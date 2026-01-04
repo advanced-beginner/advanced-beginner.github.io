@@ -3,63 +3,103 @@ title: Domain-Driven Design
 weight: 2
 ---
 
-복잡한 비즈니스 도메인을 효과적으로 모델링하고 소프트웨어로 구현하는 방법을 단계별로 안내합니다.
-
 ## DDD란?
 
-**Domain-Driven Design(DDD)**은 복잡한 소프트웨어를 개발할 때 **비즈니스 도메인**을 중심에 두고 설계하는 방법론입니다. Eric Evans가 2003년 동명의 책에서 제시했습니다.
+**Domain-Driven Design(DDD)**은 복잡한 비즈니스 로직을 체계적으로 다루기 위한 설계 방법론입니다. Eric Evans가 2003년 동명의 책에서 제시했습니다.
 
-```mermaid
-flowchart TB
-    subgraph Traditional["기존 방식"]
-        T1[기술 중심 설계]
-        T2[데이터베이스 스키마 먼저]
-        T3[비즈니스 로직 분산]
-    end
+핵심 아이디어는 단순합니다: **코드가 비즈니스를 반영해야 한다.** 데이터베이스 테이블이나 기술 프레임워크가 아닌, 비즈니스 도메인이 설계의 중심이 됩니다.
 
-    subgraph DDD["DDD 방식"]
-        D1[도메인 중심 설계]
-        D2[비즈니스 모델 먼저]
-        D3[도메인 로직 응집]
-    end
+## 언제 DDD가 필요한가?
 
-    Traditional --> |전환| DDD
-```
+모든 프로젝트에 DDD가 필요한 것은 아닙니다. 다음 질문으로 판단해보세요:
 
-## 왜 DDD인가?
+### DDD가 도움이 되는 상황
 
-| 문제 | DDD 해결책 |
-|------|-----------|
-| 개발자와 비즈니스 전문가 간 소통 단절 | **유비쿼터스 언어**로 공통 어휘 사용 |
-| 비즈니스 로직이 여러 계층에 분산 | **도메인 모델**에 로직 응집 |
-| 시스템 간 의존성 복잡 | **Bounded Context**로 명확한 경계 |
-| 변경에 취약한 구조 | **Aggregate**로 일관성 경계 정의 |
+- **비즈니스 로직이 복잡한가?** — CRUD 이상의 규칙, 조건, 계산이 있다면
+- **도메인 전문가와 협업이 필요한가?** — 개발자만으로 요구사항을 이해하기 어렵다면
+- **시스템이 오래 유지보수될 예정인가?** — 단발성 프로젝트가 아니라면
+- **여러 팀이 하나의 시스템을 개발하는가?** — 경계와 책임 분리가 필요하다면
 
-## 목차
+### DDD가 과할 수 있는 상황
 
-- [Quick Start](quick-start/) - 5분 만에 DDD 핵심 개념 이해
-- [개념 이해](concepts/) - 전략적/전술적 설계 패턴
-- [실습 예제](examples/) - Spring Boot로 구현하는 주문 도메인
-- [부록](appendix/) - 용어 사전, 참고 자료
+- 단순 CRUD 애플리케이션
+- 비즈니스 로직보다 기술적 복잡성이 주인 경우 (예: 고성능 데이터 처리)
+- 프로토타입이나 단기 프로젝트
+- 팀 전체가 DDD를 이해하고 적용할 준비가 안 된 경우
 
-## 학습 로드맵
+> "DDD는 복잡성을 다루는 도구입니다. 복잡하지 않은 곳에 적용하면 오히려 복잡성을 만듭니다."
 
-```mermaid
-flowchart LR
-    A[Quick Start] --> B[전략적 설계]
-    B --> C[전술적 설계]
-    C --> D[실습 예제]
-    D --> E[실전 적용]
+## 기존 방식과 무엇이 다른가?
 
-    style A fill:#e1f5fe
-    style B fill:#fff3e0
-    style C fill:#fff3e0
-    style D fill:#e8f5e9
-    style E fill:#fce4ec
-```
+| 기존 방식 | DDD 방식 |
+|----------|----------|
+| 데이터베이스 스키마부터 설계 | 비즈니스 모델부터 설계 |
+| 개발자 용어로 코드 작성 | 비즈니스 용어(유비쿼터스 언어)로 코드 작성 |
+| 비즈니스 로직이 서비스 레이어에 분산 | 도메인 객체에 로직 응집 |
+| 전체 시스템이 하나의 모델 | Bounded Context로 모델 분리 |
+| 엔티티 = 데이터 컨테이너 | 엔티티 = 비즈니스 행위의 주체 |
+
+## 이 가이드에서 다루는 것
+
+### [Quick Start](quick-start/)
+DDD 핵심 개념을 빠르게 훑어봅니다. 전체 그림을 먼저 잡고 세부 내용으로 들어가세요.
+
+### [개념 이해](concepts/)
+
+DDD는 크게 **전략적 설계**와 **전술적 설계**로 나뉩니다.
+
+**전략적 설계** — 큰 그림을 다룹니다:
+
+| 주제 | 배우는 것 |
+|------|----------|
+| [전략적 설계](concepts/strategic-design/) | Bounded Context, Context Map, 유비쿼터스 언어 |
+
+**전술적 설계** — 코드 레벨의 패턴을 다룹니다:
+
+| 주제 | 배우는 것 |
+|------|----------|
+| [전술적 설계](concepts/tactical-design/) | Entity, Value Object, Repository 패턴 |
+| [Aggregate](concepts/aggregate/) | 일관성 경계와 트랜잭션 범위 설계 |
+| [도메인 이벤트](concepts/domain-events/) | 느슨한 결합을 위한 이벤트 기반 통신 |
+
+**심화 주제:**
+
+| 주제 | 배우는 것 |
+|------|----------|
+| [CQRS](concepts/cqrs/) | 명령과 조회의 분리 |
+| [아키텍처 패턴](concepts/architecture/) | Layered, Hexagonal, Clean Architecture |
+| [테스트 전략](concepts/testing/) | 도메인 모델 테스트 방법 |
+| [안티패턴](concepts/anti-patterns/) | 흔한 실수와 피하는 방법 |
+
+### [실습 예제](examples/)
+실제 주문 도메인을 DDD로 구현합니다.
+
+- [환경 설정](examples/setup/) - 프로젝트 구조와 의존성
+- [주문 도메인](examples/order-domain/) - Entity, Value Object, Aggregate 구현
+- [애플리케이션 레이어](examples/application-layer/) - Use Case와 도메인 서비스
+
+### [부록](appendix/)
+- [용어 사전](appendix/glossary/) - DDD 용어 빠른 참조
+- [FAQ](appendix/faq/) - 자주 묻는 질문
+- [참고 자료](appendix/references/) - 추가 학습 자료
 
 ## 선수 지식
 
-- Java/Spring Boot 기본 이해
-- 객체지향 프로그래밍 개념
-- 기본적인 데이터베이스 지식
+- **필수**: Java/Spring Boot 기본, 객체지향 프로그래밍
+- **도움됨**: 기본적인 데이터베이스 지식, 디자인 패턴
+
+## 학습 경로 제안
+
+```
+처음이라면:     Quick Start → 전략적 설계 → 전술적 설계
+모델링 깊이:    Aggregate → 도메인 이벤트 → 주문 도메인 예제
+아키텍처:      CQRS → 아키텍처 패턴 → 테스트 전략
+```
+
+## 흔한 오해
+
+**"DDD는 특정 아키텍처를 강제한다"** — 아닙니다. DDD는 설계 원칙이지 구현 방식이 아닙니다. Hexagonal이든 Layered든 선택할 수 있습니다.
+
+**"DDD를 하려면 이벤트 소싱이 필수다"** — 아닙니다. 이벤트 소싱은 선택 사항입니다. 전통적인 상태 저장 방식으로도 DDD를 할 수 있습니다.
+
+**"DDD는 마이크로서비스와 같다"** — 다릅니다. DDD의 Bounded Context가 마이크로서비스 경계를 정하는 데 도움이 되지만, DDD는 모놀리식에서도 적용 가능합니다.
