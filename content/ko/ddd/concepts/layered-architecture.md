@@ -119,7 +119,7 @@ public record OrderResponse(
 }
 ```
 
-{{< hint warning >}}
+{{< notice style="warning" >}}
 **흔한 실수: Presentation에 비즈니스 로직 넣기**
 
 ```java
@@ -134,7 +134,7 @@ public ResponseEntity<OrderResponse> createOrder(...) {
 ```
 
 비즈니스 로직은 Domain Layer에 있어야 합니다.
-{{< /hint >}}
+{{< /notice >}}
 
 ---
 
@@ -198,7 +198,7 @@ public class OrderService {
 }
 ```
 
-{{< hint info >}}
+{{< notice style="tip" >}}
 **Application vs Domain의 차이**
 
 ```java
@@ -221,7 +221,7 @@ public class Order {
     }
 }
 ```
-{{< /hint >}}
+{{< /notice >}}
 
 ---
 
@@ -352,7 +352,7 @@ public record Money(BigDecimal amount) {
 }
 ```
 
-{{< hint warning >}}
+{{< notice style="warning" >}}
 **흔한 실수: 빈약한 도메인 (Anemic Domain)**
 
 ```java
@@ -378,7 +378,7 @@ public class OrderService {
 ```
 
 비즈니스 로직은 Entity 안에 있어야 합니다!
-{{< /hint >}}
+{{< /notice >}}
 
 ---
 

@@ -180,13 +180,13 @@ public record Money(BigDecimal amount, Currency currency) {
 }
 ```
 
-{{< hint info >}}
+{{< notice style="tip" >}}
 **Entity의 특징**
 - 어떤 프레임워크에도 의존하지 않음
 - 순수한 Java 객체 (POJO)
 - 비즈니스 규칙을 메서드로 표현
 - 테스트하기 가장 쉬움
-{{< /hint >}}
+{{< /notice >}}
 
 ---
 
@@ -256,13 +256,13 @@ public class CreateOrderInteractor implements CreateOrderUseCase {
 }
 ```
 
-{{< hint warning >}}
+{{< notice style="warning" >}}
 **Use Case의 규칙**
 
 1. **Entity만 사용** - Use Case는 Entity를 호출하고, Entity가 실제 비즈니스 로직 수행
 2. **Gateway 인터페이스 사용** - 외부 시스템은 인터페이스로 추상화
 3. **Input/Output 객체** - 외부와의 데이터 교환용 객체 정의
-{{< /hint >}}
+{{< /notice >}}
 
 ---
 
@@ -406,12 +406,12 @@ public interface OrderJpaRepository extends JpaRepository<JpaOrderEntity, String
 }
 ```
 
-{{< hint info >}}
+{{< notice style="tip" >}}
 **Framework Layer의 역할**
 - Spring, JPA, Kafka 같은 외부 도구 설정
 - 의존성 주입 설정 (Bean 등록)
 - 기술적 세부사항만 다룸
-{{< /hint >}}
+{{< /notice >}}
 
 ---
 

@@ -243,13 +243,13 @@ public class Order {  // Order가 Aggregate Root
 }
 ```
 
-{{< hint info >}}
+{{< notice style="tip" >}}
 **Domain Model의 특징**
 - **순수한 Java 객체** - 어떤 프레임워크에도 의존 안 함
 - **풍부한 도메인 로직** - getter/setter만 있으면 안 됨
 - **자기 방어** - 잘못된 상태로 만들 수 없음
 - **테스트 용이** - 외부 의존성 없이 테스트 가능
-{{< /hint >}}
+{{< /notice >}}
 
 ---
 
@@ -325,7 +325,7 @@ public interface CustomerRepository {
 }
 ```
 
-{{< hint warning >}}
+{{< notice style="warning" >}}
 **Domain Service vs Application Service**
 
 | Domain Service | Application Service |
@@ -334,7 +334,7 @@ public interface CustomerRepository {
 | 순수한 비즈니스 규칙 | 트랜잭션, 인프라 호출 |
 | 다른 도메인 객체만 사용 | Repository, 외부 서비스 호출 |
 | "할인 금액 계산" | "주문 생성 → 저장 → 알림" |
-{{< /hint >}}
+{{< /notice >}}
 
 ---
 
@@ -426,14 +426,14 @@ public class OrderApplicationService {
 }
 ```
 
-{{< hint info >}}
+{{< notice style="tip" >}}
 **Application Service의 역할**
 - **조율자 역할** - "무엇을" 할지 결정, "어떻게"는 Domain에 위임
 - **트랜잭션 경계** - @Transactional 적용
 - **외부 시스템 호출** - Payment, Notification 등
 - **이벤트 발행** - 도메인 이벤트 발행
 - **DTO 변환** - 외부에 반환할 데이터 형태 결정
-{{< /hint >}}
+{{< /notice >}}
 
 ---
 

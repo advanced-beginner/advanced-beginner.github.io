@@ -380,7 +380,7 @@ public class OrderService implements CreateOrderUseCase, ConfirmOrderUseCase {
 }
 ```
 
-{{< hint info >}}
+{{< notice style="tip" >}}
 **핵심 포인트**
 
 Application Service는 **Port(인터페이스)만 알고 있습니다:**
@@ -389,7 +389,7 @@ Application Service는 **Port(인터페이스)만 알고 있습니다:**
 - `CheckInventoryPort` ← 내부 DB인지 외부 API인지 모름
 
 그래서 **외부 기술이 바뀌어도 이 코드는 변경할 필요가 없습니다!**
-{{< /hint >}}
+{{< /notice >}}
 
 ### 3단계: Driving Adapter 구현하기
 
