@@ -160,15 +160,15 @@ flowchart TB
 ```mermaid
 sequenceDiagram
     participant A as Application
-    participant P as Producer (버퍼 가득)
-    participant K as Kafka (느림)
+    participant P as Producer
+    participant K as Kafka
 
     A->>P: send()
     Note over P: 버퍼 가득!
-    Note over P: max.block.ms 동안\n대기
+    Note over P: max.block.ms 동안 대기
 
     alt 공간 확보됨
-        K-->>P: ACK (버퍼 해제)
+        K-->>P: ACK - 버퍼 해제
         P->>K: 새 메시지 전송
     else 타임아웃
         P-->>A: TimeoutException

@@ -69,7 +69,7 @@ flowchart TB
     subgraph Architecture["아키텍처"]
         HEX[Hexagonal]
         CLEAN[Clean Architecture]
-        CQRS[CQRS/ES]
+        CQRS["CQRS/ES"]
     end
 
     SUB --> BC

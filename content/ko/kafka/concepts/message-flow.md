@@ -62,7 +62,7 @@ kafkaTemplate.send("orders", orderId, orderJson);
 flowchart TB
     MSG[메시지]
     KEY{Key 존재?}
-    HASH[Key 해시값 % Partition 수]
+    HASH["Key 해시값 mod Partition 수"]
     RR[라운드 로빈]
     P0[Partition 0]
     P1[Partition 1]

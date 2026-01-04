@@ -494,8 +494,8 @@ Upstream이 API를 제공하고, Downstream이 소비합니다.
 
 ```mermaid
 sequenceDiagram
-    participant D as Downstream<br/>(Order Service)
-    participant U as Upstream<br/>(Product Service)
+    participant D as Order Service
+    participant U as Product Service
 
     D->>U: GET /products/{id}
     U-->>D: Product 정보
