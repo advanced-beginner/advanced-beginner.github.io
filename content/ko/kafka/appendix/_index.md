@@ -10,3 +10,4 @@ weight: 4
 
 1. [용어 사전](glossary/) - Kafka 관련 용어 A-Z
 2. [참고 자료](references/) - 공식 문서, 서적, 커뮤니티
+3. [자주 묻는 질문](faq/) - Kafka FAQ

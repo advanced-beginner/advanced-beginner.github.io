@@ -15,7 +15,7 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 |---------------------|-------------------------|
 | 기본 문법은 알지만 실무 적용이 막막한 분 | 완전 초보자 (기본 튜토리얼 먼저 권장) |
 | "왜?"를 알고 싶은 분 | 복사-붙여넣기만 원하는 분 |
-| Spring Boot 경험이 있는 Java 개발자 | 다른 언어/프레임워크 사용자 |
+| Spring Boot 경험이 있는 Java/Scala 개발자 | - |
 | 설계 원칙과 트레이드오프를 이해하고 싶은 분 | 빠른 레퍼런스만 필요한 분 |
 
 ## 제공하는 가이드
@@ -40,6 +40,16 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 - 도메인 이벤트로 느슨한 결합 구현
 - 실제 주문 도메인 구현 예제
 
+### [Scala](scala/)
+
+함수형과 객체지향을 결합한 JVM 언어. 기본 문법부터 고급 타입 시스템, 함수형 패턴까지. Scala 2.13과 Scala 3 문법을 함께 다룹니다.
+
+**배우는 것:**
+- Scala 기본 문법과 함수형 프로그래밍 기초
+- Pattern Matching과 Case Classes 활용
+- 타입 시스템: Generics, Variance, Type Classes
+- Implicits/Given과 암시적 변환의 원리
+
 ## 이 가이드의 특징
 
 **First Principles** — 표면적인 사용법이 아닌, 그 기술이 해결하려는 근본 문제부터 시작합니다. "어떻게"보다 "왜"를 먼저 이해하면 응용력이 생깁니다.
@@ -54,3 +64,5 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 - **Kafka 기본은 아는데 깊이 이해하고 싶다면** → [Kafka 핵심 구성요소](kafka/concepts/core-components/)
 - **DDD가 뭔지 궁금하다면** → [DDD Quick Start](ddd/quick-start/)
 - **도메인 모델 설계를 배우고 싶다면** → [전술적 설계](ddd/concepts/tactical-design/)
+- **Scala를 처음 배운다면** → [Scala Quick Start](scala/quick-start/)
+- **Scala 타입 시스템을 깊이 이해하고 싶다면** → [Type Classes](scala/concepts/type-classes/)
