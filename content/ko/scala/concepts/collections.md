@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-06"
 title: 컬렉션
 weight: 7
 ---

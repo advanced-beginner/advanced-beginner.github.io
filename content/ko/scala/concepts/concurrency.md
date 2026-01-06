@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-06"
 title: 동시성
 weight: 16
 ---

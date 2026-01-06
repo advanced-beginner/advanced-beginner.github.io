@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-06"
 title: 참고 자료
 weight: 4
 ---
@@ -56,6 +57,122 @@ Scala 학습에 도움이 되는 참고 자료를 정리합니다.
 - **"Practical FP in Scala"**
   - 저자: Gabriel Volpe
   - 실무 함수형 프로그래밍
+
+## 실무 라이브러리 맛보기
+
+이 가이드에서 배운 개념이 실무 라이브러리에서 어떻게 활용되는지 간단히 소개합니다.
+
+### Cats: 타입 클래스 실전 활용
+
+[Type Classes](../concepts/type-classes/)에서 배운 패턴이 Cats에서 어떻게 사용되는지 보세요.
+
+```scala
+// 이 가이드에서 배운 타입 클래스 패턴
+trait Monoid[A]:
+  def empty: A
+  def combine(x: A, y: A): A
+
+// Cats에서는 이렇게 활용합니다
+import cats.syntax.all.*
+import cats.Monoid
+
+// 이미 정의된 인스턴스 사용
+List(1, 2, 3).combineAll  // 6 (Monoid[Int] 사용)
+List("a", "b").combineAll // "ab" (Monoid[String] 사용)
+
+// 커스텀 타입에 적용
+case class Order(total: Int, items: Int)
+
+given Monoid[Order] with
+  def empty = Order(0, 0)
+  def combine(x: Order, y: Order) =
+    Order(x.total + y.total, x.items + y.items)
+
+List(Order(100, 2), Order(200, 3)).combineAll
+// Order(300, 5)
+```
+
+**연결 개념:** [Type Classes](../concepts/type-classes/), [Implicits/Given](../concepts/implicits/)
+
+### ZIO: 함수형 효과 시스템
+
+[Higher-Order Functions](../concepts/higher-order-functions/)과 [For Comprehensions](../concepts/for-comprehensions/)이 ZIO에서 빛을 발합니다.
+
+```scala
+import zio.*
+
+// 부수 효과를 값으로 표현
+val readLine: ZIO[Any, IOException, String] = Console.readLine
+val printLine: String => ZIO[Any, IOException, Unit] = Console.printLine
+
+// for comprehension으로 순차 실행
+val program: ZIO[Any, IOException, Unit] = for
+  _    <- printLine("이름을 입력하세요:")
+  name <- readLine
+  _    <- printLine(s"안녕하세요, $name!")
+yield ()
+
+// 이 시점에서는 아무것도 실행되지 않음 (순수 값)
+// Unsafe.unsafe { implicit u => Runtime.default.unsafe.run(program) }
+```
+
+**연결 개념:** [For Comprehensions](../concepts/for-comprehensions/), [Functional Patterns](../concepts/functional-patterns/)
+
+### http4s: 함수형 HTTP
+
+[Pattern Matching](../concepts/pattern-matching/)과 [Case Classes](../concepts/case-classes/)가 라우팅에 활용됩니다.
+
+```scala
+import org.http4s.*
+import org.http4s.dsl.io.*
+
+// 패턴 매칭으로 HTTP 라우팅
+val routes = HttpRoutes.of[IO] {
+  case GET -> Root / "users" / IntVar(id) =>
+    Ok(s"User $id")
+
+  case req @ POST -> Root / "users" =>
+    req.as[User].flatMap(user => Created(user.asJson))
+
+  case GET -> Root / "health" =>
+    Ok("healthy")
+}
+```
+
+**연결 개념:** [Pattern Matching](../concepts/pattern-matching/), [Case Classes](../concepts/case-classes/)
+
+### Circe: JSON 타입 클래스
+
+[Type Classes](../concepts/type-classes/)와 [Generics](../concepts/generics/)가 JSON 변환에 사용됩니다.
+
+```scala
+import io.circe.*
+import io.circe.generic.auto.*
+import io.circe.syntax.*
+
+// case class 정의만 하면 자동으로 JSON 변환 가능
+case class User(name: String, age: Int)
+
+val user = User("Alice", 30)
+user.asJson.noSpaces  // {"name":"Alice","age":30}
+
+// 파싱도 타입 클래스로
+"""{"name":"Bob","age":25}""".as[User]
+// Right(User("Bob", 25))
+```
+
+**연결 개념:** [Case Classes](../concepts/case-classes/), [Type Classes](../concepts/type-classes/)
+
+### 다음 학습 방향
+
+| 관심 분야 | 추천 라이브러리 | 참고 자료 |
+|----------|----------------|----------|
+| 함수형 기초 | Cats | [Scala with Cats (무료)](https://underscore.io/books/scala-with-cats/) |
+| 비동기/동시성 | ZIO 또는 Cats Effect | [ZIO 공식 문서](https://zio.dev/) |
+| 웹 개발 | http4s + Circe | [http4s 튜토리얼](https://http4s.org/v0.23/docs/) |
+| 데이터 처리 | Spark | [Spark Scala API](https://spark.apache.org/docs/latest/api/scala/) |
+
+---
 
 ## 온라인 강의
 

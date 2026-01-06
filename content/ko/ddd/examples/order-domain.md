@@ -1,11 +1,103 @@
 ---
 title: 주문 도메인
 weight: 2
+lastmod: "2026-01-06"
 ---
 
 # 주문 도메인 구현
 
 DDD 패턴을 적용하여 주문 도메인을 구현합니다.
+
+## 왜 이렇게 설계했는가?
+
+코드를 보기 전에, 각 설계 결정의 **이유**를 먼저 이해합니다.
+
+### 설계 결정 요약
+
+| 요소 | 결정 | 이유 |
+|------|------|------|
+| **Order** | Aggregate Root | 주문의 일관성 경계. 모든 변경은 Order를 통해서만 |
+| **OrderLine** | 내부 Entity | 수량 변경이 필요하지만, Order 없이 존재할 수 없음 |
+| **Money** | Value Object | 금액은 불변이며, 값으로 비교 (10000원 == 10000원) |
+| **ShippingAddress** | Value Object | 주소는 전체가 하나의 의미 단위, 부분 변경 불가 |
+| **OrderId** | Value Object | ID는 변경되지 않으며, 값으로 비교 |
+| **CustomerId** | ID 참조 | Customer는 별도 Aggregate, 직접 포함하면 경계 위반 |
+
+### Value Object vs Entity: 어떻게 구분했나?
+
+```mermaid
+flowchart TD
+    Q1{"시간이 지나도<br/>추적해야 하나?"}
+    Q1 -->|Yes| Q2{"Order 없이<br/>존재 가능?"}
+    Q1 -->|No| VO["Value Object"]
+    Q2 -->|Yes| AGG["별도 Aggregate"]
+    Q2 -->|No| ENT["내부 Entity"]
+```
+
+**Money가 Value Object인 이유:**
+- "10,000원"과 "10,000원"은 **같은 돈**입니다 (값으로 비교)
+- 금액을 "수정"하는 게 아니라 **새 금액으로 교체**합니다
+- 금액의 변경 이력을 추적할 필요가 없습니다
+
+**OrderLine이 Entity인 이유:**
+- 같은 상품을 담아도 "첫 번째 항목"과 "두 번째 항목"은 **다릅니다** (ID로 구분)
+- 수량을 **변경**할 수 있어야 합니다 (상태 변경 추적)
+- 하지만 Order 없이는 존재할 수 없으므로 내부 Entity입니다
+
+### Aggregate 경계: 왜 Order만 Root인가?
+
+```mermaid
+flowchart LR
+    subgraph Wrong["❌ 잘못된 설계"]
+        O1["Order"]
+        C1["Customer<br/>(전체 포함)"]
+        P1["Product<br/>(전체 포함)"]
+        O1 --> C1
+        O1 --> P1
+    end
+
+    subgraph Right["✅ 올바른 설계"]
+        O2["Order"]
+        CID["CustomerId"]
+        PID["ProductId"]
+        O2 -.->|ID 참조| CID
+        O2 -.->|ID 참조| PID
+    end
+```
+
+**Customer를 ID로만 참조하는 이유:**
+- Customer는 주문과 **독립적인 생명주기**를 가집니다
+- 주문을 저장할 때 고객 정보 전체를 함께 저장하면 **데이터 중복**
+- 고객 정보 변경 시 모든 주문의 고객 정보도 변경해야 하는 **일관성 문제**
+
+**ProductId만 참조하는 이유:**
+- 상품 가격이 변경되어도 **주문 당시 가격**은 유지되어야 합니다
+- 그래서 OrderLine에 `price`를 **스냅샷**으로 저장합니다
+
+### 불변식(Invariant): 무엇을 보호하는가?
+
+Order Aggregate가 **항상 보장**하는 규칙들입니다:
+
+| 불변식 | 코드 위치 | 비즈니스 이유 |
+|--------|----------|--------------|
+| 주문 항목 1개 이상 | `Order.create()` | 빈 주문은 의미 없음 |
+| 최대 금액 1억원 | `addOrderLineInternal()` | 결제 한도, 사기 방지 |
+| 수량 1~999 | `OrderLine.validateQuantity()` | 재고 관리, 이상 거래 방지 |
+| PENDING에서만 변경 | 각 비즈니스 메서드 | 확정 후 변경 방지 |
+
+### 패키지 프라이빗 생성자: 왜 필요한가?
+
+```java
+// ❌ public 생성자 → 누구나 생성 가능
+public OrderLine(ProductId productId, ...) { }
+
+// ✅ 패키지 프라이빗 → Order만 생성 가능
+OrderLine(ProductId productId, ...) { }
+```
+
+**이유:** OrderLine은 Order 없이 존재할 수 없습니다. 패키지 프라이빗으로 만들면 **컴파일 타임에 잘못된 사용을 방지**합니다.
+
+---
 
 ## 도메인 모델 설계
 

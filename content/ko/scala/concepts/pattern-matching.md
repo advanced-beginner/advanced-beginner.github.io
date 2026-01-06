@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-06"
 title: 패턴 매칭
 weight: 6
 ---

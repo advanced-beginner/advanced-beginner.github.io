@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-06"
 title: Scala 2 vs Scala 3 비교
 weight: 3
 ---

@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-06"
 title: 고차 함수
 weight: 8
 ---

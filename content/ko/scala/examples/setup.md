@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-06"
 title: 환경 설정
 weight: 1
 ---

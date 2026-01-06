@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-06"
 title: 제어 구조
 weight: 2
 ---

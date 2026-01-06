@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-06"
 title: 기본 예제
 weight: 2
 ---
