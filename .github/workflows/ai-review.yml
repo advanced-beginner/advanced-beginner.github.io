@@ -1,0 +1,318 @@
+name: AI PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  # PR 코멘트에서 명령어 확인
+  check-command:
+    runs-on: ubuntu-latest
+    outputs:
+      should_review: ${{ steps.check.outputs.should_review }}
+      should_merge: ${{ steps.check.outputs.should_merge }}
+      pr_number: ${{ steps.check.outputs.pr_number }}
+    steps:
+      - name: Check trigger condition
+        id: check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const eventName = context.eventName;
+            let shouldReview = false;
+            let shouldMerge = false;
+            let prNumber = null;
+
+            if (eventName === 'pull_request') {
+              // PR 생성/업데이트 시 자동 리뷰
+              shouldReview = true;
+              prNumber = context.payload.pull_request.number;
+            } else if (eventName === 'issue_comment') {
+              // PR 코멘트인지 확인
+              if (!context.payload.issue.pull_request) {
+                core.info('Not a PR comment, skipping');
+                return;
+              }
+
+              prNumber = context.payload.issue.number;
+              const comment = context.payload.comment.body.toLowerCase();
+
+              // 명령어 확인
+              if (comment.includes('/review') || comment.includes('@ai-reviewer')) {
+                shouldReview = true;
+              }
+              if (comment.includes('/approve') || comment.includes('/merge')) {
+                shouldMerge = true;
+              }
+            }
+
+            core.setOutput('should_review', shouldReview);
+            core.setOutput('should_merge', shouldMerge);
+            core.setOutput('pr_number', prNumber);
+
+            core.info(`Event: ${eventName}`);
+            core.info(`Should Review: ${shouldReview}`);
+            core.info(`Should Merge: ${shouldMerge}`);
+            core.info(`PR Number: ${prNumber}`);
+
+  # AI 코드 리뷰
+  ai-review:
+    needs: check-command
+    if: needs.check-command.outputs.should_review == 'true'
+    runs-on: ubuntu-latest
+    outputs:
+      review_passed: ${{ steps.review.outputs.passed }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get PR details
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = ${{ needs.check-command.outputs.pr_number }};
+
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+
+            // 변경된 파일 목록
+            const changedFiles = files.map(f => ({
+              filename: f.filename,
+              status: f.status,
+              additions: f.additions,
+              deletions: f.deletions,
+              patch: f.patch || ''
+            }));
+
+            core.setOutput('title', pr.title);
+            core.setOutput('body', pr.body || '');
+            core.setOutput('base', pr.base.ref);
+            core.setOutput('head', pr.head.ref);
+            core.setOutput('files', JSON.stringify(changedFiles));
+
+      - name: Get PR diff
+        id: diff
+        run: |
+          # PR의 전체 diff 가져오기
+          git fetch origin ${{ steps.pr.outputs.base }}
+          git diff origin/${{ steps.pr.outputs.base }}...HEAD > pr_diff.txt
+
+          # diff 내용을 환경 변수로 저장 (크기 제한)
+          DIFF_CONTENT=$(head -c 50000 pr_diff.txt)
+          echo "diff<<EOF" >> $GITHUB_OUTPUT
+          echo "$DIFF_CONTENT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: AI Review with Gemini
+        id: review
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          # API 키 확인
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "::warning::GEMINI_API_KEY not set. Using mock review."
+            echo "passed=true" >> $GITHUB_OUTPUT
+            echo "comment<<EOF" >> $GITHUB_OUTPUT
+            echo "## 🤖 AI Review (Mock Mode)" >> $GITHUB_OUTPUT
+            echo "" >> $GITHUB_OUTPUT
+            echo "> ⚠️ GEMINI_API_KEY가 설정되지 않아 모의 리뷰를 수행합니다." >> $GITHUB_OUTPUT
+            echo "" >> $GITHUB_OUTPUT
+            echo "실제 AI 리뷰를 활성화하려면 Repository Secrets에 \`GEMINI_API_KEY\`를 추가하세요." >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Gemini API 호출을 위한 프롬프트 준비
+          PR_TITLE="${{ steps.pr.outputs.title }}"
+          PR_BODY="${{ steps.pr.outputs.body }}"
+
+          # diff 파일 읽기
+          DIFF_CONTENT=$(cat pr_diff.txt | head -c 100000)
+
+          # Gemini API 요청 본문 생성
+          PROMPT="당신은 코드 리뷰어입니다. 다음 Pull Request를 리뷰해주세요.
+
+## PR 제목
+${PR_TITLE}
+
+## PR 설명
+${PR_BODY}
+
+## 변경사항 (Diff)
+\`\`\`diff
+${DIFF_CONTENT}
+\`\`\`
+
+다음 형식으로 리뷰를 작성해주세요:
+1. **요약**: 변경사항의 전체적인 요약
+2. **장점**: 잘된 부분
+3. **개선사항**: 개선이 필요한 부분 (있다면)
+4. **보안/성능**: 보안 또는 성능 관련 이슈 (있다면)
+5. **결론**: 승인(✅) 또는 수정요청(❌) 여부
+
+한글로 작성해주세요."
+
+          # jq를 사용하여 JSON 생성 (특수문자 이스케이프 처리)
+          jq -n --arg prompt "$PROMPT" '{
+            "contents": [
+              {
+                "parts": [
+                  {"text": $prompt}
+                ]
+              }
+            ],
+            "generationConfig": {
+              "temperature": 0.7,
+              "maxOutputTokens": 4096
+            }
+          }' > request.json
+
+          # Gemini API 호출
+          RESPONSE=$(curl -s -X POST \
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d @request.json)
+
+          # 응답 파싱
+          REVIEW_CONTENT=$(echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text // empty')
+
+          if [ -z "$REVIEW_CONTENT" ]; then
+            echo "::error::Failed to get AI review response"
+            echo "$RESPONSE" | jq .
+            ERROR_MSG=$(echo "$RESPONSE" | jq -r '.error.message // "Unknown error"')
+            REVIEW_CONTENT="AI 리뷰를 가져오는데 실패했습니다. 응답: ${ERROR_MSG}"
+            echo "passed=false" >> $GITHUB_OUTPUT
+          else
+            # 승인 여부 확인 (✅가 있으면 승인)
+            if echo "$REVIEW_CONTENT" | grep -q "✅"; then
+              echo "passed=true" >> $GITHUB_OUTPUT
+            else
+              echo "passed=false" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+          # 리뷰 코멘트 저장
+          echo "comment<<EOF" >> $GITHUB_OUTPUT
+          echo "## 🤖 AI Code Review" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo "$REVIEW_CONTENT" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo "---" >> $GITHUB_OUTPUT
+          echo "*Reviewed by Gemini AI*" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Post review comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = ${{ needs.check-command.outputs.pr_number }};
+            const reviewComment = `${{ steps.review.outputs.comment }}`;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: reviewComment
+            });
+
+            core.info('Review comment posted successfully');
+
+  # 자동 머지
+  auto-merge:
+    needs: [check-command, ai-review]
+    if: |
+      always() &&
+      (needs.check-command.outputs.should_merge == 'true' ||
+       (needs.ai-review.outputs.review_passed == 'true' && github.event_name == 'pull_request'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check merge conditions
+        id: check-merge
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = ${{ needs.check-command.outputs.pr_number }};
+            const shouldMerge = '${{ needs.check-command.outputs.should_merge }}' === 'true';
+            const reviewPassed = '${{ needs.ai-review.outputs.review_passed }}' === 'true';
+
+            // PR 상태 확인
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+
+            // 머지 가능 여부 확인
+            if (!pr.mergeable) {
+              core.setFailed('PR is not mergeable (conflicts or other issues)');
+              return;
+            }
+
+            // /approve 또는 /merge 명령어로 트리거된 경우
+            if (shouldMerge) {
+              core.setOutput('can_merge', 'true');
+              core.setOutput('merge_method', 'squash');
+              core.info('Manual merge requested via command');
+              return;
+            }
+
+            // AI 리뷰 통과 + 자동 머지 조건
+            // 기본적으로 자동 머지는 비활성화 (안전을 위해)
+            // 자동 머지를 원하면 PR에 'auto-merge' 라벨 추가 필요
+            const labels = pr.labels.map(l => l.name);
+            if (reviewPassed && labels.includes('auto-merge')) {
+              core.setOutput('can_merge', 'true');
+              core.setOutput('merge_method', 'squash');
+              core.info('Auto-merge enabled via label');
+            } else {
+              core.setOutput('can_merge', 'false');
+              core.info('Auto-merge not enabled. Add "auto-merge" label to enable.');
+            }
+
+      - name: Merge PR
+        if: steps.check-merge.outputs.can_merge == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = ${{ needs.check-command.outputs.pr_number }};
+            const mergeMethod = '${{ steps.check-merge.outputs.merge_method }}';
+
+            try {
+              await github.rest.pulls.merge({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                merge_method: mergeMethod
+              });
+
+              // 머지 완료 코멘트
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: '## ✅ PR Merged\n\nPR이 성공적으로 머지되었습니다.'
+              });
+
+              core.info('PR merged successfully');
+            } catch (error) {
+              core.setFailed(`Failed to merge PR: ${error.message}`);
+            }
