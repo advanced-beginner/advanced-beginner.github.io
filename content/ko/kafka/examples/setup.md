@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-07"
+lastmod: "2026-01-06"
 title: 환경 구성
 weight: 1
 ---

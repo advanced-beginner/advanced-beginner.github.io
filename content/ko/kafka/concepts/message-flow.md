@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-07"
+lastmod: "2026-01-06"
 title: 메시지 흐름
 weight: 2
 ---

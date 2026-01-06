@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-07"
+lastmod: "2026-01-06"
 title: 에러 처리 심화
 weight: 9
 ---

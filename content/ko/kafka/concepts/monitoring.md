@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-07"
+lastmod: "2026-01-06"
 title: 모니터링 기초
 weight: 10
 ---
