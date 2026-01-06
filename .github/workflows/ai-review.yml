@@ -281,17 +281,14 @@ jobs:
               return;
             }
 
-            // AI 리뷰 통과 + 자동 머지 조건
-            // 기본적으로 자동 머지는 비활성화 (안전을 위해)
-            // 자동 머지를 원하면 PR에 'auto-merge' 라벨 추가 필요
-            const labels = pr.labels.map(l => l.name);
-            if (reviewPassed && labels.includes('auto-merge')) {
+            // AI 리뷰 통과 시 자동 머지
+            if (reviewPassed) {
               core.setOutput('can_merge', 'true');
               core.setOutput('merge_method', 'squash');
-              core.info('Auto-merge enabled via label');
+              core.info('Auto-merge: AI review passed');
             } else {
               core.setOutput('can_merge', 'false');
-              core.info('Auto-merge not enabled. Add "auto-merge" label to enable.');
+              core.info('Auto-merge skipped: AI review not passed');
             }
 
       - name: Merge PR
