@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-07"
 title: 주문 시스템
 weight: 3
 ---
@@ -299,6 +300,12 @@ public void consume(OrderEvent event) {
 | **이벤트 소비** | @KafkaListener + JSON Deserializer |
 | **순서 보장** | Message Key (orderId) |
 | **상태 전이** | 이벤트 기반 상태 머신 |
+
+## 전체 소스코드
+
+이 예제의 전체 소스코드는 아래 링크에서 확인할 수 있습니다. Producer, Consumer, Controller 및 도메인 객체의 전체 구현을 살펴보세요.
+
+- [**`examples/order-system`**](../../../../examples/order-system/)
 
 ## 다음 단계
 

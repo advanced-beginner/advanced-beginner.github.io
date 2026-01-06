@@ -50,3 +50,5 @@ params:
     - relearn-dark
 
   mermaidInitialize: '{ "theme": "default" }'
+
+  LastModFormat: ":date.2006-01-02"

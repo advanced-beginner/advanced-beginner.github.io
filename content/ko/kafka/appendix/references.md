@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-07"
 title: 참고 자료
 weight: 2
 ---

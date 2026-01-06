@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-07"
 title: 심화 개념
 weight: 5
 ---

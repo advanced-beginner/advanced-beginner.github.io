@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-07"
 title: 용어 사전
 weight: 1
 ---

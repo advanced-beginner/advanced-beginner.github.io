@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-07"
 title: 개념 이해
 weight: 2
 ---
@@ -22,3 +23,5 @@ Kafka의 핵심 구성요소와 동작 원리를 이해합니다.
 8. [Consumer 튜닝](consumer-tuning/) - Fetch, Poll, 커밋 전략
 9. [에러 처리 심화](error-handling/) - 재시도, Dead Letter Topic
 10. [모니터링 기초](monitoring/) - Lag, 메트릭, 알림 설정
+11. [보안](security/) - 암호화, 인증, 권한 관리
+12. [생태계](ecosystem/) - Connect, Schema Registry, Streams

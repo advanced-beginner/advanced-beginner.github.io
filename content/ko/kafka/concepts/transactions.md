@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-07"
 title: 트랜잭션과 Exactly-Once
 weight: 6
 ---
