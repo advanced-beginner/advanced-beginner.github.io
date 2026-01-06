@@ -413,20 +413,609 @@ kafka-guidance-101/
 
 ---
 
+---
+
+## Brownfield Enhancement: Scala 가이드 추가
+
+### Enhancement Overview
+
+**Enhancement Type:** New Feature Addition (새로운 가이드 콘텐츠 추가)
+
+**Enhancement Description:**
+Scala 프로그래밍 언어에 대한 체계적인 한글 가이드를 추가합니다. 기존 Kafka/DDD 가이드와 동일한 구조(Quick Start → Concepts → Examples → Appendix)를 따르며, Scala 2.13과 Scala 3를 모두 다룹니다. 기초부터 고급까지 전체 범위를 커버하고, sbt 기반 예제 프로젝트를 포함합니다.
+
+**Impact Assessment:** Minimal Impact (기존 코드 변경 없이 새로운 콘텐츠 추가)
+
+### Goals
+
+- Scala 핵심 문법과 개념을 체계적으로 이해할 수 있는 한글 문서 제공
+- Scala 2.13과 Scala 3의 주요 차이점과 마이그레이션 가이드 제공
+- 함수형 프로그래밍 패턴과 타입 시스템 심화 내용 제공
+- sbt 기반 실행 가능한 예제 프로젝트 제공
+- 기존 Kafka 가이드와 연계하여 Scala + Kafka 활용 사례 제공
+
+### Background Context
+
+Scala는 JVM 기반의 함수형/객체지향 하이브리드 언어로, 대규모 데이터 처리(Apache Spark), 분산 시스템(Akka), 웹 개발(Play Framework) 등에서 널리 사용됩니다. 그러나 양질의 한국어 학습 자료가 부족하고, 특히 Scala 3의 새로운 기능에 대한 한글 자료는 거의 없습니다.
+
+이 Enhancement는 공식 Scala 문서(docs.scala-lang.org)를 참고하여, "First Principles" 접근 방식으로 Scala의 본질적 개념을 설명하고, 실행 가능한 예제를 제공합니다.
+
+### Change Log
+
+| Date | Version | Description | Author |
+|------|---------|-------------|--------|
+| 2025-01-06 | 0.1 | Scala 가이드 Brownfield Enhancement 초안 | BMad Master |
+
+---
+
+## Scala 가이드 Requirements
+
+### Functional Requirements
+
+#### 문서 콘텐츠
+
+- **SFR1:** Quick Start 섹션은 sbt를 사용하여 5분 안에 Scala 환경을 구성하고 Hello World를 실행할 수 있어야 한다.
+- **SFR2:** 기초 개념 섹션은 변수, 타입, 제어 구조, 함수, 클래스, 트레이트, 케이스 클래스, 패턴 매칭을 다루어야 한다.
+- **SFR3:** 중급 개념 섹션은 컬렉션, 고차 함수, 제네릭, For Comprehension, 암시적 변환/문맥적 추상화를 다루어야 한다.
+- **SFR4:** 고급 개념 섹션은 타입 클래스, 공변성/반공변성, 매크로/메타프로그래밍, 동시성(Future), 함수형 프로그래밍 패턴을 다루어야 한다.
+- **SFR5:** 모든 개념 설명에 Scala 2.13과 Scala 3 양쪽 문법을 비교하여 제시해야 한다.
+- **SFR6:** 용어 사전은 Scala 핵심 용어를 정의하고 설명해야 한다.
+- **SFR7:** Scala 2와 Scala 3 차이점 요약 문서를 제공해야 한다.
+
+#### 예제 코드
+
+- **SFR8:** 모든 예제 코드는 Scala 2.13 또는 Scala 3 환경에서 실행 가능해야 한다.
+- **SFR9:** 예제 프로젝트는 sbt 빌드 도구를 사용해야 한다.
+- **SFR10:** 각 예제는 README를 포함하여 실행 방법을 설명해야 한다.
+- **SFR11:** Scala 2와 Scala 3 예제를 별도 프로젝트 또는 별도 소스 디렉토리로 구분해야 한다.
+
+### Non-Functional Requirements
+
+- **SNFR1:** 기존 사이트 구조(Hugo, GitHub Pages)와 완전히 호환되어야 한다.
+- **SNFR2:** 기존 문서 스타일과 톤을 일관되게 유지해야 한다.
+- **SNFR3:** 공식 Scala 문서(docs.scala-lang.org)를 주요 참고 자료로 활용해야 한다.
+
+### Compatibility Requirements
+
+- **SCR1:** 기존 Hugo 테마(hugo-theme-relearn)와 호환되어야 한다.
+- **SCR2:** 기존 Mermaid.js 설정을 그대로 사용할 수 있어야 한다.
+- **SCR3:** 기존 사이트 네비게이션에 Scala 가이드가 자연스럽게 추가되어야 한다.
+- **SCR4:** 기존 GitHub Actions 배포 파이프라인에 영향을 주지 않아야 한다.
+
+---
+
+## Scala 가이드 콘텐츠 구조
+
+```
+content/ko/scala/
+├── _index.md                       # Scala 가이드 메인
+├── quick-start/
+│   └── _index.md                   # 빠른 시작 (설치, Hello World, REPL)
+├── concepts/
+│   ├── _index.md                   # 개념 이해 인덱스
+│   │
+│   │ # 기초 (Basics)
+│   ├── basics.md                   # 변수, 상수, 기본 타입
+│   ├── control-structures.md       # 제어 구조 (if, while, for, match)
+│   ├── functions-methods.md        # 함수와 메서드
+│   ├── classes-objects.md          # 클래스, 객체, 트레이트
+│   ├── case-classes.md             # 케이스 클래스
+│   ├── pattern-matching.md         # 패턴 매칭
+│   │
+│   │ # 중급 (Intermediate)
+│   ├── collections.md              # 컬렉션 (List, Set, Map, Seq)
+│   ├── higher-order-functions.md   # 고차 함수
+│   ├── generics.md                 # 제네릭과 타입 매개변수
+│   ├── for-comprehensions.md       # For Comprehension
+│   ├── implicits.md                # 암시적 변환 (Scala 2) / 문맥적 추상화 (Scala 3)
+│   │
+│   │ # 고급 (Advanced)
+│   ├── type-classes.md             # 타입 클래스
+│   ├── variance.md                 # 공변성, 반공변성
+│   ├── type-system-advanced.md     # 고급 타입 시스템 (Union, Intersection, Match Types)
+│   ├── macros-metaprogramming.md   # 매크로 및 메타프로그래밍
+│   ├── concurrency.md              # 동시성 (Future, 기초)
+│   └── functional-patterns.md      # 함수형 프로그래밍 패턴
+│
+├── examples/
+│   ├── _index.md                   # 실습 예제 인덱스
+│   ├── setup.md                    # 환경 설정 (sbt, IDE)
+│   ├── basic.md                    # 기본 예제
+│   └── scala2-vs-scala3.md         # Scala 2 vs Scala 3 비교 예제
+│
+└── appendix/
+    ├── _index.md
+    ├── glossary.md                 # 용어 사전
+    ├── version-comparison.md       # Scala 2 vs Scala 3 주요 차이점
+    ├── faq.md                      # FAQ
+    └── references.md               # 참고 자료
+
+examples/scala/
+├── scala2-basics/                  # Scala 2.13 기본 예제
+│   ├── build.sbt
+│   ├── project/build.properties
+│   └── src/main/scala/
+└── scala3-basics/                  # Scala 3 기본 예제
+    ├── build.sbt
+    ├── project/build.properties
+    └── src/main/scala/
+```
+
+---
+
+## Scala Epic List
+
+| Epic | 제목 | 목표 |
+|------|------|------|
+| **Epic 6** | Scala 가이드 기반 구축 | 디렉토리 구조, Quick Start, 메인 페이지 작성 |
+| **Epic 7** | Scala 기초 문서 | 변수, 타입, 함수, 클래스, 패턴 매칭 등 기초 개념 |
+| **Epic 8** | Scala 중급 문서 | 컬렉션, 고차 함수, 제네릭, For Comprehension 등 |
+| **Epic 9** | Scala 고급 문서 | 타입 클래스, 매크로, 동시성, 함수형 패턴 등 |
+| **Epic 10** | Scala 예제 및 부록 | 예제 프로젝트, 용어 사전, FAQ, 버전 비교 |
+
+---
+
+## Epic 6: Scala 가이드 기반 구축
+
+**목표:** Scala 가이드의 기본 구조를 설정하고, Quick Start를 작성하여 사용자가 5분 안에 Scala를 체험할 수 있게 합니다.
+
+### Story 6.1: Scala 가이드 디렉토리 구조 설정
+
+**As a** 프로젝트 관리자,
+**I want** Scala 가이드의 디렉토리 구조를 설정하고 싶다,
+**So that** 일관된 구조로 문서를 관리할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/` 디렉토리 구조가 생성되어 있다 (quick-start, concepts, examples, appendix)
+2. 각 섹션에 `_index.md` 파일이 있다
+3. Hugo frontmatter가 올바르게 설정되어 있다
+4. 사이드바 네비게이션에 Scala 가이드가 표시된다
+
+**Integration Verification:**
+- IV1: 기존 Kafka/DDD 가이드와 동일한 구조 패턴 확인
+- IV2: Hugo 빌드 성공 확인
+- IV3: 사이트 네비게이션 정상 동작 확인
+
+### Story 6.2: Scala 가이드 메인 페이지 작성
+
+**As a** Scala 입문자,
+**I want** Scala 가이드의 전체 구조와 학습 경로를 파악하고 싶다,
+**So that** 어디서부터 시작해야 할지 알 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/_index.md`가 작성되어 있다
+2. Scala의 정의와 특징이 설명되어 있다
+3. 언제 Scala를 사용해야 하는지 설명되어 있다
+4. 각 섹션(Quick Start, Concepts, Examples, Appendix)에 대한 안내가 있다
+5. 학습 경로 제안이 포함되어 있다
+6. 선수 지식이 명시되어 있다
+
+### Story 6.3: Scala Quick Start 작성
+
+**As a** Scala 입문자,
+**I want** 5분 안에 Scala를 체험하고 싶다,
+**So that** 복잡한 개념 없이 빠르게 시작할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/quick-start/_index.md`가 작성되어 있다
+2. Scala 설치 방법이 설명되어 있다 (Coursier, sbt)
+3. Hello World 프로그램 작성 및 실행 방법이 설명되어 있다
+4. REPL 사용법이 설명되어 있다
+5. IDE 설정 안내가 포함되어 있다 (IntelliJ, VS Code)
+6. Scala 2와 Scala 3 설치 옵션이 모두 안내되어 있다
+
+### Story 6.4: Scala 예제 프로젝트 기본 구조 생성
+
+**As a** 개발자,
+**I want** sbt 기반 Scala 예제 프로젝트 템플릿을 원한다,
+**So that** 예제를 직접 실행해볼 수 있다.
+
+**Acceptance Criteria:**
+1. `examples/scala/scala2-basics/` 프로젝트가 생성되어 있다
+2. `examples/scala/scala3-basics/` 프로젝트가 생성되어 있다
+3. 각 프로젝트에 `build.sbt`와 `project/build.properties`가 있다
+4. Hello World 예제가 포함되어 있다
+5. `sbt run`으로 실행 가능하다
+6. README.md에 실행 방법이 설명되어 있다
+
+---
+
+## Epic 7: Scala 기초 문서
+
+**목표:** Scala의 핵심 기초 개념을 체계적으로 문서화합니다. 변수, 타입, 함수, 클래스, 트레이트, 케이스 클래스, 패턴 매칭을 다룹니다.
+
+### Story 7.1: 기본 문법 (변수, 상수, 타입) 문서 작성
+
+**As a** Scala 입문자,
+**I want** 변수 선언과 기본 타입에 대해 이해하고 싶다,
+**So that** Scala 코드를 읽고 쓸 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/concepts/basics.md`가 작성되어 있다
+2. `val`과 `var`의 차이가 설명되어 있다
+3. 기본 타입(Int, Long, Double, String, Boolean 등)이 설명되어 있다
+4. 타입 추론이 설명되어 있다
+5. Scala 2와 Scala 3 문법 비교가 포함되어 있다
+6. 코드 예제가 포함되어 있다
+
+### Story 7.2: 제어 구조 문서 작성
+
+**As a** Scala 입문자,
+**I want** Scala의 제어 구조를 이해하고 싶다,
+**So that** 조건문과 반복문을 사용할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/concepts/control-structures.md`가 작성되어 있다
+2. `if-else` 표현식이 설명되어 있다
+3. `for` 표현식이 설명되어 있다 (yield 포함)
+4. `while` 루프가 설명되어 있다
+5. `match` 표현식의 기본 사용법이 설명되어 있다
+6. Scala에서 제어 구조가 "표현식"인 점이 강조되어 있다
+
+### Story 7.3: 함수와 메서드 문서 작성
+
+**As a** Scala 입문자,
+**I want** 함수와 메서드 정의 방법을 이해하고 싶다,
+**So that** 재사용 가능한 코드를 작성할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/concepts/functions-methods.md`가 작성되어 있다
+2. `def`를 사용한 메서드 정의가 설명되어 있다
+3. 매개변수와 반환 타입이 설명되어 있다
+4. 기본 매개변수 값이 설명되어 있다
+5. 가변 인자(varargs)가 설명되어 있다
+6. 익명 함수(람다)가 설명되어 있다
+7. Scala 3의 새로운 문법(들여쓰기 기반 등)이 포함되어 있다
+
+### Story 7.4: 클래스와 객체 문서 작성
+
+**As a** Scala 입문자,
+**I want** 클래스, 객체, 트레이트를 이해하고 싶다,
+**So that** 객체지향 Scala 코드를 작성할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/concepts/classes-objects.md`가 작성되어 있다
+2. 클래스 정의와 생성자가 설명되어 있다
+3. 싱글톤 객체(`object`)가 설명되어 있다
+4. 컴패니언 객체가 설명되어 있다
+5. 트레이트 정의와 믹스인이 설명되어 있다
+6. 접근 제어자(private, protected)가 설명되어 있다
+7. Scala 3의 `enum`이 소개되어 있다
+
+### Story 7.5: 케이스 클래스 문서 작성
+
+**As a** Scala 입문자,
+**I want** 케이스 클래스의 개념과 사용법을 이해하고 싶다,
+**So that** 불변 데이터 모델을 효과적으로 정의할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/concepts/case-classes.md`가 작성되어 있다
+2. 케이스 클래스의 정의와 특징이 설명되어 있다
+3. 자동 생성되는 메서드들(equals, hashCode, copy 등)이 설명되어 있다
+4. 패턴 매칭과의 연계가 설명되어 있다
+5. 케이스 클래스 vs 일반 클래스 비교가 있다
+6. 실무 사용 사례가 포함되어 있다
+
+### Story 7.6: 패턴 매칭 문서 작성
+
+**As a** Scala 학습자,
+**I want** 패턴 매칭을 깊이 이해하고 싶다,
+**So that** Scala의 강력한 패턴 매칭을 활용할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/concepts/pattern-matching.md`가 작성되어 있다
+2. `match` 표현식의 다양한 패턴이 설명되어 있다 (리터럴, 변수, 타입, 튜플, 케이스 클래스)
+3. 가드(guard) 조건이 설명되어 있다
+4. 중첩 패턴이 설명되어 있다
+5. 추출자(Extractor) 패턴이 설명되어 있다
+6. Scala 3의 새로운 패턴 매칭 기능이 포함되어 있다
+
+---
+
+## Epic 8: Scala 중급 문서
+
+**목표:** Scala의 중급 개념을 문서화합니다. 컬렉션, 고차 함수, 제네릭, For Comprehension, 암시적 변환/문맥적 추상화를 다룹니다.
+
+### Story 8.1: 컬렉션 문서 작성
+
+**As a** Scala 학습자,
+**I want** Scala 컬렉션 라이브러리를 이해하고 싶다,
+**So that** 데이터를 효과적으로 처리할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/concepts/collections.md`가 작성되어 있다
+2. 불변 컬렉션과 가변 컬렉션의 차이가 설명되어 있다
+3. List, Set, Map, Seq, Vector 등 주요 컬렉션이 설명되어 있다
+4. 컬렉션 연산(map, filter, flatMap, fold, reduce 등)이 설명되어 있다
+5. 컬렉션 변환 메서드가 설명되어 있다
+6. 성능 특성 비교가 포함되어 있다
+
+### Story 8.2: 고차 함수 문서 작성
+
+**As a** Scala 학습자,
+**I want** 고차 함수를 이해하고 싶다,
+**So that** 함수형 프로그래밍 스타일로 코드를 작성할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/concepts/higher-order-functions.md`가 작성되어 있다
+2. 고차 함수의 정의와 개념이 설명되어 있다
+3. 함수를 인자로 받는 함수가 설명되어 있다
+4. 함수를 반환하는 함수(커링 포함)가 설명되어 있다
+5. 클로저(Closure)가 설명되어 있다
+6. 실무에서 자주 사용되는 패턴이 포함되어 있다
+
+### Story 8.3: 제네릭 문서 작성
+
+**As a** Scala 학습자,
+**I want** 제네릭과 타입 매개변수를 이해하고 싶다,
+**So that** 재사용 가능한 타입 안전 코드를 작성할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/concepts/generics.md`가 작성되어 있다
+2. 타입 매개변수 기본 사용법이 설명되어 있다
+3. 타입 경계(upper/lower bounds)가 설명되어 있다
+4. 컨텍스트 경계가 설명되어 있다
+5. 타입 제약(Type Constraints)이 설명되어 있다
+6. Java 제네릭과의 비교가 포함되어 있다
+
+### Story 8.4: For Comprehension 문서 작성
+
+**As a** Scala 학습자,
+**I want** For Comprehension을 깊이 이해하고 싶다,
+**So that** 모나딕 연산을 우아하게 표현할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/concepts/for-comprehensions.md`가 작성되어 있다
+2. For Comprehension의 기본 문법이 설명되어 있다
+3. `<-`, `=`, `if` 가드의 역할이 설명되어 있다
+4. `yield`를 사용한 값 생성이 설명되어 있다
+5. For Comprehension이 flatMap/map/withFilter로 변환되는 원리가 설명되어 있다
+6. Option, List, Future 등 다양한 타입에서의 활용이 포함되어 있다
+
+### Story 8.5: 암시적 변환 / 문맥적 추상화 문서 작성
+
+**As a** Scala 학습자,
+**I want** implicit(Scala 2) / given-using(Scala 3)을 이해하고 싶다,
+**So that** 고급 Scala 라이브러리를 이해하고 활용할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/concepts/implicits.md`가 작성되어 있다
+2. Scala 2의 implicit 변환, implicit 매개변수가 설명되어 있다
+3. Scala 3의 given/using이 설명되어 있다
+4. Extension Methods가 설명되어 있다
+5. 암시적 해석 규칙이 설명되어 있다
+6. Scala 2에서 Scala 3로의 마이그레이션 가이드가 포함되어 있다
+
+---
+
+## Epic 9: Scala 고급 문서
+
+**목표:** Scala의 고급 개념을 문서화합니다. 타입 클래스, 공변성/반공변성, 고급 타입 시스템, 매크로, 동시성, 함수형 패턴을 다룹니다.
+
+### Story 9.1: 타입 클래스 문서 작성
+
+**As a** Scala 고급 학습자,
+**I want** 타입 클래스 패턴을 이해하고 싶다,
+**So that** 확장 가능한 추상화를 설계할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/concepts/type-classes.md`가 작성되어 있다
+2. 타입 클래스의 개념과 동기가 설명되어 있다
+3. 타입 클래스 정의, 인스턴스, 사용 패턴이 설명되어 있다
+4. Scala 2의 implicit 기반 구현이 설명되어 있다
+5. Scala 3의 given/using 기반 구현이 설명되어 있다
+6. 실무 예제(Ordering, Numeric 등)가 포함되어 있다
+
+### Story 9.2: 공변성/반공변성 문서 작성
+
+**As a** Scala 고급 학습자,
+**I want** 변성(Variance)을 이해하고 싶다,
+**So that** 타입 안전한 제네릭 코드를 작성할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/concepts/variance.md`가 작성되어 있다
+2. 공변성(+T), 반공변성(-T), 무공변(T)이 설명되어 있다
+3. 각 변성의 사용 시점과 제약이 설명되어 있다
+4. 실제 라이브러리 예제(Function, List 등)가 포함되어 있다
+5. 변성 규칙과 컴파일러 검사가 설명되어 있다
+
+### Story 9.3: 고급 타입 시스템 문서 작성
+
+**As a** Scala 고급 학습자,
+**I want** Scala 3의 고급 타입 기능을 이해하고 싶다,
+**So that** 더 표현력 있는 타입을 활용할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/concepts/type-system-advanced.md`가 작성되어 있다
+2. Union Types(|)가 설명되어 있다
+3. Intersection Types(&)가 설명되어 있다
+4. Match Types가 설명되어 있다
+5. Opaque Types가 설명되어 있다
+6. Type Lambdas가 설명되어 있다
+7. Dependent Function Types가 소개되어 있다
+
+### Story 9.4: 매크로와 메타프로그래밍 문서 작성
+
+**As a** Scala 고급 학습자,
+**I want** Scala의 메타프로그래밍 기능을 이해하고 싶다,
+**So that** 컴파일 타임 코드 생성을 활용할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/concepts/macros-metaprogramming.md`가 작성되어 있다
+2. Scala 3의 inline이 설명되어 있다
+3. 컴파일 타임 연산이 설명되어 있다
+4. Scala 3 매크로 기초가 설명되어 있다
+5. Scala 2 매크로와의 차이점이 언급되어 있다
+6. 실무 활용 사례가 포함되어 있다
+
+### Story 9.5: 동시성 문서 작성
+
+**As a** Scala 학습자,
+**I want** Scala의 동시성 프로그래밍 기초를 이해하고 싶다,
+**So that** 비동기 코드를 작성할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/concepts/concurrency.md`가 작성되어 있다
+2. Future의 개념과 사용법이 설명되어 있다
+3. ExecutionContext가 설명되어 있다
+4. Future 조합(map, flatMap, recover 등)이 설명되어 있다
+5. Promise가 설명되어 있다
+6. 비동기 에러 처리가 설명되어 있다
+7. Akka/ZIO 등 고급 라이브러리 소개가 포함되어 있다
+
+### Story 9.6: 함수형 프로그래밍 패턴 문서 작성
+
+**As a** Scala 고급 학습자,
+**I want** 함수형 프로그래밍 패턴을 이해하고 싶다,
+**So that** 더 안전하고 조합 가능한 코드를 작성할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/concepts/functional-patterns.md`가 작성되어 있다
+2. Functor, Applicative, Monad 개념이 설명되어 있다
+3. Option, Either, Try의 함수형 활용이 설명되어 있다
+4. 함수 합성(Function Composition)이 설명되어 있다
+5. 참조 투명성과 부수 효과 관리가 설명되어 있다
+6. Cats/ZIO 등 FP 라이브러리 소개가 포함되어 있다
+
+---
+
+## Epic 10: Scala 예제 및 부록
+
+**목표:** 실습 예제 문서를 작성하고, 용어 사전, FAQ, 버전 비교 등 부록을 완성합니다.
+
+### Story 10.1: 환경 설정 문서 작성
+
+**As a** Scala 개발자,
+**I want** 개발 환경 설정 방법을 상세히 알고 싶다,
+**So that** 효율적인 개발 환경을 구축할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/examples/setup.md`가 작성되어 있다
+2. sbt 설치 및 기본 사용법이 설명되어 있다
+3. IntelliJ IDEA Scala 플러그인 설정이 설명되어 있다
+4. VS Code Metals 설정이 설명되어 있다
+5. build.sbt 주요 설정이 설명되어 있다
+6. 자주 사용하는 sbt 명령어가 정리되어 있다
+
+### Story 10.2: 기본 예제 문서 작성
+
+**As a** Scala 학습자,
+**I want** 종합적인 기본 예제를 따라해보고 싶다,
+**So that** 학습한 개념을 실습할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/examples/basic.md`가 작성되어 있다
+2. 간단한 데이터 처리 예제가 포함되어 있다
+3. 케이스 클래스와 패턴 매칭 활용 예제가 포함되어 있다
+4. 컬렉션 연산 예제가 포함되어 있다
+5. 예제 프로젝트 실행 방법이 설명되어 있다
+
+### Story 10.3: Scala 2 vs Scala 3 비교 예제 문서 작성
+
+**As a** Scala 학습자,
+**I want** Scala 2와 Scala 3의 차이를 코드로 비교하고 싶다,
+**So that** 버전 간 차이를 명확히 이해할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/examples/scala2-vs-scala3.md`가 작성되어 있다
+2. 동일한 로직을 Scala 2와 Scala 3로 구현한 비교가 있다
+3. 새로운 문법(들여쓰기, enum 등) 비교가 있다
+4. given/using vs implicit 비교가 있다
+5. 마이그레이션 팁이 포함되어 있다
+
+### Story 10.4: 용어 사전 작성
+
+**As a** Scala 입문자,
+**I want** Scala 용어를 빠르게 찾아볼 수 있는 사전을 원한다,
+**So that** 모르는 용어를 쉽게 확인할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/appendix/glossary.md`가 작성되어 있다
+2. 주요 Scala 용어가 알파벳/가나다 순으로 정리되어 있다
+3. 각 용어에 간결한 정의와 설명이 포함되어 있다
+4. 관련 문서 섹션으로의 링크가 포함되어 있다
+
+### Story 10.5: Scala 2 vs Scala 3 차이점 요약 문서 작성
+
+**As a** Scala 학습자,
+**I want** Scala 2와 Scala 3의 주요 차이점을 한눈에 보고 싶다,
+**So that** 마이그레이션이나 버전 선택에 참고할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/appendix/version-comparison.md`가 작성되어 있다
+2. 새로운 기능(enum, union types, given/using 등)이 정리되어 있다
+3. 변경된 기능이 정리되어 있다
+4. 제거된 기능이 정리되어 있다
+5. 마이그레이션 가이드 링크가 포함되어 있다
+
+### Story 10.6: FAQ 및 참고 자료 작성
+
+**As a** Scala 학습자,
+**I want** 자주 묻는 질문과 추가 학습 자료를 원한다,
+**So that** 더 깊이 공부할 수 있다.
+
+**Acceptance Criteria:**
+1. `content/ko/scala/appendix/faq.md`가 작성되어 있다
+2. `content/ko/scala/appendix/references.md`가 작성되어 있다
+3. FAQ에 자주 묻는 질문과 답변이 포함되어 있다
+4. 참고 자료에 공식 문서 링크가 포함되어 있다
+5. 추천 서적/강의가 포함되어 있다
+6. 커뮤니티 리소스가 포함되어 있다
+
+### Story 10.7: Scala 예제 프로젝트 완성
+
+**As a** 개발자,
+**I want** 종합적인 Scala 예제 프로젝트를 원한다,
+**So that** 실제로 코드를 실행해볼 수 있다.
+
+**Acceptance Criteria:**
+1. `examples/scala/scala2-basics/`가 완성되어 있다
+2. `examples/scala/scala3-basics/`가 완성되어 있다
+3. 각 프로젝트에 기초/중급 개념을 활용한 예제가 포함되어 있다
+4. 컬렉션, 패턴 매칭, 고차 함수 활용 예제가 있다
+5. 각 예제에 주석과 설명이 포함되어 있다
+6. README.md에 전체 실행 방법이 설명되어 있다
+
+---
+
+## Technical Constraints and Integration
+
+### Existing Technology Stack Integration
+
+**Languages**: Scala 2.13, Scala 3 (새로 추가) + 기존 Java 17
+**Build Tools**: sbt (새로 추가) + 기존 Gradle
+**Frameworks**: Scala Standard Library (새로 추가)
+**Infrastructure**: 기존 Hugo + GitHub Pages + GitHub Actions 그대로 사용
+
+### Integration Approach
+
+**Hugo Integration**: 기존 `content/ko/` 구조에 `scala/` 디렉토리 추가
+**Navigation Integration**: 기존 메뉴 구조에 Scala 가이드 항목 추가
+**Build Integration**: 기존 Hugo 빌드 프로세스 그대로 사용
+**Testing Integration**: Scala 예제는 sbt test로 독립 테스트
+
+### Code Organization
+
+**File Structure**: 기존 Kafka/DDD 가이드와 동일한 패턴 사용
+**Naming Conventions**: 기존 문서 명명 규칙 준수
+**Documentation Standards**: 기존 Hugo frontmatter 형식 준수
+
+---
+
 ## Next Steps
 
 ### Architect Prompt
 
-이 PRD를 기반으로 Architecture 문서를 생성해 주세요. 특히 다음 사항에 집중해 주세요:
-- Hugo 프로젝트 구조 상세 설계
-- GitHub Actions 워크플로우 설계
-- 예제 프로젝트 구조 설계
-- Mermaid.js 통합 방법
+이 Brownfield Enhancement PRD를 기반으로 Architecture 문서를 업데이트해 주세요:
+- Scala 예제 프로젝트 구조 설계 (sbt)
+- Scala 2와 Scala 3 프로젝트 구성 방법
+- 기존 아키텍처와의 통합 방안
 
 ### Development Prompt
 
-Epic 1부터 순차적으로 Story를 구현해 주세요. 각 Story는 독립적으로 완료 가능하며, Story 완료 시 GitHub에 커밋해 주세요.
+Epic 6부터 순차적으로 Story를 구현해 주세요. 각 Story는 독립적으로 완료 가능하며, Story 완료 시 GitHub에 커밋해 주세요.
 
 ---
 
 *Generated from Project Brief: Kafka Guidance 101*
+*Brownfield Enhancement: Scala Guide Addition*
