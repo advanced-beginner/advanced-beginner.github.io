@@ -122,65 +122,84 @@ jobs:
           echo "$DIFF_CONTENT" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: AI Review with Claude
+      - name: AI Review with Gemini
         id: review
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           # API 키 확인
-          if [ -z "$ANTHROPIC_API_KEY" ]; then
-            echo "::warning::ANTHROPIC_API_KEY not set. Using mock review."
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "::warning::GEMINI_API_KEY not set. Using mock review."
             echo "passed=true" >> $GITHUB_OUTPUT
             echo "comment<<EOF" >> $GITHUB_OUTPUT
             echo "## 🤖 AI Review (Mock Mode)" >> $GITHUB_OUTPUT
             echo "" >> $GITHUB_OUTPUT
-            echo "> ⚠️ ANTHROPIC_API_KEY가 설정되지 않아 모의 리뷰를 수행합니다." >> $GITHUB_OUTPUT
+            echo "> ⚠️ GEMINI_API_KEY가 설정되지 않아 모의 리뷰를 수행합니다." >> $GITHUB_OUTPUT
             echo "" >> $GITHUB_OUTPUT
-            echo "실제 AI 리뷰를 활성화하려면 Repository Secrets에 \`ANTHROPIC_API_KEY\`를 추가하세요." >> $GITHUB_OUTPUT
+            echo "실제 AI 리뷰를 활성화하려면 Repository Secrets에 \`GEMINI_API_KEY\`를 추가하세요." >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
             exit 0
           fi
 
-          # Claude API 호출을 위한 프롬프트 준비
+          # Gemini API 호출을 위한 프롬프트 준비
           PR_TITLE="${{ steps.pr.outputs.title }}"
           PR_BODY="${{ steps.pr.outputs.body }}"
 
           # diff 파일 읽기
           DIFF_CONTENT=$(cat pr_diff.txt | head -c 100000)
 
-          # API 요청 본문 생성
-          cat > request.json << 'PROMPT_EOF'
-          {
-            "model": "claude-sonnet-4-20250514",
-            "max_tokens": 4096,
-            "messages": [
+          # Gemini API 요청 본문 생성
+          PROMPT="당신은 코드 리뷰어입니다. 다음 Pull Request를 리뷰해주세요.
+
+## PR 제목
+${PR_TITLE}
+
+## PR 설명
+${PR_BODY}
+
+## 변경사항 (Diff)
+\`\`\`diff
+${DIFF_CONTENT}
+\`\`\`
+
+다음 형식으로 리뷰를 작성해주세요:
+1. **요약**: 변경사항의 전체적인 요약
+2. **장점**: 잘된 부분
+3. **개선사항**: 개선이 필요한 부분 (있다면)
+4. **보안/성능**: 보안 또는 성능 관련 이슈 (있다면)
+5. **결론**: 승인(✅) 또는 수정요청(❌) 여부
+
+한글로 작성해주세요."
+
+          # jq를 사용하여 JSON 생성 (특수문자 이스케이프 처리)
+          jq -n --arg prompt "$PROMPT" '{
+            "contents": [
               {
-                "role": "user",
-                "content": "당신은 코드 리뷰어입니다. 다음 Pull Request를 리뷰해주세요.\n\n## PR 제목\n$PR_TITLE\n\n## PR 설명\n$PR_BODY\n\n## 변경사항 (Diff)\n```diff\n$DIFF_CONTENT\n```\n\n다음 형식으로 리뷰를 작성해주세요:\n1. **요약**: 변경사항의 전체적인 요약\n2. **장점**: 잘된 부분\n3. **개선사항**: 개선이 필요한 부분 (있다면)\n4. **보안/성능**: 보안 또는 성능 관련 이슈 (있다면)\n5. **결론**: 승인(✅) 또는 수정요청(❌) 여부\n\n한글로 작성해주세요."
+                "parts": [
+                  {"text": $prompt}
+                ]
               }
-            ]
-          }
-          PROMPT_EOF
+            ],
+            "generationConfig": {
+              "temperature": 0.7,
+              "maxOutputTokens": 4096
+            }
+          }' > request.json
 
-          # 실제 내용으로 치환
-          jq --arg title "$PR_TITLE" --arg body "$PR_BODY" --arg diff "$DIFF_CONTENT" \
-            '.messages[0].content = "당신은 코드 리뷰어입니다. 다음 Pull Request를 리뷰해주세요.\n\n## PR 제목\n" + $title + "\n\n## PR 설명\n" + $body + "\n\n## 변경사항 (Diff)\n```diff\n" + $diff + "\n```\n\n다음 형식으로 리뷰를 작성해주세요:\n1. **요약**: 변경사항의 전체적인 요약\n2. **장점**: 잘된 부분\n3. **개선사항**: 개선이 필요한 부분 (있다면)\n4. **보안/성능**: 보안 또는 성능 관련 이슈 (있다면)\n5. **결론**: 승인(✅) 또는 수정요청(❌) 여부\n\n한글로 작성해주세요."' \
-            request.json > request_final.json
-
-          # Claude API 호출
-          RESPONSE=$(curl -s -X POST https://api.anthropic.com/v1/messages \
+          # Gemini API 호출
+          RESPONSE=$(curl -s -X POST \
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}" \
             -H "Content-Type: application/json" \
-            -H "x-api-key: $ANTHROPIC_API_KEY" \
-            -H "anthropic-version: 2023-06-01" \
-            -d @request_final.json)
+            -d @request.json)
 
           # 응답 파싱
-          REVIEW_CONTENT=$(echo "$RESPONSE" | jq -r '.content[0].text // empty')
+          REVIEW_CONTENT=$(echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text // empty')
 
           if [ -z "$REVIEW_CONTENT" ]; then
             echo "::error::Failed to get AI review response"
             echo "$RESPONSE" | jq .
-            REVIEW_CONTENT="AI 리뷰를 가져오는데 실패했습니다. 응답: $(echo $RESPONSE | jq -r '.error.message // "Unknown error"')"
+            ERROR_MSG=$(echo "$RESPONSE" | jq -r '.error.message // "Unknown error"')
+            REVIEW_CONTENT="AI 리뷰를 가져오는데 실패했습니다. 응답: ${ERROR_MSG}"
             echo "passed=false" >> $GITHUB_OUTPUT
           else
             # 승인 여부 확인 (✅가 있으면 승인)
@@ -198,7 +217,7 @@ jobs:
           echo "$REVIEW_CONTENT" >> $GITHUB_OUTPUT
           echo "" >> $GITHUB_OUTPUT
           echo "---" >> $GITHUB_OUTPUT
-          echo "*Reviewed by Claude AI*" >> $GITHUB_OUTPUT
+          echo "*Reviewed by Gemini AI*" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Post review comment
