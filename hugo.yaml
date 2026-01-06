@@ -17,6 +17,15 @@ languages:
     title: Advanced Beginner
     params:
       landingPageName: "<i class='fas fa-home'></i> 홈"
+  en:
+    weight: 2
+    languageName: English
+    languageCode: en-US
+    contentDir: content/en
+    title: Advanced Beginner
+    params:
+      landingPageName: "<i class='fas fa-home'></i> Home"
+      description: "A practical guide to Kafka, DDD, and Scala for developers moving beyond tutorials. Learn the 'why' behind the 'how'."
 
 markup:
   highlight:
