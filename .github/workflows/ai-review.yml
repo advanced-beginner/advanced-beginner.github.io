@@ -148,28 +148,32 @@ jobs:
           # diff 파일 읽기
           DIFF_CONTENT=$(cat pr_diff.txt | head -c 100000)
 
-          # Gemini API 요청 본문 생성
-          PROMPT="당신은 코드 리뷰어입니다. 다음 Pull Request를 리뷰해주세요.
+          # Gemini API 요청 본문 생성 (heredoc 사용)
+          cat > prompt.txt << PROMPT_EOF
+          당신은 코드 리뷰어입니다. 다음 Pull Request를 리뷰해주세요.
 
-## PR 제목
-${PR_TITLE}
+          ## PR 제목
+          ${PR_TITLE}
 
-## PR 설명
-${PR_BODY}
+          ## PR 설명
+          ${PR_BODY}
 
-## 변경사항 (Diff)
-\`\`\`diff
-${DIFF_CONTENT}
-\`\`\`
+          ## 변경사항 (Diff)
+          \`\`\`diff
+          ${DIFF_CONTENT}
+          \`\`\`
 
-다음 형식으로 리뷰를 작성해주세요:
-1. **요약**: 변경사항의 전체적인 요약
-2. **장점**: 잘된 부분
-3. **개선사항**: 개선이 필요한 부분 (있다면)
-4. **보안/성능**: 보안 또는 성능 관련 이슈 (있다면)
-5. **결론**: 승인(✅) 또는 수정요청(❌) 여부
+          다음 형식으로 리뷰를 작성해주세요:
+          1. **요약**: 변경사항의 전체적인 요약
+          2. **장점**: 잘된 부분
+          3. **개선사항**: 개선이 필요한 부분 (있다면)
+          4. **보안/성능**: 보안 또는 성능 관련 이슈 (있다면)
+          5. **결론**: 승인(✅) 또는 수정요청(❌) 여부
 
-한글로 작성해주세요."
+          한글로 작성해주세요.
+          PROMPT_EOF
+
+          PROMPT=$(cat prompt.txt)
 
           # jq를 사용하여 JSON 생성 (특수문자 이스케이프 처리)
           jq -n --arg prompt "$PROMPT" '{
