@@ -1,10 +1,316 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-08"
 title: 고차 함수
 weight: 8
 ---
 
 고차 함수(Higher-Order Function)는 함수를 인자로 받거나, 함수를 반환하는 함수입니다. 함수형 프로그래밍의 핵심 개념입니다.
+
+## 왜 고차 함수가 강력한가?
+
+### 문제: 반복되는 패턴
+
+Java 스타일의 명령형 코드에서는 비슷한 패턴이 반복됩니다:
+
+```java
+// Java: 주문 목록에서 총액 계산
+List<Order> orders = getOrders();
+double total = 0;
+for (Order order : orders) {
+    if (order.getStatus().equals("COMPLETED")) {  // 필터링
+        double price = order.getPrice() * 1.1;     // 변환 (세금 추가)
+        total += price;                             // 축약
+    }
+}
+
+// 같은 패턴이 다른 곳에서도 반복...
+List<String> names = new ArrayList<>();
+for (User user : users) {
+    if (user.isActive()) {                        // 필터링
+        names.add(user.getName().toUpperCase());  // 변환
+    }
+}
+```
+
+**문제점:**
+- "무엇을 하는지"보다 "어떻게 하는지"에 집중
+- 가변 상태(`total`, `names`)로 인한 버그 가능성
+- 재사용이 어려움
+
+### 고차 함수의 해결책
+
+Scala에서는 "무엇을"만 선언합니다:
+
+```scala
+// Scala: 선언적 스타일
+val total = orders
+  .filter(_.status == "COMPLETED")  // 무엇을: 완료된 주문만
+  .map(_.price * 1.1)               // 무엇을: 세금 추가
+  .sum                              // 무엇을: 합계
+
+val names = users
+  .filter(_.isActive)               // 무엇을: 활성 사용자만
+  .map(_.name.toUpperCase)          // 무엇을: 이름을 대문자로
+```
+
+**장점:**
+- 의도가 명확하게 드러남
+- 불변성 유지 (가변 상태 없음)
+- 각 연산을 독립적으로 테스트 가능
+- 체이닝으로 복잡한 변환도 읽기 쉬움
+
+### Java Stream API와 비교
+
+Java 8+의 Stream API도 비슷한 기능을 제공하지만, Scala가 더 간결합니다:
+
+```java
+// Java Stream
+double total = orders.stream()
+    .filter(o -> o.getStatus().equals("COMPLETED"))
+    .mapToDouble(o -> o.getPrice() * 1.1)
+    .sum();
+```
+
+```scala
+// Scala
+val total = orders
+  .filter(_.status == "COMPLETED")
+  .map(_.price * 1.1)
+  .sum
+```
+
+| 비교 항목 | Java Stream | Scala Collection |
+|----------|-------------|------------------|
+| 기본 동작 | 지연 평가 | 즉시 평가 (view로 지연 가능) |
+| 재사용 | 한 번만 사용 가능 | 무제한 재사용 |
+| 문법 | `.stream()`, `.collect()` 필요 | 바로 사용 |
+| 타입 힌트 | 자주 필요 | 대부분 추론 |
+| 기본형 처리 | `mapToInt`, `mapToDouble` 필요 | 자동 변환 |
+
+## 실무 예제: 주문 처리 파이프라인
+
+### 요구사항
+
+온라인 쇼핑몰에서 다음 처리가 필요합니다:
+1. 유효한 주문만 필터링
+2. 회원 등급에 따른 할인 적용
+3. 상품별 총액 계산
+4. 배송비 추가
+5. 최종 결제 금액 산출
+
+### 도메인 모델
+
+```scala
+case class Order(
+  id: String,
+  customerId: String,
+  items: List[OrderItem],
+  status: OrderStatus
+)
+
+case class OrderItem(
+  productId: String,
+  name: String,
+  price: Double,
+  quantity: Int
+)
+
+enum OrderStatus:
+  case Pending, Confirmed, Shipped, Cancelled
+
+case class Customer(
+  id: String,
+  name: String,
+  tier: CustomerTier
+)
+
+enum CustomerTier:
+  case Bronze, Silver, Gold, Platinum
+```
+
+### 고차 함수로 파이프라인 구현
+
+```scala
+object OrderProcessor:
+  // 할인율 매핑
+  val discountRates: Map[CustomerTier, Double] = Map(
+    CustomerTier.Bronze   -> 0.0,
+    CustomerTier.Silver   -> 0.05,
+    CustomerTier.Gold     -> 0.10,
+    CustomerTier.Platinum -> 0.15
+  )
+
+  // 주문 유효성 검사 - 고차 함수로 유연하게
+  def isValidOrder(order: Order): Boolean =
+    order.status != OrderStatus.Cancelled &&
+    order.items.nonEmpty
+
+  // 주문 아이템 총액 계산
+  def calculateItemTotal(item: OrderItem): Double =
+    item.price * item.quantity
+
+  // 주문 총액 계산
+  def calculateOrderTotal(order: Order): Double =
+    order.items.map(calculateItemTotal).sum
+
+  // 할인 적용 함수 생성 (함수를 반환하는 고차 함수)
+  def applyDiscount(tier: CustomerTier): Double => Double = {
+    val rate = discountRates.getOrElse(tier, 0.0)
+    total => total * (1 - rate)
+  }
+
+  // 배송비 계산
+  def calculateShipping(total: Double): Double =
+    if (total >= 50000) 0
+    else if (total >= 30000) 2500
+    else 3500
+
+  // 전체 파이프라인
+  def processOrders(
+    orders: List[Order],
+    getCustomer: String => Option[Customer]
+  ): List[(Order, Double)] = {
+    orders
+      .filter(isValidOrder)                          // 1. 유효한 주문만
+      .flatMap { order =>                            // 2. 고객 정보 결합
+        getCustomer(order.customerId).map(c => (order, c))
+      }
+      .map { case (order, customer) =>               // 3. 가격 계산
+        val subtotal = calculateOrderTotal(order)
+        val discounted = applyDiscount(customer.tier)(subtotal)
+        val shipping = calculateShipping(discounted)
+        val finalTotal = discounted + shipping
+        (order, finalTotal)
+      }
+  }
+```
+
+### 사용 예시
+
+```scala
+// 테스트 데이터
+val orders = List(
+  Order("O001", "C001", List(
+    OrderItem("P1", "노트북", 1200000, 1),
+    OrderItem("P2", "마우스", 50000, 2)
+  ), OrderStatus.Confirmed),
+  Order("O002", "C002", List(
+    OrderItem("P3", "키보드", 80000, 1)
+  ), OrderStatus.Cancelled),  // 제외됨
+  Order("O003", "C003", List(
+    OrderItem("P4", "모니터", 350000, 2)
+  ), OrderStatus.Confirmed)
+)
+
+val customers = Map(
+  "C001" -> Customer("C001", "김철수", CustomerTier.Gold),
+  "C003" -> Customer("C003", "이영희", CustomerTier.Silver)
+)
+
+val results = OrderProcessor.processOrders(
+  orders,
+  id => customers.get(id)
+)
+
+results.foreach { case (order, total) =>
+  println(s"주문 ${order.id}: ${total}원")
+}
+// 주문 O001: 1170000.0원 (10% 할인 + 무료배송)
+// 주문 O003: 665000.0원 (5% 할인 + 무료배송)
+```
+
+### 확장: 비동기 처리
+
+`Future`와 조합하여 비동기 파이프라인으로 확장:
+
+```scala
+import scala.concurrent.{Future, ExecutionContext}
+
+def processOrdersAsync(
+  orders: List[Order],
+  getCustomer: String => Future[Option[Customer]]
+)(using ec: ExecutionContext): Future[List[(Order, Double)]] = {
+  Future.sequence {
+    orders
+      .filter(isValidOrder)
+      .map { order =>
+        getCustomer(order.customerId).map { maybeCustomer =>
+          maybeCustomer.map { customer =>
+            val subtotal = calculateOrderTotal(order)
+            val discounted = applyDiscount(customer.tier)(subtotal)
+            val shipping = calculateShipping(discounted)
+            (order, discounted + shipping)
+          }
+        }
+      }
+  }.map(_.flatten)
+}
+```
+
+## 고차 함수 선택 가이드
+
+### 언제 무엇을 사용할까?
+
+| 작업 | 함수 | 예시 | 결과 |
+|------|------|------|------|
+| 1:1 변환 | `map` | 가격에 세금 추가 | `List[A]` → `List[B]` |
+| 조건 필터링 | `filter` | 유효한 주문만 | `List[A]` → `List[A]` (더 적음) |
+| 1:N 변환 + 평탄화 | `flatMap` | 주문 → 개별 상품들 | `List[A]` → `List[B]` (펼쳐짐) |
+| 단일 값으로 축약 | `fold`/`reduce` | 총액 계산 | `List[A]` → `B` |
+| 부수효과 실행 | `foreach` | 로깅, DB 저장 | `Unit` |
+| 조건으로 분리 | `partition` | 성공/실패 분류 | `(List[A], List[A])` |
+| 키로 그룹화 | `groupBy` | 카테고리별 상품 | `Map[K, List[A]]` |
+| 패턴 매칭 변환 | `collect` | 특정 타입만 추출 | `List[B]` (매칭된 것만) |
+
+### 성능 고려사항
+
+```scala
+// ❌ 큰 컬렉션에서 중간 컬렉션 생성
+val result = (1 to 1000000)
+  .map(_ * 2)      // 100만 개 리스트 생성
+  .filter(_ > 100) // 또 다른 리스트 생성
+  .take(10)        // 10개만 필요했는데...
+
+// ✅ view로 지연 평가 - 필요한 만큼만 계산
+val result = (1 to 1000000)
+  .view
+  .map(_ * 2)
+  .filter(_ > 100)
+  .take(10)
+  .toList
+
+// ✅ Iterator도 지연 평가
+val result = (1 to 1000000)
+  .iterator
+  .map(_ * 2)
+  .filter(_ > 100)
+  .take(10)
+  .toList
+```
+
+### 주의사항: 과도한 체이닝
+
+```scala
+// ❌ 너무 긴 체이닝은 디버깅이 어려움
+val result = data
+  .filter(_.isValid)
+  .map(_.transform)
+  .flatMap(_.split)
+  .groupBy(_.category)
+  .map { case (k, v) => k -> v.map(_.process) }
+  .filter { case (_, v) => v.nonEmpty }
+  .toMap
+
+// ✅ 의미 있는 단위로 분리하고 이름 부여
+val validData = data.filter(_.isValid)
+val transformed = validData.map(_.transform).flatMap(_.split)
+val grouped = transformed.groupBy(_.category)
+val processed = grouped.map { case (k, v) =>
+  k -> v.map(_.process)
+}.filter { case (_, v) => v.nonEmpty }
+```
+
+---
 
 ## 고차 함수란?
 

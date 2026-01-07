@@ -1,10 +1,193 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-08"
 title: Implicit / Given
 weight: 11
 ---
 
 암시적 기능은 Scala의 강력한 기능 중 하나입니다. Scala 2의 `implicit`과 Scala 3의 `given`/`using`을 모두 다룹니다.
+
+## 왜 Implicit이 필요한가?
+
+### 문제 1: 보일러플레이트 파라미터
+
+Java 스타일로 컨텍스트를 전달하면 모든 메서드에 반복적으로 매개변수가 필요합니다:
+
+```java
+// Java: ExecutionContext를 매번 전달
+public class OrderService {
+    public CompletableFuture<Order> createOrder(OrderRequest req, ExecutionContext ec) {
+        return validateOrder(req, ec)
+            .thenCompose(valid -> saveOrder(valid, ec))
+            .thenCompose(saved -> notifyUser(saved, ec));
+    }
+
+    private CompletableFuture<Order> validateOrder(OrderRequest req, ExecutionContext ec) { ... }
+    private CompletableFuture<Order> saveOrder(Order order, ExecutionContext ec) { ... }
+    private CompletableFuture<Void> notifyUser(Order order, ExecutionContext ec) { ... }
+}
+```
+
+**Scala의 해결책:** `implicit`/`using`으로 컨텍스트를 자동 전달합니다:
+
+```scala
+// Scala: ExecutionContext를 암시적으로 전달
+class OrderService(using ec: ExecutionContext):
+  def createOrder(req: OrderRequest): Future[Order] =
+    validateOrder(req)
+      .flatMap(saveOrder)
+      .flatMap(notifyUser)
+
+  private def validateOrder(req: OrderRequest): Future[Order] = ...
+  private def saveOrder(order: Order): Future[Order] = ...
+  private def notifyUser(order: Order): Future[Unit] = ...
+
+// 사용 시 한 번만 제공
+given ExecutionContext = ExecutionContext.global
+val service = OrderService()
+service.createOrder(request)  // ec 자동 주입
+```
+
+### 문제 2: 외부 라이브러리 타입 확장 불가
+
+Java에서는 `String`에 메서드를 추가하려면 래퍼 클래스가 필요합니다:
+
+```java
+// Java: String에 toSlug 메서드를 추가하고 싶다면
+public class StringUtils {
+    public static String toSlug(String s) {
+        return s.toLowerCase().replaceAll(" ", "-");
+    }
+}
+// 사용: StringUtils.toSlug(title) — 어색함
+
+// 또는 래퍼 클래스
+public class RichString {
+    private final String value;
+    public RichString(String value) { this.value = value; }
+    public String toSlug() { return value.toLowerCase().replaceAll(" ", "-"); }
+}
+// 사용: new RichString(title).toSlug() — 더 어색함
+```
+
+**Scala의 해결책:** Extension 메서드로 기존 타입을 확장합니다:
+
+```scala
+// Scala 3: String에 직접 메서드 추가
+extension (s: String)
+  def toSlug: String = s.toLowerCase.replace(" ", "-")
+  def words: List[String] = s.split("\\s+").toList
+
+// 사용: 마치 String의 원래 메서드인 것처럼
+"Hello World".toSlug   // "hello-world"
+"Hello World".words    // List("Hello", "World")
+```
+
+### 문제 3: 타입별 동작 구현의 어려움
+
+Java에서 다양한 타입을 같은 방식으로 처리하려면 복잡한 조건문이 필요합니다:
+
+```java
+// Java: 타입별로 다른 직렬화 로직
+public class JsonSerializer {
+    public String toJson(Object obj) {
+        if (obj instanceof String) {
+            return "\"" + obj + "\"";
+        } else if (obj instanceof Integer) {
+            return obj.toString();
+        } else if (obj instanceof List) {
+            List<?> list = (List<?>) obj;
+            return list.stream()
+                .map(this::toJson)
+                .collect(Collectors.joining(",", "[", "]"));
+        }
+        throw new IllegalArgumentException("Unsupported type");
+    }
+}
+// 문제: 새 타입 추가 시 이 메서드를 수정해야 함 (Open-Closed 원칙 위반)
+```
+
+**Scala의 해결책:** 타입 클래스로 확장 가능하게 설계합니다:
+
+```scala
+// Scala: 타입 클래스 패턴
+trait JsonEncoder[A]:
+  def encode(a: A): String
+
+given JsonEncoder[String] with
+  def encode(a: String): String = s"\"$a\""
+
+given JsonEncoder[Int] with
+  def encode(a: Int): String = a.toString
+
+given [A](using enc: JsonEncoder[A]): JsonEncoder[List[A]] with
+  def encode(list: List[A]): String =
+    list.map(enc.encode).mkString("[", ",", "]")
+
+def toJson[A](a: A)(using enc: JsonEncoder[A]): String = enc.encode(a)
+
+// 새 타입 추가 - 기존 코드 수정 없이 확장
+case class User(name: String, age: Int)
+given JsonEncoder[User] with
+  def encode(u: User): String = s"""{"name":"${u.name}","age":${u.age}}"""
+
+toJson(List("a", "b"))  // ["a","b"]
+toJson(User("Kim", 30)) // {"name":"Kim","age":30}
+```
+
+## Implicit/Given 사용 가이드
+
+### 언제 사용해야 하는가?
+
+| 상황 | 적합성 | 이유 |
+|------|--------|------|
+| `ExecutionContext` 전달 | ✅ 적합 | 표준 패턴, 명확한 컨텍스트 |
+| 타입 클래스 인스턴스 (`Ordering`, `Show` 등) | ✅ 적합 | 컴파일 타임 안전성 |
+| JSON/DB 코덱 | ✅ 적합 | 라이브러리 표준 패턴 |
+| 로거, 설정 객체 | ⚠️ 주의 | 명시적 DI가 더 나을 수 있음 |
+| 비즈니스 로직 파라미터 | ❌ 부적합 | 가독성 저하, 디버깅 어려움 |
+| 기본값/폴백 값 | ❌ 부적합 | 예상치 못한 동작 유발 |
+
+### 사용 결정 플로우차트
+
+```mermaid
+flowchart TD
+    A[파라미터를 implicit으로?] --> B{호출하는 쪽에서<br/>값을 알아야 하나?}
+    B -->|예| C[❌ 명시적 파라미터]
+    B -->|아니오| D{표준 라이브러리나<br/>프레임워크 패턴인가?}
+    D -->|예| E[✅ implicit 사용]
+    D -->|아니오| F{타입이 구체적인가?}
+    F -->|String, Int 등| G[❌ 너무 일반적]
+    F -->|AppConfig, DbContext 등| H[⚠️ 주의해서 사용]
+```
+
+### 피해야 할 안티패턴
+
+```scala
+// ❌ 안티패턴 1: 너무 일반적인 타입
+given String = "default"  // 모든 String 파라미터에 주입됨!
+given Int = 0             // 위험!
+
+// ✅ 올바른 방법: 래퍼 타입 사용
+case class ApiKey(value: String)
+given ApiKey = ApiKey("default-key")
+
+// ❌ 안티패턴 2: 비즈니스 로직 숨기기
+def processOrder(orderId: String)(using discount: Double): Order = ...
+// 할인율이 어디서 오는지 추적 어려움
+
+// ✅ 올바른 방법: 명시적 파라미터
+def processOrder(orderId: String, discount: Double): Order = ...
+
+// ❌ 안티패턴 3: 암시적 변환 남용
+given Conversion[String, Int] = _.toInt
+val x: Int = "123"  // 컴파일되지만 위험
+
+// ✅ 올바른 방법: 명시적 변환 또는 extension
+extension (s: String)
+  def toIntSafe: Option[Int] = s.toIntOption
+```
+
+---
 
 ## Scala 2: Implicit
 

@@ -1,10 +1,224 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-08"
 title: 함수와 메서드
 weight: 3
 ---
 
 Scala에서 함수는 일급 시민(first-class citizen)입니다. 함수를 변수에 저장하고, 인자로 전달하고, 반환값으로 사용할 수 있습니다.
+
+## 왜 일급 함수(First-Class Functions)인가?
+
+### Java 개발자가 겪는 문제
+
+Java에서 "동작"을 전달하려면 인터페이스와 클래스가 필요합니다:
+
+```java
+// Java: 전략 패턴으로 가격 계산 방식 변경
+public interface PricingStrategy {
+    double calculate(double price);
+}
+
+public class RegularPricing implements PricingStrategy {
+    @Override
+    public double calculate(double price) { return price; }
+}
+
+public class DiscountPricing implements PricingStrategy {
+    private double rate;
+    public DiscountPricing(double rate) { this.rate = rate; }
+    @Override
+    public double calculate(double price) { return price * (1 - rate); }
+}
+
+// 사용
+public double applyPricing(double price, PricingStrategy strategy) {
+    return strategy.calculate(price);
+}
+applyPricing(10000, new DiscountPricing(0.1));  // 9000.0
+```
+
+Java 8의 람다로 개선되었지만, 여전히 함수형 인터페이스(`Function`, `BiFunction`, `Consumer` 등)를 명시해야 합니다:
+
+```java
+// Java 8+
+Function<Double, Double> discount = price -> price * 0.9;
+double result = discount.apply(10000.0);  // apply() 메서드 호출 필요
+```
+
+### Scala의 해결책
+
+Scala에서 함수는 값(value)입니다. 특별한 인터페이스 없이 바로 사용합니다:
+
+```scala
+// Scala: 함수를 값으로
+val discount = (price: Double) => price * 0.9
+val result = discount(10000)  // 9000.0 - 바로 호출
+
+// 함수를 인자로 전달
+def applyPricing(price: Double, strategy: Double => Double): Double =
+  strategy(price)
+
+applyPricing(10000, discount)           // 9000.0
+applyPricing(10000, _ * 1.1)            // 11000.0 (인라인 람다)
+applyPricing(10000, Math.floor)         // 기존 메서드도 전달 가능
+```
+
+### 실무 활용: 전략 패턴 단순화
+
+```scala
+// 주문 처리 시스템
+case class Order(items: List[Item], customerId: String)
+case class Item(name: String, price: Double, quantity: Int)
+
+// 다양한 할인 전략 - 그냥 함수로 정의
+val noDiscount: Order => Double = order =>
+  order.items.map(i => i.price * i.quantity).sum
+
+val memberDiscount: Order => Double = order =>
+  noDiscount(order) * 0.9
+
+val bulkDiscount: Order => Double = order => {
+  val total = noDiscount(order)
+  if (total > 100000) total * 0.85 else total
+}
+
+// 전략 선택
+def calculateTotal(order: Order, strategy: Order => Double): Double =
+  strategy(order)
+
+// 전략을 Map으로 관리
+val strategies = Map(
+  "regular"  -> noDiscount,
+  "member"   -> memberDiscount,
+  "bulk"     -> bulkDiscount
+)
+
+// 고객 유형에 따라 전략 선택
+def getStrategy(customerId: String): Order => Double =
+  if (customerId.startsWith("VIP")) memberDiscount
+  else noDiscount
+```
+
+## 왜 커링(Currying)인가?
+
+### 문제: 반복되는 설정 값
+
+로깅할 때마다 로거 인스턴스를 전달해야 합니다:
+
+```scala
+// 매번 logger를 전달
+def logInfo(logger: Logger, message: String): Unit =
+  logger.info(message)
+
+def logError(logger: Logger, message: String, cause: Throwable): Unit =
+  logger.error(message, cause)
+
+// 사용할 때마다 반복
+val logger = LoggerFactory.getLogger("OrderService")
+logInfo(logger, "주문 시작")
+logInfo(logger, "검증 완료")
+logInfo(logger, "결제 처리 중")
+logError(logger, "결제 실패", exception)
+```
+
+### 커링의 해결책
+
+설정을 한 번만 적용하고 재사용합니다:
+
+```scala
+// 커링으로 분리
+def logInfo(logger: Logger)(message: String): Unit =
+  logger.info(message)
+
+def logError(logger: Logger)(message: String)(cause: Throwable): Unit =
+  logger.error(message, cause)
+
+// 로거를 한 번만 적용
+val logger = LoggerFactory.getLogger("OrderService")
+val info = logInfo(logger)      // String => Unit
+val error = logError(logger)    // String => Throwable => Unit
+
+// 이후 간결하게 사용
+info("주문 시작")
+info("검증 완료")
+info("결제 처리 중")
+error("결제 실패")(exception)
+```
+
+### 실무 활용: 의존성 주입 패턴
+
+DI 프레임워크 없이도 의존성을 우아하게 관리할 수 있습니다:
+
+```scala
+// 데이터베이스 작업 함수들
+def findUser(db: Database)(userId: String): Option[User] =
+  db.query(s"SELECT * FROM users WHERE id = '$userId'").headOption
+
+def saveOrder(db: Database)(order: Order): Unit =
+  db.execute(s"INSERT INTO orders ...")
+
+def sendEmail(mailer: Mailer)(to: String)(subject: String)(body: String): Unit =
+  mailer.send(to, subject, body)
+
+// 애플리케이션 시작 시 한 번 설정
+val db = Database.connect("jdbc:postgresql://localhost/shop")
+val mailer = Mailer.create("smtp.example.com")
+
+// 부분 적용으로 "서비스" 생성
+val getUser = findUser(db)           // String => Option[User]
+val createOrder = saveOrder(db)      // Order => Unit
+val notify = sendEmail(mailer)       // String => String => String => Unit
+
+// 비즈니스 로직에서 간결하게 사용
+def processOrder(userId: String, items: List[Item]): Unit = {
+  getUser(userId) match {
+    case Some(user) =>
+      val order = Order(items, userId)
+      createOrder(order)
+      notify(user.email)("주문 확인")(s"주문이 접수되었습니다: ${order.id}")
+    case None =>
+      throw new IllegalArgumentException(s"User not found: $userId")
+  }
+}
+```
+
+## 메서드 vs 함수: 언제 무엇을 선택할까?
+
+### 비교 테이블
+
+| 상황 | 권장 | 이유 |
+|------|------|------|
+| 클래스/객체의 동작 정의 | `def` 메서드 | 명확한 소속, `this` 참조 가능 |
+| 함수를 저장/전달해야 할 때 | `val` 함수 | 이미 값이므로 변환 불필요 |
+| 재귀 | `def` 메서드 | `@tailrec` 꼬리 재귀 최적화 가능 |
+| 컬렉션 연산 콜백 | 인라인 람다 | `list.map(x => x * 2)` |
+| 오버로딩이 필요할 때 | `def` 메서드 | 함수는 오버로딩 불가 |
+| 지연 평가가 필요할 때 | `def` 메서드 | 호출할 때마다 평가 |
+
+### 주의사항: 과도한 함수 사용
+
+```scala
+// ❌ 불필요하게 복잡
+class Calculator {
+  val add: (Int, Int) => Int = (a, b) => a + b
+  val multiply: (Int, Int) => Int = (a, b) => a * b
+}
+
+// ✅ 단순하고 명확
+class Calculator {
+  def add(a: Int, b: Int): Int = a + b
+  def multiply(a: Int, b: Int): Int = a * b
+}
+
+// 함수가 적합한 경우: 전략 패턴, 콜백, 고차 함수 인자
+val operations: Map[String, (Int, Int) => Int] = Map(
+  "+" -> (_ + _),
+  "-" -> (_ - _),
+  "*" -> (_ * _)
+)
+```
+
+---
 
 ## 메서드 정의
 
