@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-06"
 title: Scala
+description: 함수형과 객체지향을 결합한 Scala 가이드 - 기본 문법부터 타입 시스템, 고차 함수, 타입 클래스까지
 weight: 3
 ---
 

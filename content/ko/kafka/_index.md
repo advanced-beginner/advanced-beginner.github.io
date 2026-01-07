@@ -1,5 +1,6 @@
 ---
 title: Apache Kafka
+description: 분산 메시징 시스템 Kafka 실무 가이드 - Producer/Consumer, 트랜잭션, 복제, 장애 처리, 성능 튜닝까지
 weight: 1
 ---
 

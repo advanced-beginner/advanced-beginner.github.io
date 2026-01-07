@@ -42,15 +42,23 @@
   "name": "{{ .Site.Title }}",
   "url": "{{ .Site.BaseURL }}",
   "description": "{{ .Site.Params.description }}",
+  "inLanguage": "{{ .Site.LanguageCode }}",
   "publisher": {
     "@type": "Person",
     "name": "{{ .Site.Params.author.name }}"
+  },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "{{ .Site.BaseURL }}?q={search_term_string}",
+    "query-input": "required name=search_term_string"
   }
   {{ else if .IsPage }}
   "@type": "Article",
   "headline": "{{ .Title }}",
   "url": "{{ .Permalink }}",
   "description": "{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}",
+  "inLanguage": "{{ .Site.LanguageCode }}",
+  {{ with .Site.Params.images }}"image": "{{ index . 0 | absURL }}",{{ end }}
   {{ with .Date }}"datePublished": "{{ .Format "2006-01-02T15:04:05Z07:00" }}",{{ end }}
   {{ with .Lastmod }}"dateModified": "{{ .Format "2006-01-02T15:04:05Z07:00" }}",{{ end }}
   "author": {
@@ -69,10 +77,47 @@
   "@type": "WebPage",
   "name": "{{ .Title }}",
   "url": "{{ .Permalink }}",
+  "inLanguage": "{{ .Site.LanguageCode }}",
   "description": "{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}"
   {{ end }}
 }
 </script>
+
+<!-- BreadcrumbList for hierarchical search results -->
+{{ if not .IsHome }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "{{ .Site.Title }}",
+      "item": "{{ .Site.BaseURL }}"
+    }
+    {{- $position := 2 -}}
+    {{- range .Ancestors.Reverse -}}
+    {{- if not .IsHome -}}
+    ,{
+      "@type": "ListItem",
+      "position": {{ $position }},
+      "name": "{{ .Title }}",
+      "item": "{{ .Permalink }}"
+    }
+    {{- $position = add $position 1 -}}
+    {{- end -}}
+    {{- end -}}
+    ,{
+      "@type": "ListItem",
+      "position": {{ $position }},
+      "name": "{{ .Title }}",
+      "item": "{{ .Permalink }}"
+    }
+  ]
+}
+</script>
+{{ end }}
 
 <!-- Mermaid.js for diagrams -->
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>

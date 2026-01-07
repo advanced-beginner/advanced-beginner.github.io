@@ -1,5 +1,6 @@
 ---
 title: Apache Spark
+description: Java/Spring 개발자를 위한 Apache Spark 가이드 - DataFrame API, SQL, 스트리밍, 클러스터 배포
 weight: 4
 lastmod: "2026-01-07"
 ---
