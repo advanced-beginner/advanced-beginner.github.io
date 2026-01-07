@@ -1,6 +1,7 @@
 ---
 title: Structured Streaming
 weight: 8
+lastmod: "2026-01-07"
 ---
 
 # Structured Streaming

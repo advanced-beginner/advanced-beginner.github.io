@@ -1,6 +1,7 @@
 ---
 title: Transformation과 Action
 weight: 5
+lastmod: "2026-01-07"
 ---
 
 # Transformation과 Action
@@ -412,3 +413,11 @@ df.select("id", "category", "value")
 
 - [파티셔닝과 셔플](../partitioning/) - Wide Transformation의 내부 동작
 - [캐싱과 영속성](../caching/) - 중간 결과 재사용
+
+## 관련 문서
+
+- [아키텍처](../architecture/) - Job, Stage, Task의 실행 구조
+- [RDD 기초](../rdd/) - 저수준 Transformation API
+- [DataFrame과 Dataset](../dataframe-dataset/) - 고수준 데이터 처리 API
+- [성능 튜닝](../tuning/) - 실행 계획 최적화
+- [용어 사전](../../appendix/glossary/) - Transformation, Action 용어 정의

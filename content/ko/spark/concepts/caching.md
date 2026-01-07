@@ -1,6 +1,7 @@
 ---
 title: 캐싱과 영속성
 weight: 7
+lastmod: "2026-01-07"
 ---
 
 # 캐싱과 영속성
@@ -386,3 +387,11 @@ Dataset<Row> filtered = df.filter(...);  // df가 캐시됨
 
 - [Structured Streaming](../structured-streaming/) - 실시간 데이터 처리
 - [성능 튜닝](../tuning/) - 전체 성능 최적화
+
+## 관련 문서
+
+- [Transformation과 Action](../transformations-actions/) - 지연 평가와 캐싱의 관계
+- [파티셔닝과 셔플](../partitioning/) - 캐시 전 파티션 최적화
+- [RDD 기초](../rdd/) - RDD 수준의 persist/cache
+- [MLlib](../mllib/) - 머신러닝에서의 캐싱 활용
+- [용어 사전](../../appendix/glossary/) - Persist, Storage Level 용어 정의

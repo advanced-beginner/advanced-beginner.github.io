@@ -1,6 +1,7 @@
 ---
 title: DataFrame과 Dataset
 weight: 3
+lastmod: "2026-01-07"
 ---
 
 # DataFrame과 Dataset

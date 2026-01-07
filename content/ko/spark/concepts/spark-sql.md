@@ -1,6 +1,7 @@
 ---
 title: Spark SQL
 weight: 4
+lastmod: "2026-01-07"
 ---
 
 # Spark SQL

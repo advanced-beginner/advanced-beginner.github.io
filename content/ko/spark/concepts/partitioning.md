@@ -1,6 +1,7 @@
 ---
 title: 파티셔닝과 셔플
 weight: 6
+lastmod: "2026-01-07"
 ---
 
 # 파티셔닝과 셔플
@@ -434,3 +435,11 @@ Dataset<Row> joined = users.join(events, "user_id");
 
 - [캐싱과 영속성](../caching/) - 중간 결과 저장으로 재계산 방지
 - [성능 튜닝](../tuning/) - 전체적인 성능 최적화 전략
+
+## 관련 문서
+
+- [아키텍처](../architecture/) - 분산 처리 구조 이해
+- [Transformation과 Action](../transformations-actions/) - Narrow/Wide Transformation
+- [Spark SQL](../spark-sql/) - SQL 쿼리의 파티션 처리
+- [배포와 클러스터 관리](../deployment/) - 클러스터 환경에서의 파티션 설정
+- [용어 사전](../../appendix/glossary/) - Partition, Shuffle 용어 정의

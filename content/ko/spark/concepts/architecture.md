@@ -1,6 +1,7 @@
 ---
 title: 아키텍처
 weight: 1
+lastmod: "2026-01-07"
 ---
 
 # Spark 아키텍처
@@ -10,6 +11,41 @@ Spark 애플리케이션이 어떻게 분산 환경에서 실행되는지 이해
 ## 핵심 구성요소
 
 Spark 클러스터는 세 가지 주요 컴포넌트로 구성됩니다:
+
+```mermaid
+graph TB
+    subgraph Driver["Driver (Main JVM)"]
+        SS[SparkSession]
+        SC[SparkContext]
+        DAG[DAG Scheduler]
+        TS[Task Scheduler]
+    end
+
+    CM[Cluster Manager<br/>YARN / K8s / Standalone]
+
+    subgraph Worker1["Worker Node 1"]
+        E1[Executor 1]
+        T1[Task]
+        T2[Task]
+        Cache1[Block Manager]
+    end
+
+    subgraph Worker2["Worker Node 2"]
+        E2[Executor 2]
+        T3[Task]
+        T4[Task]
+        Cache2[Block Manager]
+    end
+
+    Driver -->|리소스 요청| CM
+    CM -->|Executor 할당| Worker1
+    CM -->|Executor 할당| Worker2
+    Driver -->|Task 배포| E1
+    Driver -->|Task 배포| E2
+    E1 -->|결과 반환| Driver
+    E2 -->|결과 반환| Driver
+    E1 <-->|셔플| E2
+```
 
 ### 1. Driver
 
@@ -100,30 +136,31 @@ Driver는 Spring 애플리케이션의 메인 컨텍스트와 유사합니다. �
 
 Spark 애플리케이션이 제출되면 다음 순서로 실행됩니다:
 
-```
-1. 애플리케이션 제출
-       ↓
-2. Driver 프로세스 시작
-       ↓
-3. SparkSession 생성
-       ↓
-4. Cluster Manager에 Executor 요청
-       ↓
-5. Executor 프로세스 시작 (각 워커 노드)
-       ↓
-6. Executor가 Driver에 등록
-       ↓
-7. Driver가 코드 분석 → DAG 생성
-       ↓
-8. DAG를 Stage로 분할
-       ↓
-9. Stage를 Task로 분할
-       ↓
-10. Task를 Executor에 배포
-       ↓
-11. Executor가 Task 실행
-       ↓
-12. 결과를 Driver에 반환
+```mermaid
+sequenceDiagram
+    participant User as 사용자
+    participant Driver as Driver
+    participant CM as Cluster Manager
+    participant Executor as Executors
+
+    User->>Driver: 1. spark-submit
+    activate Driver
+    Driver->>Driver: 2. SparkSession 생성
+    Driver->>CM: 3. Executor 리소스 요청
+    CM->>Executor: 4. Executor 프로세스 시작
+    activate Executor
+    Executor->>Driver: 5. Executor 등록
+
+    Note over Driver: 6. 코드 분석 → DAG 생성
+    Note over Driver: 7. DAG → Stage → Task 분할
+
+    Driver->>Executor: 8. Task 배포
+    Executor->>Executor: 9. Task 실행
+    Executor->>Driver: 10. 결과 반환
+
+    deactivate Executor
+    Driver->>User: 11. 최종 결과
+    deactivate Driver
 ```
 
 ## Job, Stage, Task

@@ -1,6 +1,7 @@
 ---
 title: 성능 튜닝
 weight: 10
+lastmod: "2026-01-07"
 ---
 
 # 성능 튜닝
@@ -396,3 +397,12 @@ df.explain(true);
 
 - [배포와 클러스터 관리](../deployment/) - 프로덕션 환경 구성
 - [FAQ](../../appendix/faq/) - 자주 발생하는 성능 문제 해결
+
+## 관련 문서
+
+- [아키텍처](../architecture/) - Driver/Executor 메모리 구조
+- [파티셔닝과 셔플](../partitioning/) - 셔플 최적화 상세
+- [캐싱과 영속성](../caching/) - 캐시 메모리 관리
+- [Spark SQL](../spark-sql/) - SQL 쿼리 최적화
+- [기본 예제](../../examples/basic/) - 최적화 적용 예제
+- [용어 사전](../../appendix/glossary/) - AQE, Tungsten 용어 정의

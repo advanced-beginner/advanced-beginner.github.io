@@ -1,6 +1,7 @@
 ---
 title: RDD 기초
 weight: 2
+lastmod: "2026-01-07"
 ---
 
 # RDD (Resilient Distributed Dataset)

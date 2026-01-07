@@ -1,6 +1,7 @@
 ---
 title: FAQ
 weight: 2
+lastmod: "2026-01-07"
 ---
 
 # FAQ
