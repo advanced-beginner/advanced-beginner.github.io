@@ -15,6 +15,168 @@ Spark SQL은 구조화된 데이터 처리를 위한 Spark 모듈입니다. SQL 
 3. **다양한 데이터 소스**: JDBC, Parquet, JSON, Hive 등 통합
 4. **DataFrame과 상호 운용**: SQL 결과가 DataFrame으로 반환
 
+## Catalyst Optimizer 심층 이해
+
+Catalyst는 Spark SQL의 쿼리 최적화 엔진입니다. 사용자가 작성한 쿼리를 분석하고 최적화하여 효율적인 실행 계획을 생성합니다.
+
+### 쿼리 처리 단계
+
+```mermaid
+flowchart LR
+    A[SQL/DataFrame] --> B[Unresolved<br/>Logical Plan]
+    B --> C[Analyzed<br/>Logical Plan]
+    C --> D[Optimized<br/>Logical Plan]
+    D --> E[Physical<br/>Plans]
+    E --> F[Selected<br/>Physical Plan]
+    F --> G[RDD 코드<br/>생성]
+
+    subgraph Analysis["1. Analysis"]
+        B --> C
+    end
+
+    subgraph Optimization["2. Logical Optimization"]
+        C --> D
+    end
+
+    subgraph Planning["3. Physical Planning"]
+        D --> E --> F
+    end
+
+    subgraph CodeGen["4. Code Generation"]
+        F --> G
+    end
+```
+
+### 각 단계 상세
+
+#### 1단계: Analysis (분석)
+
+테이블과 컬럼 이름을 실제 스키마와 매핑합니다.
+
+```java
+// 사용자 코드
+df.filter(col("salary").gt(5000));
+
+// Unresolved Plan: "salary"가 어떤 타입인지 모름
+// Analyzed Plan: salary는 IntegerType, df의 3번째 컬럼
+```
+
+#### 2단계: Logical Optimization (논리 최적화)
+
+규칙 기반으로 쿼리를 최적화합니다.
+
+| 최적화 규칙 | 설명 | 예시 |
+|------------|------|------|
+| **Predicate Pushdown** | 필터를 데이터 소스에 푸시 | WHERE 절을 Parquet 파일 읽기 단계로 이동 |
+| **Column Pruning** | 필요한 컬럼만 읽기 | SELECT에 없는 컬럼 스킵 |
+| **Constant Folding** | 상수 표현식 미리 계산 | `1 + 2` → `3` |
+| **Boolean Simplification** | 불리언 조건 단순화 | `true AND x` → `x` |
+| **Filter Pushdown** | 조인 전 필터링 | 조인 전에 각 테이블 필터 |
+
+```java
+// 최적화 전
+df.join(other, "id")
+  .filter(col("status").equalTo("ACTIVE"))
+  .select("name");
+
+// 최적화 후 (Catalyst가 자동 변환)
+// 1. filter가 join 전으로 이동 (Predicate Pushdown)
+// 2. "name"만 읽기 (Column Pruning)
+```
+
+#### 3단계: Physical Planning (물리 계획)
+
+여러 실행 전략 중 최적의 방법을 선택합니다.
+
+```java
+// 조인 전략 선택 예시
+// Catalyst가 테이블 크기를 분석하여 결정:
+// - 작은 테이블: Broadcast Hash Join
+// - 큰 테이블: Sort Merge Join
+// - 스트리밍: Shuffle Hash Join
+```
+
+#### 4단계: Code Generation (코드 생성 - Tungsten)
+
+최적화된 Java 바이트코드를 런타임에 생성합니다.
+
+```java
+// Whole-Stage Code Generation
+// 여러 연산자를 하나의 함수로 융합 (fusion)
+// 가상 함수 호출 오버헤드 제거
+spark.conf().set("spark.sql.codegen.wholeStage", "true");  // 기본값
+```
+
+### 실행 계획 확인하기
+
+```java
+Dataset<Row> result = df
+    .filter(col("age").gt(30))
+    .groupBy("department")
+    .agg(avg("salary").alias("avg_salary"));
+
+// 논리 계획
+result.explain(true);
+
+// 출력 예시:
+// == Parsed Logical Plan ==
+// 'Aggregate ['department], ['department, avg('salary) AS avg_salary]
+// +- 'Filter ('age > 30)
+//    +- 'UnresolvedRelation [employees]
+//
+// == Analyzed Logical Plan ==
+// department: string, avg_salary: double
+// Aggregate [department], [department, avg(salary) AS avg_salary]
+// +- Filter (age > 30)
+//    +- Relation[id,name,age,department,salary] parquet
+//
+// == Optimized Logical Plan ==
+// Aggregate [department], [department, avg(salary) AS avg_salary]
+// +- Project [department, salary]        ← Column Pruning
+//    +- Filter (age > 30)
+//       +- Relation[id,name,age,department,salary] parquet
+//
+// == Physical Plan ==
+// *(2) HashAggregate(keys=[department], functions=[avg(salary)])
+// +- Exchange hashpartitioning(department, 200)   ← 셔플
+//    +- *(1) HashAggregate(keys=[department], functions=[partial_avg(salary)])
+//       +- *(1) Project [department, salary]
+//          +- *(1) Filter (age > 30)
+//             +- *(1) ColumnarToRow
+//                +- FileScan parquet [age,department,salary]  ← 필요한 컬럼만
+```
+
+### AQE (Adaptive Query Execution)
+
+Spark 3.0+에서 도입된 **런타임 최적화**입니다. 실행 중 통계를 수집하여 계획을 동적으로 조정합니다.
+
+```java
+// AQE 활성화 (Spark 3.2+ 기본 활성화)
+spark.conf().set("spark.sql.adaptive.enabled", "true");
+
+// 주요 기능:
+// 1. 동적 파티션 병합 (Coalescing)
+spark.conf().set("spark.sql.adaptive.coalescePartitions.enabled", "true");
+
+// 2. 스큐 조인 최적화
+spark.conf().set("spark.sql.adaptive.skewJoin.enabled", "true");
+
+// 3. 브로드캐스트 조인 동적 전환
+spark.conf().set("spark.sql.adaptive.autoBroadcastJoinThreshold", "10MB");
+```
+
+**AQE 동작 예시:**
+
+```
+정적 계획: 200개 파티션으로 셔플
+    ↓
+실행 중: 실제 데이터가 적어 대부분 파티션이 거의 비어있음
+    ↓
+AQE: 런타임에 5개 파티션으로 병합
+    ↓
+결과: 태스크 수 감소, 오버헤드 절감
+```
+
 ## 기본 사용법
 
 ### 임시 뷰 생성

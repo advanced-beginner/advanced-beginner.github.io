@@ -10,8 +10,12 @@ lastmod: "2026-01-07"
 
 ## 전체 흐름
 
-```
-1. 프로젝트 생성 → 2. 의존성 추가 → 3. SparkSession 생성 → 4. 데이터 처리 → 5. 결과 확인
+```mermaid
+flowchart LR
+    A[1. 프로젝트 생성] --> B[2. 의존성 추가]
+    B --> C[3. SparkSession 생성]
+    C --> D[4. 데이터 처리]
+    D --> E[5. 결과 확인]
 ```
 
 ## 준비물
@@ -71,6 +75,68 @@ configurations.all {
 ```
 
 > **버전 참고:** `spark-core_2.13`에서 `2.13`은 Scala 버전입니다. Java에서 사용해도 Scala 런타임이 필요하기 때문에 명시합니다.
+
+### Maven 사용 시
+
+`pom.xml` 파일:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>spark-quickstart</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <spark.version>3.5.1</spark.version>
+        <scala.version>2.13</scala.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_${scala.version}</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_${scala.version}</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.9</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <mainClass>com.example.SparkQuickStart</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+```
+
+실행:
+```bash
+mvn compile exec:java
+```
 
 ## Step 3: 샘플 데이터 생성
 
@@ -231,6 +297,103 @@ root
 ```
 
 **축하합니다!** 첫 번째 Spark 애플리케이션을 성공적으로 실행했습니다.
+
+---
+
+## 프로덕션 수준 코드
+
+실제 운영 환경에서는 예외 처리와 리소스 정리가 필수입니다:
+
+```java
+package com.example;
+
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.AnalysisException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static org.apache.spark.sql.functions.*;
+
+public class SparkQuickStartProduction {
+    private static final Logger logger = LoggerFactory.getLogger(SparkQuickStartProduction.class);
+
+    public static void main(String[] args) {
+        SparkSession spark = null;
+        int exitCode = 0;
+
+        try {
+            // SparkSession 생성
+            spark = SparkSession.builder()
+                    .appName("Quick Start Production")
+                    .master("local[*]")
+                    .config("spark.sql.session.timeZone", "Asia/Seoul")
+                    .getOrCreate();
+
+            spark.sparkContext().setLogLevel("WARN");
+            logger.info("SparkSession 생성 완료");
+
+            // 데이터 읽기 (에러 모드 설정)
+            Dataset<Row> employees = spark.read()
+                    .option("header", "true")
+                    .option("inferSchema", "true")
+                    .option("mode", "FAILFAST")  // 잘못된 데이터 시 즉시 실패
+                    .csv("src/main/resources/employees.csv");
+
+            // 스키마 검증
+            validateSchema(employees);
+
+            // 데이터 처리
+            Dataset<Row> result = employees
+                    .filter(col("salary").isNotNull())
+                    .groupBy("department")
+                    .agg(
+                        avg("salary").alias("avg_salary"),
+                        count("*").alias("count")
+                    );
+
+            // 결과 출력
+            result.show();
+            logger.info("처리 완료: {} 개 부서", result.count());
+
+        } catch (AnalysisException e) {
+            logger.error("데이터 분석 오류: {}", e.getMessage());
+            exitCode = 1;
+        } catch (Exception e) {
+            logger.error("Spark 작업 실패", e);
+            exitCode = 1;
+        } finally {
+            // 리소스 정리 (항상 실행)
+            if (spark != null) {
+                spark.stop();
+                logger.info("SparkSession 종료");
+            }
+        }
+
+        System.exit(exitCode);
+    }
+
+    private static void validateSchema(Dataset<Row> df) {
+        String[] requiredColumns = {"id", "name", "department", "salary"};
+        for (String col : requiredColumns) {
+            if (!java.util.Arrays.asList(df.columns()).contains(col)) {
+                throw new IllegalArgumentException("필수 컬럼 누락: " + col);
+            }
+        }
+    }
+}
+```
+
+**프로덕션 코드의 핵심 포인트:**
+
+| 항목 | 설명 |
+|------|------|
+| `try-finally` | SparkSession이 항상 정리되도록 보장 |
+| `option("mode", "FAILFAST")` | 잘못된 데이터 발견 시 즉시 실패 |
+| `Logger` | System.out 대신 구조화된 로깅 |
+| `exitCode` | 스크립트/CI 연동을 위한 종료 코드 |
+| `validateSchema` | 런타임 스키마 검증 |
 
 ---
 

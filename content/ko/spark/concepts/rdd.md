@@ -101,6 +101,33 @@ JavaRDD<Integer> evens = numbers.filter(n -> n % 2 == 0);
 
 Transformation은 기존 RDD에서 새 RDD를 생성하는 연산입니다. **지연 평가**되어 즉시 실행되지 않습니다.
 
+### Narrow vs Wide Transformation
+
+```mermaid
+graph TB
+    subgraph Narrow["Narrow Transformation (셔플 없음)"]
+        direction TB
+        P1[Partition 1] --> P1_out[Partition 1']
+        P2[Partition 2] --> P2_out[Partition 2']
+        P3[Partition 3] --> P3_out[Partition 3']
+    end
+
+    subgraph Wide["Wide Transformation (셔플 발생)"]
+        direction TB
+        W1[Partition 1] --> |데이터 재분배| W1_out[Partition A]
+        W1 --> W2_out[Partition B]
+        W2[Partition 2] --> W1_out
+        W2 --> W2_out
+        W3[Partition 3] --> W1_out
+        W3 --> W2_out
+    end
+```
+
+| 유형 | 예시 | 특징 |
+|------|------|------|
+| **Narrow** | map, filter, flatMap | 1:1 파티션 매핑, 빠름 |
+| **Wide** | groupByKey, reduceByKey, join | 셔플 발생, 네트워크 비용 |
+
 ### 기본 Transformation
 
 ```java

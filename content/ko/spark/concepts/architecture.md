@@ -271,6 +271,106 @@ Dataset<Row> highPaid = employees
 2. **실행 위치**: Java는 단일 JVM, Spark는 여러 Executor에 분산
 3. **장애 처리**: Java는 예외 발생 시 실패, Spark는 자동 재시도
 
+## 메모리 모델 (Unified Memory Management)
+
+Spark 1.6부터 도입된 **통합 메모리 관리(Unified Memory Management)**는 실행과 저장 메모리를 동적으로 공유합니다.
+
+### Executor 메모리 구조
+
+```mermaid
+graph TB
+    subgraph Executor["Executor JVM 메모리"]
+        subgraph Reserved["Reserved Memory (300MB)"]
+            RM[Spark 내부 객체]
+        end
+
+        subgraph UM["Unified Memory (spark.memory.fraction × Heap)"]
+            subgraph Storage["Storage Memory"]
+                Cache[캐시된 데이터]
+                Broadcast[브로드캐스트 변수]
+            end
+
+            subgraph Execution["Execution Memory"]
+                Shuffle[셔플 버퍼]
+                Join[조인 버퍼]
+                Sort[정렬 버퍼]
+                Agg[집계 버퍼]
+            end
+        end
+
+        subgraph User["User Memory"]
+            UDF[UDF 객체]
+            Meta[메타데이터]
+        end
+    end
+
+    Storage <-->|동적 공유| Execution
+```
+
+### 메모리 영역별 역할
+
+| 영역 | 비율 (기본값) | 용도 |
+|------|--------------|------|
+| **Reserved** | 300MB 고정 | Spark 내부 객체, OOM 방지 버퍼 |
+| **Unified Memory** | Heap × 0.6 | 실행과 저장 공유 |
+| ├─ Storage | 동적 (초기 50%) | 캐시, 브로드캐스트, 언롤링 |
+| └─ Execution | 동적 (초기 50%) | 셔플, 조인, 정렬, 집계 |
+| **User Memory** | Heap × 0.4 | 사용자 코드, UDF, RDD 메타데이터 |
+
+### 동적 메모리 공유
+
+**핵심 원리**: Execution 메모리가 부족하면 Storage 메모리를 빌려 사용하고, 그 반대도 가능합니다.
+
+```java
+// 메모리 설정 예시
+SparkSession spark = SparkSession.builder()
+    .config("spark.memory.fraction", "0.6")           // Unified Memory 비율
+    .config("spark.memory.storageFraction", "0.5")    // Storage 초기 비율
+    .getOrCreate();
+```
+
+**동작 방식:**
+
+1. **Execution → Storage 차용**: 셔플 중 메모리 부족 시 캐시 공간 사용
+2. **Storage → Execution 차용**: 캐시 중 메모리 부족 시 실행 공간 사용
+3. **우선순위**: Execution이 우선 - 필요 시 캐시 데이터 삭제(eviction)
+
+### 메모리 계산 예시
+
+```
+Executor 메모리: 8GB
+├── Reserved: 300MB
+├── Unified Memory: (8GB - 300MB) × 0.6 = 4.6GB
+│   ├── Storage (초기): 4.6GB × 0.5 = 2.3GB
+│   └── Execution (초기): 4.6GB × 0.5 = 2.3GB
+└── User Memory: (8GB - 300MB) × 0.4 = 3.1GB
+```
+
+### Off-Heap 메모리
+
+GC 영향을 줄이기 위해 JVM 힙 외부 메모리 사용:
+
+```java
+SparkSession spark = SparkSession.builder()
+    .config("spark.memory.offHeap.enabled", "true")
+    .config("spark.memory.offHeap.size", "2g")
+    .getOrCreate();
+```
+
+**Off-Heap 장점:**
+- GC 대상에서 제외되어 Stop-the-World 감소
+- 대용량 캐시에 효과적
+- Tungsten 메모리 관리와 통합
+
+### 메모리 관련 트러블슈팅
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| OOM in Executor | 데이터 파티션이 너무 큼 | 파티션 수 증가 (`repartition`) |
+| OOM in Driver | `collect()` 결과가 너무 큼 | `take(n)` 또는 파일로 저장 |
+| GC overhead exceeded | 메모리 부족 | `spark.executor.memory` 증가 |
+| 캐시 삭제 빈번 | Storage Memory 부족 | `storageFraction` 증가 또는 DISK 사용 |
+
 ## 배포 모드
 
 ### Client Mode

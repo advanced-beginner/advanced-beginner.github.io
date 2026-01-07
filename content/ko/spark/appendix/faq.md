@@ -310,3 +310,188 @@ List<Employee> employees = df.as(encoder).collectAsList();
 ```
 
 주의: `collect()`는 모든 데이터를 Driver로 가져오므로 대용량 데이터에서는 사용하지 마세요.
+
+## Spark UI 활용 디버깅 가이드
+
+Spark 성능 문제 해결의 핵심은 Spark UI를 체계적으로 분석하는 것입니다.
+
+### 디버깅 플로우
+
+```mermaid
+flowchart TD
+    A[성능 문제 발생] --> B{Spark UI 확인}
+    B --> C[Jobs 탭]
+    B --> D[Stages 탭]
+    B --> E[Storage 탭]
+    B --> F[Executors 탭]
+
+    C --> G{Job이 오래 걸림?}
+    G -->|Yes| H[어떤 Stage가 느린지 확인]
+
+    D --> I{Stage가 느림?}
+    I -->|Yes| J[Task 분포 확인]
+    J --> K{스큐 있음?}
+    K -->|Yes| L[Salting 또는 AQE 적용]
+    K -->|No| M[파티션 수 조정]
+
+    E --> N{캐시 적중률?}
+    N -->|낮음| O[Storage Level 확인]
+
+    F --> P{특정 Executor 느림?}
+    P -->|Yes| Q[GC, 네트워크, 디스크 확인]
+```
+
+### 1. Jobs 탭 분석
+
+```
+확인 항목:
+- Duration: 전체 Job 소요 시간
+- Stages: 완료/실패/진행 중 Stage 수
+- Tasks: 총 Task 수와 진행 상황
+```
+
+**문제 신호:**
+- 특정 Job이 비정상적으로 오래 걸림
+- 반복 Job 간 시간 편차가 큼
+
+### 2. Stages 탭 분석 (가장 중요)
+
+```
+핵심 메트릭:
+┌─────────────────────────────────────────────────────────┐
+│ Shuffle Read    : Stage가 읽은 셔플 데이터 크기        │
+│ Shuffle Write   : Stage가 쓴 셔플 데이터 크기          │
+│ Spill (Memory)  : 메모리 → 디스크 스필 (성능 저하)     │
+│ Spill (Disk)    : 디스크 스필 총량 (심각한 메모리 부족)│
+└─────────────────────────────────────────────────────────┘
+```
+
+**Task 분포 분석:**
+
+| 메트릭 | 정상 | 문제 |
+|--------|------|------|
+| Min/Max Duration | 비슷함 | 10배 이상 차이 → **스큐** |
+| Shuffle Read | 균등 분포 | 일부만 큼 → **스큐** |
+| GC Time | < 10% | > 30% → **메모리 부족** |
+
+### 3. 스큐 진단 및 해결
+
+**진단 코드:**
+
+```java
+// 파티션별 데이터 분포 확인
+df.groupBy(spark_partition_id().alias("partition"))
+  .count()
+  .orderBy(col("count").desc())
+  .show(20);
+
+// 예상 출력 (스큐 있음):
+// +----------+--------+
+// |partition |  count |
+// +----------+--------+
+// |        5 | 1000000|  ← 비정상적으로 큼!
+// |        3 |   5000 |
+// |        1 |   4800 |
+// ...
+```
+
+**해결책:**
+
+```java
+// 1. AQE 스큐 조인 (Spark 3.0+)
+spark.conf().set("spark.sql.adaptive.enabled", "true");
+spark.conf().set("spark.sql.adaptive.skewJoin.enabled", "true");
+
+// 2. Salting (수동)
+int saltBuckets = 10;
+Dataset<Row> salted = df.withColumn("salted_key",
+    concat(col("key"), lit("_"), lit(Math.abs(rand().hashCode() % saltBuckets))));
+
+// 3. Broadcast Join (작은 테이블)
+df1.join(broadcast(smallDf), "key");
+```
+
+### 4. OOM 디버깅
+
+**Driver OOM:**
+```
+java.lang.OutOfMemoryError: Java heap space
+  at org.apache.spark.sql.Dataset.collect
+```
+
+→ `collect()`, `toPandas()` 등이 원인. 결과 크기 확인.
+
+**Executor OOM:**
+```
+ExecutorLostFailure (executor X exited caused by one of the running tasks)
+Reason: Container killed by YARN for exceeding memory limits
+```
+
+→ 파티션당 데이터 크기 확인, 메모리 증가 또는 파티션 수 증가.
+
+**해결 체크리스트:**
+
+```java
+// 1. 파티션 수 확인
+int numPartitions = df.rdd().getNumPartitions();
+System.out.println("파티션 수: " + numPartitions);
+
+// 2. 파티션당 예상 크기
+long totalSize = spark.sessionState().executePlan(df.queryExecution().logical())
+    .optimizedPlan().stats().sizeInBytes().longValue();
+System.out.println("파티션당 크기: " + (totalSize / numPartitions / 1024 / 1024) + "MB");
+
+// 3. 파티션 수 조정
+df = df.repartition(200);  // 파티션 크기가 200MB 정도 되도록
+```
+
+### 5. 셔플 최적화 진단
+
+**셔플이 많은지 확인:**
+
+```java
+// 실행 계획에서 Exchange 확인
+df.explain();
+// Exchange hashpartitioning ← 셔플 발생!
+```
+
+**셔플 줄이기:**
+
+```java
+// Before: 두 번의 셔플
+df.groupBy("a").count()
+  .join(df.groupBy("a").sum("b"), "a");
+
+// After: 한 번의 셔플
+df.groupBy("a").agg(
+    count("*").alias("count"),
+    sum("b").alias("sum_b")
+);
+```
+
+### 6. 로그 분석
+
+```bash
+# Driver 로그에서 오류 찾기
+grep -i "error\|exception\|oom\|killed" driver.log
+
+# 셔플 관련 문제
+grep -i "shuffle\|fetch\|timeout" executor.log
+
+# GC 문제
+grep -i "gc\|pause\|heap" executor.log
+```
+
+### 7. 성능 체크리스트
+
+```
+□ 셔플 파티션 수가 적절한가? (기본 200, 데이터 크기에 따라 조정)
+□ 브로드캐스트 조인을 사용할 수 있는가? (작은 테이블)
+□ 파티션 스큐가 있는가? (Spark UI Stage 탭에서 확인)
+□ GC 시간이 과도한가? (> 10%)
+□ 디스크 스필이 발생하는가? (메모리 부족)
+□ 필요한 컬럼만 선택했는가? (Column Pruning)
+□ 필터를 최대한 앞에 적용했는가? (Predicate Pushdown)
+□ Parquet 같은 컬럼 기반 포맷을 사용하는가?
+□ AQE가 활성화되어 있는가? (Spark 3.0+)
+```
