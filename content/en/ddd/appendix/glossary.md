@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-07"
 title: Glossary
 weight: 1
 ---

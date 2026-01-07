@@ -8,6 +8,21 @@ weight: 2
 
 Explaining basic message send/receive implementation with Spring Kafka.
 
+> **Required Dependencies (build.gradle.kts):**
+> ```kotlin
+> implementation("org.springframework.kafka:spring-kafka")
+> ```
+>
+> **Common Imports:**
+> ```java
+> import org.springframework.kafka.core.KafkaTemplate;
+> import org.springframework.kafka.annotation.KafkaListener;
+> import org.springframework.kafka.support.SendResult;
+> import org.springframework.kafka.support.Acknowledgment;
+> import org.apache.kafka.clients.consumer.ConsumerRecord;
+> import org.apache.kafka.clients.producer.RecordMetadata;
+> ```
+
 > **Prerequisite**: Completing the [Quick Start](../../quick-start/) first will make this document easier to understand.
 
 This document extends the simple Quick Start example to learn patterns used in production.

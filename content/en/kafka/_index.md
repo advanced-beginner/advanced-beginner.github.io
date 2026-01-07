@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-07"
 title: Apache Kafka
 weight: 1
 ---
