@@ -37,7 +37,7 @@ examples/scala/
 ### 1. 프로젝트 클론
 
 ```bash
-git clone https://github.com/kimbenji/advanced-beginner.git
+git clone https://github.com/advanced-beginner/advanced-beginner.github.io.git
 cd advanced-beginner/examples/scala
 ```
 

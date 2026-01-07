@@ -12,7 +12,7 @@
 
 Kafka Guidance 101은 **한글 기술 문서 사이트**입니다. Hugo 정적 사이트 + Spring Boot 예제 프로젝트를 모노레포로 관리합니다.
 
-- **사이트 URL**: https://kimbenji.github.io/advanced-beginner/
+- **사이트 URL**: https://advanced-beginner.github.io/
 - **콘텐츠 언어**: 한글 (ko)
 - **테마**: hugo-theme-relearn (git submodule)
 

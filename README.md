@@ -1,13 +1,13 @@
 # Advanced Beginner
 
-[![Deploy Hugo](https://github.com/kimbenji/advanced-beginner/actions/workflows/hugo.yaml/badge.svg)](https://github.com/kimbenji/advanced-beginner/actions/workflows/hugo.yaml)
+[![Deploy Hugo](https://github.com/advanced-beginner/advanced-beginner.github.io/actions/workflows/hugo.yaml/badge.svg)](https://github.com/advanced-beginner/advanced-beginner.github.io/actions/workflows/hugo.yaml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 > **기초를 넘어 실무로** — 핵심 원리부터 이해하는 기술 가이드
 
 튜토리얼로 "Hello World"는 만들어봤지만, **왜 이렇게 해야 하는지** 모르겠다면 이 가이드가 그 간극을 메워드립니다.
 
-**[📖 가이드 바로가기](https://kimbenji.github.io/advanced-beginner/)**
+**[📖 가이드 바로가기](https://advanced-beginner.github.io/)**
 
 ---
 
@@ -15,9 +15,9 @@
 
 | 가이드 | 설명 | 상태 |
 |--------|------|------|
-| **[Apache Kafka](https://kimbenji.github.io/advanced-beginner/ko/kafka/)** | 분산 메시징 시스템의 실무 활용. Producer/Consumer부터 트랜잭션, 성능 튜닝까지 | ✅ 완료 |
-| **[Domain-Driven Design](https://kimbenji.github.io/advanced-beginner/ko/ddd/)** | 복잡한 비즈니스 로직을 체계적으로 다루는 설계 방법론 | ✅ 완료 |
-| **[Scala](https://kimbenji.github.io/advanced-beginner/ko/scala/)** | Scala 2.13 & Scala 3 문법 가이드. 함수형 프로그래밍부터 동시성까지 | ✅ 완료 |
+| **[Apache Kafka](https://advanced-beginner.github.io/ko/kafka/)** | 분산 메시징 시스템의 실무 활용. Producer/Consumer부터 트랜잭션, 성능 튜닝까지 | ✅ 완료 |
+| **[Domain-Driven Design](https://advanced-beginner.github.io/ko/ddd/)** | 복잡한 비즈니스 로직을 체계적으로 다루는 설계 방법론 | ✅ 완료 |
+| **[Scala](https://advanced-beginner.github.io/ko/scala/)** | Scala 2.13 & Scala 3 문법 가이드. 함수형 프로그래밍부터 동시성까지 | ✅ 완료 |
 
 ---
 
@@ -35,7 +35,7 @@
 
 ```bash
 # 저장소 클론
-git clone --recurse-submodules https://github.com/kimbenji/advanced-beginner.git
+git clone --recurse-submodules https://github.com/advanced-beginner/advanced-beginner.github.io.git
 cd advanced-beginner
 
 # Hugo 개발 서버 실행

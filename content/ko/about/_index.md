@@ -12,8 +12,8 @@ weight: 100
 
 이 가이드는 오픈소스 프로젝트로 운영됩니다. 기여와 피드백을 환영합니다.
 
-- **GitHub:** [github.com/kimbenji/advanced-beginner](https://github.com/kimbenji/advanced-beginner)
-- **Issues:** [이슈 등록 및 개선 제안](https://github.com/kimbenji/advanced-beginner/issues)
+- **GitHub:** [github.com/advanced-beginner/advanced-beginner.github.io](https://github.com/advanced-beginner/advanced-beginner.github.io)
+- **Issues:** [이슈 등록 및 개선 제안](https://github.com/advanced-beginner/advanced-beginner.github.io/issues)
 
 ## 목적
 

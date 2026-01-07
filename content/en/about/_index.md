@@ -12,8 +12,8 @@ weight: 100
 
 This guide is maintained as an open-source project. Contributions and feedback are welcome.
 
-- **GitHub:** [github.com/kimbenji/advanced-beginner](https://github.com/kimbenji/advanced-beginner)
-- **Issues:** [Report issues or suggest improvements](https://github.com/kimbenji/advanced-beginner/issues)
+- **GitHub:** [github.com/advanced-beginner/advanced-beginner.github.io](https://github.com/advanced-beginner/advanced-beginner.github.io)
+- **Issues:** [Report issues or suggest improvements](https://github.com/advanced-beginner/advanced-beginner.github.io/issues)
 
 ## Purpose
 

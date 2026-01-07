@@ -7,7 +7,7 @@
 | **프로젝트명** | Advanced Beginner (Kafka Guidance 101) |
 | **유형** | Hugo 정적 사이트 (기술 문서) |
 | **호스팅** | GitHub Pages |
-| **URL** | https://kimbenji.github.io/advanced-beginner/ |
+| **URL** | https://advanced-beginner.github.io/ |
 | **마지막 업데이트** | 2026-01-04 |
 
 ## 기술 스택
