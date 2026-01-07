@@ -567,6 +567,96 @@ public class SalesAnalysis {
 }
 ```
 
+---
+
+## Java vs Scala 코드 비교
+
+동일한 로직을 Java와 Scala로 작성한 비교입니다. Java 개발자가 Scala 문서를 읽을 때 참고하세요.
+
+### DataFrame 생성 및 조회
+
+| 작업 | Java | Scala |
+|------|------|-------|
+| SparkSession 생성 | `SparkSession.builder().getOrCreate()` | `SparkSession.builder.getOrCreate()` |
+| CSV 읽기 | `spark.read().option("header", "true").csv(path)` | `spark.read.option("header", true).csv(path)` |
+| 스키마 출력 | `df.printSchema()` | `df.printSchema()` |
+| 컬럼 참조 | `col("name")` | `$"name"` 또는 `col("name")` |
+
+### 코드 예시 비교
+
+**Java:**
+```java
+import static org.apache.spark.sql.functions.*;
+
+Dataset<Row> result = df
+    .filter(col("age").gt(25))
+    .withColumn("bonus", col("salary").multiply(0.1))
+    .groupBy("department")
+    .agg(
+        avg("salary").alias("avg_salary"),
+        sum("bonus").alias("total_bonus")
+    )
+    .orderBy(col("avg_salary").desc());
+```
+
+**Scala:**
+```scala
+import org.apache.spark.sql.functions._
+
+val result = df
+  .filter($"age" > 25)
+  .withColumn("bonus", $"salary" * 0.1)
+  .groupBy("department")
+  .agg(
+    avg("salary").alias("avg_salary"),
+    sum("bonus").alias("total_bonus")
+  )
+  .orderBy($"avg_salary".desc)
+```
+
+### 주요 차이점
+
+| 구분 | Java | Scala | 설명 |
+|------|------|-------|------|
+| **타입 선언** | `Dataset<Row>` | `DataFrame` | Scala는 타입 alias 사용 |
+| **메서드 호출** | `.method()` | `.method` | Scala는 괄호 생략 가능 |
+| **컬럼 참조** | `col("x")` | `$"x"` | Scala는 StringContext 사용 |
+| **비교 연산** | `.gt(25)` | `> 25` | Scala는 연산자 오버로딩 |
+| **산술 연산** | `.multiply(0.1)` | `* 0.1` | Scala는 연산자 오버로딩 |
+| **람다** | `row -> row.getInt(0)` | `row => row.getInt(0)` | 화살표 문법 차이 |
+| **익명 함수** | `(MapFunction<T,R>)` | 타입 추론 | Java는 명시적 캐스트 필요 |
+
+### Dataset 타입 안전 코드 비교
+
+**Java:**
+```java
+Encoder<Employee> encoder = Encoders.bean(Employee.class);
+Dataset<Employee> ds = df.as(encoder);
+
+Dataset<Employee> filtered = ds.filter(
+    (FilterFunction<Employee>) emp -> emp.getAge() > 30
+);
+
+Dataset<String> names = ds.map(
+    (MapFunction<Employee, String>) Employee::getName,
+    Encoders.STRING()
+);
+```
+
+**Scala:**
+```scala
+case class Employee(name: String, age: Int, department: String)
+
+val ds = df.as[Employee]
+
+val filtered = ds.filter(_.age > 30)
+
+val names = ds.map(_.name)
+```
+
+> **Note**: Scala의 case class는 자동으로 Encoder가 생성되어 Java보다 간결합니다.
+> Java 17+의 `record`를 사용하면 비슷하게 간결해집니다.
+
 ## 다음 단계
 
 DataFrame과 Dataset을 이해했다면:

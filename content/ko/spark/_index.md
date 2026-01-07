@@ -108,13 +108,77 @@ Spark와 하둡 MapReduce를 비교하면 Spark의 위치를 이해하기 쉽습
 - **필수**: Java 기본, 컬렉션 API (Stream, Lambda)
 - **도움됨**: SQL 기초, Spring Boot 경험, 기본적인 분산 시스템 개념
 
-## 학습 경로 제안
+## 학습 경로 가이드
 
+### 역할별 학습 경로
+
+```mermaid
+flowchart TD
+    Start[시작] --> Role{역할 선택}
+
+    Role -->|백엔드 개발자| BE[배치 처리 중심]
+    Role -->|데이터 엔지니어| DE[파이프라인 중심]
+    Role -->|데이터 분석가| DA[분석 중심]
+
+    BE --> BE1[Quick Start]
+    BE1 --> BE2[DataFrame/Dataset]
+    BE2 --> BE3[Spring Boot 통합]
+    BE3 --> BE4[ETL 파이프라인]
+
+    DE --> DE1[아키텍처]
+    DE1 --> DE2[파티셔닝/캐싱]
+    DE2 --> DE3[성능 튜닝]
+    DE3 --> DE4[배포/모니터링]
+
+    DA --> DA1[Spark SQL]
+    DA1 --> DA2[기본 예제]
+    DA2 --> DA3[공개 데이터셋]
+    DA3 --> DA4[MLlib]
 ```
-처음이라면:     Quick Start → 아키텍처 → RDD → DataFrame/Dataset
-데이터 처리:    Spark SQL → Transformation/Action → 파티셔닝 → 기본 예제
-실시간 처리:    Structured Streaming → 캐싱
-운영 준비:      성능 튜닝 → 배포 → FAQ
+
+### 난이도별 문서 분류
+
+| 문서 | 난이도 | 예상 시간 | 선수 문서 |
+|------|--------|----------|----------|
+| **Quick Start** | ⭐ 입문 | 30분 | 없음 |
+| **아키텍처** | ⭐ 입문 | 45분 | 없음 |
+| **RDD 기초** | ⭐ 입문 | 30분 | 없음 |
+| **DataFrame/Dataset** | ⭐⭐ 기초 | 60분 | Quick Start |
+| **Spark SQL** | ⭐⭐ 기초 | 45분 | DataFrame |
+| **Transformation/Action** | ⭐⭐ 기초 | 30분 | RDD 또는 DataFrame |
+| **기본 예제** | ⭐⭐ 기초 | 60분 | DataFrame, Spark SQL |
+| **파티셔닝과 셔플** | ⭐⭐⭐ 중급 | 60분 | 아키텍처, Transformation |
+| **캐싱과 영속성** | ⭐⭐⭐ 중급 | 30분 | 파티셔닝 |
+| **Spring Boot 통합** | ⭐⭐⭐ 중급 | 90분 | 기본 예제 |
+| **모니터링** | ⭐⭐⭐ 중급 | 60분 | 아키텍처 |
+| **성능 튜닝** | ⭐⭐⭐⭐ 고급 | 90분 | 파티셔닝, 캐싱 |
+| **Structured Streaming** | ⭐⭐⭐⭐ 고급 | 90분 | DataFrame, 파티셔닝 |
+| **ETL 파이프라인** | ⭐⭐⭐⭐ 고급 | 120분 | Spring Boot, 기본 예제 |
+| **MLlib** | ⭐⭐⭐⭐ 고급 | 90분 | DataFrame, SQL |
+| **배포** | ⭐⭐⭐⭐ 고급 | 60분 | 아키텍처, 성능 튜닝 |
+| **Spark Connect** | ⭐⭐⭐⭐⭐ 심화 | 45분 | 배포 |
+
+### 목표별 추천 경로
+
+**1주차 - 기초 다지기 (입문자)**
+```
+Day 1-2: Quick Start → 아키텍처
+Day 3-4: DataFrame/Dataset → Spark SQL
+Day 5:   Transformation/Action → 기본 예제
+```
+
+**2주차 - 실무 적용 (중급자)**
+```
+Day 1-2: Spring Boot 통합 → 모니터링
+Day 3-4: 파티셔닝 → 캐싱 → 성능 튜닝
+Day 5:   ETL 파이프라인
+```
+
+**3주차 - 고급 기능 (고급자)**
+```
+Day 1-2: Structured Streaming
+Day 3-4: MLlib
+Day 5:   배포 → Spark Connect
 ```
 
 각 문서는 독립적으로 읽을 수 있지만, 처음이라면 위 순서를 추천합니다.

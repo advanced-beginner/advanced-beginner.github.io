@@ -516,6 +516,236 @@ public class SalesAnalysisExample {
 }
 ```
 
+---
+
+## 실제 공개 데이터셋 예제
+
+실무에서 자주 활용하는 공개 데이터셋을 사용한 예제입니다.
+
+### NYC 택시 데이터 분석
+
+뉴욕시 택시 데이터(TLC Trip Record Data)는 빅데이터 분석 학습에 가장 많이 사용되는 공개 데이터셋입니다.
+
+```java
+import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.types.*;
+import static org.apache.spark.sql.functions.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * NYC 택시 데이터 분석 예제
+ * 데이터 출처: https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page
+ */
+public class NYCTaxiAnalysis {
+    private static final Logger logger = LoggerFactory.getLogger(NYCTaxiAnalysis.class);
+
+    public static void main(String[] args) {
+        SparkSession spark = SparkSession.builder()
+                .appName("NYC Taxi Analysis")
+                .config("spark.sql.adaptive.enabled", "true")
+                .config("spark.sql.adaptive.coalescePartitions.enabled", "true")
+                .getOrCreate();
+
+        try {
+            // 스키마 명시 (inferSchema보다 성능 우수)
+            StructType taxiSchema = new StructType()
+                .add("VendorID", DataTypes.IntegerType)
+                .add("tpep_pickup_datetime", DataTypes.TimestampType)
+                .add("tpep_dropoff_datetime", DataTypes.TimestampType)
+                .add("passenger_count", DataTypes.IntegerType)
+                .add("trip_distance", DataTypes.DoubleType)
+                .add("PULocationID", DataTypes.IntegerType)
+                .add("DOLocationID", DataTypes.IntegerType)
+                .add("payment_type", DataTypes.IntegerType)
+                .add("fare_amount", DataTypes.DoubleType)
+                .add("tip_amount", DataTypes.DoubleType)
+                .add("total_amount", DataTypes.DoubleType);
+
+            // Parquet 포맷 권장 (NYC TLC에서 제공)
+            // 샘플: https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-01.parquet
+            Dataset<Row> taxiData = spark.read()
+                    .schema(taxiSchema)
+                    .parquet("data/yellow_tripdata_2024-01.parquet");
+
+            logger.info("총 레코드 수: {}", taxiData.count());
+
+            // 1. 시간대별 운행 패턴 분석
+            Dataset<Row> hourlyPattern = taxiData
+                .withColumn("pickup_hour", hour(col("tpep_pickup_datetime")))
+                .withColumn("pickup_dayofweek", dayofweek(col("tpep_pickup_datetime")))
+                .groupBy("pickup_dayofweek", "pickup_hour")
+                .agg(
+                    count("*").alias("trip_count"),
+                    avg("trip_distance").alias("avg_distance"),
+                    avg("total_amount").alias("avg_fare"),
+                    avg("tip_amount").alias("avg_tip")
+                )
+                .orderBy("pickup_dayofweek", "pickup_hour");
+
+            logger.info("=== 시간대별 운행 패턴 ===");
+            hourlyPattern.show(24);
+
+            // 2. 인기 출발/도착 지역 분석
+            Dataset<Row> popularRoutes = taxiData
+                .filter(col("trip_distance").gt(0))
+                .groupBy("PULocationID", "DOLocationID")
+                .agg(
+                    count("*").alias("trip_count"),
+                    avg("total_amount").alias("avg_fare"),
+                    percentile_approx(col("trip_distance"), lit(0.5)).alias("median_distance")
+                )
+                .orderBy(col("trip_count").desc())
+                .limit(20);
+
+            logger.info("=== 인기 경로 Top 20 ===");
+            popularRoutes.show();
+
+            // 3. 요금 이상치 탐지
+            Dataset<Row> fareStats = taxiData.agg(
+                avg("total_amount").alias("mean"),
+                stddev("total_amount").alias("stddev")
+            ).first();
+
+            double mean = fareStats.getDouble(0);
+            double stddev = fareStats.getDouble(1);
+            double threshold = mean + (3 * stddev);  // 3-시그마 규칙
+
+            Dataset<Row> outliers = taxiData
+                .filter(col("total_amount").gt(threshold)
+                    .or(col("total_amount").lt(0)))
+                .select("tpep_pickup_datetime", "trip_distance",
+                        "fare_amount", "tip_amount", "total_amount");
+
+            logger.info("=== 요금 이상치 (3σ 초과) ===");
+            logger.info("임계값: ${}", String.format("%.2f", threshold));
+            outliers.show(10);
+
+            // 4. 결과 저장
+            hourlyPattern.write()
+                .mode("overwrite")
+                .partitionBy("pickup_dayofweek")
+                .parquet("output/nyc_taxi/hourly_pattern");
+
+            logger.info("분석 완료");
+
+        } catch (Exception e) {
+            logger.error("분석 중 오류 발생: {}", e.getMessage(), e);
+            throw new RuntimeException(e);
+        } finally {
+            spark.stop();
+        }
+    }
+}
+```
+
+#### 데이터 다운로드 방법
+
+```bash
+# NYC TLC 공식 데이터 (Parquet 형식, ~50MB/월)
+wget https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-01.parquet
+
+# Zone Lookup 테이블 (지역 코드 → 지역명 매핑)
+wget https://d37ci6vzurychx.cloudfront.net/misc/taxi_zone_lookup.csv
+```
+
+### Kaggle 데이터셋 활용 예제
+
+[Kaggle](https://www.kaggle.com)은 다양한 실무 데이터셋을 제공합니다.
+
+```java
+/**
+ * Kaggle Credit Card Fraud Detection 데이터셋 분석
+ * 데이터: https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
+ */
+public class FraudDetectionAnalysis {
+    private static final Logger logger = LoggerFactory.getLogger(FraudDetectionAnalysis.class);
+
+    public static void main(String[] args) {
+        SparkSession spark = SparkSession.builder()
+                .appName("Fraud Detection Analysis")
+                .config("spark.sql.shuffle.partitions", "8")  // 소규모 데이터용
+                .getOrCreate();
+
+        try {
+            // 신용카드 거래 데이터 (284,807 거래, 492건 사기)
+            Dataset<Row> transactions = spark.read()
+                    .option("header", "true")
+                    .option("inferSchema", "true")
+                    .csv("data/creditcard.csv");
+
+            // 클래스 불균형 확인
+            logger.info("=== 클래스 분포 ===");
+            transactions.groupBy("Class")
+                .agg(
+                    count("*").alias("count"),
+                    round(count("*").multiply(100.0).divide(transactions.count()), 2)
+                        .alias("percentage")
+                )
+                .show();
+
+            // 사기 거래 특성 분석
+            Dataset<Row> fraudStats = transactions
+                .groupBy("Class")
+                .agg(
+                    avg("Amount").alias("avg_amount"),
+                    max("Amount").alias("max_amount"),
+                    min("Amount").alias("min_amount"),
+                    stddev("Amount").alias("stddev_amount"),
+                    avg("Time").alias("avg_time_seconds")
+                );
+
+            logger.info("=== 정상 vs 사기 거래 통계 ===");
+            fraudStats.show();
+
+            // 시간대별 사기 발생 패턴
+            Dataset<Row> hourlyFraud = transactions
+                .withColumn("hour", floor(col("Time").divide(3600)).mod(24))
+                .groupBy("hour", "Class")
+                .count()
+                .orderBy("hour");
+
+            logger.info("=== 시간대별 거래 패턴 ===");
+            hourlyFraud.show(48);
+
+            // 금액 구간별 사기 비율
+            Dataset<Row> amountBuckets = transactions
+                .withColumn("amount_bucket",
+                    when(col("Amount").lt(100), "0-100")
+                    .when(col("Amount").lt(500), "100-500")
+                    .when(col("Amount").lt(1000), "500-1000")
+                    .when(col("Amount").lt(5000), "1000-5000")
+                    .otherwise("5000+"))
+                .groupBy("amount_bucket")
+                .agg(
+                    count("*").alias("total"),
+                    sum(when(col("Class").equalTo(1), 1).otherwise(0)).alias("fraud_count")
+                )
+                .withColumn("fraud_rate",
+                    round(col("fraud_count").multiply(100.0).divide(col("total")), 4));
+
+            logger.info("=== 금액 구간별 사기 비율 ===");
+            amountBuckets.show();
+
+        } finally {
+            spark.stop();
+        }
+    }
+}
+```
+
+### 공개 데이터셋 목록
+
+| 데이터셋 | 크기 | 용도 | 다운로드 |
+|----------|------|------|----------|
+| **NYC Taxi** | ~50MB/월 | 시계열, 집계, 조인 | [TLC](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page) |
+| **Credit Card Fraud** | 150MB | 불균형 분류, 이상 탐지 | [Kaggle](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud) |
+| **Amazon Reviews** | 수GB | 텍스트 분석, 감성 분류 | [AWS Registry](https://registry.opendata.aws/amazon-reviews/) |
+| **Common Crawl** | 수TB | 대규모 웹 분석 | [commoncrawl.org](https://commoncrawl.org/) |
+| **Wikipedia Dumps** | 수십GB | NLP, 지식 그래프 | [dumps.wikimedia.org](https://dumps.wikimedia.org/) |
+
 ## 다음 단계
 
 예제를 완료했다면:

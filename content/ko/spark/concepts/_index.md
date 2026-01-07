@@ -27,6 +27,7 @@ Spark의 핵심 구성요소와 동작 원리를 이해합니다.
 
 10. [성능 튜닝](tuning/) - 메모리, 파티션, 셔플 최적화
 11. [배포와 클러스터 관리](deployment/) - Standalone, YARN, Kubernetes 환경
+12. [Spark Connect](spark-connect/) - 씬 클라이언트 아키텍처 (Spark 3.4+)
 
 ## 핵심 개념 요약
 

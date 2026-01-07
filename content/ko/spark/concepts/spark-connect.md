@@ -1,0 +1,375 @@
+---
+title: Spark Connect
+weight: 11
+lastmod: "2026-01-07"
+---
+
+# Spark Connect (Spark 3.4+)
+
+Spark Connect는 Spark 3.4에서 도입된 새로운 클라이언트-서버 아키텍처입니다. 씬 클라이언트(Thin Client)로 원격 Spark 클러스터에 연결할 수 있습니다.
+
+## 기존 방식 vs Spark Connect
+
+```mermaid
+flowchart TB
+    subgraph Traditional["기존 방식"]
+        App1[Application]
+        Driver1[Driver + SparkContext]
+        Exec1[Executors]
+        App1 --> Driver1
+        Driver1 --> Exec1
+    end
+
+    subgraph Connect["Spark Connect"]
+        App2[Thin Client]
+        Server[Spark Connect Server]
+        Driver2[Driver]
+        Exec2[Executors]
+        App2 -->|gRPC| Server
+        Server --> Driver2
+        Driver2 --> Exec2
+    end
+```
+
+### 주요 차이점
+
+| 구분 | 기존 방식 | Spark Connect |
+|------|----------|---------------|
+| **아키텍처** | 모놀리식 (Driver 내장) | 클라이언트-서버 분리 |
+| **클라이언트 크기** | 수백 MB (Spark 전체) | 수 MB (gRPC 클라이언트) |
+| **언어 지원** | JVM 필수 | 언어 독립적 (gRPC) |
+| **리소스 격리** | 클라이언트에 Driver 리소스 필요 | 서버에서만 리소스 사용 |
+| **업그레이드** | 클라이언트 재배포 필요 | 서버만 업그레이드 |
+| **안정성** | 클라이언트 충돌 시 작업 중단 | 서버 독립적으로 안정 |
+
+## Spark Connect 장점
+
+### 1. 가벼운 클라이언트
+
+```xml
+<!-- 기존 방식: spark-core + spark-sql (~200MB) -->
+<dependency>
+    <groupId>org.apache.spark</groupId>
+    <artifactId>spark-sql_2.13</artifactId>
+    <version>3.5.1</version>
+</dependency>
+
+<!-- Spark Connect: 경량 클라이언트 (~10MB) -->
+<dependency>
+    <groupId>org.apache.spark</groupId>
+    <artifactId>spark-connect-client-jvm_2.13</artifactId>
+    <version>3.5.1</version>
+</dependency>
+```
+
+### 2. 격리된 실행 환경
+
+- 클라이언트 메모리 부족이 Spark 작업에 영향 없음
+- 여러 클라이언트가 동일 클러스터 공유 가능
+- 클라이언트 장애 시 서버 작업 계속 진행
+
+### 3. 언어 독립성
+
+- gRPC 기반으로 다양한 언어에서 연결 가능
+- Python, Scala, Java, Go 등 지원
+- 향후 더 많은 언어 지원 예정
+
+## 서버 설정
+
+### Spark Connect 서버 시작
+
+```bash
+# 독립 실행형 서버 시작
+./sbin/start-connect-server.sh \
+    --packages org.apache.spark:spark-connect_2.13:3.5.1 \
+    --conf spark.connect.grpc.binding.port=15002
+
+# 또는 spark-submit으로 시작
+spark-submit \
+    --class org.apache.spark.sql.connect.service.SparkConnectServer \
+    --packages org.apache.spark:spark-connect_2.13:3.5.1 \
+    --conf spark.connect.grpc.binding.port=15002 \
+    local:///dev/null
+```
+
+### Docker로 서버 실행
+
+```yaml
+# docker-compose.yml
+version: '3.8'
+services:
+  spark-connect:
+    image: apache/spark:3.5.1
+    command: >
+      /opt/spark/sbin/start-connect-server.sh
+      --packages org.apache.spark:spark-connect_2.13:3.5.1
+    ports:
+      - "15002:15002"  # gRPC 포트
+      - "4040:4040"    # Spark UI
+    environment:
+      - SPARK_CONNECT_GRPC_BINDING_PORT=15002
+    volumes:
+      - ./data:/opt/spark/data
+```
+
+### 서버 설정 옵션
+
+```properties
+# spark-defaults.conf
+spark.connect.grpc.binding.port=15002
+spark.connect.grpc.arrow.maxBatchSize=4194304
+spark.connect.grpc.maxInboundMessageSize=134217728
+spark.connect.extensions.relation.classes=
+spark.connect.extensions.expression.classes=
+spark.connect.extensions.command.classes=
+```
+
+## Java 클라이언트 사용
+
+### 의존성 설정
+
+```kotlin
+// build.gradle.kts
+dependencies {
+    // Spark Connect 클라이언트 (경량)
+    implementation("org.apache.spark:spark-connect-client-jvm_2.13:3.5.1")
+}
+```
+
+### 연결 및 사용
+
+```java
+import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import static org.apache.spark.sql.functions.*;
+
+public class SparkConnectExample {
+    public static void main(String[] args) {
+        // Spark Connect 서버에 연결
+        SparkSession spark = SparkSession.builder()
+                .remote("sc://localhost:15002")  // Spark Connect URL
+                .build();
+
+        try {
+            // 기존 DataFrame API 동일하게 사용
+            Dataset<Row> df = spark.read()
+                    .option("header", "true")
+                    .option("inferSchema", "true")
+                    .csv("data/sales.csv");
+
+            Dataset<Row> result = df
+                    .filter(col("amount").gt(100))
+                    .groupBy("category")
+                    .agg(
+                        sum("amount").alias("total"),
+                        count("*").alias("count")
+                    )
+                    .orderBy(col("total").desc());
+
+            result.show();
+
+            // 결과 수집
+            List<Row> rows = result.collectAsList();
+            for (Row row : rows) {
+                System.out.println(row.getString(0) + ": " + row.getDouble(1));
+            }
+
+        } finally {
+            spark.stop();
+        }
+    }
+}
+```
+
+### 연결 URL 형식
+
+```java
+// 기본 연결
+SparkSession.builder().remote("sc://hostname:port")
+
+// 토큰 인증
+SparkSession.builder().remote("sc://hostname:port;token=<auth_token>")
+
+// 사용자 ID 지정
+SparkSession.builder().remote("sc://hostname:port;user_id=my_user")
+
+// SSL/TLS
+SparkSession.builder().remote("sc://hostname:port;use_ssl=true")
+```
+
+## 지원되는 기능
+
+### 완전 지원
+
+| 기능 | 상태 | 비고 |
+|------|------|------|
+| DataFrame API | ✅ 지원 | select, filter, groupBy 등 |
+| SQL 쿼리 | ✅ 지원 | spark.sql() |
+| UDF (사용자 함수) | ✅ 지원 | 서버에 등록 필요 |
+| 파일 읽기/쓰기 | ✅ 지원 | CSV, JSON, Parquet |
+| 집계 함수 | ✅ 지원 | sum, avg, count 등 |
+| Window 함수 | ✅ 지원 | rank, row_number 등 |
+| 조인 | ✅ 지원 | inner, left, right 등 |
+
+### 제한 사항
+
+| 기능 | 상태 | 대안 |
+|------|------|------|
+| RDD API | ❌ 미지원 | DataFrame API 사용 |
+| Streaming | ⚠️ 부분 지원 | 서버 측에서 실행 |
+| MLlib | ⚠️ 부분 지원 | 기본 기능만 |
+| GraphX | ❌ 미지원 | GraphFrame 사용 |
+| 로컬 파일 접근 | ❌ 미지원 | 서버 경로 또는 클라우드 스토리지 |
+
+## Spring Boot 통합
+
+```java
+package com.example.config;
+
+import org.apache.spark.sql.SparkSession;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import jakarta.annotation.PreDestroy;
+
+@Configuration
+public class SparkConnectConfig {
+
+    @Value("${spark.connect.url:sc://localhost:15002}")
+    private String sparkConnectUrl;
+
+    private SparkSession spark;
+
+    @Bean
+    @Profile("!local")  // 로컬이 아닌 환경에서 사용
+    public SparkSession sparkSession() {
+        this.spark = SparkSession.builder()
+                .remote(sparkConnectUrl)
+                .build();
+        return spark;
+    }
+
+    @Bean
+    @Profile("local")  // 로컬 개발 시
+    public SparkSession localSparkSession() {
+        this.spark = SparkSession.builder()
+                .appName("local-dev")
+                .master("local[*]")
+                .getOrCreate();
+        return spark;
+    }
+
+    @PreDestroy
+    public void cleanup() {
+        if (spark != null) {
+            spark.stop();
+        }
+    }
+}
+```
+
+```yaml
+# application.yml
+spring:
+  profiles:
+    active: local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: production
+
+spark:
+  connect:
+    url: sc://spark-connect.internal:15002;token=${SPARK_TOKEN}
+```
+
+## 모범 사례
+
+### 1. 연결 풀링
+
+```java
+@Component
+public class SparkConnectionPool {
+    private final SparkSession spark;
+
+    public SparkConnectionPool(SparkSession spark) {
+        this.spark = spark;
+    }
+
+    // SparkSession은 스레드 안전하므로 공유 가능
+    public SparkSession getSession() {
+        return spark;
+    }
+}
+```
+
+### 2. 대용량 결과 처리
+
+```java
+// ❌ 전체 수집 - 메모리 위험
+List<Row> allRows = df.collectAsList();
+
+// ✅ 제한된 결과만 수집
+List<Row> topRows = df.limit(1000).collectAsList();
+
+// ✅ 서버에서 파일로 저장 후 다운로드
+df.write().parquet("s3://bucket/results/");
+```
+
+### 3. 에러 처리
+
+```java
+import io.grpc.StatusRuntimeException;
+
+try {
+    Dataset<Row> result = spark.sql("SELECT * FROM table");
+    result.show();
+} catch (StatusRuntimeException e) {
+    if (e.getStatus().getCode() == Status.Code.UNAVAILABLE) {
+        logger.error("Spark Connect 서버 연결 실패");
+        // 재연결 로직
+    } else {
+        throw e;
+    }
+} catch (AnalysisException e) {
+    logger.error("SQL 분석 오류: {}", e.getMessage());
+}
+```
+
+## 마이그레이션 가이드
+
+### 기존 코드에서 Spark Connect로 전환
+
+```java
+// Before: 기존 방식
+SparkSession spark = SparkSession.builder()
+        .appName("MyApp")
+        .master("spark://master:7077")
+        .config("spark.executor.memory", "4g")
+        .getOrCreate();
+
+// After: Spark Connect
+SparkSession spark = SparkSession.builder()
+        .remote("sc://spark-connect:15002")
+        .build();
+
+// DataFrame API는 동일하게 사용
+Dataset<Row> df = spark.read().parquet("data.parquet");
+```
+
+### 주의사항
+
+1. **로컬 파일 접근 불가**: 클라이언트의 로컬 파일 대신 클라우드 스토리지 사용
+2. **RDD API 미지원**: DataFrame/Dataset API로 변환 필요
+3. **UDF 서버 등록**: 사용자 정의 함수는 서버에 미리 등록
+4. **네트워크 지연**: 원격 연결로 인한 약간의 오버헤드 존재
+
+## 관련 문서
+
+- [아키텍처](../architecture/) - Spark 클러스터 구조
+- [Spring Boot 통합](../../examples/spring-boot/) - Spring 연동
+- [배포](../deployment/) - 클러스터 배포 방법
