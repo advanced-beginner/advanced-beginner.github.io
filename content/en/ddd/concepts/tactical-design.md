@@ -6,7 +6,7 @@ weight: 2
 
 # Tactical Design
 
-Patterns for concretely implementing domain models.
+Concrete patterns for implementing domain models.
 
 ## Tactical Design Elements Overview
 

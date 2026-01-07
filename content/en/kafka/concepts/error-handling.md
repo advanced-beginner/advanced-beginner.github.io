@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-07"
 title: Advanced Error Handling
 weight: 9
 ---
