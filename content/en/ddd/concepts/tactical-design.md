@@ -1,11 +1,19 @@
 ---
+lastmod: "2026-01-07"
 title: Tactical Design
 weight: 2
 ---
 
 # Tactical Design
 
-Patterns for concretely implementing domain models.
+Concrete patterns for implementing domain models.
+
+> **Common Imports for examples in this page:**
+> ```java
+> import java.util.*;
+> import java.time.LocalDateTime;
+> import java.math.BigDecimal;
+> ```
 
 ## Tactical Design Elements Overview
 

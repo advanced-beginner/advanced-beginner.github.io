@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-07"
 title: Quick Start
 weight: 1
 ---
@@ -30,7 +31,7 @@ Developer: "Oh, so I change the status to 9 in the order table,
 Planner: "...What? What does status 9 mean?"
 ```
 
-→ **DDD bridges this gap**
+**This is where DDD comes in** — it bridges this communication gap.
 
 ## Core Idea
 

@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-07"
 title: Domain Events
 weight: 4
 ---
@@ -6,6 +7,20 @@ weight: 4
 # Domain Events
 
 How to express and utilize important occurrences in the domain as events.
+
+> **Common Imports for examples in this page:**
+> ```java
+> import java.time.Instant;
+> import java.time.LocalDateTime;
+> import java.util.UUID;
+> import java.util.List;
+> import java.util.ArrayList;
+> import java.util.Collections;
+> import org.springframework.context.ApplicationEventPublisher;
+> import org.springframework.transaction.event.TransactionalEventListener;
+> import org.springframework.transaction.event.TransactionPhase;
+> import org.springframework.scheduling.annotation.Async;
+> ```
 
 ## What are Domain Events?
 

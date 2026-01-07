@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-07"
 title: Advanced Beginner
 description: Beyond basics to real-world practice - A technical guide that starts from core principles
 ---
@@ -32,7 +33,7 @@ Practical usage of distributed messaging systems. From Producer/Consumer basics 
 
 ### [Domain-Driven Design](ddd/)
 
-A design methodology for systematically handling complex business logic. From strategic design to tactical patterns, CQRS, and event sourcing.
+A methodology for tackling complex business logic systematically. From strategic design to tactical patterns, CQRS, and event sourcing.
 
 **What you'll learn:**
 - Dividing system boundaries with Bounded Contexts
@@ -56,7 +57,7 @@ A JVM language combining functional and object-oriented programming. From basic 
 
 **Executable Examples** — All code actually runs. We provide examples you can verify immediately after concept explanations.
 
-**Real-world Perspective** — What's theoretically perfect and what works in production are different. We cover trade-offs and realistic choices together.
+**Real-world Perspective** — Theory and production reality often differ. We cover trade-offs and practical choices alongside the ideal approach.
 
 ## Where should I start?
 

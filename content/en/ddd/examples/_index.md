@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-07"
 title: Hands-on Examples
 weight: 3
 ---

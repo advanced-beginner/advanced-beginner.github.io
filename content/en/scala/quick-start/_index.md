@@ -42,7 +42,7 @@ Expand-Archive -Path "cs.zip"
 {{% /tab %}}
 {{< /tabs >}}
 
-After installation, open a new terminal and verify the version:
+After installation, open a new terminal and verify the installation:
 
 ```bash
 scala --version

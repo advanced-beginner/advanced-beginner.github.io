@@ -26,7 +26,7 @@ flowchart LR
 
 ## Step 1: Start Kafka
 
-Run Kafka with Docker Compose from the root directory of this repository.
+Navigate to the docker directory and start Kafka with Docker Compose.
 
 ```bash
 # Navigate to the docker directory at repository root
@@ -37,19 +37,19 @@ docker-compose up -d
 > **No docker-compose.yml?**
 > Check the [Environment Setup Guide](../examples/setup/) for the docker-compose.yml content and save it as `docker/docker-compose.yml`.
 
-Verify successful startup:
+Verify Kafka started successfully:
 
 ```bash
 docker-compose ps
 ```
 
-Expected result:
+You should see:
 ```
 NAME      COMMAND                  STATUS
 kafka     "/etc/kafka/docker..."   Up
 ```
 
-> **Note:** It may take 10-20 seconds for Kafka to fully start.
+> **Note:** Kafka typically takes 10-20 seconds to fully initialize.
 
 ## Step 2: Run the Example Project
 
@@ -63,7 +63,7 @@ cd examples/quick-start
 
 > **Windows users:** Use `gradlew.bat bootRun`
 
-When startup is complete, you'll see this log:
+When the application starts successfully, you'll see:
 ```
 Started QuickStartApplication in X.XXX seconds
 ```
@@ -85,7 +85,7 @@ Message sent: Hello Kafka!
 
 ## Step 4: Verify Message Reception
 
-Check the Consumer log in the **terminal where the Spring Boot application is running**.
+Check the log output in the **terminal running the Spring Boot application**.
 
 ```
 INFO  c.e.quickstart.MessageConsumer : Message received: Hello Kafka!

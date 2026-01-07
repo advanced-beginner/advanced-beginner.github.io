@@ -8,6 +8,14 @@ lastmod: "2026-01-06"
 
 DDD 패턴을 적용하여 주문 도메인을 구현합니다.
 
+> **이 페이지 예제의 공통 import:**
+> ```java
+> import java.util.*;
+> import java.time.LocalDateTime;
+> import java.math.BigDecimal;
+> // 도메인 클래스는 이 문서 내에서 정의됩니다
+> ```
+
 ## 왜 이렇게 설계했는가?
 
 코드를 보기 전에, 각 설계 결정의 **이유**를 먼저 이해합니다.

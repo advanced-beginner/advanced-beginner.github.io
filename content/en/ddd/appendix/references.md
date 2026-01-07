@@ -1,4 +1,5 @@
 ---
+lastmod: "2026-01-07"
 title: References
 weight: 2
 ---
@@ -218,8 +219,9 @@ Checklist:
 
 ## Community
 
-- **DDD Korea:** https://www.facebook.com/groups/daboroDDD
-- **Korean Spring User Group:** https://www.facebook.com/groups/springkorea
+- **DDD Community:** https://www.dddcommunity.org/
+- **Virtual DDD:** https://virtualddd.com/
+- **DDD Reddit:** https://www.reddit.com/r/DomainDrivenDesign/
 
 ---
 

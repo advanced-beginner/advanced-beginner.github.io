@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-07"
 title: Advanced Error Handling
 weight: 9
 ---
@@ -7,6 +7,22 @@ weight: 9
 # Advanced Error Handling
 
 Understanding Kafka Consumer error handling strategies and the Dead Letter Topic pattern.
+
+> **Common Imports for examples in this page:**
+> ```java
+> import org.springframework.kafka.annotation.KafkaListener;
+> import org.springframework.kafka.annotation.RetryableTopic;
+> import org.springframework.kafka.annotation.DltHandler;
+> import org.springframework.kafka.retrytopic.TopicSuffixingStrategy;
+> import org.springframework.kafka.retrytopic.DltStrategy;
+> import org.springframework.kafka.listener.DefaultErrorHandler;
+> import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
+> import org.springframework.util.backoff.FixedBackOff;
+> import org.springframework.util.backoff.ExponentialBackOff;
+> import org.springframework.retry.annotation.Backoff;
+> import org.springframework.kafka.support.KafkaHeaders;
+> import org.apache.kafka.clients.consumer.ConsumerRecord;
+> ```
 
 ## Error Types
 

@@ -8,6 +8,14 @@ lastmod: "2026-01-06"
 
 Implementing the order domain with DDD patterns.
 
+> **Common Imports for examples in this page:**
+> ```java
+> import java.util.*;
+> import java.time.LocalDateTime;
+> import java.math.BigDecimal;
+> // Domain classes are defined within this document
+> ```
+
 ## Why Did We Design It This Way?
 
 Before looking at the code, first understand the **reasoning** behind each design decision.
