@@ -8,6 +8,14 @@ weight: 3
 
 A comprehensive look at Aggregate design principles, transaction boundaries, and practical patterns.
 
+> **Common Imports for examples in this page:**
+> ```java
+> import java.util.List;
+> import java.util.ArrayList;
+> import java.util.Collections;
+> import java.time.LocalDateTime;
+> ```
+
 ## What is an Aggregate?
 
 An **Aggregate** is a cluster of related objects treated as a unit for data changes.

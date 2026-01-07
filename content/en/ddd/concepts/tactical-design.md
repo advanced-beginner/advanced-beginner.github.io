@@ -8,6 +8,13 @@ weight: 2
 
 Concrete patterns for implementing domain models.
 
+> **Common Imports for examples in this page:**
+> ```java
+> import java.util.*;
+> import java.time.LocalDateTime;
+> import java.math.BigDecimal;
+> ```
+
 ## Tactical Design Elements Overview
 
 ```mermaid

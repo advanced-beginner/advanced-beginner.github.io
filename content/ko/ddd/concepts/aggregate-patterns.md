@@ -10,6 +10,14 @@ Aggregate 설계를 위한 구현 패턴과 의사결정 가이드입니다.
 
 > **선수 지식:** 먼저 [Aggregate 심화](../aggregate/)에서 핵심 개념을 읽어주세요.
 
+> **이 페이지 예제의 공통 import:**
+> ```java
+> import java.util.*;
+> import java.time.LocalDateTime;
+> import javax.persistence.Version;
+> import org.springframework.context.ApplicationEventPublisher;
+> ```
+
 ## Aggregate 루트 설계
 
 ### 루트를 통한 모든 변경

@@ -10,6 +10,14 @@ Implementation patterns and decision guides for Aggregate design.
 
 > **Prerequisite:** Read [Aggregate Deep Dive](../aggregate/) first for core concepts.
 
+> **Common Imports for examples in this page:**
+> ```java
+> import java.util.*;
+> import java.time.LocalDateTime;
+> import javax.persistence.Version;
+> import org.springframework.context.ApplicationEventPublisher;
+> ```
+
 ## Aggregate Root Design
 
 ### All Changes Through Root

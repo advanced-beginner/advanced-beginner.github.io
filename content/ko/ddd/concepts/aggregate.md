@@ -8,6 +8,14 @@ weight: 3
 
 Aggregate의 설계 원칙, 트랜잭션 경계, 실전 패턴을 깊이 있게 다룹니다.
 
+> **이 페이지 예제의 공통 import:**
+> ```java
+> import java.util.List;
+> import java.util.ArrayList;
+> import java.util.Collections;
+> import java.time.LocalDateTime;
+> ```
+
 ## Aggregate란?
 
 **Aggregate**는 데이터 변경의 단위로 취급되는 연관된 객체들의 묶음입니다.

@@ -8,6 +8,15 @@ weight: 3
 
 Implementing an event-driven order system closer to real-world applications.
 
+> **Common Imports for examples in this page:**
+> ```java
+> import org.springframework.kafka.core.KafkaTemplate;
+> import org.springframework.kafka.annotation.KafkaListener;
+> import org.springframework.kafka.support.KafkaHeaders;
+> import org.apache.kafka.clients.consumer.ConsumerRecord;
+> import com.fasterxml.jackson.databind.ObjectMapper;
+> ```
+
 ## System Architecture
 
 ```mermaid

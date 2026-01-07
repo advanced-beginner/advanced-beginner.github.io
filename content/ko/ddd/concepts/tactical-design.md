@@ -7,6 +7,13 @@ weight: 2
 
 도메인 모델을 구체적으로 구현하기 위한 패턴들입니다.
 
+> **이 페이지 예제의 공통 import:**
+> ```java
+> import java.util.*;
+> import java.time.LocalDateTime;
+> import java.math.BigDecimal;
+> ```
+
 ## 전술적 설계 요소 개요
 
 ```mermaid

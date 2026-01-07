@@ -8,6 +8,15 @@ weight: 3
 
 실무에 가까운 이벤트 기반 주문 시스템을 구현합니다.
 
+> **이 페이지 예제의 공통 import:**
+> ```java
+> import org.springframework.kafka.core.KafkaTemplate;
+> import org.springframework.kafka.annotation.KafkaListener;
+> import org.springframework.kafka.support.KafkaHeaders;
+> import org.apache.kafka.clients.consumer.ConsumerRecord;
+> import com.fasterxml.jackson.databind.ObjectMapper;
+> ```
+
 ## 시스템 아키텍처
 
 ```mermaid
