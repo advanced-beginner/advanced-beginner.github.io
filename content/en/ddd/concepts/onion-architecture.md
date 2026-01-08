@@ -30,8 +30,6 @@ flowchart TB
     end
 
     INF --> AS --> DS --> Model
-
-    style Model fill:#fff9c4
 ```
 
 ## 4 Layers

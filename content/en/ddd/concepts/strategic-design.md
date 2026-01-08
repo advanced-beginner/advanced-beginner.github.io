@@ -60,10 +60,6 @@ flowchart TB
             GD3["Authentication/Authorization"]
         end
     end
-
-    style Core fill:#ffcdd2
-    style Supporting fill:#fff9c4
-    style Generic fill:#c8e6c9
 ```
 
 ### Subdomain Types

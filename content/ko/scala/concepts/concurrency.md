@@ -383,9 +383,6 @@ flowchart LR
 
     Future --> |"간단한 비동기"| Use1["웹 API 호출"]
     IO/ZIO --> |"복잡한 비동기"| Use2["비즈니스 로직"]
-
-    style Future fill:#ffe0b2
-    style IO/ZIO fill:#c8e6c9
 ```
 
 ## 연습 문제

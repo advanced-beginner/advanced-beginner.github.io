@@ -43,8 +43,6 @@ flowchart TB
     APP --> OP
     OP --> PA --> DB
     OP --> EA --> API
-
-    style Core fill:#fff9c4
 ```
 
 ---
@@ -261,8 +259,6 @@ flowchart TB
     SNP --> NA
     PA --> DB
     NA --> MAIL
-
-    style Core fill:#fff9c4
 ```
 
 ---
@@ -979,10 +975,6 @@ flowchart LR
     C["3단계<br/>Adapter 분리"]
 
     A --> B --> C
-
-    style A fill:#ffcdd2
-    style B fill:#fff9c4
-    style C fill:#c8e6c9
 ```
 
 ### 1단계: Repository Interface를 Domain으로

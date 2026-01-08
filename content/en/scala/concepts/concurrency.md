@@ -383,9 +383,6 @@ flowchart LR
 
     Future --> |"Simple async"| Use1["Web API calls"]
     IO/ZIO --> |"Complex async"| Use2["Business logic"]
-
-    style Future fill:#ffe0b2
-    style IO/ZIO fill:#c8e6c9
 ```
 
 ## Exercises

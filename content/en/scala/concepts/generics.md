@@ -87,11 +87,6 @@ graph TB
         RedApple -->|"<:"| Apple
         LB["B >: Apple<br/>B is supertype of Apple"]
     end
-
-    style Animal fill:#e8f5e9
-    style Fruit fill:#fff3e0
-    style UB fill:#bbdefb
-    style LB fill:#ffe0b2
 ```
 
 ### Upper Bound

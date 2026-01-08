@@ -22,8 +22,6 @@ flowchart TB
 
     P --> A --> D
     I -.->|"구현 제공"| D
-
-    style D fill:#fff9c4
 ```
 
 ---
@@ -815,10 +813,6 @@ flowchart LR
 
     A -->|"1. Repository Interface 추출"| B
     B -->|"2. Port/Adapter 도입"| C
-
-    style A fill:#ffcdd2
-    style B fill:#fff9c4
-    style C fill:#c8e6c9
 ```
 
 **1단계: Repository Interface를 Domain으로 이동**

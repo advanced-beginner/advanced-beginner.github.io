@@ -87,11 +87,6 @@ graph TB
         RedApple -->|"<:"| Apple
         LB["B >: Apple<br/>B는 Apple의 상위 타입"]
     end
-
-    style Animal fill:#e8f5e9
-    style Fruit fill:#fff3e0
-    style UB fill:#bbdefb
-    style LB fill:#ffe0b2
 ```
 
 ### 상한 경계 (Upper Bound)

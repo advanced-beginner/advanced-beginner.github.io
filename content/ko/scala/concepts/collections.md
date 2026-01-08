@@ -404,10 +404,6 @@ flowchart TD
 
     Q3 -->|Yes| List
     Q3 -->|No| Set["Set"]
-
-    style Vector fill:#e3f2fd
-    style List fill:#e8f5e9
-    style Set fill:#fff3e0
 ```
 
 ## 연습 문제

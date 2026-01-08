@@ -234,11 +234,6 @@ flowchart LR
     A -->|"Domain gets complex"| B
     B -->|"External integrations grow"| C
     C -->|"Testing/changes get hard"| D
-
-    style A fill:#ffcdd2
-    style B fill:#fff9c4
-    style C fill:#c8e6c9
-    style D fill:#bbdefb
 ```
 
 **Signals for Stage 1 → 2:**

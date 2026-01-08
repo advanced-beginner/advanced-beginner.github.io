@@ -5,28 +5,6 @@ weight: 2
 
 DDD의 전략적 설계와 전술적 설계 패턴을 깊이 있게 살펴봅니다.
 
-## 학습 순서
-
-```mermaid
-flowchart LR
-    A[전략적 설계] --> B[전술적 설계]
-    B --> C[Aggregate 심화]
-    C --> D[도메인 이벤트]
-    D --> E[아키텍처]
-    E --> F[CQRS]
-    F --> G[테스트 전략]
-    G --> H[안티패턴]
-
-    style A fill:#fff3e0
-    style B fill:#e8f5e9
-    style C fill:#e1f5fe
-    style D fill:#fce4ec
-    style E fill:#f3e5f5
-    style F fill:#e0f2f1
-    style G fill:#fff8e1
-    style H fill:#ffebee
-```
-
 ## 목차
 
 ### 설계 패턴

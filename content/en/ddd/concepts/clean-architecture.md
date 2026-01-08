@@ -28,11 +28,6 @@ flowchart TB
     end
 
     F --> A --> UC --> E
-
-    style Yellow fill:#fff9c4
-    style Red fill:#ffcdd2
-    style Green fill:#c8e6c9
-    style Outer fill:#bbdefb
 ```
 
 ## The Dependency Rule

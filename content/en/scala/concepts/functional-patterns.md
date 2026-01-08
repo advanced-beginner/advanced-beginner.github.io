@@ -124,11 +124,6 @@ flowchart LR
         Result["None"]
         FC --> Result
     end
-
-    style A fill:#e3f2fd
-    style B fill:#c8e6c9
-    style N fill:#ffcdd2
-    style Result fill:#ffcdd2
 ```
 
 ### Monad Laws

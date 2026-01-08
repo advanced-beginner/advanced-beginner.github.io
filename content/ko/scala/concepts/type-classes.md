@@ -64,10 +64,6 @@ graph TB
     Code --> Compiler
     Compiler --> Instance
     Instance --> Result
-
-    style TC fill:#e3f2fd
-    style TI fill:#c8e6c9
-    style API fill:#fff3e0
 ```
 
 타입 클래스는 세 부분으로 구성됩니다:
