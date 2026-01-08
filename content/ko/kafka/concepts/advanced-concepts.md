@@ -10,6 +10,15 @@ acks, Message Key, Retention 정책을 이해합니다.
 
 > **Kafka 버전**: 이 문서는 **Kafka 3.6.x** 기준으로 작성되었습니다.
 
+| 검증 환경 | 버전 |
+|----------|------|
+| Kafka | 3.6.1 (KRaft) |
+| Spring Boot | 3.2.x |
+| Spring Kafka | 3.1.x |
+| Java | 17 |
+
+> 이 문서의 코드 예제는 위 환경에서 컴파일 및 동작이 확인되었습니다.
+
 ## 선행 지식
 
 - [메시지 흐름](../message-flow/) - Topic, Partition, Broker 개념

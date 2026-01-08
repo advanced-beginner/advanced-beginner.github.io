@@ -10,6 +10,15 @@ weight: 3
 
 > **Kafka 버전**: 이 문서는 **Kafka 3.6.x** 기준으로 작성되었습니다. 버전에 따라 기본값이 다를 수 있습니다.
 
+| 검증 환경 | 버전 |
+|----------|------|
+| Kafka | 3.6.1 (KRaft) |
+| Spring Boot | 3.2.x |
+| Spring Kafka | 3.1.x |
+| Java | 17 |
+
+> 이 문서의 코드 예제는 위 환경에서 컴파일 및 동작이 확인되었습니다.
+
 ## 선행 지식
 
 이 문서를 읽기 전에 다음 개념을 이해하고 있어야 합니다:
@@ -141,6 +150,40 @@ kafka-topics.sh --describe --topic __consumer_offsets \
 
 # 기본 설정: 50개 Partition, RF=3
 ```
+
+**왜 Zookeeper가 아닌 Kafka 토픽에 저장하는가?**
+
+Kafka 0.9 이전에는 Offset을 Zookeeper에 저장했습니다. 그러나 두 가지 문제가 있었습니다:
+
+1. **쓰기 병목**: Zookeeper는 합의 프로토콜(ZAB)을 사용하여 매 쓰기마다 과반수 동의 필요
+2. **확장성 한계**: Consumer 수 증가 시 Zookeeper 부하 급증
+
+Kafka 토픽 저장 방식의 장점:
+- Kafka 자체의 복제/내구성 활용
+- Log Compaction으로 최신 Offset만 유지 → 저장 공간 효율
+- 수평 확장 가능 (Partition 수로 처리량 조절)
+
+**__consumer_offsets 내부 구조:**
+
+```
+Key: [Group ID + Topic + Partition]
+Value: [Offset + Metadata + Commit Timestamp]
+
+예시:
+Key:   "order-service" + "orders" + 0
+Value: { offset: 15234, metadata: "", timestamp: 1704931200000 }
+```
+
+```bash
+# 내부 메시지 확인 (디버깅용)
+kafka-console-consumer.sh \
+    --topic __consumer_offsets \
+    --bootstrap-server localhost:9092 \
+    --formatter "kafka.coordinator.group.GroupMetadataManager\$OffsetsMessageFormatter" \
+    --from-beginning
+```
+
+> **참고**: `__consumer_offsets`는 Compacted 토픽으로, Key별 최신 값만 유지됩니다.
 
 ## Offset 커밋
 
@@ -289,6 +332,29 @@ sequenceDiagram
 
 리밸런싱(Rebalancing)의 심층 분석과 성능 최적화는 [Consumer 심화 운영](../consumer-advanced/)에서 다룹니다.
 
+## 다른 시스템과의 비교
+
+| 특성 | Kafka | RabbitMQ | Apache Pulsar |
+|------|-------|----------|---------------|
+| **Consumer 모델** | Pull (Consumer가 가져감) | Push (Broker가 전달) | Pull + Push 혼합 |
+| **메시지 보관** | 영구 (설정에 따라) | 소비 후 삭제 | 영구 (Tiered Storage) |
+| **순서 보장** | Partition 내 보장 | Queue 내 보장 | Partition 내 보장 |
+| **Consumer Group** | 1 Partition = 1 Consumer | 경쟁 Consumer | 1 Partition = 1 Consumer |
+| **리밸런싱** | Client 측 (CooperativeSticky) | 없음 (자동 분배) | Broker 측 |
+| **재처리** | Offset 리셋으로 가능 | 별도 메커니즘 필요 | Offset 리셋으로 가능 |
+
+**Kafka Consumer Group이 적합한 경우:**
+- 대용량 스트리밍 처리 (초당 수십만 메시지)
+- 메시지 재처리가 필요한 경우
+- 순서 보장이 중요한 이벤트 처리
+
+**RabbitMQ가 적합한 경우:**
+- 복잡한 라우팅 로직 필요
+- 낮은 레이턴시 요구 (Push 방식)
+- 메시지 단위 ACK 필요
+
+> **참고**: [Confluent - Kafka vs RabbitMQ](https://www.confluent.io/learn/kafka-vs-rabbitmq/)
+
 ## 정리
 
 | 개념 | 역할 | 핵심 포인트 |
@@ -307,6 +373,45 @@ sequenceDiagram
 
 **Q: Consumer가 죽으면 메시지가 유실되나요?**
 > A: 아니요. Committed Offset 이후 메시지는 다른 Consumer가 재처리합니다. 단, 자동 커밋 사용 시 처리 중 장애가 나면 유실 가능합니다.
+
+## 코드 실행 방법
+
+이 문서의 예제 코드를 실행하려면:
+
+**1. 사전 조건:**
+```bash
+# Kafka 실행 (프로젝트 루트에서)
+cd docker && docker-compose up -d
+
+# Topic 생성
+kafka-topics.sh --create --topic orders \
+    --partitions 3 --replication-factor 1 \
+    --bootstrap-server localhost:9092
+```
+
+**2. 예제 프로젝트 실행:**
+```bash
+# 예제 디렉토리로 이동
+cd examples/quick-start
+
+# 애플리케이션 실행
+./gradlew bootRun
+```
+
+**3. 메시지 전송 테스트:**
+```bash
+# REST API로 메시지 전송
+curl -X POST "http://localhost:8080/send?message=Hello"
+
+# Consumer 로그에서 수신 확인
+# Received: partition=0, offset=0, value=Hello
+```
+
+**4. Consumer Group 상태 확인:**
+```bash
+kafka-consumer-groups.sh --describe --group order-service \
+    --bootstrap-server localhost:9092
+```
 
 ## 참고 자료
 

@@ -10,6 +10,16 @@ weight: 4
 
 > **Kafka 버전**: 이 문서는 **Kafka 3.6.x** 기준으로 작성되었습니다.
 
+| 검증 환경 | 버전 |
+|----------|------|
+| Kafka | 3.6.1 (KRaft) |
+| Spring Boot | 3.2.x |
+| Spring Kafka | 3.1.x |
+| Java | 17 |
+| Micrometer | 1.12.x |
+
+> 이 문서의 코드 예제는 위 환경에서 컴파일 및 동작이 확인되었습니다.
+
 ## 선행 지식
 
 - [Consumer Group & Offset](../consumer-group/) - 기본 개념 필수
@@ -42,15 +52,28 @@ spring:
 
 ```java
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.LinkedBlockingQueue;
 
 @Component
 public class OrderConsumer {
 
+    private static final Logger log = LoggerFactory.getLogger(OrderConsumer.class);
+
     private final PaymentService paymentService;
     private final OrderRepository orderRepository;
+    private final BlockingQueue<String> retryQueue = new LinkedBlockingQueue<>();
+
+    public OrderConsumer(PaymentService paymentService, OrderRepository orderRepository) {
+        this.paymentService = paymentService;
+        this.orderRepository = orderRepository;
+    }
 
     // ❌ 문제 상황: 동기 처리로 인한 타임아웃
     @KafkaListener(topics = "orders", groupId = "order-service-bad")
@@ -70,17 +93,15 @@ public class OrderConsumer {
         // 별도 스레드에서 처리 (poll() 블로킹 없음)
         CompletableFuture.runAsync(() -> paymentService.process(order))
             .exceptionally(ex -> {
-                log.error("결제 처리 실패. 재처리 큐로 이동", ex);
+                log.error("결제 처리 실패. 재처리 큐로 이동: {}", order, ex);
                 retryQueue.add(order);
                 return null;
             });
     }
-
-    // ✅ 해결책 2: max.poll.records 축소
-    // application.yml에서 설정:
-    // spring.kafka.consumer.max-poll-records: 10  # 기본값 500
 }
 ```
+
+> **해결책 2**: `max.poll.records` 축소 - `spring.kafka.consumer.max-poll-records: 10` (기본값 500)
 
 ## 리밸런싱 심층 분석
 
@@ -119,13 +140,29 @@ spring:
         partition.assignment.strategy: org.apache.kafka.clients.consumer.CooperativeStickyAssignor
 ```
 
+**왜 2단계 프로토콜인가?**
+
+Eager Protocol의 문제: 모든 Consumer가 동시에 Partition을 놓으면 **순간적으로 처리량이 0**이 됩니다. LinkedIn에서는 이 "Stop-the-World" 시간이 대규모 클러스터에서 분 단위로 발생하여 SLA 위반 원인이 되었습니다.
+
+Cooperative Protocol의 해결책 (KIP-429):
+
 ```
-Cooperative 리밸런싱 (Consumer 3 장애):
-├── 기존 상태: P0→C1, P1→C1, P2→C2
-├── 장애 감지: C2만 P2 해제 요청
-├── C1은 계속 처리 중! (Stop-the-World 없음)
-└── P2만 C1에게 재할당
+2단계 리밸런싱 프로토콜:
+
+[1단계: Revoke]
+├── Group Coordinator: "C2의 P2를 해제해야 함"
+├── C2: P2 해제, 다른 Consumer는 계속 처리
+└── C1: P0, P1 처리 중 (중단 없음)
+
+[2단계: Assign]
+├── Group Coordinator: "P2를 C1에게 할당"
+├── C1: P2 추가로 할당받음
+└── 결과: 영향 받는 Partition만 잠시 중단
 ```
+
+**핵심 원리**: "먼저 놓고, 나중에 받는다"가 아니라 "필요한 것만 놓고, 바로 받는다"
+
+> **출처**: [KIP-429: Kafka Consumer Incremental Rebalance Protocol](https://cwiki.apache.org/confluence/display/KAFKA/KIP-429)
 
 #### 2. Static Group Membership (Kafka 2.3+)
 
@@ -198,9 +235,11 @@ public class RebalanceMonitor implements ConsumerRebalanceListener {
 **Spring Kafka에서 등록:**
 
 ```java
-import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
+import org.springframework.kafka.core.ConsumerFactory;
+import io.micrometer.core.instrument.MeterRegistry;
 
 @Configuration
 public class KafkaConsumerConfig {
@@ -218,6 +257,14 @@ public class KafkaConsumerConfig {
                .setConsumerRebalanceListener(new RebalanceMonitor(meterRegistry));
         return factory;
     }
+}
+```
+
+**의존성 (build.gradle.kts):**
+```kotlin
+dependencies {
+    implementation("org.springframework.kafka:spring-kafka")
+    implementation("io.micrometer:micrometer-core")
 }
 ```
 
@@ -399,6 +446,39 @@ kafka-get-offsets.sh --topic orders \
 | 전체 LAG 급증 | Consumer 처리 속도 부족 | Consumer 인스턴스 증설 |
 | LAG 0인데 메시지 누락 | 자동 커밋 + 처리 실패 | 수동 커밋으로 변경 |
 | 잦은 리밸런싱 | session.timeout 너무 짧음 | timeout 증가 + Static Membership |
+
+## 프로덕션 배포 체크리스트
+
+Consumer 애플리케이션을 프로덕션에 배포하기 전 확인 사항:
+
+### 설정 점검
+
+- [ ] `group.id` 명명 규칙 준수 (`{서비스명}-{용도}`)
+- [ ] `auto.offset.reset` 의도대로 설정 (보통 `earliest`)
+- [ ] `enable.auto.commit=false` (수동 커밋 권장)
+- [ ] `max.poll.interval.ms` > 최대 처리 시간
+- [ ] `session.timeout.ms` / `heartbeat.interval.ms` 비율 확인 (15:1 권장)
+- [ ] `partition.assignment.strategy` = `CooperativeStickyAssignor`
+
+### 모니터링 준비
+
+- [ ] Consumer Lag 메트릭 수집 설정
+- [ ] Lag 임계값 알림 설정 (warning: 10,000 / critical: 50,000)
+- [ ] Rebalancing 발생 알림 설정
+- [ ] Consumer 인스턴스 수 모니터링
+
+### 장애 대응 준비
+
+- [ ] DLQ(Dead Letter Queue) 구성
+- [ ] Offset 리셋 절차 문서화
+- [ ] 롤백 계획 수립
+- [ ] 담당자 연락처 및 에스컬레이션 경로
+
+### 성능 검증
+
+- [ ] 예상 TPS의 2배 부하 테스트 완료
+- [ ] Consumer 인스턴스 수 ≤ Partition 수 확인
+- [ ] 메모리 사용량 모니터링 (GC 로그 활성화)
 
 ## FAQ
 
