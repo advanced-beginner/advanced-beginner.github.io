@@ -263,6 +263,99 @@ cleanup.policy: compact
 min.cleanable.dirty.ratio: 0.5
 ```
 
+### Log Compaction 내부 동작 원리
+
+Log Compaction은 **백그라운드 스레드**에서 비동기로 실행됩니다:
+
+```
+Log Segment 구조:
+├── Segment 1 (Closed) ← Compaction 대상
+├── Segment 2 (Closed) ← Compaction 대상
+├── Segment 3 (Closed) ← Compaction 대상
+└── Segment 4 (Active)  ← Compaction 제외 (쓰기 중)
+```
+
+**Compaction 실행 조건:**
+
+```yaml
+# Dirty Ratio가 이 값을 초과하면 Compaction 시작
+min.cleanable.dirty.ratio: 0.5  # 50% (기본값)
+
+# Compaction 대상이 되기까지 최소 대기 시간
+min.compaction.lag.ms: 0  # 즉시 대상 (기본값)
+
+# 삭제 표시(Tombstone) 보관 시간
+delete.retention.ms: 86400000  # 24시간 (기본값)
+```
+
+### Tombstone 메시지 (삭제 처리)
+
+Log Compaction 환경에서 Key를 **삭제**하려면 **Tombstone 메시지**를 보냅니다:
+
+```java
+// Tombstone 메시지: value가 null
+kafkaTemplate.send("user-profiles", "user-123", null);
+//                  Topic            Key         null = 삭제!
+
+// 일정 시간(delete.retention.ms) 후 Key 자체가 삭제됨
+```
+
+```
+Compaction + Tombstone 타임라인:
+├── T0: [user-123: {"name": "Alice"}]
+├── T1: [user-123: {"name": "Bob"}]  ← 값 업데이트
+├── T2: [user-123: null]              ← Tombstone (삭제 요청)
+├── T3: Compaction 실행
+│   └── 결과: [user-123: null] 만 남음
+├── T4: delete.retention.ms(24시간) 경과
+├── T5: 다음 Compaction 실행
+│   └── 결과: user-123 Key 완전 삭제
+```
+
+> **주의:** Tombstone이 삭제되기 전에 Consumer가 읽으면 `null` 값을 받습니다. 애플리케이션에서 `null` 처리가 필요합니다.
+
+### Compaction 성능 영향
+
+| 설정 | 값 | 효과 |
+|------|-----|------|
+| `min.cleanable.dirty.ratio` | 낮음 (0.1) | 자주 Compaction, CPU 부하 증가 |
+| `min.cleanable.dirty.ratio` | 높음 (0.9) | 가끔 Compaction, 디스크 사용량 증가 |
+| `log.cleaner.threads` | 증가 | Compaction 속도 향상, CPU 부하 증가 |
+
+**프로덕션 권장 설정:**
+
+```yaml
+# Broker 설정
+log.cleaner.threads: 2
+log.cleaner.dedupe.buffer.size: 134217728  # 128MB
+
+# Topic 설정
+cleanup.policy: compact
+min.cleanable.dirty.ratio: 0.5
+delete.retention.ms: 86400000  # 24시간
+segment.ms: 604800000  # 7일마다 새 Segment
+```
+
+### Log Compaction vs 시간 기반 삭제 비교
+
+| 특성 | 시간 기반 (delete) | Log Compaction (compact) |
+|------|-------------------|-------------------------|
+| **삭제 기준** | 시간 경과 | Key 중복 |
+| **보관 데이터** | 최근 N일 | Key별 최신 값 |
+| **용도** | 이벤트 로그 | 상태 저장소 |
+| **Key 필수** | 아니오 | 예 |
+| **Null 값 의미** | 일반 값 | 삭제 (Tombstone) |
+
+**혼합 정책도 가능:**
+
+```yaml
+# 시간 기반 삭제 + Compaction 동시 적용
+cleanup.policy: compact,delete
+retention.ms: 604800000  # 7일
+```
+
+이 설정은 "7일 이내의 데이터 중 Key별 최신 값만 유지"를 의미합니다.
+
 ## Idempotent Producer (멱등성 프로듀서)
 
 네트워크 오류로 재전송 시 **중복 메시지 방지**를 보장합니다.
