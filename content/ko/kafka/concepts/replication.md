@@ -164,6 +164,47 @@ flowchart TB
     end
 ```
 
+### 복제 내부 동작: LEO와 High Watermark
+
+복제가 **어떻게** 동작하는지 이해하면 문제 진단이 쉬워집니다.
+
+```
+Leader Partition:
++----+----+----+----+----+----+----+----+
+| 0  | 1  | 2  | 3  | 4  | 5  | 6  | 7  |  ← 메시지들
++----+----+----+----+----+----+----+----+
+                              ↑         ↑
+                              HW        LEO
+                         (High Watermark)  (Log End Offset)
+```
+
+| 용어 | 의미 | 중요성 |
+|------|------|--------|
+| **LEO (Log End Offset)** | 가장 마지막 메시지의 다음 Offset | Replica마다 다를 수 있음 |
+| **High Watermark (HW)** | 모든 ISR에 복제 완료된 Offset | Consumer는 여기까지만 읽을 수 있음 |
+
+**왜 이 구분이 중요한가:**
+
+```
+상황: Leader LEO=100, Follower LEO=95, HW=95
+
+- Producer가 보낸 메시지 96-100은 Leader에만 존재
+- Consumer는 95까지만 읽을 수 있음 (HW 기준)
+- 이 상태에서 Leader가 죽으면?
+  → Follower가 Leader로 승격
+  → 메시지 96-100은 유실됨 (ISR 설정에 따라 다름)
+```
+
+**복제 지연 확인 방법:**
+
+```bash
+# 각 Replica의 LEO 확인
+kafka-replica-verification.sh --broker-list localhost:9092 \
+  --topic-white-list "orders"
+
+# 출력에서 LEO 차이가 크면 복제 지연 중
+```
+
 ### ISR 조건
 
 Follower가 ISR에 포함되려면:
@@ -475,6 +516,159 @@ kafka-reassign-partitions.sh --reassignment-json-file plan.json \
 | 스테이징 | 3 | 2 | 1 |
 | **프로덕션** | **3+** | **3** | **2** |
 | 대규모 | 5+ | 3 | 2 |
+
+---
+
+## 프로덕션 운영 체크리스트
+
+### 배포 전 점검
+
+```
+□ Replication Factor가 3 이상인가?
+□ min.insync.replicas가 2 이상인가?
+□ unclean.leader.election.enable이 false인가?
+□ 모든 Broker가 다른 랙/가용영역에 분산되어 있는가?
+□ 모니터링/알림이 설정되어 있는가?
+```
+
+### 일일 모니터링 점검
+
+```bash
+# 1. Under-replicated partition 확인 (0이어야 정상)
+kafka-topics.sh --describe --under-replicated-partitions \
+  --bootstrap-server localhost:9092
+
+# 2. Offline partition 확인 (0이어야 정상)
+kafka-topics.sh --describe --unavailable-partitions \
+  --bootstrap-server localhost:9092
+
+# 3. ISR 축소/확장 이벤트 확인 (로그)
+grep -E "ISR|shrunk|expanded" /var/log/kafka/server.log
+```
+
+### 핵심 알림 규칙
+
+```yaml
+# Prometheus alerting rules
+groups:
+  - name: kafka-replication-alerts
+    rules:
+      # Under-replicated partitions > 0 이면 경고
+      - alert: UnderReplicatedPartitions
+        expr: kafka_server_replicamanager_underreplicatedpartitions > 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $value }}개의 partition이 복제 부족 상태"
+
+      # ISR 축소가 빈번하면 경고
+      - alert: FrequentISRShrink
+        expr: rate(kafka_server_replicamanager_isrshrinks_total[5m]) > 0.1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "ISR 축소가 빈번함 - 네트워크/디스크 점검 필요"
+
+      # Offline partition은 즉시 알림
+      - alert: OfflinePartitions
+        expr: kafka_controller_kafkacontroller_offlinepartitionscount > 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{{ $value }}개의 partition이 오프라인 상태!"
+```
+
+---
+
+## 장애 복구 플레이북
+
+### 상황 1: Under-replicated Partition 발생
+
+```bash
+# 1. 어떤 partition이 문제인지 확인
+kafka-topics.sh --describe --under-replicated-partitions \
+  --bootstrap-server localhost:9092
+
+# 2. 해당 Broker의 상태 확인
+# - Broker가 살아있는가?
+# - CPU/메모리/디스크는 정상인가?
+# - 네트워크 연결은 정상인가?
+
+# 3. Broker 로그 확인
+tail -f /var/log/kafka/server.log | grep -E "ERROR|WARN"
+
+# 4. 복제 상태 확인
+kafka-replica-verification.sh --broker-list localhost:9092 \
+  --topic-white-list ".*"
+```
+
+### 상황 2: Broker 완전 장애
+
+```bash
+# 1. 영향받는 partition 확인
+kafka-topics.sh --describe --bootstrap-server localhost:9092 \
+  | grep "Isr:" | grep -v "broker-id-of-failed-broker"
+
+# 2. Leader 재선출 상태 확인
+kafka-leader-election.sh --bootstrap-server localhost:9092 \
+  --election-type preferred --all-topic-partitions
+
+# 3. Broker 복구 후 확인
+# - 복구된 Broker가 ISR에 다시 포함되는지 확인
+# - Under-replicated partition이 0이 되는지 확인
+```
+
+### 상황 3: 긴급 - 데이터 유실 방지
+
+```bash
+# 일시적으로 쓰기 허용 조건 완화 (주의: 데이터 유실 위험 증가)
+# 정상화 후 반드시 원복해야 함!
+
+# Topic 레벨에서 min.insync.replicas 변경
+kafka-configs.sh --alter --entity-type topics --entity-name orders \
+  --add-config min.insync.replicas=1 \
+  --bootstrap-server localhost:9092
+
+# 정상화 후 원복
+kafka-configs.sh --alter --entity-type topics --entity-name orders \
+  --add-config min.insync.replicas=2 \
+  --bootstrap-server localhost:9092
+```
+
+---
+
+## 복제 성능 영향
+
+복제는 안전성을 높이지만 성능에 영향을 줍니다. 트레이드오프를 이해하세요.
+
+### 쓰기 지연시간 (Latency)
+
+| 설정 | 대략적 지연시간 | 안전성 |
+|------|---------------|--------|
+| acks=0 | < 1ms | 낮음 |
+| acks=1 | 1-5ms | 중간 |
+| acks=all, RF=3 | 5-15ms | 높음 |
+| acks=all, RF=3, 원격 DC | 50-200ms | 매우 높음 |
+
+> ⚠️ 위 수치는 참고용입니다. 실제 환경에서 반드시 측정하세요.
+
+### 네트워크 대역폭 계산
+
+복제는 네트워크 대역폭을 RF배 사용합니다:
+
+```
+예시: 100MB/sec 쓰기 처리량, RF=3
+
+- Producer → Leader: 100MB/sec
+- Leader → Follower1: 100MB/sec
+- Leader → Follower2: 100MB/sec
+- 총 네트워크 사용: 300MB/sec + Consumer 읽기
+
+권장: Broker간 네트워크는 10Gbps 이상
+```
 
 ## 다음 단계
 

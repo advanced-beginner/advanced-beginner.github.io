@@ -180,6 +180,80 @@ Order Aggregate에 포함:
 - 한 번에 로드하는 데이터가 수십 KB를 넘으면 의심
 - 동시 수정 충돌이 자주 발생하면 분리 신호
 
+### 실제 사례: Aggregate 경계 재설계
+
+**상황:** 이커머스 시스템에서 Order Aggregate가 너무 커서 문제 발생
+
+```
+초기 설계 (문제):
+Order Aggregate
+├── OrderLines (최대 100개)
+├── PaymentInfo
+├── ShippingInfo
+├── OrderHistory (모든 상태 변경 기록)
+└── CustomerSnapshot
+
+문제:
+1. Order 로드 시 평균 50KB, 최대 500KB
+2. 주문 조회만 해도 전체 로드 → 느림
+3. 상태 변경마다 전체 저장 → 락 경합
+4. OrderHistory가 계속 증가 → 메모리 이슈
+```
+
+**해결: 경계 재설계**
+
+```
+재설계 후:
+Order Aggregate (핵심만)
+├── OrderLines
+├── OrderStatus
+└── ShippingAddressSnapshot
+
+별도 Aggregate로 분리:
+├── Payment Aggregate (결제 정보)
+├── Shipment Aggregate (배송 추적)
+└── OrderAuditLog (이력은 별도 저장)
+
+결과:
+1. Order 로드 시간: 50ms → 5ms
+2. 동시성 충돌: 주당 100건 → 2건
+3. 코드 복잡도: 감소 (각 Aggregate가 단일 책임)
+```
+
+**교훈:**
+
+> Vaughn Vernon의 조언: "가능한 한 작은 Aggregate로 시작하고,
+> 실제로 트랜잭션 일관성이 필요한 경우에만 확장하라."
+
+### 성능 측정: 언제 분리를 고려해야 하나?
+
+다음 지표를 정기적으로 측정하세요:
+
+| 지표 | 건강한 수준 | 경고 수준 | 위험 수준 |
+|------|-----------|----------|----------|
+| 평균 로드 시간 | < 10ms | 10-50ms | > 50ms |
+| 평균 Aggregate 크기 | < 10KB | 10-50KB | > 50KB |
+| 낙관적 락 충돌률 | < 1% | 1-5% | > 5% |
+| 트랜잭션 평균 시간 | < 50ms | 50-200ms | > 200ms |
+
+```java
+// 측정 코드 예시
+@Around("execution(* *Repository.save(..))")
+public Object measureSaveTime(ProceedingJoinPoint pjp) throws Throwable {
+    long start = System.currentTimeMillis();
+    try {
+        return pjp.proceed();
+    } finally {
+        long duration = System.currentTimeMillis() - start;
+        if (duration > 50) {
+            log.warn("Slow aggregate save: {}ms, type={}",
+                duration, pjp.getArgs()[0].getClass().getSimpleName());
+        }
+        metrics.recordSaveTime(pjp.getSignature().getName(), duration);
+    }
+}
+```
+
 ### 원칙 3: 다른 Aggregate는 ID로만 참조하라
 
 ```java
@@ -428,6 +502,129 @@ public void onOrderConfirmed(OrderConfirmedEvent event) {
 
 ---
 
+---
+
+## 레거시 시스템에 Aggregate 도입하기
+
+기존 시스템에 DDD를 도입할 때는 점진적 접근이 필수입니다.
+
+### 단계별 마이그레이션 로드맵
+
+```
+Phase 1: 분석 (1-2주)
+├── 기존 도메인 모델 파악
+├── 트랜잭션 경계 분석
+├── 가장 문제가 심한 영역 식별
+└── 목표 Aggregate 설계 초안
+
+Phase 2: 격리 (2-4주)
+├── 대상 영역을 별도 패키지로 격리
+├── 기존 코드는 유지, 새 코드 병행
+├── Anti-Corruption Layer 구축
+└── 점진적 트래픽 전환
+
+Phase 3: 리팩토링 (4-8주)
+├── Aggregate Root 도입
+├── Repository 패턴 적용
+├── 도메인 이벤트 발행 추가
+└── 기존 코드 제거
+
+Phase 4: 안정화 (2-4주)
+├── 성능 모니터링
+├── 경계 조정
+└── 문서화
+```
+
+### Anti-Corruption Layer 패턴
+
+레거시 코드와 새 Aggregate 사이에 변환 계층을 둡니다:
+
+```java
+// Anti-Corruption Layer
+@Service
+public class OrderAntiCorruptionLayer {
+
+    private final LegacyOrderDao legacyDao;  // 기존 시스템
+    private final OrderRepository newRepo;   // 새 Aggregate
+
+    // 레거시 → 새 모델
+    public Order findOrder(String legacyOrderId) {
+        LegacyOrderEntity legacy = legacyDao.findById(legacyOrderId);
+        return translateToAggregate(legacy);
+    }
+
+    // 새 모델 → 레거시 (역방향 호환)
+    public void saveOrder(Order order) {
+        newRepo.save(order);
+        // 레거시 시스템도 업데이트 (전환 기간 동안)
+        legacyDao.update(translateToLegacy(order));
+    }
+
+    private Order translateToAggregate(LegacyOrderEntity legacy) {
+        return Order.reconstitute(
+            new OrderId(legacy.getOrderNumber()),
+            translateOrderLines(legacy.getItems()),
+            // ... 변환 로직
+        );
+    }
+}
+```
+
+### 도입 시 주의사항
+
+**하지 말아야 할 것:**
+- ❌ 전체 시스템을 한 번에 리팩토링
+- ❌ 완벽한 설계를 추구하며 분석만 계속하기
+- ❌ 레거시 코드 무시하고 새로 작성
+- ❌ 비즈니스 요구사항 무시하고 기술적 리팩토링만
+
+**해야 할 것:**
+- ✅ 가장 고통스러운 부분부터 시작
+- ✅ 작은 성공을 빠르게 보여주기
+- ✅ 레거시와 공존하면서 점진적 전환
+- ✅ 비즈니스 가치와 연결하여 정당화
+
+---
+
+## DDD 커뮤니티 가이드라인
+
+### Eric Evans (DDD 창시자)의 조언
+
+> "Aggregate 경계를 찾는 것은 가장 어려운 설계 결정 중 하나입니다.
+> 처음에는 잘못될 수 있고, 그래도 괜찮습니다.
+> 중요한 것은 경계를 명시적으로 만들고, 필요할 때 수정할 준비를 하는 것입니다."
+
+### Vaughn Vernon의 실용적 규칙
+
+1. **작게 시작하라**: 의심스러우면 분리하라
+2. **Root만 참조하라**: 내부 Entity를 외부에 노출하지 마라
+3. **ID로 참조하라**: 다른 Aggregate는 ID로만 참조
+4. **결과적 일관성을 수용하라**: 즉각적 일관성은 대부분 불필요
+
+### 일반적인 의사결정 트리
+
+```
+이 Entity를 Aggregate에 포함시켜야 하는가?
+
+1. 이 Entity가 Root 없이 존재할 수 있는가?
+   └── Yes → 별도 Aggregate 고려
+   └── No → 다음 질문으로
+
+2. 이 Entity를 다른 곳에서 직접 참조하는가?
+   └── Yes → 별도 Aggregate (ID 참조로 변경)
+   └── No → 다음 질문으로
+
+3. 이 Entity가 Root와 항상 함께 변경되는가?
+   └── Yes → 포함
+   └── No → 별도 Aggregate + 이벤트로 동기화
+
+4. 포함했을 때 트랜잭션이 너무 커지는가?
+   └── Yes → 분리 후 결과적 일관성 적용
+   └── No → 포함
+```
+
+---
+
 ## 요약
 
 | 개념 | 설명 |
@@ -437,6 +634,7 @@ public void onOrderConfirmed(OrderConfirmedEvent event) {
 | **작게 설계** | 트랜잭션 범위와 충돌 감소 |
 | **ID 참조** | 다른 Aggregate는 ID로만 참조 |
 | **결과적 일관성** | Aggregate 간 변경은 이벤트 사용 |
+| **점진적 도입** | 레거시 시스템에서는 ACL 패턴 활용 |
 
 ## 다음 단계
 

@@ -399,6 +399,59 @@ public class OrderConfirmedEventV2 extends DomainEvent {
 }
 ```
 
+---
+
+## 이벤트 패턴 비교
+
+도메인 이벤트를 사용하는 세 가지 패턴이 있습니다. 각각의 목적이 다릅니다.
+
+### Event Notification vs Event-Carried State Transfer vs Event Sourcing
+
+| 패턴 | 목적 | 이벤트 내용 | 복잡도 |
+|------|------|-----------|--------|
+| **Event Notification** | "이 일이 발생했음" 알림 | ID만 포함 | 낮음 |
+| **Event-Carried State Transfer** | 상태 동기화 | 전체 상태 포함 | 중간 |
+| **Event Sourcing** | 상태를 이벤트로 저장 | 변경 내역 | 높음 |
+
+**패턴별 예시:**
+
+```java
+// 1. Event Notification (가장 단순)
+// "주문이 확정됐으니 너희가 알아서 조회해"
+public class OrderConfirmedEvent {
+    private OrderId orderId;  // ID만
+    // Consumer가 필요하면 직접 조회해야 함
+}
+
+// 2. Event-Carried State Transfer (가장 일반적)
+// "주문이 확정됐고, 이게 주문 내용이야"
+public class OrderConfirmedEvent {
+    private OrderId orderId;
+    private CustomerId customerId;
+    private List<OrderLineSnapshot> orderLines;  // 필요한 데이터 포함
+    private Money totalAmount;
+    // Consumer가 추가 조회 없이 처리 가능
+}
+
+// 3. Event Sourcing
+// "모든 변경을 이벤트로 저장하고, 현재 상태는 재생으로 도출"
+// → 별도 섹션에서 자세히 설명
+```
+
+**패턴 선택 기준:**
+
+```
+단순한 알림만 필요한가?
+├── Yes → Event Notification
+└── No → Consumer가 추가 조회 없이 처리해야 하는가?
+        ├── Yes → Event-Carried State Transfer
+        └── No → 완전한 감사 추적이 필요한가?
+                ├── Yes → Event Sourcing
+                └── No → Event-Carried State Transfer
+```
+
+---
+
 ## 이벤트 소싱 (Event Sourcing)
 
 이벤트를 상태의 원본으로 사용하는 패턴입니다.
@@ -486,6 +539,74 @@ public class EventSourcedOrderRepository implements OrderRepository {
 | 완전한 감사 추적 | 복잡성 증가 |
 | 시간 여행 (과거 상태 재현) | 이벤트 스키마 진화 어려움 |
 | 이벤트 기반 통합에 적합 | 쿼리 성능 (CQRS 필요) |
+
+### 이벤트 저장소 선택
+
+| 옵션 | 특징 | 적합한 경우 |
+|------|------|-----------|
+| **직접 구현 (RDBMS)** | 간단, 기존 DB 활용 | 소규모, 학습 목적 |
+| **EventStoreDB** | 전용 저장소, 구독 기능 내장 | 이벤트 소싱 전문 |
+| **Axon Framework** | Java 생태계, CQRS 통합 | Spring 기반 프로젝트 |
+| **Kafka** | 고성능, 이미 사용 중이면 | 이벤트 스트리밍 중심 |
+
+---
+
+## CQRS와 도메인 이벤트
+
+이벤트 소싱을 사용하면 CQRS(Command Query Responsibility Segregation)가 자연스럽습니다.
+
+```mermaid
+flowchart LR
+    subgraph Write["쓰기 측 (Command)"]
+        CMD[Command] --> AGG[Aggregate]
+        AGG --> EVT[Domain Event]
+        EVT --> ES[(Event Store)]
+    end
+
+    subgraph Read["읽기 측 (Query)"]
+        ES --> PROJ[Projection]
+        PROJ --> RD[(Read DB)]
+        RD --> API[Query API]
+    end
+```
+
+**왜 CQRS가 필요한가:**
+
+이벤트 소싱에서 현재 상태를 얻으려면 모든 이벤트를 재생해야 합니다.
+주문 1개에 이벤트 100개면? → 매 조회마다 100번 재생 = 느림
+
+```java
+// CQRS 없이: 매번 이벤트 재생
+public Order findById(OrderId id) {
+    List<DomainEvent> events = eventStore.getEvents(id);
+    return Order.fromEvents(events);  // 느림!
+}
+
+// CQRS 적용: 읽기 전용 뷰 사용
+public OrderView findById(OrderId id) {
+    return orderViewRepository.findById(id);  // 빠름!
+}
+
+// Projection: 이벤트를 읽기 뷰로 변환
+@EventHandler
+public void on(OrderConfirmedEvent event) {
+    OrderView view = orderViewRepository.findById(event.getOrderId());
+    view.setStatus("CONFIRMED");
+    view.setConfirmedAt(event.getOccurredAt());
+    orderViewRepository.save(view);
+}
+```
+
+**CQRS 도입 기준:**
+
+```
+다음 조건 중 2개 이상이면 CQRS 고려:
+□ 읽기와 쓰기 패턴이 크게 다름
+□ 읽기 성능이 중요함
+□ 이벤트 소싱을 사용함
+□ 복잡한 조회 요구사항 (다양한 뷰)
+□ 읽기/쓰기 확장이 독립적으로 필요함
+```
 
 ## 실전 팁
 
@@ -715,6 +836,124 @@ log.info("이벤트 처리 시작: eventId={}, correlationId={}, type={}",
 ```
 
 이렇게 하면 로그에서 `correlationId`로 검색하여 하나의 요청이 발생시킨 모든 이벤트 흐름을 추적할 수 있습니다.
+
+---
+
+## 실제 스키마 진화 사례
+
+이벤트 스키마 변경은 신중해야 합니다. 실제 사례를 통해 배워봅시다.
+
+### 사례 1: 필드 추가 (안전)
+
+```java
+// v1: 초기 버전
+public class OrderConfirmedEvent {
+    private String orderId;
+    private BigDecimal amount;
+}
+
+// v2: 할인 정보 추가 필요
+public class OrderConfirmedEvent {
+    private String orderId;
+    private BigDecimal amount;
+    private BigDecimal discountAmount;  // 새 필드 (null 허용)
+
+    // 하위 호환성: 기존 이벤트는 discountAmount가 null
+    public BigDecimal getDiscountAmount() {
+        return discountAmount != null ? discountAmount : BigDecimal.ZERO;
+    }
+}
+```
+
+### 사례 2: 필드 이름 변경 (위험)
+
+```java
+// ❌ 위험: 필드명 직접 변경
+// v1: amount
+// v2: totalAmount
+// → 기존 Consumer 전부 깨짐!
+
+// ✅ 안전: 두 필드 모두 유지
+public class OrderConfirmedEvent {
+    private String orderId;
+
+    @Deprecated
+    private BigDecimal amount;       // 기존 필드 유지
+
+    private BigDecimal totalAmount;  // 새 필드
+
+    // 새 Consumer는 totalAmount 사용
+    public BigDecimal getTotalAmount() {
+        return totalAmount != null ? totalAmount : amount;
+    }
+
+    // 기존 Consumer 호환성
+    public BigDecimal getAmount() {
+        return amount != null ? amount : totalAmount;
+    }
+}
+```
+
+### 사례 3: 타입 변경 (가장 위험)
+
+```java
+// ❌ 절대 하면 안 됨: 타입 변경
+// v1: String orderId
+// v2: Long orderId
+// → 역직렬화 실패!
+
+// ✅ 해결: 새 이벤트 타입 정의
+public class OrderConfirmedEventV2 {
+    private Long orderId;  // 새 타입
+
+    // 마이그레이션 핸들러
+    public static OrderConfirmedEventV2 fromV1(OrderConfirmedEvent v1) {
+        return new OrderConfirmedEventV2(Long.parseLong(v1.getOrderId()));
+    }
+}
+
+// Consumer는 두 버전 모두 처리
+@KafkaListener(topics = "order-events")
+public void handle(ConsumerRecord<String, JsonNode> record) {
+    int version = record.value().get("version").asInt();
+    if (version == 1) {
+        // V1 처리
+    } else {
+        // V2 처리
+    }
+}
+```
+
+### 스키마 진화 체크리스트
+
+```
+안전한 변경:
+✅ 새 필드 추가 (Optional)
+✅ 필드에 기본값 추가
+✅ 새 이벤트 타입 추가
+
+위험한 변경 (마이그레이션 필요):
+⚠️ 필드명 변경
+⚠️ 필드 타입 변경
+⚠️ 필수 필드로 변경
+
+절대 하면 안 되는 변경:
+❌ 기존 필드 삭제
+❌ 기존 이벤트 타입 삭제
+❌ 이벤트 의미 변경
+```
+
+---
+
+## 요약
+
+| 개념 | 핵심 |
+|------|------|
+| **도메인 이벤트** | 비즈니스적으로 의미 있는 사건 |
+| **이벤트 패턴** | Notification / State Transfer / Sourcing |
+| **Outbox 패턴** | 이벤트 유실 방지 |
+| **CQRS** | 이벤트 소싱의 쿼리 성능 해결 |
+| **스키마 진화** | 하위 호환성 유지 필수 |
 
 ## 다음 단계
 

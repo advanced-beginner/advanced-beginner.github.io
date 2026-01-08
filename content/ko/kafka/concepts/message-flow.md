@@ -165,6 +165,51 @@ flowchart TB
 | **Offset 할당** | 각 메시지에 고유 순번 부여 |
 | **영속성** | 디스크에 저장되어 재시작해도 유지 |
 
+### Kafka가 빠른 이유: 내부 저장 구조
+
+"Kafka는 디스크에 저장하는데 왜 빠른가?"라는 질문을 자주 받습니다. 핵심은 **순차 I/O**와 **Zero-Copy**입니다.
+
+**물리적 저장 구조:**
+
+```
+/kafka-logs/
+└── orders-0/                    # Topic "orders"의 Partition 0
+    ├── 00000000000000000000.log  # Segment 파일 (실제 메시지)
+    ├── 00000000000000000000.index # Offset → 물리적 위치 매핑
+    ├── 00000000000000000000.timeindex # 타임스탬프 → Offset 매핑
+    ├── 00000000000012345678.log  # 새 Segment (이전 것이 가득 차면)
+    └── ...
+```
+
+**왜 이 구조가 빠른가:**
+
+| 특성 | 설명 | 성능 영향 |
+|------|------|----------|
+| **Append-only 쓰기** | 파일 끝에만 추가, 랜덤 쓰기 없음 | 디스크 쓰기 최적화 |
+| **순차 읽기** | Consumer는 순서대로 읽음 | OS 페이지 캐시 활용 |
+| **Zero-Copy** | 커널에서 네트워크로 직접 전송 | CPU 사용량 감소 |
+| **배치 처리** | 여러 메시지를 묶어서 I/O | 시스템 콜 감소 |
+
+**실제 성능 수치 (참고용):**
+
+> ⚠️ 실제 성능은 하드웨어, 네트워크, 메시지 크기에 따라 크게 달라집니다.
+
+| 시나리오 | 처리량 (대략) | 조건 |
+|----------|-------------|------|
+| 단일 Partition, 작은 메시지 | 10만+ msg/sec | 100 bytes 메시지 |
+| 3개 Partition, 배치 활성화 | 50만+ msg/sec | linger.ms=5, batch.size=32KB |
+| 대용량 메시지 | 1만 msg/sec | 1MB 메시지 |
+
+**Segment 롤오버:**
+
+```yaml
+# server.properties
+log.segment.bytes=1073741824  # 1GB마다 새 Segment (기본값)
+log.roll.hours=168            # 또는 7일마다 새 Segment
+```
+
+오래된 Segment는 `log.retention.hours` 설정에 따라 자동 삭제됩니다.
+
 ### Offset이란?
 
 ```
@@ -407,6 +452,120 @@ Consumer Group: order-service (Consumer 5개)
 
 ---
 
+---
+
+## 다른 메시징 시스템과 비교
+
+"왜 Kafka를 선택해야 하는가?"를 이해하려면 다른 시스템과의 차이를 알아야 합니다.
+
+### Kafka vs RabbitMQ vs AWS SQS
+
+| 특성 | Kafka | RabbitMQ | AWS SQS |
+|------|-------|----------|---------|
+| **아키텍처** | 분산 로그 | 메시지 브로커 | 관리형 큐 |
+| **전달 방식** | Pull | Push (기본) | Pull |
+| **메시지 보존** | 설정 기간 동안 유지 | 소비 후 삭제 | 최대 14일 |
+| **순서 보장** | Partition 내 보장 | 보장 안됨 (기본) | FIFO 큐만 보장 |
+| **재처리** | Offset 이동으로 가능 | 불가 (기본) | 가시성 타임아웃 내 |
+| **처리량** | 매우 높음 | 중간 | 중간 |
+| **운영 복잡도** | 높음 | 중간 | 낮음 (관리형) |
+
+**언제 어떤 것을 선택하는가:**
+
+```
+Kafka가 적합한 경우:
+├── 높은 처리량 필요 (수십만 msg/sec)
+├── 메시지 재처리/리플레이 필요
+├── 이벤트 소싱, 스트림 처리
+└── 여러 Consumer가 같은 메시지를 읽어야 함
+
+RabbitMQ가 적합한 경우:
+├── 복잡한 라우팅 규칙 필요
+├── 요청-응답 패턴 (RPC)
+├── 메시지별 TTL, 우선순위 필요
+└── 적은 운영 부담 선호
+
+AWS SQS가 적합한 경우:
+├── AWS 생태계 내 간단한 큐잉
+├── 서버리스 아키텍처 (Lambda 트리거)
+├── 운영 부담 최소화
+└── 예측 불가한 트래픽 패턴
+```
+
+---
+
+## 운영 모니터링 가이드
+
+### 핵심 모니터링 지표
+
+```bash
+# 1. Consumer Lag 확인 (가장 중요!)
+kafka-consumer-groups.sh --describe --group order-service \
+  --bootstrap-server localhost:9092
+
+# 출력 예시:
+# GROUP        TOPIC   PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG
+# order-service orders  0          1000            1050            50  ← 50개 밀림!
+```
+
+**Lag 해석 가이드:**
+
+| Lag 수준 | 의미 | 대응 |
+|----------|------|------|
+| 0-100 | 정상 | 모니터링 유지 |
+| 100-1,000 | 주의 | Consumer 성능 점검 |
+| 1,000-10,000 | 경고 | Consumer 추가 또는 최적화 필요 |
+| 10,000+ | 위험 | 즉시 조치 필요, 처리 병목 확인 |
+
+```bash
+# 2. Topic 상태 확인
+kafka-topics.sh --describe --topic orders \
+  --bootstrap-server localhost:9092
+
+# 3. Producer 메트릭 확인 (JMX)
+# - record-send-rate: 초당 전송 메시지 수
+# - record-error-rate: 전송 실패율 (0 유지해야 함)
+# - request-latency-avg: 평균 응답 시간
+```
+
+### 프로덕션 알림 설정 권장값
+
+```yaml
+# Prometheus alerting rules 예시
+groups:
+  - name: kafka-alerts
+    rules:
+      - alert: HighConsumerLag
+        expr: kafka_consumergroup_lag > 10000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Consumer lag이 10,000 이상 ({{ $value }})"
+
+      - alert: ConsumerGroupDown
+        expr: kafka_consumergroup_members == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Consumer group에 활성 멤버 없음"
+```
+
+### 빠른 진단 체크리스트
+
+문제가 발생했을 때 순서대로 확인:
+
+```
+□ 1. Consumer lag 확인 → 처리 병목 여부
+□ 2. Consumer group 멤버 수 확인 → Consumer 장애 여부
+□ 3. Broker CPU/메모리 확인 → 인프라 문제 여부
+□ 4. Producer error rate 확인 → 전송 실패 여부
+□ 5. 네트워크 지연 확인 → 네트워크 문제 여부
+```
+
+---
+
 ## 핵심 정리
 
 | 개념 | 핵심 포인트 |
@@ -415,6 +574,7 @@ Consumer Group: order-service (Consumer 5개)
 | **Partition** | 병렬 처리의 단위. Consumer 수는 Partition 수 이하로 |
 | **Offset** | Consumer의 읽기 위치. 커밋 시점이 메시지 보장 수준 결정 |
 | **Pull 방식** | Consumer가 주도권. 처리 시간이 길면 poll 간격 주의 |
+| **내부 구조** | Log Segment + Index로 순차 I/O 최적화 |
 
 ## 다음 단계
 

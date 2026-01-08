@@ -432,6 +432,152 @@ spring:
 - 트랜잭션 마커 기록
 - Consumer의 필터링 처리
 
+---
+
+## 분산 트랜잭션 방식 비교
+
+Kafka 트랜잭션은 유일한 선택지가 아닙니다. 각 방식의 특성을 이해하세요.
+
+### Two-Phase Commit (2PC) vs Kafka Transactions vs Saga
+
+| 특성 | 2PC | Kafka Transactions | Saga |
+|------|-----|-------------------|------|
+| **범위** | 여러 DB | Kafka 내부 | 여러 서비스 |
+| **일관성** | 강한 일관성 | Kafka 내 강한 일관성 | 결과적 일관성 |
+| **성능** | 느림 (블로킹) | 중간 | 빠름 |
+| **장애 복구** | 코디네이터 의존 | 자동 복구 | 보상 트랜잭션 |
+| **확장성** | 제한적 | Kafka 수준 | 높음 |
+
+**Kafka 트랜잭션의 한계:**
+
+```
+Kafka 트랜잭션으로 할 수 있는 것:
+├── 여러 Kafka Topic에 원자적 쓰기 ✅
+├── Consume-Transform-Produce 원자성 ✅
+└── Kafka 내부에서의 Exactly-Once ✅
+
+Kafka 트랜잭션으로 할 수 없는 것:
+├── DB + Kafka 원자적 처리 ❌
+├── 외부 API + Kafka 원자적 처리 ❌
+└── 서비스 간 분산 트랜잭션 ❌
+```
+
+**DB + Kafka를 함께 다뤄야 할 때:**
+
+```java
+// ❌ 불가능: Kafka + DB 원자적 처리
+@Transactional  // DB 트랜잭션
+public void process(OrderEvent event) {
+    orderRepository.save(order);          // DB 저장
+    kafkaTemplate.send("results", result); // Kafka 전송
+    // 둘 중 하나만 실패하면? → 불일치 발생
+}
+
+// ✅ 해결책: Outbox 패턴
+@Transactional  // DB 트랜잭션만
+public void process(OrderEvent event) {
+    orderRepository.save(order);
+    outboxRepository.save(new OutboxEvent("results", result));
+    // DB 트랜잭션으로 원자성 보장
+}
+// 별도 프로세스가 Outbox에서 Kafka로 전송
+```
+
+---
+
+## 트랜잭션 디버깅 가이드
+
+### 흔한 에러와 해결책
+
+**에러 1: `ProducerFencedException`**
+
+```
+org.apache.kafka.common.errors.ProducerFencedException:
+Producer with transactional.id has been fenced by a newer instance
+```
+
+**원인:** 동일한 `transactional.id`를 가진 다른 Producer가 시작됨
+
+**해결:**
+```yaml
+# 각 인스턴스마다 고유한 transactional.id 사용
+spring:
+  kafka:
+    producer:
+      transaction-id-prefix: tx-${spring.application.name}-${random.uuid}-
+```
+
+**에러 2: `InvalidTxnStateException`**
+
+```
+org.apache.kafka.common.errors.InvalidTxnStateException:
+Cannot perform operation for transaction id ... in state ...
+```
+
+**원인:** 트랜잭션 상태 불일치 (타임아웃, 비정상 종료 등)
+
+**해결:**
+```java
+// Producer 재생성 필요
+kafkaTemplate.getProducerFactory().reset();
+```
+
+**에러 3: 트랜잭션 타임아웃**
+
+```
+org.apache.kafka.common.errors.TimeoutException:
+Timeout expired while awaiting InitProducerId response
+```
+
+**원인:** 트랜잭션 코디네이터 응답 지연 또는 처리 시간 초과
+
+**해결:**
+```yaml
+spring:
+  kafka:
+    producer:
+      properties:
+        transaction.timeout.ms: 120000  # 60초 → 120초로 증가
+        max.block.ms: 60000
+```
+
+### 디버깅 체크리스트
+
+```
+□ transaction.id가 인스턴스마다 고유한가?
+□ Broker 버전이 트랜잭션을 지원하는가? (0.11+)
+□ 모든 Consumer가 isolation.level=read_committed인가?
+□ 트랜잭션 타임아웃이 처리 시간보다 긴가?
+□ 네트워크 지연이 비정상적이지 않은가?
+```
+
+---
+
+## Kafka Streams와 Exactly-Once
+
+Kafka Streams를 사용하면 EOS가 더 쉬워집니다.
+
+```java
+Properties props = new Properties();
+props.put(StreamsConfig.PROCESSING_GUARANTEE_CONFIG,
+    StreamsConfig.EXACTLY_ONCE_V2);  // Kafka 2.5+
+
+// Streams 내부에서 자동으로:
+// 1. 입력 offset 커밋
+// 2. 상태 저장소 업데이트
+// 3. 출력 레코드 전송
+// 을 원자적으로 처리
+```
+
+**Streams EOS vs 직접 구현:**
+
+| 측면 | Kafka Streams EOS | 직접 구현 |
+|------|------------------|----------|
+| 구현 복잡도 | 설정 한 줄 | 수십 줄 코드 |
+| 상태 관리 | 자동 | 직접 관리 |
+| Consumer Offset | 자동 관리 | sendOffsetsToTransaction() 필요 |
+| 장애 복구 | 자동 | 직접 구현 |
+
 **실제 성능 영향:**
 
 | 설정 | 상대 처리량 | 지연시간 | 사용 상황 |
