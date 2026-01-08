@@ -2,6 +2,8 @@
 lastmod: "2026-01-06"
 title: 에러 처리 심화
 weight: 9
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # 에러 처리 심화

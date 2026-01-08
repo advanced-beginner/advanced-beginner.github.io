@@ -2,6 +2,8 @@
 lastmod: "2026-01-06"
 title: 실습 예제
 weight: 3
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 Spring Boot를 사용한 다양한 Kafka 예제를 직접 실행해보세요.

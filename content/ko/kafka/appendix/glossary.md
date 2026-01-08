@@ -2,6 +2,8 @@
 lastmod: "2026-01-08"
 title: 용어 사전
 weight: 1
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # Kafka 용어 사전

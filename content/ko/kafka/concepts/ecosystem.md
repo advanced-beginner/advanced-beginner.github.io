@@ -2,6 +2,8 @@
 lastmod: "2026-01-08"
 title: 생태계
 weight: 12
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # Kafka 생태계

@@ -2,6 +2,8 @@
 lastmod: "2026-01-08"
 title: 보안
 weight: 11
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # Kafka 보안

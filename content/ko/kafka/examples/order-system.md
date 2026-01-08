@@ -2,6 +2,8 @@
 lastmod: "2026-01-06"
 title: 주문 시스템
 weight: 3
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # 주문 시스템 예제

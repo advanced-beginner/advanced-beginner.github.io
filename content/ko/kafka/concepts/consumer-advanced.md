@@ -2,6 +2,8 @@
 lastmod: "2026-01-08"
 title: Consumer 심화 운영
 weight: 4
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # Consumer 심화 운영

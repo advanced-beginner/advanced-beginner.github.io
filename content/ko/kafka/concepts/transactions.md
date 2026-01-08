@@ -2,6 +2,8 @@
 lastmod: "2026-01-06"
 title: 트랜잭션과 Exactly-Once
 weight: 6
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # 트랜잭션과 Exactly-Once Semantics

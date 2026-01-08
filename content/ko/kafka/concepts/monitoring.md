@@ -2,6 +2,8 @@
 lastmod: "2026-01-06"
 title: 모니터링 기초
 weight: 10
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # 모니터링 기초

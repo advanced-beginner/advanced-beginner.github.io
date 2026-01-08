@@ -2,6 +2,8 @@
 lastmod: "2026-01-06"
 title: Replication
 weight: 4
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # Replication

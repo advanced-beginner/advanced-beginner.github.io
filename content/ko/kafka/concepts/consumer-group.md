@@ -2,6 +2,8 @@
 lastmod: "2026-01-08"
 title: Consumer Group & Offset
 weight: 3
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # Consumer Group & Offset

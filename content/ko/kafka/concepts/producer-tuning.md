@@ -2,6 +2,8 @@
 lastmod: "2026-01-08"
 title: Producer 튜닝
 weight: 7
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # Producer 튜닝

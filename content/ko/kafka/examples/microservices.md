@@ -2,6 +2,8 @@
 lastmod: "2026-01-08"
 title: 마이크로서비스 연동
 weight: 4
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 마이크로서비스 환경에서 Kafka를 활용한 이벤트 기반 통신을 구현합니다.

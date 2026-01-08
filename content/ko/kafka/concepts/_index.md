@@ -2,6 +2,8 @@
 lastmod: "2026-01-06"
 title: 개념 이해
 weight: 2
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 Kafka의 핵심 구성요소와 동작 원리를 이해합니다.

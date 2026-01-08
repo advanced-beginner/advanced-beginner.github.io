@@ -2,6 +2,8 @@
 lastmod: "2026-01-06"
 title: 메시지 흐름
 weight: 2
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # 메시지 흐름

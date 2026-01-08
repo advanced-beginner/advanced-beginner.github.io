@@ -2,6 +2,8 @@
 lastmod: "2026-01-08"
 title: 심화 개념
 weight: 5
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # 심화 개념
