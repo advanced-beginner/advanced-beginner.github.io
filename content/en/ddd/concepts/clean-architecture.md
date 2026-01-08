@@ -18,11 +18,11 @@ flowchart TB
         subgraph Green["🟢 Interface Adapters"]
             subgraph Red["🔴 Use Cases"]
                 subgraph Yellow["🟡 Entities"]
-                    E["Enterprise<br/>Business Rules"]
+                    E["Enterprise<br>Business Rules"]
                 end
-                UC["Application<br/>Business Rules"]
+                UC["Application<br>Business Rules"]
             end
-            A["Controllers<br/>Gateways<br/>Presenters"]
+            A["Controllers<br>Gateways<br>Presenters"]
         end
         F["Web, DB, Devices"]
     end

@@ -292,11 +292,11 @@ An interface that **abstracts persistence** for Aggregates.
 flowchart LR
     subgraph Domain["Domain Layer"]
         AGG[Aggregate]
-        REPO_IF[Repository<br/>Interface]
+        REPO_IF[Repository<br>Interface]
     end
 
     subgraph Infra["Infrastructure Layer"]
-        REPO_IMPL[Repository<br/>Implementation]
+        REPO_IMPL[Repository<br>Implementation]
         DB[(Database)]
     end
 

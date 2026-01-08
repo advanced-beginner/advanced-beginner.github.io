@@ -40,13 +40,13 @@ flowchart TB
 
         subgraph Command["Command Side"]
             CMD["Command Handler"]
-            WMODEL["Write Model<br/>(Domain Model)"]
+            WMODEL["Write Model<br>(Domain Model)"]
             WDB[(Write DB)]
         end
 
         subgraph Query["Query Side"]
             QRY["Query Handler"]
-            RMODEL["Read Model<br/>(DTO/View)"]
+            RMODEL["Read Model<br>(DTO/View)"]
             RDB[(Read DB)]
         end
 
@@ -180,12 +180,12 @@ flowchart TB
     subgraph Command["Command Side"]
         CMD["Command Handler"]
         AGG["Aggregate"]
-        WT[("orders<br/>(정규화)")]
+        WT[("orders<br>(정규화)")]
     end
 
     subgraph Query["Query Side"]
         QRY["Query Handler"]
-        RT[("order_views<br/>(비정규화)")]
+        RT[("order_views<br>(비정규화)")]
     end
 
     subgraph Sync["동기화"]
@@ -297,7 +297,7 @@ flowchart TB
     subgraph Command["Command Side"]
         CMD["Command Handler"]
         AGG["Aggregate"]
-        WDB[("PostgreSQL<br/>(Write)")]
+        WDB[("PostgreSQL<br>(Write)")]
     end
 
     subgraph Sync["Event Bus"]
@@ -307,7 +307,7 @@ flowchart TB
     subgraph Query["Query Side"]
         QRY["Query Handler"]
         PROJ["Projector"]
-        RDB[("Elasticsearch<br/>(Read)")]
+        RDB[("Elasticsearch<br>(Read)")]
     end
 
     UI -->|Command| CMD
@@ -480,9 +480,9 @@ public class Order {
 
 ```mermaid
 flowchart TB
-    Q1{조회와 명령의<br/>요구사항이 다른가?}
-    Q2{조회 성능이<br/>중요한가?}
-    Q3{복잡한 리포팅/<br/>검색이 필요한가?}
+    Q1{조회와 명령의<br>요구사항이 다른가?}
+    Q2{조회 성능이<br>중요한가?}
+    Q3{복잡한 리포팅/<br>검색이 필요한가?}
 
     Q1 -->|Yes| CQRS["CQRS 고려"]
     Q1 -->|No| SIMPLE["단순 CRUD"]

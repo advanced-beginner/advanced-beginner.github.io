@@ -41,13 +41,13 @@ flowchart TB
 
         subgraph Command["Command Side"]
             CMD["Command Handler"]
-            WMODEL["Write Model<br/>(Domain Model)"]
+            WMODEL["Write Model<br>(Domain Model)"]
             WDB[(Write DB)]
         end
 
         subgraph Query["Query Side"]
             QRY["Query Handler"]
-            RMODEL["Read Model<br/>(DTO/View)"]
+            RMODEL["Read Model<br>(DTO/View)"]
             RDB[(Read DB)]
         end
 
@@ -181,12 +181,12 @@ flowchart TB
     subgraph Command["Command Side"]
         CMD["Command Handler"]
         AGG["Aggregate"]
-        WT[("orders<br/>(normalized)")]
+        WT[("orders<br>(normalized)")]
     end
 
     subgraph Query["Query Side"]
         QRY["Query Handler"]
-        RT[("order_views<br/>(denormalized)")]
+        RT[("order_views<br>(denormalized)")]
     end
 
     subgraph Sync["Synchronization"]
@@ -298,7 +298,7 @@ flowchart TB
     subgraph Command["Command Side"]
         CMD["Command Handler"]
         AGG["Aggregate"]
-        WDB[("PostgreSQL<br/>(Write)")]
+        WDB[("PostgreSQL<br>(Write)")]
     end
 
     subgraph Sync["Event Bus"]
@@ -308,7 +308,7 @@ flowchart TB
     subgraph Query["Query Side"]
         QRY["Query Handler"]
         PROJ["Projector"]
-        RDB[("Elasticsearch<br/>(Read)")]
+        RDB[("Elasticsearch<br>(Read)")]
     end
 
     UI -->|Command| CMD
@@ -481,9 +481,9 @@ public class Order {
 
 ```mermaid
 flowchart TB
-    Q1{Different requirements<br/>for queries vs commands?}
-    Q2{Query performance<br/>critical?}
-    Q3{Complex reporting/<br/>search needed?}
+    Q1{Different requirements<br>for queries vs commands?}
+    Q2{Query performance<br>critical?}
+    Q3{Complex reporting/<br>search needed?}
 
     Q1 -->|Yes| CQRS["Consider CQRS"]
     Q1 -->|No| SIMPLE["Simple CRUD"]

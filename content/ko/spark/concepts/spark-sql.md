@@ -23,12 +23,12 @@ Catalyst는 Spark SQL의 쿼리 최적화 엔진입니다. 사용자가 작성�
 
 ```mermaid
 flowchart LR
-    A[SQL/DataFrame] --> B[Unresolved<br/>Logical Plan]
-    B --> C[Analyzed<br/>Logical Plan]
-    C --> D[Optimized<br/>Logical Plan]
-    D --> E[Physical<br/>Plans]
-    E --> F[Selected<br/>Physical Plan]
-    F --> G[RDD 코드<br/>생성]
+    A[SQL/DataFrame] --> B[Unresolved<br>Logical Plan]
+    B --> C[Analyzed<br>Logical Plan]
+    C --> D[Optimized<br>Logical Plan]
+    D --> E[Physical<br>Plans]
+    E --> F[Selected<br>Physical Plan]
+    F --> G[RDD 코드<br>생성]
 
     subgraph Analysis["1. Analysis"]
         B --> C

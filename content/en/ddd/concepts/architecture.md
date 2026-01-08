@@ -71,7 +71,7 @@ Problems with this code:
 ```mermaid
 flowchart LR
     subgraph Before["❌ No Architecture"]
-        B1["All code<br/>mixed together"]
+        B1["All code<br>mixed together"]
     end
 
     subgraph After["✅ Architecture Applied"]
@@ -181,15 +181,15 @@ flowchart TB
 ```mermaid
 flowchart TB
     START["Project Start"]
-    Q1{"Does team have<br/>architecture pattern<br/>experience?"}
-    Q2{"Is project large<br/>or long-term?"}
-    Q3{"Many external<br/>system integrations?"}
-    Q4{"Seriously applying<br/>DDD?"}
+    Q1{"Does team have<br>architecture pattern<br>experience?"}
+    Q2{"Is project large<br>or long-term?"}
+    Q3{"Many external<br>system integrations?"}
+    Q4{"Seriously applying<br>DDD?"}
 
-    LAYER["✅ Layered<br/>Most basic and easy"]
-    HEX["✅ Hexagonal<br/>Good for external isolation"]
-    CLEAN["✅ Clean<br/>When strict rules needed"]
-    ONION["✅ Onion<br/>Domain model centric"]
+    LAYER["✅ Layered<br>Most basic and easy"]
+    HEX["✅ Hexagonal<br>Good for external isolation"]
+    CLEAN["✅ Clean<br>When strict rules needed"]
+    ONION["✅ Onion<br>Domain model centric"]
 
     START --> Q1
     Q1 -->|"No"| LAYER
@@ -226,10 +226,10 @@ No need to apply complex architecture from the start:
 
 ```mermaid
 flowchart LR
-    A["Stage 1<br/>Layered"]
-    B["Stage 2<br/>Domain Separation"]
-    C["Stage 3<br/>Extract Ports"]
-    D["Stage 4<br/>Hexagonal/Clean"]
+    A["Stage 1<br>Layered"]
+    B["Stage 2<br>Domain Separation"]
+    C["Stage 3<br>Extract Ports"]
+    D["Stage 4<br>Hexagonal/Clean"]
 
     A -->|"Domain gets complex"| B
     B -->|"External integrations grow"| C

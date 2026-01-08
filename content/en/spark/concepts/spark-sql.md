@@ -23,12 +23,12 @@ Catalyst is Spark SQL's query optimization engine. It analyzes user queries and 
 
 ```mermaid
 flowchart LR
-    A[SQL/DataFrame] --> B[Unresolved<br/>Logical Plan]
-    B --> C[Analyzed<br/>Logical Plan]
-    C --> D[Optimized<br/>Logical Plan]
-    D --> E[Physical<br/>Plans]
-    E --> F[Selected<br/>Physical Plan]
-    F --> G[RDD Code<br/>Generation]
+    A[SQL/DataFrame] --> B[Unresolved<br>Logical Plan]
+    B --> C[Analyzed<br>Logical Plan]
+    C --> D[Optimized<br>Logical Plan]
+    D --> E[Physical<br>Plans]
+    E --> F[Selected<br>Physical Plan]
+    F --> G[RDD Code<br>Generation]
 
     subgraph Analysis["1. Analysis"]
         B --> C

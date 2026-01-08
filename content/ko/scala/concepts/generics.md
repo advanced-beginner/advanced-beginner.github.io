@@ -75,7 +75,7 @@ graph TB
         Cat["Cat"]
         Dog -->|"<:"| Animal
         Cat -->|"<:"| Animal
-        UB["A <: Animal<br/>A는 Animal의 하위 타입"]
+        UB["A ≤ Animal<br>A는 Animal의 하위 타입"]
     end
 
     subgraph "하한 경계 (Lower Bound)"
@@ -85,7 +85,7 @@ graph TB
         RedApple["RedApple"]
         Apple -->|"<:"| Fruit
         RedApple -->|"<:"| Apple
-        LB["B >: Apple<br/>B는 Apple의 상위 타입"]
+        LB["B ≥ Apple<br>B는 Apple의 상위 타입"]
     end
 ```
 

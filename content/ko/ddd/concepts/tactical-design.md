@@ -291,11 +291,11 @@ Aggregate의 **영속성을 추상화**하는 인터페이스입니다.
 flowchart LR
     subgraph Domain["도메인 계층"]
         AGG[Aggregate]
-        REPO_IF[Repository<br/>Interface]
+        REPO_IF[Repository<br>Interface]
     end
 
     subgraph Infra["인프라 계층"]
-        REPO_IMPL[Repository<br/>구현체]
+        REPO_IMPL[Repository<br>구현체]
         DB[(Database)]
     end
 

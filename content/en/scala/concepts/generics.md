@@ -75,7 +75,7 @@ graph TB
         Cat["Cat"]
         Dog -->|"<:"| Animal
         Cat -->|"<:"| Animal
-        UB["A <: Animal<br/>A is subtype of Animal"]
+        UB["A ≤ Animal<br>A is subtype of Animal"]
     end
 
     subgraph "Lower Bound"
@@ -85,7 +85,7 @@ graph TB
         RedApple["RedApple"]
         Apple -->|"<:"| Fruit
         RedApple -->|"<:"| Apple
-        LB["B >: Apple<br/>B is supertype of Apple"]
+        LB["B ≥ Apple<br>B is supertype of Apple"]
     end
 ```
 

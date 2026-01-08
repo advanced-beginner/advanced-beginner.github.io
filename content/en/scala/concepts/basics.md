@@ -80,9 +80,9 @@ Every value in Scala is an object. Java's primitive types are also treated as ob
 
 ```mermaid
 graph TB
-    Any["Any<br/>(top type)"]
-    AnyVal["AnyVal<br/>(value types)"]
-    AnyRef["AnyRef<br/>(reference types)"]
+    Any["Any<br>(top type)"]
+    AnyVal["AnyVal<br>(value types)"]
+    AnyRef["AnyRef<br>(reference types)"]
 
     Any --> AnyVal
     Any --> AnyRef
@@ -98,7 +98,7 @@ graph TB
     AnyVal --> Unit
 
     String["String"]
-    List["List[T]"]
+    List["List#91;T#93;"]
     UserClass["User classes"]
 
     AnyRef --> String
@@ -106,7 +106,7 @@ graph TB
     AnyRef --> UserClass
 
     Null["Null"]
-    Nothing["Nothing<br/>(bottom type)"]
+    Nothing["Nothing<br>(bottom type)"]
 
     String --> Null
     List --> Null

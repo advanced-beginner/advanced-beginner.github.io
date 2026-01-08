@@ -13,11 +13,11 @@ Elasticsearch 클러스터의 노드 구성, 샤드 할당, 상태 모니터링 
 ```mermaid
 flowchart TB
     subgraph Cluster["Elasticsearch Cluster"]
-        M[Master Node<br/>클러스터 상태 관리]
-        D1[Data Node 1<br/>데이터 저장]
-        D2[Data Node 2<br/>데이터 저장]
-        D3[Data Node 3<br/>데이터 저장]
-        C[Coordinating Node<br/>요청 라우팅]
+        M[Master Node<br>클러스터 상태 관리]
+        D1[Data Node 1<br>데이터 저장]
+        D2[Data Node 2<br>데이터 저장]
+        D3[Data Node 3<br>데이터 저장]
+        C[Coordinating Node<br>요청 라우팅]
     end
 
     Client --> C

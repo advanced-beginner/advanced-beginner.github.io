@@ -318,8 +318,8 @@ GET /products/_search
 
 ```mermaid
 graph LR
-    A[origin<br/>기준점] --> B[scale<br/>감소 범위]
-    B --> C[decay<br/>감소율]
+    A[origin<br>기준점] --> B[scale<br>감소 범위]
+    B --> C[decay<br>감소율]
 ```
 
 | 함수 | 감소 형태 |

@@ -21,15 +21,15 @@ graph LR
     end
 
     subgraph "Covariant (+A): Producer"
-        ListDog["List[Dog]"] -->|"<:"| ListAnimal["List[Animal]"]
+        ListDog["List#91;Dog#93;"] -->|"<:"| ListAnimal["List#91;Animal#93;"]
     end
 
     subgraph "Contravariant (-A): Consumer"
-        PrinterAnimal["Printer[Animal]"] -->|"<:"| PrinterDog["Printer[Dog]"]
+        PrinterAnimal["Printer#91;Animal#93;"] -->|"<:"| PrinterDog["Printer#91;Dog#93;"]
     end
 
     subgraph "Invariant (A)"
-        ArrayDog["Array[Dog]"] -.-|"No relation"| ArrayAnimal["Array[Animal]"]
+        ArrayDog["Array#91;Dog#93;"] -.-|"No relation"| ArrayAnimal["Array#91;Animal#93;"]
     end
 ```
 
@@ -151,12 +151,12 @@ graph TB
     end
 
     subgraph "Example"
-        F1["Animal => String"]
-        F2["Dog => String"]
+        F1["Animal → String"]
+        F2["Dog → String"]
         F1 -->|"<:"| F2
     end
 
-    Note["A function that accepts Animal<br/>can also accept Dog"]
+    Note["A function that accepts Animal<br>can also accept Dog"]
 ```
 
 > **Interpretation:** An `Animal => String` function can be used where `Dog => String` is expected.

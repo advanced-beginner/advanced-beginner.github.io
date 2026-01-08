@@ -34,7 +34,7 @@ What DDD IS:
 
 ```mermaid
 flowchart TB
-    Q1{Is business logic<br/>complex?}
+    Q1{Is business logic<br>complex?}
     Q1 -->|Yes| DDD["DDD Recommended"]
     Q1 -->|No| SIMPLE["Simple CRUD is sufficient"]
 ```
@@ -429,10 +429,10 @@ When using business terms in code:
 
 ```mermaid
 flowchart LR
-    A["1. Quick Start<br/>Core concepts"] --> B["2. Tactical Patterns<br/>Entity, VO, Aggregate"]
-    B --> C["3. Strategic Patterns<br/>BC, Context Map"]
-    C --> D["4. Architecture<br/>Hexagonal, CQRS"]
-    D --> E["5. Practice<br/>Projects"]
+    A["1. Quick Start<br>Core concepts"] --> B["2. Tactical Patterns<br>Entity, VO, Aggregate"]
+    B --> C["3. Strategic Patterns<br>BC, Context Map"]
+    C --> D["4. Architecture<br>Hexagonal, CQRS"]
+    D --> E["5. Practice<br>Projects"]
 ```
 
 **Recommended resources:**

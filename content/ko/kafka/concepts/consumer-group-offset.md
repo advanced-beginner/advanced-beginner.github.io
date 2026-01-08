@@ -43,7 +43,7 @@ flowchart TB
 
 ```mermaid
 flowchart TB
-    subgraph Case1["Consumer < Partition"]
+    subgraph Case1["Consumer ＜ Partition"]
         P1A[P0]
         P1B[P1]
         P1C[P2]
@@ -66,7 +66,7 @@ flowchart TB
         P2C --> C2C
     end
 
-    subgraph Case3["Consumer > Partition"]
+    subgraph Case3["Consumer ＞ Partition"]
         P3A[P0]
         P3B[P1]
         C3A[Consumer 1]

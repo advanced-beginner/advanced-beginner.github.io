@@ -154,9 +154,9 @@ flowchart LR
 ```mermaid
 flowchart TB
     subgraph Topic["orders Topic"]
-        P0["Partition 0\n[msg1, msg4, msg7]"]
-        P1["Partition 1\n[msg2, msg5, msg8]"]
-        P2["Partition 2\n[msg3, msg6, msg9]"]
+        P0["Partition 0\n#91;msg1, msg4, msg7#93;"]
+        P1["Partition 1\n#91;msg2, msg5, msg8#93;"]
+        P2["Partition 2\n#91;msg3, msg6, msg9#93;"]
     end
 
     subgraph Consumers["Consumer Group"]

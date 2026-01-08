@@ -47,14 +47,14 @@ people.sorted(using byAge)  // 상황에 맞게 선택!
 ```mermaid
 graph TB
     subgraph "타입 클래스 패턴"
-        TC["1. 타입 클래스<br/>(trait Show[A])"]
-        TI["2. 인스턴스<br/>(given Show[Int])"]
-        API["3. API<br/>(def show[A: Show](a))"]
+        TC["1. 타입 클래스<br>(trait Show#91;A#93;)"]
+        TI["2. 인스턴스<br>(given Show#91;Int#93;)"]
+        API["3. API<br>(def show#91;A: Show#93;(a))"]
     end
 
     subgraph "사용 흐름"
         Code["코드: 42.show"]
-        Compiler["컴파일러가 Show[Int] 검색"]
+        Compiler["컴파일러가 Show#91;Int#93; 검색"]
         Instance["인스턴스 주입"]
         Result["결과: \"42\""]
     end

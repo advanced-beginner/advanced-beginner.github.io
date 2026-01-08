@@ -16,7 +16,7 @@ DDD를 적용할 때 흔히 범하는 실수와 해결책을 정리합니다.
 ```mermaid
 flowchart TB
     subgraph Bad["❌ Big Ball of Mud"]
-        MEGA["MegaContext<br/>━━━━━━━━━<br/>Order<br/>Product<br/>Customer<br/>Payment<br/>Shipping<br/>Inventory<br/>..."]
+        MEGA["MegaContext<br>━━━━━━━━━<br>Order<br>Product<br>Customer<br>Payment<br>Shipping<br>Inventory<br>..."]
     end
 
     subgraph Good["✅ 적절한 분리"]

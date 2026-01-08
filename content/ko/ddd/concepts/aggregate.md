@@ -23,7 +23,7 @@ Aggregate의 설계 원칙, 트랜잭션 경계, 실전 패턴을 깊이 있게 
 ```mermaid
 flowchart TB
     subgraph OrderAggregate["Order Aggregate"]
-        Order["Order<br/>(Aggregate Root)"]
+        Order["Order<br>(Aggregate Root)"]
         OL1["OrderLine"]
         OL2["OrderLine"]
         SA["ShippingAddress"]
@@ -215,16 +215,16 @@ public void confirmOrder(OrderId orderId) {
 ```mermaid
 flowchart TB
     subgraph Problem["문제 상황"]
-        T1["트랜잭션 1:<br/>Order + Stock 동시 수정"]
-        T2["트랜잭션 2:<br/>같은 Stock 수정 시도"]
+        T1["트랜잭션 1:<br>Order + Stock 동시 수정"]
+        T2["트랜잭션 2:<br>같은 Stock 수정 시도"]
         LOCK["🔒 락 경합"]
         T1 --> LOCK
         T2 --> LOCK
     end
 
     subgraph Solution["해결책"]
-        T3["트랜잭션 1:<br/>Order만 수정"]
-        T4["트랜잭션 2:<br/>Stock만 수정"]
+        T3["트랜잭션 1:<br>Order만 수정"]
+        T4["트랜잭션 2:<br>Stock만 수정"]
         T3 -.->|이벤트| T4
     end
 ```

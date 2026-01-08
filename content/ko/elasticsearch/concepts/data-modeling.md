@@ -271,11 +271,11 @@ GET /products/_search
 
 ```mermaid
 flowchart LR
-    A["입력 텍스트<br/>The Quick Brown Fox"]
-    --> B["Character Filter<br/>(HTML 제거 등)"]
-    --> C["Tokenizer<br/>(단어 분리)"]
-    --> D["Token Filter<br/>(소문자 변환 등)"]
-    --> E["토큰<br/>[the, quick, brown, fox]"]
+    A["입력 텍스트<br>The Quick Brown Fox"]
+    --> B["Character Filter<br>(HTML 제거 등)"]
+    --> C["Tokenizer<br>(단어 분리)"]
+    --> D["Token Filter<br>(소문자 변환 등)"]
+    --> E["토큰<br>#91;the, quick, brown, fox#93;"]
 ```
 
 ### 기본 Analyzer

@@ -35,8 +35,8 @@ Before looking at the code, first understand the **reasoning** behind each desig
 
 ```mermaid
 flowchart TD
-    Q1{"Does it need to be<br/>tracked over time?"}
-    Q1 -->|Yes| Q2{"Can it exist<br/>without Order?"}
+    Q1{"Does it need to be<br>tracked over time?"}
+    Q1 -->|Yes| Q2{"Can it exist<br>without Order?"}
     Q1 -->|No| VO["Value Object"]
     Q2 -->|Yes| AGG["Separate Aggregate"]
     Q2 -->|No| ENT["Internal Entity"]
@@ -58,8 +58,8 @@ flowchart TD
 flowchart LR
     subgraph Wrong["❌ Wrong Design"]
         O1["Order"]
-        C1["Customer<br/>(entire object)"]
-        P1["Product<br/>(entire object)"]
+        C1["Customer<br>(entire object)"]
+        P1["Product<br>(entire object)"]
         O1 --> C1
         O1 --> P1
     end
@@ -114,11 +114,11 @@ OrderLine(ProductId productId, ...) { }
 ```mermaid
 flowchart TB
     subgraph OrderAggregate["Order Aggregate"]
-        Order["Order<br/>(Aggregate Root)"]
+        Order["Order<br>(Aggregate Root)"]
         OL1["OrderLine"]
         OL2["OrderLine"]
-        ADDR["ShippingAddress<br/>(Value Object)"]
-        MONEY["Money<br/>(Value Object)"]
+        ADDR["ShippingAddress<br>(Value Object)"]
+        MONEY["Money<br>(Value Object)"]
     end
 
     Order --> OL1

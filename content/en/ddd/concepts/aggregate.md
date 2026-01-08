@@ -23,7 +23,7 @@ An **Aggregate** is a cluster of related objects treated as a unit for data chan
 ```mermaid
 flowchart TB
     subgraph OrderAggregate["Order Aggregate"]
-        Order["Order<br/>(Aggregate Root)"]
+        Order["Order<br>(Aggregate Root)"]
         OL1["OrderLine"]
         OL2["OrderLine"]
         SA["ShippingAddress"]
@@ -215,16 +215,16 @@ public void confirmOrder(OrderId orderId) {
 ```mermaid
 flowchart TB
     subgraph Problem["Problem Scenario"]
-        T1["Transaction 1:<br/>Modify Order + Stock together"]
-        T2["Transaction 2:<br/>Trying to modify same Stock"]
+        T1["Transaction 1:<br>Modify Order + Stock together"]
+        T2["Transaction 2:<br>Trying to modify same Stock"]
         LOCK["🔒 Lock contention"]
         T1 --> LOCK
         T2 --> LOCK
     end
 
     subgraph Solution["Solution"]
-        T3["Transaction 1:<br/>Modify Order only"]
-        T4["Transaction 2:<br/>Modify Stock only"]
+        T3["Transaction 1:<br>Modify Order only"]
+        T4["Transaction 2:<br>Modify Stock only"]
         T3 -.->|Event| T4
     end
 ```

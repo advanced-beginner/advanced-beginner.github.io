@@ -21,15 +21,15 @@ graph LR
     end
 
     subgraph "공변 (+A): 생산자"
-        ListDog["List[Dog]"] -->|"<:"| ListAnimal["List[Animal]"]
+        ListDog["List#91;Dog#93;"] -->|"<:"| ListAnimal["List#91;Animal#93;"]
     end
 
     subgraph "반공변 (-A): 소비자"
-        PrinterAnimal["Printer[Animal]"] -->|"<:"| PrinterDog["Printer[Dog]"]
+        PrinterAnimal["Printer#91;Animal#93;"] -->|"<:"| PrinterDog["Printer#91;Dog#93;"]
     end
 
     subgraph "무공변 (A)"
-        ArrayDog["Array[Dog]"] -.-|"관계 없음"| ArrayAnimal["Array[Animal]"]
+        ArrayDog["Array#91;Dog#93;"] -.-|"관계 없음"| ArrayAnimal["Array#91;Animal#93;"]
     end
 ```
 
@@ -151,12 +151,12 @@ graph TB
     end
 
     subgraph "예시"
-        F1["Animal => String"]
-        F2["Dog => String"]
+        F1["Animal → String"]
+        F2["Dog → String"]
         F1 -->|"<:"| F2
     end
 
-    Note["Animal을 받는 함수는<br/>Dog도 받을 수 있다"]
+    Note["Animal을 받는 함수는<br>Dog도 받을 수 있다"]
 ```
 
 > **해석:** `Animal => String` 함수를 `Dog => String`이 필요한 곳에 쓸 수 있습니다.

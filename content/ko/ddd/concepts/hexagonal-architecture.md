@@ -141,14 +141,14 @@ public interface SaveOrderPort {
 ```mermaid
 flowchart LR
     subgraph Driving["Driving Adapters (나를 호출)"]
-        WA["Web Adapter<br/>(Controller)"]
+        WA["Web Adapter<br>(Controller)"]
         CA["CLI Adapter"]
-        MA["Message Adapter<br/>(Kafka Listener)"]
+        MA["Message Adapter<br>(Kafka Listener)"]
     end
 
     subgraph Driven["Driven Adapters (내가 호출)"]
-        PA["Persistence Adapter<br/>(Repository 구현)"]
-        NA["Notification Adapter<br/>(Email, SMS)"]
+        PA["Persistence Adapter<br>(Repository 구현)"]
+        NA["Notification Adapter<br>(Email, SMS)"]
         EA["External API Adapter"]
     end
 ```
@@ -194,7 +194,7 @@ public class OrderPersistenceAdapter implements SaveOrderPort {
 flowchart TB
     subgraph Core["Application Core"]
         subgraph App["Application Layer"]
-            AS["Application Service<br/>(Use Case 구현)"]
+            AS["Application Service<br>(Use Case 구현)"]
         end
 
         subgraph Domain["Domain Layer"]
@@ -652,9 +652,9 @@ flowchart LR
     end
 
     subgraph After["MongoDB로 변경"]
-        APP2["OrderService<br/>(변경 없음!)"]
-        PORT2["SaveOrderPort<br/>(변경 없음!)"]
-        MONGO["MongoDB Adapter<br/>(새로 작성)"]
+        APP2["OrderService<br>(변경 없음!)"]
+        PORT2["SaveOrderPort<br>(변경 없음!)"]
+        MONGO["MongoDB Adapter<br>(새로 작성)"]
     end
 
     Before -->|"Adapter만 교체"| After
@@ -821,9 +821,9 @@ public class OrderService {
 ```mermaid
 flowchart TB
     subgraph Tests["테스트 피라미드"]
-        E2E["E2E Test<br/>(전체 통합)"]
-        INT["Integration Test<br/>(Adapter)"]
-        UNIT["Unit Test<br/>(Domain + Service)"]
+        E2E["E2E Test<br>(전체 통합)"]
+        INT["Integration Test<br>(Adapter)"]
+        UNIT["Unit Test<br>(Domain + Service)"]
     end
 
     E2E --> INT --> UNIT
@@ -970,9 +970,9 @@ class OrderControllerTest {
 
 ```mermaid
 flowchart LR
-    A["1단계<br/>Repository Interface 추출"]
-    B["2단계<br/>Port 패턴 적용"]
-    C["3단계<br/>Adapter 분리"]
+    A["1단계<br>Repository Interface 추출"]
+    B["2단계<br>Port 패턴 적용"]
+    C["3단계<br>Adapter 분리"]
 
     A --> B --> C
 ```
