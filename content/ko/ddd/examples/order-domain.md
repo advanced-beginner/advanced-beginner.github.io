@@ -35,8 +35,8 @@ DDD 패턴을 적용하여 주문 도메인을 구현합니다.
 
 ```mermaid
 flowchart TD
-    Q1{"시간이 지나도<br/>추적해야 하나?"}
-    Q1 -->|Yes| Q2{"Order 없이<br/>존재 가능?"}
+    Q1{"시간이 지나도<br>추적해야 하나?"}
+    Q1 -->|Yes| Q2{"Order 없이<br>존재 가능?"}
     Q1 -->|No| VO["Value Object"]
     Q2 -->|Yes| AGG["별도 Aggregate"]
     Q2 -->|No| ENT["내부 Entity"]
@@ -58,8 +58,8 @@ flowchart TD
 flowchart LR
     subgraph Wrong["❌ 잘못된 설계"]
         O1["Order"]
-        C1["Customer<br/>(전체 포함)"]
-        P1["Product<br/>(전체 포함)"]
+        C1["Customer<br>(전체 포함)"]
+        P1["Product<br>(전체 포함)"]
         O1 --> C1
         O1 --> P1
     end
@@ -114,11 +114,11 @@ OrderLine(ProductId productId, ...) { }
 ```mermaid
 flowchart TB
     subgraph OrderAggregate["Order Aggregate"]
-        Order["Order<br/>(Aggregate Root)"]
+        Order["Order<br>(Aggregate Root)"]
         OL1["OrderLine"]
         OL2["OrderLine"]
-        ADDR["ShippingAddress<br/>(Value Object)"]
-        MONEY["Money<br/>(Value Object)"]
+        ADDR["ShippingAddress<br>(Value Object)"]
+        MONEY["Money<br>(Value Object)"]
     end
 
     Order --> OL1

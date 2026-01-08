@@ -71,10 +71,10 @@ GET /_cluster/health
 ```mermaid
 flowchart LR
     subgraph Cluster
-        M[Master Node<br/>클러스터 관리]
-        D1[Data Node<br/>데이터 저장/검색]
-        D2[Data Node<br/>데이터 저장/검색]
-        C[Coordinating Node<br/>요청 라우팅]
+        M[Master Node<br>클러스터 관리]
+        D1[Data Node<br>데이터 저장/검색]
+        D2[Data Node<br>데이터 저장/검색]
+        C[Coordinating Node<br>요청 라우팅]
     end
 
     Client --> C
@@ -324,12 +324,12 @@ Elasticsearch는 내부적으로 **Apache Lucene** 라이브러리를 사용합�
 flowchart TB
     subgraph Shard["Shard (= Lucene Index)"]
         subgraph Segments["Segments"]
-            S1["Segment 1<br/>(불변)"]
-            S2["Segment 2<br/>(불변)"]
-            S3["Segment 3<br/>(불변)"]
+            S1["Segment 1<br>(불변)"]
+            S2["Segment 2<br>(불변)"]
+            S3["Segment 3<br>(불변)"]
         end
-        Commit["Commit Point<br/>(세그먼트 목록)"]
-        Translog["Translog<br/>(미커밋 변경사항)"]
+        Commit["Commit Point<br>(세그먼트 목록)"]
+        Translog["Translog<br>(미커밋 변경사항)"]
     end
 
     S1 --> Commit
@@ -382,13 +382,13 @@ sequenceDiagram
 ```mermaid
 flowchart LR
     subgraph Before["병합 전"]
-        S1["Seg 1<br/>100 docs"]
-        S2["Seg 2<br/>50 docs"]
-        S3["Seg 3<br/>30 docs"]
+        S1["Seg 1<br>100 docs"]
+        S2["Seg 2<br>50 docs"]
+        S3["Seg 3<br>30 docs"]
     end
 
     subgraph After["병합 후"]
-        SM["Merged Seg<br/>180 docs"]
+        SM["Merged Seg<br>180 docs"]
     end
 
     S1 --> SM
@@ -444,11 +444,11 @@ flowchart TB
     C --> D[Shard]
     D --> E[Document]
 
-    A2["여러 노드의 집합<br/>고가용성 제공"] -.-> A
-    B2["실제 서버<br/>역할별 분리 가능"] -.-> B
-    C2["문서의 논리적 그룹<br/>RDB 테이블과 유사"] -.-> C
-    D2["인덱스의 물리적 분할<br/>분산 처리 단위"] -.-> D
-    E2["JSON 데이터<br/>RDB Row와 유사"] -.-> E
+    A2["여러 노드의 집합<br>고가용성 제공"] -.-> A
+    B2["실제 서버<br>역할별 분리 가능"] -.-> B
+    C2["문서의 논리적 그룹<br>RDB 테이블과 유사"] -.-> C
+    D2["인덱스의 물리적 분할<br>분산 처리 단위"] -.-> D
+    E2["JSON 데이터<br>RDB Row와 유사"] -.-> E
 ```
 
 ---

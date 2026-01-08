@@ -17,13 +17,13 @@ flowchart TB
         subgraph Green["🟢 Interface Adapters"]
             subgraph Red["🔴 Use Cases"]
                 subgraph Yellow["🟡 Entities"]
-                    E["Enterprise<br/>Business Rules"]
+                    E["Enterprise<br>Business Rules"]
                 end
-                UC["Application<br/>Business Rules"]
+                UC["Application<br>Business Rules"]
             end
-            A["Controllers<br/>Gateways<br/>Presenters"]
+            A["Controllers<br>Gateways<br>Presenters"]
         end
-        F["Web, DB, Devices<br/>External Interfaces"]
+        F["Web, DB, Devices<br>External Interfaces"]
     end
 
     F --> A --> UC --> E
@@ -273,8 +273,8 @@ flowchart LR
     end
 
     subgraph Adapters["Interface Adapters"]
-        CTRL["Controller<br/>(요청 변환)"]
-        REPO["Repository<br/>(데이터 변환)"]
+        CTRL["Controller<br>(요청 변환)"]
+        REPO["Repository<br>(데이터 변환)"]
     end
 
     subgraph UseCase["Use Case 형식"]
@@ -820,10 +820,10 @@ class OrderControllerTest {
 
 ```mermaid
 flowchart LR
-    A["1단계<br/>Entity 분리"]
-    B["2단계<br/>Use Case 추출"]
-    C["3단계<br/>Gateway 인터페이스"]
-    D["4단계<br/>전체 적용"]
+    A["1단계<br>Entity 분리"]
+    B["2단계<br>Use Case 추출"]
+    C["3단계<br>Gateway 인터페이스"]
+    D["4단계<br>전체 적용"]
 
     A --> B --> C --> D
 ```

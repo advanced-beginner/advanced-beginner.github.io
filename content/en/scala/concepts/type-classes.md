@@ -47,14 +47,14 @@ people.sorted(using byAge)  // Choose based on context!
 ```mermaid
 graph TB
     subgraph "Type Class Pattern"
-        TC["1. Type Class<br/>(trait Show[A])"]
-        TI["2. Instance<br/>(given Show[Int])"]
-        API["3. API<br/>(def show[A: Show](a))"]
+        TC["1. Type Class<br>(trait Show#91;A#93;)"]
+        TI["2. Instance<br>(given Show#91;Int#93;)"]
+        API["3. API<br>(def show#91;A: Show#93;(a))"]
     end
 
     subgraph "Usage Flow"
         Code["Code: 42.show"]
-        Compiler["Compiler searches for Show[Int]"]
+        Compiler["Compiler searches for Show#91;Int#93;"]
         Instance["Instance injected"]
         Result["Result: \"42\""]
     end

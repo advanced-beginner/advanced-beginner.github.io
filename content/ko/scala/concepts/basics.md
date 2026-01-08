@@ -80,9 +80,9 @@ Scala의 모든 값은 객체입니다. Java의 원시 타입(primitive type)도
 
 ```mermaid
 graph TB
-    Any["Any<br/>(최상위)"]
-    AnyVal["AnyVal<br/>(값 타입)"]
-    AnyRef["AnyRef<br/>(참조 타입)"]
+    Any["Any<br>(최상위)"]
+    AnyVal["AnyVal<br>(값 타입)"]
+    AnyRef["AnyRef<br>(참조 타입)"]
 
     Any --> AnyVal
     Any --> AnyRef
@@ -98,7 +98,7 @@ graph TB
     AnyVal --> Unit
 
     String["String"]
-    List["List[T]"]
+    List["List#91;T#93;"]
     UserClass["사용자 클래스"]
 
     AnyRef --> String
@@ -106,7 +106,7 @@ graph TB
     AnyRef --> UserClass
 
     Null["Null"]
-    Nothing["Nothing<br/>(최하위)"]
+    Nothing["Nothing<br>(최하위)"]
 
     String --> Null
     List --> Null

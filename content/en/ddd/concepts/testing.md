@@ -13,9 +13,9 @@ Exploring testing strategies suitable for domain models and DDD architectures.
 ```mermaid
 flowchart TB
     subgraph Pyramid["Test Pyramid"]
-        E2E["E2E Tests<br/>Few, Slow"]
-        INT["Integration Tests<br/>Medium"]
-        UNIT["Unit Tests<br/>Many, Fast"]
+        E2E["E2E Tests<br>Few, Slow"]
+        INT["Integration Tests<br>Medium"]
+        UNIT["Unit Tests<br>Many, Fast"]
     end
 
     E2E --> INT --> UNIT

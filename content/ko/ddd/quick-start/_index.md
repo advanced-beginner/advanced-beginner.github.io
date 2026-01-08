@@ -14,10 +14,10 @@ DDD의 핵심 개념을 빠르게 살펴봅니다.
 ```mermaid
 flowchart TB
     subgraph Problems["흔히 겪는 문제들"]
-        P1["개발자와 기획자가<br/>다른 언어 사용"]
-        P2["비즈니스 로직이<br/>여기저기 분산"]
-        P3["작은 변경에도<br/>전체 시스템 영향"]
-        P4["코드를 읽어도<br/>비즈니스 이해 불가"]
+        P1["개발자와 기획자가<br>다른 언어 사용"]
+        P2["비즈니스 로직이<br>여기저기 분산"]
+        P3["작은 변경에도<br>전체 시스템 영향"]
+        P4["코드를 읽어도<br>비즈니스 이해 불가"]
     end
 ```
 
@@ -200,20 +200,20 @@ public class NotificationEventHandler {
 flowchart TB
     subgraph Strategic["전략적 설계 (Strategic Design)"]
         direction LR
-        S1[Bounded Context<br/>시스템 경계]
-        S2[Context Mapping<br/>시스템 통합]
-        S3[Ubiquitous Language<br/>공통 언어]
-        S4[Subdomain<br/>도메인 분류]
+        S1[Bounded Context<br>시스템 경계]
+        S2[Context Mapping<br>시스템 통합]
+        S3[Ubiquitous Language<br>공통 언어]
+        S4[Subdomain<br>도메인 분류]
     end
 
     subgraph Tactical["전술적 설계 (Tactical Design)"]
         direction LR
-        T1[Entity<br/>식별자로 구분]
-        T2[Value Object<br/>값으로 구분]
-        T3[Aggregate<br/>일관성 경계]
-        T4[Repository<br/>영속성]
-        T5[Domain Service<br/>도메인 로직]
-        T6[Domain Event<br/>사건 표현]
+        T1[Entity<br>식별자로 구분]
+        T2[Value Object<br>값으로 구분]
+        T3[Aggregate<br>일관성 경계]
+        T4[Repository<br>영속성]
+        T5[Domain Service<br>도메인 로직]
+        T6[Domain Event<br>사건 표현]
     end
 
     Strategic -->|구체화| Tactical
@@ -233,15 +233,15 @@ flowchart TB
 ```mermaid
 flowchart TB
     subgraph Sales["판매 Context"]
-        SP["Product<br/>━━━━━━━<br/>• id<br/>• name<br/>• price<br/>• discount"]
+        SP["Product<br>━━━━━━━<br>• id<br>• name<br>• price<br>• discount"]
     end
 
     subgraph Inventory["재고 Context"]
-        IP["Product<br/>━━━━━━━<br/>• id<br/>• sku<br/>• quantity<br/>• location"]
+        IP["Product<br>━━━━━━━<br>• id<br>• sku<br>• quantity<br>• location"]
     end
 
     subgraph Shipping["배송 Context"]
-        SHP["Package<br/>━━━━━━━<br/>• id<br/>• weight<br/>• dimension<br/>• fragile"]
+        SHP["Package<br>━━━━━━━<br>• id<br>• weight<br>• dimension<br>• fragile"]
     end
 ```
 
@@ -259,7 +259,7 @@ flowchart TB
 ```mermaid
 flowchart TB
     subgraph OrderAggregate["Order Aggregate"]
-        Order["🔷 Order<br/>(Aggregate Root)"]
+        Order["🔷 Order<br>(Aggregate Root)"]
         OL1["OrderLine 1"]
         OL2["OrderLine 2"]
         ADDR["ShippingAddress"]
@@ -338,9 +338,9 @@ sequenceDiagram
 
 ```mermaid
 flowchart TB
-    Q1{비즈니스 로직이<br/>복잡한가?}
-    Q2{도메인 전문가와<br/>협업이 필요한가?}
-    Q3{장기적으로<br/>유지보수 할 것인가?}
+    Q1{비즈니스 로직이<br>복잡한가?}
+    Q2{도메인 전문가와<br>협업이 필요한가?}
+    Q3{장기적으로<br>유지보수 할 것인가?}
 
     Q1 -->|Yes| Q2
     Q1 -->|No| SIMPLE["단순 CRUD로 충분"]

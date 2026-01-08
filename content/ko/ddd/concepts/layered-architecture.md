@@ -14,10 +14,10 @@ weight: 6
 ```mermaid
 flowchart TB
     subgraph Layers["4계층 구조"]
-        P["🖥️ Presentation Layer<br/>(사용자와 만나는 층)"]
-        A["⚙️ Application Layer<br/>(흐름을 조율하는 층)"]
-        D["💎 Domain Layer<br/>(비즈니스 규칙이 있는 층)"]
-        I["🔧 Infrastructure Layer<br/>(기술적 세부사항)"]
+        P["🖥️ Presentation Layer<br>(사용자와 만나는 층)"]
+        A["⚙️ Application Layer<br>(흐름을 조율하는 층)"]
+        D["💎 Domain Layer<br>(비즈니스 규칙이 있는 층)"]
+        I["🔧 Infrastructure Layer<br>(기술적 세부사항)"]
     end
 
     P --> A --> D
@@ -35,10 +35,10 @@ flowchart TB
 ```mermaid
 flowchart TB
     subgraph Company["회사 조직"]
-        CS["고객 응대팀<br/>(고객과 대화)"]
-        PM["기획팀<br/>(업무 조율)"]
-        DEV["개발팀<br/>(핵심 기술)"]
-        INFRA["인프라팀<br/>(서버, DB 관리)"]
+        CS["고객 응대팀<br>(고객과 대화)"]
+        PM["기획팀<br>(업무 조율)"]
+        DEV["개발팀<br>(핵심 기술)"]
+        INFRA["인프라팀<br>(서버, DB 관리)"]
     end
 
     CS -->|"요청 전달"| PM
@@ -521,11 +521,11 @@ flowchart TB
 flowchart LR
     subgraph Domain["Domain Layer"]
         O["Order"]
-        RI["OrderRepository<br/>(Interface)"]
+        RI["OrderRepository<br>(Interface)"]
     end
 
     subgraph Infrastructure["Infrastructure Layer"]
-        JR["JpaOrderRepository<br/>(구현체)"]
+        JR["JpaOrderRepository<br>(구현체)"]
     end
 
     O -->|"사용"| RI
@@ -807,7 +807,7 @@ class JpaOrderRepositoryTest {
 
 ```mermaid
 flowchart LR
-    A["계층형<br/>(현재)"]
+    A["계층형<br>(현재)"]
     B["도메인 분리"]
     C["헥사고날"]
 

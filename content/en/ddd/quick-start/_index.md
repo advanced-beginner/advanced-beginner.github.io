@@ -15,10 +15,10 @@ A quick overview of DDD's core concepts.
 ```mermaid
 flowchart TB
     subgraph Problems["Common Problems"]
-        P1["Developers and planners<br/>speak different languages"]
-        P2["Business logic<br/>scattered everywhere"]
-        P3["Small changes affect<br/>the entire system"]
-        P4["Can't understand business<br/>by reading code"]
+        P1["Developers and planners<br>speak different languages"]
+        P2["Business logic<br>scattered everywhere"]
+        P3["Small changes affect<br>the entire system"]
+        P4["Can't understand business<br>by reading code"]
     end
 ```
 
@@ -201,20 +201,20 @@ public class NotificationEventHandler {
 flowchart TB
     subgraph Strategic["Strategic Design"]
         direction LR
-        S1[Bounded Context<br/>System Boundaries]
-        S2[Context Mapping<br/>System Integration]
-        S3[Ubiquitous Language<br/>Common Language]
-        S4[Subdomain<br/>Domain Classification]
+        S1[Bounded Context<br>System Boundaries]
+        S2[Context Mapping<br>System Integration]
+        S3[Ubiquitous Language<br>Common Language]
+        S4[Subdomain<br>Domain Classification]
     end
 
     subgraph Tactical["Tactical Design"]
         direction LR
-        T1[Entity<br/>Identity-based]
-        T2[Value Object<br/>Value-based]
-        T3[Aggregate<br/>Consistency Boundary]
-        T4[Repository<br/>Persistence]
-        T5[Domain Service<br/>Domain Logic]
-        T6[Domain Event<br/>Event Expression]
+        T1[Entity<br>Identity-based]
+        T2[Value Object<br>Value-based]
+        T3[Aggregate<br>Consistency Boundary]
+        T4[Repository<br>Persistence]
+        T5[Domain Service<br>Domain Logic]
+        T6[Domain Event<br>Event Expression]
     end
 
     Strategic -->|Concrete| Tactical
@@ -234,15 +234,15 @@ The same term can have different meanings depending on context.
 ```mermaid
 flowchart TB
     subgraph Sales["Sales Context"]
-        SP["Product<br/>━━━━━━━<br/>• id<br/>• name<br/>• price<br/>• discount"]
+        SP["Product<br>━━━━━━━<br>• id<br>• name<br>• price<br>• discount"]
     end
 
     subgraph Inventory["Inventory Context"]
-        IP["Product<br/>━━━━━━━<br/>• id<br/>• sku<br/>• quantity<br/>• location"]
+        IP["Product<br>━━━━━━━<br>• id<br>• sku<br>• quantity<br>• location"]
     end
 
     subgraph Shipping["Shipping Context"]
-        SHP["Package<br/>━━━━━━━<br/>• id<br/>• weight<br/>• dimension<br/>• fragile"]
+        SHP["Package<br>━━━━━━━<br>• id<br>• weight<br>• dimension<br>• fragile"]
     end
 ```
 
@@ -260,7 +260,7 @@ A cluster of objects that maintain transactional consistency.
 ```mermaid
 flowchart TB
     subgraph OrderAggregate["Order Aggregate"]
-        Order["🔷 Order<br/>(Aggregate Root)"]
+        Order["🔷 Order<br>(Aggregate Root)"]
         OL1["OrderLine 1"]
         OL2["OrderLine 2"]
         ADDR["ShippingAddress"]
@@ -339,9 +339,9 @@ sequenceDiagram
 
 ```mermaid
 flowchart TB
-    Q1{Is the business logic<br/>complex?}
-    Q2{Do you need to collaborate<br/>with domain experts?}
-    Q3{Will this be maintained<br/>long-term?}
+    Q1{Is the business logic<br>complex?}
+    Q2{Do you need to collaborate<br>with domain experts?}
+    Q3{Will this be maintained<br>long-term?}
 
     Q1 -->|Yes| Q2
     Q1 -->|No| SIMPLE["Simple CRUD is sufficient"]

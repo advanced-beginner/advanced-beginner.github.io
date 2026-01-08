@@ -21,7 +21,7 @@ graph TB
         TS[Task Scheduler]
     end
 
-    CM[Cluster Manager<br/>YARN / K8s / Standalone]
+    CM[Cluster Manager<br>YARN / K8s / Standalone]
 
     subgraph Worker1["Worker Node 1"]
         E1[Executor 1]

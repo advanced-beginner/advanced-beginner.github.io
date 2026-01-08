@@ -110,8 +110,8 @@ val sum: Option[Int] = (some1, some2) match
 ```mermaid
 flowchart LR
     subgraph "flatMap 연산"
-        A["Option[A]"] -->|"flatMap"| F["A => Option[B]"]
-        F --> B["Option[B]"]
+        A["Option#91;A#93;"] -->|"flatMap"| F["A => Option#91;B#93;"]
+        F --> B["Option#91;B#93;"]
     end
 
     subgraph "예시: 안전한 나눗셈"
@@ -120,7 +120,7 @@ flowchart LR
     end
 
     subgraph "For Comprehension"
-        FC["for {<br/>  a <- Some(10)<br/>  b <- divide(a, 2)<br/>  c <- divide(b, 0)<br/>} yield c"]
+        FC["for {<br>  a <- Some(10)<br>  b <- divide(a, 2)<br>  c <- divide(b, 0)<br>} yield c"]
         Result["None"]
         FC --> Result
     end

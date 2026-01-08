@@ -19,9 +19,9 @@ flowchart LR
     end
 
     subgraph "Transformed Result"
-        R1["list.map(x => f(x))"]
-        R2["list.flatMap(x => list2.map(y => f(x,y)))"]
-        R3["list.withFilter(cond).map(x => f(x))"]
+        R1["list.map(x → f(x))"]
+        R2["list.flatMap(x => list2.map(y → f(x,y)))"]
+        R3["list.withFilter(cond).map(x → f(x))"]
     end
 
     FC1 --> R1

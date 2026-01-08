@@ -211,9 +211,9 @@ public class JpaOrderRepository implements OrderRepository {
 
 ```mermaid
 flowchart TB
-    Q1{Must they change<br/>together?}
-    Q2{Is same transaction<br/>required?}
-    Q3{Does a true invariant<br/>exist?}
+    Q1{Must they change<br>together?}
+    Q2{Is same transaction<br>required?}
+    Q3{Does a true invariant<br>exist?}
 
     Q1 -->|Yes| Q2
     Q1 -->|No| SEP[Separate Aggregates]

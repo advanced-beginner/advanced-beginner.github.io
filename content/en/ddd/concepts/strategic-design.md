@@ -15,10 +15,10 @@ Strategic design is the process of drawing **"the big picture"**:
 ```mermaid
 flowchart TB
     subgraph Strategic["Strategic Design Components"]
-        SUB[Subdomain<br/>Domain Classification]
-        UL[Ubiquitous Language<br/>Common Language]
-        BC[Bounded Context<br/>Bounded Context]
-        CM[Context Mapping<br/>Context Relationships]
+        SUB[Subdomain<br>Domain Classification]
+        UL[Ubiquitous Language<br>Common Language]
+        BC[Bounded Context<br>Bounded Context]
+        CM[Context Mapping<br>Context Relationships]
     end
 
     SUB --> BC
@@ -105,9 +105,9 @@ flowchart TB
 
 ```mermaid
 flowchart TB
-    Q1{Can the business<br/>exist without this?}
-    Q2{Does it differentiate<br/>from competitors?}
-    Q3{Can a solution be<br/>purchased in the market?}
+    Q1{Can the business<br>exist without this?}
+    Q2{Does it differentiate<br>from competitors?}
+    Q3{Can a solution be<br>purchased in the market?}
 
     Q1 -->|No| CORE["Core Domain"]
     Q1 -->|Yes| Q2
@@ -397,7 +397,7 @@ Defines relationships and integration methods between Contexts.
 ```mermaid
 flowchart LR
     subgraph Upstream["Upstream (Provider)"]
-        U[Product Catalog<br/>Service]
+        U[Product Catalog<br>Service]
     end
 
     subgraph Downstream["Downstream (Consumer)"]
@@ -427,7 +427,7 @@ flowchart LR
         B[Payment Context]
     end
 
-    A <-->|Close collaboration<br/>Joint planning| B
+    A <-->|Close collaboration<br>Joint planning| B
 ```
 
 **Characteristics:**
@@ -449,12 +449,12 @@ Two Contexts **share some models**.
 flowchart TB
     subgraph A["Order Context"]
         A1[Order Model]
-        SK1[Money<br/>Address]
+        SK1[Money<br>Address]
     end
 
     subgraph B["Payment Context"]
         B1[Payment Model]
-        SK2[Money<br/>Address]
+        SK2[Money<br>Address]
     end
 
     SK1 <-.->|Same module| SK2
@@ -576,13 +576,13 @@ A **translation layer** prevents external models from corrupting internal ones.
 ```mermaid
 flowchart LR
     subgraph External["Legacy/External System"]
-        EXT[Legacy API<br/>Complex and inconsistent]
+        EXT[Legacy API<br>Complex and inconsistent]
     end
 
     subgraph ACL["Anti-Corruption Layer"]
-        TRANS[Translator<br/>Data conversion]
-        ADAPT[Adapter<br/>Interface adaptation]
-        FACADE[Facade<br/>Simplification]
+        TRANS[Translator<br>Data conversion]
+        ADAPT[Adapter<br>Interface adaptation]
+        FACADE[Facade<br>Simplification]
     end
 
     subgraph Domain["Our Domain"]
@@ -673,8 +673,8 @@ Integration through **standardized API and data formats**.
 ```mermaid
 flowchart TB
     subgraph Provider["Product Service"]
-        API["Open Host Service<br/>(REST API)"]
-        SCHEMA["Published Language<br/>(JSON Schema)"]
+        API["Open Host Service<br>(REST API)"]
+        SCHEMA["Published Language<br>(JSON Schema)"]
     end
 
     subgraph Consumers["Multiple Consumers"]
@@ -757,21 +757,21 @@ flowchart TB
 ```mermaid
 flowchart TB
     subgraph Core["Core Domain"]
-        ORDER["Order<br/>Context"]
-        PRICE["Pricing Policy<br/>Context"]
+        ORDER["Order<br>Context"]
+        PRICE["Pricing Policy<br>Context"]
     end
 
     subgraph Supporting["Supporting"]
-        CATALOG["Product Catalog<br/>Context"]
-        INV["Inventory<br/>Context"]
-        SHIP["Shipping<br/>Context"]
-        MEMBER["Member<br/>Context"]
+        CATALOG["Product Catalog<br>Context"]
+        INV["Inventory<br>Context"]
+        SHIP["Shipping<br>Context"]
+        MEMBER["Member<br>Context"]
     end
 
     subgraph Generic["Generic"]
-        PAY["Payment<br/>(External PG)"]
-        NOTI["Notification<br/>(External Service)"]
-        AUTH["Authentication<br/>(OAuth)"]
+        PAY["Payment<br>(External PG)"]
+        NOTI["Notification<br>(External Service)"]
+        AUTH["Authentication<br>(OAuth)"]
     end
 
     %% Relationship definitions
@@ -803,11 +803,11 @@ A workshop technique where domain experts and developers **come together** to ex
 ```mermaid
 flowchart LR
     subgraph Workshop["EventStorming Workshop"]
-        E[Domain Events<br/>Orange]
-        C[Commands<br/>Blue]
-        A[Aggregates<br/>Yellow]
-        P[Policies<br/>Purple]
-        BC[Bounded Context<br/>Boundary line]
+        E[Domain Events<br>Orange]
+        C[Commands<br>Blue]
+        A[Aggregates<br>Yellow]
+        P[Policies<br>Purple]
+        BC[Bounded Context<br>Boundary line]
     end
 
     E --> C --> A --> P --> BC

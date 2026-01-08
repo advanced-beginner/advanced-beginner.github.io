@@ -211,9 +211,9 @@ public class JpaOrderRepository implements OrderRepository {
 
 ```mermaid
 flowchart TB
-    Q1{함께 변경되어야<br/>하는가?}
-    Q2{같은 트랜잭션이<br/>필수인가?}
-    Q3{진정한 불변식이<br/>존재하는가?}
+    Q1{함께 변경되어야<br>하는가?}
+    Q2{같은 트랜잭션이<br>필수인가?}
+    Q3{진정한 불변식이<br>존재하는가?}
 
     Q1 -->|Yes| Q2
     Q1 -->|No| SEP[분리된 Aggregate]

@@ -12,9 +12,9 @@ weight: 7
 ```mermaid
 flowchart TB
     subgraph Pyramid["테스트 피라미드"]
-        E2E["E2E 테스트<br/>적음, 느림"]
-        INT["통합 테스트<br/>중간"]
-        UNIT["단위 테스트<br/>많음, 빠름"]
+        E2E["E2E 테스트<br>적음, 느림"]
+        INT["통합 테스트<br>중간"]
+        UNIT["단위 테스트<br>많음, 빠름"]
     end
 
     E2E --> INT --> UNIT

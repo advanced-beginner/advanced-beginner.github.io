@@ -105,7 +105,7 @@ Memory Buffer의 데이터를 **검색 가능**하게 만드는 작업입니다.
 
 ```mermaid
 flowchart LR
-    A[Memory Buffer] -->|Refresh| B[Segment<br/>검색 가능]
+    A[Memory Buffer] -->|Refresh| B[Segment<br>검색 가능]
 ```
 
 ### Refresh Interval
@@ -227,10 +227,10 @@ PUT /_index_template/products_template
 
 ```mermaid
 flowchart LR
-    A[Hot<br/>활발한 쓰기/읽기] --> B[Warm<br/>읽기 위주]
-    B --> C[Cold<br/>가끔 읽기]
-    C --> D[Frozen<br/>거의 안 읽음]
-    D --> E[Delete<br/>삭제]
+    A[Hot<br>활발한 쓰기/읽기] --> B[Warm<br>읽기 위주]
+    B --> C[Cold<br>가끔 읽기]
+    C --> D[Frozen<br>거의 안 읽음]
+    D --> E[Delete<br>삭제]
 ```
 
 ### ILM 정책 생성

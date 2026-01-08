@@ -92,9 +92,9 @@ flowchart TB
     end
 
     subgraph Group["order-processor-group"]
-        C1["Consumer 1<br/>P0, P1"]
-        C2["Consumer 2<br/>P2, P3"]
-        C3["Consumer 3<br/>P4, P5"]
+        C1["Consumer 1<br>P0, P1"]
+        C2["Consumer 2<br>P2, P3"]
+        C3["Consumer 3<br>P4, P5"]
     end
 
     P0 & P1 --> C1

@@ -25,7 +25,7 @@ Elasticsearch의 벡터 검색(kNN)을 사용하여 시맨틱 검색과 유사 �
 ```mermaid
 flowchart LR
     A[텍스트/이미지] --> B[임베딩 모델]
-    B --> C[벡터 변환<br/>[0.1, 0.3, -0.2, ...]]
+    B --> C[벡터 변환<br>[0.1, 0.3, -0.2, ...]]
     C --> D[Elasticsearch 저장]
 
     E[검색어] --> F[임베딩 모델]

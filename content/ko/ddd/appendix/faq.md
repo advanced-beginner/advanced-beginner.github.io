@@ -33,7 +33,7 @@ DDD인 것:
 
 ```mermaid
 flowchart TB
-    Q1{비즈니스 로직이<br/>복잡한가?}
+    Q1{비즈니스 로직이<br>복잡한가?}
     Q1 -->|Yes| DDD["DDD 권장"]
     Q1 -->|No| SIMPLE["단순 CRUD 충분"]
 ```
@@ -428,10 +428,10 @@ public class LegacyOrderAdapter implements OrderReader {
 
 ```mermaid
 flowchart LR
-    A["1. Quick Start<br/>핵심 개념"] --> B["2. 전술적 패턴<br/>Entity, VO, Aggregate"]
-    B --> C["3. 전략적 패턴<br/>BC, Context Map"]
-    C --> D["4. 아키텍처<br/>Hexagonal, CQRS"]
-    D --> E["5. 실전 적용<br/>프로젝트"]
+    A["1. Quick Start<br>핵심 개념"] --> B["2. 전술적 패턴<br>Entity, VO, Aggregate"]
+    B --> C["3. 전략적 패턴<br>BC, Context Map"]
+    C --> D["4. 아키텍처<br>Hexagonal, CQRS"]
+    D --> E["5. 실전 적용<br>프로젝트"]
 ```
 
 **추천 자료:**

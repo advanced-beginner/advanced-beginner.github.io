@@ -15,7 +15,7 @@ weight: 4
 flowchart LR
     subgraph Domain["도메인"]
         ACT[행위 발생]
-        EVT["이벤트 발행<br/>'주문이 확정되었다'"]
+        EVT["이벤트 발행<br>'주문이 확정되었다'"]
     end
 
     subgraph Handlers["이벤트 처리"]
@@ -414,7 +414,7 @@ flowchart TB
     subgraph EventSourcing["이벤트 소싱"]
         E1[모든 이벤트 저장]
         E2[(events 테이블)]
-        E3[이벤트 재생으로<br/>현재 상태 도출]
+        E3[이벤트 재생으로<br>현재 상태 도출]
         E1 --> E2
         E2 --> E3
     end

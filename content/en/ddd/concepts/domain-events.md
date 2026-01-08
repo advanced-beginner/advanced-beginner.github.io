@@ -30,7 +30,7 @@ How to express and utilize important occurrences in the domain as events.
 flowchart LR
     subgraph Domain["Domain"]
         ACT[Action occurs]
-        EVT["Event published<br/>'Order was confirmed'"]
+        EVT["Event published<br>'Order was confirmed'"]
     end
 
     subgraph Handlers["Event Handlers"]
@@ -429,7 +429,7 @@ flowchart TB
     subgraph EventSourcing["Event Sourcing"]
         E1[Store all events]
         E2[(events table)]
-        E3[Derive current state<br/>by replaying events]
+        E3[Derive current state<br>by replaying events]
         E1 --> E2
         E2 --> E3
     end

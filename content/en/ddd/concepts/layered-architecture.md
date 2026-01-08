@@ -15,10 +15,10 @@ The most basic and widely used architecture pattern. **Start here if you're lear
 ```mermaid
 flowchart TB
     subgraph Layers["4-Layer Structure"]
-        P["🖥️ Presentation Layer<br/>(User-facing layer)"]
-        A["⚙️ Application Layer<br/>(Flow orchestration layer)"]
-        D["💎 Domain Layer<br/>(Business rules layer)"]
-        I["🔧 Infrastructure Layer<br/>(Technical details)"]
+        P["🖥️ Presentation Layer<br>(User-facing layer)"]
+        A["⚙️ Application Layer<br>(Flow orchestration layer)"]
+        D["💎 Domain Layer<br>(Business rules layer)"]
+        I["🔧 Infrastructure Layer<br>(Technical details)"]
     end
 
     P --> A --> D
@@ -36,10 +36,10 @@ Think about how a company works:
 ```mermaid
 flowchart TB
     subgraph Company["Company Organization"]
-        CS["Customer Service<br/>(Talks with customers)"]
-        PM["Planning Team<br/>(Coordinates work)"]
-        DEV["Development Team<br/>(Core technology)"]
-        INFRA["Infrastructure Team<br/>(Manages servers, DB)"]
+        CS["Customer Service<br>(Talks with customers)"]
+        PM["Planning Team<br>(Coordinates work)"]
+        DEV["Development Team<br>(Core technology)"]
+        INFRA["Infrastructure Team<br>(Manages servers, DB)"]
     end
 
     CS -->|"Pass request"| PM
@@ -522,11 +522,11 @@ flowchart TB
 flowchart LR
     subgraph Domain["Domain Layer"]
         O["Order"]
-        RI["OrderRepository<br/>(Interface)"]
+        RI["OrderRepository<br>(Interface)"]
     end
 
     subgraph Infrastructure["Infrastructure Layer"]
-        JR["JpaOrderRepository<br/>(Implementation)"]
+        JR["JpaOrderRepository<br>(Implementation)"]
     end
 
     O -->|"uses"| RI
@@ -808,7 +808,7 @@ Once familiar with Layered, you can progress to more advanced patterns as needed
 
 ```mermaid
 flowchart LR
-    A["Layered<br/>(Current)"]
+    A["Layered<br>(Current)"]
     B["Domain Separation"]
     C["Hexagonal"]
 

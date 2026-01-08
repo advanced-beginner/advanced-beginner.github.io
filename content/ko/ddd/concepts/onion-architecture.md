@@ -42,10 +42,10 @@ flowchart TB
 ```mermaid
 flowchart TB
     subgraph Onion["🧅 양파 구조"]
-        L1["바깥 껍질<br/>(버리는 부분)"]
+        L1["바깥 껍질<br>(버리는 부분)"]
         L2["바깥쪽 층"]
         L3["안쪽 층"]
-        L4["💎 핵심<br/>(가장 단단하고 중요)"]
+        L4["💎 핵심<br>(가장 단단하고 중요)"]
     end
 
     L1 --> L2 --> L3 --> L4
@@ -110,10 +110,10 @@ flowchart LR
 ```mermaid
 flowchart TB
     subgraph DM["Domain Model"]
-        E["Entity<br/>(식별성 있는 객체)"]
-        VO["Value Object<br/>(값으로 비교)"]
-        AGG["Aggregate<br/>(일관성 경계)"]
-        DE["Domain Event<br/>(도메인 이벤트)"]
+        E["Entity<br>(식별성 있는 객체)"]
+        VO["Value Object<br>(값으로 비교)"]
+        AGG["Aggregate<br>(일관성 경계)"]
+        DE["Domain Event<br>(도메인 이벤트)"]
     end
 ```
 
@@ -806,9 +806,9 @@ public class OrderApplicationService {
 ```mermaid
 flowchart TB
     subgraph Tests["테스트 피라미드"]
-        E2E["E2E Test<br/>(적음)"]
-        INT["Integration Test<br/>(중간)"]
-        UNIT["Unit Test<br/>(많음)"]
+        E2E["E2E Test<br>(적음)"]
+        INT["Integration Test<br>(중간)"]
+        UNIT["Unit Test<br>(많음)"]
     end
 
     E2E --> INT --> UNIT
@@ -977,10 +977,10 @@ class JpaOrderRepositoryTest {
 
 ```mermaid
 flowchart LR
-    A["1단계<br/>Entity 풍부화"]
-    B["2단계<br/>Domain Service 추출"]
-    C["3단계<br/>Repository Interface 분리"]
-    D["4단계<br/>완전한 분리"]
+    A["1단계<br>Entity 풍부화"]
+    B["2단계<br>Domain Service 추출"]
+    C["3단계<br>Repository Interface 분리"]
+    D["4단계<br>완전한 분리"]
 
     A --> B --> C --> D
 ```

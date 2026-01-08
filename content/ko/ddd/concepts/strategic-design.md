@@ -14,10 +14,10 @@ weight: 1
 ```mermaid
 flowchart TB
     subgraph Strategic["전략적 설계 구성요소"]
-        SUB[Subdomain<br/>도메인 분류]
-        UL[Ubiquitous Language<br/>공통 언어]
-        BC[Bounded Context<br/>경계된 컨텍스트]
-        CM[Context Mapping<br/>컨텍스트 간 관계]
+        SUB[Subdomain<br>도메인 분류]
+        UL[Ubiquitous Language<br>공통 언어]
+        BC[Bounded Context<br>경계된 컨텍스트]
+        CM[Context Mapping<br>컨텍스트 간 관계]
     end
 
     SUB --> BC
@@ -104,9 +104,9 @@ flowchart TB
 
 ```mermaid
 flowchart TB
-    Q1{이것 없이 사업이<br/>가능한가?}
-    Q2{경쟁사와 차별화되는<br/>요소인가?}
-    Q3{시장에서 솔루션을<br/>구매할 수 있는가?}
+    Q1{이것 없이 사업이<br>가능한가?}
+    Q2{경쟁사와 차별화되는<br>요소인가?}
+    Q3{시장에서 솔루션을<br>구매할 수 있는가?}
 
     Q1 -->|No| CORE["Core Domain"]
     Q1 -->|Yes| Q2
@@ -136,7 +136,7 @@ flowchart LR
 
     subgraph Solution["✅ 유비쿼터스 언어"]
         direction TB
-        ALL["모두: 'Gift Order'<br/>(선물 주문)"]
+        ALL["모두: 'Gift Order'<br>(선물 주문)"]
     end
 
     Problem -->|DDD 적용| Solution
@@ -396,7 +396,7 @@ Context 간의 관계와 통합 방식을 정의합니다.
 ```mermaid
 flowchart LR
     subgraph Upstream["Upstream (공급자)"]
-        U[Product Catalog<br/>Service]
+        U[Product Catalog<br>Service]
     end
 
     subgraph Downstream["Downstream (소비자)"]
@@ -426,7 +426,7 @@ flowchart LR
         B[Payment Context]
     end
 
-    A <-->|긴밀한 협력<br/>공동 계획| B
+    A <-->|긴밀한 협력<br>공동 계획| B
 ```
 
 **특징:**
@@ -448,12 +448,12 @@ flowchart LR
 flowchart TB
     subgraph A["Order Context"]
         A1[Order Model]
-        SK1[Money<br/>Address]
+        SK1[Money<br>Address]
     end
 
     subgraph B["Payment Context"]
         B1[Payment Model]
-        SK2[Money<br/>Address]
+        SK2[Money<br>Address]
     end
 
     SK1 <-.->|동일한 모듈| SK2
@@ -575,13 +575,13 @@ flowchart LR
 ```mermaid
 flowchart LR
     subgraph External["레거시/외부 시스템"]
-        EXT[Legacy API<br/>복잡하고 불일치]
+        EXT[Legacy API<br>복잡하고 불일치]
     end
 
     subgraph ACL["Anti-Corruption Layer"]
-        TRANS[Translator<br/>데이터 변환]
-        ADAPT[Adapter<br/>인터페이스 적응]
-        FACADE[Facade<br/>단순화]
+        TRANS[Translator<br>데이터 변환]
+        ADAPT[Adapter<br>인터페이스 적응]
+        FACADE[Facade<br>단순화]
     end
 
     subgraph Domain["우리 도메인"]
@@ -672,8 +672,8 @@ public class LegacyOrderAdapter implements OrderReader {
 ```mermaid
 flowchart TB
     subgraph Provider["Product Service"]
-        API["Open Host Service<br/>(REST API)"]
-        SCHEMA["Published Language<br/>(JSON Schema)"]
+        API["Open Host Service<br>(REST API)"]
+        SCHEMA["Published Language<br>(JSON Schema)"]
     end
 
     subgraph Consumers["다수의 소비자"]
@@ -756,21 +756,21 @@ flowchart TB
 ```mermaid
 flowchart TB
     subgraph Core["Core Domain"]
-        ORDER["주문<br/>Context"]
-        PRICE["가격 정책<br/>Context"]
+        ORDER["주문<br>Context"]
+        PRICE["가격 정책<br>Context"]
     end
 
     subgraph Supporting["Supporting"]
-        CATALOG["상품 카탈로그<br/>Context"]
-        INV["재고<br/>Context"]
-        SHIP["배송<br/>Context"]
-        MEMBER["회원<br/>Context"]
+        CATALOG["상품 카탈로그<br>Context"]
+        INV["재고<br>Context"]
+        SHIP["배송<br>Context"]
+        MEMBER["회원<br>Context"]
     end
 
     subgraph Generic["Generic"]
-        PAY["결제<br/>(외부 PG)"]
-        NOTI["알림<br/>(외부 서비스)"]
-        AUTH["인증<br/>(OAuth)"]
+        PAY["결제<br>(외부 PG)"]
+        NOTI["알림<br>(외부 서비스)"]
+        AUTH["인증<br>(OAuth)"]
     end
 
     %% 관계 정의
@@ -802,11 +802,11 @@ flowchart TB
 ```mermaid
 flowchart LR
     subgraph Workshop["EventStorming 워크숍"]
-        E[Domain Events<br/>주황색]
-        C[Commands<br/>파란색]
-        A[Aggregates<br/>노란색]
-        P[Policies<br/>보라색]
-        BC[Bounded Context<br/>경계선]
+        E[Domain Events<br>주황색]
+        C[Commands<br>파란색]
+        A[Aggregates<br>노란색]
+        P[Policies<br>보라색]
+        BC[Bounded Context<br>경계선]
     end
 
     E --> C --> A --> P --> BC
