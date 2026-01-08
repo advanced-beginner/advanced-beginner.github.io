@@ -63,6 +63,34 @@ lastmod: 2026-01-08
 ### 한국 커뮤니티
 
 - [Elastic 한국 사용자 그룹](https://www.facebook.com/groups/elasticsearch.kr/)
+- [한국 Elasticsearch 밋업](https://www.meetup.com/ko-KR/elasticsearch-korea/)
+
+### 한글 학습 자료
+
+#### 블로그 & 아티클
+
+| 주제 | 링크 | 특징 |
+|------|------|------|
+| ES 기초 | [우아한형제들 기술블로그](https://techblog.woowahan.com/) | 실무 적용 사례 |
+| 검색 최적화 | [카카오 기술블로그](https://tech.kakao.com/) | 대규모 검색 경험 |
+| 로그 분석 | [네이버 D2](https://d2.naver.com/) | ELK 스택 운영 |
+| 인프라 | [당근마켓 기술블로그](https://medium.com/daangn) | 스타트업 ES 도입기 |
+
+#### 추천 한글 글
+
+- "Elasticsearch 검색 품질 개선기" - 검색 관련성 튜닝 실전
+- "1억 건 데이터 ES 마이그레이션" - 대용량 인덱싱 최적화
+- "ES 클러스터 무중단 업그레이드" - 운영 중 버전 업그레이드
+- "Nori 분석기 커스터마이징" - 한글 검색 품질 개선
+
+#### 국내 도서
+
+| 도서 | 특징 |
+|------|------|
+| 엘라스틱서치 실무 가이드 | 한글, 실무 중심 |
+| 기초부터 다지는 ElasticSearch | 입문자 친화적 |
+
+> **팁**: 영문 공식 문서와 한글 블로그를 병행하면 이해가 빠릅니다.
 
 ### GitHub
 

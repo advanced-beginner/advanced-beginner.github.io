@@ -348,6 +348,9 @@ graph LR
 
 ### 1. 동의어 처리
 
+동의어 처리를 위해 커스텀 Analyzer를 설정합니다.
+→ [Analyzer 기본 개념](../data-modeling/#분석기-analyzer-설정)
+
 ```json
 PUT /products
 {

@@ -370,6 +370,9 @@ GET /products/_explain/1
 
 ## 인덱싱 성능
 
+인덱싱 성능 최적화의 상세 내용은 인덱싱 전략 문서를 참고하세요.
+→ [인덱싱 전략 상세](../indexing/)
+
 ### Refresh Interval 조정
 
 ```json

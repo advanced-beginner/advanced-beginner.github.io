@@ -439,6 +439,138 @@ PUT /_watcher/watch/cluster_health_watch
 
 ---
 
+## 실제 장애 사례와 교훈
+
+### 사례 1: 디스크 풀로 인한 클러스터 마비
+
+**상황:**
+- 로그 인덱스가 예상보다 빠르게 증가
+- 디스크 사용률 95% 초과 → 전체 인덱스 read-only 전환
+- 새 로그 유입 불가, 서비스 모니터링 중단
+
+**대응:**
+```bash
+# 1. 긴급: 오래된 인덱스 삭제
+DELETE /logs-2024.01.*
+
+# 2. read-only 해제
+PUT /_all/_settings
+{ "index.blocks.read_only_allow_delete": null }
+
+# 3. 재발 방지: ILM 정책 적용
+```
+
+**교훈:**
+- 디스크 사용률 80%에서 알림 설정 필수
+- ILM으로 자동 삭제 정책 필수
+- 용량 계획 시 2배 여유 확보
+
+---
+
+### 사례 2: Master 노드 단일 장애점
+
+**상황:**
+- 비용 절감으로 Master-eligible 노드 1개만 운영
+- Master 노드 장애 → 전체 클러스터 다운
+- 신규 노드 추가해도 Master 선출 불가 (과반수 미충족)
+
+**대응:**
+```yaml
+# elasticsearch.yml - 강제 Master 선출 (위험!)
+cluster.initial_master_nodes: ["node-1"]
+```
+
+**교훈:**
+- Master-eligible 노드 **최소 3개** 필수
+- 홀수 개 유지 (2개보다 3개가 안전)
+- `discovery.seed_hosts` 정확히 설정
+
+---
+
+### 사례 3: 대량 인덱싱 중 OOM
+
+**상황:**
+- 1억 건 데이터 마이그레이션 중 bulk 인덱싱
+- JVM Heap 100% → OOM → 노드 다운
+- 연쇄적으로 다른 노드도 과부하
+
+**대응:**
+```bash
+# 1. Bulk 크기 조정 (5-15MB 권장)
+# 2. Refresh 비활성화
+PUT /products/_settings
+{ "refresh_interval": "-1" }
+
+# 3. Replica 임시 비활성화
+PUT /products/_settings
+{ "number_of_replicas": 0 }
+
+# 4. 인덱싱 완료 후 복원
+```
+
+**교훈:**
+- Bulk 크기는 문서 수가 아닌 **바이트 크기**로 관리
+- 대량 작업 시 refresh_interval 비활성화
+- 인덱싱 전용 노드 분리 고려
+
+---
+
+### 사례 4: 샤드 불균형으로 인한 핫스팟
+
+**상황:**
+- 특정 노드에 샤드가 집중
+- 해당 노드 CPU 100%, 다른 노드는 10%
+- 검색 응답 시간 10배 증가
+
+**대응:**
+```json
+// 샤드 재배치
+POST /_cluster/reroute
+{
+  "commands": [{
+    "move": {
+      "index": "products",
+      "shard": 0,
+      "from_node": "hot-node",
+      "to_node": "cold-node"
+    }
+  }]
+}
+```
+
+**교훈:**
+- `/_cat/allocation` 정기 모니터링
+- Hot-Warm 아키텍처 적용
+- Zone awareness로 균등 분배
+
+---
+
+### 사례 5: 스냅샷 복원 실패
+
+**상황:**
+- 장애 발생 → 스냅샷 복원 시도
+- 스냅샷이 손상되어 복원 실패
+- 백업 검증을 안 해서 발견 늦음
+
+**대응:**
+```bash
+# 매주 복원 테스트 자동화
+# 테스트 클러스터에서 복원 검증
+POST /_snapshot/my_backup/weekly_snapshot/_restore?wait_for_completion=true
+{
+  "indices": "products",
+  "rename_pattern": "(.+)",
+  "rename_replacement": "test_$1"
+}
+```
+
+**교훈:**
+- **복원 테스트 없는 백업은 백업이 아님**
+- 월 1회 이상 복원 훈련 필수
+- 다른 리전에 스냅샷 복제
+
+---
+
 ## 체크리스트
 
 ### 일일 점검

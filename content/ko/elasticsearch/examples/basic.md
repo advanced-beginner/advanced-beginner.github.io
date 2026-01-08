@@ -104,6 +104,20 @@ public class Product {
 | `@Field` | 필드 타입 및 분석기 설정 |
 | `@Setting` | 인덱스 설정 파일 경로 |
 
+### 왜 이렇게 설계했나?
+
+**필드 타입 선택 이유:**
+- `name`은 `Text` 타입: 형태소 분석이 필요한 검색 대상 필드
+- `category`는 `Keyword` 타입: 정확한 일치 필터링용 (분석 불필요)
+- `price`는 `Integer` 타입: 범위 검색(`range`) 필요
+
+**대안 비교:**
+| 선택 | 대안 | 선택 이유 |
+|------|------|----------|
+| `String id` | `Long id` | ES 문서 ID는 문자열, UUID 사용 가능 |
+| `@Field` 명시 | 자동 매핑 | 타입 명시로 예측 가능한 동작 보장 |
+| `standard` analyzer | `nori` | 기본 예제는 단순하게, 한글 검색은 [상품 검색 예제](../product-search/) 참조 |
+
 ---
 
 ## Repository
@@ -143,6 +157,17 @@ public interface ProductRepository extends ElasticsearchRepository<Product, Stri
 | `findByNameContaining` | `{ "match": { "name": ? } }` |
 | `findByPriceBetween` | `{ "range": { "price": { "gte": ?, "lte": ? } } }` |
 | `findByCategoryAndInStock` | `{ "bool": { "must": [...] } }` |
+
+### 왜 ElasticsearchRepository인가?
+
+**Repository 패턴의 장점:**
+- JPA와 유사한 방식으로 학습 곡선 낮음
+- 메서드 이름만으로 쿼리 자동 생성
+- 테스트 용이성 (Mock 가능)
+
+**한계와 대안:**
+- 복잡한 쿼리는 `ElasticsearchOperations` 사용 → 아래 Service 참조
+- 네이티브 쿼리가 필요하면 `@Query` 어노테이션 사용
 
 ---
 
