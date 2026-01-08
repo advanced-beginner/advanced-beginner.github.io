@@ -50,6 +50,26 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 - 타입 시스템: Generics, Variance, Type Classes
 - Implicits/Given과 암시적 변환의 원리
 
+### [Apache Spark](spark/)
+
+대규모 데이터 처리를 위한 분산 컴퓨팅 엔진. Java/Spring 개발자 관점에서 인메모리 처리, 지연 평가, DAG 최적화를 설명합니다.
+
+**배우는 것:**
+- Spark 아키텍처와 실행 모델 (Driver, Executor, Stage)
+- RDD, DataFrame, Dataset의 차이와 활용
+- Structured Streaming으로 실시간 데이터 처리
+- 메모리 튜닝과 성능 최적화 전략
+
+### [Elasticsearch](elasticsearch/)
+
+대용량 검색과 실시간 분석을 위한 분산 검색 엔진. RDB의 한계를 넘는 전문 검색과 현실적인 운영 노하우를 다룹니다.
+
+**배우는 것:**
+- 역색인(Inverted Index)과 Lucene 내부 구조
+- Query DSL과 집계(Aggregation) 분석
+- 한글 검색 최적화와 자동완성 구현
+- 클러스터 운영, 성능 튜닝, 장애 대응
+
 ## 이 가이드의 특징
 
 **First Principles** — 표면적인 사용법이 아닌, 그 기술이 해결하려는 근본 문제부터 시작합니다. "어떻게"보다 "왜"를 먼저 이해하면 응용력이 생깁니다.
@@ -66,3 +86,7 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 - **도메인 모델 설계를 배우고 싶다면** → [전술적 설계](ddd/concepts/tactical-design/)
 - **Scala를 처음 배운다면** → [Scala Quick Start](scala/quick-start/)
 - **Scala 타입 시스템을 깊이 이해하고 싶다면** → [Type Classes](scala/concepts/type-classes/)
+- **Spark로 대용량 데이터를 처리하고 싶다면** → [Spark Quick Start](spark/quick-start/)
+- **Spark 내부 구조를 이해하고 싶다면** → [Spark 아키텍처](spark/concepts/architecture/)
+- **검색 엔진을 도입하고 싶다면** → [Elasticsearch Quick Start](elasticsearch/quick-start/)
+- **한글 검색을 최적화하고 싶다면** → [한글 검색 최적화](elasticsearch/concepts/korean-search/)
