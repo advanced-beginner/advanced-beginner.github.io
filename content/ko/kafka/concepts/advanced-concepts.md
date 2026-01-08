@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-08"
 title: 심화 개념
 weight: 5
 ---
@@ -7,6 +7,13 @@ weight: 5
 # 심화 개념
 
 acks, Message Key, Retention 정책을 이해합니다.
+
+> **Kafka 버전**: 이 문서는 **Kafka 3.6.x** 기준으로 작성되었습니다.
+
+## 선행 지식
+
+- [메시지 흐름](../message-flow/) - Topic, Partition, Broker 개념
+- [Replication](../replication/) - ISR, Leader, Follower 개념
 
 ## acks (Acknowledgment)
 
@@ -161,12 +168,29 @@ sequenceDiagram
 ### Spring Kafka 코드
 
 ```java
-// Key 지정
-kafkaTemplate.send("orders", orderId, orderJson);
-//                  Topic    Key      Value
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
 
-// Key 없이 (라운드 로빈)
-kafkaTemplate.send("logs", null, logMessage);
+@Service
+public class OrderProducer {
+
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
+    public OrderProducer(KafkaTemplate<String, String> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+
+    // Key 지정 - 같은 orderId는 항상 같은 Partition으로
+    public void sendOrder(String orderId, String orderJson) {
+        kafkaTemplate.send("orders", orderId, orderJson);
+        //                  Topic    Key      Value
+    }
+
+    // Key 없이 (Sticky Partitioner, Kafka 2.4+에서 기본)
+    public void sendLog(String logMessage) {
+        kafkaTemplate.send("logs", null, logMessage);
+    }
+}
 ```
 
 ### 주의사항
@@ -293,11 +317,46 @@ delete.retention.ms: 86400000  # 24시간 (기본값)
 Log Compaction 환경에서 Key를 **삭제**하려면 **Tombstone 메시지**를 보냅니다:
 
 ```java
-// Tombstone 메시지: value가 null
-kafkaTemplate.send("user-profiles", "user-123", null);
-//                  Topic            Key         null = 삭제!
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
 
-// 일정 시간(delete.retention.ms) 후 Key 자체가 삭제됨
+@Service
+public class UserProfileService {
+
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
+    public UserProfileService(KafkaTemplate<String, String> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+
+    // 사용자 프로필 삭제 (Tombstone 전송)
+    public void deleteUserProfile(String userId) {
+        // value가 null이면 Tombstone 메시지
+        kafkaTemplate.send("user-profiles", userId, null);
+        // delete.retention.ms(기본 24시간) 후 Key 완전 삭제
+    }
+
+    // 사용자 프로필 업데이트
+    public void updateUserProfile(String userId, String profileJson) {
+        kafkaTemplate.send("user-profiles", userId, profileJson);
+    }
+}
+```
+
+**Consumer에서 Tombstone 처리:**
+
+```java
+@KafkaListener(topics = "user-profiles", groupId = "profile-service")
+public void consume(ConsumerRecord<String, String> record) {
+    if (record.value() == null) {
+        // Tombstone 메시지 - 삭제 처리
+        log.info("User deleted: {}", record.key());
+        userRepository.deleteById(record.key());
+    } else {
+        // 일반 업데이트
+        userRepository.save(parseProfile(record.value()));
+    }
+}
 ```
 
 ```
@@ -487,7 +546,31 @@ flowchart TB
 | **Message Key** | 순서가 중요한가? | 순서 필요 시 Key 사용 |
 | **Retention** | 얼마나 보관? | 요구사항에 따라 |
 
+## FAQ
+
+**Q: acks=all이면 성능이 많이 떨어지나요?**
+> A: 환경에 따라 다릅니다. 일반적으로 acks=1 대비 10~30% 레이턴시 증가가 예상됩니다. 처리량(throughput)은 배치 설정으로 보완 가능합니다.
+
+**Q: Message Key 없이 순서를 보장할 수 있나요?**
+> A: Partition이 1개면 가능하지만 병렬성을 포기해야 합니다. 실무에서는 Key를 사용하는 것이 권장됩니다.
+
+**Q: Log Compaction과 시간 기반 삭제를 함께 쓰면?**
+> A: `cleanup.policy=compact,delete` 설정 시 "N일 이내 데이터 중 Key별 최신 값만" 유지됩니다. 두 정책이 AND 조건으로 적용됩니다.
+
+**Q: Idempotent Producer는 무조건 켜야 하나요?**
+> A: Kafka 3.0+에서는 기본값이 `true`입니다. 특별한 이유가 없다면 끄지 마세요. 성능 영향은 미미합니다.
+
+**Q: min.insync.replicas=2인데 Broker가 2대뿐이면?**
+> A: 1대라도 장애 나면 쓰기 불가(NotEnoughReplicasException). 최소 3대 Broker + RF=3 + min.insync.replicas=2 권장.
+
+## 참고 자료
+
+- [Kafka Producer Configs - Apache Kafka Documentation](https://kafka.apache.org/documentation/#producerconfigs)
+- [Log Compaction - Confluent Documentation](https://docs.confluent.io/platform/current/kafka/design.html#log-compaction)
+- [KIP-98: Exactly Once Delivery and Transactional Messaging](https://cwiki.apache.org/confluence/display/KAFKA/KIP-98)
+- [Idempotent Producer - Confluent Blog](https://www.confluent.io/blog/exactly-once-semantics-are-possible-heres-how-apache-kafka-does-it/)
+
 ## 다음 단계
 
 - [트랜잭션과 Exactly-Once](../transactions/) - 메시지 전달 보장과 트랜잭션 API
-- [실습 예제](../../examples/) - 배운 개념을 직접 적용해보기
+- [Producer 튜닝](../producer-tuning/) - Producer 성능 최적화

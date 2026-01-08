@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-08"
 title: Producer 튜닝
 weight: 7
 ---
@@ -7,6 +7,13 @@ weight: 7
 # Producer 튜닝
 
 Producer 성능을 최적화하는 핵심 설정들을 이해합니다.
+
+> **Kafka 버전**: 이 문서는 **Kafka 3.6.x** 기준으로 작성되었습니다.
+
+## 선행 지식
+
+- [심화 개념](../advanced-concepts/) - acks, Message Key, Idempotent Producer
+- [메시지 흐름](../message-flow/) - Topic, Partition, Broker 개념
 
 ## Producer 내부 구조
 
@@ -388,9 +395,22 @@ flowchart TB
     Q3 -->|Yes| ORD[enable.idempotence=true]
 ```
 
-## 실제 벤치마크 결과
+## 성능 특성 참고 데이터
 
-아래는 3-node Kafka 클러스터 (각 노드: 8 vCPU, 32GB RAM, NVMe SSD)에서 측정한 결과입니다:
+아래 수치는 **참고용**입니다. 실제 성능은 환경(하드웨어, 네트워크, 메시지 크기, 직렬화 방식)에 따라 크게 달라집니다.
+
+> **측정 환경 예시**: 3-node Kafka 클러스터, 각 노드 8 vCPU, 32GB RAM, NVMe SSD, 1Gbps 네트워크
+
+**직접 측정을 권장합니다:**
+```bash
+# Kafka 내장 성능 테스트 도구
+kafka-producer-perf-test.sh --topic test-topic \
+    --num-records 1000000 \
+    --record-size 1024 \
+    --throughput -1 \
+    --producer-props bootstrap.servers=localhost:9092 \
+        linger.ms=5 batch.size=16384
+```
 
 ### linger.ms 영향 측정
 
@@ -538,12 +558,20 @@ spring:
 ### JVM 튜닝 권장사항
 
 ```bash
-# Producer 애플리케이션 JVM 옵션
+# Producer 애플리케이션 JVM 옵션 (Java 17+ 기준)
 JAVA_OPTS="-Xms512m -Xmx2g \
   -XX:+UseG1GC \
   -XX:MaxGCPauseMillis=20 \
   -XX:+ParallelRefProcEnabled"
+
+# 대용량 처리 시 ZGC 고려 (Java 17+)
+# JAVA_OPTS="-Xms2g -Xmx4g -XX:+UseZGC"
 ```
+
+**G1GC 선택 이유:**
+- Kafka Producer는 중간 크기 힙(1~4GB)에서 주로 운영
+- G1GC는 이 범위에서 레이턴시/처리량 균형 우수
+- MaxGCPauseMillis=20은 Kafka 기본 request.timeout.ms(30초) 대비 충분히 작음
 
 | 메시지 볼륨 | Heap 크기 | buffer.memory |
 |------------|----------|---------------|
@@ -560,6 +588,31 @@ JAVA_OPTS="-Xms512m -Xmx2g \
 | `compression.type` | lz4/snappy | none |
 | `buffer.memory` | ↑ 크게 | 영향 없음 |
 
+## FAQ
+
+**Q: linger.ms를 늘리면 메시지 유실 위험이 있나요?**
+> A: 아니요. linger.ms는 버퍼에서 대기하는 시간이며, 이 시간 동안 Producer가 죽으면 버퍼 내 메시지는 유실됩니다. 하지만 이는 acks 설정과 무관합니다. 중요 데이터는 `acks=all`과 함께 사용하세요.
+
+**Q: batch.size와 linger.ms 중 뭘 먼저 튜닝해야 하나요?**
+> A: `linger.ms`를 먼저 튜닝하세요. 기본값 0에서 5~20ms로만 바꿔도 처리량이 크게 향상됩니다. batch.size는 그 다음에 조정합니다.
+
+**Q: 압축을 사용하면 Producer CPU가 병목이 될 수 있나요?**
+> A: 네. gzip은 CPU 사용량이 높습니다. CPU 병목이 우려되면 lz4나 snappy를 사용하세요. 압축률은 낮지만 속도가 빠릅니다.
+
+**Q: buffer.memory가 부족하면 어떻게 되나요?**
+> A: `max.block.ms` 시간 동안 대기 후 `BufferExhaustedException` 발생. buffer.memory를 늘리거나 Broker 응답 속도를 확인하세요.
+
+**Q: Idempotent Producer를 쓰면 성능이 떨어지나요?**
+> A: Kafka 3.0+에서는 기본 활성화이며, 성능 영향은 미미합니다 (1~2% 이내). 순서 보장과 중복 방지 이점이 더 큽니다.
+
+## 참고 자료
+
+- [Kafka Producer Configs - Apache Documentation](https://kafka.apache.org/documentation/#producerconfigs)
+- [Kafka Performance Tuning - Confluent Blog](https://www.confluent.io/blog/configure-kafka-to-minimize-latency/)
+- [Producer Compression - Confluent Documentation](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#compression-type)
+- [kafka-producer-perf-test - Kafka Tools](https://kafka.apache.org/documentation/#basic_ops_producer_perf)
+
 ## 다음 단계
 
-- [Consumer 튜닝](../consumer-tuning/) - Consumer 성능 최적화
+- [Consumer 심화 운영](../consumer-advanced/) - Consumer 성능 최적화
+- [트랜잭션](../transactions/) - Exactly-Once 처리
