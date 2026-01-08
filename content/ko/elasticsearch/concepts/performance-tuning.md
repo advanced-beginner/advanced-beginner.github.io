@@ -1,0 +1,452 @@
+---
+title: 성능 튜닝
+weight: 8
+lastmod: 2026-01-08
+---
+
+Elasticsearch의 검색 및 인덱싱 성능을 최적화하는 방법을 배웁니다.
+
+## 성능 최적화 영역
+
+```mermaid
+flowchart TB
+    A[성능 튜닝] --> B[인덱스 설계]
+    A --> C[쿼리 최적화]
+    A --> D[캐싱]
+    A --> E[시스템 설정]
+```
+
+---
+
+## 인덱스 설계 최적화
+
+### 적절한 샤드 수
+
+| 데이터 규모 | 권장 Primary 샤드 |
+|-------------|------------------|
+| < 10GB | 1 |
+| 10-50GB | 2-3 |
+| 50-200GB | 3-5 |
+| > 200GB | 노드당 1-2개 |
+
+**Rule of Thumb:** 샤드당 20-40GB
+
+```json
+PUT /products
+{
+  "settings": {
+    "number_of_shards": 3,
+    "number_of_replicas": 1
+  }
+}
+```
+
+### 불필요한 필드 제외
+
+```json
+{
+  "mappings": {
+    "properties": {
+      "raw_data": {
+        "type": "object",
+        "enabled": false    // 인덱싱 안 함, 저장만
+      },
+      "internal_id": {
+        "type": "keyword",
+        "index": false      // 검색 안 함
+      },
+      "description": {
+        "type": "text",
+        "norms": false      // 길이 정규화 비활성 (score에 안 씀)
+      }
+    }
+  }
+}
+```
+
+### 적절한 Field Type
+
+```json
+{
+  "properties": {
+    // 검색용: text
+    "title": { "type": "text" },
+
+    // 필터/정렬용: keyword
+    "status": { "type": "keyword" },
+
+    // 숫자 ID: keyword (범위 검색 없으면)
+    "user_id": { "type": "keyword" },
+
+    // 범위 검색 필요: 숫자
+    "price": { "type": "integer" }
+  }
+}
+```
+
+---
+
+## 쿼리 최적화
+
+### Filter Context 활용
+
+Score 계산이 필요 없는 조건은 `filter`로:
+
+```json
+// ❌ 비효율 - 모든 조건이 score 계산
+{
+  "query": {
+    "bool": {
+      "must": [
+        { "match": { "name": "맥북" } },
+        { "term": { "category": "노트북" } },
+        { "range": { "price": { "gte": 1000000 } } }
+      ]
+    }
+  }
+}
+
+// ✅ 효율적 - filter는 캐싱됨
+{
+  "query": {
+    "bool": {
+      "must": [
+        { "match": { "name": "맥북" } }
+      ],
+      "filter": [
+        { "term": { "category": "노트북" } },
+        { "range": { "price": { "gte": 1000000 } } }
+      ]
+    }
+  }
+}
+```
+
+### 필요한 필드만 반환
+
+```json
+{
+  "_source": ["name", "price"],  // 필요한 필드만
+  "query": { ... }
+}
+
+// 또는
+{
+  "_source": false,              // _source 비활성화
+  "stored_fields": ["name"],     // stored field만
+  "query": { ... }
+}
+```
+
+### Pagination 최적화
+
+```json
+// ❌ 깊은 페이지네이션
+{ "from": 10000, "size": 10 }  // 10,000개 건너뛰기
+
+// ✅ search_after 사용
+{
+  "size": 10,
+  "sort": [
+    { "created_at": "desc" },
+    { "_id": "asc" }
+  ],
+  "search_after": ["2024-01-15T10:00:00", "abc123"]
+}
+```
+
+### Wildcard 쿼리 피하기
+
+```json
+// ❌ 매우 느림
+{ "wildcard": { "name": "*북*" } }
+
+// ✅ N-gram 또는 Edge N-gram 사용
+PUT /products
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "ngram_analyzer": {
+          "tokenizer": "ngram_tokenizer"
+        }
+      },
+      "tokenizer": {
+        "ngram_tokenizer": {
+          "type": "ngram",
+          "min_gram": 2,
+          "max_gram": 3
+        }
+      }
+    }
+  }
+}
+```
+
+### 집계 최적화
+
+```json
+// size: 0으로 검색 결과 생략
+{
+  "size": 0,
+  "aggs": {
+    "categories": {
+      "terms": {
+        "field": "category",
+        "size": 10,
+        "shard_size": 25  // 정확도 vs 성능
+      }
+    }
+  }
+}
+```
+
+---
+
+## 캐싱
+
+### 캐시 종류
+
+| 캐시 | 대상 | 무효화 |
+|------|------|--------|
+| **Node Query Cache** | Filter 결과 | Refresh 시 |
+| **Shard Request Cache** | 집계 결과 | 데이터 변경 시 |
+| **Field Data Cache** | text 필드 정렬/집계 | 메모리 부족 시 |
+
+### Filter Cache 활용
+
+```json
+// 자동 캐싱됨
+{
+  "query": {
+    "bool": {
+      "filter": [
+        { "term": { "status": "active" } }
+      ]
+    }
+  }
+}
+```
+
+### Request Cache 강제 사용
+
+```json
+GET /products/_search?request_cache=true
+{
+  "size": 0,
+  "aggs": { ... }
+}
+```
+
+### 캐시 상태 확인
+
+```json
+GET /_nodes/stats/indices/query_cache,request_cache
+```
+
+### 캐시 초기화
+
+```json
+POST /products/_cache/clear
+```
+
+---
+
+## JVM 설정
+
+### Heap 메모리
+
+```bash
+# jvm.options
+-Xms8g
+-Xmx8g
+```
+
+**권장:**
+- 총 메모리의 50% (최대 30-31GB)
+- 최소/최대 동일하게 설정
+- 남은 메모리는 파일 시스템 캐시용
+
+### GC 설정
+
+```bash
+# Elasticsearch 8.x 기본 G1GC
+-XX:+UseG1GC
+-XX:G1HeapRegionSize=16m
+-XX:InitiatingHeapOccupancyPercent=75
+```
+
+### Heap 사용량 모니터링
+
+```json
+GET /_nodes/stats/jvm
+```
+
+**경고 신호:**
+- Heap 사용률 > 75% 지속
+- Old GC 빈번 발생
+- GC 시간 > 500ms
+
+---
+
+## 시스템 설정
+
+### Linux 커널
+
+```bash
+# /etc/sysctl.conf
+vm.max_map_count=262144
+vm.swappiness=1
+
+# 적용
+sudo sysctl -p
+```
+
+### File Descriptors
+
+```bash
+# /etc/security/limits.conf
+elasticsearch  -  nofile  65535
+elasticsearch  -  nproc   4096
+```
+
+### 디스크 I/O
+
+- **SSD 사용 필수** (프로덕션)
+- RAID 0 또는 RAID 10 권장
+- 디스크 사용률 < 80% 유지
+
+---
+
+## 느린 쿼리 분석
+
+### Slow Log 설정
+
+```json
+PUT /products/_settings
+{
+  "index.search.slowlog.threshold.query.warn": "10s",
+  "index.search.slowlog.threshold.query.info": "5s",
+  "index.search.slowlog.threshold.query.debug": "2s",
+  "index.search.slowlog.threshold.fetch.warn": "1s",
+
+  "index.indexing.slowlog.threshold.index.warn": "10s",
+  "index.indexing.slowlog.threshold.index.info": "5s"
+}
+```
+
+### Profile API
+
+쿼리 실행 분석:
+
+```json
+GET /products/_search
+{
+  "profile": true,
+  "query": {
+    "match": { "name": "맥북" }
+  }
+}
+```
+
+응답에서 확인:
+- `time_in_nanos`: 각 단계 소요 시간
+- `breakdown`: 상세 시간 분석
+
+### Explain API
+
+Score 계산 분석:
+
+```json
+GET /products/_explain/1
+{
+  "query": {
+    "match": { "name": "맥북" }
+  }
+}
+```
+
+---
+
+## 인덱싱 성능
+
+### Refresh Interval 조정
+
+```json
+// 대량 인덱싱 시
+PUT /products/_settings
+{ "refresh_interval": "-1" }
+
+// 인덱싱 완료 후
+PUT /products/_settings
+{ "refresh_interval": "1s" }
+```
+
+### Bulk 인덱싱 최적화
+
+```json
+// 권장 크기: 5-15MB per request
+POST /_bulk
+{"index": {"_index": "products"}}
+{"name": "상품1"}
+{"index": {"_index": "products"}}
+{"name": "상품2"}
+...
+```
+
+### Translog 설정
+
+```json
+PUT /products/_settings
+{
+  "index.translog.durability": "async",
+  "index.translog.sync_interval": "30s"
+}
+```
+
+---
+
+## 성능 체크리스트
+
+### 검색 성능
+
+- [ ] Filter Context 사용
+- [ ] 필요한 필드만 반환
+- [ ] 적절한 페이지네이션
+- [ ] Wildcard 앞 `*` 회피
+- [ ] 캐시 활용
+
+### 인덱싱 성능
+
+- [ ] Bulk API 사용
+- [ ] 적절한 Refresh Interval
+- [ ] 대량 작업 시 Replica 비활성화
+- [ ] 적절한 샤드 수
+
+### 시스템
+
+- [ ] SSD 사용
+- [ ] JVM Heap 적절히 설정
+- [ ] File Descriptors 충분히
+- [ ] vm.max_map_count 설정
+
+---
+
+## 성능 목표
+
+| 지표 | 목표 |
+|------|------|
+| 검색 응답 시간 | < 100ms (p99) |
+| 인덱싱 처리량 | > 10,000 docs/sec |
+| JVM Heap 사용 | < 75% |
+| 디스크 사용 | < 80% |
+
+---
+
+## 다음 단계
+
+| 목표 | 추천 문서 |
+|------|----------|
+| 장애 대응 | [고가용성](../high-availability/) |
+| 클러스터 구성 | [클러스터 관리](../cluster-management/) |
+| 실전 구현 | [상품 검색 시스템](../../examples/product-search/) |
