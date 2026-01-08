@@ -20,7 +20,7 @@ RDD is Spark's most fundamental data abstraction. As the low-level API underlyin
 
 | Characteristic | Description |
 |----------------|-------------|
-| **Immutable** | Cannot be changed after creation, new RDD created on transformation |
+| **Immutable** | Once created, cannot be modified; transformations produce new RDDs |
 | **Distributed** | Data split into multiple partitions across nodes |
 | **Lazy** | Transformations are not executed immediately |
 | **Type-safe** | Types can be specified with generics |
@@ -63,7 +63,7 @@ public class RddExample {
 
 **Java Developer Notes:**
 - `JavaSparkContext` is the entry point for RDD API
-- Also accessible via `sparkSession.sparkContext()` or `new JavaSparkContext(spark.sparkContext())` from SparkSession
+- Also accessible through `sparkSession.sparkContext()` or `new JavaSparkContext(spark.sparkContext())` from SparkSession
 - `parallelize` converts a local collection to a distributed RDD
 
 ### 2. From External Data
@@ -99,7 +99,7 @@ JavaRDD<Integer> evens = numbers.filter(n -> n % 2 == 0);
 
 ## Transformations
 
-Transformations create new RDDs from existing RDDs. They are **lazily evaluated** and not executed immediately.
+Transformations produce new RDDs from existing ones. They are **lazily evaluated**, meaning they are not executed immediately.
 
 ### Narrow vs Wide Transformations
 

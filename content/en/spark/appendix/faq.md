@@ -172,7 +172,7 @@ System.setProperty("hadoop.home.dir", "C:\\hadoop");
 
 **Checklist**:
 1. **Minimize shuffles**: Reduce Wide Transformations
-2. **Check partition count**: Not too few or too many
+2. **Check partition count**: Ensure it's neither too few nor too many
 3. **Data skew**: Check if data is concentrated in specific partitions
 4. **Broadcast join**: Broadcast small tables
 5. **Caching**: Cache repeatedly used data
@@ -419,7 +419,7 @@ java.lang.OutOfMemoryError: Java heap space
   at org.apache.spark.sql.Dataset.collect
 ```
 
-→ `collect()`, `toPandas()` etc. are the cause. Check result size.
+→ `collect()`, `toPandas()`, etc., are typically the cause. Check the result size.
 
 **Executor OOM:**
 ```
@@ -427,7 +427,7 @@ ExecutorLostFailure (executor X exited caused by one of the running tasks)
 Reason: Container killed by YARN for exceeding memory limits
 ```
 
-→ Check data size per partition, increase memory or partition count.
+→ Check the data size per partition; increase memory or partition count accordingly.
 
 **Resolution checklist:**
 

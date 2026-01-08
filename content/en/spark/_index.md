@@ -9,7 +9,7 @@ lastmod: "2026-01-07"
 
 Apache Spark is a **unified analytics engine for large-scale data processing**. It provides processing speeds up to 100x faster in memory and 10x faster on disk compared to Hadoop MapReduce, supporting multiple languages including Java, Scala, Python, and R.
 
-The reason Spark is called a "unified" engine is that it can handle batch processing, real-time streaming, machine learning, and graph analysis all on a single platform.
+Spark is called a "unified" engine because it handles batch processing, real-time streaming, machine learning, and graph analysis all on a single platform.
 
 ### Why Do You Need Spark?
 
@@ -50,7 +50,7 @@ Through RDD lineage information, data loss triggers automatic recomputation. Rel
 - Running analytical queries on data lakes
 
 **May be overkill:**
-- Data is a few GBs or less, processable on a single server
+- Data is a few GB or less and can be processed on a single server
 - Simple CRUD operations are the main workload
 - Real-time processing requiring millisecond-level ultra-low latency
 - Team lacks distributed systems experience and timeline is tight

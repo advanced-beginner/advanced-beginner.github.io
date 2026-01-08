@@ -191,7 +191,7 @@ Operations for time-based grouping. Includes Tumbling, Sliding, and Session Wind
 
 ### Estimator
 
-An algorithm that trains via the fit() method to produce a [Transformer](#transformer-ml).
+An algorithm that trains using the fit() method to produce a [Transformer](#transformer-ml).
 → [MLlib](../concepts/mllib/)
 
 ### Pipeline
@@ -201,7 +201,7 @@ A workflow connecting multiple [Estimators](#estimator) and [Transformers](#tran
 
 ### Transformer (ML)
 
-A component that transforms data via the transform() method.
+A component that transforms data using the transform() method.
 → [MLlib](../concepts/mllib/)
 
 ## Configuration Related

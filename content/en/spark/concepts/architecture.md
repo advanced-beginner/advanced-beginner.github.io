@@ -267,9 +267,9 @@ Dataset<Row> highPaid = employees
 ```
 
 Key differences:
-1. **Data Location**: Java loads entirely into memory, Spark exists in distributed storage
-2. **Execution Location**: Java in single JVM, Spark distributed across multiple Executors
-3. **Failure Handling**: Java fails on exception, Spark auto-retries
+1. **Data Location**: Java loads all data into memory; Spark distributes data across storage nodes
+2. **Execution Location**: Java runs in a single JVM; Spark distributes work across multiple Executors
+3. **Failure Handling**: Java fails on exception; Spark automatically retries failed tasks
 
 ## Memory Model (Unified Memory Management)
 

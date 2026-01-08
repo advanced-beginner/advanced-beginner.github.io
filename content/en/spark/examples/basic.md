@@ -79,7 +79,7 @@ Dataset<Row> selected = spark.read()
         .select("id", "name");
 ```
 
-### Reading Database via JDBC
+### Reading from Database Using JDBC
 
 ```java
 Dataset<Row> df = spark.read()
