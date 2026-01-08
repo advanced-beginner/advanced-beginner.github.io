@@ -6,19 +6,7 @@ weight: 3
 
 Implementing an order domain with DDD patterns using Spring Boot.
 
-## Learning Path
-
-```mermaid
-flowchart LR
-    A[Project Setup] --> B[Domain Model]
-    B --> C[Application Layer]
-    C --> D[Infrastructure Layer]
-
-    style A fill:#e1f5fe
-    style B fill:#fff3e0
-    style C fill:#e8f5e9
-    style D fill:#fce4ec
-```
+**Learning Path:** Project Setup → Domain Model → Application Layer → Infrastructure Layer
 
 ## Contents
 

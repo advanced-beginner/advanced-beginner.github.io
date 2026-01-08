@@ -117,11 +117,6 @@ graph TB
     Double --> Nothing
     Boolean --> Nothing
     Unit --> Nothing
-
-    style Any fill:#e1f5fe
-    style Nothing fill:#ffebee
-    style AnyVal fill:#e8f5e9
-    style AnyRef fill:#fff3e0
 ```
 
 - **Any**: Top type of all types

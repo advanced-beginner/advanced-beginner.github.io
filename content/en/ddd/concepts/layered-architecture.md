@@ -23,8 +23,6 @@ flowchart TB
 
     P --> A --> D
     I -.->|"Provides implementation"| D
-
-    style D fill:#fff9c4
 ```
 
 ---
@@ -816,10 +814,6 @@ flowchart LR
 
     A -->|"1. Extract Repository Interface"| B
     B -->|"2. Introduce Port/Adapter"| C
-
-    style A fill:#ffcdd2
-    style B fill:#fff9c4
-    style C fill:#c8e6c9
 ```
 
 **Step 1: Move Repository Interface to Domain**

@@ -392,15 +392,7 @@ flowchart TB
 
 핵심 개념을 이해했다면, 이제 깊이 있게 살펴봅시다:
 
-```mermaid
-flowchart LR
-    A["✅ Quick Start<br/>(현재)"] --> B[전략적 설계]
-    B --> C[전술적 설계]
-    C --> D[아키텍처]
-    D --> E[실습 예제]
-
-    style A fill:#4caf50,color:#fff
-```
+**학습 경로:** Quick Start → [전략적 설계](../concepts/strategic-design/) → [전술적 설계](../concepts/tactical-design/) → [아키텍처](../concepts/architecture/) → 실습 예제
 
 - [전략적 설계](../concepts/strategic-design/) - Bounded Context, Context Mapping, Subdomain
 - [전술적 설계](../concepts/tactical-design/) - Entity, Value Object, Aggregate

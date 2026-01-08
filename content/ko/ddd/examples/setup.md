@@ -142,8 +142,6 @@ flowchart LR
     I[Interfaces] --> A[Application]
     A --> D[Domain]
     INF[Infrastructure] --> D
-
-    style D fill:#fff3e0
 ```
 
 | 규칙 | 설명 |

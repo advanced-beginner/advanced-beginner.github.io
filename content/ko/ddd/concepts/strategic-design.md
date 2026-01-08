@@ -59,10 +59,6 @@ flowchart TB
             GD3["인증/인가"]
         end
     end
-
-    style Core fill:#ffcdd2
-    style Supporting fill:#fff9c4
-    style Generic fill:#c8e6c9
 ```
 
 ### Subdomain 유형

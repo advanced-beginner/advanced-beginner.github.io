@@ -27,11 +27,6 @@ flowchart TB
     end
 
     F --> A --> UC --> E
-
-    style Yellow fill:#fff9c4
-    style Red fill:#ffcdd2
-    style Green fill:#c8e6c9
-    style Outer fill:#bbdefb
 ```
 
 ---
@@ -831,11 +826,6 @@ flowchart LR
     D["4단계<br/>전체 적용"]
 
     A --> B --> C --> D
-
-    style A fill:#ffcdd2
-    style B fill:#fff9c4
-    style C fill:#c8e6c9
-    style D fill:#bbdefb
 ```
 
 ### 1단계: Entity 분리

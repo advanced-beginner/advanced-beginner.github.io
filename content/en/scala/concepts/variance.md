@@ -31,13 +31,6 @@ graph LR
     subgraph "Invariant (A)"
         ArrayDog["Array[Dog]"] -.-|"No relation"| ArrayAnimal["Array[Animal]"]
     end
-
-    style Dog fill:#c8e6c9
-    style Animal fill:#e8f5e9
-    style ListDog fill:#bbdefb
-    style ListAnimal fill:#e3f2fd
-    style PrinterAnimal fill:#ffe0b2
-    style PrinterDog fill:#fff3e0
 ```
 
 > **Memory tip:**
@@ -164,10 +157,6 @@ graph TB
     end
 
     Note["A function that accepts Animal<br/>can also accept Dog"]
-
-    style Input fill:#ffe0b2
-    style Output fill:#bbdefb
-    style Note fill:#f5f5f5
 ```
 
 > **Interpretation:** An `Animal => String` function can be used where `Dog => String` is expected.

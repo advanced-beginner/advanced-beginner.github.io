@@ -233,11 +233,6 @@ flowchart LR
     A -->|"도메인이 복잡해지면"| B
     B -->|"외부 연동이 많아지면"| C
     C -->|"테스트/변경이 어려우면"| D
-
-    style A fill:#ffcdd2
-    style B fill:#fff9c4
-    style C fill:#c8e6c9
-    style D fill:#bbdefb
 ```
 
 **1단계 → 2단계로 가는 신호:**

@@ -27,13 +27,6 @@ flowchart LR
     FC1 --> R1
     FC2 --> R2
     FC3 --> R3
-
-    style FC1 fill:#e3f2fd
-    style FC2 fill:#e3f2fd
-    style FC3 fill:#e3f2fd
-    style R1 fill:#c8e6c9
-    style R2 fill:#c8e6c9
-    style R3 fill:#c8e6c9
 ```
 
 ```scala

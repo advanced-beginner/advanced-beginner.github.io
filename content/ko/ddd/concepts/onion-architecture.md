@@ -29,8 +29,6 @@ flowchart TB
     end
 
     INF --> AS --> DS --> Model
-
-    style Model fill:#fff9c4
 ```
 
 ---
@@ -985,11 +983,6 @@ flowchart LR
     D["4단계<br/>완전한 분리"]
 
     A --> B --> C --> D
-
-    style A fill:#ffcdd2
-    style B fill:#fff9c4
-    style C fill:#c8e6c9
-    style D fill:#bbdefb
 ```
 
 ### 1단계: Entity에 로직 넣기

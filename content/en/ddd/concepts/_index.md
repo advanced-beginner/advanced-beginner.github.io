@@ -6,28 +6,6 @@ weight: 2
 
 A deep dive into DDD's strategic and tactical design patterns.
 
-## Learning Path
-
-```mermaid
-flowchart LR
-    A[Strategic Design] --> B[Tactical Design]
-    B --> C[Aggregate Deep Dive]
-    C --> D[Domain Events]
-    D --> E[Architecture]
-    E --> F[CQRS]
-    F --> G[Testing Strategy]
-    G --> H[Anti-Patterns]
-
-    style A fill:#fff3e0
-    style B fill:#e8f5e9
-    style C fill:#e1f5fe
-    style D fill:#fce4ec
-    style E fill:#f3e5f5
-    style F fill:#e0f2f1
-    style G fill:#fff8e1
-    style H fill:#ffebee
-```
-
 ## Table of Contents
 
 ### Design Patterns

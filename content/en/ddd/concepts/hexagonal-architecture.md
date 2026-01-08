@@ -44,8 +44,6 @@ flowchart TB
     APP --> OP
     OP --> PA --> DB
     OP --> EA --> API
-
-    style Core fill:#fff9c4
 ```
 
 ---

@@ -393,15 +393,7 @@ flowchart TB
 
 Now that you understand the core concepts, let's dive deeper:
 
-```mermaid
-flowchart LR
-    A["✅ Quick Start<br/>(Current)"] --> B[Strategic Design]
-    B --> C[Tactical Design]
-    C --> D[Architecture]
-    D --> E[Hands-on Examples]
-
-    style A fill:#4caf50,color:#fff
-```
+**Learning Path:** Quick Start → [Strategic Design](../concepts/strategic-design/) → [Tactical Design](../concepts/tactical-design/) → [Architecture](../concepts/architecture/) → Hands-on Examples
 
 - [Strategic Design](../concepts/strategic-design/) - Bounded Context, Context Mapping, Subdomain
 - [Tactical Design](../concepts/tactical-design/) - Entity, Value Object, Aggregate
