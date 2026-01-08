@@ -1,6 +1,8 @@
 ---
 title: 자주 묻는 질문
 weight: 4
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # Kafka 자주 묻는 질문 (FAQ)

@@ -2,6 +2,8 @@
 lastmod: "2026-01-06"
 title: 기본 예제
 weight: 2
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # 기본 Producer/Consumer 예제

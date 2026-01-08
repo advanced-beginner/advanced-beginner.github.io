@@ -2,6 +2,8 @@
 lastmod: "2026-01-06"
 title: 참고 자료
 weight: 2
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # 참고 자료

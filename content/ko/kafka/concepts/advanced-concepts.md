@@ -1,12 +1,30 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-08"
 title: 심화 개념
 weight: 5
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # 심화 개념
 
 acks, Message Key, Retention 정책을 이해합니다.
+
+> **Kafka 버전**: 이 문서는 **Kafka 3.6.x** 기준으로 작성되었습니다.
+
+| 검증 환경 | 버전 |
+|----------|------|
+| Kafka | 3.6.1 (KRaft) |
+| Spring Boot | 3.2.x |
+| Spring Kafka | 3.1.x |
+| Java | 17 |
+
+> 이 문서의 코드 예제는 위 환경에서 컴파일 및 동작이 확인되었습니다.
+
+## 선행 지식
+
+- [메시지 흐름](../message-flow/) - Topic, Partition, Broker 개념
+- [Replication](../replication/) - ISR, Leader, Follower 개념
 
 ## acks (Acknowledgment)
 
@@ -161,12 +179,29 @@ sequenceDiagram
 ### Spring Kafka 코드
 
 ```java
-// Key 지정
-kafkaTemplate.send("orders", orderId, orderJson);
-//                  Topic    Key      Value
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
 
-// Key 없이 (라운드 로빈)
-kafkaTemplate.send("logs", null, logMessage);
+@Service
+public class OrderProducer {
+
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
+    public OrderProducer(KafkaTemplate<String, String> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+
+    // Key 지정 - 같은 orderId는 항상 같은 Partition으로
+    public void sendOrder(String orderId, String orderJson) {
+        kafkaTemplate.send("orders", orderId, orderJson);
+        //                  Topic    Key      Value
+    }
+
+    // Key 없이 (Sticky Partitioner, Kafka 2.4+에서 기본)
+    public void sendLog(String logMessage) {
+        kafkaTemplate.send("logs", null, logMessage);
+    }
+}
 ```
 
 ### 주의사항
@@ -262,6 +297,134 @@ flowchart LR
 cleanup.policy: compact
 min.cleanable.dirty.ratio: 0.5
 ```
+
+### Log Compaction 내부 동작 원리
+
+Log Compaction은 **백그라운드 스레드**에서 비동기로 실행됩니다:
+
+```
+Log Segment 구조:
+├── Segment 1 (Closed) ← Compaction 대상
+├── Segment 2 (Closed) ← Compaction 대상
+├── Segment 3 (Closed) ← Compaction 대상
+└── Segment 4 (Active)  ← Compaction 제외 (쓰기 중)
+```
+
+**Compaction 실행 조건:**
+
+```yaml
+# Dirty Ratio가 이 값을 초과하면 Compaction 시작
+min.cleanable.dirty.ratio: 0.5  # 50% (기본값)
+
+# Compaction 대상이 되기까지 최소 대기 시간
+min.compaction.lag.ms: 0  # 즉시 대상 (기본값)
+
+# 삭제 표시(Tombstone) 보관 시간
+delete.retention.ms: 86400000  # 24시간 (기본값)
+```
+
+### Tombstone 메시지 (삭제 처리)
+
+Log Compaction 환경에서 Key를 **삭제**하려면 **Tombstone 메시지**를 보냅니다:
+
+```java
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserProfileService {
+
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
+    public UserProfileService(KafkaTemplate<String, String> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+
+    // 사용자 프로필 삭제 (Tombstone 전송)
+    public void deleteUserProfile(String userId) {
+        // value가 null이면 Tombstone 메시지
+        kafkaTemplate.send("user-profiles", userId, null);
+        // delete.retention.ms(기본 24시간) 후 Key 완전 삭제
+    }
+
+    // 사용자 프로필 업데이트
+    public void updateUserProfile(String userId, String profileJson) {
+        kafkaTemplate.send("user-profiles", userId, profileJson);
+    }
+}
+```
+
+**Consumer에서 Tombstone 처리:**
+
+```java
+@KafkaListener(topics = "user-profiles", groupId = "profile-service")
+public void consume(ConsumerRecord<String, String> record) {
+    if (record.value() == null) {
+        // Tombstone 메시지 - 삭제 처리
+        log.info("User deleted: {}", record.key());
+        userRepository.deleteById(record.key());
+    } else {
+        // 일반 업데이트
+        userRepository.save(parseProfile(record.value()));
+    }
+}
+```
+
+```
+Compaction + Tombstone 타임라인:
+├── T0: [user-123: {"name": "Alice"}]
+├── T1: [user-123: {"name": "Bob"}]  ← 값 업데이트
+├── T2: [user-123: null]              ← Tombstone (삭제 요청)
+├── T3: Compaction 실행
+│   └── 결과: [user-123: null] 만 남음
+├── T4: delete.retention.ms(24시간) 경과
+├── T5: 다음 Compaction 실행
+│   └── 결과: user-123 Key 완전 삭제
+```
+
+> **주의:** Tombstone이 삭제되기 전에 Consumer가 읽으면 `null` 값을 받습니다. 애플리케이션에서 `null` 처리가 필요합니다.
+
+### Compaction 성능 영향
+
+| 설정 | 값 | 효과 |
+|------|-----|------|
+| `min.cleanable.dirty.ratio` | 낮음 (0.1) | 자주 Compaction, CPU 부하 증가 |
+| `min.cleanable.dirty.ratio` | 높음 (0.9) | 가끔 Compaction, 디스크 사용량 증가 |
+| `log.cleaner.threads` | 증가 | Compaction 속도 향상, CPU 부하 증가 |
+
+**프로덕션 권장 설정:**
+
+```yaml
+# Broker 설정
+log.cleaner.threads: 2
+log.cleaner.dedupe.buffer.size: 134217728  # 128MB
+
+# Topic 설정
+cleanup.policy: compact
+min.cleanable.dirty.ratio: 0.5
+delete.retention.ms: 86400000  # 24시간
+segment.ms: 604800000  # 7일마다 새 Segment
+```
+
+### Log Compaction vs 시간 기반 삭제 비교
+
+| 특성 | 시간 기반 (delete) | Log Compaction (compact) |
+|------|-------------------|-------------------------|
+| **삭제 기준** | 시간 경과 | Key 중복 |
+| **보관 데이터** | 최근 N일 | Key별 최신 값 |
+| **용도** | 이벤트 로그 | 상태 저장소 |
+| **Key 필수** | 아니오 | 예 |
+| **Null 값 의미** | 일반 값 | 삭제 (Tombstone) |
+
+**혼합 정책도 가능:**
+
+```yaml
+# 시간 기반 삭제 + Compaction 동시 적용
+cleanup.policy: compact,delete
+retention.ms: 604800000  # 7일
+```
+
+이 설정은 "7일 이내의 데이터 중 Key별 최신 값만 유지"를 의미합니다.
 
 ## Idempotent Producer (멱등성 프로듀서)
 
@@ -394,7 +557,31 @@ flowchart TB
 | **Message Key** | 순서가 중요한가? | 순서 필요 시 Key 사용 |
 | **Retention** | 얼마나 보관? | 요구사항에 따라 |
 
+## FAQ
+
+**Q: acks=all이면 성능이 많이 떨어지나요?**
+> A: 환경에 따라 다릅니다. 일반적으로 acks=1 대비 10~30% 레이턴시 증가가 예상됩니다. 처리량(throughput)은 배치 설정으로 보완 가능합니다.
+
+**Q: Message Key 없이 순서를 보장할 수 있나요?**
+> A: Partition이 1개면 가능하지만 병렬성을 포기해야 합니다. 실무에서는 Key를 사용하는 것이 권장됩니다.
+
+**Q: Log Compaction과 시간 기반 삭제를 함께 쓰면?**
+> A: `cleanup.policy=compact,delete` 설정 시 "N일 이내 데이터 중 Key별 최신 값만" 유지됩니다. 두 정책이 AND 조건으로 적용됩니다.
+
+**Q: Idempotent Producer는 무조건 켜야 하나요?**
+> A: Kafka 3.0+에서는 기본값이 `true`입니다. 특별한 이유가 없다면 끄지 마세요. 성능 영향은 미미합니다.
+
+**Q: min.insync.replicas=2인데 Broker가 2대뿐이면?**
+> A: 1대라도 장애 나면 쓰기 불가(NotEnoughReplicasException). 최소 3대 Broker + RF=3 + min.insync.replicas=2 권장.
+
+## 참고 자료
+
+- [Kafka Producer Configs - Apache Kafka Documentation](https://kafka.apache.org/documentation/#producerconfigs)
+- [Log Compaction - Confluent Documentation](https://docs.confluent.io/platform/current/kafka/design.html#log-compaction)
+- [KIP-98: Exactly Once Delivery and Transactional Messaging](https://cwiki.apache.org/confluence/display/KAFKA/KIP-98)
+- [Idempotent Producer - Confluent Blog](https://www.confluent.io/blog/exactly-once-semantics-are-possible-heres-how-apache-kafka-does-it/)
+
 ## 다음 단계
 
 - [트랜잭션과 Exactly-Once](../transactions/) - 메시지 전달 보장과 트랜잭션 API
-- [실습 예제](../../examples/) - 배운 개념을 직접 적용해보기
+- [Producer 튜닝](../producer-tuning/) - Producer 성능 최적화

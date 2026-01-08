@@ -2,6 +2,8 @@
 lastmod: "2026-01-06"
 title: 환경 구성
 weight: 1
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # 환경 구성

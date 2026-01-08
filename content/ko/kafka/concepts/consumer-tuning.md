@@ -2,6 +2,8 @@
 lastmod: "2026-01-06"
 title: Consumer 튜닝
 weight: 8
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # Consumer 튜닝

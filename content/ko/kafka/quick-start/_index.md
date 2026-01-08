@@ -2,6 +2,8 @@
 lastmod: "2026-01-06"
 title: Quick Start
 weight: 1
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # Quick Start

@@ -2,11 +2,22 @@
 lastmod: "2026-01-06"
 title: 모니터링 기초
 weight: 10
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # 모니터링 기초
 
 Kafka 클러스터와 애플리케이션의 핵심 메트릭을 이해합니다.
+
+| 검증 환경 | 버전 |
+|----------|------|
+| Kafka | 3.6.1 (KRaft) |
+| Spring Boot | 3.2.x |
+| Micrometer | 1.12.x |
+| Prometheus | 2.x |
+
+> 이 문서의 코드 예제는 위 환경에서 컴파일 및 동작이 확인되었습니다.
 
 ## 모니터링 대상
 

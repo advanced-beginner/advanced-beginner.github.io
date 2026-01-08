@@ -2,6 +2,8 @@
 lastmod: "2026-01-06"
 title: 부록
 weight: 4
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 용어 사전과 참고 자료입니다.
