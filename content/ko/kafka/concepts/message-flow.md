@@ -8,6 +8,15 @@ weight: 2
 
 Kafka에서 메시지가 발행되고 소비되는 전체 과정을 이해합니다.
 
+| 검증 환경 | 버전 |
+|----------|------|
+| Kafka | 3.6.1 (KRaft) |
+| Spring Boot | 3.2.x |
+| Spring Kafka | 3.1.x |
+| Java | 17 |
+
+> 이 문서의 코드 예제는 위 환경에서 컴파일 및 동작이 확인되었습니다.
+
 ## 왜 메시지 흐름을 이해해야 하는가?
 
 Kafka를 "그냥 메시지 큐"로만 생각하면 운영 중 예상치 못한 문제를 겪게 됩니다. 메시지 흐름을 깊이 이해하면 다음 질문에 답할 수 있습니다:
@@ -578,4 +587,4 @@ groups:
 
 ## 다음 단계
 
-- [Consumer Group & Offset](../consumer-group-offset/) - 병렬 처리와 상태 관리
+- [Consumer Group & Offset](../consumer-group/) - 병렬 처리와 상태 관리

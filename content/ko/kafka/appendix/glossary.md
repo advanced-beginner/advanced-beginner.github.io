@@ -16,7 +16,7 @@ Kafka 관련 주요 용어를 정리합니다. 상세 설명은 [개념 이해](
 
 ### Auto Offset Reset
 [Consumer Group](#consumer-group)이 처음 시작하거나 [Offset](#offset) 정보가 없을 때 읽기 시작할 위치. `earliest` 또는 `latest`.
-→ [Consumer Group & Offset](../../concepts/consumer-group-offset/#autooffsetreset-설정)
+→ [Consumer Group & Offset](../../concepts/consumer-group/#auto.offset.reset-설정)
 
 ## B
 
@@ -31,7 +31,7 @@ Kafka 클러스터에 처음 연결할 때 사용하는 [Broker](#broker) 주소
 
 ### Commit (Offset Commit)
 [Consumer](#consumer)가 특정 [Offset](#offset)까지 메시지를 성공적으로 처리했음을 Kafka에 알리는 것. 자동/수동 커밋 방식.
-→ [Consumer Group & Offset](../../concepts/consumer-group-offset/#offset-커밋)
+→ [Consumer Group & Offset](../../concepts/consumer-group/#offset-커밋)
 
 ### Consumer
 Kafka에서 메시지를 읽어가는 클라이언트 애플리케이션. [Consumer Group](#consumer-group)에 소속되어 [Partition](#partition)을 분배받음.
@@ -39,7 +39,7 @@ Kafka에서 메시지를 읽어가는 클라이언트 애플리케이션. [Consu
 
 ### Consumer Group
 같은 목적을 가진 [Consumer](#consumer)들의 논리적 그룹. 그룹 내에서 [Partition](#partition)이 분배됨. [Rebalancing](#rebalancing)으로 동적 조정.
-→ [Consumer Group & Offset](../../concepts/consumer-group-offset/)
+→ [Consumer Group & Offset](../../concepts/consumer-group/)
 
 ## D
 
@@ -105,7 +105,7 @@ Spring Kafka의 [Producer](#producer) 클래스. 메시지 전송에 사용. [Ka
 
 ### Offset
 [Partition](#partition) 내 메시지의 순차적 위치 번호. 0부터 시작하여 증가. [Consumer](#consumer)가 [Commit](#commit-offset-commit)으로 관리.
-→ [Consumer Group & Offset](../../concepts/consumer-group-offset/#offset이란)
+→ [Consumer Group & Offset](../../concepts/consumer-group/#offset이란)
 
 ## P
 
@@ -125,7 +125,7 @@ Kafka에 메시지를 발행하는 클라이언트 애플리케이션. [KafkaTem
 
 ### Rebalancing
 [Consumer Group](#consumer-group) 내에서 [Partition](#partition)을 재분배하는 과정. [Consumer](#consumer) 추가/제거 시 발생.
-→ [Consumer Group & Offset](../../concepts/consumer-group-offset/#리밸런싱-rebalancing)
+→ [Consumer 심화 운영](../../concepts/consumer-advanced/#리밸런싱-심층-분석)
 
 ### Replication Factor
 각 [Partition](#partition)의 복제본 수. 프로덕션에서는 3 권장. [ISR](#isr-in-sync-replicas)과 연관.
