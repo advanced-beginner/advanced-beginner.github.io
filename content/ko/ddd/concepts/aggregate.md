@@ -16,6 +16,35 @@ Aggregate의 설계 원칙, 트랜잭션 경계, 실전 패턴을 깊이 있게 
 > import java.time.LocalDateTime;
 > ```
 
+## 왜 Aggregate가 필요한가?
+
+객체 지향 설계에서 가장 어려운 질문 중 하나는 **"어디까지 하나의 단위로 묶을 것인가?"**입니다.
+
+**Aggregate 없이 설계하면 생기는 문제:**
+
+```java
+// 문제 1: 어디서든 내부 객체 직접 수정 가능
+OrderLine line = orderLineRepository.findById(lineId);
+line.setQuantity(100);  // 주문 총액 업데이트 안 됨! 불일치 발생
+
+// 문제 2: 트랜잭션 범위가 불명확
+@Transactional
+public void processOrder(OrderId orderId) {
+    // Order, OrderLine, Customer, Product, Stock, Payment...
+    // 전부 한 트랜잭션? 어디까지?
+}
+
+// 문제 3: 동시성 제어 불가능
+// 사용자 A: order.addLine(...)
+// 사용자 B: order.removeLine(...)
+// 누가 이기는가? 어떤 락을 잡아야 하는가?
+```
+
+**Aggregate가 해결하는 것:**
+- **일관성 경계**: 이 범위 안에서는 항상 일관된 상태 보장
+- **트랜잭션 경계**: 하나의 Aggregate = 하나의 트랜잭션
+- **동시성 경계**: 같은 Aggregate에 대한 동시 수정은 충돌로 처리
+
 ## Aggregate란?
 
 **Aggregate**는 데이터 변경의 단위로 취급되는 연관된 객체들의 묶음입니다.
@@ -107,6 +136,49 @@ flowchart TB
 - 트랜잭션 범위 축소 → 동시성 충돌 감소
 - 메모리 사용량 감소
 - 변경 영향 범위 최소화
+
+### "작다"의 실질적 기준
+
+"작게 설계하라"는 원칙은 모호합니다. 실제로 어떻게 판단해야 할까요?
+
+**포함시킬지 판단하는 질문들:**
+
+```
+Q1. "이 객체 없이 Root가 유효한 상태인가?"
+    - No → 포함 (OrderLine 없는 Order는 무의미)
+    - Yes → 분리 고려 (Customer 없이도 Order 존재 가능)
+
+Q2. "이 객체가 독립적으로 생성/수정되는가?"
+    - Yes → 분리 (Product는 Order와 독립적으로 관리)
+    - No → 포함 (OrderLine은 Order 없이 의미 없음)
+
+Q3. "이 객체를 다른 곳에서도 참조하는가?"
+    - Yes → 분리 (Product는 여러 Order에서 참조)
+    - No → 포함 (OrderLine은 이 Order에서만 의미)
+
+Q4. "이 객체가 자주 변경되는가?"
+    - 자주 변경 → 분리 (Stock은 주문마다 변경됨)
+    - Root와 함께만 변경 → 포함 (ShippingAddress는 Order와 함께)
+```
+
+**실제 예시: 주문 시스템**
+
+```
+Order Aggregate에 포함:
+├── OrderLine (Order 없이 의미 없음, 함께 생성됨)
+├── ShippingAddress (Order의 속성, 독립 변경 없음)
+└── OrderStatus (Order의 상태)
+
+별도 Aggregate로 분리:
+├── Customer (독립 생성/수정, 여러 Order에서 참조)
+├── Product (독립 관리, 카탈로그에서도 사용)
+└── Stock (자주 변경, 여러 Order가 동시 접근)
+```
+
+**적정 크기의 감각:**
+- 내부 Entity가 3-5개를 넘으면 분리를 고려
+- 한 번에 로드하는 데이터가 수십 KB를 넘으면 의심
+- 동시 수정 충돌이 자주 발생하면 분리 신호
 
 ### 원칙 3: 다른 Aggregate는 ID로만 참조하라
 
@@ -228,6 +300,133 @@ flowchart TB
         T3 -.->|이벤트| T4
     end
 ```
+
+---
+
+## 실무에서 흔한 실수
+
+### 실수 1: 모든 연관 객체를 하나의 Aggregate에
+
+```java
+// ❌ 너무 큰 Aggregate
+public class Order {
+    private Customer customer;        // 별도 Aggregate여야 함
+    private List<Product> products;   // 별도 Aggregate여야 함
+    private Payment payment;          // 별도 Aggregate여야 함
+    private Delivery delivery;        // 별도 Aggregate여야 함
+}
+
+// 문제점:
+// 1. Customer 정보 수정할 때마다 Order를 로드해야 함
+// 2. 재고 확인하려면 모든 Order를 뒤져야 함
+// 3. 동시 주문 시 불필요한 충돌 발생
+```
+
+**해결:** ID 참조로 분리하고, 필요한 정보만 복사해서 보관
+
+```java
+// ✅ 적절한 크기
+public class Order {
+    private CustomerId customerId;
+    private String customerName;  // 표시용 복사본
+    private List<OrderLine> orderLines;  // OrderLine만 포함
+}
+```
+
+### 실수 2: Repository를 Aggregate 내부에서 호출
+
+```java
+// ❌ Aggregate에서 Repository 직접 호출
+public class Order {
+    @Autowired  // 절대 안 됨!
+    private ProductRepository productRepository;
+
+    public void addItem(ProductId productId, int quantity) {
+        Product product = productRepository.findById(productId);  // 안티패턴!
+        this.orderLines.add(new OrderLine(product, quantity));
+    }
+}
+```
+
+**문제점:**
+- Aggregate가 인프라스트럭처에 의존
+- 테스트하기 어려움
+- 트랜잭션 범위가 불명확해짐
+
+**해결:** 필요한 정보는 서비스 레이어에서 조회 후 전달
+
+```java
+// ✅ 서비스에서 조회 후 전달
+@Service
+public class OrderService {
+    public void addItem(OrderId orderId, ProductId productId, int quantity) {
+        Order order = orderRepository.findById(orderId);
+        ProductInfo productInfo = productService.getProductInfo(productId);
+
+        order.addItem(productInfo, quantity);  // 필요한 정보만 전달
+
+        orderRepository.save(order);
+    }
+}
+```
+
+### 실수 3: Aggregate Root를 무시하고 내부 Entity 직접 수정
+
+```java
+// ❌ 내부 Entity 직접 조회/수정
+OrderLine line = orderLineRepository.findById(lineId);
+line.setQuantity(10);  // Order의 totalAmount는 업데이트 안 됨!
+orderLineRepository.save(line);
+```
+
+**해결:** 항상 Root를 통해 수정
+
+```java
+// ✅ Root를 통한 수정
+Order order = orderRepository.findById(orderId);
+order.changeLineQuantity(lineId, 10);  // 내부에서 총액도 재계산
+orderRepository.save(order);
+```
+
+### 실수 4: 여러 Aggregate를 한 트랜잭션에서 수정
+
+```java
+// ❌ 한 트랜잭션에서 여러 Aggregate 수정
+@Transactional
+public void processOrder(OrderId orderId) {
+    Order order = orderRepository.findById(orderId);
+    order.confirm();
+
+    Stock stock = stockRepository.findByProductId(productId);
+    stock.decrease(quantity);  // 다른 Aggregate 수정!
+
+    Customer customer = customerRepository.findById(customerId);
+    customer.addPoints(points);  // 또 다른 Aggregate 수정!
+}
+// 문제: 락 범위가 넓어지고, 동시성 이슈 발생
+```
+
+**해결:** 이벤트로 분리
+
+```java
+// ✅ 각각 별도 트랜잭션
+@Transactional
+public void confirmOrder(OrderId orderId) {
+    Order order = orderRepository.findById(orderId);
+    order.confirm();  // OrderConfirmedEvent 발행
+    orderRepository.save(order);
+}
+
+@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+@Transactional(propagation = Propagation.REQUIRES_NEW)
+public void onOrderConfirmed(OrderConfirmedEvent event) {
+    Stock stock = stockRepository.findByProductId(event.getProductId());
+    stock.decrease(event.getQuantity());
+    stockRepository.save(stock);
+}
+```
+
+---
 
 ## 요약
 

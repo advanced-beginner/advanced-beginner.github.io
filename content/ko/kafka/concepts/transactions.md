@@ -8,6 +8,37 @@ weight: 6
 
 메시지 전달 보장 수준과 Kafka 트랜잭션을 이해합니다.
 
+## 왜 메시지 보장 수준이 중요한가?
+
+"메시지가 전달됐으면 끝 아닌가?" 라고 생각할 수 있습니다. 하지만 분산 시스템에서는 **네트워크 장애, 프로세스 충돌, 타이밍 이슈** 때문에 단순하지 않습니다.
+
+**실제로 발생하는 문제들:**
+
+```
+시나리오 1: 결제 이벤트 유실
+- 주문 서비스 → Kafka → 결제 서비스
+- 네트워크 순간 끊김으로 메시지 유실
+- 고객: "결제가 안 됐는데 주문은 됐다고?"
+
+시나리오 2: 포인트 중복 적립
+- 주문 완료 이벤트 → 포인트 서비스
+- ACK 유실로 재전송 발생
+- 고객: "1000원 적립인데 왜 2000원이 들어왔지?" (손해)
+
+시나리오 3: 재고 불일치
+- 주문 이벤트 → 재고 서비스
+- 중복 처리로 재고가 2배 차감
+- 운영팀: "재고가 -10개?" (불가능한 상태)
+```
+
+**각 보장 수준의 실제 의미:**
+
+| 수준 | 비즈니스 의미 | 실제 사례 |
+|------|-------------|----------|
+| At-Most-Once | 놓쳐도 괜찮다 | 로그 수집, 클릭 분석 |
+| At-Least-Once | 놓치면 안 되지만 중복은 처리 가능 | 대부분의 이벤트 |
+| Exactly-Once | 놓침도 중복도 치명적 | 금융 거래, 포인트, 재고 |
+
 ## 메시지 전달 보장 수준
 
 ```mermaid
@@ -401,7 +432,20 @@ spring:
 - 트랜잭션 마커 기록
 - Consumer의 필터링 처리
 
-**대안:** 비즈니스 로직에서 멱등성 보장
+**실제 성능 영향:**
+
+| 설정 | 상대 처리량 | 지연시간 | 사용 상황 |
+|------|-----------|---------|----------|
+| `acks=0` | 100% (기준) | 최소 | 로그, 메트릭 |
+| `acks=1` | ~95% | 낮음 | 일반적인 경우 |
+| `acks=all` | ~90% | 중간 | 데이터 안정성 필요 |
+| `acks=all` + Transaction | ~70-80% | 높음 | 원자성 필수 |
+
+> **참고:** 실제 수치는 클러스터 구성, 네트워크, 메시지 크기에 따라 다릅니다.
+
+**대안: 비즈니스 레벨 멱등성**
+
+Kafka 트랜잭션 대신 애플리케이션에서 멱등성을 보장하면 성능을 유지하면서 중복을 방지할 수 있습니다:
 
 ```java
 // DB 유니크 제약조건으로 멱등성 보장
@@ -413,6 +457,85 @@ public void handleOrder(OrderEvent event) {
     }
     // 처리 로직
     orderRepository.save(order);
+}
+```
+
+---
+
+## 실무 의사결정 가이드
+
+### 언제 무엇을 선택하나?
+
+```
+질문 1: 메시지 유실이 허용되는가?
+├── Yes → At-Most-Once (acks=0)
+└── No → 질문 2로
+
+질문 2: 중복 처리가 허용되는가?
+├── Yes → At-Least-Once + 멱등성 처리 (권장)
+└── No → 질문 3으로
+
+질문 3: 여러 Topic/Partition에 원자적 쓰기가 필요한가?
+├── Yes → Kafka Transactions
+└── No → Idempotent Producer (기본값으로 충분)
+```
+
+### 대부분의 경우 권장하는 방식
+
+**At-Least-Once + 비즈니스 멱등성**이 가장 실용적입니다:
+
+```yaml
+# Producer 설정
+spring:
+  kafka:
+    producer:
+      acks: all
+      # enable.idempotence는 Kafka 3.0+에서 기본 true
+```
+
+```java
+// Consumer에서 멱등성 처리
+@KafkaListener(topics = "orders")
+@Transactional
+public void handleOrder(OrderEvent event) {
+    // 1. 이미 처리했는지 확인
+    if (processedEventRepository.existsById(event.getEventId())) {
+        return;
+    }
+
+    // 2. 비즈니스 로직
+    orderService.process(event);
+
+    // 3. 처리 완료 기록 (같은 DB 트랜잭션)
+    processedEventRepository.save(new ProcessedEvent(event.getEventId()));
+}
+```
+
+### Kafka 트랜잭션이 꼭 필요한 경우
+
+다음 조건을 **모두** 만족할 때만 Kafka 트랜잭션을 사용하세요:
+
+1. **여러 Topic에 원자적으로 써야 함** (전부 성공 or 전부 실패)
+2. **Kafka Streams 또는 Consume-Transform-Produce 패턴** 사용
+3. **성능 오버헤드 감수 가능**
+
+```java
+// Kafka 트랜잭션이 필요한 예: Consume-Transform-Produce
+@KafkaListener(topics = "raw-orders")
+@Transactional("kafkaTransactionManager")
+public void processAndProduce(RawOrder raw, Acknowledgment ack) {
+    // 1. 변환
+    ProcessedOrder processed = transform(raw);
+
+    // 2. 여러 Topic에 원자적 쓰기
+    kafkaTemplate.send("processed-orders", processed);
+    kafkaTemplate.send("order-analytics", toAnalytics(processed));
+    kafkaTemplate.send("order-notifications", toNotification(processed));
+
+    // 3. Consumer offset 커밋도 같은 트랜잭션
+    ack.acknowledge();
+
+    // 모두 성공하거나 모두 롤백
 }
 ```
 

@@ -545,6 +545,177 @@ public class StockEventHandler {
 }
 ```
 
+---
+
+## 이벤트 기반 아키텍처의 함정
+
+도메인 이벤트는 강력하지만, 잘못 사용하면 디버깅이 어려운 시스템이 됩니다.
+
+### 함정 1: 이벤트 유실
+
+**문제:** `@TransactionalEventListener(AFTER_COMMIT)`은 이벤트를 메모리에만 보관합니다. 애플리케이션이 이벤트 발행 직전에 죽으면 유실됩니다.
+
+```java
+// ❌ 이벤트 유실 가능
+@Transactional
+public void confirmOrder(OrderId orderId) {
+    Order order = orderRepository.findById(orderId);
+    order.confirm();
+    orderRepository.save(order);
+    // 여기서 커밋 완료
+
+    // 이벤트는 AFTER_COMMIT에서 발행됨
+    // 만약 이 시점에 서버가 죽으면? → 이벤트 유실!
+}
+```
+
+**해결: Transactional Outbox Pattern**
+
+이벤트를 DB에 먼저 저장하고, 별도 프로세스가 발행합니다:
+
+```java
+// ✅ 이벤트 유실 방지
+@Transactional
+public void confirmOrder(OrderId orderId) {
+    Order order = orderRepository.findById(orderId);
+    order.confirm();
+    orderRepository.save(order);
+
+    // 같은 트랜잭션에서 Outbox에 저장
+    outboxRepository.save(new OutboxEvent(
+        "OrderConfirmed",
+        toJson(new OrderConfirmedEvent(order))
+    ));
+    // DB 트랜잭션 성공 = 이벤트 저장 보장
+}
+
+// 별도 스케줄러가 Outbox 폴링하여 Kafka 발행
+@Scheduled(fixedDelay = 1000)
+public void publishEvents() {
+    List<OutboxEvent> events = outboxRepository.findUnpublished();
+    for (OutboxEvent event : events) {
+        kafkaTemplate.send("domain-events", event.getPayload());
+        event.markPublished();
+        outboxRepository.save(event);
+    }
+}
+```
+
+### 함정 2: 이벤트 순서 역전
+
+**문제:** 비동기 이벤트는 발행 순서와 처리 순서가 다를 수 있습니다.
+
+```
+발행 순서: OrderCreated → OrderPaid → OrderShipped
+처리 순서: OrderCreated → OrderShipped → OrderPaid (역전!)
+
+결과: "결제도 안 됐는데 배송됐다?" 상태 불일치
+```
+
+**해결 방법:**
+
+```java
+// 방법 1: 상태 검증 후 처리
+@KafkaListener(topics = "order-events")
+public void handleOrderShipped(OrderShippedEvent event) {
+    Order order = orderRepository.findById(event.getOrderId());
+
+    // 상태 검증: PAID 상태가 아니면 처리 보류
+    if (order.getStatus() != OrderStatus.PAID) {
+        throw new OrderNotReadyForShipmentException();
+        // 재시도 또는 DLT로 이동
+    }
+
+    order.ship();
+    orderRepository.save(order);
+}
+
+// 방법 2: 이벤트에 버전/시퀀스 포함
+public class OrderEvent {
+    private long sequenceNumber;  // 1, 2, 3, ...
+
+    // 낮은 시퀀스 이벤트는 무시
+}
+```
+
+### 함정 3: 순환 이벤트
+
+**문제:** A 이벤트가 B를 발생시키고, B가 다시 A를 발생시키는 무한 루프
+
+```
+OrderConfirmed → StockReserved → OrderUpdated → StockReserved → ...
+```
+
+**해결: 이벤트 체인 추적**
+
+```java
+public abstract class DomainEvent {
+    private String correlationId;  // 최초 이벤트 ID
+    private String causationId;    // 이 이벤트를 발생시킨 이벤트 ID
+    private int depth;             // 이벤트 체인 깊이
+
+    public boolean isMaxDepthReached() {
+        return depth > 10;  // 최대 깊이 제한
+    }
+}
+```
+
+### 함정 4: 이벤트 스키마 변경
+
+**문제:** 이벤트 구조를 변경하면 기존 Consumer가 깨집니다.
+
+```java
+// v1: OrderConfirmedEvent { orderId, amount }
+// v2: OrderConfirmedEvent { orderId, totalAmount, discountAmount }
+// 기존 Consumer가 amount를 찾다가 실패!
+```
+
+**해결: 하위 호환성 유지**
+
+```java
+// 필드 추가는 OK (Optional로 처리)
+public class OrderConfirmedEvent {
+    private String orderId;
+    private Money amount;           // 기존 필드 유지
+    private Money totalAmount;      // 새 필드 추가
+    private Money discountAmount;   // 새 필드 추가
+
+    // 하위 호환성: 기존 필드로도 접근 가능
+    public Money getAmount() {
+        return amount != null ? amount : totalAmount;
+    }
+}
+
+// 필드 삭제나 타입 변경이 필요하면 새 이벤트 타입 정의
+// OrderConfirmedEventV2
+```
+
+---
+
+## 이벤트 디버깅 팁
+
+이벤트 기반 시스템은 흐름 추적이 어렵습니다. 다음을 항상 포함하세요:
+
+```java
+public abstract class DomainEvent {
+    private String eventId;         // 유니크 ID
+    private String correlationId;   // 요청 추적 ID (같은 요청의 모든 이벤트)
+    private Instant occurredAt;     // 발생 시각
+    private String aggregateId;     // 어떤 Aggregate에서 발생했는지
+    private String aggregateType;   // Order, Payment 등
+}
+```
+
+**로그에 항상 포함:**
+```java
+log.info("이벤트 처리 시작: eventId={}, correlationId={}, type={}",
+    event.getEventId(),
+    event.getCorrelationId(),
+    event.getClass().getSimpleName());
+```
+
+이렇게 하면 로그에서 `correlationId`로 검색하여 하나의 요청이 발생시킨 모든 이벤트 흐름을 추적할 수 있습니다.
+
 ## 다음 단계
 
 - [실습 예제](../../examples/) - Spring Boot로 구현하는 주문 도메인
