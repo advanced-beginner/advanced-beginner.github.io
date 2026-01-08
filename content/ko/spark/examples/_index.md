@@ -58,6 +58,17 @@ Java/Spring 개발자를 위한 Spark와 Spring Boot 통합 패턴입니다.
 - 에러 처리 및 재시도 로직
 - Spring 스케줄링 통합
 
+### [Delta Lake 통합](delta-lake/)
+
+ACID 트랜잭션과 시간 여행 기능을 갖춘 데이터 레이크를 구축합니다.
+
+- Delta Lake 기본 CRUD 연산
+- 시간 여행 (Time Travel)
+- 스키마 진화 (Schema Evolution)
+- 최적화 (Compaction, Z-Order, Vacuum)
+- Change Data Feed (CDC)
+- Bronze → Silver → Gold 아키텍처
+
 ## 예제 실행 전 준비
 
 ### 필수 환경

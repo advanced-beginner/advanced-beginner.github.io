@@ -29,3 +29,4 @@ Elasticsearch의 핵심 구성요소와 동작 원리를 이해합니다.
 ### 고급 기능
 
 10. [Vector Search (kNN)](vector-search/) - 시맨틱 검색, 유사 상품 추천, 임베딩
+11. [한글 검색 최적화](korean-search/) - Nori 분석기, 자동완성, 초성 검색

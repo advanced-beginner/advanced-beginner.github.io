@@ -1,13 +1,16 @@
 ---
 title: 용어 사전
 weight: 1
+lastmod: 2026-01-08
 ---
 
 # DDD 용어 사전
 
-Domain-Driven Design의 핵심 용어를 정리합니다.
+Domain-Driven Design의 핵심 용어를 정리합니다. 상세 설명은 [개념 이해](../../concepts/) 섹션을 참고하세요.
 
 ## 전략적 설계 (Strategic Design)
+
+> 📖 자세한 내용: [전략적 설계](../../concepts/strategic-design/)
 
 ### Bounded Context (경계된 컨텍스트)
 
@@ -17,16 +20,19 @@ Domain-Driven Design의 핵심 용어를 정리합니다.
 - 같은 용어도 Context마다 다른 의미를 가질 수 있음
 - 각 Context는 독립적인 모델을 가짐
 - 보통 하나의 팀이 하나의 Context를 담당
+- [Context Mapping](#context-mapping-컨텍스트-매핑)으로 다른 Context와의 관계를 정의
 
 **예시:**
 - 판매 Context의 "Product" = 가격, 프로모션
 - 재고 Context의 "Product" = 수량, 창고 위치
 
+📖 [전략적 설계 상세](../../concepts/strategic-design/#bounded-context)
+
 ---
 
 ### Context Mapping (컨텍스트 매핑)
 
-**정의:** Bounded Context 간의 관계와 통합 방식을 정의하는 것
+**정의:** [Bounded Context](#bounded-context-경계된-컨텍스트) 간의 관계와 통합 방식을 정의하는 것
 
 **주요 패턴:**
 
@@ -37,7 +43,9 @@ Domain-Driven Design의 핵심 용어를 정리합니다.
 | **Conformist** | 소비자가 공급자 모델을 그대로 따름 | 협상력 없을 때 |
 | **Anti-Corruption Layer** | 번역 계층으로 외부 모델 변환 | 레거시 통합 |
 | **Open Host Service** | 표준 API 공개 | 다수 소비자 |
-| **Published Language** | 표준 데이터 형식 사용 | 이벤트 통합 |
+| **Published Language** | 표준 데이터 형식 사용 | [Domain Event](#domain-event-도메인-이벤트) 통합 |
+
+📖 [전략적 설계 상세](../../concepts/strategic-design/#context-mapping)
 
 ---
 
@@ -47,8 +55,8 @@ Domain-Driven Design의 핵심 용어를 정리합니다.
 
 **특징:**
 - 코드, 문서, 대화에서 동일한 용어 사용
-- Context마다 별도의 언어 존재 가능
-- 용어 사전으로 정의하고 관리
+- [Bounded Context](#bounded-context-경계된-컨텍스트)마다 별도의 언어 존재 가능
+- 이 용어 사전처럼 정의하고 관리
 
 **실천 방법:**
 ```
@@ -56,6 +64,8 @@ Domain-Driven Design의 핵심 용어를 정리합니다.
 코드: order.confirm()
 테스트: @Test void 주문_확정_시_상태가_CONFIRMED로_변경된다()
 ```
+
+📖 [전략적 설계 상세](../../concepts/strategic-design/#ubiquitous-language)
 
 ---
 
@@ -67,12 +77,15 @@ Domain-Driven Design의 핵심 용어를 정리합니다.
 - 가장 중요하고 복잡한 비즈니스 로직 포함
 - 최고의 개발자가 담당해야 함
 - 외부에 위임하면 안 됨
+- [Aggregate](#aggregate-집합체)로 모델링하여 복잡성 관리
+
+📖 [전략적 설계 상세](../../concepts/strategic-design/#domain-types)
 
 ---
 
 ### Supporting Domain (지원 도메인)
 
-**정의:** Core Domain을 지원하지만 핵심은 아닌 도메인
+**정의:** [Core Domain](#core-domain-핵심-도메인)을 지원하지만 핵심은 아닌 도메인
 
 **특징:**
 - 비즈니스에 필요하지만 차별화 요소는 아님
@@ -93,6 +106,8 @@ Domain-Driven Design의 핵심 용어를 정리합니다.
 
 ## 전술적 설계 (Tactical Design)
 
+> 📖 자세한 내용: [전술적 설계](../../concepts/tactical-design/)
+
 ### Entity (엔티티)
 
 **정의:** 고유 식별자(Identity)로 구분되는 도메인 객체
@@ -101,6 +116,9 @@ Domain-Driven Design의 핵심 용어를 정리합니다.
 - 상태가 변경되어도 동일한 객체
 - 생명주기 존재 (생성 → 변경 → 소멸)
 - 식별자로 동등성 판단
+- [Aggregate](#aggregate-집합체)의 구성 요소
+
+**관련 용어:** [Value Object](#value-object-값-객체), [Aggregate Root](#aggregate-root-집합-루트)
 
 ```java
 // 식별자로 동등성 판단
@@ -110,6 +128,8 @@ public boolean equals(Object o) {
     return id.equals(order.id);
 }
 ```
+
+📖 [전술적 설계 상세](../../concepts/tactical-design/#entity) | [주문 도메인 예제](../../examples/order-domain/)
 
 ---
 
@@ -123,6 +143,8 @@ public boolean equals(Object o) {
 - 부수효과 없는 메서드만 제공
 - 자체적으로 유효성 검증
 
+**관련 용어:** [Entity](#entity-엔티티) - 식별자 기반 동등성과 비교
+
 ```java
 public record Money(BigDecimal amount, Currency currency) {
     public Money add(Money other) {
@@ -131,6 +153,8 @@ public record Money(BigDecimal amount, Currency currency) {
 }
 ```
 
+📖 [전술적 설계 상세](../../concepts/tactical-design/#value-object) | [주문 도메인 예제](../../examples/order-domain/#value-object)
+
 ---
 
 ### Aggregate (집합체)
@@ -138,25 +162,29 @@ public record Money(BigDecimal amount, Currency currency) {
 **정의:** 데이터 변경의 단위로 취급되는 연관 객체들의 묶음
 
 **특징:**
-- Aggregate Root를 통해서만 접근
+- [Aggregate Root](#aggregate-root-집합-루트)를 통해서만 접근
 - 하나의 트랜잭션 = 하나의 Aggregate
 - 진정한 불변식(Invariant)을 보호
 
 **설계 원칙:**
 1. 작게 유지
 2. 다른 Aggregate는 ID로만 참조
-3. 경계 밖은 결과적 일관성
+3. 경계 밖은 [Domain Event](#domain-event-도메인-이벤트)로 결과적 일관성
+
+**관련 용어:** [Entity](#entity-엔티티), [Value Object](#value-object-값-객체), [Repository](#repository-리포지토리)
+
+📖 [Aggregate 상세](../../concepts/aggregate/) | [Aggregate 패턴](../../concepts/aggregate-patterns/)
 
 ---
 
 ### Aggregate Root (집합 루트)
 
-**정의:** Aggregate의 진입점이 되는 Entity
+**정의:** [Aggregate](#aggregate-집합체)의 진입점이 되는 [Entity](#entity-엔티티)
 
 **책임:**
 - 외부와의 유일한 접점
 - Aggregate 내부 일관성 보장
-- 도메인 이벤트 발행
+- [Domain Event](#domain-event-도메인-이벤트) 발행
 
 ```java
 public class Order extends AggregateRoot<OrderId> {
@@ -171,16 +199,18 @@ public class Order extends AggregateRoot<OrderId> {
 }
 ```
 
+📖 [Aggregate 상세](../../concepts/aggregate/#aggregate-root) | [주문 도메인 예제](../../examples/order-domain/)
+
 ---
 
 ### Repository (리포지토리)
 
-**정의:** Aggregate의 영속성을 추상화하는 인터페이스
+**정의:** [Aggregate](#aggregate-집합체)의 영속성을 추상화하는 인터페이스
 
 **특징:**
-- Aggregate Root만 Repository를 가짐
+- [Aggregate Root](#aggregate-root-집합-루트)만 Repository를 가짐
 - Collection처럼 동작
-- 도메인 계층에 인터페이스, 인프라에 구현
+- 도메인 계층에 인터페이스, 인프라에 구현 ([Hexagonal Architecture](#hexagonal-architecture-헥사고날-아키텍처) 참고)
 
 ```java
 // 도메인 계층
@@ -194,16 +224,20 @@ public interface OrderRepository {
 public class JpaOrderRepository implements OrderRepository { }
 ```
 
+📖 [전술적 설계 상세](../../concepts/tactical-design/#repository)
+
 ---
 
 ### Domain Service (도메인 서비스)
 
-**정의:** 특정 Entity에 속하지 않는 도메인 로직을 담는 서비스
+**정의:** 특정 [Entity](#entity-엔티티)에 속하지 않는 도메인 로직을 담는 서비스
 
 **사용 시점:**
-- 여러 Aggregate에 걸친 연산
+- 여러 [Aggregate](#aggregate-집합체)에 걸친 연산
 - 외부 서비스가 필요한 도메인 로직
 - Entity의 책임으로 보기 어려운 로직
+
+**관련 용어:** [Application Service](#application-service-애플리케이션-서비스) - 유스케이스 조율과 비교
 
 ```java
 @DomainService
@@ -214,6 +248,8 @@ public class DiscountCalculator {
 }
 ```
 
+📖 [전술적 설계 상세](../../concepts/tactical-design/#domain-service)
+
 ---
 
 ### Domain Event (도메인 이벤트)
@@ -222,9 +258,14 @@ public class DiscountCalculator {
 
 **특징:**
 - 과거형으로 명명 (OrderConfirmed)
-- 불변
+- 불변 ([Value Object](#value-object-값-객체)처럼)
 - 발생 시점 포함
 - 필요한 정보 자체 포함
+
+**활용:**
+- [Aggregate](#aggregate-집합체) 간 결과적 일관성 달성
+- [CQRS](#cqrs-command-query-responsibility-segregation)에서 Read Model 동기화
+- [Event Sourcing](#event-sourcing-이벤트-소싱)의 기본 단위
 
 ```java
 public class OrderConfirmedEvent extends DomainEvent {
@@ -233,16 +274,20 @@ public class OrderConfirmedEvent extends DomainEvent {
 }
 ```
 
+📖 [도메인 이벤트 상세](../../concepts/domain-events/) | [Event Sourcing 실습](../../examples/event-sourcing/)
+
 ---
 
 ### Factory (팩토리)
 
-**정의:** 복잡한 Aggregate 생성 로직을 캡슐화
+**정의:** 복잡한 [Aggregate](#aggregate-집합체) 생성 로직을 캡슐화
 
 **사용 시점:**
 - 생성 로직이 복잡할 때
 - 다른 서비스 조회가 필요할 때
 - 여러 생성 방식이 있을 때
+
+📖 [전술적 설계 상세](../../concepts/tactical-design/#factory)
 
 ---
 
@@ -252,8 +297,10 @@ public class OrderConfirmedEvent extends DomainEvent {
 
 **특징:**
 - 트랜잭션 관리
-- 도메인 객체 간 조율
+- [Domain Service](#domain-service-도메인-서비스)와 [Repository](#repository-리포지토리) 조율
 - 도메인 로직 포함하지 않음
+
+**관련 용어:** [Domain Service](#domain-service-도메인-서비스) - 도메인 로직 담당과 비교
 
 ```java
 @Service
@@ -266,9 +313,13 @@ public class OrderService {
 }
 ```
 
+📖 [애플리케이션 계층 실습](../../examples/application-layer/)
+
 ---
 
 ## 아키텍처 패턴
+
+> 📖 자세한 내용: [아키텍처 개요](../../concepts/architecture/)
 
 ### Layered Architecture (계층형 아키텍처)
 
@@ -276,15 +327,19 @@ public class OrderService {
 ┌─────────────────────────┐
 │   Interfaces (API)      │
 ├─────────────────────────┤
-│   Application           │
+│   Application           │ ← Application Service
 ├─────────────────────────┤
-│   Domain                │
+│   Domain                │ ← Entity, Value Object, Aggregate
 ├─────────────────────────┤
-│   Infrastructure        │
+│   Infrastructure        │ ← Repository 구현
 └─────────────────────────┘
 ```
 
 **의존성 규칙:** 위에서 아래로만 의존
+
+**관련 용어:** [Application Service](#application-service-애플리케이션-서비스), [Repository](#repository-리포지토리)
+
+📖 [계층형 아키텍처 상세](../../concepts/layered-architecture/)
 
 ---
 
@@ -293,7 +348,7 @@ public class OrderService {
 **다른 이름:** Ports and Adapters
 
 **구조:**
-- Port: 인터페이스 (도메인이 정의)
+- Port: 인터페이스 (도메인이 정의, 예: [Repository](#repository-리포지토리))
 - Adapter: 구현체 (인프라가 제공)
 
 ```
@@ -309,6 +364,10 @@ public class OrderService {
     │ (Web)   │     │ (DB)     │
     └─────────┘     └──────────┘
 ```
+
+**관련 패턴:** [Layered Architecture](#layered-architecture-계층형-아키텍처), Clean Architecture, Onion Architecture
+
+📖 [헥사고날 아키텍처 상세](../../concepts/hexagonal-architecture/) | [Clean Architecture](../../concepts/clean-architecture/)
 
 ---
 
@@ -329,11 +388,15 @@ flowchart LR
 - 조회 성능 향상
 - 복잡성 분리
 
+**관련 패턴:** [Event Sourcing](#event-sourcing-이벤트-소싱)과 함께 사용하면 Read Model을 [Domain Event](#domain-event-도메인-이벤트)로 동기화
+
+📖 [CQRS 상세](../../concepts/cqrs/)
+
 ---
 
 ### Event Sourcing (이벤트 소싱)
 
-**정의:** 상태 대신 이벤트를 저장하고, 이벤트로부터 상태를 도출
+**정의:** 상태 대신 [Domain Event](#domain-event-도메인-이벤트)를 저장하고, 이벤트로부터 상태를 도출
 
 ```
 이벤트 스트림:
@@ -347,8 +410,15 @@ flowchart LR
 - 시간 여행 가능
 - 이벤트 기반 통합에 적합
 
+**관련 패턴:** [CQRS](#cqrs-command-query-responsibility-segregation), [Domain Event](#domain-event-도메인-이벤트)
+
+📖 [Event Sourcing 실습](../../examples/event-sourcing/) - EventStore, 스냅샷, 시간 여행 구현
+
 ---
 
 ## 다음 단계
 
+- [개념 이해](../../concepts/) - 전략적/전술적 설계, 아키텍처
+- [실습 예제](../../examples/) - Spring Boot 기반 구현
 - [참고 자료](../references/) - 도서, 아티클, 발표 자료
+- [FAQ](../faq/) - 자주 묻는 질문
