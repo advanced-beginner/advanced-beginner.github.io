@@ -2,6 +2,8 @@
 title: 주문 도메인
 weight: 2
 lastmod: "2026-01-06"
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # 주문 도메인 구현

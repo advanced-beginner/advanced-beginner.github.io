@@ -1,15 +1,13 @@
 ---
 title: 실습 예제
 weight: 3
+lastmod: 2026-01-09
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
-Spring Boot로 DDD 패턴을 적용한 주문 도메인을 구현합니다.
+이 섹션에서는 Spring Boot를 사용하여 DDD 패턴을 실제로 적용한 주문 도메인을 구현합니다. 이론적인 개념을 코드로 옮기는 과정에서 각 패턴이 어떻게 상호작용하는지 직접 경험할 수 있습니다.
 
-**학습 순서:** 프로젝트 설정 → 도메인 모델 → 애플리케이션 계층 → 인프라 계층
+학습은 프로젝트 설정에서 시작하여 도메인 모델 구현, 애플리케이션 계층 구현, 그리고 인프라 계층 구현 순서로 진행됩니다. 각 단계에서는 이전 단계에서 구축한 기반 위에 새로운 요소를 추가합니다.
 
-## 목차
-
-1. [프로젝트 설정](setup/) - 프로젝트 구조와 의존성
-2. [주문 도메인](order-domain/) - Aggregate, Entity, Value Object 구현
-3. [애플리케이션 계층](application-layer/) - Use Case와 서비스 구현
-4. [Event Sourcing 실습](event-sourcing/) - 이벤트 저장, 스냅샷, 시간 여행
+[프로젝트 설정](setup/)에서는 DDD에 적합한 프로젝트 구조와 필요한 의존성을 구성합니다. [주문 도메인](order-domain/)에서는 Aggregate, Entity, Value Object를 구현하며 도메인 모델의 핵심을 작성합니다. [애플리케이션 계층](application-layer/)에서는 Use Case를 정의하고 도메인 서비스를 구현하여 비즈니스 로직의 흐름을 조율합니다. [Event Sourcing 실습](event-sourcing/)에서는 이벤트 저장, 스냅샷 최적화, 시간 여행 기능을 구현하여 이벤트 소싱의 실제 활용법을 배웁니다.

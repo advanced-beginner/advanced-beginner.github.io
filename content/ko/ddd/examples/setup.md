@@ -1,6 +1,9 @@
 ---
 title: 프로젝트 설정
 weight: 1
+lastmod: 2026-01-09
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # 프로젝트 설정

@@ -1,6 +1,9 @@
 ---
 title: 자주 묻는 질문
 weight: 3
+lastmod: 2026-01-09
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # DDD 자주 묻는 질문 (FAQ)

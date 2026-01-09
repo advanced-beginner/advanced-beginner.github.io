@@ -2,6 +2,8 @@
 lastmod: "2026-01-07"
 title: Aggregate 실전 패턴
 weight: 4
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # Aggregate 실전 패턴

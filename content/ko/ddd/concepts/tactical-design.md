@@ -1,11 +1,12 @@
 ---
 title: 전술적 설계
 weight: 2
+lastmod: "2026-01-09"
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
-# 전술적 설계 (Tactical Design)
-
-도메인 모델을 구체적으로 구현하기 위한 패턴들입니다.
+도메인 모델을 구체적으로 구현하기 위한 패턴들이 바로 전술적 설계입니다. 전략적 설계가 "큰 그림"을 그리는 것이라면, 전술적 설계는 "구체적인 구현 방법"을 제시합니다.
 
 > **이 페이지 예제의 공통 import:**
 > ```java
@@ -14,7 +15,9 @@ weight: 2
 > import java.math.BigDecimal;
 > ```
 
-## 전술적 설계 요소 개요
+#### 전술적 설계 요소 개요
+
+전술적 설계는 여러 빌딩 블록으로 구성됩니다. Entity와 Value Object가 도메인 객체의 기본 단위이고, Aggregate가 이들을 일관성 경계로 묶습니다. Domain Service와 Application Service는 비즈니스 로직을 조율하며, Repository와 Factory는 객체의 생명주기를 관리합니다. Domain Event는 Aggregate 간 통신을 담당합니다. 이 구성요소들이 함께 동작하여 복잡한 도메인 로직을 명확하게 표현합니다.
 
 ```mermaid
 flowchart TB
@@ -48,11 +51,11 @@ flowchart TB
     AGG --> DE
 ```
 
-## Entity (엔티티)
+#### Entity (엔티티)
 
-### 정의
+**정의**
 
-**식별자(Identity)**로 구분되는 도메인 객체입니다.
+Entity는 식별자(Identity)로 구분되는 도메인 객체입니다. 주문번호나 회원ID처럼 고유한 식별자를 가지며, 속성이 변경되더라도 식별자가 같으면 동일한 객체로 취급됩니다. Entity의 핵심은 Identity, Mutability, Lifecycle 세 가지 특성입니다.
 
 ```mermaid
 flowchart LR
@@ -63,7 +66,7 @@ flowchart LR
     end
 ```
 
-### 특징
+Entity의 특징을 구체적으로 살펴보겠습니다. **Identity**는 고유 식별자로 구분되는 특성입니다. 주문번호나 회원ID가 대표적인 예입니다. **Mutability**는 상태가 변경될 수 있다는 특성입니다. 예를 들어 주문 상태가 PENDING에서 CONFIRMED로 변경됩니다. **Lifecycle**은 생성, 변경, 소멸의 생명주기를 가진다는 특성입니다. 회원 가입, 활동, 탈퇴의 과정이 여기에 해당합니다.
 
 | 특성 | 설명 | 예시 |
 |------|------|------|
@@ -71,7 +74,9 @@ flowchart LR
 | **Mutability** | 상태가 변경될 수 있음 | 주문 상태: PENDING → CONFIRMED |
 | **Lifecycle** | 생성, 변경, 소멸의 생명주기 | 회원 가입 → 활동 → 탈퇴 |
 
-### 구현 예시
+**구현 예시**
+
+다음은 Order Entity의 구현 예시입니다. `id` 필드는 불변(final)이므로 한 번 설정되면 변경할 수 없습니다. 반면 `status`와 `shippingAddress`는 가변이므로 비즈니스 규칙에 따라 변경될 수 있습니다. `equals`와 `hashCode` 메서드는 ID만으로 동등성을 비교합니다. 같은 ID를 가진 Order는 다른 속성이 달라도 동일한 객체로 취급됩니다. `confirm`과 `changeShippingAddress` 같은 비즈니스 행위는 메서드로 표현됩니다. 단순히 setter를 호출하는 것이 아니라, 유효성 검증과 도메인 이벤트 발행을 함께 수행합니다.
 
 ```java
 public class Order {
@@ -118,7 +123,9 @@ public class Order {
 }
 ```
 
-### 식별자 설계
+**식별자 설계**
+
+Entity의 식별자는 단순한 String이나 Long보다 도메인 식별자 타입을 사용하는 것이 좋습니다. 아래 예시의 `OrderId`는 Java Record로 구현되어 불변성을 보장합니다. 생성자에서 null 체크와 빈 값 검증을 수행하여 유효하지 않은 ID가 생성되는 것을 막습니다. `generate` 정적 메서드는 새로운 ID를 생성하고, `of` 정적 메서드는 기존 값으로 ID를 복원합니다.
 
 ```java
 // ✅ 도메인 식별자 (권장)
@@ -143,11 +150,11 @@ public record OrderId(String value) {
 Order order = new Order(OrderId.generate(), customerId, orderLines);
 ```
 
-## Value Object (값 객체)
+#### Value Object (값 객체)
 
-### 정의
+**정의**
 
-**속성 값**으로 동등성이 결정되는 불변 객체입니다.
+Value Object는 속성 값으로 동등성이 결정되는 불변 객체입니다. Entity가 식별자로 구분된다면, Value Object는 값 자체로 구분됩니다. Money의 1000원과 또 다른 1000원은 별개의 객체지만 같은 값을 가지므로 동일하게 취급됩니다.
 
 ```mermaid
 flowchart LR
@@ -158,7 +165,7 @@ flowchart LR
     end
 ```
 
-### 특징
+Value Object의 특징을 정리하면 다음과 같습니다. **Immutability**는 생성 후 변경할 수 없다는 특성입니다. Money(1000, KRW)를 생성한 후에는 금액이나 통화를 바꿀 수 없습니다. **Value Equality**는 모든 속성이 같으면 같은 객체로 취급된다는 특성입니다. 1000원과 1000원은 동일합니다. **Self-Contained**는 자체적으로 유효성을 검증한다는 특성입니다. 음수 금액은 생성 시점에 거부됩니다.
 
 | 특성 | 설명 | 예시 |
 |------|------|------|
@@ -166,7 +173,9 @@ flowchart LR
 | **Value Equality** | 모든 속성이 같으면 같은 객체 | 1000원 == 1000원 |
 | **Self-Contained** | 자체적으로 유효성 검증 | 금액은 음수 불가 |
 
-### 구현 예시
+**구현 예시**
+
+Money Value Object 구현을 살펴보겠습니다. Java Record를 사용하여 불변성을 자동으로 보장받습니다. Compact Constructor에서 유효성을 검증합니다. 금액이 null이거나 음수이면 예외를 던집니다. `won` 같은 팩토리 메서드로 편리하게 객체를 생성할 수 있습니다. `add`와 `multiply` 같은 연산은 원본을 변경하지 않고 새로운 객체를 반환합니다. 이것이 불변 연산의 핵심입니다.
 
 ```java
 // Money Value Object
@@ -211,6 +220,8 @@ public record Money(BigDecimal amount, Currency currency) {
 }
 ```
 
+Address Value Object도 비슷한 패턴을 따릅니다. Compact Constructor에서 필수 필드를 검증하고, 우편번호 형식도 검증합니다. `fullAddress` 메서드는 주소를 보기 좋은 형식으로 반환합니다.
+
 ```java
 // Address Value Object
 public record Address(
@@ -235,7 +246,9 @@ public record Address(
 }
 ```
 
-### Entity vs Value Object
+**Entity vs Value Object**
+
+Entity와 Value Object를 어떻게 구분할까요? Order, Member, Product는 Entity입니다. 각각이 고유한 식별자를 가지며 독립적인 생명주기를 가집니다. 반면 Money, Address, DateRange는 Value Object입니다. 값 자체가 의미를 가지며 Entity에 포함되어 사용됩니다.
 
 ```mermaid
 flowchart TB
@@ -256,6 +269,8 @@ flowchart TB
     E2 -->|포함| V2
 ```
 
+두 개념의 차이를 정리하면 다음과 같습니다. Entity는 ID로 비교하고 변경 가능하며 독립적인 생명주기를 가집니다. 주문이나 회원이 여기에 해당합니다. Value Object는 모든 속성으로 비교하고 불변이며 Entity에 종속됩니다. 금액이나 주소가 여기에 해당합니다.
+
 | 구분 | Entity | Value Object |
 |------|--------|--------------|
 | **동등성** | ID로 비교 | 모든 속성으로 비교 |
@@ -263,7 +278,9 @@ flowchart TB
 | **생명주기** | 독립적 | Entity에 종속 |
 | **예시** | 주문, 회원 | 금액, 주소 |
 
-### Value Object로 만들어야 하는 것들
+**Value Object로 만들어야 하는 것들**
+
+Primitive Obsession(원시 타입 집착)은 피해야 할 안티패턴입니다. String이나 int를 그대로 사용하지 말고 Value Object로 감싸세요. `orderId`는 `OrderId`로, `totalAmount`는 `Money`로, `customerEmail`은 `Email`로 표현하면 타입 안정성이 높아지고 비즈니스 의미가 명확해집니다.
 
 ```java
 // ❌ Primitive Obsession (원시 타입 집착)
@@ -281,11 +298,11 @@ public class Order {
 }
 ```
 
-## Repository (리포지토리)
+#### Repository (리포지토리)
 
-### 정의
+**정의**
 
-Aggregate의 **영속성을 추상화**하는 인터페이스입니다.
+Repository는 Aggregate의 영속성을 추상화하는 인터페이스입니다. 데이터베이스의 기술적 세부사항을 숨기고, 마치 컬렉션을 다루듯이 도메인 객체를 저장하고 조회할 수 있게 합니다. Repository 인터페이스는 도메인 계층에 위치하며, 구현체는 인프라 계층에 위치합니다.
 
 ```mermaid
 flowchart LR
@@ -304,7 +321,9 @@ flowchart LR
     REPO_IMPL --> DB
 ```
 
-### 인터페이스 설계
+**인터페이스 설계**
+
+Repository 인터페이스는 도메인 계층에 위치하며 도메인 언어로 작성됩니다. `save`는 Aggregate를 저장하고, `findById`는 ID로 조회합니다. `findByCustomerId`나 `findPendingOrdersOlderThan` 같은 도메인 특화 조회 메서드도 포함됩니다. `delete`는 삭제를 담당하는데, 실무에서는 물리 삭제보다 논리 삭제를 권장합니다. `existsById`는 존재 여부만 확인합니다.
 
 ```java
 // 도메인 계층에 위치
@@ -329,7 +348,9 @@ public interface OrderRepository {
 }
 ```
 
-### 구현체
+**구현체**
+
+Repository 구현체는 인프라 계층에 위치하며 JPA나 MyBatis 같은 기술을 사용합니다. 도메인 객체와 영속성 모델(Entity) 사이의 변환을 담당합니다. `save`는 도메인 객체를 Entity로 변환하여 저장하고, `findById`는 Entity를 조회하여 도메인 객체로 변환합니다. `findPendingOrdersOlderThan`처럼 도메인 특화 조회도 구현합니다.
 
 ```java
 // 인프라 계층에 위치
@@ -363,9 +384,9 @@ public class JpaOrderRepository implements OrderRepository {
 }
 ```
 
-### Repository 설계 원칙
+**Repository 설계 원칙**
 
-1. **Aggregate Root만 Repository를 가짐**
+Repository 설계 시 지켜야 할 원칙이 있습니다. 첫째, Aggregate Root만 Repository를 가집니다. Order는 Repository를 가지지만, OrderLine은 가지지 않습니다. OrderLine은 Order를 통해서만 접근합니다.
 
 ```java
 // ✅ Aggregate Root(Order)만 Repository
@@ -377,7 +398,7 @@ interface OrderRepository {
 // interface OrderLineRepository { ... }  // 잘못된 설계
 ```
 
-2. **Collection처럼 동작**
+둘째, Repository는 컬렉션처럼 동작해야 합니다. `save`는 마치 리스트에 추가하듯, `findById`는 마치 리스트에서 찾듯 자연스럽게 사용됩니다.
 
 ```java
 // 마치 컬렉션에 추가하듯
@@ -388,11 +409,11 @@ Order order = orderRepository.findById(orderId)
     .orElseThrow(() -> new OrderNotFoundException(orderId));
 ```
 
-## Domain Service (도메인 서비스)
+#### Domain Service (도메인 서비스)
 
-### 언제 사용하나?
+**언제 사용하나?**
 
-특정 Entity나 Value Object에 속하기 어려운 **도메인 로직**을 담습니다.
+특정 Entity나 Value Object에 속하기 어려운 도메인 로직을 담는 것이 Domain Service입니다. 여러 Aggregate에 걸친 연산이거나, 외부 서비스가 필요한 도메인 로직이거나, 특정 Entity에 속하지 않는 로직일 때 사용합니다.
 
 ```mermaid
 flowchart TB
@@ -403,7 +424,9 @@ flowchart TB
     end
 ```
 
-### 예시 1: 할인 계산
+**예시 1: 할인 계산**
+
+할인 정책이 여러 요소를 고려해야 할 때 Domain Service를 사용합니다. `DiscountCalculator`는 회원 등급과 프로모션을 모두 고려하여 최종 할인액을 계산합니다. Order 하나로는 결정할 수 없고, MemberGrade와 Promotion 정보가 모두 필요하므로 Domain Service로 분리합니다.
 
 ```java
 // 할인 정책이 여러 요소를 고려해야 할 때
@@ -436,7 +459,9 @@ public class DiscountCalculator {
 }
 ```
 
-### 예시 2: 재고 확인
+**예시 2: 재고 확인**
+
+재고 확인도 Domain Service로 구현합니다. `StockValidator`는 주문의 모든 항목에 대해 재고가 충분한지 검증합니다. Order는 자신의 항목 정보만 알고, Stock은 재고 정보만 알기 때문에, 이 둘을 연결하는 로직은 Domain Service에 위치하는 것이 자연스럽습니다.
 
 ```java
 @DomainService
@@ -460,7 +485,9 @@ public class StockValidator {
 }
 ```
 
-### Domain Service vs Application Service
+**Domain Service vs Application Service**
+
+Domain Service와 Application Service는 역할이 다릅니다. Domain Service는 순수한 도메인 로직을 담습니다. 트랜잭션이나 인프라스트럭처는 모릅니다. 도메인 객체만 의존합니다. 반면 Application Service는 유스케이스를 조율합니다. 트랜잭션을 관리하고, 도메인과 인프라스트럭처를 연결합니다. 아래 예시에서 `OrderValidator`는 Domain Service로 검증 로직만 담고, `OrderApplicationService`는 Application Service로 전체 흐름을 조율합니다.
 
 ```java
 // Domain Service: 도메인 로직
@@ -498,6 +525,8 @@ public class OrderApplicationService {
 }
 ```
 
+두 서비스의 차이를 정리하면 다음과 같습니다. Domain Service는 도메인 계층에 위치하며 도메인 로직을 담고, 트랜잭션을 모르며, 도메인 객체만 의존합니다. Application Service는 응용 계층에 위치하며 유스케이스를 조율하고, 트랜잭션을 관리하며, 도메인과 인프라스트럭처 모두 의존합니다.
+
 | 구분 | Domain Service | Application Service |
 |------|---------------|---------------------|
 | **위치** | 도메인 계층 | 응용 계층 |
@@ -505,11 +534,11 @@ public class OrderApplicationService {
 | **트랜잭션** | 모름 | 관리 |
 | **의존성** | 도메인 객체만 | 도메인 + 인프라 |
 
-## Factory (팩토리)
+#### Factory (팩토리)
 
-### 언제 사용하나?
+**언제 사용하나?**
 
-Aggregate 생성이 복잡할 때 **생성 로직을 캡슐화**합니다.
+Aggregate 생성이 복잡할 때 생성 로직을 캡슐화하는 것이 Factory입니다. 간단한 경우는 정적 팩토리 메서드로 충분하지만, 복잡한 경우는 별도의 Factory 클래스를 만듭니다. `Order.create`는 간단한 생성에 사용하는 정적 팩토리 메서드입니다. `OrderFactory`는 고객 검증, 상품 조회, 주문 항목 생성 등 복잡한 로직을 담는 Factory 클래스입니다.
 
 ```java
 // 간단한 경우: 정적 팩토리 메서드
@@ -556,7 +585,9 @@ public class OrderFactory {
 }
 ```
 
-## 계층 구조
+#### 계층 구조
+
+전술적 설계의 계층 구조를 보겠습니다. 표현 계층의 Controller는 응용 계층의 Application Service를 호출합니다. Application Service는 도메인 계층의 Aggregate, Domain Service, Repository Interface를 사용합니다. Repository Interface는 인프라 계층의 Repository 구현체로 연결됩니다. Aggregate는 Domain Event를 발행하여 다른 Aggregate와 통신합니다.
 
 ```mermaid
 flowchart TB
@@ -590,11 +621,11 @@ flowchart TB
     AGG --> EVT
 ```
 
-## Specification (명세) 패턴
+#### Specification (명세) 패턴
 
-### 정의
+**정의**
 
-**비즈니스 규칙을 객체로 캡슐화**하여 재사용 가능하게 만드는 패턴입니다.
+비즈니스 규칙을 객체로 캡슐화하여 재사용 가능하게 만드는 패턴이 Specification입니다. "이 주문을 확정할 수 있는가?", "이 고객은 VIP 할인을 받을 수 있는가?" 같은 복잡한 조건을 Specification 객체로 만들어 조합할 수 있습니다.
 
 ```mermaid
 flowchart LR
@@ -610,7 +641,9 @@ flowchart LR
     NOT --> SPEC
 ```
 
-### 기본 구현
+**기본 구현**
+
+Specification 인터페이스는 `isSatisfiedBy` 메서드로 조건을 검사합니다. `and`, `or`, `not` 메서드로 Specification을 조합할 수 있습니다. `AndSpecification`은 두 조건을 모두 만족해야 하고, `OrSpecification`은 둘 중 하나만 만족하면 되며, `NotSpecification`은 조건을 반대로 만듭니다.
 
 ```java
 // Specification 인터페이스
@@ -675,7 +708,9 @@ public class NotSpecification<T> implements Specification<T> {
 }
 ```
 
-### 주문 도메인 예시
+**주문 도메인 예시**
+
+주문 도메인에서 Specification을 어떻게 사용하는지 보겠습니다. `hasMinimumAmount`는 최소 금액 조건을, `hasStatus`는 특정 상태 조건을 검사합니다. `isConfirmable`은 "PENDING 상태이면서 최소 금액 이상"이라는 복합 조건을 and로 조합합니다. `isCancellable`은 "PENDING 또는 CONFIRMED 상태"라는 조건을 or로 조합합니다. Order 클래스의 `confirm`과 `cancel` 메서드는 이 Specification을 사용하여 조건을 검사합니다.
 
 ```java
 // 구체적인 주문 Specification들
@@ -733,7 +768,9 @@ public class Order {
 }
 ```
 
-### Repository와 함께 사용
+**Repository와 함께 사용**
+
+Specification은 Repository 조회에도 사용할 수 있습니다. Spring Data JPA의 Specification을 활용하면 동적 쿼리를 타입 안전하게 작성할 수 있습니다. `hasStatus`, `hasMinimumAmount`, `createdBetween`, `belongsToCustomer` 같은 Specification을 조합하여 복잡한 조회 조건을 만듭니다.
 
 ```java
 // JPA Specification (Spring Data JPA)
@@ -782,7 +819,7 @@ public class JpaOrderRepository implements OrderRepository {
 }
 ```
 
-### Specification 패턴의 장점
+Specification 패턴의 장점을 정리하면 다음과 같습니다. **재사용성**은 비즈니스 규칙을 여러 곳에서 재사용할 수 있다는 것입니다. **가독성**은 복잡한 조건을 명확하게 표현한다는 것입니다. **테스트 용이**는 각 규칙을 독립적으로 테스트할 수 있다는 것입니다. **조합 가능**은 and, or, not으로 복잡한 규칙을 구성할 수 있다는 것입니다.
 
 | 장점 | 설명 |
 |------|------|
@@ -791,13 +828,11 @@ public class JpaOrderRepository implements OrderRepository {
 | **테스트 용이** | 각 규칙을 독립적으로 테스트 |
 | **조합 가능** | and, or, not으로 복잡한 규칙 구성 |
 
----
+#### Policy (정책) 패턴
 
-## Policy (정책) 패턴
+**정의**
 
-### 정의
-
-**비즈니스 정책을 독립적인 객체로 분리**하여 교체 가능하게 만드는 패턴입니다.
+비즈니스 정책을 독립적인 객체로 분리하여 교체 가능하게 만드는 패턴이 Policy입니다. Specification이 "조건 검사"에 초점을 맞춘다면, Policy는 "계산이나 결정"에 초점을 맞춥니다. 할인 정책, 배송비 정책, 포인트 적립 정책 등이 Policy 패턴의 좋은 예입니다.
 
 ```mermaid
 flowchart TB
@@ -813,7 +848,9 @@ flowchart TB
     P3 --> IF
 ```
 
-### 할인 정책 예시
+**할인 정책 예시**
+
+할인 정책을 Policy 패턴으로 구현해보겠습니다. `DiscountPolicy` 인터페이스는 `calculateDiscount`와 `isApplicable` 메서드를 정의합니다. `VipDiscountPolicy`는 VIP 고객에게 10% 할인을 적용합니다. `FirstOrderDiscountPolicy`는 첫 주문 고객에게 5000원 할인을 적용합니다. `BulkOrderDiscountPolicy`는 10개 이상 구매 시 5% 할인을 적용합니다. `DiscountCalculator`는 이 모든 정책을 조합하여 총 할인액을 계산합니다.
 
 ```java
 // 할인 정책 인터페이스
@@ -887,7 +924,9 @@ public class DiscountCalculator {
 }
 ```
 
-### 배송비 정책 예시
+**배송비 정책 예시**
+
+배송비 정책도 비슷한 패턴을 따릅니다. `StandardShippingPolicy`는 기본 배송비 정책으로, 5만원 이상 구매 시 무료 배송을 적용합니다. `RemoteAreaShippingPolicy`는 도서산간 지역에 추가 배송비를 부과합니다. 기존 정책을 delegate로 받아 기본 배송비를 계산한 후, 도서산간이면 추가 비용을 더합니다.
 
 ```java
 // 배송비 정책 인터페이스
@@ -927,13 +966,11 @@ public class RemoteAreaShippingPolicy implements ShippingPolicy {
 }
 ```
 
----
+#### Module (모듈) 조직
 
-## Module (모듈) 조직
+**패키지 구조**
 
-### 패키지 구조
-
-도메인의 복잡도가 높아지면 **모듈로 분리**하여 관리합니다.
+도메인의 복잡도가 높아지면 모듈로 분리하여 관리합니다. 주문 모듈, 고객 모듈, 상품 모듈을 각각 domain, application, infrastructure 계층으로 나눕니다. domain 패키지에는 Entity, Value Object, Repository Interface, Domain Event가 위치합니다. application 패키지에는 Application Service와 DTO가 위치합니다. infrastructure 패키지에는 Repository 구현체와 Event Publisher가 위치합니다. shared 모듈에는 Money, Address 같은 공통 Value Object가 위치합니다.
 
 ```
 src/main/java/com/example/
@@ -988,7 +1025,9 @@ src/main/java/com/example/
             └── DomainEventPublisher.java
 ```
 
-### 모듈 간 의존성
+**모듈 간 의존성**
+
+모듈 간 의존성은 명확해야 합니다. 주문 모듈, 고객 모듈, 상품 모듈은 모두 shared 모듈을 의존합니다. 주문 모듈은 고객 모듈이나 상품 모듈을 직접 의존하지 않고 ID 참조만 사용합니다.
 
 ```mermaid
 flowchart TB
@@ -1007,7 +1046,9 @@ flowchart TB
     ORDER -.->|ID 참조만| PRODUCT
 ```
 
-### 모듈 간 통신
+**모듈 간 통신**
+
+모듈 간 통신은 ID 참조를 사용합니다. Customer Aggregate를 직접 참조하면 안 됩니다. CustomerId만 참조합니다. 필요하면 Application Service에서 CustomerReader로 조회합니다. 이렇게 하면 모듈 간 결합도가 낮아지고 독립적으로 변경할 수 있습니다.
 
 ```java
 // ❌ 직접 의존 (피해야 함)
@@ -1036,13 +1077,11 @@ public class OrderApplicationService {
 }
 ```
 
----
+#### Builder 패턴 (복잡한 생성)
 
-## Builder 패턴 (복잡한 생성)
+**Aggregate Builder**
 
-### Aggregate Builder
-
-복잡한 Aggregate 생성 시 Builder 패턴을 활용합니다.
+복잡한 Aggregate 생성 시 Builder 패턴을 활용합니다. Order를 생성할 때 여러 속성을 설정해야 한다면 Builder가 유용합니다. 내부 Builder 클래스로 유창한 인터페이스를 제공하고, `build` 메서드에서 최종 검증을 수행합니다.
 
 ```java
 public class Order {
@@ -1119,13 +1158,11 @@ Order order = Order.builder()
     .build();
 ```
 
----
+#### Null Object 패턴
 
-## Null Object 패턴
+**정의**
 
-### 정의
-
-null 체크를 피하기 위해 **특수한 'null' 객체**를 사용합니다.
+null 체크를 피하기 위해 특수한 'null' 객체를 사용하는 패턴입니다. DiscountPolicy 인터페이스에 NONE이라는 Null Object를 정의합니다. 할인이 없을 때 null을 반환하는 대신 `DiscountPolicy.NONE`을 반환합니다. 이렇게 하면 null 체크 없이 `calculateDiscount`를 호출할 수 있습니다.
 
 ```java
 // Null Object 패턴 적용
@@ -1154,7 +1191,9 @@ public class Order {
 }
 ```
 
-### Optional과의 비교
+**Optional과의 비교**
+
+Optional을 사용하는 방법도 있지만, 도메인 로직에서는 Null Object가 더 자연스러울 때가 많습니다. Optional은 호출하는 쪽에서 처리해야 하지만, Null Object는 투명하게 동작합니다.
 
 ```java
 // Optional 사용
@@ -1168,11 +1207,11 @@ public Discount getDiscount() {
 }
 ```
 
----
+#### 전술적 설계 체크리스트
 
-## 전술적 설계 체크리스트
+**Entity 체크리스트**
 
-### Entity 체크리스트
+Entity를 설계할 때 다음 항목을 확인하세요. 고유 식별자가 있는지, 식별자로 동등성을 비교하는지, 비즈니스 행위가 메서드로 표현되어 있는지, 유효하지 않은 상태가 될 수 없는지, setter 대신 행위 메서드를 사용하는지 점검합니다.
 
 ```
 [ ] 고유 식별자가 있는가?
@@ -1182,7 +1221,9 @@ public Discount getDiscount() {
 [ ] setter 대신 행위 메서드를 사용하는가?
 ```
 
-### Value Object 체크리스트
+**Value Object 체크리스트**
+
+Value Object를 설계할 때는 불변인지, 모든 속성으로 동등성을 비교하는지, 자체적으로 유효성을 검증하는지, 부수효과가 없는지(새 객체 반환), 의미 있는 도메인 개념을 표현하는지 확인합니다.
 
 ```
 [ ] 불변인가?
@@ -1192,7 +1233,9 @@ public Discount getDiscount() {
 [ ] 의미 있는 도메인 개념을 표현하는가?
 ```
 
-### Repository 체크리스트
+**Repository 체크리스트**
+
+Repository를 설계할 때는 Aggregate Root만 Repository가 있는지, 인터페이스가 도메인 계층에 있는지, 컬렉션처럼 동작하는지, 도메인 특화 메서드가 있는지 확인합니다.
 
 ```
 [ ] Aggregate Root만 Repository가 있는가?
@@ -1201,7 +1244,9 @@ public Discount getDiscount() {
 [ ] 도메인 특화 메서드가 있는가?
 ```
 
-### Domain Service 체크리스트
+**Domain Service 체크리스트**
+
+Domain Service를 설계할 때는 특정 Entity에 속하지 않는 로직인지, 여러 Aggregate에 걸친 연산인지, 무상태인지, 도메인 계층에만 의존하는지 확인합니다.
 
 ```
 [ ] 특정 Entity에 속하지 않는 로직인가?
@@ -1210,7 +1255,7 @@ public Discount getDiscount() {
 [ ] 도메인 계층에만 의존하는가?
 ```
 
-## 다음 단계
+#### 다음 단계
 
 - [Aggregate 심화](../aggregate/) - Aggregate 설계 원칙과 트랜잭션 경계
 - [도메인 이벤트](../domain-events/) - 이벤트 기반 설계
