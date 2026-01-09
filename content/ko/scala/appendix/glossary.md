@@ -1,12 +1,12 @@
 ---
-lastmod: "2026-01-08"
+lastmod: "2026-01-09"
 title: 용어 사전
 weight: 1
 ---
 
-Scala 핵심 용어를 알파벳 순으로 정리합니다. 상세 설명은 [개념 이해](../../concepts/) 섹션을 참고하세요.
+Scala 핵심 용어를 알파벳 순으로 정리합니다. 상세 설명은 [개념 이해](../../concepts/) 섹션을 참고하세요. 각 용어는 정의와 함께 관련 문서 링크를 제공합니다.
 
-## A
+#### A
 
 **ADT (Algebraic Data Type)**
 : 대수적 데이터 타입. `sealed trait`과 [Case Class](#case-class)로 정의되는 합 타입과 곱 타입의 조합. Scala 3에서는 `enum`으로 더 간단히 정의 가능. → [패턴 매칭](../../concepts/pattern-matching/)과 함께 사용
@@ -17,7 +17,7 @@ Scala 핵심 용어를 알파벳 순으로 정리합니다. 상세 설명은 [�
 **apply 메서드**
 : 객체를 함수처럼 호출할 수 있게 하는 특별한 메서드. `obj(args)`는 `obj.apply(args)`로 해석됨. [Companion Object](#companion-object)에서 팩토리 메서드로 자주 사용.
 
-## C
+#### C
 
 **Case Class**
 : 불변 데이터를 위한 특별한 클래스. `equals`, `hashCode`, `copy`, `unapply` 등이 자동 생성됨. [Pattern Matching](#pattern-matching)과 함께 사용. → [Case Classes 상세](../../concepts/case-classes/)
@@ -31,7 +31,7 @@ Scala 핵심 용어를 알파벳 순으로 정리합니다. 상세 설명은 [�
 **Currying (커링)**
 : 여러 인자를 받는 함수를 단일 인자 함수의 체인으로 변환하는 기법. [Higher-Order Function](#higher-order-function)과 함께 사용. → [함수와 메서드](../../concepts/functions-methods/)
 
-## E
+#### E
 
 **Either[L, R]**
 : 두 가지 타입 중 하나의 값을 담는 타입. 보통 `Left`는 실패, `Right`는 성공. [Option](#optiona)과 유사하나 실패 사유를 담을 수 있음. [flatMap](#flatmap)으로 체이닝 가능.
@@ -42,7 +42,7 @@ Scala 핵심 용어를 알파벳 순으로 정리합니다. 상세 설명은 [�
 **ExecutionContext**
 : [Future](#futuret) 실행을 위한 스레드 풀을 제공하는 컨텍스트. → [동시성](../../concepts/concurrency/)
 
-## F
+#### F
 
 **flatMap**
 : 컨테이너 내의 값을 변환하고 결과를 평탄화하는 연산. [Monad](#monad)의 핵심 연산. [For Comprehension](#for-comprehension)으로 우아하게 표현 가능.
@@ -56,12 +56,12 @@ Scala 핵심 용어를 알파벳 순으로 정리합니다. 상세 설명은 [�
 **Future[T]**
 : 아직 완료되지 않은 비동기 계산을 나타내는 타입. [ExecutionContext](#executioncontext) 필요. [For Comprehension](#for-comprehension)으로 순차 실행 가능. → [동시성](../../concepts/concurrency/)
 
-## G
+#### G
 
 **Given (Scala 3)**
 : [타입 클래스](#type-class) 인스턴스를 정의하는 키워드. Scala 2의 [implicit](#implicit-scala-2) `val`을 대체. → [Scala 2 vs 3 비교](../../examples/scala2-vs-scala3/)
 
-## H
+#### H
 
 **Higher-Order Function**
 : 함수를 인자로 받거나 함수를 반환하는 함수. [map](#flatmap), `filter`, `fold` 등. → [고차 함수 상세](../../concepts/higher-order-functions/)
@@ -69,7 +69,7 @@ Scala 핵심 용어를 알파벳 순으로 정리합니다. 상세 설명은 [�
 **Higher-Kinded Type**
 : 타입 생성자를 인자로 받는 타입. `F[_]` 형태. [Functor](#functor), [Monad](#monad) 정의에 필수. → [고급 타입 시스템](../../concepts/type-system-advanced/)
 
-## I
+#### I
 
 **Immutable (불변)**
 : 생성 후 상태를 변경할 수 없는 것. Scala는 불변성을 권장. [Case Class](#case-class), [val](#val), 불변 [컬렉션](../../concepts/collections/) 사용.
@@ -80,12 +80,12 @@ Scala 핵심 용어를 알파벳 순으로 정리합니다. 상세 설명은 [�
 **Intersection Type (&)**
 : 여러 타입을 모두 만족하는 타입. `A & B`. [Union Type](#union-type-)과 반대. → [고급 타입 시스템](../../concepts/type-system-advanced/)
 
-## L
+#### L
 
 **Lazy val**
 : 처음 접근할 때까지 초기화가 지연되는 값. 비용이 큰 초기화에 유용. → [기초 문법](../../concepts/basics/)
 
-## M
+#### M
 
 **Match Expression**
 : 값의 패턴에 따라 분기하는 표현식. `switch`의 강력한 버전. [Case Class](#case-class)와 [Sealed](#sealed) 트레이트에 최적화. → [패턴 매칭 상세](../../concepts/pattern-matching/)
@@ -93,7 +93,7 @@ Scala 핵심 용어를 알파벳 순으로 정리합니다. 상세 설명은 [�
 **Monad**
 : [flatMap](#flatmap)과 `pure` 연산을 가진 [타입 클래스](#type-class). 순차적 효과 조합. [Option](#optiona), [Either](#eitherl-r), [Future](#futuret) 등이 Monad. → [함수형 패턴](../../concepts/functional-patterns/)
 
-## O
+#### O
 
 **Object**
 : 싱글톤 인스턴스를 정의하는 키워드. [Companion Object](#companion-object) 참고. → [클래스와 객체](../../concepts/classes-objects/)
@@ -104,7 +104,7 @@ Scala 핵심 용어를 알파벳 순으로 정리합니다. 상세 설명은 [�
 **Option[A]**
 : 값이 있거나(`Some`) 없음(`None`)을 나타내는 타입. `null` 대체. [flatMap](#flatmap)과 [For Comprehension](#for-comprehension)으로 안전하게 처리. → [기초 문법](../../concepts/basics/)
 
-## P
+#### P
 
 **Partial Function**
 : 일부 입력에 대해서만 정의된 함수. [Pattern Matching](#pattern-matching)의 케이스와 같은 형태. `collect` 메서드에 활용. → [함수와 메서드](../../concepts/functions-methods/)
@@ -115,12 +115,12 @@ Scala 핵심 용어를 알파벳 순으로 정리합니다. 상세 설명은 [�
 **Promise[T]**
 : [Future](#futuret)를 직접 완료할 수 있게 해주는 타입. 콜백 기반 API 래핑에 사용. → [동시성](../../concepts/concurrency/)
 
-## R
+#### R
 
 **Referential Transparency**
 : 표현식을 그 결과값으로 대체해도 프로그램 의미가 변하지 않는 속성. 순수 함수의 핵심 특성. [Immutable](#immutable-불변) 데이터와 관련. → [함수형 패턴](../../concepts/functional-patterns/)
 
-## S
+#### S
 
 **Sealed**
 : 같은 파일에서만 상속 가능하게 제한하는 수식어. [Pattern Matching](#pattern-matching) 완전성 검사에 사용. [ADT](#adt-algebraic-data-type) 정의에 필수. → [패턴 매칭](../../concepts/pattern-matching/)
@@ -131,7 +131,7 @@ Scala 핵심 용어를 알파벳 순으로 정리합니다. 상세 설명은 [�
 **summon (Scala 3)**
 : 주어진 타입의 암시적 인스턴스를 가져오는 함수. [implicit](#implicit-scala-2) `implicitly`를 대체. → [타입 클래스](../../concepts/type-classes/)
 
-## T
+#### T
 
 **Tail Recursion**
 : 함수의 마지막 연산이 자기 자신 호출인 재귀. 스택 오버플로우 없이 최적화 가능. `@tailrec` 어노테이션으로 검증. → [함수와 메서드](../../concepts/functions-methods/)
@@ -148,7 +148,7 @@ Scala 핵심 용어를 알파벳 순으로 정리합니다. 상세 설명은 [�
 **Type Inference**
 : 컴파일러가 타입을 자동으로 추론하는 기능. Scala의 강력한 타입 추론으로 보일러플레이트 감소. → [기초 문법](../../concepts/basics/)
 
-## U
+#### U
 
 **Union Type (|)**
 : 여러 타입 중 하나를 나타내는 타입. `Int | String`. [Intersection Type](#intersection-type-)과 반대. Scala 3 전용. → [고급 타입 시스템](../../concepts/type-system-advanced/)
@@ -156,7 +156,7 @@ Scala 핵심 용어를 알파벳 순으로 정리합니다. 상세 설명은 [�
 **Using (Scala 3)**
 : 암시적 매개변수를 선언하는 키워드. [Implicit](#implicit-scala-2)을 대체. [Given](#given-scala-3)과 짝을 이룸. → [Scala 2 vs 3 비교](../../examples/scala2-vs-scala3/)
 
-## V
+#### V
 
 **val**
 : [Immutable](#immutable-불변) 값을 선언하는 키워드. [var](#var)와 비교. Scala에서 기본 선택.
@@ -167,14 +167,14 @@ Scala 핵심 용어를 알파벳 순으로 정리합니다. 상세 설명은 [�
 **Variance (변성)**
 : 타입 매개변수의 서브타이핑 관계. 공변(`+A`), 반공변(`-A`), 무공변. 컬렉션 설계에 중요. → [변성 상세](../../concepts/variance/)
 
-## Y
+#### Y
 
 **yield**
 : [For Comprehension](#for-comprehension)에서 값을 생성하는 키워드. `map` 호출로 변환됨. → [For Comprehension 상세](../../concepts/for-comprehensions/)
 
 ---
 
-## 다음 단계
+#### 다음 단계
 
 - [개념 이해](../../concepts/) - Scala 핵심 개념
 - [실습 예제](../../examples/) - 코드로 배우기

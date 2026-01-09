@@ -1,16 +1,16 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-09"
 title: 제어 구조
 weight: 2
 ---
 
-Scala의 제어 구조는 **표현식(expression)**입니다. 즉, 모든 제어 구조가 값을 반환합니다.
+Scala의 제어 구조는 **표현식(expression)**입니다. 즉, 모든 제어 구조가 값을 반환합니다. 이는 Java나 C와 같은 언어의 문(statement) 기반 제어 구조와 근본적으로 다릅니다. 표현식 기반 접근 방식은 코드를 더 간결하고 함수형으로 만듭니다.
 
-## if 표현식
+#### if 표현식
 
-### 기본 사용법
+Scala의 `if`는 문(statement)이 아니라 표현식(expression)입니다. 따라서 삼항 연산자가 필요 없으며, if 자체가 값을 반환합니다.
 
-Scala의 `if`는 문(statement)이 아니라 표현식(expression)입니다.
+**기본 사용법**
 
 ```scala
 val x = 10
@@ -23,9 +23,9 @@ println(result)  // 크다
 val max = if (a > b) a else b
 ```
 
-### Scala 3 문법
+**Scala 3 문법**
 
-Scala 3에서는 `then` 키워드를 사용할 수 있습니다.
+Scala 3에서는 `then` 키워드를 사용하여 더 자연스러운 문법으로 조건문을 작성할 수 있습니다. 괄호를 생략하고 들여쓰기 기반으로 작성하면 코드가 더 읽기 쉬워집니다.
 
 {{< tabs groupid="scala-version" >}}
 {{% tab title="Scala 3" %}}
@@ -66,9 +66,9 @@ val message = {
 {{% /tab %}}
 {{< /tabs >}}
 
-### Unit 반환
+**Unit 반환**
 
-`else`가 없으면 `Unit`을 반환할 수 있습니다.
+`else`가 없으면 `Unit`을 반환할 수 있습니다. 이 경우 if는 부수 효과를 위해 사용됩니다.
 
 ```scala
 val x = 10
@@ -80,11 +80,13 @@ if (x > 5) println("크다")
 val result: Unit = if (x > 5) println("크다")
 ```
 
-## for 표현식
+#### for 표현식
 
-Scala의 `for`는 매우 강력합니다. 단순 반복부터 컬렉션 변환까지 다양하게 사용됩니다.
+Scala의 `for`는 매우 강력합니다. 단순 반복부터 컬렉션 변환까지 다양하게 사용됩니다. for comprehension이라고도 불리며, 모나딕 연산을 간결하게 표현할 수 있습니다.
 
-### 기본 반복
+**기본 반복**
+
+Range나 컬렉션의 요소를 순회할 수 있습니다. `to`는 끝 값을 포함하고, `until`은 끝 값을 제외합니다.
 
 ```scala
 // Range를 사용한 반복
@@ -104,7 +106,9 @@ for (fruit <- fruits) {
 }
 ```
 
-### 가드 (조건 필터)
+**가드 (조건 필터)**
+
+`if` 가드를 사용하면 특정 조건을 만족하는 요소만 처리할 수 있습니다. 여러 조건을 조합할 수도 있습니다.
 
 ```scala
 // 조건이 true인 경우만 실행
@@ -120,7 +124,9 @@ for {
 } println(i)  // 15, 30, 45, 60, 75, 90
 ```
 
-### 중첩 반복
+**중첩 반복**
+
+여러 생성자(generator)를 사용하면 중첩 반복을 간결하게 표현할 수 있습니다. 구구단이나 좌표 생성 등에 유용합니다.
 
 ```scala
 // 구구단
@@ -138,9 +144,9 @@ for {
 } println(s"($x, $y)")
 ```
 
-### yield - 새 컬렉션 생성
+**yield - 새 컬렉션 생성**
 
-`yield`를 사용하면 for 표현식이 새 컬렉션을 반환합니다.
+`yield`를 사용하면 for 표현식이 새 컬렉션을 반환합니다. 이는 map, flatMap, filter의 조합과 동일합니다.
 
 ```scala
 // 각 요소를 변환하여 새 리스트 생성
@@ -163,7 +169,9 @@ val pairs = for {
 // Vector((1,1), (1,2), (1,3), (2,1), (2,2), (2,3), (3,1), (3,2), (3,3))
 ```
 
-### 패턴 매칭과 함께
+**패턴 매칭과 함께**
+
+for 표현식에서 패턴 매칭을 사용할 수 있습니다. 튜플이나 케이스 클래스, Option 값을 분해할 때 유용합니다.
 
 ```scala
 val pairs = List((1, "one"), (2, "two"), (3, "three"))
@@ -179,7 +187,9 @@ for (Some(value) <- maybeValues) {
 }
 ```
 
-### Scala 3 문법
+**Scala 3 문법**
+
+Scala 3에서는 `do` 키워드와 들여쓰기 기반 구문을 사용할 수 있습니다.
 
 {{< tabs groupid="scala-version" >}}
 {{% tab title="Scala 3" %}}
@@ -226,9 +236,9 @@ val result = for {
 {{% /tab %}}
 {{< /tabs >}}
 
-## while 루프
+#### while 루프
 
-`while`은 표현식이 아닌 문(statement)입니다. 값을 반환하지 않으며 `Unit`을 반환합니다.
+`while`은 표현식이 아닌 문(statement)입니다. 값을 반환하지 않으며 `Unit`을 반환합니다. 가변 상태가 필요하므로 함수형 프로그래밍에서는 가급적 피합니다.
 
 ```scala
 var i = 0
@@ -238,7 +248,9 @@ while (i < 5) {
 }
 ```
 
-### do-while (Scala 2 전용)
+**do-while (Scala 2 전용)**
+
+`do-while`은 Scala 3에서 제거되었습니다. Scala 3에서는 다른 방식으로 대체해야 합니다.
 
 > ⚠️ **주의:** `do-while`은 **Scala 3에서 제거**되었습니다. Scala 3에서는 `while` 루프로 대체하세요.
 
@@ -277,11 +289,13 @@ do {
 > **함수형 프로그래밍에서는 `while`보다 `for`나 재귀를 선호합니다.**
 > `while`은 가변 상태(`var`)가 필요하기 때문입니다.
 
-## match 표현식
+#### match 표현식
 
-Scala의 `match`는 Java의 `switch`보다 훨씬 강력합니다.
+Scala의 `match`는 Java의 `switch`보다 훨씬 강력합니다. 값 매칭, 타입 매칭, 패턴 매칭, 가드 조건 등을 지원합니다.
 
-### 기본 매칭
+**기본 매칭**
+
+값에 따라 다른 결과를 반환합니다. `_`는 와일드카드로, 어떤 값과도 매칭됩니다.
 
 ```scala
 val day = 3
@@ -299,7 +313,9 @@ val dayName = day match {
 println(dayName)  // 수요일
 ```
 
-### 타입 매칭
+**타입 매칭**
+
+값의 타입에 따라 분기할 수 있습니다. 타입 검사와 캐스팅을 안전하게 수행합니다.
 
 ```scala
 def describe(x: Any): String = x match {
@@ -314,7 +330,9 @@ println(describe("hello")) // 문자열: hello
 println(describe(3.14))    // 실수: 3.14
 ```
 
-### 가드 조건
+**가드 조건**
+
+`if` 가드를 사용하여 추가 조건을 지정할 수 있습니다. 패턴이 매칭된 후 가드 조건이 평가됩니다.
 
 ```scala
 val x = 15
@@ -329,7 +347,9 @@ val result = x match {
 println(result)  // 두 자리 양수
 ```
 
-### OR 패턴
+**OR 패턴**
+
+`|`를 사용하여 여러 패턴을 하나의 case로 묶을 수 있습니다.
 
 ```scala
 val char = 'a'
@@ -340,7 +360,9 @@ val result = char match {
 }
 ```
 
-### Scala 3 문법
+**Scala 3 문법**
+
+Scala 3에서는 들여쓰기 기반 구문으로 match를 작성할 수 있습니다.
 
 {{< tabs groupid="scala-version" >}}
 {{% tab title="Scala 3" %}}
@@ -370,9 +392,9 @@ val dayName = day match {
 {{% /tab %}}
 {{< /tabs >}}
 
-## 표현식 vs 문
+#### 표현식 vs 문
 
-Scala에서 거의 모든 것은 표현식입니다.
+Scala에서 거의 모든 것은 표현식입니다. 블록, try-catch, 심지어 throw까지 값을 반환합니다.
 
 ```scala
 // 블록도 표현식 - 마지막 값이 결과
@@ -396,15 +418,13 @@ def divide(a: Int, b: Int): Int =
   else a / b
 ```
 
-## 연습 문제
+#### 연습 문제
 
-### 1. FizzBuzz
+다음 연습 문제들을 통해 제어 구조를 복습해보세요.
 
-1부터 100까지 숫자에 대해:
-- 3의 배수면 "Fizz"
-- 5의 배수면 "Buzz"
-- 3과 5의 배수면 "FizzBuzz"
-- 그 외에는 숫자 출력
+**1. FizzBuzz**
+
+1부터 100까지 숫자에 대해 3의 배수면 "Fizz", 5의 배수면 "Buzz", 3과 5의 배수면 "FizzBuzz", 그 외에는 숫자를 출력하세요.
 
 <details>
 <summary>정답 보기</summary>
@@ -423,7 +443,7 @@ for (i <- 1 to 100) {
 
 </details>
 
-### 2. 구구단 표
+**2. 구구단 표**
 
 2단부터 9단까지 구구단을 `for` + `yield`로 생성하세요.
 
@@ -441,14 +461,9 @@ gugudan.foreach(println)
 
 </details>
 
-### 3. 학점 계산
+**3. 학점 계산**
 
-점수(0~100)를 받아 학점을 반환하는 함수를 작성하세요.
-- 90 이상: A
-- 80 이상: B
-- 70 이상: C
-- 60 이상: D
-- 60 미만: F
+점수(0~100)를 받아 학점을 반환하는 함수를 작성하세요. 90 이상이면 A, 80 이상이면 B, 70 이상이면 C, 60 이상이면 D, 60 미만이면 F를 반환합니다.
 
 <details>
 <summary>정답 보기</summary>
@@ -469,7 +484,10 @@ println(grade(55))  // F
 
 </details>
 
-## 다음 단계
+#### 다음 단계
+
+제어 구조를 익혔다면 다음 주제로 진행하세요.
 
 - [함수와 메서드](../functions-methods/) — 함수 정의와 고급 기능
 - [패턴 매칭](../pattern-matching/) — match 표현식 심화
+

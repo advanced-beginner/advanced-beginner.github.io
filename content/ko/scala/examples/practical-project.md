@@ -1,20 +1,24 @@
 ---
-lastmod: "2026-01-08"
+lastmod: "2026-01-09"
 title: 실무 프로젝트
 weight: 5
 ---
 
-Scala로 실제 서비스를 구축하는 예제입니다. REST API 서버와 데이터 파이프라인을 구현합니다.
+Scala로 실제 서비스를 구축하는 예제입니다. REST API 서버와 데이터 파이프라인을 구현합니다. 이 예제들은 Scala의 함수형 프로그래밍 특성을 활용하여 타입 안전하고 유지보수하기 쉬운 코드를 작성하는 방법을 보여줍니다.
 
-## 프로젝트 1: REST API 서버
+#### 프로젝트 1: REST API 서버
 
-### 기술 스택
+http4s는 Scala의 함수형 HTTP 라이브러리입니다. 불변성과 참조 투명성을 유지하면서 웹 서버를 구축할 수 있습니다. Circe는 JSON 처리를, Cats Effect는 비동기 처리를 담당합니다.
+
+**기술 스택**
+
+이 프로젝트에서 사용하는 라이브러리들입니다. http4s-ember는 가벼운 HTTP 서버/클라이언트 구현체이고, Circe는 컴파일 타임에 JSON 코덱을 생성합니다.
 
 - **Scala 3** + **http4s** (함수형 HTTP 라이브러리)
 - **Circe** (JSON 처리)
 - **Cats Effect** (비동기 처리)
 
-### build.sbt
+**build.sbt**
 
 ```scala
 ThisBuild / scalaVersion := "3.3.1"
@@ -34,7 +38,9 @@ lazy val root = (project in file("."))
   )
 ```
 
-### 도메인 모델
+**도메인 모델**
+
+먼저 API에서 사용할 도메인 모델을 정의합니다. Case Class로 불변 데이터를 표현하고, Circe의 자동 코덱 생성 기능을 활용합니다.
 
 ```scala
 // domain/models.scala
@@ -76,7 +82,11 @@ object JsonCodecs:
     )
 ```
 
-### 리포지토리 (인메모리)
+UserId를 AnyVal로 래핑하면 런타임 오버헤드 없이 타입 안전성을 얻을 수 있습니다. JSON 코덱은 Circe의 semiauto를 사용하여 컴파일 타임에 자동 생성됩니다.
+
+**리포지토리 (인메모리)**
+
+데이터 저장소를 정의합니다. Cats Effect의 Ref를 사용하여 스레드 안전한 인메모리 저장소를 구현합니다.
 
 ```scala
 // repository/UserRepository.scala
@@ -139,7 +149,11 @@ object InMemoryUserRepository:
         }
 ```
 
-### HTTP 라우트
+Ref.modify는 원자적 업데이트를 보장합니다. 트레이트로 인터페이스를 정의하면 나중에 실제 데이터베이스 구현으로 쉽게 교체할 수 있습니다.
+
+**HTTP 라우트**
+
+http4s DSL을 사용하여 RESTful 엔드포인트를 정의합니다. 각 라우트는 IO 값을 반환하며, 부수 효과가 순수하게 관리됩니다.
 
 ```scala
 // routes/UserRoutes.scala
@@ -203,7 +217,9 @@ object UserRoutes:
   given EntityDecoder[IO, UpdateUserRequest] = jsonOf[IO, UpdateUserRequest]
 ```
 
-### 메인 애플리케이션
+**메인 애플리케이션**
+
+모든 컴포넌트를 조합하여 서버를 시작합니다. IOApp.Simple을 상속하면 IO 기반 애플리케이션의 진입점을 간단히 정의할 수 있습니다.
 
 ```scala
 // Main.scala
@@ -232,7 +248,9 @@ object Main extends IOApp.Simple:
     yield ()
 ```
 
-### 실행 및 테스트
+**실행 및 테스트**
+
+서버를 실행하고 curl로 API를 테스트합니다.
 
 ```bash
 # 서버 실행
@@ -262,17 +280,21 @@ curl -X PUT http://localhost:8080/users/1 \
 curl -X DELETE http://localhost:8080/users/1
 ```
 
----
+#### 프로젝트 2: 데이터 파이프라인
 
-## 프로젝트 2: 데이터 파이프라인
+FS2는 함수형 스트림 처리 라이브러리입니다. 메모리 효율적인 스트림 처리와 리소스 안전한 파일 I/O를 제공합니다.
 
-### FS2 스트림 처리
+**FS2 스트림 처리**
+
+build.sbt에 FS2 의존성을 추가합니다.
 
 ```scala
 // build.sbt에 추가
 libraryDependencies += "co.fs2" %% "fs2-core" % "3.9.4"
 libraryDependencies += "co.fs2" %% "fs2-io"   % "3.9.4"
 ```
+
+로그 데이터를 스트림으로 처리하고 집계하는 파이프라인을 구현합니다. FS2 Stream은 지연 평가되며, 대용량 데이터도 일정한 메모리로 처리할 수 있습니다.
 
 ```scala
 // StreamPipeline.scala
@@ -364,11 +386,13 @@ object StreamPipeline extends IOApp.Simple:
     yield ()
 ```
 
----
+groupWithin은 시간 또는 개수 기반의 윈도우 집계를 수행합니다. compile.drain은 스트림을 끝까지 실행하고 결과를 버립니다.
 
-## 프로젝트 3: CLI 도구
+#### 프로젝트 3: CLI 도구
 
-### scopt를 이용한 명령줄 파서
+scopt를 사용하면 타입 안전한 명령줄 파서를 쉽게 구현할 수 있습니다. 서브커맨드, 옵션, 인자를 선언적으로 정의합니다.
+
+**scopt를 이용한 명령줄 파서**
 
 ```scala
 // build.sbt
@@ -450,6 +474,8 @@ object CliTool extends App:
       ()
 ```
 
+파서 정의는 선언적이며, 잘못된 인자가 주어지면 자동으로 에러 메시지를 출력합니다.
+
 ```bash
 # 사용 예시
 sbt "run convert -i input.json -o output.csv -f csv"
@@ -457,11 +483,11 @@ sbt "run analyze -i data.json -v"
 sbt "run --help"
 ```
 
----
+#### 공통 패턴: 에러 처리
 
-## 공통 패턴: 에러 처리
+Cats의 Validated를 사용하면 여러 검증 오류를 한 번에 수집할 수 있습니다. Either는 첫 번째 오류에서 중단되지만, Validated는 모든 오류를 수집합니다.
 
-### Either와 Validated 활용
+**Either와 Validated 활용**
 
 ```scala
 import cats.data.{Validated, ValidatedNec}
@@ -502,10 +528,13 @@ validateUser("Alice", "alice@example.com", 30)  // Valid(ValidatedUser(...))
 validateUser("", "invalid-email", 200)          // Invalid(Chain(EmptyField(name), InvalidFormat(email, ...), OutOfRange(age, ...)))
 ```
 
----
+ValidatedNec는 NonEmptyChain에 오류를 수집합니다. mapN은 모든 검증이 성공했을 때만 결과를 조합합니다. 하나라도 실패하면 모든 실패 사유가 수집됩니다.
 
-## 다음 단계
+#### 다음 단계
+
+실무 프로젝트 예제를 학습했다면 다음 주제들로 학습을 이어가세요.
 
 - [Spark 연동](spark-integration/) - 대규모 데이터 처리
 - [함수형 패턴](../concepts/functional-patterns/) - Cats, ZIO 활용
 - [동시성](../concepts/concurrency/) - Future, IO 심화
+

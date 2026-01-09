@@ -1,10 +1,10 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-09"
 title: 함수형 프로그래밍 패턴
 weight: 17
 ---
 
-이 문서에서는 Scala에서 사용되는 핵심 함수형 프로그래밍 패턴을 다룹니다.
+이 문서에서는 Scala에서 사용되는 핵심 함수형 프로그래밍 패턴을 다룹니다. 함수형 프로그래밍은 부수 효과를 최소화하고 순수 함수와 불변 데이터를 활용하여 예측 가능하고 테스트하기 쉬운 코드를 작성하는 패러다임입니다.
 
 > 📚 **사전 지식**: 이 문서를 이해하려면 다음 개념에 익숙해야 합니다:
 > - [고차 함수](../higher-order-functions/) - map, flatMap, filter
@@ -13,9 +13,9 @@ weight: 17
 >
 > **난이도**: ⭐⭐⭐⭐ (고급)
 
-## 참조 투명성
+#### 참조 투명성
 
-함수 호출을 그 결과로 대체해도 프로그램의 의미가 변하지 않는 속성입니다.
+함수 호출을 그 결과로 대체해도 프로그램의 의미가 변하지 않는 속성입니다. 참조 투명한 함수는 동일한 입력에 대해 항상 동일한 출력을 반환하며, 외부 상태에 의존하거나 변경하지 않습니다.
 
 ```scala
 // 참조 투명
@@ -35,9 +35,9 @@ val a = increment()  // 1
 val b = increment()  // 2 (결과가 달라짐!)
 ```
 
-## 불변성
+#### 불변성
 
-데이터를 변경하지 않고 새 데이터를 생성합니다.
+불변성(Immutability)은 함수형 프로그래밍의 핵심 원칙입니다. 데이터를 변경하지 않고 새 데이터를 생성하여 부수 효과를 방지합니다. 불변 데이터는 스레드 안전하고 추론하기 쉬우며, 캐싱과 공유가 자유롭습니다.
 
 ```scala
 // 불변 리스트
@@ -50,11 +50,13 @@ val alice = Person("Alice", 30)
 val olderAlice = alice.copy(age = 31)  // alice는 변경되지 않음
 ```
 
-## Functor
+#### Functor
 
-`map` 연산을 가진 타입입니다.
+Functor는 `map` 연산을 가진 타입입니다. 컨테이너 안의 값을 변환하면서 구조를 유지합니다. List, Option, Future 등 대부분의 컬렉션과 컨테이너 타입은 Functor입니다.
 
-### Functor 법칙
+**Functor 법칙**
+
+Functor가 되려면 두 가지 법칙을 만족해야 합니다. 항등 법칙은 identity 함수로 map하면 원본과 같아야 함을 의미하고, 합성 법칙은 두 번 map하는 것과 합성된 함수로 한 번 map하는 것이 같아야 함을 의미합니다.
 
 ```scala
 // 1. 항등 법칙: fa.map(identity) == fa
@@ -67,7 +69,9 @@ val g = (x: Int) => x * 2
 List(1, 2, 3).map(f).map(g) == List(1, 2, 3).map(f andThen g)
 ```
 
-### 커스텀 Functor
+**커스텀 Functor**
+
+타입 클래스 패턴을 사용하여 커스텀 Functor를 정의할 수 있습니다. `F[_]`는 고차 타입(higher-kinded type)으로, 타입 매개변수를 받는 타입을 나타냅니다.
 
 ```scala
 trait Functor[F[_]]:
@@ -82,9 +86,9 @@ given Functor[List] with
   def map[A, B](fa: List[A])(f: A => B): List[B] = fa.map(f)
 ```
 
-## Applicative
+#### Applicative
 
-독립적인 효과를 결합합니다.
+Applicative는 독립적인 효과를 결합합니다. Functor보다 강력하며, 여러 독립적인 컨텍스트의 값들을 결합할 수 있습니다. `pure`는 값을 컨텍스트에 넣고, `ap`는 컨텍스트 안의 함수를 컨텍스트 안의 값에 적용합니다.
 
 ```scala
 trait Applicative[F[_]] extends Functor[F]:
@@ -101,11 +105,13 @@ val sum: Option[Int] = (some1, some2) match
   case _ => None
 ```
 
-## Monad
+#### Monad
 
-순차적인 효과를 연결합니다.
+Monad는 순차적인 효과를 연결합니다. `flatMap`을 통해 이전 연산의 결과에 의존하는 다음 연산을 수행할 수 있습니다. Option, Either, Future 등이 대표적인 Monad입니다.
 
-### Monad 흐름 시각화
+**Monad 흐름 시각화**
+
+아래 다이어그램은 flatMap 연산이 어떻게 작동하는지 보여줍니다. 첫 번째 연산의 결과가 다음 연산의 입력이 됩니다.
 
 ```mermaid
 flowchart LR
@@ -126,7 +132,9 @@ flowchart LR
     end
 ```
 
-### Monad 법칙
+**Monad 법칙**
+
+Monad는 세 가지 법칙을 만족해야 합니다. 왼쪽 항등, 오른쪽 항등, 결합 법칙이 그것입니다. 이 법칙들이 for comprehension의 직관적인 동작을 보장합니다.
 
 ```scala
 trait Monad[F[_]] extends Applicative[F]:
@@ -137,7 +145,9 @@ trait Monad[F[_]] extends Applicative[F]:
   // m.flatMap(f).flatMap(g) == m.flatMap(a => f(a).flatMap(g))  // 결합
 ```
 
-### 표준 라이브러리 Monad
+**표준 라이브러리 Monad**
+
+Scala 표준 라이브러리의 Option, Either, Future는 모두 Monad입니다. for comprehension을 통해 이들을 편리하게 조합할 수 있습니다.
 
 ```scala
 // Option
@@ -166,7 +176,9 @@ yield orders
 // Future(List("Order1-User1"))
 ```
 
-## Option - null 대체
+#### Option - null 대체
+
+Option은 값이 있거나 없을 수 있는 경우를 타입 안전하게 표현합니다. null을 사용하는 대신 Option을 사용하면 NullPointerException을 컴파일 타임에 방지할 수 있습니다.
 
 ```scala
 // 안전한 나눗셈
@@ -186,7 +198,9 @@ divide(10, 0).getOrElse(0)  // 0
 divide(10, 2).fold(0)(_ * 2)  // 10
 ```
 
-## Either - 에러 처리
+#### Either - 에러 처리
+
+Either는 두 가지 가능한 결과 중 하나를 표현합니다. 관례상 Left는 실패(에러), Right는 성공을 나타냅니다. 에러 정보를 타입으로 명시할 수 있어 예외보다 타입 안전합니다.
 
 ```scala
 sealed trait ValidationError
@@ -213,7 +227,9 @@ createPerson("Alice", 30)  // Right(Person("Alice", 30))
 createPerson("", 30)       // Left(EmptyName("name"))
 ```
 
-## Try - 예외 처리
+#### Try - 예외 처리
+
+Try는 예외가 발생할 수 있는 연산을 캡슐화합니다. Success 또는 Failure로 결과를 표현하며, 예외를 값으로 다룰 수 있게 해줍니다.
 
 ```scala
 import scala.util.{Try, Success, Failure}
@@ -235,7 +251,9 @@ parseInt("abc").getOrElse(0)  // 0
 parseInt("abc").recover { case _: NumberFormatException => 0 }
 ```
 
-## 함수 합성
+#### 함수 합성
+
+함수 합성은 작은 함수들을 결합하여 더 큰 함수를 만드는 기법입니다. `andThen`은 왼쪽에서 오른쪽으로, `compose`는 오른쪽에서 왼쪽으로 함수를 연결합니다.
 
 ```scala
 val addOne = (x: Int) => x + 1
@@ -251,7 +269,9 @@ val composed = square compose double compose addOne
 composed(3)  // (3 + 1) * 2)^2 = 64
 ```
 
-## 커링과 부분 적용
+#### 커링과 부분 적용
+
+커링(Currying)은 여러 인자를 받는 함수를 인자 하나씩 받는 함수들의 체인으로 변환하는 기법입니다. 부분 적용은 일부 인자만 제공하여 새로운 함수를 만드는 것입니다.
 
 ```scala
 // 커링
@@ -271,9 +291,13 @@ error("Something went wrong")
 info("Application started")
 ```
 
-## Cats/ZIO 라이브러리
+#### Cats/ZIO 라이브러리
 
-### Cats
+Scala 생태계에서는 함수형 프로그래밍을 위한 강력한 라이브러리들이 있습니다. Cats와 ZIO가 대표적입니다.
+
+**Cats**
+
+Cats는 함수형 프로그래밍 추상화를 제공하는 라이브러리입니다. Functor, Monad 등의 타입 클래스와 Validated, Either 등의 데이터 타입을 제공합니다.
 
 ```scala
 import cats.*
@@ -293,7 +317,9 @@ val invalid: ValidationResult[Int] = Validated.invalid(List("에러"))
 // Invalid(List("에러", "에러"))
 ```
 
-### ZIO
+**ZIO**
+
+ZIO는 효과 시스템과 의존성 주입을 결합한 라이브러리입니다. `ZIO[R, E, A]`는 환경 R이 필요하고, E 타입의 에러를 발생시킬 수 있으며, A 타입의 값을 반환하는 효과를 나타냅니다.
 
 ```scala
 import zio.*
@@ -308,9 +334,11 @@ val program: ZIO[Any, IOException, Int] = for
 yield num * 2
 ```
 
-## 연습 문제
+#### 연습 문제
 
-### 1. 커스텀 Monad ⭐⭐
+다음 연습 문제를 통해 함수형 패턴을 복습해보세요.
+
+**1. 커스텀 Monad ⭐⭐**
 
 `Box[A]` 타입에 대한 `flatMap`을 구현하세요.
 
@@ -330,7 +358,7 @@ val result = for {
 
 </details>
 
-### 2. 에러 누적 ⭐⭐⭐
+**2. 에러 누적 ⭐⭐⭐**
 
 여러 검증을 수행하고 모든 에러를 수집하세요.
 
@@ -358,13 +386,15 @@ validateAll(results)  // Left(List("에러1", "에러2"))
 
 </details>
 
-## 참고 자료
+#### 참고 자료
+
+더 깊은 학습을 위한 자료입니다.
 
 - [Cats 공식 문서](https://typelevel.org/cats/)
 - [ZIO 공식 문서](https://zio.dev/)
 - [Functional Programming in Scala](https://www.manning.com/books/functional-programming-in-scala)
 
-## 다음 단계
+#### 다음 단계
 
 - [Cats 라이브러리](https://typelevel.org/cats/)
 - [ZIO 라이브러리](https://zio.dev/)

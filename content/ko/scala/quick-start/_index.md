@@ -1,16 +1,18 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-09"
 title: Quick Start
 weight: 1
 ---
 
-5분 만에 Scala를 설치하고 첫 번째 프로그램을 실행해봅니다.
+5분 만에 Scala를 설치하고 첫 번째 프로그램을 실행해봅니다. 이 가이드는 설치부터 sbt 프로젝트 생성, IDE 설정까지 실무에서 바로 사용할 수 있는 환경을 구축하는 과정을 안내합니다.
 
 > 🎯 **설치 없이 바로 실행:** [Scastie](https://scastie.scala-lang.org/)에서 브라우저로 Scala를 바로 실행해볼 수 있습니다!
 
-## 1. Scala 설치
+#### 1. Scala 설치
 
-### Coursier로 설치 (권장)
+Scala를 설치하는 가장 쉬운 방법은 Coursier를 사용하는 것입니다. Coursier는 Scala, sbt, 그리고 다양한 Scala 도구를 한 번에 설치해주는 공식 설치 도구입니다.
+
+**Coursier로 설치 (권장)**
 
 Coursier는 Scala 생태계의 표준 설치 도구입니다.
 
@@ -52,7 +54,9 @@ sbt --version
 # sbt script version: 1.x.x
 ```
 
-### 특정 버전 설치
+**특정 버전 설치**
+
+프로젝트 요구사항에 따라 특정 Scala 버전을 설치해야 할 수 있습니다. 특히 Apache Spark를 사용하는 경우 Scala 2.13이 필요합니다.
 
 ```bash
 # Scala 3 최신
@@ -62,9 +66,11 @@ cs install scala:3
 cs install scala:2.13.12
 ```
 
-## 2. Hello World
+#### 2. Hello World
 
-### REPL에서 실행
+Scala의 기본 문법을 확인하는 가장 좋은 방법은 간단한 Hello World 프로그램을 작성하는 것입니다. REPL에서 바로 실행하거나 파일로 저장해서 실행할 수 있습니다.
+
+**REPL에서 실행**
 
 Scala REPL(Read-Eval-Print Loop)로 바로 코드를 실행해봅니다:
 
@@ -85,7 +91,9 @@ Hello, World!
 scala> :quit
 ```
 
-### 파일로 실행
+**파일로 실행**
+
+코드를 파일로 저장하면 재사용과 버전 관리가 가능합니다. Scala 3는 들여쓰기 기반의 간결한 문법을 지원하고, Scala 2 스타일의 중괄호 문법도 계속 사용할 수 있습니다.
 
 **Scala 3 (들여쓰기 기반):**
 
@@ -118,11 +126,11 @@ scala Hello.scala
 # Hello, Scala 2!
 ```
 
-## 3. sbt 프로젝트 생성
+#### 3. sbt 프로젝트 생성
 
-실제 프로젝트에서는 sbt(Scala Build Tool)를 사용합니다.
+실제 프로젝트에서는 sbt(Scala Build Tool)를 사용합니다. sbt는 의존성 관리, 컴파일, 테스트, 패키징 등 프로젝트 빌드에 필요한 모든 기능을 제공하는 Scala 표준 빌드 도구입니다.
 
-### 프로젝트 생성
+**프로젝트 생성**
 
 ```bash
 # 새 디렉토리 생성
@@ -135,9 +143,9 @@ sbt new scala/scala3.g8
 
 프롬프트에서 프로젝트 이름을 입력하면 기본 구조가 생성됩니다.
 
-### 수동 프로젝트 구성
+**수동 프로젝트 구성**
 
-직접 구성하려면:
+템플릿 없이 직접 프로젝트를 구성하면 구조를 더 잘 이해할 수 있습니다. 최소한 build.sbt 파일과 소스 디렉토리만 있으면 됩니다.
 
 ```bash
 mkdir -p src/main/scala
@@ -182,7 +190,9 @@ sbt.version=1.10.6
   println("Hello from sbt project!")
 ```
 
-### 실행
+**실행**
+
+sbt로 프로젝트를 실행하면 의존성 해결, 컴파일, 실행까지 자동으로 처리됩니다.
 
 ```bash
 sbt run
@@ -190,7 +200,9 @@ sbt run
 # Hello from sbt project!
 ```
 
-### 자주 사용하는 sbt 명령어
+**자주 사용하는 sbt 명령어**
+
+아래 표는 일상적인 개발에서 가장 자주 사용하는 sbt 명령어들입니다. `~compile`처럼 물결표(~)를 붙이면 파일 변경을 감지하여 자동으로 해당 명령을 다시 실행합니다.
 
 | 명령어 | 설명 |
 |--------|------|
@@ -200,27 +212,33 @@ sbt run
 | `sbt console` | REPL 실행 (프로젝트 의존성 포함) |
 | `sbt ~compile` | 파일 변경 시 자동 컴파일 |
 
-## 4. IDE 설정
+#### 4. IDE 설정
 
-### IntelliJ IDEA (권장)
+효율적인 Scala 개발을 위해서는 IDE 설정이 중요합니다. 코드 자동 완성, 타입 검사, 리팩토링 지원 등을 받을 수 있습니다. 두 가지 주요 선택지가 있습니다.
+
+**IntelliJ IDEA (권장)**
 
 1. [IntelliJ IDEA](https://www.jetbrains.com/idea/download/) 설치 (Community Edition 무료)
 2. **Plugins** → "Scala" 검색 → 설치
 3. **File** → **Open** → sbt 프로젝트 폴더 선택
 4. "Import as sbt project" 선택
 
-### VS Code + Metals
+**VS Code + Metals**
+
+VS Code는 가볍고 빠른 에디터로, Metals 확장을 통해 Scala Language Server Protocol(LSP) 지원을 받을 수 있습니다.
 
 1. [VS Code](https://code.visualstudio.com/) 설치
 2. Extensions에서 "Metals" 검색 → 설치
 3. sbt 프로젝트 폴더 열기
 4. "Import build" 클릭
 
-## 5. 간단한 예제
+#### 5. 간단한 예제
+
+설치가 완료되었으니 Scala의 기본 문법을 간단한 예제로 살펴봅니다. 아래 코드들은 Scala의 핵심적인 특징인 타입 추론, 불변성, 함수형 컬렉션 연산을 보여줍니다.
 
 > 💻 아래 예제들을 [Scastie](https://scastie.scala-lang.org/)에서 직접 실행해보세요!
 
-### 변수와 타입
+**변수와 타입**
 
 ```scala
 // 불변 (권장)
@@ -238,7 +256,9 @@ val isScala: Boolean = true
 val char: Char = 'S'
 ```
 
-### 함수 정의
+**함수 정의**
+
+Scala에서 함수는 `def` 키워드로 정의합니다. 반환 타입은 대부분 추론되지만, 명시적으로 지정하는 것이 좋은 습관입니다.
 
 ```scala
 // Scala 3
@@ -255,7 +275,9 @@ println(greet("World"))  // Hello, World!
 println(add(1, 2))       // 3
 ```
 
-### 컬렉션 맛보기
+**컬렉션 맛보기**
+
+Scala 컬렉션은 함수형 프로그래밍의 강력함을 보여줍니다. `map`, `filter`, `reduce` 등의 고차 함수로 데이터를 선언적으로 변환할 수 있습니다.
 
 ```scala
 val numbers = List(1, 2, 3, 4, 5)
@@ -273,17 +295,19 @@ val sum = numbers.reduce(_ + _)
 // 15
 ```
 
-## 다음 단계
+#### 다음 단계
 
-Quick Start를 완료했습니다! 다음으로 진행하세요:
+Quick Start를 완료했습니다! 환경 설정이 끝났으니 이제 Scala의 핵심 개념들을 하나씩 배워볼 차례입니다.
 
 1. **[기본 문법](../concepts/basics/)** — 변수, 타입, 타입 추론 자세히 배우기
 2. **[제어 구조](../concepts/control-structures/)** — if, for, match 표현식
 3. **[함수와 메서드](../concepts/functions-methods/)** — 함수 정의와 고급 기능
 
-## 트러블슈팅
+#### 트러블슈팅
 
-### `scala` 명령어를 찾을 수 없음
+설치나 실행 중 문제가 발생하면 아래 해결책을 참고하세요. 대부분의 문제는 환경 변수 설정이나 캐시 관련입니다.
+
+**`scala` 명령어를 찾을 수 없음**
 
 ```bash
 # PATH 확인
@@ -293,16 +317,18 @@ echo $PATH | grep coursier
 source ~/.bashrc  # 또는 ~/.zshrc
 ```
 
-### sbt가 느림
+**sbt가 느림**
 
-처음 실행 시 의존성 다운로드로 느릴 수 있습니다. 두 번째부터는 빨라집니다.
+처음 실행 시 의존성 다운로드로 느릴 수 있습니다. 두 번째부터는 캐시를 사용하므로 빨라집니다. 메모리 부족이 원인인 경우 아래 설정으로 JVM 메모리를 늘릴 수 있습니다.
 
 ```bash
 # sbt 메모리 설정 (선택)
 export SBT_OPTS="-Xmx2G"
 ```
 
-### IntelliJ에서 빨간 줄이 표시됨
+**IntelliJ에서 빨간 줄이 표시됨**
+
+IntelliJ의 인덱스가 손상되었거나 sbt 프로젝트 설정이 동기화되지 않은 경우 발생합니다. 대부분 캐시 무효화로 해결됩니다.
 
 1. **File** → **Invalidate Caches** → **Restart**
 2. 또는 프로젝트 reimport: **sbt** 탭 → **Reload**

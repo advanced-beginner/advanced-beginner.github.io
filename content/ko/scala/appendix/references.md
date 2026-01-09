@@ -1,34 +1,44 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-09"
 title: 참고 자료
 weight: 4
 ---
 
-Scala 학습에 도움이 되는 참고 자료를 정리합니다.
+Scala 학습에 도움이 되는 참고 자료를 정리합니다. 공식 문서부터 서적, 온라인 강의, 커뮤니티까지 다양한 리소스를 카테고리별로 분류했습니다.
 
-## 공식 문서
+#### 공식 문서
 
-### Scala 공식
+Scala 공식 사이트와 문서는 가장 정확하고 최신의 정보를 제공합니다.
+
+**Scala 공식**
 
 - [Scala 공식 사이트](https://www.scala-lang.org/) — 최신 뉴스, 다운로드
 - [Scala 3 Documentation](https://docs.scala-lang.org/scala3/) — Scala 3 공식 문서
 - [Scala 2 Documentation](https://docs.scala-lang.org/) — Scala 2 공식 문서
 - [Scala API Docs](https://www.scala-lang.org/api/current/) — 표준 라이브러리 API
 
-### 학습 자료
+**학습 자료**
+
+공식적으로 제공되는 학습 자료들입니다.
 
 - [Tour of Scala](https://docs.scala-lang.org/tour/tour-of-scala.html) — 핵심 기능 빠른 둘러보기
 - [Scala 3 Book](https://docs.scala-lang.org/scala3/book/introduction.html) — 단계별 학습서
 - [Scala Exercises](https://www.scala-exercises.org/) — 인터랙티브 학습
 
-### 빌드 도구
+**빌드 도구**
+
+Scala 프로젝트에서 사용하는 빌드 도구들의 공식 문서입니다.
 
 - [sbt Documentation](https://www.scala-sbt.org/1.x/docs/) — sbt 공식 문서
 - [Mill Build Tool](https://mill-build.com/mill/Intro_to_Mill.html) — Mill 문서
 
-## 서적
+#### 서적
 
-### 입문서
+Scala 학습에 도움이 되는 서적들을 난이도별로 분류했습니다.
+
+**입문서**
+
+Scala를 처음 배우는 분께 추천하는 서적입니다.
 
 - **"Programming in Scala" (4th Edition)**
   - 저자: Martin Odersky, Lex Spoon, Bill Venners
@@ -38,7 +48,9 @@ Scala 학습에 도움이 되는 참고 자료를 정리합니다.
   - 저자: Cay S. Horstmann
   - 빠르게 Scala를 배우고 싶은 분께 추천
 
-### 함수형 프로그래밍
+**함수형 프로그래밍**
+
+함수형 프로그래밍 개념과 패턴을 깊이 있게 다루는 서적입니다.
 
 - **"Functional Programming in Scala" (2nd Edition)**
   - 저자: Michael Pilquist, Rúnar Bjarnason, Paul Chiusano
@@ -48,7 +60,9 @@ Scala 학습에 도움이 되는 참고 자료를 정리합니다.
   - 저자: Noel Welsh, Dave Gurnell
   - [무료 온라인 버전](https://underscore.io/books/essential-scala/)
 
-### 고급
+**고급**
+
+타입 클래스, 효과 시스템 등 고급 주제를 다루는 서적입니다.
 
 - **"Scala with Cats"**
   - 저자: Noel Welsh, Dave Gurnell
@@ -58,13 +72,13 @@ Scala 학습에 도움이 되는 참고 자료를 정리합니다.
   - 저자: Gabriel Volpe
   - 실무 함수형 프로그래밍
 
-## 실무 라이브러리 맛보기
+#### 실무 라이브러리 맛보기
 
 이 가이드에서 배운 개념이 실무 라이브러리에서 어떻게 활용되는지 간단히 소개합니다.
 
-### Cats: 타입 클래스 실전 활용
+**Cats: 타입 클래스 실전 활용**
 
-[Type Classes](../concepts/type-classes/)에서 배운 패턴이 Cats에서 어떻게 사용되는지 보세요.
+[Type Classes](../concepts/type-classes/)에서 배운 패턴이 Cats에서 실제로 어떻게 사용되는지 살펴봅니다.
 
 ```scala
 // 이 가이드에서 배운 타입 클래스 패턴
@@ -94,7 +108,7 @@ List(Order(100, 2), Order(200, 3)).combineAll
 
 **연결 개념:** [Type Classes](../concepts/type-classes/), [Implicits/Given](../concepts/implicits/)
 
-### ZIO: 함수형 효과 시스템
+**ZIO: 함수형 효과 시스템**
 
 [Higher-Order Functions](../concepts/higher-order-functions/)과 [For Comprehensions](../concepts/for-comprehensions/)이 ZIO에서 빛을 발합니다.
 
@@ -118,7 +132,7 @@ yield ()
 
 **연결 개념:** [For Comprehensions](../concepts/for-comprehensions/), [Functional Patterns](../concepts/functional-patterns/)
 
-### http4s: 함수형 HTTP
+**http4s: 함수형 HTTP**
 
 [Pattern Matching](../concepts/pattern-matching/)과 [Case Classes](../concepts/case-classes/)가 라우팅에 활용됩니다.
 
@@ -141,7 +155,7 @@ val routes = HttpRoutes.of[IO] {
 
 **연결 개념:** [Pattern Matching](../concepts/pattern-matching/), [Case Classes](../concepts/case-classes/)
 
-### Circe: JSON 타입 클래스
+**Circe: JSON 타입 클래스**
 
 [Type Classes](../concepts/type-classes/)와 [Generics](../concepts/generics/)가 JSON 변환에 사용됩니다.
 
@@ -163,7 +177,9 @@ user.asJson.noSpaces  // {"name":"Alice","age":30}
 
 **연결 개념:** [Case Classes](../concepts/case-classes/), [Type Classes](../concepts/type-classes/)
 
-### 다음 학습 방향
+**다음 학습 방향**
+
+관심 분야에 따라 추천하는 라이브러리와 학습 자료입니다.
 
 | 관심 분야 | 추천 라이브러리 | 참고 자료 |
 |----------|----------------|----------|
@@ -174,106 +190,122 @@ user.asJson.noSpaces  // {"name":"Alice","age":30}
 
 ---
 
-## 온라인 강의
+#### 온라인 강의
 
-### 무료
+동영상으로 Scala를 배울 수 있는 강의들입니다.
+
+**무료**
+
+무료로 제공되는 양질의 강의 자료입니다.
 
 - [Scala & Functional Programming Essentials](https://rockthejvm.com/) — Rock the JVM
 - [Functional Programming Principles in Scala](https://www.coursera.org/learn/scala-functional-programming) — Coursera (Martin Odersky)
 - [Scala 3 New Features](https://docs.scala-lang.org/scala3/new-in-scala3.html) — 공식 문서
 
-### 유료
+**유료**
+
+더 체계적인 학습을 원하는 분을 위한 유료 강의입니다.
 
 - [Rock the JVM](https://rockthejvm.com/) — 종합적인 Scala 강의
 - [Zionomicon](https://www.zionomicon.com/) — ZIO 심화
 
-## 라이브러리 문서
+#### 라이브러리 문서
 
-### 함수형 프로그래밍
+주요 Scala 라이브러리들의 공식 문서 링크입니다.
+
+**함수형 프로그래밍**
 
 - [Cats](https://typelevel.org/cats/) — 타입 클래스 라이브러리
 - [ZIO](https://zio.dev/) — 효과 시스템
 - [Cats Effect](https://typelevel.org/cats-effect/) — 비동기/동시성
 
-### 웹 개발
+**웹 개발**
 
 - [Play Framework](https://www.playframework.com/documentation/latest/Home) — 웹 프레임워크
 - [http4s](https://http4s.org/) — 함수형 HTTP
 - [Akka HTTP](https://doc.akka.io/docs/akka-http/current/) — 액터 기반 HTTP
 
-### 데이터 처리
+**데이터 처리**
 
 - [Apache Spark](https://spark.apache.org/docs/latest/api/scala/) — 분산 데이터 처리
 - [Apache Kafka](https://kafka.apache.org/documentation/) — 스트리밍 플랫폼
 - [Doobie](https://tpolecat.github.io/doobie/) — 함수형 JDBC
 
-### JSON
+**JSON**
 
 - [Circe](https://circe.github.io/circe/) — JSON 라이브러리
 - [Play JSON](https://github.com/playframework/play-json) — Play JSON
 - [uPickle](https://com-lihaoyi.github.io/upickle/) — 경량 JSON
 
-### 테스트
+**테스트**
 
 - [ScalaTest](https://www.scalatest.org/) — 테스트 프레임워크
 - [MUnit](https://scalameta.org/munit/) — 경량 테스트
 - [ScalaCheck](https://scalacheck.org/) — 속성 기반 테스트
 
-## 커뮤니티
+#### 커뮤니티
 
-### 포럼/디스코드
+Scala 개발자들과 소통할 수 있는 채널들입니다.
+
+**포럼/디스코드**
 
 - [Scala Users Forum](https://users.scala-lang.org/) — 공식 포럼
 - [Scala Discord](https://discord.gg/scala) — 실시간 채팅
 - [Typelevel Discord](https://discord.gg/XF3CXcMzqD) — Cats, fs2 등
 
-### Q&A
+**Q&A**
 
 - [Stack Overflow - Scala](https://stackoverflow.com/questions/tagged/scala)
 - [Reddit - r/scala](https://www.reddit.com/r/scala/)
 
-### 블로그/뉴스
+**블로그/뉴스**
 
 - [Scala Times](https://scalatimes.com/) — 주간 뉴스레터
 - [Typelevel Blog](https://typelevel.org/blog/) — 함수형 Scala
 - [Li Haoyi's Blog](https://www.lihaoyi.com/) — Scala 팁
 
-## 도구
+#### 도구
 
-### IDE
+개발 생산성을 높여주는 도구들입니다.
+
+**IDE**
 
 - [IntelliJ IDEA Scala Plugin](https://plugins.jetbrains.com/plugin/1347-scala)
 - [Metals (VS Code)](https://scalameta.org/metals/)
 
-### 유틸리티
+**유틸리티**
 
 - [Scastie](https://scastie.scala-lang.org/) — 온라인 Scala 실행 ⭐ **이 가이드의 모든 예제를 여기서 실행 가능!**
 - [Scaladex](https://index.scala-lang.org/) — 라이브러리 검색
 - [Scalafmt](https://scalameta.org/scalafmt/) — 코드 포맷터
 - [Scalafix](https://scalacenter.github.io/scalafix/) — 리팩토링 도구
 
-## 컨퍼런스
+#### 컨퍼런스
+
+Scala 커뮤니티의 주요 컨퍼런스들입니다.
 
 - [Scala Days](https://scaladays.org/) — 주요 Scala 컨퍼런스
 - [Scala.io](https://scala.io/) — 유럽 Scala 컨퍼런스
 - [Typelevel Summit](https://typelevel.org/event/) — 함수형 Scala
 
-## 추천 학습 경로
+#### 추천 학습 경로
 
-### 입문자
+단계별 학습 경로를 제안합니다.
+
+**입문자**
 
 1. Quick Start로 환경 설정
 2. Tour of Scala로 핵심 개념
 3. "Scala for the Impatient" 또는 Coursera 강의
 4. 간단한 프로젝트 실습
 
-### 중급자
+**중급자**
 
 1. "Programming in Scala" 정독
 2. Cats 또는 ZIO 학습
 3. 실무 프로젝트에 함수형 스타일 적용
 
-### 고급자
+**고급자**
 
 1. "Functional Programming in Scala"
 2. "Scala with Cats"
