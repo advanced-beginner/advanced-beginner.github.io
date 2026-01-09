@@ -1,14 +1,12 @@
 ---
 title: 아키텍처
 weight: 1
-lastmod: "2026-01-07"
+lastmod: "2026-01-09"
 ---
-
-# Spark 아키텍처
 
 Spark 애플리케이션이 어떻게 분산 환경에서 실행되는지 이해합니다. Java/Spring 개발자에게 익숙한 개념과 비교하며 설명합니다.
 
-## 핵심 구성요소
+#### 핵심 구성요소
 
 Spark 클러스터는 세 가지 주요 컴포넌트로 구성됩니다:
 
@@ -47,7 +45,9 @@ graph TB
     E1 <-->|셔플| E2
 ```
 
-### 1. Driver
+아래에서 각 구성요소의 역할과 상호작용을 자세히 살펴봅니다.
+
+**1. Driver**
 
 **Driver**는 Spark 애플리케이션의 중앙 조율자입니다. `main()` 메서드가 실행되는 JVM 프로세스입니다.
 
@@ -76,7 +76,7 @@ public static void main(String[] args) {
 **Java 개발자 관점:**
 Driver는 Spring 애플리케이션의 메인 컨텍스트와 유사합니다. 모든 설정과 조율이 여기서 이루어지고, 실제 작업은 Executor(워커)가 수행합니다.
 
-### 2. Executor
+**2. Executor**
 
 **Executor**는 클러스터의 워커 노드에서 실행되는 JVM 프로세스입니다. 실제 데이터 처리를 담당합니다.
 
@@ -106,7 +106,7 @@ Driver는 Spring 애플리케이션의 메인 컨텍스트와 유사합니다. �
 └─────────────────────────────────────────────────────┘
 ```
 
-### 3. Cluster Manager
+**3. Cluster Manager**
 
 **Cluster Manager**는 클러스터 전체의 리소스를 관리합니다. Driver의 요청에 따라 Executor를 할당합니다.
 
@@ -120,6 +120,8 @@ Driver는 Spring 애플리케이션의 메인 컨텍스트와 유사합니다. �
 | **Mesos** | 범용 리소스 관리 | 다양한 워크로드 혼합 시 |
 | **Local** | 단일 JVM | 개발/테스트 환경 |
 
+각 Cluster Manager는 사용 환경과 요구사항에 따라 선택합니다. 개발 환경에서는 Local이나 Standalone을, 프로덕션 환경에서는 YARN이나 Kubernetes를 주로 사용합니다.
+
 **로컬 모드 vs 클러스터 모드:**
 
 ```java
@@ -132,7 +134,7 @@ Driver는 Spring 애플리케이션의 메인 컨텍스트와 유사합니다. �
 .master("k8s://https://...")  // Kubernetes
 ```
 
-## 애플리케이션 실행 흐름
+#### 애플리케이션 실행 흐름
 
 Spark 애플리케이션이 제출되면 다음 순서로 실행됩니다:
 
