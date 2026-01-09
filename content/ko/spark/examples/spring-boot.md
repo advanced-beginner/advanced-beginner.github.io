@@ -2,6 +2,9 @@
 title: Spring Boot 통합
 weight: 5
 lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 Java/Spring 개발자를 위한 Spark와 Spring Boot 통합 패턴입니다.

@@ -2,6 +2,9 @@
 title: RDD 기초
 weight: 2
 lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 RDD는 Spark의 가장 기본적인 데이터 추상화입니다. DataFrame과 Dataset의 기반이 되는 저수준 API로, Spark의 동작 원리를 이해하는 데 필수적입니다.

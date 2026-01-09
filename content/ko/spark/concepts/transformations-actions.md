@@ -2,6 +2,9 @@
 title: Transformation과 Action
 weight: 5
 lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 Spark의 모든 연산은 **Transformation**과 **Action** 두 가지로 분류됩니다. 이 구분을 이해하는 것이 Spark 프로그래밍의 핵심입니다.

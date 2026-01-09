@@ -2,6 +2,9 @@
 title: MLlib
 weight: 9
 lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 MLlib은 Spark의 분산 머신러닝 라이브러리입니다. 대규모 데이터셋에서 머신러닝 모델을 학습하고 예측할 수 있습니다.

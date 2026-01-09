@@ -2,6 +2,9 @@
 title: 모니터링 설정
 weight: 4
 lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 프로덕션 환경에서 Spark 애플리케이션을 안정적으로 운영하기 위한 모니터링 설정 가이드입니다.

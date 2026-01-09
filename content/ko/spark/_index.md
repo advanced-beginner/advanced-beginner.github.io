@@ -3,6 +3,9 @@ title: Apache Spark
 description: Java/Spring 개발자를 위한 Apache Spark 가이드 - DataFrame API, SQL, 스트리밍, 클러스터 배포
 weight: 4
 lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 Apache Spark는 **대규모 데이터 처리를 위한 통합 분석 엔진**입니다. 하둡 MapReduce보다 메모리에서 최대 100배, 디스크에서 10배 빠른 처리 속도를 제공하며, Java, Scala, Python, R 등 다양한 언어를 지원합니다.

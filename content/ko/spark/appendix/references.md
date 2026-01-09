@@ -2,6 +2,9 @@
 title: 참고 자료
 weight: 3
 lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 Apache Spark 학습을 위한 공식 문서와 추가 자료를 안내합니다.

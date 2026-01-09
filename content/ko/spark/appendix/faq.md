@@ -2,6 +2,9 @@
 title: FAQ
 weight: 2
 lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 자주 묻는 질문과 흔히 발생하는 문제의 해결 방법을 제공합니다.

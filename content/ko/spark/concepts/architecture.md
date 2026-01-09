@@ -2,6 +2,9 @@
 title: 아키텍처
 weight: 1
 lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 Spark 애플리케이션이 어떻게 분산 환경에서 실행되는지 이해합니다. Java/Spring 개발자에게 익숙한 개념과 비교하며 설명합니다.
@@ -471,6 +474,39 @@ SparkSession spark = SparkSession.builder()
     .config("spark.executor.cores", "4")
     .getOrCreate();
 ```
+
+#### 실무 인사이트
+
+**Java/Spring 환경에서의 실제 적용 경험**
+
+1. **Driver 메모리 산정**
+   - `collect()` 결과 크기 + 브로드캐스트 변수 크기의 2~3배
+   - 일반적으로 4~8GB로 시작, OOM 발생 시 증가
+   - 과도한 Driver 메모리는 GC 부담 증가
+
+2. **Executor 구성 전략**
+   - 코어당 5GB 메모리가 안정적 (예: 4코어 = 20GB)
+   - 코어 수는 4~5개가 최적 (과도한 코어는 GC 병목)
+   - YARN 환경에서는 컨테이너 오버헤드 10% 고려
+
+3. **흔한 실수와 해결책**
+
+   | 실수 | 증상 | 해결 |
+   |------|------|------|
+   | 클로저에서 외부 객체 참조 | NotSerializableException | 파티션 내에서 객체 생성 |
+   | Driver에서 대용량 collect() | Driver OOM | limit() 또는 파일 저장 |
+   | 작은 파티션 수 | 일부 Executor만 바쁨 | repartition()으로 재분배 |
+   | 브로드캐스트 없이 작은 테이블 조인 | 과도한 셔플 | broadcast() 사용 |
+
+4. **Spring Boot와의 통합 시 주의점**
+   - SparkSession은 애플리케이션 생명주기와 별도 관리
+   - 요청당 SparkSession 생성은 비효율적 (싱글톤 권장)
+   - 종료 시 `spark.stop()` 명시적 호출 필수
+
+5. **디버깅 팁**
+   - Spark UI (4040 포트)는 가장 중요한 디버깅 도구
+   - Stage 탭에서 Task 분포 불균형 확인
+   - GC 시간이 10% 이상이면 메모리 증가 필요
 
 #### 다음 단계
 

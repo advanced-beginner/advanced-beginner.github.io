@@ -2,6 +2,9 @@
 lastmod: "2026-01-09"
 title: Delta Lake 통합
 weight: 6
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 Delta Lake를 활용하여 데이터 레이크에 ACID 트랜잭션, 스키마 관리, 시간 여행 기능을 추가합니다.

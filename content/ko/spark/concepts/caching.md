@@ -2,6 +2,9 @@
 title: 캐싱과 영속성
 weight: 7
 lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 Spark의 인메모리 컴퓨팅 능력을 활용하여 중간 결과를 캐시하고 재사용하는 방법을 알아봅니다.

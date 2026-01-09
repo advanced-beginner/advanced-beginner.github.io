@@ -2,6 +2,9 @@
 title: Quick Start
 weight: 1
 lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 5분 만에 Spark 애플리케이션을 실행하고 데이터를 처리해봅니다. 이 가이드를 따라하면 프로젝트 생성부터 데이터 조회까지 전체 과정을 경험할 수 있습니다.

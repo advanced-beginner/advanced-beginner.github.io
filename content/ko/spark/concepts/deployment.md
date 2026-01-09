@@ -2,6 +2,9 @@
 title: 배포와 클러스터 관리
 weight: 11
 lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 Spark 애플리케이션을 다양한 클러스터 환경에 배포하고 관리하는 방법을 알아봅니다.

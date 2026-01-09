@@ -2,6 +2,9 @@
 title: 용어 사전
 weight: 1
 lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 Spark에서 사용되는 주요 용어와 개념을 정리합니다. 각 용어에서 관련 문서로 이동할 수 있습니다.

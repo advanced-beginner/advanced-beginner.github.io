@@ -2,6 +2,9 @@
 title: DataFrame과 Dataset
 weight: 3
 lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 DataFrame과 Dataset은 Spark의 현대적인 고수준 API입니다. RDD보다 사용하기 쉽고, Catalyst Optimizer를 통한 자동 최적화를 제공합니다.
@@ -654,6 +657,62 @@ val names = ds.map(_.name)
 
 > **Note**: Scala의 case class는 자동으로 Encoder가 생성되어 Java보다 간결합니다.
 > Java 17+의 `record`를 사용하면 비슷하게 간결해집니다.
+
+#### 실무 인사이트
+
+**Java 개발자를 위한 실전 가이드**
+
+1. **DataFrame vs Dataset 선택 기준**
+   ```
+   DataFrame 선택: SQL 스타일 작업, 동적 스키마, ETL 파이프라인
+   Dataset 선택: 복잡한 비즈니스 로직, 타입 안전 필수, 도메인 객체 중심
+   ```
+
+2. **Java Record 활용 (Java 17+)**
+   ```java
+   // 기존 POJO 대신 Record 사용으로 간결화
+   public record Employee(String name, int age, String department) {}
+
+   Encoder<Employee> encoder = Encoders.bean(Employee.class);
+   Dataset<Employee> ds = df.as(encoder);
+   ```
+
+3. **성능 최적화 팁**
+   - `inferSchema` 대신 명시적 스키마 정의 (대용량 파일에서 성능 향상)
+   - 불필요한 `Dataset<T>` 변환 피하기 (직렬화 오버헤드)
+   - Parquet 포맷 + 파티셔닝으로 I/O 최소화
+
+4. **흔한 실수와 해결책**
+
+   | 실수 | 결과 | 해결 |
+   |------|------|------|
+   | `select("*")` 남용 | 불필요한 컬럼 처리 | 필요한 컬럼만 명시 |
+   | UDF 과다 사용 | 최적화 불가, 성능 저하 | 내장 함수 우선 사용 |
+   | 반복문 내 Action 호출 | N번의 Job 실행 | 한 번에 처리하도록 재구성 |
+   | null 체크 누락 | NullPointerException | `isNotNull()` 필터 선행 |
+
+5. **Spring Boot 통합 패턴**
+   ```java
+   @Service
+   public class DataFrameService {
+       private final SparkSession spark;
+
+       // 생성자 주입 권장
+       public DataFrameService(SparkSession spark) {
+           this.spark = spark;
+       }
+
+       // 비즈니스 로직에서 DataFrame 반환 대신 DTO 변환
+       public List<EmployeeDto> findHighEarners(int threshold) {
+           return spark.read().parquet("employees")
+               .filter(col("salary").gt(threshold))
+               .select("name", "salary")
+               .limit(1000)  // Driver 메모리 보호
+               .as(Encoders.bean(EmployeeDto.class))
+               .collectAsList();
+       }
+   }
+   ```
 
 #### 다음 단계
 

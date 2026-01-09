@@ -2,6 +2,9 @@
 title: 환경 설정
 weight: 1
 lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 Java/Spring Boot 프로젝트에서 Spark를 사용하기 위한 환경을 구성합니다.

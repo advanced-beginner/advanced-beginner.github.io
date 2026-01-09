@@ -2,6 +2,9 @@
 title: 부록
 weight: 4
 lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 보조 자료와 참고 정보입니다. 학습 중 참고하거나, 문제 해결 시 빠르게 찾아볼 수 있는 자료를 제공합니다.

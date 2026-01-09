@@ -2,6 +2,9 @@
 title: 기본 예제
 weight: 2
 lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 Spark의 핵심 기능을 활용하는 예제 코드입니다.

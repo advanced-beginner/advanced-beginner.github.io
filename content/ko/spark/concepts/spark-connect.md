@@ -2,6 +2,9 @@
 title: Spark Connect
 weight: 12
 lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 Spark Connect는 Spark 3.4에서 도입된 새로운 클라이언트-서버 아키텍처입니다. 씬 클라이언트(Thin Client)로 원격 Spark 클러스터에 연결할 수 있습니다.
@@ -365,6 +368,60 @@ Dataset<Row> df = spark.read().parquet("data.parquet");
 2. **RDD API 미지원**: DataFrame/Dataset API로 변환 필요
 3. **UDF 서버 등록**: 사용자 정의 함수는 서버에 미리 등록
 4. **네트워크 지연**: 원격 연결로 인한 약간의 오버헤드 존재
+
+#### 언제 Spark Connect를 선택해야 할까
+
+**Spark Connect 권장 상황**
+
+| 상황 | 이유 |
+|------|------|
+| **마이크로서비스 아키텍처** | 각 서비스에서 무거운 Spark 의존성 없이 데이터 처리 |
+| **다중 팀 공유 클러스터** | 중앙 집중식 서버로 리소스 효율성 향상 |
+| **컨테이너 환경(K8s)** | 경량 클라이언트로 Pod 시작 시간 단축 |
+| **언어 다양성** | Python, Java, Go 등 다양한 언어에서 동일 클러스터 접근 |
+| **보안 요구사항** | 클러스터 직접 접근 대신 gRPC 엔드포인트만 노출 |
+
+**기존 방식 유지 권장 상황**
+
+| 상황 | 이유 |
+|------|------|
+| **RDD API 필수** | Spark Connect는 DataFrame API만 지원 |
+| **Streaming 중심 워크로드** | 아직 완전한 스트리밍 지원 부족 |
+| **네트워크 지연 민감** | 직접 연결 대비 gRPC 오버헤드 존재 |
+| **레거시 시스템 통합** | 기존 코드 대규모 마이그레이션 필요 |
+
+#### 실무 인사이트
+
+**Java/Spring 환경에서의 현실적 고려사항**
+
+1. **의존성 크기 비교**
+   - 기존 spark-sql: 약 200MB (전이적 의존성 포함)
+   - spark-connect-client-jvm: 약 15MB
+   - Docker 이미지 크기와 시작 시간에 상당한 영향
+
+2. **Spring Boot 통합 시 주의점**
+   - SparkSession은 스레드 안전하므로 싱글톤 Bean으로 관리
+   - 연결 끊김 시 자동 재연결 로직 구현 필요
+   - 트랜잭션과 Spark 작업을 분리 (Spark는 트랜잭션 비인식)
+
+3. **성능 트레이드오프**
+   ```
+   gRPC 오버헤드: 요청당 1-5ms 추가
+   데이터 직렬화: Arrow 포맷으로 효율적
+   대용량 결과: 서버 메모리에서 처리 후 스트리밍 전송
+   ```
+
+4. **모니터링**
+   - 서버 측 Spark UI (포트 4040)
+   - gRPC 메트릭 수집 가능
+   - 클라이언트 측에서는 제한적인 정보만 확인 가능
+
+**Spark 3.5 업데이트 사항**
+
+- Arrow 기반 데이터 전송 성능 개선
+- Python UDF 지원 확대
+- 에러 메시지 개선으로 디버깅 용이
+- 연결 안정성 향상
 
 #### 관련 문서
 

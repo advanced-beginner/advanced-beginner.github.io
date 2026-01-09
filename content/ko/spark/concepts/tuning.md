@@ -2,6 +2,9 @@
 title: 성능 튜닝
 weight: 10
 lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 Spark 애플리케이션의 성능을 최적화하는 전략과 구체적인 설정 방법을 알아봅니다.
@@ -390,6 +393,64 @@ df.explain(true);
 - [ ] Kryo 직렬화
 - [ ] 브로드캐스트 임계값 조정
 - [ ] 메모리/코어 적절 할당
+
+#### 실무 인사이트
+
+**실제 튜닝 시나리오**
+
+1. **ETL 파이프라인 최적화 사례**
+   ```
+   문제: 일일 100GB 데이터 처리, 4시간 소요
+   원인: 200개 기본 셔플 파티션으로 불균형 발생
+   해결: spark.sql.shuffle.partitions=2000 + AQE 활성화
+   결과: 45분으로 단축 (80% 개선)
+   ```
+
+2. **조인 성능 개선 패턴**
+   ```java
+   // Before: 3시간 소요
+   large.join(small, "key").join(medium, "key2")
+
+   // After: 20분 소요
+   // 1. 작은 테이블 브로드캐스트
+   // 2. 조인 순서 최적화 (작은 결과 먼저)
+   large
+     .join(broadcast(small), "key")   // 셔플 없음
+     .filter(col("status").equalTo("active"))  // 조기 필터
+     .join(medium, "key2")
+   ```
+
+3. **데이터 스큐 해결 실전**
+   ```java
+   // 특정 키에 데이터 집중 (예: null, default 값)
+   // Salting 기법으로 분산
+   int saltBuckets = 10;
+   Dataset<Row> salted = skewedDf
+       .withColumn("salt", expr("floor(rand() * " + saltBuckets + ")"))
+       .withColumn("salted_key", concat(col("key"), lit("_"), col("salt")));
+   ```
+
+4. **GC 튜닝 경험칙**
+   | Executor 메모리 | 권장 GC | 이유 |
+   |-----------------|---------|------|
+   | ~8GB | 기본 (Parallel) | 충분히 작음 |
+   | 8~32GB | G1GC | 대용량에 효과적 |
+   | 32GB+ | ZGC/Shenandoah | 초저지연 필요 시 |
+
+5. **Spring Boot 환경에서의 튜닝 팁**
+   - REST API 응답 시간 제약이 있다면 비동기 처리 (CompletableFuture)
+   - 대용량 결과는 파일 저장 후 URL 반환 패턴 권장
+   - SparkSession 생성은 애플리케이션 시작 시 1회만
+
+**성능 개선 우선순위**
+
+```
+1순위: 데이터 스큐 해결 (가장 큰 효과)
+2순위: 불필요한 셔플 제거 (groupBy, join 최적화)
+3순위: 브로드캐스트 조인 활용
+4순위: 캐싱/파티셔닝 전략
+5순위: Executor 리소스 튜닝
+```
 
 #### 다음 단계
 

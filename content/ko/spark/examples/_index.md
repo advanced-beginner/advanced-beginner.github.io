@@ -2,6 +2,9 @@
 title: 실습 예제
 weight: 3
 lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 Spark를 실제로 사용해보는 예제 코드입니다. 각 예제는 독립적으로 실행할 수 있으며, 점진적으로 복잡한 기능을 다룹니다.
