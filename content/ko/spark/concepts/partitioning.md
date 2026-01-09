@@ -1,14 +1,15 @@
 ---
 title: 파티셔닝과 셔플
 weight: 6
-lastmod: "2026-01-07"
+lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
-
-# 파티셔닝과 셔플
 
 파티셔닝은 Spark 성능의 핵심입니다. 데이터가 어떻게 분산되는지 이해하고 최적화하는 것이 대규모 데이터 처리의 관건입니다.
 
-## 파티션이란?
+#### 파티션이란?
 
 **파티션(Partition)**은 RDD/DataFrame 데이터의 논리적 분할 단위입니다. 각 파티션은 클러스터의 한 노드에서 처리됩니다.
 
@@ -21,7 +22,7 @@ DataFrame (1억 행)
 └── Partition 9 (1000만 행) → Executor 4, Task 9
 ```
 
-### 파티션의 중요성
+**파티션의 중요성**
 
 | 파티션 수 | 영향 |
 |----------|------|
@@ -29,9 +30,9 @@ DataFrame (1억 행)
 | 너무 많음 | 스케줄링 오버헤드, 작은 태스크 비효율, 셔플 비용 증가 |
 | 적절함 | 균형 잡힌 부하 분산, 효율적인 리소스 사용 |
 
-## 파티션 수 확인 및 조정
+#### 파티션 수 확인 및 조정
 
-### 현재 파티션 수 확인
+**현재 파티션 수 확인**
 
 ```java
 Dataset<Row> df = spark.read().parquet("data.parquet");
@@ -49,7 +50,7 @@ df.mapPartitions(
 ).collectAsList().forEach(System.out::println);
 ```
 
-### 파티션 수 결정 가이드라인
+**파티션 수 결정 가이드라인**
 
 ```
 권장 파티션 크기: 100MB ~ 200MB
@@ -63,7 +64,7 @@ df.mapPartitions(
 - 최대: 100 × 4 = 400 파티션
 - 권장: 약 200 파티션 (100GB ÷ 200MB × 4)
 
-### 파티션 조정
+**파티션 조정**
 
 ```java
 // repartition - 파티션 수 변경 (셔플 발생)
@@ -77,7 +78,7 @@ Dataset<Row> keyPartitioned = df.repartition(col("department"));
 Dataset<Row> keyWithCount = df.repartition(100, col("department"));
 ```
 
-### repartition vs coalesce
+**repartition vs coalesce**
 
 | 특성 | repartition | coalesce |
 |------|------------|----------|
@@ -99,11 +100,11 @@ df.repartition(200, col("key"))
   .agg(sum("value"));
 ```
 
-## 셔플(Shuffle)
+#### 셔플(Shuffle)
 
 **셔플(Shuffle)**은 파티션 간 데이터 재분배 과정입니다. Wide Transformation에서 발생합니다.
 
-### 셔플이 발생하는 연산
+**셔플이 발생하는 연산**
 
 ```java
 // groupBy - 같은 키를 같은 파티션으로
@@ -122,7 +123,7 @@ df.repartition(100);
 df.orderBy("column");
 ```
 
-### 셔플 과정
+**셔플 과정**
 
 ```
 Map Phase (셔플 쓰기)
@@ -136,7 +137,7 @@ Reduce Phase (셔플 읽기)
 └── 정렬/집계 수행
 ```
 
-### 셔플의 비용
+**셔플의 비용**
 
 셔플은 Spark에서 가장 비용이 높은 연산입니다:
 
@@ -145,7 +146,7 @@ Reduce Phase (셔플 읽기)
 3. **직렬화**: 데이터 직렬화/역직렬화
 4. **정렬**: 키 기준 정렬
 
-## 셔플 파티션 설정
+#### 셔플 파티션 설정
 
 ```java
 // 셔플 파티션 수 설정 (기본값: 200)
@@ -158,7 +159,7 @@ SparkSession spark = SparkSession.builder()
     .getOrCreate();
 ```
 
-### Adaptive Query Execution (AQE)
+**Adaptive Query Execution (AQE)**
 
 Spark 3.0+에서는 AQE가 셔플 파티션을 자동 조정합니다.
 
@@ -181,9 +182,9 @@ AQE의 장점:
 - 작은 파티션 자동 병합
 - 데이터 스큐 자동 처리
 
-## 파티셔닝 전략
+#### 파티셔닝 전략
 
-### Hash Partitioning
+**Hash Partitioning**
 
 가장 일반적인 파티셔닝. 키의 해시값을 기준으로 파티션 결정.
 
@@ -194,7 +195,7 @@ df.repartition(100, col("user_id"));
 // 해시 함수: partition = hash(key) % numPartitions
 ```
 
-### Range Partitioning
+**Range Partitioning**
 
 키 값의 범위를 기준으로 파티션 결정. 정렬된 데이터에 적합.
 
@@ -206,7 +207,7 @@ df.repartitionByRange(100, col("timestamp"));
 //     timestamp 100-200 → Partition 1
 ```
 
-### Custom Partitioning (RDD)
+**Custom Partitioning (RDD)**
 
 RDD에서는 커스텀 파티셔너를 정의할 수 있습니다.
 
@@ -242,11 +243,11 @@ JavaPairRDD<String, Integer> partitioned =
     pairRDD.partitionBy(new RegionPartitioner(4));
 ```
 
-## 데이터 스큐(Data Skew)
+#### 데이터 스큐(Data Skew)
 
 데이터 스큐는 특정 파티션에 데이터가 집중되는 현상입니다.
 
-### 스큐 탐지
+**스큐 탐지**
 
 ```java
 // 파티션별 데이터 수 확인
@@ -265,7 +266,7 @@ df.groupBy(spark_partition_id().alias("partition"))
 // ...
 ```
 
-### 스큐 해결 방법
+**스큐 해결 방법**
 
 **1. Salting (솔팅)**
 
@@ -332,9 +333,9 @@ Dataset<Row> result = partial
     .agg(sum("partial_sum").alias("total"));
 ```
 
-## 조인과 파티셔닝
+#### 조인과 파티셔닝
 
-### 조인 전략
+**조인 전략**
 
 ```java
 // 1. Broadcast Hash Join (작은 테이블)
@@ -351,7 +352,7 @@ df1.join(broadcast(df2), "key");
 df1.join(df2.hint("shuffle_hash"), "key");
 ```
 
-### 조인 최적화
+**조인 최적화**
 
 ```java
 // 조인 전 필터링 (셔플 데이터 감소)
@@ -371,7 +372,7 @@ Dataset<Row> joined = part1.join(part2, "key");
 // → 이미 같은 키가 같은 파티션에 있으므로 셔플 불필요
 ```
 
-## 파일 파티셔닝
+#### 파일 파티셔닝
 
 데이터를 저장할 때 파일 시스템 레벨에서도 파티셔닝할 수 있습니다.
 
@@ -399,7 +400,7 @@ Dataset<Row> filtered = spark.read()
 // → year=2024/month=01/ 디렉토리만 스캔
 ```
 
-### 버케팅(Bucketing)
+**버케팅(Bucketing)**
 
 ```java
 // 버케팅으로 저장 (조인 최적화)
@@ -415,15 +416,15 @@ Dataset<Row> joined = users.join(events, "user_id");
 // → 셔플 없이 조인 (같은 user_id가 같은 버킷에 있음)
 ```
 
-## 모니터링
+#### 모니터링
 
-### Spark UI에서 셔플 확인
+**Spark UI에서 셔플 확인**
 
 1. **Stages 탭**: 각 Stage의 셔플 읽기/쓰기 크기
 2. **Tasks 탭**: 개별 Task의 셔플 데이터 크기
 3. **Executors 탭**: Executor별 셔플 데이터 통계
 
-### 셔플 메트릭
+**셔플 메트릭**
 
 주목할 메트릭:
 - **Shuffle Write**: Stage에서 출력한 셔플 데이터
@@ -431,12 +432,12 @@ Dataset<Row> joined = users.join(events, "user_id");
 - **Shuffle Spill (Memory)**: 메모리 스필 크기
 - **Shuffle Spill (Disk)**: 디스크 스필 크기 (많으면 메모리 부족)
 
-## 다음 단계
+#### 다음 단계
 
 - [캐싱과 영속성](../caching/) - 중간 결과 저장으로 재계산 방지
 - [성능 튜닝](../tuning/) - 전체적인 성능 최적화 전략
 
-## 관련 문서
+#### 관련 문서
 
 - [아키텍처](../architecture/) - 분산 처리 구조 이해
 - [Transformation과 Action](../transformations-actions/) - Narrow/Wide Transformation

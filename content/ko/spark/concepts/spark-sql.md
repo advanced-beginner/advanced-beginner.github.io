@@ -1,25 +1,26 @@
 ---
 title: Spark SQL
 weight: 4
-lastmod: "2026-01-07"
+lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
-
-# Spark SQL
 
 Spark SQL은 구조화된 데이터 처리를 위한 Spark 모듈입니다. SQL 쿼리와 DataFrame API를 모두 지원하며, 동일한 실행 엔진(Catalyst Optimizer)을 사용합니다.
 
-## Spark SQL의 장점
+#### Spark SQL의 장점
 
 1. **익숙한 SQL 문법**: 기존 SQL 지식 그대로 활용
 2. **최적화**: Catalyst Optimizer가 쿼리 자동 최적화
 3. **다양한 데이터 소스**: JDBC, Parquet, JSON, Hive 등 통합
 4. **DataFrame과 상호 운용**: SQL 결과가 DataFrame으로 반환
 
-## Catalyst Optimizer 심층 이해
+#### Catalyst Optimizer 심층 이해
 
 Catalyst는 Spark SQL의 쿼리 최적화 엔진입니다. 사용자가 작성한 쿼리를 분석하고 최적화하여 효율적인 실행 계획을 생성합니다.
 
-### 쿼리 처리 단계
+**쿼리 처리 단계**
 
 ```mermaid
 flowchart LR
@@ -47,7 +48,7 @@ flowchart LR
     end
 ```
 
-### 각 단계 상세
+**각 단계 상세**
 
 #### 1단계: Analysis (분석)
 
@@ -107,7 +108,7 @@ df.join(other, "id")
 spark.conf().set("spark.sql.codegen.wholeStage", "true");  // 기본값
 ```
 
-### 실행 계획 확인하기
+**실행 계획 확인하기**
 
 ```java
 Dataset<Row> result = df
@@ -146,7 +147,7 @@ result.explain(true);
 //                +- FileScan parquet [age,department,salary]  ← 필요한 컬럼만
 ```
 
-### AQE (Adaptive Query Execution)
+**AQE (Adaptive Query Execution)**
 
 Spark 3.0+에서 도입된 **런타임 최적화**입니다. 실행 중 통계를 수집하여 계획을 동적으로 조정합니다.
 
@@ -177,9 +178,9 @@ AQE: 런타임에 5개 파티션으로 병합
 결과: 태스크 수 감소, 오버헤드 절감
 ```
 
-## 기본 사용법
+#### 기본 사용법
 
-### 임시 뷰 생성
+**임시 뷰 생성**
 
 ```java
 SparkSession spark = SparkSession.builder()
@@ -208,7 +209,7 @@ Dataset<Row> result = spark.sql("""
 result.show();
 ```
 
-### 뷰 유형
+**뷰 유형**
 
 ```java
 // 세션 범위 임시 뷰 (기본)
@@ -225,9 +226,9 @@ spark.catalog().dropTempView("my_view");
 spark.catalog().dropGlobalTempView("global_view");
 ```
 
-## SQL 문법
+#### SQL 문법
 
-### SELECT
+**SELECT**
 
 ```sql
 -- 기본 SELECT
@@ -243,7 +244,7 @@ SELECT DISTINCT department FROM employees;
 SELECT * FROM employees LIMIT 10;
 ```
 
-### WHERE
+**WHERE**
 
 ```sql
 -- 비교 연산
@@ -270,7 +271,7 @@ SELECT * FROM employees WHERE manager_id IS NULL;
 SELECT * FROM employees WHERE manager_id IS NOT NULL;
 ```
 
-### GROUP BY와 집계
+**GROUP BY와 집계**
 
 ```sql
 -- 기본 집계
@@ -296,7 +297,7 @@ FROM employees
 GROUP BY department, level;
 ```
 
-### ORDER BY
+**ORDER BY**
 
 ```sql
 -- 오름차순 (기본)
@@ -314,7 +315,7 @@ SELECT * FROM employees ORDER BY salary NULLS FIRST;
 SELECT * FROM employees ORDER BY salary DESC NULLS LAST;
 ```
 
-### JOIN
+**JOIN**
 
 ```sql
 -- INNER JOIN
@@ -348,7 +349,7 @@ FROM employees e1
 LEFT JOIN employees e2 ON e1.manager_id = e2.id;
 ```
 
-### 서브쿼리
+**서브쿼리**
 
 ```sql
 -- WHERE절 서브쿼리
@@ -377,7 +378,7 @@ FROM (
 WHERE avg_salary > 50000;
 ```
 
-### 집합 연산
+**집합 연산**
 
 ```sql
 -- UNION (중복 제거)
@@ -401,9 +402,9 @@ EXCEPT
 SELECT name FROM employees_busan;
 ```
 
-## 내장 함수
+#### 내장 함수
 
-### 문자열 함수
+**문자열 함수**
 
 ```sql
 -- 대소문자 변환
@@ -429,7 +430,7 @@ SELECT REPLACE(phone, '-', '') FROM employees;
 SELECT SPLIT(tags, ',') FROM products;
 ```
 
-### 숫자 함수
+**숫자 함수**
 
 ```sql
 -- 반올림
@@ -443,7 +444,7 @@ SELECT ABS(difference), SIGN(difference) FROM results;
 SELECT POWER(base, exponent), SQRT(value) FROM calculations;
 ```
 
-### 날짜/시간 함수
+**날짜/시간 함수**
 
 ```sql
 -- 현재 날짜/시간
@@ -473,7 +474,7 @@ SELECT TRUNC(created_at, 'MONTH') FROM orders;  -- 월 시작일
 SELECT TRUNC(created_at, 'YEAR') FROM orders;   -- 연 시작일
 ```
 
-### 조건 함수
+**조건 함수**
 
 ```sql
 -- CASE WHEN
@@ -500,7 +501,7 @@ SELECT NULLIF(value1, value2) FROM data;
 SELECT NVL(commission, 0) as commission FROM employees;
 ```
 
-### 집계 함수
+**집계 함수**
 
 ```sql
 -- 기본 집계
@@ -530,7 +531,7 @@ SELECT
 FROM employees;
 ```
 
-### Window 함수
+**Window 함수**
 
 ```sql
 -- 순위 함수
@@ -574,7 +575,7 @@ SELECT
 FROM employees;
 ```
 
-## Catalog API
+#### Catalog API
 
 Spark SQL의 메타데이터를 프로그래밍 방식으로 관리합니다.
 
@@ -610,7 +611,7 @@ catalog.clearCache();
 catalog.refreshTable("employees");
 ```
 
-## Hive 통합
+#### Hive 통합
 
 Spark SQL은 Hive 메타스토어와 통합하여 영구 테이블을 관리할 수 있습니다.
 
@@ -657,9 +658,9 @@ spark.sql("SELECT * FROM employees").show();
 spark.sql("DROP TABLE IF EXISTS employees");
 ```
 
-## 성능 최적화
+#### 성능 최적화
 
-### Explain Plan
+**Explain Plan**
 
 ```java
 // 실행 계획 확인
@@ -683,7 +684,7 @@ result.explain("cost");        // 비용 추정
 result.explain("formatted");   // 보기 좋게 정렬
 ```
 
-### 힌트
+**힌트**
 
 ```sql
 -- Broadcast 힌트
@@ -703,7 +704,7 @@ SELECT /*+ COALESCE(4) */ * FROM employees;
 SELECT /*+ REPARTITION(8, department) */ * FROM employees;
 ```
 
-### 주요 설정
+**주요 설정**
 
 ```java
 // 셔플 파티션 수
@@ -720,7 +721,7 @@ spark.conf().set("spark.sql.adaptive.coalescePartitions.enabled", "true");
 spark.conf().set("spark.sql.codegen.wholeStage", "true");
 ```
 
-## 실전 예제: 복잡한 분석 쿼리
+#### 실전 예제: 복잡한 분석 쿼리
 
 ```java
 public class ComplexAnalysis {
@@ -802,7 +803,7 @@ public class ComplexAnalysis {
 }
 ```
 
-## 다음 단계
+#### 다음 단계
 
 - [Transformation과 Action](../transformations-actions/) - 연산의 지연 평가 이해
 - [파티셔닝과 셔플](../partitioning/) - 분산 처리 최적화

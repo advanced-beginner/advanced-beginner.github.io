@@ -1,14 +1,15 @@
 ---
 title: RDD 기초
 weight: 2
-lastmod: "2026-01-07"
+lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
-
-# RDD (Resilient Distributed Dataset)
 
 RDD는 Spark의 가장 기본적인 데이터 추상화입니다. DataFrame과 Dataset의 기반이 되는 저수준 API로, Spark의 동작 원리를 이해하는 데 필수적입니다.
 
-## RDD란?
+#### RDD란?
 
 **RDD(Resilient Distributed Dataset)**는 여러 노드에 분산된 불변 데이터 컬렉션입니다.
 
@@ -16,7 +17,7 @@ RDD는 Spark의 가장 기본적인 데이터 추상화입니다. DataFrame과 D
 - **Distributed (분산)**: 클러스터의 여러 노드에 파티션으로 분산 저장
 - **Dataset (데이터셋)**: 구조화되지 않은 데이터도 처리 가능한 범용 컬렉션
 
-### RDD의 특성
+**RDD의 특성**
 
 | 특성 | 설명 |
 |------|------|
@@ -26,9 +27,9 @@ RDD는 Spark의 가장 기본적인 데이터 추상화입니다. DataFrame과 D
 | **타입 안전(Type-safe)** | 제네릭으로 타입 지정 가능 |
 | **장애 복구(Fault-tolerant)** | Lineage로 손실 데이터 재계산 |
 
-## RDD 생성
+#### RDD 생성
 
-### 1. 컬렉션에서 생성 (parallelize)
+**1. 컬렉션에서 생성 (parallelize)**
 
 ```java
 import org.apache.spark.api.java.JavaRDD;
@@ -66,7 +67,7 @@ public class RddExample {
 - SparkSession에서도 `sparkSession.sparkContext()` 또는 `new JavaSparkContext(spark.sparkContext())`로 접근 가능
 - `parallelize`는 로컬 컬렉션을 분산 RDD로 변환
 
-### 2. 외부 데이터에서 생성
+**2. 외부 데이터에서 생성**
 
 ```java
 // 텍스트 파일에서 생성 (한 줄 = 하나의 요소)
@@ -85,7 +86,7 @@ JavaRDD<String> s3Lines = sc.textFile("s3a://bucket/path/file.txt");
 JavaPairRDD<String, String> wholeFiles = sc.wholeTextFiles("path/to/directory");
 ```
 
-### 3. 다른 RDD에서 생성 (Transformation)
+**3. 다른 RDD에서 생성 (Transformation)**
 
 ```java
 JavaRDD<Integer> numbers = sc.parallelize(Arrays.asList(1, 2, 3, 4, 5));
@@ -97,11 +98,11 @@ JavaRDD<Integer> doubled = numbers.map(n -> n * 2);
 JavaRDD<Integer> evens = numbers.filter(n -> n % 2 == 0);
 ```
 
-## Transformation
+#### Transformation
 
 Transformation은 기존 RDD에서 새 RDD를 생성하는 연산입니다. **지연 평가**되어 즉시 실행되지 않습니다.
 
-### Narrow vs Wide Transformation
+**Narrow vs Wide Transformation**
 
 ```mermaid
 graph TB
@@ -128,7 +129,7 @@ graph TB
 | **Narrow** | map, filter, flatMap | 1:1 파티션 매핑, 빠름 |
 | **Wide** | groupByKey, reduceByKey, join | 셔플 발생, 네트워크 비용 |
 
-### 기본 Transformation
+**기본 Transformation**
 
 ```java
 JavaRDD<String> lines = sc.parallelize(Arrays.asList(
@@ -156,7 +157,7 @@ JavaRDD<String> uniqueWords = words.distinct();
 // ["Hello", "World", "Spark", "is", "fast"]
 ```
 
-### Pair RDD Transformation
+**Pair RDD Transformation**
 
 키-값 쌍을 다루는 RDD는 추가적인 연산을 제공합니다.
 
@@ -186,7 +187,7 @@ wordCounts.collect().forEach(System.out::println);
 // (fast,1)
 ```
 
-### 주요 Pair RDD 연산
+**주요 Pair RDD 연산**
 
 ```java
 JavaPairRDD<String, Integer> scores = sc.parallelizePairs(Arrays.asList(
@@ -216,7 +217,7 @@ JavaRDD<Integer> values = scores.values();
 JavaPairRDD<String, Integer> sorted = totalScores.sortByKey();
 ```
 
-### Join 연산
+**Join 연산**
 
 ```java
 JavaPairRDD<String, Integer> ages = sc.parallelizePairs(Arrays.asList(
@@ -242,7 +243,7 @@ JavaPairRDD<String, Tuple2<Integer, Optional<String>>> leftJoined =
 // fullOuterJoin: 양쪽 모두
 ```
 
-## Action
+#### Action
 
 Action은 RDD를 실제로 계산하고 결과를 반환하는 연산입니다.
 
@@ -289,7 +290,7 @@ Map<Integer, Long> valueCounts = numbers.countByValue();
 numbers.saveAsTextFile("output/numbers");
 ```
 
-## Lineage (혈통)
+#### Lineage (혈통)
 
 RDD는 자신이 어떻게 생성되었는지에 대한 정보(lineage)를 유지합니다. 이를 통해:
 
@@ -307,7 +308,7 @@ long count = filtered.count();                         // Action!
 // 전체 lineage: textFile → flatMap → filter → count
 ```
 
-### Lineage 확인
+**Lineage 확인**
 
 ```java
 System.out.println(filtered.toDebugString());
@@ -320,11 +321,11 @@ System.out.println(filtered.toDebugString());
  |  data.txt MapPartitionsRDD[0] at textFile at RddExample.java:13 []
 ```
 
-## Narrow vs Wide Dependencies
+#### Narrow vs Wide Dependencies
 
 Transformation은 의존성 유형에 따라 성능이 크게 달라집니다.
 
-### Narrow Dependency
+**Narrow Dependency**
 
 각 부모 파티션이 최대 하나의 자식 파티션에만 사용됩니다.
 
@@ -338,7 +339,7 @@ JavaRDD<Integer> filtered = numbers.filter(n -> n > 5);
 - 파이프라이닝 가능
 - 매우 효율적
 
-### Wide Dependency
+**Wide Dependency**
 
 하나의 부모 파티션이 여러 자식 파티션에 사용됩니다.
 
@@ -353,7 +354,7 @@ JavaPairRDD<String, Tuple2<Integer, String>> joined = rdd1.join(rdd2);
 - Stage 경계가 됨
 - 성능에 큰 영향
 
-## 영속성 (Persistence)
+#### 영속성 (Persistence)
 
 자주 사용되는 RDD는 메모리에 캐시하여 재계산을 방지할 수 있습니다.
 
@@ -378,7 +379,7 @@ long count2 = filtered.count();   // 캐시에서 읽음 (빠름)
 filtered.unpersist();
 ```
 
-### Storage Level
+**Storage Level**
 
 | 레벨 | 메모리 | 디스크 | 직렬화 | 복제 |
 |------|--------|--------|--------|------|
@@ -389,25 +390,25 @@ filtered.unpersist();
 | DISK_ONLY | X | O | X | 1 |
 | *_2 | - | - | - | 2 |
 
-## RDD vs DataFrame/Dataset
+#### RDD vs DataFrame/Dataset
 
 현재 Spark에서는 DataFrame/Dataset API를 권장하지만, RDD가 필요한 경우가 있습니다:
 
-### RDD를 사용해야 하는 경우
+**RDD를 사용해야 하는 경우**
 
 1. **저수준 제어 필요**: 파티션, 셔플 세밀 제어
 2. **비구조화 데이터**: 스키마가 없는 데이터
 3. **기존 RDD 코드 유지보수**
 4. **특수 직렬화 로직 필요**
 
-### DataFrame/Dataset을 사용해야 하는 경우
+**DataFrame/Dataset을 사용해야 하는 경우**
 
 1. **구조화된 데이터 처리**
 2. **SQL 사용**
 3. **성능 최적화 (Catalyst Optimizer)**
 4. **다양한 데이터 소스 연동**
 
-### 상호 변환
+**상호 변환**
 
 ```java
 import org.apache.spark.sql.SparkSession;
@@ -436,7 +437,7 @@ JavaRDD<Integer> numberRdd = sc.parallelize(Arrays.asList(1, 2, 3));
 Dataset<Integer> ds = spark.createDataset(numberRdd.rdd(), Encoders.INT());
 ```
 
-## 실전 예제: 로그 분석
+#### 실전 예제: 로그 분석
 
 웹 서버 로그에서 에러를 분석하는 예제:
 
@@ -497,7 +498,7 @@ public class LogAnalysis {
 }
 ```
 
-## 다음 단계
+#### 다음 단계
 
 RDD의 기본을 이해했다면, 더 효율적인 API를 학습하세요:
 

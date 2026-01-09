@@ -1,18 +1,19 @@
 ---
 title: 캐싱과 영속성
 weight: 7
-lastmod: "2026-01-07"
+lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
-
-# 캐싱과 영속성
 
 Spark의 인메모리 컴퓨팅 능력을 활용하여 중간 결과를 캐시하고 재사용하는 방법을 알아봅니다.
 
-## 캐싱이란?
+#### 캐싱이란?
 
 **캐싱(Caching)**은 RDD/DataFrame을 메모리나 디스크에 저장하여 후속 연산에서 재사용하는 것입니다.
 
-### 캐싱이 필요한 이유
+**캐싱이 필요한 이유**
 
 ```java
 // 캐싱 없이: 비효율적
@@ -34,9 +35,9 @@ processed.write().parquet("output");         // 캐시에서 읽음 (빠름)
 processed.unpersist();                       // 캐시 해제
 ```
 
-## 기본 사용법
+#### 기본 사용법
 
-### cache()
+**cache()**
 
 ```java
 Dataset<Row> df = spark.read().parquet("large-data.parquet");
@@ -55,7 +56,7 @@ df.groupBy("category").count().show();
 df.unpersist();
 ```
 
-### persist()
+**persist()**
 
 스토리지 레벨을 직접 지정할 수 있습니다.
 
@@ -81,7 +82,7 @@ df.persist(StorageLevel.DISK_ONLY());
 df.persist(StorageLevel.MEMORY_AND_DISK_2());
 ```
 
-## Storage Level 상세
+#### Storage Level 상세
 
 | Storage Level | 메모리 사용 | 디스크 사용 | 직렬화 | 복제 | 특징 |
 |--------------|------------|------------|--------|------|------|
@@ -93,7 +94,7 @@ df.persist(StorageLevel.MEMORY_AND_DISK_2());
 | OFF_HEAP | X (off-heap) | X | O | 1 | GC 영향 없음 |
 | *_2 | - | - | - | 2 | 복제본 2개 |
 
-### 어떤 레벨을 선택할까?
+**어떤 레벨을 선택할까?**
 
 ```
 메모리 충분 + 빠른 접근 필요 → MEMORY_ONLY
@@ -103,9 +104,9 @@ df.persist(StorageLevel.MEMORY_AND_DISK_2());
 고가용성 필요 → *_2 계열
 ```
 
-## 캐싱 vs 체크포인트
+#### 캐싱 vs 체크포인트
 
-### 캐싱 (cache/persist)
+**캐싱 (cache/persist)**
 
 ```java
 df.cache();
@@ -115,7 +116,7 @@ df.cache();
 - **단점**: 장애 시 lineage 재계산 필요
 - **사용**: 반복 접근 최적화
 
-### 체크포인트 (checkpoint)
+**체크포인트 (checkpoint)**
 
 ```java
 // 체크포인트 디렉토리 설정
@@ -131,7 +132,7 @@ df.checkpoint(true);
 - **단점**: 디스크 I/O 필요
 - **사용**: 긴 lineage, 장애 복구 필요 시
 
-### 언제 무엇을 사용?
+**언제 무엇을 사용?**
 
 ```java
 // 단순 반복 사용 → cache
@@ -158,9 +159,9 @@ for (int iter = 0; iter < 100; iter++) {
 }
 ```
 
-## 캐시 관리
+#### 캐시 관리
 
-### 캐시 상태 확인
+**캐시 상태 확인**
 
 ```java
 // 캐시 여부 확인
@@ -170,7 +171,7 @@ boolean isCached = spark.catalog().isCached("table_name");
 // http://localhost:4040 → Storage 탭
 ```
 
-### 캐시 해제
+**캐시 해제**
 
 ```java
 // 특정 DataFrame 해제
@@ -186,14 +187,14 @@ spark.catalog().uncacheTable("table_name");
 spark.catalog().clearCache();
 ```
 
-### 캐시 새로고침
+**캐시 새로고침**
 
 ```java
 // 캐시된 테이블 새로고침 (원본 변경 반영)
 spark.catalog().refreshTable("table_name");
 ```
 
-## SQL에서의 캐싱
+#### SQL에서의 캐싱
 
 ```sql
 -- 테이블 캐시
@@ -213,9 +214,9 @@ UNCACHE TABLE employees;
 CLEAR CACHE;
 ```
 
-## 캐싱 모범 사례
+#### 캐싱 모범 사례
 
-### 1. 여러 번 사용되는 데이터만 캐시
+**1. 여러 번 사용되는 데이터만 캐시**
 
 ```java
 // 좋음: 여러 번 사용
@@ -230,7 +231,7 @@ Dataset<Row> oneTime = loadData().cache();
 oneTime.write().parquet("output");  // 한 번만 사용
 ```
 
-### 2. 적절한 시점에 캐시
+**2. 적절한 시점에 캐시**
 
 ```java
 // 좋음: 비용이 큰 연산 후 캐시
@@ -245,7 +246,7 @@ Dataset<Row> early = df.cache();  // 아직 필터링 전
 Dataset<Row> filtered = early.filter(col("needed").equalTo(true));
 ```
 
-### 3. 메모리 모니터링
+**3. 메모리 모니터링**
 
 ```java
 // Executor 메모리의 약 60%가 저장/캐시에 사용 (기본)
@@ -255,7 +256,7 @@ spark.conf().set("spark.memory.storageFraction", "0.5");  // 50%로 조정
 spark.conf().set("spark.memory.storageFraction", "0.6");
 ```
 
-### 4. 사용 후 즉시 해제
+**4. 사용 후 즉시 해제**
 
 ```java
 Dataset<Row> cached = expensive.cache();
@@ -267,7 +268,7 @@ try {
 }
 ```
 
-### 5. 직렬화 고려
+**5. 직렬화 고려**
 
 ```java
 // 큰 객체가 많은 경우 직렬화가 효율적
@@ -278,7 +279,7 @@ spark.conf().set("spark.serializer", "org.apache.spark.serializer.KryoSerializer
 spark.conf().set("spark.kryo.registrationRequired", "false");
 ```
 
-## 캐싱과 파티셔닝
+#### 캐싱과 파티셔닝
 
 ```java
 // 캐시 전 파티션 조정 권장
@@ -291,7 +292,7 @@ Dataset<Row> optimized = df
 // 파티션이 너무 적으면 병렬성 저하
 ```
 
-## 실전 예제: 머신러닝 파이프라인
+#### 실전 예제: 머신러닝 파이프라인
 
 ```java
 public class MLPipelineWithCaching {
@@ -346,9 +347,9 @@ public class MLPipelineWithCaching {
 }
 ```
 
-## 트러블슈팅
+#### 트러블슈팅
 
-### 메모리 부족으로 캐시 실패
+**메모리 부족으로 캐시 실패**
 
 ```
 WARN MemoryStore: Not enough space to cache rdd_X in memory!
@@ -369,7 +370,7 @@ spark.conf().set("spark.executor.memory", "8g");
 anotherDf.unpersist();
 ```
 
-### 캐시가 예상대로 동작하지 않음
+**캐시가 예상대로 동작하지 않음**
 
 ```java
 // 주의: cache() 후 새 DataFrame이 생성되면 캐시 적용 안 됨
@@ -383,12 +384,12 @@ Dataset<Row> df = spark.read().parquet("data").cache();
 Dataset<Row> filtered = df.filter(...);  // df가 캐시됨
 ```
 
-## 다음 단계
+#### 다음 단계
 
 - [Structured Streaming](../structured-streaming/) - 실시간 데이터 처리
 - [성능 튜닝](../tuning/) - 전체 성능 최적화
 
-## 관련 문서
+#### 관련 문서
 
 - [Transformation과 Action](../transformations-actions/) - 지연 평가와 캐싱의 관계
 - [파티셔닝과 셔플](../partitioning/) - 캐시 전 파티션 최적화

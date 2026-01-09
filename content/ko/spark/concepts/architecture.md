@@ -1,14 +1,15 @@
 ---
 title: 아키텍처
 weight: 1
-lastmod: "2026-01-07"
+lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
-
-# Spark 아키텍처
 
 Spark 애플리케이션이 어떻게 분산 환경에서 실행되는지 이해합니다. Java/Spring 개발자에게 익숙한 개념과 비교하며 설명합니다.
 
-## 핵심 구성요소
+#### 핵심 구성요소
 
 Spark 클러스터는 세 가지 주요 컴포넌트로 구성됩니다:
 
@@ -47,7 +48,9 @@ graph TB
     E1 <-->|셔플| E2
 ```
 
-### 1. Driver
+아래에서 각 구성요소의 역할과 상호작용을 자세히 살펴봅니다.
+
+**1. Driver**
 
 **Driver**는 Spark 애플리케이션의 중앙 조율자입니다. `main()` 메서드가 실행되는 JVM 프로세스입니다.
 
@@ -76,7 +79,7 @@ public static void main(String[] args) {
 **Java 개발자 관점:**
 Driver는 Spring 애플리케이션의 메인 컨텍스트와 유사합니다. 모든 설정과 조율이 여기서 이루어지고, 실제 작업은 Executor(워커)가 수행합니다.
 
-### 2. Executor
+**2. Executor**
 
 **Executor**는 클러스터의 워커 노드에서 실행되는 JVM 프로세스입니다. 실제 데이터 처리를 담당합니다.
 
@@ -106,7 +109,7 @@ Driver는 Spring 애플리케이션의 메인 컨텍스트와 유사합니다. �
 └─────────────────────────────────────────────────────┘
 ```
 
-### 3. Cluster Manager
+**3. Cluster Manager**
 
 **Cluster Manager**는 클러스터 전체의 리소스를 관리합니다. Driver의 요청에 따라 Executor를 할당합니다.
 
@@ -120,6 +123,8 @@ Driver는 Spring 애플리케이션의 메인 컨텍스트와 유사합니다. �
 | **Mesos** | 범용 리소스 관리 | 다양한 워크로드 혼합 시 |
 | **Local** | 단일 JVM | 개발/테스트 환경 |
 
+각 Cluster Manager는 사용 환경과 요구사항에 따라 선택합니다. 개발 환경에서는 Local이나 Standalone을, 프로덕션 환경에서는 YARN이나 Kubernetes를 주로 사용합니다.
+
 **로컬 모드 vs 클러스터 모드:**
 
 ```java
@@ -132,7 +137,7 @@ Driver는 Spring 애플리케이션의 메인 컨텍스트와 유사합니다. �
 .master("k8s://https://...")  // Kubernetes
 ```
 
-## 애플리케이션 실행 흐름
+#### 애플리케이션 실행 흐름
 
 Spark 애플리케이션이 제출되면 다음 순서로 실행됩니다:
 
@@ -163,11 +168,11 @@ sequenceDiagram
     deactivate Driver
 ```
 
-## Job, Stage, Task
+#### Job, Stage, Task
 
-Action이 호출되면 Spark는 내부적으로 Job → Stage → Task 계층으로 작업을 분할합니다.
+Action이 호출되면 Spark는 내부적으로 Job → Stage → Task 계층으로 작업을 분할합니다. 각 계층의 역할을 이해하면 Spark의 실행 모델을 파악할 수 있습니다.
 
-### Job
+**Job**
 
 **Job**은 하나의 Action에 대응하는 전체 계산 단위입니다.
 
@@ -178,7 +183,7 @@ df.collect();       // Job 2
 df.write().csv();   // Job 3
 ```
 
-### Stage
+**Stage**
 
 **Stage**는 셔플 경계로 나뉜 Task의 집합입니다.
 
@@ -192,7 +197,7 @@ df.filter(col("age").gt(30))     // Narrow - Stage 1에 포함
   .show();                        // Action → Job 실행
 ```
 
-### Task
+**Task**
 
 **Task**는 단일 파티션에서 실행되는 최소 작업 단위입니다.
 
@@ -210,7 +215,7 @@ Stage 1: [Task 1-1] [Task 1-2] [Task 1-3] [Task 1-4]
 Stage 2: [Task 2-1] [Task 2-2] [Task 2-3] [Task 2-4]
 ```
 
-## DAG (Directed Acyclic Graph)
+#### DAG (Directed Acyclic Graph)
 
 Spark는 Transformation을 **DAG**로 표현합니다. 이는 연산의 의존 관계를 나타내는 방향성 비순환 그래프입니다.
 
@@ -238,9 +243,13 @@ result.show();  // Action → DAG 실행
 2. **최적화**: Catalyst Optimizer가 DAG를 분석하여 실행 계획 최적화
 3. **장애 복구**: 파티션 손실 시 DAG를 따라 재계산 가능
 
-## Java 개발자 관점에서 이해하기
+#### Java 개발자 관점에서 이해하기
 
-### Spring과의 비교
+Java 개발자가 Spark를 이해하기 위해 익숙한 개념과 비교해봅니다.
+
+**Spring과의 비교**
+
+아래 표는 Spring 애플리케이션의 구성요소와 Spark의 대응 관계를 보여줍니다:
 
 | Spring 애플리케이션 | Spark 애플리케이션 |
 |-------------------|-------------------|
@@ -251,7 +260,9 @@ result.show();  // Action → DAG 실행
 | Runnable/Callable | Task |
 | CompletableFuture | Job/Stage |
 
-### 분산 처리 관점
+**분산 처리 관점**
+
+동일한 데이터 처리 로직을 Java Stream과 Spark로 비교하면 분산 처리의 차이점을 이해할 수 있습니다:
 
 ```java
 // 일반 Java 코드 (단일 JVM)
@@ -271,11 +282,13 @@ Dataset<Row> highPaid = employees
 2. **실행 위치**: Java는 단일 JVM, Spark는 여러 Executor에 분산
 3. **장애 처리**: Java는 예외 발생 시 실패, Spark는 자동 재시도
 
-## 메모리 모델 (Unified Memory Management)
+#### 메모리 모델 (Unified Memory Management)
 
-Spark 1.6부터 도입된 **통합 메모리 관리(Unified Memory Management)**는 실행과 저장 메모리를 동적으로 공유합니다.
+Spark 1.6부터 도입된 **통합 메모리 관리(Unified Memory Management)**는 실행과 저장 메모리를 동적으로 공유합니다. 이 모델을 이해하면 메모리 관련 문제를 효과적으로 해결할 수 있습니다.
 
-### Executor 메모리 구조
+**Executor 메모리 구조**
+
+아래 다이어그램은 Executor JVM의 메모리 영역 구성을 보여줍니다:
 
 ```mermaid
 graph TB
@@ -307,7 +320,9 @@ graph TB
     Storage <-->|동적 공유| Execution
 ```
 
-### 메모리 영역별 역할
+**메모리 영역별 역할**
+
+각 메모리 영역의 용도와 기본 비율을 정리한 표입니다:
 
 | 영역 | 비율 (기본값) | 용도 |
 |------|--------------|------|
@@ -317,7 +332,7 @@ graph TB
 | └─ Execution | 동적 (초기 50%) | 셔플, 조인, 정렬, 집계 |
 | **User Memory** | Heap × 0.4 | 사용자 코드, UDF, RDD 메타데이터 |
 
-### 동적 메모리 공유
+**동적 메모리 공유**
 
 **핵심 원리**: Execution 메모리가 부족하면 Storage 메모리를 빌려 사용하고, 그 반대도 가능합니다.
 
@@ -335,7 +350,9 @@ SparkSession spark = SparkSession.builder()
 2. **Storage → Execution 차용**: 캐시 중 메모리 부족 시 실행 공간 사용
 3. **우선순위**: Execution이 우선 - 필요 시 캐시 데이터 삭제(eviction)
 
-### 메모리 계산 예시
+**메모리 계산 예시**
+
+8GB Executor의 메모리 배분 예시입니다:
 
 ```
 Executor 메모리: 8GB
@@ -346,7 +363,7 @@ Executor 메모리: 8GB
 └── User Memory: (8GB - 300MB) × 0.4 = 3.1GB
 ```
 
-### Off-Heap 메모리
+**Off-Heap 메모리**
 
 GC 영향을 줄이기 위해 JVM 힙 외부 메모리 사용:
 
@@ -362,7 +379,9 @@ SparkSession spark = SparkSession.builder()
 - 대용량 캐시에 효과적
 - Tungsten 메모리 관리와 통합
 
-### 메모리 관련 트러블슈팅
+**메모리 관련 트러블슈팅**
+
+자주 발생하는 메모리 문제와 해결 방법입니다:
 
 | 증상 | 원인 | 해결 |
 |------|------|------|
@@ -371,9 +390,11 @@ SparkSession spark = SparkSession.builder()
 | GC overhead exceeded | 메모리 부족 | `spark.executor.memory` 증가 |
 | 캐시 삭제 빈번 | Storage Memory 부족 | `storageFraction` 증가 또는 DISK 사용 |
 
-## 배포 모드
+#### 배포 모드
 
-### Client Mode
+Spark 애플리케이션은 Client Mode와 Cluster Mode 두 가지 방식으로 배포할 수 있습니다.
+
+**Client Mode**
 
 Driver가 클라이언트(spark-submit 실행 위치)에서 실행됩니다.
 
@@ -386,7 +407,7 @@ spark-submit --deploy-mode client myapp.jar
 - 클라이언트 종료 시 애플리케이션도 종료
 - 개발/테스트 환경에 적합
 
-### Cluster Mode
+**Cluster Mode**
 
 Driver가 클러스터 내부에서 실행됩니다.
 
@@ -399,9 +420,11 @@ spark-submit --deploy-mode cluster myapp.jar
 - 로그 확인이 상대적으로 불편
 - 프로덕션 환경에 적합
 
-## 주요 설정
+#### 주요 설정
 
-### Driver 설정
+Spark 애플리케이션의 성능을 조절하는 주요 설정 항목들입니다.
+
+**Driver 설정**
 
 ```properties
 # Driver 메모리
@@ -414,7 +437,7 @@ spark.driver.cores=2
 spark.driver.maxResultSize=1g
 ```
 
-### Executor 설정
+**Executor 설정**
 
 ```properties
 # Executor 수
@@ -427,7 +450,9 @@ spark.executor.memory=8g
 spark.executor.cores=4
 ```
 
-### 실행 시 설정 예시
+**실행 시 설정 예시**
+
+spark-submit 명령어나 코드에서 설정을 지정하는 방법입니다:
 
 ```bash
 spark-submit \
@@ -450,7 +475,40 @@ SparkSession spark = SparkSession.builder()
     .getOrCreate();
 ```
 
-## 다음 단계
+#### 실무 인사이트
+
+**Java/Spring 환경에서의 실제 적용 경험**
+
+1. **Driver 메모리 산정**
+   - `collect()` 결과 크기 + 브로드캐스트 변수 크기의 2~3배
+   - 일반적으로 4~8GB로 시작, OOM 발생 시 증가
+   - 과도한 Driver 메모리는 GC 부담 증가
+
+2. **Executor 구성 전략**
+   - 코어당 5GB 메모리가 안정적 (예: 4코어 = 20GB)
+   - 코어 수는 4~5개가 최적 (과도한 코어는 GC 병목)
+   - YARN 환경에서는 컨테이너 오버헤드 10% 고려
+
+3. **흔한 실수와 해결책**
+
+   | 실수 | 증상 | 해결 |
+   |------|------|------|
+   | 클로저에서 외부 객체 참조 | NotSerializableException | 파티션 내에서 객체 생성 |
+   | Driver에서 대용량 collect() | Driver OOM | limit() 또는 파일 저장 |
+   | 작은 파티션 수 | 일부 Executor만 바쁨 | repartition()으로 재분배 |
+   | 브로드캐스트 없이 작은 테이블 조인 | 과도한 셔플 | broadcast() 사용 |
+
+4. **Spring Boot와의 통합 시 주의점**
+   - SparkSession은 애플리케이션 생명주기와 별도 관리
+   - 요청당 SparkSession 생성은 비효율적 (싱글톤 권장)
+   - 종료 시 `spark.stop()` 명시적 호출 필수
+
+5. **디버깅 팁**
+   - Spark UI (4040 포트)는 가장 중요한 디버깅 도구
+   - Stage 탭에서 Task 분포 불균형 확인
+   - GC 시간이 10% 이상이면 메모리 증가 필요
+
+#### 다음 단계
 
 아키텍처를 이해했다면, 다음으로 데이터 추상화에 대해 학습하세요:
 

@@ -1,14 +1,15 @@
 ---
 title: Spring Boot 통합
 weight: 5
-lastmod: "2026-01-07"
+lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
-
-# Spring Boot와 Spark 통합 가이드
 
 Java/Spring 개발자를 위한 Spark와 Spring Boot 통합 패턴입니다.
 
-## 아키텍처 패턴
+#### 아키텍처 패턴
 
 ```mermaid
 flowchart TB
@@ -40,7 +41,7 @@ flowchart TB
     Config --> SparkSession
 ```
 
-## Gradle 설정
+#### Gradle 설정
 
 ```kotlin
 // build.gradle.kts
@@ -102,9 +103,9 @@ configurations.all {
 }
 ```
 
-## SparkSession 빈 구성
+#### SparkSession 빈 구성
 
-### 기본 설정
+**기본 설정**
 
 ```java
 package com.example.spark.config;
@@ -198,7 +199,7 @@ public class SparkConfig {
 }
 ```
 
-### application.yml 설정
+**application.yml 설정**
 
 ```yaml
 # application.yml
@@ -251,9 +252,9 @@ spark:
       partitions: 2
 ```
 
-## 서비스 레이어 패턴
+#### 서비스 레이어 패턴
 
-### 기본 Spark 서비스
+**기본 Spark 서비스**
 
 ```java
 package com.example.spark.service;
@@ -344,7 +345,7 @@ public class DataAnalysisService {
 }
 ```
 
-### 비동기 배치 작업
+**비동기 배치 작업**
 
 ```java
 package com.example.spark.service;
@@ -469,9 +470,9 @@ public class BatchProcessingService {
 }
 ```
 
-## REST API 통합
+#### REST API 통합
 
-### 분석 API 컨트롤러
+**분석 API 컨트롤러**
 
 ```java
 package com.example.spark.controller;
@@ -551,9 +552,9 @@ public class AnalyticsController {
 }
 ```
 
-## 테스트 작성
+#### 테스트 작성
 
-### Spark 통합 테스트
+**Spark 통합 테스트**
 
 ```java
 package com.example.spark.service;
@@ -650,7 +651,7 @@ class DataAnalysisServiceTest {
 }
 ```
 
-## Java vs Scala 비교
+#### Java vs Scala 비교
 
 | 구분 | Java | Scala |
 |------|------|-------|
@@ -663,7 +664,7 @@ class DataAnalysisServiceTest {
 | **Spring 통합** | 네이티브 지원 | 어노테이션 호환 |
 | **IDE 지원** | IntelliJ, VS Code | IntelliJ + Scala 플러그인 |
 
-### 동일 로직 비교
+**동일 로직 비교**
 
 **Java:**
 ```java
@@ -683,7 +684,7 @@ val result = df
   .orderBy($"avg_salary".desc)
 ```
 
-## 관련 문서
+#### 관련 문서
 
 - [환경 설정](../setup/) - 기본 프로젝트 구성
 - [모니터링](../monitoring/) - 운영 모니터링 설정

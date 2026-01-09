@@ -1,14 +1,17 @@
 ---
 title: Quick Start
 weight: 1
-lastmod: "2026-01-07"
+lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
-# Quick Start
+5분 만에 Spark 애플리케이션을 실행하고 데이터를 처리해봅니다. 이 가이드를 따라하면 프로젝트 생성부터 데이터 조회까지 전체 과정을 경험할 수 있습니다.
 
-5분 만에 Spark 애플리케이션을 실행하고 데이터를 처리해봅니다.
+#### 전체 흐름
 
-## 전체 흐름
+아래 다이어그램은 Quick Start의 진행 순서를 보여줍니다:
 
 ```mermaid
 flowchart LR
@@ -18,13 +21,15 @@ flowchart LR
     D --> E[5. 결과 확인]
 ```
 
-## 준비물
+#### 준비물
+
+시작하기 전에 아래 환경을 준비합니다:
 
 - **Java 17+** (Java 8, 11도 지원하나 17 권장)
 - **Gradle** 또는 **Maven**
 - **IDE** (IntelliJ IDEA, VS Code 등)
 
-## Step 1: 프로젝트 생성
+#### Step 1: 프로젝트 생성
 
 Spring Initializr나 IDE에서 Java 프로젝트를 생성합니다. 이 예제에서는 순수 Java 프로젝트로 시작합니다.
 
@@ -33,7 +38,7 @@ mkdir spark-quickstart
 cd spark-quickstart
 ```
 
-## Step 2: Gradle 설정
+#### Step 2: Gradle 설정
 
 `build.gradle` 파일을 생성합니다:
 
@@ -76,7 +81,9 @@ configurations.all {
 
 > **버전 참고:** `spark-core_2.13`에서 `2.13`은 Scala 버전입니다. Java에서 사용해도 Scala 런타임이 필요하기 때문에 명시합니다.
 
-### Maven 사용 시
+**Maven 사용 시**
+
+Maven을 선호한다면 아래 `pom.xml` 설정을 사용합니다:
 
 `pom.xml` 파일:
 
@@ -138,7 +145,7 @@ configurations.all {
 mvn compile exec:java
 ```
 
-## Step 3: 샘플 데이터 생성
+#### Step 3: 샘플 데이터 생성
 
 `src/main/resources/employees.csv` 파일을 생성합니다:
 
@@ -154,7 +161,7 @@ id,name,department,salary
 8,윤서연,Engineering,5200
 ```
 
-## Step 4: Spark 애플리케이션 작성
+#### Step 4: Spark 애플리케이션 작성
 
 `src/main/java/com/example/SparkQuickStart.java`:
 
@@ -227,7 +234,7 @@ public class SparkQuickStart {
 }
 ```
 
-## Step 5: 실행
+#### Step 5: 실행
 
 ```bash
 ./gradlew run
@@ -238,7 +245,9 @@ Windows의 경우:
 gradlew.bat run
 ```
 
-## 예상 출력
+#### 예상 출력
+
+정상적으로 실행되면 아래와 같은 출력을 확인할 수 있습니다:
 
 ```
 === Spark Quick Start ===
@@ -300,7 +309,7 @@ root
 
 ---
 
-## 프로덕션 수준 코드
+#### 프로덕션 수준 코드
 
 실제 운영 환경에서는 예외 처리와 리소스 정리가 필수입니다:
 
@@ -387,6 +396,8 @@ public class SparkQuickStartProduction {
 
 **프로덕션 코드의 핵심 포인트:**
 
+아래 표는 프로덕션 환경에서 필수적인 코드 패턴을 정리한 것입니다:
+
 | 항목 | 설명 |
 |------|------|
 | `try-finally` | SparkSession이 항상 정리되도록 보장 |
@@ -395,11 +406,15 @@ public class SparkQuickStartProduction {
 | `exitCode` | 스크립트/CI 연동을 위한 종료 코드 |
 | `validateSchema` | 런타임 스키마 검증 |
 
+각 항목은 운영 환경에서 발생할 수 있는 문제를 예방하거나 디버깅을 용이하게 합니다.
+
 ---
 
-## 무엇이 일어났나요?
+#### 무엇이 일어났나요?
 
-### 1. SparkSession 생성
+위 코드에서 각 단계가 어떻게 동작하는지 살펴봅니다.
+
+**1. SparkSession 생성**
 
 ```java
 SparkSession spark = SparkSession.builder()
@@ -416,7 +431,7 @@ SparkSession spark = SparkSession.builder()
   - `local[*]`: 모든 코어
   - 클러스터 환경에서는 `spark://master:7077`, `yarn` 등 사용
 
-### 2. 데이터 읽기
+**2. 데이터 읽기**
 
 ```java
 Dataset<Row> employees = spark.read()
@@ -429,7 +444,7 @@ Dataset<Row> employees = spark.read()
 - `option("inferSchema", "true")`: 데이터를 샘플링하여 각 컬럼의 타입을 자동 추론
 - Spark는 CSV, JSON, Parquet, JDBC 등 다양한 데이터 소스 지원
 
-### 3. DataFrame 연산
+**3. DataFrame 연산**
 
 ```java
 employees.filter(col("salary").geq(5000))
@@ -439,7 +454,7 @@ employees.filter(col("salary").geq(5000))
 - `filter`, `select`, `groupBy` 등은 **Transformation** — 지연 평가됨
 - `show`, `collect`, `count` 등은 **Action** — 실제 연산 수행
 
-### 4. SQL 사용
+**4. SQL 사용**
 
 ```java
 employees.createOrReplaceTempView("employees");
@@ -452,9 +467,11 @@ spark.sql("SELECT * FROM employees WHERE ...");
 
 ---
 
-## Java 개발자를 위한 비교
+#### Java 개발자를 위한 비교
 
-### Java Stream vs Spark DataFrame
+기존 Java 코드와 Spark 코드를 비교하면 유사점과 차이점을 쉽게 이해할 수 있습니다.
+
+**Java Stream vs Spark DataFrame**
 
 ```java
 // Java Stream (단일 JVM)
@@ -473,9 +490,11 @@ Dataset<Row> highEarners = employees
 
 ---
 
-## 트러블슈팅
+#### 트러블슈팅
 
-### 로그가 너무 많아요
+Spark 실행 시 자주 발생하는 문제와 해결 방법입니다.
+
+**로그가 너무 많아요**
 
 Spark는 기본적으로 많은 로그를 출력합니다. `log4j2.properties` 파일을 `src/main/resources`에 추가하거나:
 
@@ -483,7 +502,7 @@ Spark는 기본적으로 많은 로그를 출력합니다. `log4j2.properties` �
 spark.sparkContext().setLogLevel("WARN");  // 또는 "ERROR"
 ```
 
-### Java 버전 오류
+**Java 버전 오류**
 
 Spark 3.5는 Java 8, 11, 17을 지원합니다. Java 21은 아직 공식 지원되지 않으니 주의하세요.
 
@@ -493,7 +512,7 @@ Error: A JNI error has occurred
 
 → Java 버전 확인: `java -version`
 
-### 메모리 부족 (OutOfMemoryError)
+**메모리 부족 (OutOfMemoryError)**
 
 로컬 실행 시 기본 메모리가 부족할 수 있습니다:
 
@@ -509,7 +528,7 @@ application {
 }
 ```
 
-### Windows에서 Hadoop 관련 오류
+**Windows에서 Hadoop 관련 오류**
 
 Windows에서 실행 시 `winutils.exe` 관련 경고가 나올 수 있습니다. 기능에는 영향 없지만, 해결하려면:
 
@@ -519,7 +538,7 @@ Windows에서 실행 시 `winutils.exe` 관련 경고가 나올 수 있습니다
 
 ---
 
-## Spark UI 확인하기
+#### Spark UI 확인하기
 
 Spark 애플리케이션 실행 중 `http://localhost:4040`에 접속하면 Spark UI를 확인할 수 있습니다:
 
@@ -532,9 +551,9 @@ Spark 애플리케이션 실행 중 `http://localhost:4040`에 접속하면 Spar
 
 ---
 
-## 다음 단계
+#### 다음 단계
 
-Quick Start를 완료했다면, 다음 단계로 진행하세요:
+Quick Start를 완료했다면, 학습 목표에 따라 다음 문서를 선택하세요:
 
 | 목표 | 추천 문서 |
 |------|----------|
@@ -542,3 +561,5 @@ Quick Start를 완료했다면, 다음 단계로 진행하세요:
 | RDD 기초 학습 | [RDD 기초](../concepts/rdd/) |
 | DataFrame 심화 | [DataFrame과 Dataset](../concepts/dataframe-dataset/) |
 | Spring Boot 통합 | [환경 설정](../examples/setup/) |
+
+Spark의 전체적인 동작 원리를 이해하려면 아키텍처 문서를, 실습 위주로 진행하려면 환경 설정 문서를 먼저 읽는 것을 권장합니다.

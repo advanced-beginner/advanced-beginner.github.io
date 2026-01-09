@@ -1,18 +1,19 @@
 ---
 title: 환경 설정
 weight: 1
-lastmod: "2026-01-07"
+lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
-
-# 환경 설정
 
 Java/Spring Boot 프로젝트에서 Spark를 사용하기 위한 환경을 구성합니다.
 
-## 순수 Java 프로젝트
+#### 순수 Java 프로젝트
 
 가장 간단한 구성입니다.
 
-### build.gradle
+**build.gradle**
 
 ```groovy
 plugins {
@@ -64,7 +65,7 @@ tasks.named('run') {
 }
 ```
 
-### 기본 구조
+**기본 구조**
 
 ```
 src/
@@ -77,7 +78,7 @@ src/
 │           └── sample.csv
 ```
 
-### SparkApp.java
+**SparkApp.java**
 
 ```java
 package com.example;
@@ -109,11 +110,11 @@ public class SparkApp {
 }
 ```
 
-## Spring Boot 통합
+#### Spring Boot 통합
 
 Spring Boot와 Spark를 함께 사용하는 구성입니다.
 
-### build.gradle
+**build.gradle**
 
 ```groovy
 plugins {
@@ -159,7 +160,7 @@ configurations.all {
 }
 ```
 
-### SparkConfig.java
+**SparkConfig.java**
 
 ```java
 package com.example.config;
@@ -214,7 +215,7 @@ public class SparkConfig {
 }
 ```
 
-### application.yml
+**application.yml**
 
 ```yaml
 spring:
@@ -232,7 +233,7 @@ server:
   port: 8080
 ```
 
-### DataService.java
+**DataService.java**
 
 ```java
 package com.example.service;
@@ -272,7 +273,7 @@ public class DataService {
 }
 ```
 
-### DataController.java
+**DataController.java**
 
 ```java
 package com.example.controller;
@@ -320,9 +321,9 @@ public class DataController {
 }
 ```
 
-## 로깅 설정
+#### 로깅 설정
 
-### log4j2.properties
+**log4j2.properties**
 
 Spark는 Log4j2를 사용합니다. `src/main/resources/log4j2.properties`:
 
@@ -350,11 +351,11 @@ logger.app.name = com.example
 logger.app.level = INFO
 ```
 
-## Windows 환경 설정
+#### Windows 환경 설정
 
 Windows에서는 Hadoop 바이너리가 필요합니다.
 
-### winutils 설정
+**winutils 설정**
 
 ```bash
 # 1. winutils 다운로드
@@ -370,16 +371,16 @@ setx HADOOP_HOME C:\hadoop
 setx PATH "%PATH%;%HADOOP_HOME%\bin"
 ```
 
-### 또는 코드에서 설정
+**또는 코드에서 설정**
 
 ```java
 // Windows에서 Hadoop 홈 설정
 System.setProperty("hadoop.home.dir", "C:\\hadoop");
 ```
 
-## 트러블슈팅
+#### 트러블슈팅
 
-### 로깅 충돌
+**로깅 충돌**
 
 ```
 SLF4J: Class path contains multiple SLF4J bindings
@@ -395,7 +396,7 @@ configurations.all {
 }
 ```
 
-### SparkSession 중복 생성
+**SparkSession 중복 생성**
 
 ```
 Only one SparkContext may be running in this JVM
@@ -410,7 +411,7 @@ SparkSession spark = SparkSession.builder()
     .getOrCreate();  // 기존 세션 재사용
 ```
 
-### 메모리 부족
+**메모리 부족**
 
 ```
 java.lang.OutOfMemoryError: Java heap space
@@ -432,7 +433,7 @@ tasks.named('run') {
 .config("spark.executor.memory", "4g")
 ```
 
-### Java 버전 호환성
+**Java 버전 호환성**
 
 ```
 Unsupported class file major version
@@ -444,7 +445,7 @@ Unsupported class file major version
 java -version  # 버전 확인
 ```
 
-## 다음 단계
+#### 다음 단계
 
 환경 설정이 완료되었다면:
 

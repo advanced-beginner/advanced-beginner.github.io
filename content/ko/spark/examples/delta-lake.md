@@ -1,14 +1,17 @@
 ---
-lastmod: "2026-01-08"
+lastmod: "2026-01-09"
 title: Delta Lake 통합
 weight: 6
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
 Delta Lake를 활용하여 데이터 레이크에 ACID 트랜잭션, 스키마 관리, 시간 여행 기능을 추가합니다.
 
-## Delta Lake란?
+#### Delta Lake란?
 
-### 기존 데이터 레이크의 문제
+**기존 데이터 레이크의 문제**
 
 | 문제 | 설명 |
 |------|------|
@@ -17,7 +20,7 @@ Delta Lake를 활용하여 데이터 레이크에 ACID 트랜잭션, 스키마 �
 | **소규모 파일** | 성능 저하 |
 | **롤백 불가** | 잘못된 데이터 복구 어려움 |
 
-### Delta Lake 해결책
+**Delta Lake 해결책**
 
 ```mermaid
 flowchart LR
@@ -45,9 +48,9 @@ flowchart LR
 
 ---
 
-## 환경 설정
+#### 환경 설정
 
-### build.sbt
+**build.sbt**
 
 ```scala
 ThisBuild / scalaVersion := "2.13.12"
@@ -63,7 +66,7 @@ lazy val root = (project in file("."))
   )
 ```
 
-### SparkSession 설정
+**SparkSession 설정**
 
 ```scala
 import org.apache.spark.sql.SparkSession
@@ -79,9 +82,9 @@ val spark = SparkSession.builder()
 
 ---
 
-## 기본 CRUD 연산
+#### 기본 CRUD 연산
 
-### Create: Delta 테이블 생성
+**Create: Delta 테이블 생성**
 
 ```scala
 import io.delta.tables._
@@ -124,7 +127,7 @@ spark.sql("""
 """)
 ```
 
-### Read: 데이터 조회
+**Read: 데이터 조회**
 
 ```scala
 // DataFrame API
@@ -138,7 +141,7 @@ spark.sql("SELECT * FROM delta.`/data/orders`").show()
 spark.sql("SELECT * FROM orders WHERE quantity > 1").show()
 ```
 
-### Update: 데이터 수정
+**Update: 데이터 수정**
 
 ```scala
 import io.delta.tables.DeltaTable
@@ -162,7 +165,7 @@ spark.sql("""
 """)
 ```
 
-### Delete: 데이터 삭제
+**Delete: 데이터 삭제**
 
 ```scala
 // 조건부 삭제
@@ -172,7 +175,7 @@ deltaTable.delete(expr("customerId = 'C2'"))
 spark.sql("DELETE FROM orders WHERE customerId = 'C2'")
 ```
 
-### Merge (Upsert): 병합
+**Merge (Upsert): 병합**
 
 ```scala
 val newOrders = Seq(
@@ -194,9 +197,9 @@ deltaTable.as("target")
 
 ---
 
-## 시간 여행 (Time Travel)
+#### 시간 여행 (Time Travel)
 
-### 버전별 조회
+**버전별 조회**
 
 ```scala
 // 특정 버전 조회
@@ -221,7 +224,7 @@ spark.sql("""
 """).show()
 ```
 
-### 버전 히스토리 조회
+**버전 히스토리 조회**
 
 ```scala
 val history = deltaTable.history()
@@ -238,7 +241,7 @@ history.select("version", "timestamp", "operation", "operationParameters").show(
 // +-------+--------------------+---------+---------------------------+
 ```
 
-### 버전 복원
+**버전 복원**
 
 ```scala
 // 이전 버전으로 복원
@@ -253,9 +256,9 @@ spark.sql("RESTORE orders TO VERSION AS OF 1")
 
 ---
 
-## 스키마 진화 (Schema Evolution)
+#### 스키마 진화 (Schema Evolution)
 
-### 컬럼 추가
+**컬럼 추가**
 
 ```scala
 // 새 컬럼이 있는 데이터
@@ -271,7 +274,7 @@ ordersWithStatus.write
   .save("/data/orders")
 ```
 
-### 스키마 덮어쓰기
+**스키마 덮어쓰기**
 
 ```scala
 // 스키마 완전히 변경
@@ -284,9 +287,9 @@ newSchema.write
 
 ---
 
-## 최적화 (Optimization)
+#### 최적화 (Optimization)
 
-### Compaction (파일 병합)
+**Compaction (파일 병합)**
 
 ```scala
 // 작은 파일 병합
@@ -302,7 +305,7 @@ spark.sql("OPTIMIZE orders")
 spark.sql("OPTIMIZE orders WHERE orderDate = '2024-01-15'")
 ```
 
-### Z-Order (데이터 클러스터링)
+**Z-Order (데이터 클러스터링)**
 
 ```scala
 // 자주 필터링하는 컬럼 기준 클러스터링
@@ -313,7 +316,7 @@ deltaTable.optimize()
 spark.sql("OPTIMIZE orders ZORDER BY (customerId, product)")
 ```
 
-### Vacuum (오래된 파일 정리)
+**Vacuum (오래된 파일 정리)**
 
 ```scala
 // 7일 이상 지난 버전 삭제
@@ -327,9 +330,9 @@ spark.sql("VACUUM orders RETAIN 168 HOURS")
 
 ---
 
-## Change Data Feed (CDC)
+#### Change Data Feed (CDC)
 
-### CDC 활성화
+**CDC 활성화**
 
 ```scala
 // 테이블 생성 시 활성화
@@ -352,7 +355,7 @@ spark.sql("""
 """)
 ```
 
-### 변경 사항 조회
+**변경 사항 조회**
 
 ```scala
 // 버전 범위로 변경 조회
@@ -386,9 +389,9 @@ changesStream.writeStream
 
 ---
 
-## 실전 예제: ETL 파이프라인
+#### 실전 예제: ETL 파이프라인
 
-### Bronze → Silver → Gold 아키텍처
+**Bronze → Silver → Gold 아키텍처**
 
 ```scala
 object DeltaLakePipeline extends App {
@@ -503,9 +506,9 @@ object DeltaLakePipeline extends App {
 
 ---
 
-## Spark Streaming과 연동
+#### Spark Streaming과 연동
 
-### Streaming 쓰기
+**Streaming 쓰기**
 
 ```scala
 val stream = spark.readStream
@@ -526,7 +529,7 @@ orders.writeStream
   .start("/data/bronze/orders")
 ```
 
-### Streaming 읽기
+**Streaming 읽기**
 
 ```scala
 val deltaStream = spark.readStream
@@ -544,7 +547,7 @@ deltaStream
 
 ---
 
-## 주의 사항
+#### 주의 사항
 
 | 항목 | 주의점 |
 |------|--------|
@@ -555,7 +558,7 @@ deltaStream
 
 ---
 
-## 다음 단계
+#### 다음 단계
 
 - [Structured Streaming](../concepts/structured-streaming/) - 실시간 처리
 - [성능 튜닝](../concepts/tuning/) - Spark 최적화

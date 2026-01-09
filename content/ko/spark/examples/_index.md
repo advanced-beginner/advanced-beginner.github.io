@@ -1,14 +1,17 @@
 ---
 title: 실습 예제
 weight: 3
-lastmod: "2026-01-07"
+lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
-Spark를 실제로 사용해보는 예제 코드입니다.
+Spark를 실제로 사용해보는 예제 코드입니다. 각 예제는 독립적으로 실행할 수 있으며, 점진적으로 복잡한 기능을 다룹니다.
 
-## 예제 목록
+#### 예제 목록
 
-### [환경 설정](setup/)
+**[환경 설정](setup/)**
 
 Java/Spring Boot와 Spark를 통합하는 프로젝트 환경을 구성합니다.
 
@@ -17,7 +20,7 @@ Java/Spring Boot와 Spark를 통합하는 프로젝트 환경을 구성합니다
 - Spring Boot와 Spark 통합 시 주의사항
 - 로깅 충돌 해결
 
-### [기본 예제](basic/)
+**[기본 예제](basic/)**
 
 Spark의 핵심 기능을 활용하는 기본 예제들입니다.
 
@@ -28,7 +31,7 @@ Spark의 핵심 기능을 활용하는 기본 예제들입니다.
 - SQL 쿼리
 - **실제 공개 데이터셋 예제** (NYC Taxi, Kaggle)
 
-### [모니터링 설정](monitoring/)
+**[모니터링 설정](monitoring/)**
 
 프로덕션 환경에서 Spark 애플리케이션을 안정적으로 운영하기 위한 모니터링 설정입니다.
 
@@ -38,7 +41,7 @@ Spark의 핵심 기능을 활용하는 기본 예제들입니다.
 - 구조화된 로깅 (Log4j2, JSON)
 - 알림 설정
 
-### [Spring Boot 통합](spring-boot/)
+**[Spring Boot 통합](spring-boot/)**
 
 Java/Spring 개발자를 위한 Spark와 Spring Boot 통합 패턴입니다.
 
@@ -48,7 +51,7 @@ Java/Spring 개발자를 위한 Spark와 Spring Boot 통합 패턴입니다.
 - 통합 테스트 작성
 - Java vs Scala 비교
 
-### [ETL 파이프라인](etl-pipeline/)
+**[ETL 파이프라인](etl-pipeline/)**
 
 프로덕션 환경에서 사용 가능한 완전한 ETL 파이프라인 예제입니다.
 
@@ -58,7 +61,7 @@ Java/Spring 개발자를 위한 Spark와 Spring Boot 통합 패턴입니다.
 - 에러 처리 및 재시도 로직
 - Spring 스케줄링 통합
 
-### [Delta Lake 통합](delta-lake/)
+**[Delta Lake 통합](delta-lake/)**
 
 ACID 트랜잭션과 시간 여행 기능을 갖춘 데이터 레이크를 구축합니다.
 
@@ -69,15 +72,19 @@ ACID 트랜잭션과 시간 여행 기능을 갖춘 데이터 레이크를 구�
 - Change Data Feed (CDC)
 - Bronze → Silver → Gold 아키텍처
 
-## 예제 실행 전 준비
+#### 예제 실행 전 준비
 
-### 필수 환경
+예제를 실행하기 전에 아래 환경을 준비합니다.
+
+**필수 환경**
 
 - **Java 17+**
 - **Gradle 8.x** 또는 **Maven 3.x**
 - **IDE** (IntelliJ IDEA, VS Code 등)
 
-### 공통 Gradle 설정
+**공통 Gradle 설정**
+
+모든 예제에서 사용하는 기본 Gradle 설정입니다:
 
 ```groovy
 plugins {
@@ -112,7 +119,9 @@ configurations.all {
 }
 ```
 
-## 다음 단계
+위 설정은 Spark와 Spring Boot의 로깅 충돌을 방지하고, 기본적인 의존성을 포함합니다.
+
+#### 다음 단계
 
 예제를 완료했다면:
 
