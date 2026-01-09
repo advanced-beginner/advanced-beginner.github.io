@@ -1,25 +1,20 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-09"
 title: 환경 구성
 weight: 1
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
 
-# 환경 구성
-
 Spring Boot에서 Kafka를 사용하기 위한 환경 설정 레퍼런스입니다.
 
-> **Quick Start를 완료했다면?**
-> [Quick Start](../../quick-start/)에서 이미 기본 환경을 구성했습니다. 이 문서는 설정 상세 내용과 프로덕션 환경 구성을 위한 **참조 문서**입니다.
+Quick Start를 완료했다면 이미 기본 환경을 구성한 것입니다. 이 문서는 설정 상세 내용과 프로덕션 환경 구성을 위한 참조 문서입니다.
 
----
+#### Docker로 Kafka 실행
 
-## Docker로 Kafka 실행
+**docker-compose.yml**
 
-### docker-compose.yml
-
-프로젝트 루트의 `docker/docker-compose.yml` 파일입니다.
+프로젝트 루트의 `docker/docker-compose.yml` 파일입니다. 이 설정은 Zookeeper 없이 Kafka 자체적으로 메타데이터를 관리하는 KRaft 모드를 사용합니다. KRaft는 Kafka 3.3 이상에서 권장됩니다.
 
 ```yaml
 version: '3.8'
@@ -51,9 +46,9 @@ volumes:
   kafka-data:
 ```
 
-> **KRaft 모드**: 이 설정은 Zookeeper 없이 Kafka 자체 메타데이터 관리를 사용합니다 (Kafka 3.3+).
+**실행 명령**
 
-### 실행 명령
+Kafka를 시작하려면 `docker-compose up -d` 명령을 사용합니다. 상태를 확인하려면 `docker-compose ps`, 로그를 확인하려면 `docker-compose logs -f kafka` 명령을 사용합니다. 종료할 때는 `docker-compose down`을 사용하고, 데이터까지 모두 삭제하려면 `docker-compose down -v` 명령을 사용합니다.
 
 ```bash
 # 시작
@@ -72,11 +67,11 @@ docker-compose down
 docker-compose down -v
 ```
 
----
+#### Spring Boot 의존성
 
-## Spring Boot 의존성
+**build.gradle.kts**
 
-### build.gradle.kts
+Gradle Kotlin DSL을 사용하는 경우 다음과 같이 의존성을 추가합니다.
 
 ```kotlin
 plugins {
@@ -98,7 +93,9 @@ dependencies {
 }
 ```
 
-### Maven (pom.xml)
+**Maven (pom.xml)**
+
+Maven을 사용하는 경우 다음과 같이 의존성을 추가합니다.
 
 ```xml
 <dependencies>
@@ -113,13 +110,11 @@ dependencies {
 </dependencies>
 ```
 
----
+#### application.yml 설정
 
-## application.yml 설정
+**Quick Start 기본 설정**
 
-### Quick Start 기본 설정
-
-[Quick Start 예제](../../quick-start/)에서 사용하는 최소 설정입니다.
+Quick Start 예제에서 사용하는 최소 설정입니다.
 
 ```yaml
 spring:
@@ -140,9 +135,9 @@ spring:
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 ```
 
-### 프로덕션 권장 설정
+**프로덕션 권장 설정**
 
-실무 환경에서는 다음 설정을 추가로 고려하세요.
+실무 환경에서는 다음 설정을 추가로 고려합니다. acks를 all로 설정하면 모든 복제본에서 확인을 받아 데이터 안정성이 높아집니다. enable.idempotence를 true로 설정하면 중복 전송을 방지합니다.
 
 ```yaml
 spring:
@@ -169,34 +164,21 @@ spring:
         max.poll.interval.ms: 300000
 ```
 
----
+#### 설정 항목 상세
 
-## 설정 항목 상세
+**Producer 설정**
 
-### Producer 설정
+acks는 전송 확인 수준으로 기본값은 1이며 프로덕션에서는 all을 권장합니다. retries는 재시도 횟수로 기본값이 매우 크므로 3 정도로 제한할 수 있습니다. batch-size는 배치 크기로 기본값 16384바이트가 적절합니다. linger-ms는 배치 대기 시간으로 기본값 0이지만 1ms 정도로 설정하면 배치 효율이 높아집니다. buffer-memory는 버퍼 메모리로 기본값 33554432바이트(32MB)가 적절합니다.
 
-| 설정 | 설명 | 기본값 | 권장값 |
-|------|------|--------|--------|
-| `acks` | 전송 확인 수준 | `1` | `all` (프로덕션) |
-| `retries` | 재시도 횟수 | `2147483647` | `3` |
-| `batch-size` | 배치 크기 (bytes) | `16384` | `16384` |
-| `linger-ms` | 배치 대기 시간 | `0` | `1` |
-| `buffer-memory` | 버퍼 메모리 | `33554432` | `33554432` |
+**Consumer 설정**
 
-### Consumer 설정
+group-id는 Consumer Group ID로 서비스명을 사용하는 것이 좋습니다. auto-offset-reset은 초기 Offset으로 개발 환경에서는 earliest를 권장합니다. enable-auto-commit은 자동 커밋 여부로 상황에 따라 선택합니다. max-poll-records는 한번에 가져올 최대 레코드 수로 기본값 500이 적절합니다.
 
-| 설정 | 설명 | 기본값 | 권장값 |
-|------|------|--------|--------|
-| `group-id` | Consumer Group ID | - | 서비스명 |
-| `auto-offset-reset` | 초기 Offset | `latest` | `earliest` (개발) |
-| `enable-auto-commit` | 자동 커밋 | `true` | 상황에 따라 |
-| `max-poll-records` | 한번에 가져올 최대 레코드 | `500` | `500` |
+#### JSON 메시지 처리
 
----
+**의존성 추가**
 
-## JSON 메시지 처리
-
-### 의존성 추가
+JSON 직렬화를 위해 Jackson 의존성을 추가합니다.
 
 ```kotlin
 dependencies {
@@ -204,7 +186,9 @@ dependencies {
 }
 ```
 
-### 설정
+**설정**
+
+Producer는 JsonSerializer를, Consumer는 JsonDeserializer를 사용합니다. trusted.packages 설정은 역직렬화할 클래스의 패키지를 지정합니다.
 
 ```yaml
 spring:
@@ -217,7 +201,9 @@ spring:
         spring.json.trusted.packages: "com.example.*"
 ```
 
-### 사용 예시
+**사용 예시**
+
+Java Record를 도메인 클래스로 사용하면 간결하게 JSON 메시지를 주고받을 수 있습니다.
 
 ```java
 // 도메인 클래스
@@ -237,11 +223,13 @@ public void consume(OrderEvent event) {
 }
 ```
 
----
+#### 프로필별 설정
 
-## 프로필별 설정
+환경별로 다른 설정을 적용하려면 프로필을 사용합니다.
 
-### application.yml (공통)
+**application.yml (공통)**
+
+환경 변수가 있으면 해당 값을, 없으면 기본값 localhost:9092를 사용합니다.
 
 ```yaml
 spring:
@@ -249,7 +237,9 @@ spring:
     bootstrap-servers: ${KAFKA_SERVERS:localhost:9092}
 ```
 
-### application-local.yml
+**application-local.yml**
+
+로컬 개발 환경에서는 earliest로 설정하여 모든 메시지를 처음부터 읽습니다.
 
 ```yaml
 spring:
@@ -259,7 +249,9 @@ spring:
       auto-offset-reset: earliest
 ```
 
-### application-prod.yml
+**application-prod.yml**
+
+프로덕션 환경에서는 여러 Broker를 지정하고, acks를 all로 설정하여 안정성을 높입니다.
 
 ```yaml
 spring:
@@ -271,32 +263,16 @@ spring:
       auto-offset-reset: latest
 ```
 
----
+#### 일반적인 오류와 해결
 
-## 일반적인 오류와 해결
+**연결 오류**
 
-### 연결 오류
+`Connection to node -1 could not be established` 오류는 Kafka 브로커에 연결할 수 없을 때 발생합니다. `docker-compose ps`로 Kafka 실행 상태를 확인하고, `netstat -an | grep 9092`로 포트가 열려 있는지 확인합니다. bootstrap-servers 설정이 올바른지도 확인합니다.
 
-```
-Connection to node -1 could not be established
-```
+**Serialization 오류**
 
-**원인:** Kafka 브로커에 연결할 수 없음
+`Failed to serialize value` 오류는 Serializer 설정이 맞지 않을 때 발생합니다. JSON 객체를 전송하려면 JsonSerializer를 사용해야 합니다.
 
-**해결:**
-1. Kafka 실행 확인: `docker-compose ps`
-2. 포트 확인: `netstat -an | grep 9092`
-3. bootstrap-servers 설정 확인
-
-### Serialization 오류
-
-```
-Failed to serialize value
-```
-
-**원인:** Serializer 설정 불일치
-
-**해결:**
 ```yaml
 spring:
   kafka:
@@ -304,15 +280,10 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 ```
 
-### Deserialization 오류
+**Deserialization 오류**
 
-```
-Failed to deserialize; nested exception is java.lang.IllegalArgumentException
-```
+`Failed to deserialize` 오류는 신뢰할 수 있는 패키지가 설정되지 않았을 때 발생합니다. JsonDeserializer가 역직렬화할 클래스의 패키지를 지정해야 합니다.
 
-**원인:** 신뢰할 수 있는 패키지 미설정
-
-**해결:**
 ```yaml
 spring:
   kafka:
@@ -321,15 +292,10 @@ spring:
         spring.json.trusted.packages: "*"  # 또는 특정 패키지
 ```
 
-### Group ID 누락
+**Group ID 누락**
 
-```
-group.id is required
-```
+`group.id is required` 오류는 Consumer의 group-id가 설정되지 않았을 때 발생합니다.
 
-**원인:** Consumer group-id 미설정
-
-**해결:**
 ```yaml
 spring:
   kafka:
@@ -337,21 +303,11 @@ spring:
       group-id: quickstart-group
 ```
 
----
+#### 설정 확인 체크리스트
 
-## 설정 확인 체크리스트
+환경 구성이 완료되었는지 다음 항목을 확인합니다. Docker로 Kafka가 실행 중인지, spring-kafka 의존성이 추가되었는지, bootstrap-servers가 설정되었는지, Producer의 serializer가 설정되었는지, Consumer의 deserializer가 설정되었는지, Consumer의 group-id가 설정되었는지 확인합니다. JSON을 사용한다면 trusted.packages도 설정되어 있어야 합니다.
 
-- [ ] Docker로 Kafka 실행됨
-- [ ] spring-kafka 의존성 추가됨
-- [ ] bootstrap-servers 설정됨
-- [ ] Producer serializer 설정됨
-- [ ] Consumer deserializer 설정됨
-- [ ] Consumer group-id 설정됨
-- [ ] (JSON 사용 시) trusted.packages 설정됨
-
----
-
-## 다음 단계
+#### 다음 단계
 
 - [기본 예제](../basic/) - Producer/Consumer 구현
 - [주문 시스템](../order-system/) - 실전 예제

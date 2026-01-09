@@ -1,54 +1,22 @@
 ---
-lastmod: "2026-01-08"
+lastmod: "2026-01-09"
 title: 보안
 weight: 11
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
 
-# Kafka 보안
-
 프로덕션 환경에서 Kafka를 안전하게 운영하기 위한 암호화, 인증, 권한 관리를 이해합니다.
 
-| 검증 환경 | 버전 |
-|----------|------|
-| Kafka | 3.6.1 (KRaft) |
-| Spring Boot | 3.2.x |
-| Spring Kafka | 3.1.x |
-| Java | 17 |
-| OpenSSL | 3.x |
+#### 왜 Kafka 보안이 중요한가?
 
-> 이 문서의 코드 예제는 위 환경에서 컴파일 및 동작이 확인되었습니다.
+보안 없이 Kafka를 운영하면 심각한 문제가 발생할 수 있습니다. 먼저 데이터 유출 위험이 있습니다. 네트워크 스니핑을 통해 결제 정보나 개인정보가 탈취될 수 있으며, 평문 전송 시 중간자 공격(MITM)에 취약해집니다. 다음으로 무단 접근 문제가 있습니다. 인증이 없으면 누구나 Topic에 메시지를 발행할 수 있어 악의적인 데이터 주입으로 시스템이 오작동할 수 있습니다. 마지막으로 권한 남용이 발생할 수 있습니다. 권한 관리가 없으면 개발자가 실수로 프로덕션 Topic을 삭제하거나 민감 데이터에 무제한으로 접근하는 상황이 생깁니다.
 
-## 왜 Kafka 보안이 중요한가?
+보안의 3요소 관점에서 Kafka 보안을 살펴보면, 기밀성(Confidentiality)은 SSL/TLS 암호화로 데이터 탈취를 방지합니다. 무결성(Integrity)은 SSL/TLS와 메시지 서명으로 데이터 변조를 방지합니다. 가용성(Availability)은 ACL과 인증을 통해 무단 접근으로 인한 장애를 방지합니다.
 
-보안 없이 Kafka를 운영하면 어떤 일이 발생할까요?
+#### Kafka 보안 아키텍처
 
-```
-실제 사고 시나리오:
-
-1. 데이터 유출
-   - 네트워크 스니핑으로 결제 정보, 개인정보 탈취
-   - 평문 전송으로 중간자 공격(MITM) 취약
-
-2. 무단 접근
-   - 누구나 Topic에 메시지 발행 가능
-   - 악의적인 데이터 주입으로 시스템 오작동
-
-3. 권한 남용
-   - 개발자가 프로덕션 Topic 삭제
-   - 민감 데이터에 무제한 접근
-```
-
-**보안 3요소와 Kafka:**
-
-| 요소 | Kafka 구현 | 해결 문제 |
-|------|-----------|----------|
-| **기밀성 (Confidentiality)** | SSL/TLS 암호화 | 데이터 탈취 방지 |
-| **무결성 (Integrity)** | SSL/TLS + 메시지 서명 | 데이터 변조 방지 |
-| **가용성 (Availability)** | ACL + 인증 | 무단 접근으로 인한 장애 방지 |
-
-## Kafka 보안 아키텍처
+Kafka 보안은 세 가지 계층으로 구성됩니다. 첫 번째 계층인 SSL/TLS는 클라이언트와 Broker 간의 모든 통신을 암호화합니다. 두 번째 계층인 SASL은 클라이언트의 신원을 확인하는 인증을 담당합니다. 세 번째 계층인 ACL은 인증된 클라이언트가 어떤 작업을 수행할 수 있는지 권한을 관리합니다. 클라이언트 요청은 이 세 계층을 모두 통과해야 Broker에 도달할 수 있습니다.
 
 ```mermaid
 flowchart TB
@@ -78,11 +46,13 @@ flowchart TB
     ACL --> B3
 ```
 
-## 1. 암호화 (Encryption): SSL/TLS
+#### 암호화 (Encryption): SSL/TLS
 
-### 인증서 생성 실습
+SSL/TLS는 네트워크 통신을 암호화하여 데이터가 전송 중에 노출되는 것을 방지합니다. Kafka에서 SSL을 구성하려면 인증서를 생성하고 Broker와 Client에 각각 설정해야 합니다.
 
-**1단계: CA(Certificate Authority) 생성**
+**인증서 생성 과정**
+
+먼저 CA(Certificate Authority)를 생성합니다. CA는 다른 인증서에 서명하는 신뢰할 수 있는 기관 역할을 합니다.
 
 ```bash
 # CA 개인키 생성
@@ -93,7 +63,7 @@ openssl req -new -x509 -key ca-key.pem -out ca-cert.pem -days 3650 \
     -subj "/CN=KafkaCA/O=MyCompany/C=KR"
 ```
 
-**2단계: Broker 인증서 생성**
+다음으로 Broker 인증서를 생성합니다. Broker는 자체 Keystore에 개인키와 인증서를 보관하며, 이 인증서는 CA에 의해 서명되어야 합니다.
 
 ```bash
 # Broker Keystore 생성
@@ -129,7 +99,7 @@ keytool -importcert -alias kafka-broker \
     -storepass broker-secret -noprompt
 ```
 
-**3단계: Truststore 생성**
+마지막으로 Truststore를 생성합니다. Truststore는 신뢰하는 CA 인증서를 보관하며, 상대방의 인증서가 이 CA에 의해 서명되었는지 확인하는 데 사용됩니다.
 
 ```bash
 # Broker Truststore (CA 인증서 포함)
@@ -145,7 +115,9 @@ keytool -importcert -alias ca-root \
     -storepass client-secret -noprompt
 ```
 
-### Broker SSL 설정
+**Broker SSL 설정**
+
+인증서를 생성한 후에는 Broker에 SSL 설정을 적용합니다. listeners는 SSL 프로토콜을 사용하는 포트를 지정하고, ssl.client.auth=required는 양방향 TLS를 활성화하여 클라이언트 인증서도 검증합니다.
 
 ```properties
 # server.properties
@@ -164,7 +136,9 @@ ssl.truststore.password=truststore-secret
 ssl.client.auth=required  # none, requested, required
 ```
 
-### Spring Boot 클라이언트 설정
+**Spring Boot 클라이언트 설정**
+
+Spring Boot 애플리케이션에서 SSL을 사용하려면 security.protocol을 SSL로 설정하고 Truststore와 Keystore 위치를 지정합니다.
 
 ```yaml
 # application.yml
@@ -181,19 +155,9 @@ spring:
       key-password: client-secret
 ```
 
+프로그래밍 방식으로 SSL을 구성하면 더 세밀한 제어가 가능합니다.
+
 ```java
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.core.DefaultKafkaProducerFactory;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.core.ProducerFactory;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.config.SslConfigs;
-import org.apache.kafka.common.serialization.StringSerializer;
-
-import java.util.HashMap;
-import java.util.Map;
-
 @Configuration
 public class KafkaSslConfig {
 
@@ -222,21 +186,15 @@ public class KafkaSslConfig {
 }
 ```
 
----
+#### 인증 (Authentication): SASL
 
-## 2. 인증 (Authentication): SASL
+SASL(Simple Authentication and Security Layer)은 클라이언트의 신원을 확인하는 인증 프레임워크입니다. Kafka는 여러 SASL 메커니즘을 지원하며, 각각 보안 수준과 설정 복잡도가 다릅니다.
 
-### SASL 메커니즘 비교
+PLAIN은 사용자명과 비밀번호를 평문으로 전송하므로 보안 수준이 낮고 반드시 SSL과 함께 사용해야 합니다. SCRAM-SHA-256은 Challenge-Response 방식으로 비밀번호를 안전하게 검증하며 프로덕션에서 권장됩니다. SCRAM-SHA-512는 더 강력한 해시를 사용하여 고보안 환경에 적합합니다. GSSAPI는 Kerberos 기반 인증으로 기존 Kerberos 인프라가 있는 조직에서 사용합니다. OAUTHBEARER는 OAuth 2.0 토큰 기반 인증으로 최신 인증 시스템과 통합할 때 사용합니다.
 
-| 메커니즘 | 보안 수준 | 설정 복잡도 | 사용 사례 |
-|----------|----------|------------|----------|
-| **PLAIN** | 낮음 (평문) | 낮음 | 개발 환경, SSL 필수 |
-| **SCRAM-SHA-256** | 높음 | 중간 | **프로덕션 권장** |
-| **SCRAM-SHA-512** | 매우 높음 | 중간 | 고보안 환경 |
-| **GSSAPI** | 높음 | 높음 | Kerberos 인프라 보유 시 |
-| **OAUTHBEARER** | 높음 | 높음 | OAuth 2.0 통합 |
+**SCRAM 사용자 생성**
 
-### SCRAM 사용자 생성
+SCRAM을 사용하려면 먼저 Broker에 사용자를 등록해야 합니다. KRaft 모드에서는 kafka-configs.sh 명령어로 사용자를 생성합니다.
 
 ```bash
 # SCRAM-SHA-256 사용자 생성 (KRaft 모드)
@@ -249,7 +207,9 @@ kafka-configs.sh --bootstrap-server localhost:9092 \
     --describe --entity-type users --entity-name order-service
 ```
 
-### Broker SASL 설정
+**Broker SASL 설정**
+
+Broker에서 SASL을 활성화하려면 리스너 프로토콜을 SASL_SSL로 변경하고 사용할 메커니즘을 지정합니다.
 
 ```properties
 # server.properties
@@ -265,7 +225,7 @@ sasl.enabled.mechanisms=SCRAM-SHA-256
 ssl.keystore.location=...
 ```
 
-**JAAS 설정 파일 (kafka_server_jaas.conf):**
+JAAS(Java Authentication and Authorization Service) 설정 파일은 Broker가 인증에 사용할 자격 증명을 정의합니다.
 
 ```
 KafkaServer {
@@ -275,14 +235,16 @@ KafkaServer {
 };
 ```
 
-**Broker 시작:**
+Broker 시작 시 JAAS 설정 파일을 지정합니다.
 
 ```bash
 KAFKA_OPTS="-Djava.security.auth.login.config=/path/to/kafka_server_jaas.conf" \
     ./bin/kafka-server-start.sh config/server.properties
 ```
 
-### Spring Boot SASL 클라이언트
+**Spring Boot SASL 클라이언트**
+
+Spring Boot 클라이언트에서는 application.yml에 SASL 설정을 추가합니다. sasl.jaas.config에 사용자명과 비밀번호를 직접 지정할 수 있습니다.
 
 ```yaml
 # application.yml
@@ -301,30 +263,15 @@ spring:
       trust-store-password: client-secret
 ```
 
----
+#### 권한 관리 (Authorization): ACLs
 
-## 3. 권한 관리 (Authorization): ACLs
+ACL(Access Control List)은 인증된 사용자가 어떤 리소스에 어떤 작업을 수행할 수 있는지 정의합니다. ACL 규칙의 형식은 "Principal P is [Allowed/Denied] Operation O From Host H On Resource R"입니다. 예를 들어 "User:order-service is Allowed Write From * On Topic:orders"는 order-service 사용자가 모든 호스트에서 orders Topic에 쓰기가 가능함을 의미합니다.
 
-### ACL 개념
+Kafka의 주요 리소스는 네 가지입니다. Topic은 Read, Write, Create, Delete, Describe 작업을 지원합니다. Group은 Consumer Group에 대한 Read, Describe, Delete 작업을 지원합니다. Cluster는 클러스터 관리를 위한 Create, Alter, Describe 작업을 지원합니다. TransactionalId는 트랜잭션을 위한 Write, Describe 작업을 지원합니다.
 
-```
-ACL 규칙 형식:
-Principal P is [Allowed/Denied] Operation O From Host H On Resource R
+**ACL 설정 예시**
 
-예시:
-User:order-service is Allowed Write From * On Topic:orders
-```
-
-### 주요 리소스와 작업
-
-| 리소스 | 작업 | 설명 |
-|--------|------|------|
-| **Topic** | Read, Write, Create, Delete, Describe | 토픽 접근 |
-| **Group** | Read, Describe, Delete | Consumer Group |
-| **Cluster** | Create, Alter, Describe | 클러스터 관리 |
-| **TransactionalId** | Write, Describe | 트랜잭션 |
-
-### ACL 설정 예시
+Producer에게 특정 Topic에 쓰기 권한을 부여하려면 --producer 옵션을 사용합니다.
 
 ```bash
 # Producer 권한: orders 토픽에 쓰기
@@ -358,7 +305,7 @@ kafka-acls.sh --bootstrap-server localhost:9093 \
     --producer --topic orders
 ```
 
-**admin.properties:**
+admin.properties 파일은 관리 명령을 실행하는 데 필요한 인증 정보를 포함합니다.
 
 ```properties
 security.protocol=SASL_SSL
@@ -369,7 +316,9 @@ ssl.truststore.location=/path/to/truststore.jks
 ssl.truststore.password=truststore-secret
 ```
 
-### Broker ACL 설정
+**Broker ACL 설정**
+
+Broker에서 ACL을 활성화하려면 authorizer.class.name을 설정합니다. KRaft 모드에서는 StandardAuthorizer를 사용합니다. super.users는 모든 권한을 가진 관리자를 지정하고, allow.everyone.if.no.acl.found=false는 ACL이 없으면 기본적으로 접근을 거부하도록 합니다. 이 설정은 보안상 권장됩니다.
 
 ```properties
 # server.properties
@@ -382,9 +331,9 @@ super.users=User:admin
 allow.everyone.if.no.acl.found=false
 ```
 
----
+#### Docker Compose 보안 클러스터 예시
 
-## Docker Compose 보안 클러스터 예시
+보안이 적용된 Kafka 클러스터를 Docker Compose로 구성할 수 있습니다. 이 예시에는 SASL_SSL 리스너, SCRAM 인증, ACL이 모두 포함되어 있습니다.
 
 ```yaml
 # docker-compose-secure.yml
@@ -430,25 +379,13 @@ services:
       - ./secrets:/etc/kafka/secrets
 ```
 
----
+#### 트러블슈팅 가이드
 
-## 트러블슈팅 가이드
+**SSL Handshake 실패**
 
-### 에러 1: SSL Handshake 실패
+`org.apache.kafka.common.errors.SslAuthenticationException: SSL handshake failed` 에러가 발생하면 여러 원인이 있을 수 있습니다.
 
-```
-org.apache.kafka.common.errors.SslAuthenticationException:
-SSL handshake failed
-```
-
-**원인과 해결:**
-
-| 원인 | 해결 |
-|------|------|
-| 인증서 만료 | `keytool -list -v -keystore keystore.jks`로 유효기간 확인 |
-| CA 불일치 | Client Truststore에 올바른 CA 포함 확인 |
-| 호스트명 불일치 | 인증서 CN과 Bootstrap 서버 호스트명 일치 확인 |
-| 프로토콜 버전 | `ssl.enabled.protocols=TLSv1.2,TLSv1.3` 확인 |
+인증서가 만료되었을 수 있으므로 `keytool -list -v -keystore keystore.jks` 명령으로 유효기간을 확인합니다. CA가 일치하지 않을 수 있으므로 Client Truststore에 올바른 CA 인증서가 포함되어 있는지 확인합니다. 인증서의 CN(Common Name)과 Bootstrap 서버 호스트명이 일치하지 않을 수 있습니다. TLS 프로토콜 버전 불일치 시 `ssl.enabled.protocols=TLSv1.2,TLSv1.3`을 확인합니다.
 
 ```bash
 # 인증서 확인
@@ -458,14 +395,11 @@ openssl s_client -connect kafka-broker:9093 -showcerts
 keytool -list -v -keystore kafka.broker.keystore.jks -storepass broker-secret
 ```
 
-### 에러 2: SASL 인증 실패
+**SASL 인증 실패**
 
-```
-org.apache.kafka.common.errors.SaslAuthenticationException:
-Authentication failed: credentials invalid
-```
+`org.apache.kafka.common.errors.SaslAuthenticationException: Authentication failed: credentials invalid` 에러는 자격 증명 문제를 나타냅니다.
 
-**해결:**
+먼저 사용자가 존재하는지 확인합니다. 비밀번호가 잘못되었다면 재설정합니다. JAAS 설정에서 사용자명이나 비밀번호에 특수문자가 있으면 따옴표로 감싸야 합니다.
 
 ```bash
 # 1. 사용자 존재 확인
@@ -476,19 +410,11 @@ kafka-configs.sh --bootstrap-server localhost:9092 \
 kafka-configs.sh --bootstrap-server localhost:9092 \
     --alter --add-config 'SCRAM-SHA-256=[password=new-password]' \
     --entity-type users --entity-name order-service
-
-# 3. JAAS 설정 확인
-# username/password에 특수문자가 있으면 따옴표로 감싸기
 ```
 
-### 에러 3: ACL 권한 부족
+**ACL 권한 부족**
 
-```
-org.apache.kafka.common.errors.TopicAuthorizationException:
-Not authorized to access topics: [orders]
-```
-
-**해결:**
+`org.apache.kafka.common.errors.TopicAuthorizationException: Not authorized to access topics: [orders]` 에러는 필요한 권한이 없음을 의미합니다. 현재 ACL을 확인하고 필요한 권한을 추가합니다.
 
 ```bash
 # 1. 현재 ACL 확인
@@ -503,7 +429,9 @@ kafka-acls.sh --bootstrap-server localhost:9093 \
     --operation Write --topic orders
 ```
 
-### 디버깅 로깅 활성화
+**디버깅 로깅 활성화**
+
+문제 진단을 위해 Kafka 보안 관련 로깅을 DEBUG 레벨로 활성화할 수 있습니다.
 
 ```yaml
 # application.yml
@@ -513,38 +441,21 @@ logging:
     org.apache.kafka.clients: DEBUG
 ```
 
----
+#### 프로덕션 보안 체크리스트
 
-## 프로덕션 보안 체크리스트
+프로덕션 배포 전에 다음 항목을 확인해야 합니다.
 
-### 배포 전 필수 확인
+암호화 관련으로 모든 통신에 SSL/TLS를 적용했는지(security.protocol=SASL_SSL), 인증서 유효기간이 충분한지(최소 1년), 강력한 암호화 스위트를 사용하는지(TLS 1.2+), 양방향 TLS가 활성화되어 있는지(ssl.client.auth=required) 확인합니다.
 
-```
-암호화:
-□ 모든 통신에 SSL/TLS 적용 (security.protocol=SASL_SSL)
-□ 인증서 유효기간 충분 (최소 1년)
-□ 강력한 암호화 스위트 사용 (TLS 1.2+)
-□ ssl.client.auth=required (양방향 TLS)
+인증 관련으로 SCRAM-SHA-256 또는 SCRAM-SHA-512를 사용하는지, 기본 비밀번호를 변경했는지, 서비스별 별도 사용자를 생성했는지, 비밀번호가 충분히 복잡한지(16자 이상 권장) 확인합니다.
 
-인증:
-□ SCRAM-SHA-256 또는 SCRAM-SHA-512 사용
-□ 기본 비밀번호 변경 완료
-□ 서비스별 별도 사용자 생성
-□ 비밀번호 복잡도 충족 (16자 이상 권장)
+권한 관련으로 allow.everyone.if.no.acl.found=false가 설정되어 있는지, 최소 권한 원칙이 적용되어 있는지, super.users가 최소화되어 있는지, 정기적 ACL 감사 계획이 있는지 확인합니다.
 
-권한:
-□ allow.everyone.if.no.acl.found=false
-□ 최소 권한 원칙 적용
-□ super.users 최소화
-□ 정기적 ACL 감사 계획
+모니터링 관련으로 인증 실패 알림이 설정되어 있는지, ACL 거부 로깅이 활성화되어 있는지, 인증서 만료 30일 전 알림이 설정되어 있는지 확인합니다.
 
-모니터링:
-□ 인증 실패 알림 설정
-□ ACL 거부 로깅 활성화
-□ 인증서 만료 알림 (30일 전)
-```
+**인증서 갱신 자동화**
 
-### 인증서 갱신 자동화
+인증서 만료는 심각한 장애를 유발할 수 있으므로 자동 갱신 또는 사전 알림 시스템을 구축해야 합니다.
 
 ```bash
 #!/bin/bash
@@ -564,39 +475,34 @@ if [ $(days_until_expiry "$EXPIRY") -lt $DAYS_BEFORE_EXPIRY ]; then
 fi
 ```
 
----
+#### 자주 묻는 질문
 
-## FAQ
+**SSL과 SASL 중 하나만 써도 되나요?**
 
-**Q: SSL과 SASL 중 하나만 써도 되나요?**
-> A: 아니요. SSL은 암호화, SASL은 인증입니다. **둘 다 사용해야** 완전한 보안입니다. SASL_PLAINTEXT는 비밀번호가 평문 전송되어 위험합니다.
+둘 다 사용해야 완전한 보안이 구현됩니다. SSL은 통신 암호화를 담당하고 SASL은 사용자 인증을 담당합니다. SASL_PLAINTEXT를 사용하면 비밀번호가 평문으로 전송되어 매우 위험합니다. 항상 SASL_SSL을 사용하세요.
 
-**Q: SCRAM과 Kerberos 중 무엇을 선택하나요?**
-> A: 기존 Kerberos 인프라가 있으면 GSSAPI, 없으면 **SCRAM-SHA-256**을 권장합니다. SCRAM이 설정이 더 간단합니다.
+**SCRAM과 Kerberos 중 무엇을 선택하나요?**
 
-**Q: ACL을 Topic 단위로만 설정해야 하나요?**
-> A: 아니요. `--resource-pattern-type=prefixed`로 접두사 기반 권한도 가능합니다:
-> ```bash
-> kafka-acls.sh --add --allow-principal User:order-service \
->     --operation Write --topic order- --resource-pattern-type prefixed
-> ```
+기존에 Kerberos 인프라가 구축되어 있다면 GSSAPI(Kerberos)를 사용하는 것이 좋습니다. 그렇지 않다면 SCRAM-SHA-256을 권장합니다. SCRAM은 설정이 더 간단하고 별도의 인프라가 필요하지 않습니다.
 
-**Q: 인증서가 만료되면 어떻게 되나요?**
-> A: 새 연결이 실패합니다. 기존 연결은 유지되지만, 재시작 시 연결 불가. **자동 갱신 설정 필수**.
+**ACL을 Topic 단위로만 설정해야 하나요?**
 
-**Q: 개발 환경에서도 보안을 적용해야 하나요?**
-> A: 프로덕션과 동일한 보안 설정을 권장합니다. 개발 환경에서 보안 문제를 미리 발견할 수 있습니다.
+아닙니다. 접두사(prefix) 기반 권한도 설정할 수 있습니다. `--resource-pattern-type=prefixed` 옵션을 사용하면 특정 접두사로 시작하는 모든 Topic에 권한을 부여할 수 있습니다. 예를 들어 order-로 시작하는 모든 Topic에 쓰기 권한을 부여할 수 있습니다.
 
----
+```bash
+kafka-acls.sh --add --allow-principal User:order-service \
+    --operation Write --topic order- --resource-pattern-type prefixed
+```
 
-## 참고 자료
+**인증서가 만료되면 어떻게 되나요?**
 
-- [Apache Kafka Security](https://kafka.apache.org/documentation/#security)
-- [Confluent Security Tutorial](https://docs.confluent.io/platform/current/security/security-tutorial.html)
-- [SCRAM Authentication](https://kafka.apache.org/documentation/#security_sasl_scram)
-- [ACL Authorization](https://kafka.apache.org/documentation/#security_authz)
+새로운 연결이 실패합니다. 기존에 맺어진 연결은 유지되지만, 재시작하면 연결할 수 없게 됩니다. 인증서 만료 전에 자동으로 갱신되도록 시스템을 구성하는 것이 필수입니다.
 
-## 다음 단계
+**개발 환경에서도 보안을 적용해야 하나요?**
+
+프로덕션과 동일한 보안 설정을 권장합니다. 개발 환경에서 보안 설정을 적용하면 프로덕션 배포 전에 보안 관련 문제를 미리 발견할 수 있습니다. 또한 개발자가 보안 설정에 익숙해지는 장점도 있습니다.
+
+#### 다음 단계
 
 - [모니터링](../monitoring/) - 보안 이벤트 모니터링
 - [생태계](../ecosystem/) - Schema Registry 보안 설정

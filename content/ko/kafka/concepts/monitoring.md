@@ -1,48 +1,28 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-09"
 title: 모니터링 기초
 weight: 10
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
 
-# 모니터링 기초
-
 Kafka 클러스터와 애플리케이션의 핵심 메트릭을 이해합니다.
 
-| 검증 환경 | 버전 |
-|----------|------|
-| Kafka | 3.6.1 (KRaft) |
-| Spring Boot | 3.2.x |
-| Micrometer | 1.12.x |
-| Prometheus | 2.x |
+#### 모니터링 대상
 
-> 이 문서의 코드 예제는 위 환경에서 컴파일 및 동작이 확인되었습니다.
+Kafka 시스템에서 모니터링해야 할 대상은 네 가지 영역으로 나눌 수 있습니다.
 
-## 모니터링 대상
+Broker 모니터링은 클러스터의 전반적인 상태를 파악하는 데 필수적입니다. 복제 상태, 컨트롤러 상태, 파티션 상태 등을 확인하여 클러스터가 정상적으로 동작하는지 판단합니다.
 
-```mermaid
-flowchart TB
-    subgraph Monitoring["모니터링 대상"]
-        BROKER["Broker\n클러스터 상태"]
-        PRODUCER["Producer\n전송 성능"]
-        CONSUMER["Consumer\nLag, 처리 속도"]
-        TOPIC["Topic/Partition\n상태"]
-    end
-```
+Producer 모니터링은 메시지 전송 성능을 추적합니다. 초당 전송량, 에러율, 지연시간을 확인하여 Producer가 효율적으로 동작하는지 확인합니다.
 
-## Consumer Lag
+Consumer 모니터링은 메시지 처리 상태를 추적합니다. Consumer Lag은 가장 중요한 메트릭으로, 처리 속도가 생산 속도를 따라가는지 보여줍니다.
 
-가장 중요한 메트릭입니다.
+Topic/Partition 모니터링은 데이터 분산 상태와 각 파티션의 상태를 확인합니다.
 
-### Lag이란?
+#### Consumer Lag
 
-```
-Partition 0:
-├── Log End Offset (LEO): 1000  (최신 메시지)
-├── Consumer Offset: 800       (현재 위치)
-└── Lag: 200                   (처리 대기)
-```
+Consumer Lag은 Kafka 모니터링에서 가장 중요한 메트릭입니다. Lag은 Topic에서 가장 최신 메시지의 Offset(Log End Offset, LEO)과 Consumer가 현재 처리한 위치(Consumer Offset)의 차이입니다. 예를 들어 Partition의 LEO가 1000이고 Consumer Offset이 800이라면 Lag은 200입니다. 이는 Consumer가 처리해야 할 메시지가 200개 남아있음을 의미합니다.
 
 ```mermaid
 flowchart LR
@@ -58,18 +38,13 @@ flowchart LR
     O3 -->|Lag: 200| O5
 ```
 
-### Lag 의미
+**Lag의 의미 해석**
 
-| Lag 상태 | 의미 | 조치 |
-|----------|------|------|
-| **0** | 실시간 처리 | 정상 |
-| **일정 수치** | 안정적 처리 | 정상 |
-| **증가 추세** | 처리 속도 < 생산 속도 | 조치 필요 |
-| **급증** | 처리 중단 | 긴급 조치 |
+Lag이 0이면 Consumer가 실시간으로 메시지를 처리하고 있음을 나타내며 정상 상태입니다. Lag이 일정 수치를 유지하면 Consumer가 안정적으로 메시지를 처리하고 있으며 이 또한 정상 상태입니다. 그러나 Lag이 지속적으로 증가하는 추세라면 처리 속도가 생산 속도보다 느리다는 것을 의미하며 조치가 필요합니다. Lag이 급증한다면 Consumer가 처리를 중단했거나 심각한 문제가 발생한 것이므로 긴급 조치가 필요합니다.
 
-### Lag 모니터링
+**Lag 모니터링 방법**
 
-#### kafka-consumer-groups 명령어
+kafka-consumer-groups.sh 명령어를 사용하면 Consumer Group의 현재 상태와 Lag을 확인할 수 있습니다.
 
 ```bash
 kafka-consumer-groups.sh \
@@ -78,7 +53,8 @@ kafka-consumer-groups.sh \
   --describe
 ```
 
-출력:
+출력 결과는 각 Partition별로 현재 Consumer Offset, Log End Offset, Lag을 보여줍니다.
+
 ```
 GROUP           TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG
 order-service   orders          0          800             1000            200
@@ -86,7 +62,7 @@ order-service   orders          1          750             900             150
 order-service   orders          2          820             820             0
 ```
 
-#### Spring Boot Actuator
+Spring Boot Actuator를 사용하면 애플리케이션에서 직접 Lag 메트릭을 노출할 수 있습니다.
 
 ```yaml
 management:
@@ -96,29 +72,34 @@ management:
         include: health,metrics,kafka
 ```
 
+Actuator 엔드포인트를 통해 Lag을 조회할 수 있습니다.
+
 ```bash
 curl http://localhost:8080/actuator/metrics/kafka.consumer.fetch.manager.records.lag
 ```
 
-## Broker 메트릭
+#### Broker 메트릭
 
-### 핵심 메트릭
+Broker 상태를 파악하기 위한 핵심 메트릭이 있습니다.
 
-| 메트릭 | 설명 | 주의 수준 |
-|--------|------|----------|
-| **UnderReplicatedPartitions** | 복제 부족 파티션 수 | > 0 |
-| **ActiveControllerCount** | 활성 컨트롤러 수 | != 1 |
-| **OfflinePartitionsCount** | 오프라인 파티션 수 | > 0 |
-| **RequestHandlerAvgIdlePercent** | 핸들러 유휴율 | < 30% |
+UnderReplicatedPartitions는 복제가 부족한 파티션 수를 나타냅니다. 이 값이 0보다 크면 일부 Broker가 다운되었거나 네트워크 문제가 있을 수 있으므로 즉시 확인이 필요합니다.
 
-### JMX 메트릭 확인
+ActiveControllerCount는 클러스터 내 활성 컨트롤러 수입니다. 이 값은 항상 1이어야 합니다. 0이면 컨트롤러가 없어 클러스터가 정상 동작하지 않고, 2 이상이면 Split Brain 상태일 수 있습니다.
+
+OfflinePartitionsCount는 오프라인 상태인 파티션 수입니다. 이 값이 0보다 크면 해당 파티션의 데이터에 접근할 수 없으므로 긴급 조치가 필요합니다.
+
+RequestHandlerAvgIdlePercent는 요청 핸들러의 유휴율을 나타냅니다. 이 값이 30% 미만이면 Broker가 과부하 상태일 수 있으므로 리소스 확장을 고려해야 합니다.
+
+**JMX 메트릭 설정**
+
+Broker 메트릭은 JMX(Java Management Extensions)를 통해 노출됩니다. Broker 시작 시 JMX 포트를 활성화합니다.
 
 ```bash
 # JMX 활성화 (브로커 시작 시)
 KAFKA_JMX_OPTS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9999"
 ```
 
-### 주요 JMX Bean
+주요 JMX Bean 경로는 다음과 같습니다.
 
 ```
 kafka.server:type=ReplicaManager,name=UnderReplicatedPartitions
@@ -127,9 +108,15 @@ kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec
 kafka.network:type=RequestMetrics,name=TotalTimeMs,request=Produce
 ```
 
-## Producer 메트릭
+#### Producer 메트릭
 
-### Spring Kafka + Micrometer
+Producer의 성능과 안정성을 모니터링하기 위한 메트릭입니다.
+
+record-send-rate는 초당 전송되는 레코드 수를 나타내며, 처리량을 파악하는 데 사용됩니다. record-error-rate는 초당 발생하는 에러 수로, 이 값이 전체 전송량의 1%를 초과하면 문제가 있을 수 있습니다. request-latency-avg는 요청당 평균 지연시간으로, 100ms를 초과하면 네트워크나 Broker 성능을 확인해야 합니다. batch-size-avg는 평균 배치 크기로, 배치 효율성을 확인하는 데 사용됩니다. buffer-exhausted-rate는 버퍼가 부족해진 빈도로, 이 값이 0보다 크면 버퍼 크기를 늘려야 합니다.
+
+**Spring Kafka + Micrometer 설정**
+
+Spring Kafka와 Micrometer를 함께 사용하면 Producer 메트릭을 쉽게 수집할 수 있습니다.
 
 ```yaml
 management:
@@ -138,18 +125,9 @@ management:
       kafka: true
 ```
 
-### 핵심 메트릭
-
-| 메트릭 | 설명 | 권장 |
-|--------|------|------|
-| `record-send-rate` | 초당 전송 레코드 | 모니터링 |
-| `record-error-rate` | 초당 에러 수 | < 1% |
-| `request-latency-avg` | 평균 요청 지연 | < 100ms |
-| `batch-size-avg` | 평균 배치 크기 | 배치 효율 확인 |
-| `buffer-exhausted-rate` | 버퍼 부족 빈도 | 0 |
+커스텀 메트릭을 추가하여 비즈니스 관련 지표를 추적할 수 있습니다.
 
 ```java
-// Micrometer로 커스텀 메트릭 추가
 @Component
 public class KafkaMetrics {
 
@@ -173,19 +151,15 @@ public class KafkaMetrics {
 }
 ```
 
-## Consumer 메트릭
+#### Consumer 메트릭
 
-### 핵심 메트릭
+Consumer의 상태와 성능을 모니터링하기 위한 메트릭입니다.
 
-| 메트릭 | 설명 | 주의 |
-|--------|------|------|
-| `records-lag` | 현재 Lag | 증가 추세 |
-| `records-lag-max` | 최대 Lag | 임계값 초과 |
-| `records-consumed-rate` | 초당 소비 레코드 | 급격한 감소 |
-| `fetch-latency-avg` | 평균 fetch 지연 | 증가 추세 |
-| `commit-latency-avg` | 평균 커밋 지연 | > 100ms |
+records-lag는 현재 Lag 값으로, 가장 중요한 메트릭입니다. 증가 추세라면 처리 속도가 부족한 것입니다. records-lag-max는 모든 파티션 중 최대 Lag 값으로, 특정 파티션에 문제가 있는지 확인하는 데 유용합니다. records-consumed-rate는 초당 소비되는 레코드 수로, 급격한 감소는 문제를 나타냅니다. fetch-latency-avg는 평균 fetch 지연시간으로, 증가 추세라면 네트워크나 Broker 문제일 수 있습니다. commit-latency-avg는 평균 Offset 커밋 지연시간으로, 100ms를 초과하면 확인이 필요합니다.
 
-### Lag 알림 설정
+**Lag 알림 설정**
+
+Lag이 특정 임계값을 초과하면 알림을 보내도록 설정할 수 있습니다.
 
 ```java
 @Component
@@ -209,9 +183,13 @@ public class LagMonitor {
 }
 ```
 
-## Prometheus + Grafana
+#### Prometheus + Grafana
 
-### JMX Exporter 설정
+Prometheus와 Grafana를 사용하면 Kafka 메트릭을 시각화하고 알림을 설정할 수 있습니다.
+
+**JMX Exporter 설정**
+
+JMX Exporter는 JMX 메트릭을 Prometheus 형식으로 변환합니다.
 
 ```yaml
 # jmx_exporter_config.yaml
@@ -227,7 +205,9 @@ rules:
     type: GAUGE
 ```
 
-### Spring Boot 설정
+**Spring Boot Prometheus 설정**
+
+Spring Boot 애플리케이션에서 Prometheus 엔드포인트를 노출합니다.
 
 ```yaml
 management:
@@ -241,22 +221,15 @@ management:
         enabled: true
 ```
 
-### Grafana 대시보드 쿼리 예시
+**Grafana 대시보드 쿼리**
 
-```promql
-# Consumer Lag
-sum(kafka_consumer_records_lag) by (topic, partition)
+Grafana에서 PromQL을 사용하여 Kafka 메트릭을 시각화합니다.
 
-# 메시지 처리율
-rate(kafka_consumer_records_consumed_total[5m])
+Consumer Lag을 Topic과 Partition별로 집계하려면 `sum(kafka_consumer_records_lag) by (topic, partition)` 쿼리를 사용합니다. 메시지 처리율을 5분 단위로 계산하려면 `rate(kafka_consumer_records_consumed_total[5m])` 쿼리를 사용합니다. Producer 에러율을 5분 단위로 계산하려면 `rate(kafka_producer_record_error_total[5m])` 쿼리를 사용합니다.
 
-# Producer 에러율
-rate(kafka_producer_record_error_total[5m])
-```
+#### 알림 설정 가이드
 
-## 알림 설정 가이드
-
-### Lag 기반 알림
+Lag 기반으로 알림을 설정할 때 단계별 임계값을 적용합니다. Lag이 100 미만이면 정상 상태입니다. 100에서 1000 사이면 경고 알림을 발송합니다. 1000을 초과하면 긴급 알림을 발송합니다. Lag이 지속적으로 증가하는 추세라면 별도의 추세 알림을 발송합니다.
 
 ```mermaid
 flowchart TB
@@ -267,18 +240,11 @@ flowchart TB
     LAG -->|증가 추세| TREND[추세 알림]
 ```
 
-### 알림 임계값 예시
+각 메트릭별 권장 임계값입니다. Consumer Lag은 1,000이면 Warning, 10,000이면 Critical입니다. Producer Error Rate는 1%면 Warning, 5%면 Critical입니다. Broker UnderReplicated는 1이면 Warning, 1을 초과하면 Critical입니다. Request Latency는 100ms면 Warning, 500ms면 Critical입니다.
 
-| 메트릭 | Warning | Critical |
-|--------|---------|----------|
-| Consumer Lag | 1,000 | 10,000 |
-| Producer Error Rate | 1% | 5% |
-| Broker UnderReplicated | 1 | > 1 |
-| Request Latency | 100ms | 500ms |
+#### 로깅 전략
 
-## 로깅 전략
-
-### 구조화된 로깅
+구조화된 로깅은 문제 추적에 매우 유용합니다. MDC(Mapped Diagnostic Context)를 사용하면 로그에 컨텍스트 정보를 추가할 수 있습니다.
 
 ```java
 @KafkaListener(topics = "orders")
@@ -300,7 +266,7 @@ public void consume(ConsumerRecord<String, OrderEvent> record) {
 }
 ```
 
-### logback 설정
+Logback 설정에서 MDC 필드를 JSON 형식으로 출력하면 로그 분석 도구에서 쉽게 검색하고 필터링할 수 있습니다.
 
 ```xml
 <appender name="KAFKA_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -312,9 +278,11 @@ public void consume(ConsumerRecord<String, OrderEvent> record) {
 </appender>
 ```
 
-## 트러블슈팅
+#### 트러블슈팅
 
-### Lag 급증 시
+Lag이 급증했을 때 단계적으로 원인을 파악합니다.
+
+먼저 Consumer가 살아있는지 확인합니다. Consumer 프로세스가 죽었다면 재시작합니다. Consumer가 살아있다면 처리 속도가 정상인지 확인합니다. 처리 속도가 느리다면 처리 로직을 최적화합니다. 처리 속도가 정상이라면 리밸런싱이 발생했는지 확인합니다. 리밸런싱이 발생했다면 session.timeout.ms, max.poll.interval.ms 등의 설정을 검토합니다. 리밸런싱이 발생하지 않았다면 Consumer 스케일 아웃을 고려합니다.
 
 ```mermaid
 flowchart TB
@@ -332,55 +300,38 @@ flowchart TB
     Q3 -->|No| SCALE[Consumer 스케일 아웃]
 ```
 
-### 체크리스트
+**문제 진단 체크리스트**
 
-1. **Consumer 상태 확인**
-   ```bash
-   kafka-consumer-groups.sh --describe --group order-service
-   ```
+Consumer 상태는 kafka-consumer-groups.sh 명령어로 확인합니다.
 
-2. **리밸런싱 확인**
-   ```bash
-   grep "Rebalancing" /var/log/kafka/server.log
-   ```
-
-3. **네트워크 확인**
-   ```bash
-   netstat -an | grep 9092
-   ```
-
-4. **디스크 사용량 확인**
-   ```bash
-   df -h /var/lib/kafka
-   ```
-
-## 정리
-
-```mermaid
-flowchart TB
-    subgraph Metrics["핵심 메트릭"]
-        LAG["Consumer Lag\n가장 중요"]
-        ERR["Error Rate\n품질 지표"]
-        LAT["Latency\n성능 지표"]
-    end
-
-    subgraph Tools["도구"]
-        CLI["kafka-consumer-groups"]
-        ACT["Spring Actuator"]
-        PROM["Prometheus"]
-        GRAF["Grafana"]
-    end
-
-    Metrics --> Tools
+```bash
+kafka-consumer-groups.sh --describe --group order-service
 ```
 
-| 우선순위 | 메트릭 | 도구 |
-|---------|--------|------|
-| 1 | Consumer Lag | CLI, Prometheus |
-| 2 | Error Rate | Micrometer |
-| 3 | Latency | Micrometer |
-| 4 | Broker Health | JMX |
+리밸런싱 발생 여부는 Kafka 서버 로그에서 확인합니다.
 
-## 다음 단계
+```bash
+grep "Rebalancing" /var/log/kafka/server.log
+```
+
+네트워크 연결 상태는 netstat으로 확인합니다.
+
+```bash
+netstat -an | grep 9092
+```
+
+디스크 사용량은 Kafka 데이터 디렉토리에서 확인합니다. 디스크가 가득 차면 Broker가 새 메시지를 받지 못합니다.
+
+```bash
+df -h /var/lib/kafka
+```
+
+#### 정리
+
+Kafka 모니터링의 핵심 메트릭은 세 가지입니다. Consumer Lag은 가장 중요한 메트릭으로 처리 지연을 나타냅니다. Error Rate는 시스템 품질을 나타내는 지표입니다. Latency는 성능을 나타내는 지표입니다.
+
+모니터링 도구로는 kafka-consumer-groups CLI, Spring Actuator, Prometheus, Grafana를 활용합니다. 우선순위로 보면 Consumer Lag이 가장 중요하고, 그 다음이 Error Rate, Latency 순이며, 마지막으로 Broker Health를 확인합니다.
+
+#### 다음 단계
 
 - [실습 예제](../../examples/) - 배운 개념을 직접 적용해보기

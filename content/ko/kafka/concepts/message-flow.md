@@ -6,31 +6,25 @@ author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
 
-# 메시지 흐름
+Kafka에서 메시지가 발행되고 소비되는 전체 과정을 이해하는 것은 안정적인 시스템 운영의 기초입니다. 메시지가 Producer에서 출발하여 Broker에 저장되고, Consumer가 읽어가는 각 단계에서 어떤 일이 일어나는지 알아야 문제 상황에서 원인을 빠르게 파악하고 해결할 수 있습니다.
 
-Kafka에서 메시지가 발행되고 소비되는 전체 과정을 이해합니다.
+이 문서에서는 메시지 흐름의 각 단계를 상세히 살펴보고, 각 단계에서 흔히 발생하는 문제와 해결 방법을 함께 다룹니다. 단순히 "어떻게 동작하는가"를 넘어 "왜 이렇게 설계되었고, 실무에서 어떤 영향을 미치는가"를 이해하는 것이 목표입니다.
 
-| 검증 환경 | 버전 |
-|----------|------|
-| Kafka | 3.6.1 (KRaft) |
-| Spring Boot | 3.2.x |
-| Spring Kafka | 3.1.x |
-| Java | 17 |
+#### 왜 메시지 흐름을 이해해야 하는가
 
-> 이 문서의 코드 예제는 위 환경에서 컴파일 및 동작이 확인되었습니다.
+Kafka를 단순한 메시지 큐로만 생각하면 운영 중 예상치 못한 문제를 겪게 됩니다. 메시지 흐름을 깊이 이해하면 다음과 같은 질문에 답할 수 있습니다.
 
-## 왜 메시지 흐름을 이해해야 하는가?
+"왜 메시지 순서가 뒤바뀌었지?"라는 문제는 Partition과 Key의 관계를 모르면 원인을 파악하기 어렵습니다. Kafka는 같은 Partition 내에서만 순서를 보장하기 때문에, 순서가 중요한 메시지는 반드시 같은 Key를 사용해야 합니다.
 
-Kafka를 "그냥 메시지 큐"로만 생각하면 운영 중 예상치 못한 문제를 겪게 됩니다. 메시지 흐름을 깊이 이해하면 다음 질문에 답할 수 있습니다:
+"왜 같은 메시지가 두 번 처리되었지?"라는 문제는 Offset 커밋 시점을 이해하지 못하면 발생합니다. 메시지를 처리하기 전에 커밋하면 처리 실패 시 메시지가 유실되고, 처리 후에 커밋하면 커밋 실패 시 중복 처리가 발생할 수 있습니다.
 
-- **"왜 메시지 순서가 뒤바뀌었지?"** → Partition과 Key의 관계를 모르면 발생
-- **"왜 같은 메시지가 두 번 처리되었지?"** → Offset 커밋 시점을 이해하지 못하면 발생
-- **"왜 Consumer가 메시지를 못 받지?"** → Pull 방식의 특성을 모르면 원인 파악 어려움
-- **"왜 처리량이 기대보다 낮지?"** → Partition 분배 원리를 모르면 병목 해결 불가
+"왜 Consumer가 메시지를 못 받지?"라는 문제는 Pull 방식의 특성을 모르면 원인 파악이 어렵습니다. Consumer가 poll()을 호출하지 않으면 메시지를 받을 수 없고, poll() 간격이 너무 길면 리밸런싱이 발생합니다.
 
-이 문서에서는 단순히 "어떻게 동작하는가"를 넘어 **"왜 이렇게 설계되었고, 실무에서 어떤 영향을 미치는가"**를 함께 다룹니다.
+"왜 처리량이 기대보다 낮지?"라는 문제는 Partition 분배 원리를 모르면 병목을 해결할 수 없습니다. Consumer 수가 Partition 수보다 많으면 일부 Consumer는 유휴 상태가 됩니다.
 
-## 전체 흐름 개요
+#### 전체 흐름 개요
+
+메시지가 Producer에서 Consumer까지 전달되는 과정은 크게 세 단계로 나눌 수 있습니다. 첫 번째 단계에서 Producer가 메시지를 직렬화하고 Partition을 선택하여 Broker로 전송합니다. 두 번째 단계에서 Broker가 메시지를 Partition에 저장하고 복제본을 동기화합니다. 세 번째 단계에서 Consumer가 Broker에 poll 요청을 보내 메시지를 가져오고 처리한 후 Offset을 커밋합니다.
 
 ```mermaid
 sequenceDiagram
@@ -47,31 +41,11 @@ sequenceDiagram
     C->>B: 6. Offset 커밋
 ```
 
-## 1단계: 메시지 발행 (Produce)
+#### 메시지 발행 단계
 
-Producer가 메시지를 Kafka에 전송합니다.
+Producer가 메시지를 Kafka에 전송하는 과정은 여러 단계로 이루어집니다. 먼저 애플리케이션에서 Key-Value 쌍으로 메시지를 생성합니다. Key는 선택 사항이지만 순서 보장이 필요한 경우 반드시 지정해야 합니다. 그 다음 Serializer가 객체를 바이트 배열로 변환합니다. 문자열이면 StringSerializer, JSON이면 JsonSerializer, Avro면 AvroSerializer를 사용합니다.
 
-```mermaid
-flowchart LR
-    subgraph Producer
-        MSG[메시지 생성]
-        SER[직렬화]
-        PART[Partition 결정]
-    end
-
-    subgraph Kafka
-        B[Broker]
-    end
-
-    MSG --> SER --> PART --> B
-```
-
-### 발행 과정
-
-1. **메시지 생성**: Key-Value 쌍으로 메시지 구성
-2. **직렬화**: 객체를 바이트 배열로 변환
-3. **Partition 결정**: Key 해시 또는 라운드 로빈
-4. **전송**: 네트워크를 통해 Broker로 전송
+직렬화된 메시지는 Partitioner를 거쳐 어떤 Partition에 저장될지 결정됩니다. Key가 있으면 Key의 해시값을 Partition 수로 나눈 나머지가 Partition 번호가 됩니다. 같은 Key는 항상 같은 Partition으로 전송되므로 순서가 보장됩니다. Key가 없으면 라운드 로빈 방식으로 Partition에 균등하게 분배됩니다.
 
 ```java
 // Producer 코드 예시
@@ -79,349 +53,110 @@ kafkaTemplate.send("orders", orderId, orderJson);
 //                  Topic    Key      Value
 ```
 
-### Partition 결정 방식
+**Key 설계가 중요한 이유**
 
-```mermaid
-flowchart TB
-    MSG[메시지]
-    KEY{Key 존재?}
-    HASH["Key 해시값 mod Partition 수"]
-    RR[라운드 로빈]
-    P0[Partition 0]
-    P1[Partition 1]
-    P2[Partition 2]
+Key는 단순한 식별자가 아니라 메시지의 운명을 결정합니다. Kafka는 Partition 내에서만 순서를 보장하기 때문에, 순서가 중요한 메시지들은 반드시 같은 Key를 사용해야 합니다.
 
-    MSG --> KEY
-    KEY -->|Yes| HASH
-    KEY -->|No| RR
-    HASH --> P0
-    HASH --> P1
-    RR --> P0
-    RR --> P1
-    RR --> P2
-```
+주문 상태 변경 이벤트를 예로 들어보겠습니다. orderId를 Key로 사용하면 같은 주문의 모든 이벤트(OrderCreated, OrderPaid, OrderShipped)가 같은 Partition에 저장되어 순서대로 처리됩니다. 하지만 Key 없이 보내면 각 이벤트가 다른 Partition에 저장될 수 있고, Consumer에서 OrderShipped가 OrderCreated보다 먼저 처리될 수 있습니다. 이는 상태 머신 오류나 비즈니스 로직 오류를 일으킵니다.
 
-- **Key 있음**: 동일 Key는 항상 동일 Partition으로
-- **Key 없음**: 라운드 로빈으로 균등 분배
+Key를 설계할 때는 업무 도메인을 고려해야 합니다. 주문 이벤트는 orderId를, 사용자 활동 로그는 userId를, 센서 데이터는 sensorId를 Key로 사용합니다. 순서가 중요하지 않은 범용 로그는 Key 없이 보내서 균등하게 분배하는 것이 처리량 측면에서 유리합니다.
 
-### Key 설계가 중요한 이유
+**Hot Partition 문제**
 
-Key는 단순한 식별자가 아니라 **메시지의 운명을 결정**합니다.
+특정 Key에 메시지가 집중되면 해당 Partition만 과부하되는 Hot Partition 문제가 발생합니다. 예를 들어 대형 고객사의 모든 주문이 customer-대기업 Key를 사용하면 해당 Partition의 처리량이 폭주하고 다른 Partition은 유휴 상태가 됩니다.
 
-**순서 보장의 핵심:**
-Kafka는 **Partition 내에서만 순서를 보장**합니다. 같은 Key를 가진 메시지는 같은 Partition으로 가므로 순서가 보장되지만, 다른 Key의 메시지끼리는 순서를 보장하지 않습니다.
+이 문제를 해결하려면 Key를 더 세분화해야 합니다. customer-대기업-order-123처럼 주문 ID를 포함하면 같은 고객의 주문도 여러 Partition에 분산됩니다. 다만 이 경우 같은 고객의 주문 간에는 순서가 보장되지 않으므로, 순서 보장이 필수인 경우에만 고객 ID를 Key로 사용해야 합니다.
 
-```
-예시: 주문 상태 변경 이벤트
+#### 메시지 저장 단계
 
-Key = "order-123"인 메시지들:
-  1. OrderCreated (Partition 2)
-  2. OrderPaid (Partition 2)
-  3. OrderShipped (Partition 2)
-→ 순서 보장됨: Created → Paid → Shipped
+Broker가 메시지를 받으면 해당 Partition의 로그 끝에 추가합니다. 이 저장 방식을 Append-only라고 합니다. 저장된 메시지는 수정할 수 없으며, 각 메시지에는 Partition 내에서 고유한 Offset이 할당됩니다. Offset은 0부터 시작하여 메시지가 추가될 때마다 1씩 증가합니다.
 
-Key 없이 보낸 경우:
-  1. OrderCreated (Partition 0)
-  2. OrderPaid (Partition 2)
-  3. OrderShipped (Partition 1)
-→ Consumer에서 Shipped가 Created보다 먼저 처리될 수 있음!
-```
+Kafka가 디스크에 저장하면서도 빠른 이유는 순차 I/O를 사용하기 때문입니다. 파일 끝에만 데이터를 추가하므로 디스크 헤드가 이동할 필요가 없습니다. 또한 운영체제의 페이지 캐시를 활용하여 자주 접근하는 데이터는 메모리에서 바로 제공합니다. Consumer에게 데이터를 전송할 때는 Zero-Copy 기술을 사용하여 커널 영역에서 네트워크 버퍼로 직접 복사합니다. 이러한 최적화 덕분에 Kafka는 단일 Partition에서도 초당 10만 건 이상의 메시지를 처리할 수 있습니다.
 
-**Key 설계 가이드:**
-
-| 상황 | 권장 Key | 이유 |
-|------|----------|------|
-| 주문 이벤트 | `orderId` | 같은 주문의 상태 변경은 순서대로 처리되어야 함 |
-| 사용자 활동 로그 | `userId` | 같은 사용자의 행동은 시간 순서가 중요 |
-| 센서 데이터 | `sensorId` | 같은 센서의 데이터는 시계열로 처리 |
-| 범용 로그 | Key 없음 | 순서가 중요하지 않으면 균등 분배가 유리 |
-
-**주의: Hot Partition 문제**
-
-특정 Key에 메시지가 집중되면 해당 Partition만 과부하됩니다:
-
-```
-나쁜 예시: 대형 고객사의 모든 주문이 "customer-대기업" Key 사용
-→ 해당 Partition만 처리량 폭주, 다른 Partition은 유휴 상태
-
-해결책:
-1. Key를 더 세분화: "customer-대기업-order-123"
-2. 또는 순서가 필수가 아니면 Key 없이 전송
-```
-
-## 2단계: 메시지 저장 (Store)
-
-Broker가 메시지를 Partition에 저장합니다.
-
-```mermaid
-flowchart TB
-    subgraph Partition["Partition 0"]
-        direction LR
-        O0["Offset 0\nmsg1"]
-        O1["Offset 1\nmsg2"]
-        O2["Offset 2\nmsg3"]
-        O3["Offset 3\nmsg4"]
-        NEW["Offset 4\n새 메시지"]
-    end
-
-    MSG[새 메시지] -->|추가| NEW
-```
-
-### 저장 특성
-
-| 특성 | 설명 |
-|------|------|
-| **순차 저장** | 메시지는 Partition 끝에 추가 (Append-only) |
-| **불변성** | 저장된 메시지는 수정 불가 |
-| **Offset 할당** | 각 메시지에 고유 순번 부여 |
-| **영속성** | 디스크에 저장되어 재시작해도 유지 |
-
-### Kafka가 빠른 이유: 내부 저장 구조
-
-"Kafka는 디스크에 저장하는데 왜 빠른가?"라는 질문을 자주 받습니다. 핵심은 **순차 I/O**와 **Zero-Copy**입니다.
-
-**물리적 저장 구조:**
+물리적으로 Partition은 여러 Segment 파일로 구성됩니다. 각 Segment는 로그 파일(.log)과 인덱스 파일(.index, .timeindex)로 이루어집니다. Segment 크기가 log.segment.bytes(기본 1GB)에 도달하거나 log.roll.hours 시간이 지나면 새 Segment가 생성됩니다. 오래된 Segment는 log.retention.hours 설정에 따라 자동으로 삭제됩니다.
 
 ```
 /kafka-logs/
-└── orders-0/                    # Topic "orders"의 Partition 0
-    ├── 00000000000000000000.log  # Segment 파일 (실제 메시지)
-    ├── 00000000000000000000.index # Offset → 물리적 위치 매핑
-    ├── 00000000000000000000.timeindex # 타임스탬프 → Offset 매핑
-    ├── 00000000000012345678.log  # 새 Segment (이전 것이 가득 차면)
+└── orders-0/                     # Topic "orders"의 Partition 0
+    ├── 00000000000000000000.log   # 첫 번째 Segment
+    ├── 00000000000000000000.index
+    ├── 00000000000012345678.log   # 두 번째 Segment
     └── ...
 ```
 
-**왜 이 구조가 빠른가:**
+#### 메시지 소비 단계
 
-| 특성 | 설명 | 성능 영향 |
-|------|------|----------|
-| **Append-only 쓰기** | 파일 끝에만 추가, 랜덤 쓰기 없음 | 디스크 쓰기 최적화 |
-| **순차 읽기** | Consumer는 순서대로 읽음 | OS 페이지 캐시 활용 |
-| **Zero-Copy** | 커널에서 네트워크로 직접 전송 | CPU 사용량 감소 |
-| **배치 처리** | 여러 메시지를 묶어서 I/O | 시스템 콜 감소 |
-
-**실제 성능 수치 (참고용):**
-
-> ⚠️ 실제 성능은 하드웨어, 네트워크, 메시지 크기에 따라 크게 달라집니다.
-
-| 시나리오 | 처리량 (대략) | 조건 |
-|----------|-------------|------|
-| 단일 Partition, 작은 메시지 | 10만+ msg/sec | 100 bytes 메시지 |
-| 3개 Partition, 배치 활성화 | 50만+ msg/sec | linger.ms=5, batch.size=32KB |
-| 대용량 메시지 | 1만 msg/sec | 1MB 메시지 |
-
-**Segment 롤오버:**
-
-```yaml
-# server.properties
-log.segment.bytes=1073741824  # 1GB마다 새 Segment (기본값)
-log.roll.hours=168            # 또는 7일마다 새 Segment
-```
-
-오래된 Segment는 `log.retention.hours` 설정에 따라 자동 삭제됩니다.
-
-### Offset이란?
-
-```
-Partition 0: [0] [1] [2] [3] [4] [5] [6] [7]
-                              ↑
-                         현재 Consumer 위치
-```
-
-- 각 메시지의 고유 식별자 (순차 번호)
-- Consumer는 Offset을 기준으로 읽은 위치 추적
-- 0부터 시작하여 무한히 증가
-
-## 3단계: 메시지 소비 (Consume)
-
-Consumer가 Broker로부터 메시지를 가져옵니다.
-
-```mermaid
-sequenceDiagram
-    participant C as Consumer
-    participant B as Broker
-    participant P as Partition
-
-    loop 폴링 루프
-        C->>B: poll() - 메시지 요청
-        B->>P: Offset 위치에서 읽기
-        P-->>B: 메시지 반환
-        B-->>C: 메시지 전달
-        C->>C: 메시지 처리
-        C->>B: Offset 커밋
-    end
-```
-
-### 소비 과정
-
-1. **Poll**: Consumer가 Broker에 메시지 요청
-2. **Fetch**: Broker가 Partition에서 메시지 읽기
-3. **처리**: Consumer가 비즈니스 로직 실행
-4. **커밋**: 처리 완료된 Offset 저장
+Consumer는 Broker로부터 메시지를 Pull 방식으로 가져옵니다. Consumer가 poll() 메서드를 호출하면 Broker는 해당 Consumer에게 할당된 Partition에서 마지막으로 커밋된 Offset 이후의 메시지들을 반환합니다. Consumer는 메시지를 처리한 후 Offset을 커밋하여 처리 완료를 기록합니다.
 
 ```java
-// Consumer 코드 예시
 @KafkaListener(topics = "orders", groupId = "order-service")
 public void consume(ConsumerRecord<String, String> record) {
     String key = record.key();
     String value = record.value();
     long offset = record.offset();
 
-    // 비즈니스 로직 처리
     processOrder(value);
-
     // Offset은 자동으로 커밋됨 (기본 설정)
 }
 ```
 
-### Pull vs Push: 왜 Kafka는 Pull 방식인가?
+**Pull 방식을 사용하는 이유**
 
-Kafka는 **Pull 방식**을 사용합니다. 이 설계 결정에는 분명한 이유가 있습니다.
+Kafka가 Push가 아닌 Pull 방식을 선택한 데는 분명한 이유가 있습니다. Push 방식에서는 Broker가 Consumer에게 메시지를 밀어넣는데, Consumer의 처리 속도가 느리면 메시지가 쌓여서 메모리 부족이 발생할 수 있습니다. 백프레셔(backpressure) 메커니즘이 필요하고 구현이 복잡해집니다.
 
-| 방식 | 설명 | 장점 | 단점 |
-|------|------|------|------|
-| **Pull** | Consumer가 필요할 때 가져감 | Consumer 처리 속도에 맞춤 | 폴링 오버헤드, 지연 발생 가능 |
-| Push | Broker가 Consumer에게 밀어냄 | 즉시 전달 가능 | Consumer 과부하, 백프레셔 복잡 |
+Pull 방식에서는 Consumer가 자신의 처리 속도에 맞게 메시지를 가져갑니다. 느린 Consumer도 문제없이 동작하고, 빠른 Consumer는 더 많은 메시지를 가져갈 수 있습니다. 또한 Consumer가 한 번에 여러 메시지를 가져와 배치로 처리할 수 있어 효율적입니다.
 
-**Pull 방식의 실질적 장점:**
-
-1. **Consumer 자율성**: 느린 Consumer도 자기 속도로 처리 가능. Push면 메시지가 쌓여서 OOM 발생
-2. **배치 처리 효율**: Consumer가 한 번에 여러 메시지를 가져와 처리 가능 (`max.poll.records`)
-3. **리밸런싱 유연성**: Consumer 추가/제거 시 Broker 부담 없음
-
-**Pull 방식의 주의점:**
+Pull 방식의 주의점은 poll() 호출 간격입니다. max.poll.interval.ms(기본 5분) 내에 다음 poll()을 호출하지 않으면 Consumer가 죽은 것으로 간주되어 리밸런싱이 발생합니다. 처리 시간이 긴 작업은 별도 스레드로 위임하거나 max.poll.interval.ms 값을 늘려야 합니다.
 
 ```java
-// poll() 호출 간격이 너무 길면 Consumer가 죽은 것으로 간주됨
-// max.poll.interval.ms (기본 5분) 내에 다음 poll()을 호출해야 함
-
 @KafkaListener(topics = "orders")
 public void consume(String message) {
-    // ❌ 위험: 처리 시간이 5분 이상 걸리면 리밸런싱 발생
-    verySlowProcess(message);
-
-    // ✅ 해결: 처리 시간이 긴 작업은 별도 스레드로 위임
+    // 처리 시간이 5분 이상 걸리면 리밸런싱 발생
+    // 해결: 별도 스레드로 위임
     executorService.submit(() -> verySlowProcess(message));
 }
 ```
 
-**실시간성이 필요하다면?**
+#### 메시지 보장 수준
 
-Pull 방식이라도 `fetch.min.bytes=1`과 짧은 폴링 간격으로 거의 실시간에 가깝게 처리할 수 있습니다. 다만, 진정한 실시간이 필요하면 Kafka Streams나 다른 스트리밍 솔루션을 고려하세요.
+Kafka는 세 가지 메시지 전달 보장 수준을 제공합니다. At-Most-Once는 메시지가 최대 한 번 전달되며 유실될 수 있습니다. 메시지를 가져온 직후 Offset을 커밋하고 처리하는 방식입니다. 처리 중 오류가 발생하면 해당 메시지는 다시 처리되지 않습니다. 로그나 메트릭처럼 일부 유실이 허용되는 경우에 사용합니다.
 
-## 전체 흐름 예시
+At-Least-Once는 메시지가 최소 한 번 전달되며 중복될 수 있습니다. 메시지를 처리한 후 Offset을 커밋하는 방식입니다. 처리는 성공했지만 커밋 전에 오류가 발생하면 같은 메시지가 다시 처리됩니다. 가장 일반적으로 사용되는 방식이며, Consumer에서 멱등성을 보장하면 중복 문제를 해결할 수 있습니다.
 
-주문 시스템에서의 메시지 흐름:
+Exactly-Once는 메시지가 정확히 한 번만 처리됩니다. Kafka 트랜잭션을 사용하여 처리와 커밋을 원자적으로 수행합니다. 금융 트랜잭션처럼 정확성이 중요한 경우에 사용하지만, 오버헤드가 있어 꼭 필요한 경우에만 사용합니다.
 
-```mermaid
-sequenceDiagram
-    participant User as 사용자
-    participant Order as 주문 서비스
-    participant Kafka as Kafka
-    participant Payment as 결제 서비스
-    participant Noti as 알림 서비스
-
-    User->>Order: 주문 요청
-    Order->>Kafka: 주문 이벤트 발행
-    Order-->>User: 주문 접수 완료
-
-    par 병렬 처리
-        Kafka->>Payment: 주문 이벤트 전달
-        Payment->>Payment: 결제 처리
-    and
-        Kafka->>Noti: 주문 이벤트 전달
-        Noti->>Noti: 알림 발송
-    end
-```
-
-## 메시지 보장 수준
-
-```mermaid
-flowchart LR
-    subgraph At-Most-Once["At-Most-Once"]
-        A1[발송] --> A2[커밋] --> A3[처리]
-    end
-
-    subgraph At-Least-Once["At-Least-Once"]
-        B1[발송] --> B2[처리] --> B3[커밋]
-    end
-
-    subgraph Exactly-Once["Exactly-Once"]
-        C1[트랜잭션 시작] --> C2[처리] --> C3[커밋]
-    end
-```
-
-| 수준 | 설명 | 사용 사례 |
-|------|------|----------|
-| **At-Most-Once** | 최대 1번 (유실 가능) | 로그, 메트릭 |
-| **At-Least-Once** | 최소 1번 (중복 가능) | 일반적인 이벤트 |
-| **Exactly-Once** | 정확히 1번 | 금융 트랜잭션 |
-
-**어떤 수준을 선택해야 하는가?**
-
-대부분의 경우 **At-Least-Once + 멱등성 처리**가 정답입니다:
-
-- At-Most-Once: 데이터 유실을 감수할 수 있는 경우만 (실제로 드묾)
-- Exactly-Once: Kafka 트랜잭션 오버헤드가 있어 꼭 필요한 경우만
-- At-Least-Once: 가장 일반적. Consumer에서 멱등성을 보장하면 중복 걱정 없음
+대부분의 경우 At-Least-Once와 멱등성 처리의 조합이 적절합니다. 멱등성 처리란 같은 메시지를 여러 번 처리해도 결과가 같도록 구현하는 것입니다. 예를 들어 이벤트 ID를 데이터베이스에 저장하고, 처리 전에 이미 처리한 이벤트인지 확인합니다.
 
 ```java
-// 멱등성 처리 예시: 이미 처리한 이벤트는 무시
 @KafkaListener(topics = "orders")
 public void consume(ConsumerRecord<String, OrderEvent> record) {
     String eventId = record.value().getEventId();
 
-    // 이미 처리한 이벤트인지 확인
     if (processedEventRepository.exists(eventId)) {
         log.info("이미 처리된 이벤트, 건너뜀: {}", eventId);
         return;
     }
 
-    // 비즈니스 로직 처리
     processOrder(record.value());
-
-    // 처리 완료 기록
     processedEventRepository.save(eventId);
 }
 ```
 
----
+#### 실무에서 흔한 실수
 
-## 실무에서 흔한 실수
-
-### 실수 1: Key 없이 순서 의존 로직 구현
+첫 번째 흔한 실수는 Key 없이 순서 의존 로직을 구현하는 것입니다. 주문 상태 변경처럼 순서가 중요한 이벤트인데 Key를 지정하지 않으면, Consumer에서 이벤트가 순서 없이 도착하여 상태 머신 오류가 발생합니다. 해결책은 순서가 중요한 이벤트에 반드시 Key를 지정하는 것입니다.
 
 ```java
-// ❌ 잘못된 코드: 주문 상태 변경인데 Key가 없음
-kafkaTemplate.send("order-events", orderEvent);  // Key 없음!
+// 잘못된 코드: 주문 상태 변경인데 Key가 없음
+kafkaTemplate.send("order-events", orderEvent);
 
-// Consumer에서 상태 머신 오류 발생 가능
-// "Shipped 상태에서 Created 이벤트를 받았습니다" 같은 에러
-```
-
-**해결:** 순서가 중요한 이벤트는 반드시 Key를 지정하세요.
-
-```java
-// ✅ 올바른 코드
+// 올바른 코드
 kafkaTemplate.send("order-events", orderId, orderEvent);
 ```
 
-### 실수 2: 자동 커밋에 의존하면서 긴 처리 시간
+두 번째 흔한 실수는 자동 커밋에 의존하면서 긴 처리 시간을 갖는 것입니다. 자동 커밋(enable.auto.commit=true)은 기본적으로 5초마다 Offset을 커밋합니다. 처리 시간이 10초라면 처리 중에 자동 커밋이 발생하고, 처리 실패 시 메시지가 유실됩니다. 긴 처리가 필요하면 수동 커밋을 사용해야 합니다.
 
 ```java
-// ❌ 위험: 자동 커밋(5초마다)인데 처리가 10초 걸림
-@KafkaListener(topics = "orders")
-public void consume(String message) {
-    longRunningProcess(message);  // 10초 소요
-    // 처리 중에 자동 커밋됨 → 실패하면 메시지 유실!
-}
-```
-
-**해결:** 긴 처리가 필요하면 수동 커밋 사용
-
-```java
-// ✅ 올바른 코드
 @KafkaListener(topics = "orders")
 public void consume(String message, Acknowledgment ack) {
     longRunningProcess(message);
@@ -429,164 +164,47 @@ public void consume(String message, Acknowledgment ack) {
 }
 ```
 
-### 실수 3: Consumer 처리 속도 < Producer 전송 속도
+세 번째 흔한 실수는 Consumer 처리 속도가 Producer 전송 속도보다 느린 것입니다. 이 경우 Consumer lag이 계속 증가하여 결국 처리 불가능한 수준까지 쌓입니다. Consumer 인스턴스를 추가하거나, 처리 로직을 최적화하거나, Partition 수를 늘려서 해결합니다.
 
-**증상:** Consumer lag이 계속 증가, 결국 처리 불가능한 수준까지 쌓임
+네 번째 흔한 실수는 Partition 수보다 많은 Consumer를 배포하는 것입니다. 하나의 Partition은 Consumer Group 내에서 하나의 Consumer만 처리할 수 있습니다. Partition이 3개인데 Consumer가 5개면 2개는 유휴 상태가 됩니다. Consumer 수를 Partition 수 이하로 유지하거나, 확장이 필요하면 먼저 Partition 수를 늘려야 합니다.
 
-**원인 파악:**
+#### 다른 메시징 시스템과의 비교
+
+Kafka, RabbitMQ, AWS SQS는 각각 다른 특성을 가지고 있어 상황에 맞는 선택이 중요합니다.
+
+Kafka는 분산 로그 아키텍처로 매우 높은 처리량을 제공합니다. 메시지가 설정 기간 동안 보존되어 재처리가 가능하고, Partition 내에서 순서가 보장됩니다. 여러 Consumer Group이 같은 메시지를 독립적으로 읽을 수 있어 이벤트 소싱이나 스트림 처리에 적합합니다. 다만 운영 복잡도가 높습니다.
+
+RabbitMQ는 전통적인 메시지 브로커로 복잡한 라우팅 규칙과 요청-응답 패턴을 잘 지원합니다. 메시지별 TTL이나 우선순위 설정이 가능합니다. Kafka보다 운영이 간단하지만 처리량은 낮고, 기본적으로 메시지가 소비 후 삭제되어 재처리가 어렵습니다.
+
+AWS SQS는 완전 관리형 서비스로 운영 부담이 가장 적습니다. AWS Lambda와 통합이 용이하여 서버리스 아키텍처에 적합합니다. 다만 처리량에 제한이 있고, FIFO 큐를 사용해야만 순서가 보장됩니다.
+
+높은 처리량이 필요하거나, 메시지 재처리가 필요하거나, 여러 Consumer가 같은 메시지를 읽어야 하는 경우 Kafka가 적합합니다. 복잡한 라우팅이나 RPC 패턴이 필요하면 RabbitMQ가, 간단한 큐잉과 최소한의 운영 부담을 원하면 AWS SQS가 적합합니다.
+
+#### 운영 모니터링 가이드
+
+Kafka 운영에서 가장 중요한 지표는 Consumer lag입니다. Lag은 Producer가 생산한 메시지 중 Consumer가 아직 처리하지 않은 메시지 수입니다. Lag이 0에 가까우면 실시간에 가깝게 처리되고 있는 것이고, Lag이 계속 증가하면 Consumer가 처리량을 따라가지 못하는 것입니다.
+
 ```bash
-# Consumer lag 확인
 kafka-consumer-groups.sh --describe --group order-service \
   --bootstrap-server localhost:9092
 ```
 
-**해결책:**
-1. **Consumer 인스턴스 추가** (Partition 수만큼)
-2. **처리 로직 최적화** (DB 배치 처리, 비동기화)
-3. **Partition 수 증가** (Consumer 확장 여지 확보)
+Lag이 100 이하면 정상입니다. 100-1,000이면 Consumer 성능을 점검해야 합니다. 1,000-10,000이면 Consumer 추가나 최적화가 필요합니다. 10,000 이상이면 즉시 조치가 필요하며 처리 병목을 확인해야 합니다.
 
-### 실수 4: Partition 수보다 많은 Consumer
+문제가 발생했을 때는 다음 순서로 확인합니다. 먼저 Consumer lag을 확인하여 처리 병목 여부를 파악합니다. Consumer group 멤버 수를 확인하여 Consumer 장애 여부를 확인합니다. Broker의 CPU와 메모리를 확인하여 인프라 문제 여부를 판단합니다. Producer error rate를 확인하여 전송 실패 여부를 확인합니다. 마지막으로 네트워크 지연을 확인합니다.
 
-```
-Topic: orders (Partition 3개)
-Consumer Group: order-service (Consumer 5개)
+#### 핵심 정리
 
-결과:
-- Consumer 1 → Partition 0
-- Consumer 2 → Partition 1
-- Consumer 3 → Partition 2
-- Consumer 4 → 유휴 (처리할 Partition 없음)
-- Consumer 5 → 유휴 (처리할 Partition 없음)
-```
+Key는 순서 보장이 필요하면 반드시 지정해야 합니다. 같은 Key의 메시지는 같은 Partition에 저장되어 순서가 보장됩니다. 다만 특정 Key에 메시지가 집중되면 Hot Partition 문제가 발생할 수 있습니다.
 
-**해결:** Consumer 수 ≤ Partition 수를 유지하세요. 확장이 필요하면 먼저 Partition을 늘리세요.
+Partition은 병렬 처리의 단위입니다. Consumer 수는 Partition 수 이하로 유지해야 모든 Consumer가 일을 할 수 있습니다. 확장이 필요하면 먼저 Partition 수를 늘려야 합니다.
 
----
+Offset은 Consumer의 읽기 위치를 나타냅니다. 커밋 시점에 따라 메시지 보장 수준이 결정됩니다. 처리 전 커밋은 유실 가능성이, 처리 후 커밋은 중복 가능성이 있습니다.
 
----
+Pull 방식은 Consumer가 자신의 속도에 맞게 메시지를 가져갈 수 있게 합니다. 다만 poll() 간격이 너무 길면 리밸런싱이 발생하므로 주의해야 합니다.
 
-## 다른 메시징 시스템과 비교
+#### 다음 단계
 
-"왜 Kafka를 선택해야 하는가?"를 이해하려면 다른 시스템과의 차이를 알아야 합니다.
+이 문서에서는 메시지가 Producer에서 Consumer까지 전달되는 전체 과정을 살펴보았습니다. 다음 단계로 Consumer Group과 Offset 관리에 대해 더 자세히 학습할 수 있습니다.
 
-### Kafka vs RabbitMQ vs AWS SQS
-
-| 특성 | Kafka | RabbitMQ | AWS SQS |
-|------|-------|----------|---------|
-| **아키텍처** | 분산 로그 | 메시지 브로커 | 관리형 큐 |
-| **전달 방식** | Pull | Push (기본) | Pull |
-| **메시지 보존** | 설정 기간 동안 유지 | 소비 후 삭제 | 최대 14일 |
-| **순서 보장** | Partition 내 보장 | 보장 안됨 (기본) | FIFO 큐만 보장 |
-| **재처리** | Offset 이동으로 가능 | 불가 (기본) | 가시성 타임아웃 내 |
-| **처리량** | 매우 높음 | 중간 | 중간 |
-| **운영 복잡도** | 높음 | 중간 | 낮음 (관리형) |
-
-**언제 어떤 것을 선택하는가:**
-
-```
-Kafka가 적합한 경우:
-├── 높은 처리량 필요 (수십만 msg/sec)
-├── 메시지 재처리/리플레이 필요
-├── 이벤트 소싱, 스트림 처리
-└── 여러 Consumer가 같은 메시지를 읽어야 함
-
-RabbitMQ가 적합한 경우:
-├── 복잡한 라우팅 규칙 필요
-├── 요청-응답 패턴 (RPC)
-├── 메시지별 TTL, 우선순위 필요
-└── 적은 운영 부담 선호
-
-AWS SQS가 적합한 경우:
-├── AWS 생태계 내 간단한 큐잉
-├── 서버리스 아키텍처 (Lambda 트리거)
-├── 운영 부담 최소화
-└── 예측 불가한 트래픽 패턴
-```
-
----
-
-## 운영 모니터링 가이드
-
-### 핵심 모니터링 지표
-
-```bash
-# 1. Consumer Lag 확인 (가장 중요!)
-kafka-consumer-groups.sh --describe --group order-service \
-  --bootstrap-server localhost:9092
-
-# 출력 예시:
-# GROUP        TOPIC   PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG
-# order-service orders  0          1000            1050            50  ← 50개 밀림!
-```
-
-**Lag 해석 가이드:**
-
-| Lag 수준 | 의미 | 대응 |
-|----------|------|------|
-| 0-100 | 정상 | 모니터링 유지 |
-| 100-1,000 | 주의 | Consumer 성능 점검 |
-| 1,000-10,000 | 경고 | Consumer 추가 또는 최적화 필요 |
-| 10,000+ | 위험 | 즉시 조치 필요, 처리 병목 확인 |
-
-```bash
-# 2. Topic 상태 확인
-kafka-topics.sh --describe --topic orders \
-  --bootstrap-server localhost:9092
-
-# 3. Producer 메트릭 확인 (JMX)
-# - record-send-rate: 초당 전송 메시지 수
-# - record-error-rate: 전송 실패율 (0 유지해야 함)
-# - request-latency-avg: 평균 응답 시간
-```
-
-### 프로덕션 알림 설정 권장값
-
-```yaml
-# Prometheus alerting rules 예시
-groups:
-  - name: kafka-alerts
-    rules:
-      - alert: HighConsumerLag
-        expr: kafka_consumergroup_lag > 10000
-        for: 5m
-        labels:
-          severity: warning
-        annotations:
-          summary: "Consumer lag이 10,000 이상 ({{ $value }})"
-
-      - alert: ConsumerGroupDown
-        expr: kafka_consumergroup_members == 0
-        for: 1m
-        labels:
-          severity: critical
-        annotations:
-          summary: "Consumer group에 활성 멤버 없음"
-```
-
-### 빠른 진단 체크리스트
-
-문제가 발생했을 때 순서대로 확인:
-
-```
-□ 1. Consumer lag 확인 → 처리 병목 여부
-□ 2. Consumer group 멤버 수 확인 → Consumer 장애 여부
-□ 3. Broker CPU/메모리 확인 → 인프라 문제 여부
-□ 4. Producer error rate 확인 → 전송 실패 여부
-□ 5. 네트워크 지연 확인 → 네트워크 문제 여부
-```
-
----
-
-## 핵심 정리
-
-| 개념 | 핵심 포인트 |
-|------|-------------|
-| **Key** | 순서 보장이 필요하면 반드시 지정. Hot Partition 주의 |
-| **Partition** | 병렬 처리의 단위. Consumer 수는 Partition 수 이하로 |
-| **Offset** | Consumer의 읽기 위치. 커밋 시점이 메시지 보장 수준 결정 |
-| **Pull 방식** | Consumer가 주도권. 처리 시간이 길면 poll 간격 주의 |
-| **내부 구조** | Log Segment + Index로 순차 I/O 최적화 |
-
-## 다음 단계
-
-- [Consumer Group & Offset](../consumer-group/) - 병렬 처리와 상태 관리
+- [Consumer Group과 Offset](../consumer-group/) - 병렬 처리와 상태 관리의 세부 사항
