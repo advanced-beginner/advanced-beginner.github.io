@@ -1,6 +1,9 @@
 ---
 title: 애플리케이션 계층
 weight: 3
+lastmod: 2026-01-09
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # 애플리케이션 계층 구현

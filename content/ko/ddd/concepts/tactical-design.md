@@ -2,6 +2,8 @@
 title: 전술적 설계
 weight: 2
 lastmod: "2026-01-09"
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 도메인 모델을 구체적으로 구현하기 위한 패턴들이 바로 전술적 설계입니다. 전략적 설계가 "큰 그림"을 그리는 것이라면, 전술적 설계는 "구체적인 구현 방법"을 제시합니다.

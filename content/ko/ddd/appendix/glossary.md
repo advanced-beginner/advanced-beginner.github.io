@@ -2,6 +2,8 @@
 title: 용어 사전
 weight: 1
 lastmod: 2026-01-08
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # DDD 용어 사전

@@ -2,6 +2,8 @@
 title: CQRS
 weight: 6
 lastmod: 2026-01-09
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 명령(쓰기)과 조회(읽기)의 책임을 분리하는 패턴을 살펴봅니다. CQRS는 Command Query Responsibility Segregation의 약자로, 시스템의 읽기와 쓰기 작업을 별도의 모델로 분리하여 각각을 최적화할 수 있게 해줍니다. 복잡한 도메인 로직과 다양한 조회 요구사항을 효과적으로 처리할 수 있는 강력한 아키텍처 패턴입니다.

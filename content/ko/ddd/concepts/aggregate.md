@@ -2,6 +2,8 @@
 lastmod: "2026-01-07"
 title: Aggregate 심화
 weight: 3
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # Aggregate 심화

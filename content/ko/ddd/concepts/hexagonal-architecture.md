@@ -2,6 +2,8 @@
 title: 헥사고날 아키텍처
 weight: 7
 lastmod: 2026-01-09
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 **Ports and Adapters** 패턴이라고도 불립니다. 애플리케이션의 핵심을 외부 세계로부터 완전히 격리시키는 아키텍처입니다. 헥사고날 아키텍처의 핵심 아이디어는 비즈니스 로직을 중심에 두고, 외부와의 모든 상호작용을 Port와 Adapter를 통해 처리한다는 것입니다. 이렇게 하면 외부 기술이 바뀌어도 핵심 비즈니스 로직은 영향을 받지 않습니다.

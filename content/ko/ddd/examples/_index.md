@@ -2,6 +2,8 @@
 title: 실습 예제
 weight: 3
 lastmod: 2026-01-09
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 이 섹션에서는 Spring Boot를 사용하여 DDD 패턴을 실제로 적용한 주문 도메인을 구현합니다. 이론적인 개념을 코드로 옮기는 과정에서 각 패턴이 어떻게 상호작용하는지 직접 경험할 수 있습니다.

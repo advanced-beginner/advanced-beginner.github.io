@@ -2,6 +2,8 @@
 lastmod: "2026-01-08"
 title: Event Sourcing 실습
 weight: 4
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 Event Sourcing 패턴을 실제 주문 도메인에 구현합니다. 상태 대신 이벤트를 저장하고, 이벤트를 재생하여 상태를 복원합니다.

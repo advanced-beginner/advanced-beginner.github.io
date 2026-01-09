@@ -3,6 +3,8 @@ title: Domain-Driven Design
 description: 복잡한 비즈니스 로직을 체계적으로 다루는 DDD 가이드 - 전략적/전술적 설계, Aggregate, CQRS, 이벤트 소싱
 weight: 2
 lastmod: 2026-01-09
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 **Domain-Driven Design(DDD)**은 복잡한 비즈니스 로직을 체계적으로 다루기 위한 설계 방법론입니다. Eric Evans가 2003년 동명의 책에서 제시한 이 접근법의 핵심 아이디어는 단순합니다. 코드가 비즈니스를 반영해야 한다는 것입니다. 데이터베이스 테이블이나 기술 프레임워크가 아닌, 비즈니스 도메인이 설계의 중심이 됩니다.

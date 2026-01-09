@@ -2,6 +2,8 @@
 title: 전략적 설계
 weight: 1
 lastmod: "2026-01-09"
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 복잡한 도메인을 어떻게 나누고 통합할지 결정하는 고수준 설계가 바로 전략적 설계입니다. 이는 DDD의 출발점이자 전체 시스템 아키텍처를 결정하는 핵심 활동입니다.
