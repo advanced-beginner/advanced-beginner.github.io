@@ -1,14 +1,16 @@
 ---
-lastmod: "2026-01-08"
+lastmod: "2026-01-09"
 title: Spark 연동
 weight: 4
 ---
 
-Scala로 Apache Spark를 활용하는 방법을 배웁니다. Scala는 Spark의 네이티브 언어로, 가장 풍부한 API를 제공합니다.
+Scala로 Apache Spark를 활용하는 방법을 배웁니다. Scala는 Spark의 네이티브 언어로, 가장 풍부한 API를 제공합니다. Spark 자체가 Scala로 작성되었기 때문에 새로운 기능이 가장 먼저 Scala API에 추가되며, 타입 안전성과 함수형 프로그래밍의 장점을 최대한 활용할 수 있습니다.
 
-## 왜 Scala로 Spark를 사용하는가?
+#### 왜 Scala로 Spark를 사용하는가?
 
-### Java vs Scala 비교
+Java와 Scala로 동일한 Spark 작업을 구현했을 때의 차이를 비교해보면 Scala의 장점이 명확해집니다. Java 코드는 장황하고 보일러플레이트가 많은 반면, Scala 코드는 간결하고 의도가 분명합니다.
+
+**Java vs Scala 비교**
 
 ```java
 // Java: 장황한 코드
@@ -30,7 +32,9 @@ val result = spark.read
   .agg(avg($"salary").as("avg_salary"))
 ```
 
-### Scala + Spark의 장점
+**Scala + Spark의 장점**
+
+Scala와 Spark를 함께 사용할 때 얻을 수 있는 주요 이점을 정리했습니다. 네이티브 API를 통해 최신 기능에 가장 먼저 접근할 수 있고, Case Class를 활용한 타입 안전한 데이터 처리가 가능합니다.
 
 | 장점 | 설명 |
 |------|------|
@@ -40,11 +44,11 @@ val result = spark.read
 | **함수형 스타일** | map, filter, reduce 등 자연스럽게 활용 |
 | **REPL 지원** | spark-shell로 대화형 개발 가능 |
 
----
+#### 환경 설정
 
-## 환경 설정
+Spark 프로젝트를 시작하려면 먼저 build.sbt에 Spark 의존성을 추가해야 합니다. 현재 Spark 3.5는 Scala 2.12와 2.13을 지원하며, Scala 3는 아직 지원되지 않습니다.
 
-### build.sbt
+**build.sbt**
 
 ```scala
 ThisBuild / scalaVersion := "2.13.12"
@@ -61,17 +65,19 @@ lazy val root = (project in file("."))
 
 > **주의:** Spark 3.5는 Scala 2.12/2.13만 지원합니다. Scala 3는 아직 지원되지 않습니다.
 
-### project/build.properties
+**project/build.properties**
 
 ```properties
 sbt.version=1.10.6
 ```
 
----
+#### 기본 예제: DataFrame 처리
 
-## 기본 예제: DataFrame 처리
+Spark의 핵심 진입점은 SparkSession입니다. SparkSession을 통해 데이터를 읽고, DataFrame을 생성하고, SQL 쿼리를 실행할 수 있습니다.
 
-### SparkSession 생성
+**SparkSession 생성**
+
+SparkSession을 생성할 때는 애플리케이션 이름과 실행 모드를 지정합니다. 로컬 개발 시에는 `local[*]`를 사용하여 모든 CPU 코어를 활용합니다.
 
 ```scala
 import org.apache.spark.sql.SparkSession
@@ -134,13 +140,15 @@ object SparkBasics extends App {
 }
 ```
 
----
+이 예제에서 `spark.implicits._`를 import하면 `$"column_name"` 문법으로 컬럼을 참조할 수 있습니다. 이는 Scala의 문자열 보간법과 암시적 변환을 활용한 것입니다.
 
-## Case Class와 Dataset
+#### Case Class와 Dataset
 
-### 타입 안전한 데이터 처리
+Scala의 Case Class를 활용하면 컴파일 타임에 타입 오류를 잡을 수 있습니다. DataFrame은 런타임에 컬럼 이름 오류를 발견하지만, Dataset은 컴파일 타임에 필드 이름 오류를 발견합니다.
 
-Scala의 Case Class를 활용하면 **컴파일 타임에 타입 오류를 잡을 수 있습니다.**
+**타입 안전한 데이터 처리**
+
+Case Class로 스키마를 정의하면 Spark가 자동으로 스키마를 추론합니다. 이를 통해 타입 안전한 연산이 가능해집니다.
 
 ```scala
 import org.apache.spark.sql.{Dataset, SparkSession}
@@ -210,7 +218,9 @@ object TypeSafeExample extends App {
 }
 ```
 
-### DataFrame vs Dataset 비교
+**DataFrame vs Dataset 비교**
+
+DataFrame에서는 컬럼 이름 오타가 런타임에서야 발견되지만, Dataset에서는 컴파일 타임에 즉시 발견됩니다.
 
 ```scala
 // DataFrame: 런타임 오류 가능
@@ -223,11 +233,11 @@ ds.filter(_.salry > 70000)   // 컴파일 에러! 즉시 발견
 //            ^^^^^ value salry is not a member of Employee
 ```
 
----
+#### 함수형 스타일 활용
 
-## 함수형 스타일 활용
+Scala의 함수형 프로그래밍 기능은 Spark와 잘 어울립니다. 고차 함수, 패턴 매칭, 불변 데이터 등의 개념이 분산 데이터 처리에 자연스럽게 적용됩니다.
 
-### 고차 함수로 데이터 변환
+**고차 함수로 데이터 변환**
 
 ```scala
 import org.apache.spark.sql.functions._
@@ -306,11 +316,13 @@ object FunctionalSparkExample extends App {
 }
 ```
 
----
+UDF(User Defined Function)를 사용하면 Scala 함수를 Spark SQL에서 사용할 수 있습니다. 패턴 매칭을 활용하면 데이터 분류 로직을 명확하게 표현할 수 있습니다.
 
-## 실전 예제: ETL 파이프라인
+#### 실전 예제: ETL 파이프라인
 
-### 데이터 읽기, 변환, 저장
+실제 데이터 엔지니어링에서 자주 사용하는 ETL(Extract, Transform, Load) 파이프라인을 구현해봅니다. 로그 데이터를 읽고, 변환하고, 분석 결과를 저장하는 전체 과정을 다룹니다.
+
+**데이터 읽기, 변환, 저장**
 
 ```scala
 import org.apache.spark.sql.{SaveMode, SparkSession}
@@ -412,11 +424,13 @@ object ETLPipeline extends App {
 }
 ```
 
----
+이 ETL 파이프라인에서 Option 타입을 사용하여 nullable 필드를 안전하게 처리하고, 패턴 매칭으로 세션 유형을 분류합니다. 최종 결과는 Parquet 포맷으로 저장하여 후속 분석에 활용할 수 있습니다.
 
-## Spark SQL과 Scala
+#### Spark SQL과 Scala
 
-### SQL과 Scala API 혼합 사용
+Spark SQL을 사용하면 SQL 쿼리와 Scala API를 자유롭게 혼합할 수 있습니다. 복잡한 조인이나 집계는 SQL로 작성하고, 그 결과를 Scala로 추가 처리할 수 있습니다.
+
+**SQL과 Scala API 혼합 사용**
 
 ```scala
 object SparkSQLExample extends App {
@@ -480,11 +494,13 @@ object SparkSQLExample extends App {
 }
 ```
 
----
+#### 성능 최적화 팁
 
-## 성능 최적화 팁
+Spark 애플리케이션의 성능을 최적화하는 주요 기법들을 소개합니다. 파티셔닝, 브로드캐스트 조인, 캐싱, Predicate Pushdown 등을 적절히 활용하면 성능을 크게 개선할 수 있습니다.
 
-### 1. 파티셔닝 최적화
+**1. 파티셔닝 최적화**
+
+셔플 파티션 수를 데이터 크기에 맞게 조정하면 성능이 향상됩니다.
 
 ```scala
 // 셔플 파티션 수 조정
@@ -495,7 +511,9 @@ val optimized = largeDataset
   .repartition(100, $"key_column")  // 키 기반 파티셔닝
 ```
 
-### 2. 브로드캐스트 조인
+**2. 브로드캐스트 조인**
+
+작은 테이블을 브로드캐스트하면 셔플을 피할 수 있습니다.
 
 ```scala
 import org.apache.spark.sql.functions.broadcast
@@ -507,7 +525,9 @@ val result = largeDf.join(
 )
 ```
 
-### 3. 캐싱 전략
+**3. 캐싱 전략**
+
+반복 사용되는 데이터셋은 캐싱하여 재계산을 피합니다.
 
 ```scala
 // 반복 사용되는 데이터셋 캐싱
@@ -521,7 +541,9 @@ expensiveComputation.persist(StorageLevel.MEMORY_AND_DISK)
 cachedDf.unpersist()
 ```
 
-### 4. Predicate Pushdown
+**4. Predicate Pushdown**
+
+필터 조건을 데이터 소스 수준까지 내려보내 불필요한 데이터 읽기를 방지합니다.
 
 ```scala
 // 파일 읽기 시 필터 푸시다운
@@ -531,11 +553,11 @@ val filtered = spark.read
   .filter($"status" === "ERROR")     // 필터 푸시다운
 ```
 
----
+#### 트러블슈팅
 
-## 트러블슈팅
+Spark 개발 중 자주 발생하는 오류와 해결 방법을 정리했습니다.
 
-### 흔한 오류와 해결
+**흔한 오류와 해결**
 
 | 오류 | 원인 | 해결 |
 |------|------|------|
@@ -544,7 +566,9 @@ val filtered = spark.read
 | `Container killed by YARN` | 메모리 초과 | `spark.yarn.executor.memoryOverhead` 증가 |
 | `shuffle read/write timeout` | 네트워크 이슈 | `spark.network.timeout` 증가 |
 
-### Task not serializable 해결
+**Task not serializable 해결**
+
+이 오류는 클로저가 직렬화할 수 없는 객체를 참조할 때 발생합니다. 해결 방법은 두 가지입니다.
 
 ```scala
 // ❌ 오류 발생
@@ -576,9 +600,9 @@ class MyProcessor extends Serializable {
 }
 ```
 
----
+#### 실행 방법
 
-## 실행 방법
+Spark 애플리케이션을 실행하는 다양한 방법입니다.
 
 ```bash
 # 1. sbt로 실행
@@ -595,10 +619,13 @@ spark-submit \
 spark-shell --master local[*]
 ```
 
----
+로컬 개발 시에는 sbt run이나 spark-shell을 사용하고, 클러스터 배포 시에는 spark-submit을 사용합니다.
 
-## 다음 단계
+#### 다음 단계
+
+Spark의 기본 사용법을 익혔다면 다음 주제들로 학습을 이어가세요.
 
 - [Spark 가이드]({{< relref "/spark" >}}) - Spark 심화 학습
 - [Kafka 연동]({{< relref "/kafka" >}}) - Structured Streaming + Kafka
 - [함수형 패턴](../concepts/functional-patterns/) - Spark에서의 함수형 프로그래밍
+
