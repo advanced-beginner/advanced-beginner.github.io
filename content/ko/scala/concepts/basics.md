@@ -1,18 +1,18 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-09"
 title: 기본 문법
 weight: 1
 ---
 
-변수 선언, 기본 타입, 타입 추론 등 Scala의 기본 문법을 배웁니다.
+변수 선언, 기본 타입, 타입 추론 등 Scala의 기본 문법을 배웁니다. Scala는 정적 타입 언어이면서도 강력한 타입 추론을 제공하여 간결한 코드를 작성할 수 있습니다.
 
-## 변수와 상수
+#### 변수와 상수
 
-Scala에서는 `val`(불변)과 `var`(가변) 두 가지 방식으로 값을 선언합니다.
+Scala에서는 `val`(불변)과 `var`(가변) 두 가지 방식으로 값을 선언합니다. 함수형 프로그래밍에서는 불변 값을 선호하므로 가능한 한 `val`을 사용하는 것이 좋습니다.
 
-### val - 불변 (권장)
+**val - 불변 (권장)**
 
-`val`로 선언한 값은 재할당할 수 없습니다. 함수형 프로그래밍에서 권장하는 방식입니다.
+`val`로 선언한 값은 재할당할 수 없습니다. 함수형 프로그래밍에서 권장하는 방식입니다. 불변 값을 사용하면 코드의 예측 가능성이 높아지고, 동시성 프로그래밍에서도 안전합니다.
 
 ```scala
 val name = "Scala"
@@ -28,9 +28,9 @@ val pi = 3.14159
 > - 동시성 프로그래밍에서 안전
 > - 버그 발생 가능성 감소
 
-### var - 가변
+**var - 가변**
 
-`var`로 선언한 값은 재할당할 수 있습니다. 필요한 경우에만 사용하세요.
+`var`로 선언한 값은 재할당할 수 있습니다. 필요한 경우에만 사용하세요. 반복문에서 상태를 추적하거나, 성능이 중요한 경우에 제한적으로 사용합니다.
 
 ```scala
 var count = 0
@@ -41,9 +41,9 @@ var message = "Hello"
 message = "World"  // OK
 ```
 
-### 지연 초기화 (lazy val)
+**지연 초기화 (lazy val)**
 
-`lazy val`은 처음 접근할 때까지 초기화를 지연합니다.
+`lazy val`은 처음 접근할 때까지 초기화를 지연합니다. 비용이 큰 계산이나 리소스 로딩을 필요할 때까지 미룰 수 있습니다.
 
 ```scala
 lazy val expensiveValue = {
@@ -57,11 +57,13 @@ println(expensiveValue)  // 여기서 "계산 중..." 출력
 println(expensiveValue)  // 캐시된 값 사용, 재계산 없음
 ```
 
-## 타입 시스템
+#### 타입 시스템
 
-### 기본 타입
+Scala는 정적 타입 언어로, 모든 값이 컴파일 타임에 타입이 결정됩니다. 하지만 강력한 타입 추론 덕분에 명시적 타입 선언 없이도 대부분의 코드를 작성할 수 있습니다.
 
-Scala의 모든 값은 객체입니다. Java의 원시 타입(primitive type)도 Scala에서는 객체로 취급됩니다.
+**기본 타입**
+
+Scala의 모든 값은 객체입니다. Java의 원시 타입(primitive type)도 Scala에서는 객체로 취급됩니다. 아래 표는 Scala의 기본 타입들을 정리한 것입니다.
 
 | 타입 | 설명 | 예시 |
 |------|------|------|
@@ -76,7 +78,9 @@ Scala의 모든 값은 객체입니다. Java의 원시 타입(primitive type)도
 | `String` | 문자열 | `val s: String = "Hello"` |
 | `Unit` | 값 없음 (void 유사) | `val u: Unit = ()` |
 
-### 타입 계층 구조
+**타입 계층 구조**
+
+Scala의 타입 시스템은 잘 정의된 계층 구조를 가집니다. Any가 최상위이고, Nothing이 최하위입니다. 이 구조를 이해하면 타입 에러를 더 쉽게 해결할 수 있습니다.
 
 ```mermaid
 graph TB
@@ -119,15 +123,11 @@ graph TB
     Unit --> Nothing
 ```
 
-- **Any**: 모든 타입의 최상위 타입
-- **AnyVal**: 값 타입의 부모 (Int, Double 등)
-- **AnyRef**: 참조 타입의 부모 (String, List, 사용자 클래스 등)
-- **Null**: 모든 참조 타입의 하위 타입 (`null` 값의 타입)
-- **Nothing**: 모든 타입의 하위 타입
+**Any**는 모든 타입의 최상위 타입입니다. **AnyVal**은 값 타입의 부모로 Int, Double 등이 여기에 속합니다. **AnyRef**는 참조 타입의 부모로 String, List, 사용자 정의 클래스 등이 여기에 속합니다. **Null**은 모든 참조 타입의 하위 타입으로 `null` 값의 타입입니다. **Nothing**은 모든 타입의 하위 타입입니다.
 
-#### Nothing은 언제 사용될까?
+**Nothing은 언제 사용될까?**
 
-`Nothing`은 정상적으로 값을 반환하지 않는 경우에 사용됩니다:
+`Nothing`은 정상적으로 값을 반환하지 않는 경우에 사용됩니다. 예외를 던지는 함수, 빈 컬렉션, Option.None 등에서 활용됩니다.
 
 ```scala
 // 1. 예외를 던지는 함수
@@ -146,11 +146,13 @@ val none: Option[Nothing] = None  // Option[Int], Option[String] 등에 할당 �
 
 > 💡 **왜 유용한가?** `Nothing`이 모든 타입의 하위 타입이기 때문에, `Nil`이나 `None`을 어떤 타입의 리스트나 Option에도 사용할 수 있습니다.
 
-## 타입 추론
+#### 타입 추론
 
-Scala 컴파일러는 대부분의 경우 타입을 자동으로 추론합니다.
+Scala 컴파일러는 대부분의 경우 타입을 자동으로 추론합니다. 이 덕분에 Java보다 훨씬 간결한 코드를 작성할 수 있습니다.
 
-### 추론되는 경우
+**추론되는 경우**
+
+다음과 같은 상황에서는 타입을 명시하지 않아도 컴파일러가 자동으로 추론합니다.
 
 ```scala
 val name = "Scala"     // String으로 추론
@@ -160,7 +162,9 @@ val flag = true        // Boolean으로 추론
 val numbers = List(1, 2, 3)  // List[Int]로 추론
 ```
 
-### 명시적 타입 선언이 필요한 경우
+**명시적 타입 선언이 필요한 경우**
+
+일부 상황에서는 타입을 명시적으로 선언해야 합니다. 특정 타입을 원할 때, 빈 컬렉션, 함수 매개변수, 재귀 함수, 복잡한 표현식 등이 여기에 해당합니다.
 
 ```scala
 // 1. 특정 타입을 원할 때
@@ -182,13 +186,13 @@ def factorial(n: Int): Int =
 val result: Either[String, Int] = Right(42)
 ```
 
-## 문자열
+#### 문자열
 
-### 문자열 보간 (String Interpolation)
+Scala는 강력한 문자열 보간 기능을 제공합니다. 문자열 안에 변수나 표현식을 직접 삽입할 수 있어 문자열 조작이 매우 편리합니다.
 
-Scala는 강력한 문자열 보간 기능을 제공합니다.
+**문자열 보간 (String Interpolation)**
 
-**s-보간 (기본):**
+s-보간은 가장 기본적인 형태로, `$` 기호로 변수를 삽입합니다. 복잡한 표현식은 `${}`로 감싸서 사용합니다.
 
 ```scala
 val name = "Scala"
@@ -199,7 +203,7 @@ println(s"${name.toUpperCase}")      // SCALA
 println(s"1 + 1 = ${1 + 1}")         // 1 + 1 = 2
 ```
 
-**f-보간 (포맷팅):**
+f-보간은 printf 스타일의 포맷팅을 지원합니다. 숫자의 정밀도, 자릿수, 16진수 변환 등을 쉽게 표현할 수 있습니다.
 
 ```scala
 val pi = 3.14159
@@ -210,7 +214,7 @@ println(f"count = $count%05d")    // count = 00042
 println(f"hex = $count%x")        // hex = 2a
 ```
 
-**raw-보간 (이스케이프 무시):**
+raw-보간은 이스케이프 시퀀스를 무시합니다. 정규식이나 파일 경로 등에서 유용합니다.
 
 ```scala
 println(raw"Hello\nWorld")  // Hello\nWorld (줄바꿈 안 됨)
@@ -218,7 +222,9 @@ println(s"Hello\nWorld")    // Hello
                             // World
 ```
 
-### 여러 줄 문자열
+**여러 줄 문자열**
+
+삼중 따옴표를 사용하면 여러 줄 문자열을 작성할 수 있습니다. SQL 쿼리나 JSON 같은 긴 문자열에 유용합니다.
 
 ```scala
 val sql = """
@@ -235,11 +241,13 @@ val formatted = """
   """.stripMargin
 ```
 
-## Scala 2 vs Scala 3 차이점
+stripMargin 메서드는 각 줄 앞의 `|` 문자까지를 제거합니다. 이를 통해 코드의 들여쓰기를 유지하면서 깔끔한 문자열을 만들 수 있습니다.
 
-### 기본 문법
+#### Scala 2 vs Scala 3 차이점
 
-대부분의 기본 문법은 동일합니다. 주요 차이점:
+대부분의 기본 문법은 동일합니다. 가장 큰 차이점은 들여쓰기 기반 구문과 진입점 정의 방식입니다.
+
+**기본 문법**
 
 {{< tabs groupid="scala-version" >}}
 {{% tab title="Scala 3" %}}
@@ -269,7 +277,9 @@ object Main {
 {{% /tab %}}
 {{< /tabs >}}
 
-### 와일드카드 import
+**와일드카드 import**
+
+import 문에서 와일드카드 문자가 다릅니다. Scala 2에서는 `_`를, Scala 3에서는 `*`를 사용합니다.
 
 {{< tabs groupid="scala-version" >}}
 {{% tab title="Scala 3" %}}
@@ -284,9 +294,11 @@ import scala.collection.mutable._
 {{% /tab %}}
 {{< /tabs >}}
 
-## 흔한 실수와 Anti-patterns
+#### 흔한 실수와 Anti-patterns
 
-### ❌ 피해야 할 것
+Scala 초보자들이 자주 하는 실수와 올바른 해결 방법을 정리했습니다.
+
+**피해야 할 것**
 
 ```scala
 // 1. 무분별한 var 사용
@@ -303,7 +315,7 @@ val x = if (condition) 1 else "error"  // Any로 추론됨
 val result = list.foreach(println)  // result는 Unit
 ```
 
-### ✅ 올바른 방법
+**올바른 방법**
 
 ```scala
 // 1. val과 불변 연산 사용
@@ -321,11 +333,13 @@ val x: Either[String, Int] = if (condition) Right(1) else Left("error")
 def printAll(list: List[Int]): Unit = list.foreach(println)
 ```
 
-## 연습 문제
+#### 연습 문제
 
-### 1. 변수 선언
+다음 연습 문제들을 통해 기본 문법을 복습해보세요.
 
-다음 코드의 출력 결과를 예측하세요:
+**1. 변수 선언**
+
+다음 코드의 출력 결과를 예측하세요.
 
 ```scala
 val x = 10
@@ -345,9 +359,9 @@ x = 10, y = 30
 
 </details>
 
-### 2. 타입 추론
+**2. 타입 추론**
 
-다음 변수들의 타입을 추론하세요:
+다음 변수들의 타입을 추론하세요.
 
 ```scala
 val a = 42
@@ -368,7 +382,7 @@ val e = Map("a" -> 1, "b" -> 2)
 
 </details>
 
-### 3. 문자열 보간
+**3. 문자열 보간**
 
 이름과 나이를 받아 "홍길동님은 25세입니다." 형식으로 출력하는 코드를 작성하세요.
 
@@ -383,7 +397,10 @@ println(s"${name}님은 ${age}세입니다.")
 
 </details>
 
-## 다음 단계
+#### 다음 단계
+
+기본 문법을 익혔다면 다음 주제로 진행하세요.
 
 - [제어 구조](../control-structures/) — if, for, while, match 표현식
 - [함수와 메서드](../functions-methods/) — 함수 정의와 고급 기능
+

@@ -1,12 +1,14 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-09"
 title: 컬렉션
 weight: 7
 ---
 
-Scala 컬렉션 라이브러리는 함수형 프로그래밍에 최적화된 풍부한 데이터 구조를 제공합니다.
+Scala 컬렉션 라이브러리는 함수형 프로그래밍에 최적화된 풍부한 데이터 구조를 제공합니다. 불변 컬렉션을 기본으로 하며, 일관된 API로 다양한 데이터 구조를 다룰 수 있습니다. Java 컬렉션과 달리 Scala 컬렉션은 map, filter, fold 같은 고차 함수를 기본으로 지원합니다.
 
-## 컬렉션 계층 구조
+#### 컬렉션 계층 구조
+
+Scala 컬렉션은 잘 설계된 계층 구조를 가지고 있습니다. 최상위에 Iterable이 있고, 그 아래 순서가 있는 Seq, 중복을 허용하지 않는 Set, 키-값 쌍을 저장하는 Map이 있습니다.
 
 ```
                   Iterable
@@ -23,9 +25,9 @@ Vector    List    TreeSet
 Array   LazyList
 ```
 
-## 불변 vs 가변
+#### 불변 vs 가변
 
-Scala는 **불변 컬렉션**을 기본으로 사용합니다.
+Scala는 **불변 컬렉션**을 기본으로 사용합니다. 불변 컬렉션은 스레드 안전하고, 예측 가능한 동작을 보장합니다. 가변 컬렉션이 필요한 경우 명시적으로 import해야 합니다.
 
 ```scala
 // 불변 (기본)
@@ -41,11 +43,13 @@ val mutableSet = mutable.Set(1, 2, 3)
 val mutableMap = mutable.Map("a" -> 1)
 ```
 
-## Seq (시퀀스)
+#### Seq (시퀀스)
 
-순서가 있는 컬렉션입니다.
+Seq는 순서가 있는 컬렉션입니다. 요소들이 정해진 순서를 가지며, 인덱스로 접근할 수 있습니다. List와 Vector가 가장 많이 사용됩니다.
 
-### List (연결 리스트)
+**List (연결 리스트)**
+
+List는 불변 연결 리스트입니다. 앞에서 추가/삭제가 O(1)로 빠르지만, 인덱스 접근은 O(n)입니다.
 
 ```scala
 val list = List(1, 2, 3, 4, 5)
@@ -71,9 +75,9 @@ list match {
 }
 ```
 
-### Vector (인덱스 시퀀스)
+**Vector (인덱스 시퀀스)**
 
-랜덤 접근이 빠른 불변 시퀀스입니다.
+Vector는 랜덤 접근이 빠른 불변 시퀀스입니다. 32진 트리 구조로 구현되어 대부분의 연산이 사실상 상수 시간입니다.
 
 ```scala
 val vector = Vector(1, 2, 3, 4, 5)
@@ -89,9 +93,9 @@ val appended = vector :+ 6
 val prepended = 0 +: vector
 ```
 
-### Range
+**Range**
 
-숫자 범위를 나타냅니다.
+Range는 숫자 범위를 나타내는 특수한 시퀀스입니다. 모든 요소를 메모리에 저장하지 않고 필요할 때 계산합니다.
 
 ```scala
 val r1 = 1 to 10      // 1부터 10까지 (포함)
@@ -101,9 +105,9 @@ val r3 = 1 to 10 by 2 // 1, 3, 5, 7, 9
 r1.toList  // List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 ```
 
-## Set (집합)
+#### Set (집합)
 
-중복이 없는 컬렉션입니다.
+Set은 중복이 없는 컬렉션입니다. 요소 포함 여부를 빠르게 확인할 수 있으며, 수학적 집합 연산(합집합, 교집합, 차집합)을 지원합니다.
 
 ```scala
 val set = Set(1, 2, 3, 2, 1)  // Set(1, 2, 3)
@@ -130,9 +134,9 @@ a diff b       // Set(1)
 a -- b         // 위와 동일
 ```
 
-### SortedSet
+**SortedSet**
 
-정렬된 집합입니다.
+SortedSet은 요소가 항상 정렬된 상태를 유지하는 집합입니다. 최솟값, 최댓값, 범위 쿼리가 필요할 때 유용합니다.
 
 ```scala
 import scala.collection.immutable.SortedSet
@@ -145,9 +149,9 @@ sorted.lastKey   // 9
 sorted.range(2, 6)  // SortedSet(2, 3, 4, 5)
 ```
 
-## Map (맵)
+#### Map (맵)
 
-키-값 쌍의 컬렉션입니다.
+Map은 키-값 쌍의 컬렉션입니다. 키로 값을 빠르게 검색할 수 있으며, 설정, 캐시, 인덱스 등에 널리 사용됩니다.
 
 ```scala
 val map = Map("a" -> 1, "b" -> 2, "c" -> 3)
@@ -175,9 +179,13 @@ map.keys    // Iterable("a", "b", "c")
 map.values  // Iterable(1, 2, 3)
 ```
 
-## 컬렉션 연산
+#### 컬렉션 연산
 
-### 변환 연산
+Scala 컬렉션의 핵심은 풍부한 고차 함수입니다. 이들 연산을 조합하면 복잡한 데이터 처리를 선언적으로 표현할 수 있습니다.
+
+**변환 연산**
+
+map, flatMap, filter 등으로 컬렉션을 변환합니다. 원본은 변하지 않고 새 컬렉션이 반환됩니다.
 
 ```scala
 val numbers = List(1, 2, 3, 4, 5)
@@ -202,7 +210,9 @@ numbers.collect {
 }  // List(20, 40)
 ```
 
-### 축소 연산
+**축소 연산**
+
+reduce와 fold로 컬렉션의 모든 요소를 하나의 값으로 축소합니다.
 
 ```scala
 val numbers = List(1, 2, 3, 4, 5)
@@ -220,7 +230,9 @@ List("a", "b", "c").foldLeft("")(_ + _)   // "abc"
 List("a", "b", "c").foldRight("")(_ + _)  // "abc" (순서 동일, 계산 방향 다름)
 ```
 
-### 분할 연산
+**분할 연산**
+
+partition, groupBy, span, splitAt으로 컬렉션을 여러 부분으로 나눕니다.
 
 ```scala
 val numbers = List(1, 2, 3, 4, 5, 6)
@@ -242,7 +254,9 @@ val (first, second) = numbers.splitAt(3)
 // first = List(1, 2, 3), second = List(4, 5, 6)
 ```
 
-### 검색 연산
+**검색 연산**
+
+find, exists, forall, contains, count로 컬렉션에서 요소를 검색하거나 조건을 검사합니다.
 
 ```scala
 val numbers = List(1, 2, 3, 4, 5)
@@ -264,7 +278,9 @@ numbers.contains(3)    // true
 numbers.count(_ % 2 == 0)  // 2
 ```
 
-### 정렬 연산
+**정렬 연산**
+
+sorted, sortBy, sortWith로 컬렉션을 정렬합니다.
 
 ```scala
 val numbers = List(3, 1, 4, 1, 5, 9, 2, 6)
@@ -280,7 +296,9 @@ people.sortBy(_.name)       // 이름순
 people.sortWith(_.age > _.age)  // 나이 내림차순
 ```
 
-## Option 다루기
+#### Option 다루기
+
+Option은 값이 있거나 없을 수 있는 경우를 표현하는 컬렉션입니다. null 대신 Option을 사용하면 NullPointerException을 방지하고 타입 안전하게 없는 값을 처리할 수 있습니다.
 
 ```scala
 val maybeValue: Option[Int] = Some(42)
@@ -311,7 +329,9 @@ for {
 } yield a + b  // Some(30)
 ```
 
-## 성능 특성
+#### 성능 특성
+
+각 컬렉션은 서로 다른 성능 특성을 가지므로 용도에 맞게 선택해야 합니다. 아래 표는 주요 연산의 시간 복잡도를 정리한 것입니다.
 
 | 컬렉션 | head | tail | 인덱스 접근 | 업데이트 | 추가(앞) | 추가(뒤) |
 |--------|------|------|-----------|---------|---------|---------|
@@ -325,7 +345,9 @@ for {
 > - `*` Vector의 O(log₃₂n)은 n이 10억이어도 약 6단계로, **사실상 상수 시간**으로 간주됩니다.
 > - `**` HashSet/HashMap은 평균 O(1), TreeSet/TreeMap은 O(log n)
 
-### 어떤 컬렉션을 선택할까?
+**어떤 컬렉션을 선택할까?**
+
+용도에 따라 적합한 컬렉션을 선택합니다.
 
 ```scala
 // 앞에서 추가/제거가 많음 → List
@@ -344,9 +366,11 @@ val lookup = Map("a" -> 1, "b" -> 2)
 lookup.get("a")  // 빠름!
 ```
 
-## 흔한 실수와 Anti-patterns
+#### 흔한 실수와 Anti-patterns
 
-### ❌ 피해야 할 것
+컬렉션을 사용할 때 흔히 발생하는 실수와 올바른 해결 방법을 정리했습니다.
+
+**❌ 피해야 할 것**
 
 ```scala
 // 1. 인덱스 기반 접근 남용 (List에서)
@@ -368,7 +392,7 @@ list.map(x => List(x, x * 2)).flatten  // 비효율적
 List.empty[Int].head  // NoSuchElementException!
 ```
 
-### ✅ 올바른 방법
+**✅ 올바른 방법**
 
 ```scala
 // 1. foreach나 iterator 사용
@@ -388,7 +412,9 @@ List.empty[Int].headOption  // None
 List(1, 2, 3).headOption    // Some(1)
 ```
 
-### 컬렉션 선택 가이드
+**컬렉션 선택 가이드**
+
+아래 다이어그램은 요구사항에 따라 적합한 컬렉션을 선택하는 방법을 보여줍니다.
 
 ```mermaid
 flowchart TD
@@ -406,9 +432,11 @@ flowchart TD
     Q3 -->|No| Set["Set"]
 ```
 
-## 연습 문제
+#### 연습 문제
 
-### 1. 단어 빈도수
+다음 연습 문제들을 통해 컬렉션 사용법을 복습해보세요.
+
+**1. 단어 빈도수**
 
 문자열 리스트에서 각 단어의 빈도수를 계산하세요.
 
@@ -429,7 +457,7 @@ val frequency2 = words.groupMapReduce(identity)(_ => 1)(_ + _)
 
 </details>
 
-### 2. 중첩 리스트 평탄화
+**2. 중첩 리스트 평탄화**
 
 중첩된 리스트를 1차원으로 평탄화하세요.
 
@@ -447,7 +475,7 @@ val flat2 = nested.flatMap(identity)
 
 </details>
 
-## 다음 단계
+#### 다음 단계
 
 - [고차 함수](../higher-order-functions/) — map, filter, fold 심화
 - [For Comprehension](../for-comprehensions/) — 모나딕 연산

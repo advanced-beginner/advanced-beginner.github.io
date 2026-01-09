@@ -1,14 +1,16 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-09"
 title: FAQ
 weight: 3
 ---
 
-Scala에 대해 자주 묻는 질문과 답변입니다.
+Scala에 대해 자주 묻는 질문과 답변입니다. 질문을 카테고리별로 분류하여 빠르게 원하는 정보를 찾을 수 있도록 했습니다.
 
-## 일반
+#### 일반
 
-### Scala를 배워야 할까요?
+Scala 학습과 관련된 일반적인 질문들입니다.
+
+**Scala를 배워야 할까요?**
 
 **그렇습니다.** Scala는 다음과 같은 경우에 특히 유용합니다:
 
@@ -17,9 +19,9 @@ Scala에 대해 자주 묻는 질문과 답변입니다.
 - 타입 안전성이 중요한 프로젝트
 - 함수형 프로그래밍을 배우고 싶을 때
 
-### Scala 2와 Scala 3 중 무엇을 배워야 하나요?
+**Scala 2와 Scala 3 중 무엇을 배워야 하나요?**
 
-**상황에 따라 다릅니다:**
+상황에 따라 다릅니다.
 
 - **새 프로젝트**: Scala 3 권장
 - **Spark 사용**: Scala 2.12/2.13 (Spark가 아직 Scala 3 미지원)
@@ -27,9 +29,9 @@ Scala에 대해 자주 묻는 질문과 답변입니다.
 
 두 버전의 핵심 개념은 같으므로, 하나를 배우면 다른 것도 쉽게 적응할 수 있습니다.
 
-### Scala는 어렵나요?
+**Scala는 어렵나요?**
 
-**기초는 어렵지 않습니다.** Java 경험이 있다면 기본 문법은 금방 익힐 수 있습니다.
+기초는 어렵지 않습니다. Java 경험이 있다면 기본 문법은 금방 익힐 수 있습니다.
 
 **어려운 부분:**
 - 고급 타입 시스템 (공변성, 타입 클래스)
@@ -38,9 +40,11 @@ Scala에 대해 자주 묻는 질문과 답변입니다.
 
 점진적으로 학습하세요. 모든 고급 기능을 처음부터 알 필요는 없습니다.
 
-## 문법
+#### 문법
 
-### val과 var의 차이는?
+Scala 문법에 관한 질문들입니다.
+
+**val과 var의 차이는?**
 
 ```scala
 val x = 10  // 불변 (변경 불가)
@@ -52,7 +56,7 @@ y = 20      // OK
 
 **권장:** 가능하면 항상 `val`을 사용하세요.
 
-### def, val, lazy val의 차이는?
+**def, val, lazy val의 차이는?**
 
 ```scala
 // 매번 새로 계산
@@ -72,9 +76,9 @@ deferred  // "lazy" 출력
 deferred  // 출력 없음
 ```
 
-### 세미콜론이 필요한가요?
+**세미콜론이 필요한가요?**
 
-**보통 필요 없습니다.** Scala는 줄 끝에 자동으로 세미콜론을 추론합니다.
+보통 필요 없습니다. Scala는 줄 끝에 자동으로 세미콜론을 추론합니다.
 
 ```scala
 val x = 1
@@ -84,7 +88,7 @@ val y = 2
 val a = 1; val b = 2
 ```
 
-### Unit은 무엇인가요?
+**Unit은 무엇인가요?**
 
 `Unit`은 Java의 `void`와 유사합니다. 의미 있는 값을 반환하지 않음을 나타냅니다.
 
@@ -95,9 +99,11 @@ def printMessage(): Unit = println("Hello")
 val unit: Unit = ()
 ```
 
-## 함수형 프로그래밍
+#### 함수형 프로그래밍
 
-### Option, Some, None은 무엇인가요?
+함수형 프로그래밍 패턴에 관한 질문들입니다.
+
+**Option, Some, None은 무엇인가요?**
 
 `Option`은 값이 있거나 없음을 안전하게 표현합니다:
 
@@ -115,7 +121,7 @@ findUser(-1).getOrElse("Unknown") // "Unknown"
 
 **null 대신 Option을 사용하세요!**
 
-### map과 flatMap의 차이는?
+**map과 flatMap의 차이는?**
 
 ```scala
 val opt = Some(5)
@@ -132,7 +138,7 @@ nested.map(_.map(_ * 2))      // Some(Some(10))
 nested.flatMap(_.map(_ * 2))  // Some(10)
 ```
 
-### for comprehension은 어떻게 동작하나요?
+**for comprehension은 어떻게 동작하나요?**
 
 for comprehension은 `flatMap`, `map`, `withFilter`로 변환됩니다:
 
@@ -152,9 +158,11 @@ Some(1).flatMap(x =>
 // 결과: Some(3)
 ```
 
-## 트러블슈팅
+#### 트러블슈팅
 
-### "implicit not found" 에러
+개발 중 자주 발생하는 문제와 해결책입니다.
+
+**"implicit not found" 에러**
 
 ```
 could not find implicit value for parameter ord: Ordering[MyClass]
@@ -174,7 +182,7 @@ object Person {
 }
 ```
 
-### "value xxx is not a member of yyy"
+**"value xxx is not a member of yyy"**
 
 확장 메서드가 import되지 않았을 수 있습니다:
 
@@ -183,30 +191,32 @@ import cats.syntax.all._  // Cats 확장 메서드
 import zio.prelude._      // ZIO 확장 메서드
 ```
 
-### 컴파일이 너무 느려요
+**컴파일이 너무 느려요**
 
 - **증분 컴파일 사용**: `sbt ~compile`
 - **병렬 컴파일**: `parallelExecution := true`
 - **캐시 활용**: `.bsp` 디렉토리 유지
 
-### IntelliJ에서 빨간 줄이 표시돼요
+**IntelliJ에서 빨간 줄이 표시돼요**
 
 1. **File** → **Invalidate Caches** → **Restart**
 2. sbt 탭에서 **Reload**
 3. **Build** → **Rebuild Project**
 
-## 성능
+#### 성능
 
-### Scala는 Java보다 느린가요?
+Scala 성능에 관한 질문들입니다.
 
-**대부분의 경우 비슷합니다.** Scala는 JVM 바이트코드로 컴파일되므로 런타임 성능은 Java와 유사합니다.
+**Scala는 Java보다 느린가요?**
+
+대부분의 경우 비슷합니다. Scala는 JVM 바이트코드로 컴파일되므로 런타임 성능은 Java와 유사합니다.
 
 **주의할 점:**
 - 람다와 고차 함수는 객체 생성을 유발
 - 컬렉션 체이닝은 중간 컬렉션 생성 가능
 - `@tailrec`으로 꼬리 재귀 최적화 확인
 
-### 불변 컬렉션이 성능에 영향을 주나요?
+**불변 컬렉션이 성능에 영향을 주나요?**
 
 Scala의 불변 컬렉션은 **구조적 공유**를 사용하여 효율적입니다:
 
@@ -217,26 +227,28 @@ val list2 = 0 :: list1  // list1의 데이터 재사용
 
 성능이 정말 중요하면 `Array`나 가변 컬렉션을 사용하세요.
 
-## 도구
+#### 도구
 
-### IDE는 무엇을 사용해야 하나요?
+개발 도구 선택에 관한 질문들입니다.
+
+**IDE는 무엇을 사용해야 하나요?**
 
 - **IntelliJ IDEA + Scala 플러그인**: 가장 완성도 높음
 - **VS Code + Metals**: 가볍고 빠름
 
-### 빌드 도구는?
+**빌드 도구는?**
 
 - **sbt**: Scala 표준 빌드 도구
 - **Mill**: 더 빠른 대안
 - **Gradle**: Java 프로젝트와 혼합 시
 
-### 테스트 프레임워크는?
+**테스트 프레임워크는?**
 
 - **ScalaTest**: 가장 널리 사용, 다양한 스타일
 - **MUnit**: 간단하고 가벼움 (Scala 3 권장)
 - **Specs2**: BDD 스타일
 
-## 추가 질문
+#### 추가 질문
 
 더 궁금한 점이 있다면:
 

@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-09"
 title: 고급 타입 시스템
 weight: 14
 ---
@@ -13,9 +13,9 @@ Scala 3는 더욱 강력하고 표현력 있는 타입 시스템을 제공합니
 >
 > **난이도**: ⭐⭐⭐⭐ (고급) - Scala 3 전용 기능 포함
 
-## Union Types (|)
+#### Union Types (|)
 
-여러 타입 중 하나를 나타냅니다.
+Union Type은 여러 타입 중 하나의 값을 가질 수 있음을 나타냅니다. 래퍼 없이 직접 값을 다룰 수 있어 Either보다 간결합니다.
 
 ```scala
 // Scala 3만 지원
@@ -35,7 +35,7 @@ def toJson(value: JsonValue): String = value match
   case null       => "null"
 ```
 
-### Either와의 비교
+**Either와의 비교**
 
 ```scala
 // Either: 명시적인 Left/Right 래퍼 필요
@@ -47,9 +47,9 @@ def divideUnion(a: Int, b: Int): Int | String =
   if b == 0 then "0으로 나눌 수 없음" else a / b
 ```
 
-## Intersection Types (&)
+#### Intersection Types (&)
 
-여러 타입을 모두 만족하는 타입입니다.
+Intersection Type은 여러 타입을 모두 만족하는 타입입니다. 객체가 여러 trait를 동시에 구현해야 할 때 유용합니다.
 
 ```scala
 trait Printable:
@@ -71,7 +71,7 @@ class Document(content: String) extends Printable, Serializable:
 process(Document("Hello"))
 ```
 
-### 구조적 타입 결합
+**구조적 타입 결합**
 
 ```scala
 type Named = { def name: String }
@@ -81,9 +81,9 @@ def describe(obj: Named & Aged): String =
   s"${obj.name}, ${obj.age}세"
 ```
 
-## Opaque Types
+#### Opaque Types
 
-타입 별칭이지만 외부에서는 다른 타입으로 취급됩니다.
+Opaque Type은 타입 별칭이지만 외부에서는 다른 타입으로 취급됩니다. 런타임 오버헤드 없이 타입 안전성을 제공하여 도메인 모델링에 매우 유용합니다.
 
 ```scala
 object UserId:
@@ -104,7 +104,7 @@ id.isValid     // true
 // val x: Long = id  // 컴파일 에러! UserId != Long
 ```
 
-### 장점
+**장점**
 
 - 런타임 오버헤드 없음 (박싱 없음)
 - 타입 안전성 제공
@@ -131,9 +131,9 @@ val total = dollars + more  // OK: USD + USD
 // val mixed = dollars + eur(50)  // 컴파일 에러! USD + EUR
 ```
 
-## Match Types
+#### Match Types
 
-타입 레벨에서 패턴 매칭을 수행합니다.
+Match Type은 타입 레벨에서 패턴 매칭을 수행합니다. 입력 타입에 따라 다른 결과 타입을 계산할 수 있습니다.
 
 ```scala
 type Elem[X] = X match
@@ -146,7 +146,7 @@ val b: Elem[Array[Int]] = 1      // Int
 val c: Elem[List[String]] = "hi" // String
 ```
 
-### 재귀 Match Types
+**재귀 Match Types**
 
 ```scala
 type Flatten[X] = X match
@@ -157,9 +157,9 @@ type Flatten[X] = X match
 val x: Flatten[List[List[List[Int]]]] = List(1, 2, 3)
 ```
 
-## Type Lambdas
+#### Type Lambdas
 
-타입 생성자를 타입 매개변수로 전달합니다.
+Type Lambda는 타입 생성자를 타입 매개변수로 전달할 수 있게 해줍니다. 고차 타입을 다룰 때 유용합니다.
 
 ```scala
 // 타입 람다: [X] =>> F[X, Y]
@@ -175,9 +175,9 @@ val ok: Result[Int] = Right(42)
 val err: Result[Int] = Left("에러")
 ```
 
-## Dependent Function Types
+#### Dependent Function Types
 
-반환 타입이 매개변수 값에 의존합니다.
+Dependent Function Type은 반환 타입이 매개변수 값에 의존하는 함수 타입입니다.
 
 ```scala
 trait Key:
@@ -193,9 +193,9 @@ def get(key: Key): key.Value = ???
 val getter: (key: Key) => key.Value = (key: Key) => ???
 ```
 
-## Polymorphic Function Types
+#### Polymorphic Function Types
 
-타입 매개변수를 가진 함수 타입입니다.
+Polymorphic Function Type은 타입 매개변수를 가진 함수 타입입니다. 함수 값 자체가 제네릭할 수 있습니다.
 
 ```scala
 // 다형 함수 타입
@@ -210,7 +210,9 @@ val head: [A] => List[A] => A = [A] => (list: List[A]) => list.head
 head(List(1, 2, 3))  // 1
 ```
 
-## Scala 2와의 비교
+#### Scala 2와의 비교
+
+아래 표는 Scala 2와 Scala 3의 고급 타입 기능 차이를 정리한 것입니다.
 
 | 기능 | Scala 2 | Scala 3 |
 |------|---------|---------|
@@ -220,9 +222,9 @@ head(List(1, 2, 3))  // 1
 | Match Types | 불가 | 지원 |
 | Type Lambdas | 복잡한 문법 | `[X] =>> F[X]` |
 
-## 연습 문제
+#### 연습 문제
 
-### 1. Opaque Type 구현 ⭐⭐
+**1. Opaque Type 구현 ⭐⭐**
 
 `Email` opaque type을 구현하세요. 유효성 검사를 포함해야 합니다.
 
@@ -253,7 +255,7 @@ valid.foreach(e => println(e.domain))   // "example.com"
 
 </details>
 
-## 다음 단계
+#### 다음 단계
 
 - [매크로](../macros-metaprogramming/) — 컴파일 타임 코드 생성
 - [함수형 패턴](../functional-patterns/) — Functor, Monad

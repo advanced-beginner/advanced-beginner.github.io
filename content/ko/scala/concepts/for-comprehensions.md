@@ -1,14 +1,18 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-09"
 title: For Comprehension
 weight: 10
 ---
 
-For Comprehension은 `flatMap`, `map`, `withFilter`를 우아하게 표현하는 문법적 설탕(syntactic sugar)입니다.
+For Comprehension은 `flatMap`, `map`, `withFilter`를 우아하게 표현하는 문법적 설탕(syntactic sugar)입니다. 중첩된 flatMap과 map 호출을 읽기 쉬운 선언적 형태로 작성할 수 있게 해주며, Option, Either, Future, List 등 다양한 모나딕 타입과 함께 사용됩니다.
 
-## 기본 문법
+#### 기본 문법
 
-### 변환 규칙 시각화
+for comprehension의 기본 구조와 이것이 어떻게 메서드 호출로 변환되는지 이해하는 것이 중요합니다.
+
+**변환 규칙 시각화**
+
+아래 다이어그램은 for comprehension이 어떻게 map, flatMap, withFilter 호출로 변환되는지 보여줍니다.
 
 ```mermaid
 flowchart LR
@@ -29,6 +33,8 @@ flowchart LR
     FC3 --> R3
 ```
 
+기본적인 for comprehension 문법은 다음과 같습니다.
+
 ```scala
 // 기본 형태
 for {
@@ -42,9 +48,13 @@ for {
 } yield (x, y)
 ```
 
-## map/flatMap으로 변환
+#### map/flatMap으로 변환
 
-### 단일 생성자 → map
+컴파일러는 for comprehension을 map, flatMap, withFilter 호출로 변환합니다. 이 변환 규칙을 이해하면 for comprehension의 동작을 명확히 파악할 수 있습니다.
+
+**단일 생성자 → map**
+
+단일 생성자만 있는 경우 단순히 map으로 변환됩니다.
 
 ```scala
 // for comprehension
@@ -56,7 +66,9 @@ List(1, 2, 3).map(x => x * 2)
 // 결과: List(2, 4, 6)
 ```
 
-### 여러 생성자 → flatMap + map
+**여러 생성자 → flatMap + map**
+
+여러 생성자가 있으면 마지막 생성자를 제외한 나머지는 flatMap으로, 마지막은 map으로 변환됩니다.
 
 ```scala
 // for comprehension
@@ -75,7 +87,9 @@ List(1, 2, 3).flatMap { x =>
 // 결과: List((1,a), (1,b), (2,a), (2,b), (3,a), (3,b))
 ```
 
-### 가드 → withFilter
+**가드 → withFilter**
+
+if 조건(가드)은 withFilter 호출로 변환됩니다. filter가 아닌 withFilter를 사용하는 이유는 중간 컬렉션 생성을 피하기 위함입니다.
 
 ```scala
 // for comprehension
@@ -92,7 +106,9 @@ List(1, 2, 3, 4, 5)
 // 결과: List(4, 8)
 ```
 
-## 값 정의 (=)
+#### 값 정의 (=)
+
+for comprehension 내에서 `=`를 사용하여 중간 값을 정의할 수 있습니다. 이는 계산 결과를 재사용하거나 가독성을 높이는 데 유용합니다.
 
 ```scala
 for {
@@ -111,9 +127,9 @@ List(1, 2, 3).map { x =>
 // 결과: List(4, 16, 36)
 ```
 
-## Option과 함께
+#### Option과 함께
 
-Option은 for comprehension과 자주 사용됩니다.
+Option은 for comprehension과 가장 자주 사용되는 타입 중 하나입니다. 여러 Option 연산을 연속으로 수행할 때 중첩된 flatMap 대신 깔끔한 for 문법을 사용할 수 있습니다. 중간에 None이 발생하면 전체 결과가 None이 됩니다.
 
 ```scala
 case class User(name: String)
@@ -142,7 +158,9 @@ val failed = for {
 failed  // None
 ```
 
-## Either와 함께
+#### Either와 함께
+
+Either도 for comprehension과 함께 사용할 수 있습니다. 모든 연산이 Right면 계속 진행하고, Left가 나오면 즉시 중단하여 해당 Left를 반환합니다.
 
 ```scala
 def parseInt(s: String): Either[String, Int] =
@@ -170,9 +188,9 @@ val failed = for {
 failed  // Left("'zero'는 숫자가 아님")
 ```
 
-## Future와 함께
+#### Future와 함께
 
-비동기 연산을 순차적으로 조합합니다.
+Future를 for comprehension으로 조합하면 비동기 연산을 순차적으로 실행할 수 있습니다. 각 Future가 완료된 후 다음 단계가 실행됩니다.
 
 ```scala
 import scala.concurrent.{Future, ExecutionContext}
@@ -193,7 +211,9 @@ val result = for {
 // result: Future((User1, List(Order1 for User1, Order2 for User1)))
 ```
 
-## List 조합
+#### List 조합
+
+List에서 for comprehension을 사용하면 데카르트 곱(모든 조합)을 쉽게 생성할 수 있습니다. 가드를 추가하여 특정 조합만 선택할 수도 있습니다.
 
 ```scala
 // 데카르트 곱
@@ -218,9 +238,9 @@ val gugudan = for {
 } yield s"$i x $j = ${i * j}"
 ```
 
-## 부수 효과 (yield 없이)
+#### 부수 효과 (yield 없이)
 
-`yield` 없이 사용하면 부수 효과만 실행합니다.
+yield를 생략하면 값을 반환하지 않고 부수 효과만 실행합니다. 이 경우 foreach로 변환됩니다.
 
 ```scala
 // foreach로 변환됨
@@ -232,7 +252,9 @@ for (x <- List(1, 2, 3)) {
 List(1, 2, 3).foreach(x => println(x))
 ```
 
-## 패턴 매칭
+#### 패턴 매칭
+
+for comprehension의 생성자에서 패턴 매칭을 사용할 수 있습니다. 튜플 분해나 케이스 클래스 추출에 유용합니다. 매칭되지 않는 요소는 자동으로 필터링됩니다.
 
 ```scala
 val pairs = List((1, "one"), (2, "two"), (3, "three"))
@@ -250,7 +272,9 @@ for (Some(x) <- maybes) {
 }
 ```
 
-## Scala 3 문법
+#### Scala 3 문법
+
+Scala 3에서는 for comprehension의 문법이 더 간결해졌습니다. do 키워드와 들여쓰기 기반 문법이 추가되었습니다.
 
 {{< tabs groupid="scala-version" >}}
 {{% tab title="Scala 3" %}}
@@ -281,9 +305,9 @@ for {
 {{% /tab %}}
 {{< /tabs >}}
 
-## 커스텀 타입에서 사용
+#### 커스텀 타입에서 사용
 
-`map`, `flatMap`, `withFilter`를 구현하면 for comprehension 사용 가능합니다.
+for comprehension은 map, flatMap, withFilter 메서드를 가진 모든 타입에서 사용할 수 있습니다. 직접 정의한 타입에 이 메서드들을 구현하면 for comprehension을 활용할 수 있습니다.
 
 ```scala
 case class Box[A](value: A) {
@@ -299,9 +323,11 @@ val result = for {
 result  // Box(3)
 ```
 
-## 연습 문제
+#### 연습 문제
 
-### 1. 안전한 계산기 ⭐⭐
+다음 연습 문제들을 통해 for comprehension 개념을 복습해보세요.
+
+**1. 안전한 계산기 ⭐⭐**
 
 for comprehension으로 안전한 사칙연산을 구현하세요.
 
@@ -327,7 +353,7 @@ result  // Some(10)
 
 </details>
 
-### 2. 중첩 Option 평탄화 ⭐
+**2. 중첩 Option 평탄화 ⭐**
 
 중첩된 Option을 for comprehension으로 처리하세요.
 
@@ -359,7 +385,7 @@ result  // None
 
 </details>
 
-## 다음 단계
+#### 다음 단계
 
 - [Implicit/Given](../implicits/) — 문맥적 추상화
 - [함수형 패턴](../functional-patterns/) — Monad, Functor 심화

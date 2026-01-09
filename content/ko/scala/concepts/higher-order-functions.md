@@ -1,16 +1,18 @@
 ---
-lastmod: "2026-01-08"
+lastmod: "2026-01-09"
 title: 고차 함수
 weight: 8
 ---
 
-고차 함수(Higher-Order Function)는 함수를 인자로 받거나, 함수를 반환하는 함수입니다. 함수형 프로그래밍의 핵심 개념입니다.
+고차 함수(Higher-Order Function)는 함수를 인자로 받거나, 함수를 반환하는 함수입니다. 함수형 프로그래밍의 핵심 개념으로, 코드 재사용성을 높이고 추상화 수준을 끌어올립니다.
 
-## 왜 고차 함수가 강력한가?
+#### 왜 고차 함수가 강력한가?
 
-### 문제: 반복되는 패턴
+고차 함수는 "무엇을" 할지와 "어떻게" 할지를 분리합니다. 반복되는 패턴을 함수로 추상화하고, 달라지는 부분만 인자로 전달합니다.
 
-Java 스타일의 명령형 코드에서는 비슷한 패턴이 반복됩니다:
+**문제: 반복되는 패턴**
+
+Java 스타일의 명령형 코드에서는 필터링, 변환, 축약 같은 비슷한 패턴이 반복됩니다.
 
 ```java
 // Java: 주문 목록에서 총액 계산
@@ -37,7 +39,7 @@ for (User user : users) {
 - 가변 상태(`total`, `names`)로 인한 버그 가능성
 - 재사용이 어려움
 
-### 고차 함수의 해결책
+**고차 함수의 해결책**
 
 Scala에서는 "무엇을"만 선언합니다:
 
@@ -59,9 +61,9 @@ val names = users
 - 각 연산을 독립적으로 테스트 가능
 - 체이닝으로 복잡한 변환도 읽기 쉬움
 
-### Java Stream API와 비교
+**Java Stream API와 비교**
 
-Java 8+의 Stream API도 비슷한 기능을 제공하지만, Scala가 더 간결합니다:
+Java 8+의 Stream API도 비슷한 기능을 제공하지만, Scala가 더 간결합니다. 아래 표는 두 접근법의 차이를 정리한 것입니다.
 
 ```java
 // Java Stream
@@ -87,9 +89,11 @@ val total = orders
 | 타입 힌트 | 자주 필요 | 대부분 추론 |
 | 기본형 처리 | `mapToInt`, `mapToDouble` 필요 | 자동 변환 |
 
-## 실무 예제: 주문 처리 파이프라인
+#### 실무 예제: 주문 처리 파이프라인
 
-### 요구사항
+실제 비즈니스 로직에서 고차 함수를 어떻게 활용하는지 살펴봅니다.
+
+**요구사항**
 
 온라인 쇼핑몰에서 다음 처리가 필요합니다:
 1. 유효한 주문만 필터링
@@ -98,7 +102,9 @@ val total = orders
 4. 배송비 추가
 5. 최종 결제 금액 산출
 
-### 도메인 모델
+**도메인 모델**
+
+먼저 주문 처리에 필요한 도메인 모델을 정의합니다.
 
 ```scala
 case class Order(
@@ -128,7 +134,9 @@ enum CustomerTier:
   case Bronze, Silver, Gold, Platinum
 ```
 
-### 고차 함수로 파이프라인 구현
+**고차 함수로 파이프라인 구현**
+
+고차 함수를 활용하여 각 단계를 독립적인 함수로 정의하고 조합합니다. 함수를 반환하는 applyDiscount가 핵심입니다.
 
 ```scala
 object OrderProcessor:
@@ -185,7 +193,7 @@ object OrderProcessor:
   }
 ```
 
-### 사용 예시
+**사용 예시**
 
 ```scala
 // 테스트 데이터
@@ -219,9 +227,9 @@ results.foreach { case (order, total) =>
 // 주문 O003: 665000.0원 (5% 할인 + 무료배송)
 ```
 
-### 확장: 비동기 처리
+**확장: 비동기 처리**
 
-`Future`와 조합하여 비동기 파이프라인으로 확장:
+같은 패턴을 Future와 조합하여 비동기 파이프라인으로 확장할 수 있습니다.
 
 ```scala
 import scala.concurrent.{Future, ExecutionContext}
@@ -247,9 +255,13 @@ def processOrdersAsync(
 }
 ```
 
-## 고차 함수 선택 가이드
+#### 고차 함수 선택 가이드
 
-### 언제 무엇을 사용할까?
+상황에 따라 적합한 고차 함수를 선택해야 합니다.
+
+**언제 무엇을 사용할까?**
+
+아래 표는 작업 유형에 따라 어떤 함수를 사용해야 하는지 정리한 것입니다.
 
 | 작업 | 함수 | 예시 | 결과 |
 |------|------|------|------|
@@ -262,7 +274,9 @@ def processOrdersAsync(
 | 키로 그룹화 | `groupBy` | 카테고리별 상품 | `Map[K, List[A]]` |
 | 패턴 매칭 변환 | `collect` | 특정 타입만 추출 | `List[B]` (매칭된 것만) |
 
-### 성능 고려사항
+**성능 고려사항**
+
+큰 컬렉션을 처리할 때는 중간 컬렉션 생성을 피하기 위해 view나 iterator를 사용합니다.
 
 ```scala
 // ❌ 큰 컬렉션에서 중간 컬렉션 생성
@@ -288,7 +302,9 @@ val result = (1 to 1000000)
   .toList
 ```
 
-### 주의사항: 과도한 체이닝
+**주의사항: 과도한 체이닝**
+
+너무 긴 체이닝은 디버깅이 어렵습니다. 의미 있는 단위로 분리하고 이름을 부여하세요.
 
 ```scala
 // ❌ 너무 긴 체이닝은 디버깅이 어려움
@@ -310,9 +326,9 @@ val processed = grouped.map { case (k, v) =>
 }.filter { case (_, v) => v.nonEmpty }
 ```
 
----
+#### 고차 함수란?
 
-## 고차 함수란?
+고차 함수의 기본 개념을 예제로 살펴봅니다.
 
 ```scala
 // 함수를 인자로 받는 함수
@@ -330,11 +346,13 @@ val triple = multiplier(3)
 triple(4)  // 12
 ```
 
-## 주요 고차 함수
+#### 주요 고차 함수
 
-### map
+Scala 컬렉션에서 가장 많이 사용되는 고차 함수들을 상세히 살펴봅니다.
 
-각 요소를 변환합니다.
+**map**
+
+map은 각 요소를 변환합니다. 원본 컬렉션과 같은 크기의 새 컬렉션을 반환합니다.
 
 ```scala
 val numbers = List(1, 2, 3, 4, 5)
@@ -352,9 +370,9 @@ val ages = List(25, 30, 35)
 ages.map(age => Person(s"Person$age", age))
 ```
 
-### filter
+**filter**
 
-조건에 맞는 요소만 선택합니다.
+filter는 조건에 맞는 요소만 선택합니다. 원본보다 작거나 같은 크기의 컬렉션을 반환합니다.
 
 ```scala
 val numbers = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
@@ -370,9 +388,9 @@ numbers
 // List(6, 8, 10)
 ```
 
-### flatMap
+**flatMap**
 
-변환 후 평탄화합니다.
+flatMap은 각 요소를 컬렉션으로 변환한 후 하나로 평탄화합니다. 1:N 변환이나 Option을 다룰 때 필수적입니다.
 
 ```scala
 val numbers = List(1, 2, 3)
@@ -391,9 +409,9 @@ val strings = List("1", "two", "3")
 strings.flatMap(parse)  // List(1, 3)
 ```
 
-### fold / foldLeft / foldRight
+**fold / foldLeft / foldRight**
 
-초기값과 함께 요소들을 축소합니다.
+fold 계열 함수는 초기값과 이항 연산을 사용해 컬렉션을 단일 값으로 축소합니다. 합계, 곱, 문자열 연결 등 다양한 집계에 사용됩니다.
 
 ```scala
 val numbers = List(1, 2, 3, 4, 5)
@@ -419,9 +437,9 @@ numbers.foldLeft(Stats(0, 0)) { (stats, n) =>
 // Stats(15, 5)
 ```
 
-### reduce
+**reduce**
 
-초기값 없이 축소합니다 (빈 컬렉션에서 에러).
+reduce는 초기값 없이 축소합니다. 빈 컬렉션에서 에러가 발생하므로 주의해야 합니다.
 
 ```scala
 val numbers = List(1, 2, 3, 4, 5)
@@ -435,9 +453,9 @@ numbers.reduce(_ min _)  // 1
 List.empty[Int].reduceOption(_ + _)  // None
 ```
 
-### collect
+**collect**
 
-패턴 매칭으로 필터링 + 변환을 동시에 수행합니다.
+collect는 패턴 매칭으로 필터링과 변환을 동시에 수행합니다. PartialFunction을 인자로 받습니다.
 
 ```scala
 val mixed: List[Any] = List(1, "hello", 2, "world", 3)
@@ -456,9 +474,9 @@ maybes.collect {
 // List(1, 3, 5)
 ```
 
-### partition
+**partition**
 
-조건으로 두 그룹으로 분리합니다.
+partition은 조건을 만족하는 요소와 그렇지 않은 요소를 두 컬렉션으로 분리합니다.
 
 ```scala
 val numbers = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
@@ -468,9 +486,9 @@ val (evens, odds) = numbers.partition(_ % 2 == 0)
 // odds = List(1, 3, 5, 7, 9)
 ```
 
-### groupBy
+**groupBy**
 
-키 함수로 그룹화합니다.
+groupBy는 키 함수의 결과에 따라 요소들을 그룹화하여 Map을 생성합니다.
 
 ```scala
 val words = List("apple", "banana", "avocado", "cherry", "apricot")
@@ -493,9 +511,13 @@ val byCity = people.groupBy(_.city)
 // Map("서울" -> List(Alice, Carol), "부산" -> List(Bob))
 ```
 
-## 함수 합성
+#### 함수 합성
 
-### andThen과 compose
+작은 함수들을 조합하여 더 큰 함수를 만들 수 있습니다.
+
+**andThen과 compose**
+
+andThen은 왼쪽에서 오른쪽으로, compose는 오른쪽에서 왼쪽으로 함수를 합성합니다.
 
 ```scala
 val addOne = (x: Int) => x + 1
@@ -510,7 +532,9 @@ val doubleThenAdd = addOne compose double
 doubleThenAdd(3)  // (3 * 2) + 1 = 7
 ```
 
-### 체이닝
+**체이닝**
+
+컬렉션 메서드들을 연속으로 호출하여 데이터 파이프라인을 구성합니다.
 
 ```scala
 val numbers = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
@@ -524,9 +548,9 @@ val result = numbers
 // result = 12 + 16 + 20 = 48
 ```
 
-## 커링 (Currying)
+#### 커링 (Currying)
 
-여러 인자를 받는 함수를 단일 인자 함수의 체인으로 변환합니다.
+커링은 여러 인자를 받는 함수를 단일 인자 함수의 체인으로 변환합니다. 부분 적용과 타입 추론에 유용합니다.
 
 ```scala
 // 일반 함수
@@ -547,7 +571,9 @@ val add10 = addCurried2(10)
 add10(5)  // 15
 ```
 
-### 커링의 활용
+**커링의 활용**
+
+커링은 타입 추론 개선과 DSL 구축에 특히 유용합니다.
 
 ```scala
 // 타입 추론 개선
@@ -577,9 +603,9 @@ def withTransaction[T](db: Database)(block: Connection => T): T =
 // }
 ```
 
-## 클로저 (Closure)
+#### 클로저 (Closure)
 
-함수가 정의된 환경의 변수를 캡처합니다.
+클로저는 함수가 정의된 환경의 변수를 캡처하는 것입니다. 함수가 자신이 정의된 스코프 밖에서 실행되어도 해당 변수에 접근할 수 있습니다.
 
 ```scala
 def makeCounter(): () => Int = {
@@ -599,9 +625,9 @@ val anotherCounter = makeCounter()
 anotherCounter()  // 1 (독립적인 count)
 ```
 
-## 부분 함수 (Partial Function)
+#### 부분 함수 (Partial Function)
 
-일부 입력에 대해서만 정의된 함수입니다.
+PartialFunction은 일부 입력에 대해서만 정의된 함수입니다. isDefinedAt으로 정의 여부를 확인할 수 있으며, collect와 함께 자주 사용됩니다.
 
 ```scala
 val divide: PartialFunction[(Int, Int), Int] = {
@@ -625,9 +651,11 @@ val safeDivide = divide orElse {
 safeDivide((10, 0))  // 0
 ```
 
-## 흔한 실수와 Anti-patterns
+#### 흔한 실수와 Anti-patterns
 
-### ❌ 피해야 할 것
+고차 함수를 사용할 때 흔히 발생하는 실수와 올바른 해결 방법을 정리했습니다.
+
+**❌ 피해야 할 것**
 
 ```scala
 // 1. 불필요한 람다 래핑
@@ -651,7 +679,7 @@ list.map { x =>
 }
 ```
 
-### ✅ 올바른 방법
+**✅ 올바른 방법**
 
 ```scala
 // 1. 메서드 참조 사용 (eta expansion)
@@ -674,7 +702,9 @@ doubled.foreach(println)
 list.map(_ * 2).tapEach(println)
 ```
 
-### 성능 팁
+**성능 팁**
+
+큰 컬렉션 처리 시 view를 사용하면 지연 평가로 중간 컬렉션 생성을 피할 수 있습니다.
 
 ```scala
 // 체이닝 vs View
@@ -693,9 +723,11 @@ list.view.map(_ * 2).filter(_ > 10).take(5).toList
   .toList
 ```
 
-## 연습 문제
+#### 연습 문제
 
-### 1. 나만의 map 구현 ⭐⭐
+다음 연습 문제들을 통해 고차 함수 개념을 복습해보세요.
+
+**1. 나만의 map 구현 ⭐⭐**
 
 `myMap` 함수를 foldRight로 구현하세요.
 
@@ -713,7 +745,7 @@ myMap(List(1, 2, 3))(_ * 2)  // List(2, 4, 6)
 
 </details>
 
-### 2. 파이프라인 함수 ⭐⭐
+**2. 파이프라인 함수 ⭐⭐**
 
 여러 함수를 순차적으로 적용하는 `pipe` 함수를 구현하세요.
 
@@ -733,7 +765,7 @@ pipe(5)(
 
 </details>
 
-### 3. 메모이제이션 ⭐⭐⭐
+**3. 메모이제이션 ⭐⭐⭐**
 
 결과를 캐싱하는 고차 함수를 구현하세요.
 
@@ -758,7 +790,7 @@ fastFib(100)  // 빠르게 계산됨
 
 </details>
 
-## 다음 단계
+#### 다음 단계
 
 - [For Comprehension](../for-comprehensions/) — 모나딕 연산의 우아한 표현
 - [Implicit/Given](../implicits/) — 문맥적 추상화
