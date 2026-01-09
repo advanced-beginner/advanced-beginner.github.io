@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-08"
+lastmod: "2026-01-09"
 title: 마이크로서비스 연동
 weight: 4
 author: "@kimbenji"
@@ -8,7 +8,9 @@ author_url: "http://github.com/kimbenji"
 
 마이크로서비스 환경에서 Kafka를 활용한 이벤트 기반 통신을 구현합니다.
 
-## 시나리오: 주문 처리 시스템
+#### 시나리오: 주문 처리 시스템
+
+이 예제에서는 주문 서비스, 결제 서비스, 배송 서비스, 알림 서비스가 Kafka를 통해 이벤트를 주고받습니다. 주문 서비스가 주문을 생성하면 orders Topic에 이벤트를 발행합니다. 결제 서비스가 이를 수신하여 결제를 처리하고 payments Topic에 결과를 발행합니다. 배송 서비스는 결제 완료 이벤트를 수신하여 배송을 생성합니다. 알림 서비스는 모든 Topic을 구독하여 고객에게 알림을 발송합니다.
 
 ```mermaid
 flowchart LR
@@ -46,24 +48,20 @@ flowchart LR
     T1 & T2 & T3 --> N1
 ```
 
----
+#### 공통 이벤트 정의
 
-## 공통 이벤트 정의
+**이벤트 스키마**
 
-### 이벤트 스키마
+모든 이벤트는 BaseEvent를 상속합니다. eventId는 이벤트 고유 식별자, eventType은 이벤트 유형, occurredAt은 발생 시각, correlationId는 분산 추적을 위한 상관 ID입니다.
 
 ```java
-// common-events/src/main/java/events/BaseEvent.java
 public abstract class BaseEvent {
     private String eventId;
     private String eventType;
     private LocalDateTime occurredAt;
     private String correlationId;  // 추적용 ID
-
-    // 생성자, getter, setter
 }
 
-// OrderCreatedEvent.java
 public class OrderCreatedEvent extends BaseEvent {
     private String orderId;
     private String customerId;
@@ -72,7 +70,6 @@ public class OrderCreatedEvent extends BaseEvent {
     private String shippingAddress;
 }
 
-// PaymentCompletedEvent.java
 public class PaymentCompletedEvent extends BaseEvent {
     private String paymentId;
     private String orderId;
@@ -81,7 +78,6 @@ public class PaymentCompletedEvent extends BaseEvent {
     private PaymentStatus status;
 }
 
-// ShipmentCreatedEvent.java
 public class ShipmentCreatedEvent extends BaseEvent {
     private String shipmentId;
     private String orderId;
@@ -91,11 +87,11 @@ public class ShipmentCreatedEvent extends BaseEvent {
 }
 ```
 
----
+#### 주문 서비스 (Order Service)
 
-## 주문 서비스 (Order Service)
+**application.yml**
 
-### application.yml
+주문 서비스는 acks=all과 enable.idempotence=true로 설정하여 메시지 전송의 신뢰성을 높입니다. spring.json.type.mapping은 이벤트 클래스 매핑을 정의합니다.
 
 ```yaml
 spring:
@@ -118,7 +114,9 @@ kafka:
     orders: orders
 ```
 
-### OrderProducer
+**OrderProducer**
+
+OrderProducer는 주문 생성 시 OrderCreatedEvent를 발행합니다. orderId를 Key로 사용하여 같은 주문의 이벤트가 순서대로 처리되도록 보장합니다.
 
 ```java
 @Service
@@ -143,7 +141,6 @@ public class OrderProducer {
             .shippingAddress(order.getShippingAddress())
             .build();
 
-        // orderId를 Key로 사용하여 같은 주문은 같은 Partition으로
         return kafkaTemplate.send(ordersTopic, order.getId(), event)
             .whenComplete((result, ex) -> {
                 if (ex != null) {
@@ -159,7 +156,9 @@ public class OrderProducer {
 }
 ```
 
-### OrderController
+**OrderController**
+
+OrderController는 REST API로 주문을 받아 로컬 DB에 저장하고, 이벤트를 비동기로 발행한 후 즉시 응답을 반환합니다.
 
 ```java
 @RestController
@@ -184,11 +183,11 @@ public class OrderController {
 }
 ```
 
----
+#### 결제 서비스 (Payment Service)
 
-## 결제 서비스 (Payment Service)
+**PaymentConsumer**
 
-### PaymentConsumer
+PaymentConsumer는 orders Topic을 구독하여 주문 이벤트를 수신합니다. 멱등성 체크로 중복 처리를 방지하고, 결제 성공 시 PaymentCompletedEvent를, 실패 시 PaymentFailedEvent를 발행합니다.
 
 ```java
 @Service
@@ -235,20 +234,20 @@ public class PaymentConsumer {
 
         } catch (PaymentFailedException e) {
             log.error("결제 실패: orderId={}", event.getOrderId(), e);
-            // 결제 실패 이벤트 발행
             paymentProducer.publishPaymentFailed(event.getOrderId(), e.getMessage(), event.getCorrelationId());
-            ack.acknowledge();  // 실패해도 커밋 (재시도는 별도 처리)
+            ack.acknowledge();
 
         } catch (Exception e) {
             log.error("결제 처리 중 오류: orderId={}", event.getOrderId(), e);
-            // nack - 재시도
-            throw e;
+            throw e;  // 재시도
         }
     }
 }
 ```
 
-### PaymentProducer
+**PaymentProducer**
+
+PaymentProducer는 결제 결과에 따라 PaymentCompletedEvent 또는 PaymentFailedEvent를 발행합니다.
 
 ```java
 @Service
@@ -291,11 +290,11 @@ public class PaymentProducer {
 }
 ```
 
----
+#### 배송 서비스 (Shipment Service)
 
-## 배송 서비스 (Shipment Service)
+**ShipmentConsumer**
 
-### ShipmentConsumer
+ShipmentConsumer는 payments Topic을 구독하여 결제 완료 이벤트만 처리합니다. 결제 실패 이벤트는 무시합니다.
 
 ```java
 @Service
@@ -342,11 +341,11 @@ public class ShipmentConsumer {
 }
 ```
 
----
+#### 알림 서비스 (Notification Service)
 
-## 알림 서비스 (Notification Service)
+**NotificationConsumer**
 
-### NotificationConsumer
+알림 서비스는 여러 Topic을 동시에 구독하여 모든 이벤트에 대해 고객 알림을 발송합니다. eventType 헤더로 이벤트 유형을 구분합니다.
 
 ```java
 @Service
@@ -355,7 +354,6 @@ public class ShipmentConsumer {
 public class NotificationConsumer {
     private final NotificationService notificationService;
 
-    // 여러 토픽을 동시에 구독
     @KafkaListener(
         topics = {"${kafka.topics.orders}", "${kafka.topics.payments}", "${kafka.topics.shipments}"},
         groupId = "notification-service-group"
@@ -391,29 +389,16 @@ public class NotificationConsumer {
             ack.acknowledge();  // 알림 실패는 재시도하지 않음
         }
     }
-
-    private NotificationRequest createOrderNotification(String payload) {
-        OrderCreatedEvent event = parseEvent(payload, OrderCreatedEvent.class);
-        return NotificationRequest.builder()
-            .customerId(event.getCustomerId())
-            .type(NotificationType.EMAIL)
-            .template("ORDER_CREATED")
-            .data(Map.of(
-                "orderId", event.getOrderId(),
-                "totalAmount", event.getTotalAmount()
-            ))
-            .build();
-    }
-
-    // ... 다른 알림 생성 메서드
 }
 ```
 
----
+#### Saga 패턴: 분산 트랜잭션
 
-## Saga 패턴: 분산 트랜잭션
+마이크로서비스 환경에서는 여러 서비스에 걸친 트랜잭션을 처리해야 합니다. Saga 패턴은 각 서비스가 자체 트랜잭션을 관리하고, 실패 시 보상 트랜잭션을 실행하여 일관성을 유지합니다.
 
-### 보상 트랜잭션 구현
+**보상 트랜잭션 구현**
+
+OrderSagaOrchestrator는 결제 실패나 배송 실패 이벤트를 수신하여 주문을 취소하고 필요한 경우 환불을 요청합니다.
 
 ```java
 @Service
@@ -423,7 +408,6 @@ public class OrderSagaOrchestrator {
     private final OrderRepository orderRepository;
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    // 결제 실패 시 주문 취소
     @KafkaListener(topics = "${kafka.topics.payments}", groupId = "order-saga-group")
     public void handlePaymentEvent(@Payload String payload, @Header("eventType") String eventType) {
         if ("PAYMENT_FAILED".equals(eventType)) {
@@ -432,7 +416,6 @@ public class OrderSagaOrchestrator {
         }
     }
 
-    // 배송 실패 시 주문 취소 + 환불 요청
     @KafkaListener(topics = "${kafka.topics.shipments}", groupId = "order-saga-group")
     public void handleShipmentEvent(@Payload String payload, @Header("eventType") String eventType) {
         if ("SHIPMENT_FAILED".equals(eventType)) {
@@ -448,7 +431,6 @@ public class OrderSagaOrchestrator {
         order.cancel(reason);
         orderRepository.save(order);
 
-        // 주문 취소 이벤트 발행
         kafkaTemplate.send("orders", orderId, OrderCancelledEvent.builder()
             .orderId(orderId)
             .reason(reason)
@@ -458,7 +440,6 @@ public class OrderSagaOrchestrator {
     private void compensateOrderAndPayment(String orderId, String reason) {
         compensateOrder(orderId, reason);
 
-        // 환불 요청 이벤트 발행
         kafkaTemplate.send("refunds", orderId, RefundRequestedEvent.builder()
             .orderId(orderId)
             .reason(reason)
@@ -467,34 +448,13 @@ public class OrderSagaOrchestrator {
 }
 ```
 
----
+#### 모니터링: 분산 추적
 
-## 모니터링: 분산 추적
+**Correlation ID 전파**
 
-### Correlation ID 전파
+분산 환경에서 요청을 추적하려면 Correlation ID를 모든 이벤트에 전파해야 합니다. ProducerInterceptor를 사용하면 모든 메시지에 자동으로 추적 헤더를 추가할 수 있습니다.
 
 ```java
-@Configuration
-public class KafkaTracingConfig {
-
-    @Bean
-    public ProducerFactory<String, Object> producerFactory() {
-        Map<String, Object> config = new HashMap<>();
-        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-
-        DefaultKafkaProducerFactory<String, Object> factory =
-            new DefaultKafkaProducerFactory<>(config);
-
-        // Correlation ID 헤더 자동 추가
-        factory.setProducerInterceptorClasses(List.of(TracingProducerInterceptor.class));
-
-        return factory;
-    }
-}
-
-// TracingProducerInterceptor.java
 public class TracingProducerInterceptor implements ProducerInterceptor<String, Object> {
 
     @Override
@@ -510,12 +470,12 @@ public class TracingProducerInterceptor implements ProducerInterceptor<String, O
 
         return record;
     }
-
-    // ... 다른 메서드
 }
 ```
 
-### Consumer Lag 모니터링
+**Consumer Lag 모니터링**
+
+Consumer Lag은 마이크로서비스 상태를 파악하는 중요한 지표입니다. Lag이 증가하면 Consumer가 메시지를 제때 처리하지 못하고 있음을 의미합니다.
 
 ```java
 @Component
@@ -525,7 +485,7 @@ public class ConsumerLagMonitor {
     private final KafkaAdmin kafkaAdmin;
     private final MeterRegistry meterRegistry;
 
-    @Scheduled(fixedRate = 30000)  // 30초마다
+    @Scheduled(fixedRate = 30000)
     public void checkConsumerLag() {
         try (AdminClient adminClient = AdminClient.create(kafkaAdmin.getConfigurationProperties())) {
             ListConsumerGroupOffsetsResult offsetsResult =
@@ -535,7 +495,6 @@ public class ConsumerLagMonitor {
                 offsetsResult.partitionsToOffsetAndMetadata().get();
 
             offsets.forEach((tp, offset) -> {
-                // 현재 오프셋과 끝 오프셋 비교
                 long currentOffset = offset.offset();
                 long endOffset = getEndOffset(adminClient, tp);
                 long lag = endOffset - currentOffset;
@@ -556,11 +515,11 @@ public class ConsumerLagMonitor {
 }
 ```
 
----
+#### 테스트
 
-## 테스트
+**통합 테스트 (Testcontainers)**
 
-### 통합 테스트 (Testcontainers)
+Testcontainers를 사용하면 실제 Kafka 컨테이너에서 통합 테스트를 실행할 수 있습니다.
 
 ```java
 @SpringBootTest
@@ -585,20 +544,16 @@ class OrderServiceIntegrationTest {
 
     @Test
     void 주문_생성_시_이벤트가_발행된다() throws Exception {
-        // Given
         CreateOrderRequest request = new CreateOrderRequest(
             "customer-1",
             List.of(new OrderItem("product-1", 2, BigDecimal.valueOf(10000))),
             "서울시 강남구"
         );
 
-        // When
         ResponseEntity<OrderResponse> response = orderController.createOrder(request);
 
-        // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
-        // 이벤트 수신 확인
         ConsumerRecords<String, String> records = consumeRecords("orders", 5000);
         assertThat(records.count()).isEqualTo(1);
 
@@ -608,22 +563,11 @@ class OrderServiceIntegrationTest {
 }
 ```
 
----
+#### 체크리스트
 
-## 체크리스트
+마이크로서비스 Kafka 연동 시 확인해야 할 사항입니다. 모든 이벤트에 correlationId를 포함하여 분산 추적을 가능하게 합니다. Consumer에서 멱등성 처리를 구현하여 중복 메시지를 안전하게 처리합니다. Dead Letter Topic을 설정하여 처리 실패 메시지를 관리합니다. Saga 패턴으로 보상 트랜잭션을 구현합니다. Consumer Lag을 모니터링하여 처리 지연을 감지합니다. 재시도 정책을 설정하여 일시적 오류를 처리합니다. 이벤트 스키마 버전을 관리하여 하위 호환성을 유지합니다.
 
-- [ ] 모든 이벤트에 correlationId 포함
-- [ ] Consumer에서 멱등성 처리
-- [ ] Dead Letter Topic 설정
-- [ ] 보상 트랜잭션 (Saga) 구현
-- [ ] Consumer Lag 모니터링
-- [ ] 재시도 정책 설정
-- [ ] 이벤트 스키마 버전 관리
+#### 다음 단계
 
----
-
-## 다음 단계
-
-- [에러 처리]({{< relref "/kafka/concepts/error-handling" >}}) - DLT, 재시도 전략
-- [모니터링]({{< relref "/kafka/concepts/monitoring" >}}) - 메트릭 수집과 알림
-- [DDD 연동]({{< relref "/ddd/concepts/domain-events" >}}) - 도메인 이벤트 설계
+- [에러 처리](../../../kafka/concepts/error-handling/) - DLT, 재시도 전략
+- [모니터링](../../../kafka/concepts/monitoring/) - 메트릭 수집과 알림

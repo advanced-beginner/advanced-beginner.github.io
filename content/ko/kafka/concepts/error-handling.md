@@ -1,16 +1,16 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-09"
 title: 에러 처리 심화
 weight: 9
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
 
-# 에러 처리 심화
-
 Kafka Consumer의 에러 처리 전략과 Dead Letter Topic 패턴을 이해합니다.
 
-## 에러 유형
+#### 에러 유형
+
+Kafka Consumer에서 발생하는 에러는 크게 세 가지 유형으로 분류됩니다.
 
 ```mermaid
 flowchart TB
@@ -25,15 +25,17 @@ flowchart TB
     PERM --> DLT["Dead Letter Topic"]
 ```
 
-| 유형 | 예시 | 처리 방법 |
-|------|------|----------|
-| **역직렬화** | JSON 파싱 실패 | 건너뛰기 또는 DLT |
-| **일시적** | DB 연결 실패, 타임아웃 | 재시도 |
-| **영구적** | 유효성 검증 실패 | DLT |
+역직렬화 에러는 JSON 파싱 실패와 같은 메시지 형식 문제입니다. 메시지 자체가 잘못되었으므로 재시도해도 해결되지 않습니다. 건너뛰거나 Dead Letter Topic으로 보냅니다.
 
-## 기본 에러 처리
+일시적 에러는 DB 연결 실패, 타임아웃과 같이 일시적으로 발생하는 문제입니다. 잠시 후 재시도하면 성공할 가능성이 높으므로 재시도 전략을 적용합니다.
 
-### DefaultErrorHandler (Spring Kafka 2.8+)
+영구적 에러는 유효성 검증 실패와 같이 비즈니스 로직에서 발생하는 문제입니다. 재시도해도 결과가 같으므로 Dead Letter Topic으로 보내 별도로 처리합니다.
+
+#### 기본 에러 처리
+
+**DefaultErrorHandler (Spring Kafka 2.8+)**
+
+Spring Kafka 2.8부터 제공되는 기본 에러 핸들러입니다. 설정된 간격과 횟수로 재시도하고, 최대 재시도 횟수를 초과하면 레코드를 건너뜁니다.
 
 ```java
 @Configuration
@@ -49,28 +51,11 @@ public class KafkaConfig {
 }
 ```
 
-### 재시도 전략
+**재시도 전략**
 
-#### FixedBackOff
+FixedBackOff는 고정된 간격으로 재시도합니다. 위 예시에서는 1초 간격으로 3회 재시도합니다.
 
-```mermaid
-sequenceDiagram
-    participant C as Consumer
-    participant H as Handler
-
-    C->>H: 처리 시도 1
-    H--xC: 실패
-    Note over C: 1초 대기
-    C->>H: 처리 시도 2
-    H--xC: 실패
-    Note over C: 1초 대기
-    C->>H: 처리 시도 3
-    H--xC: 실패
-    Note over C: 최대 재시도 초과
-    C->>C: 레코드 건너뛰기
-```
-
-#### ExponentialBackOff
+ExponentialBackOff는 지수 형태로 대기 시간을 증가시킵니다. 첫 번째 재시도는 1초 후, 두 번째는 2초 후, 세 번째는 4초 후와 같이 대기 시간이 증가합니다.
 
 ```java
 @Bean
@@ -81,20 +66,9 @@ public DefaultErrorHandler errorHandler() {
 }
 ```
 
-```
-시도 1: 즉시
-시도 2: 1초 후
-시도 3: 2초 후
-시도 4: 4초 후
-시도 5: 8초 후
-...
-```
+#### Dead Letter Topic (DLT)
 
-## Dead Letter Topic (DLT)
-
-재시도 후에도 처리할 수 없는 메시지를 저장하는 별도 Topic입니다.
-
-### 기본 흐름
+Dead Letter Topic은 재시도 후에도 처리할 수 없는 메시지를 저장하는 별도 Topic입니다. 실패한 메시지를 버리지 않고 보관하여 나중에 분석하거나 수동으로 처리할 수 있습니다.
 
 ```mermaid
 flowchart LR
@@ -117,7 +91,9 @@ flowchart LR
     RETRY -->|성공| DONE[완료]
 ```
 
-### DeadLetterPublishingRecoverer
+**DeadLetterPublishingRecoverer**
+
+Spring Kafka에서 제공하는 DLT 발행 기능입니다. 최대 재시도 후에도 실패하면 메시지를 DLT로 전송합니다. 기본 DLT Topic 이름은 `원본-topic.DLT`입니다(예: `orders.DLT`).
 
 ```java
 @Configuration
@@ -138,9 +114,9 @@ public class KafkaConfig {
 }
 ```
 
-DLT Topic 명명 규칙: `원본-topic.DLT` (예: `orders.DLT`)
+**DLT 커스터마이징**
 
-### DLT 커스터마이징
+DLT Topic 이름을 변경하거나 특정 예외는 재시도하지 않도록 설정할 수 있습니다.
 
 ```java
 @Bean
@@ -171,11 +147,13 @@ public DefaultErrorHandler errorHandler(
 }
 ```
 
-## @RetryableTopic (권장)
+ValidationException이나 NullPointerException은 재시도해도 결과가 같으므로 즉시 DLT로 보냅니다.
 
-Spring Kafka 2.7+ 에서 제공하는 선언적 재시도 및 DLT 처리입니다.
+#### @RetryableTopic (권장)
 
-### 기본 사용법
+Spring Kafka 2.7 이상에서 제공하는 선언적 재시도 및 DLT 처리입니다. 어노테이션으로 재시도 정책을 정의하여 코드가 간결해집니다.
+
+**기본 사용법**
 
 ```java
 @Component
@@ -202,7 +180,9 @@ public class OrderConsumer {
 }
 ```
 
-### 재시도 Topic 구조
+**재시도 Topic 구조**
+
+@RetryableTopic은 자동으로 재시도 Topic을 생성합니다. 원본 orders에서 실패하면 orders-retry-0, orders-retry-1, orders-retry-2를 거쳐 최종적으로 orders-dlt로 전송됩니다.
 
 ```mermaid
 flowchart LR
@@ -216,7 +196,7 @@ flowchart LR
     R2 -->|성공| DONE3[완료]
 ```
 
-### 고급 설정
+**고급 설정**
 
 ```java
 @RetryableTopic(
@@ -234,22 +214,11 @@ public void consume(OrderEvent event) {
 }
 ```
 
-### 설정 옵션
+attempts는 총 시도 횟수이며 기본값은 3입니다. backoff.delay는 기본 대기 시간(기본값 1000ms), backoff.multiplier는 대기 시간 증가율(기본값 0으로 고정), backoff.maxDelay는 최대 대기 시간입니다. include는 재시도할 예외를, exclude는 재시도하지 않을 예외를 지정합니다.
 
-| 옵션 | 설명 | 기본값 |
-|------|------|--------|
-| `attempts` | 총 시도 횟수 | 3 |
-| `backoff.delay` | 기본 대기 시간 | 1000ms |
-| `backoff.multiplier` | 대기 시간 증가율 | 0 (고정) |
-| `backoff.maxDelay` | 최대 대기 시간 | - |
-| `include` | 재시도할 예외 | 모든 예외 |
-| `exclude` | 재시도 안할 예외 | - |
+#### 역직렬화 에러 처리
 
-## 역직렬화 에러 처리
-
-### ErrorHandlingDeserializer
-
-메시지 역직렬화 실패를 처리합니다.
+메시지 역직렬화가 실패하면 Consumer가 해당 메시지를 처리할 수 없습니다. ErrorHandlingDeserializer를 사용하면 역직렬화 실패를 애플리케이션에서 처리할 수 있습니다.
 
 ```yaml
 spring:
@@ -262,6 +231,8 @@ spring:
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
         spring.json.trusted.packages: "com.example.*"
 ```
+
+역직렬화에 실패하면 value가 null로 전달되고, 헤더에 예외 정보가 포함됩니다.
 
 ```java
 @KafkaListener(topics = "orders")
@@ -276,11 +247,11 @@ public void consume(ConsumerRecord<String, OrderEvent> record) {
 }
 ```
 
-## 에러 처리 패턴
+#### 에러 처리 패턴
 
-### 패턴 1: 재시도 + DLT
+**패턴 1: 재시도 + DLT**
 
-가장 일반적인 패턴입니다.
+가장 일반적인 패턴입니다. 일정 횟수 재시도 후 실패하면 DLT로 보냅니다.
 
 ```java
 @RetryableTopic(attempts = "4")
@@ -296,7 +267,9 @@ public void handleDlt(OrderEvent event) {
 }
 ```
 
-### 패턴 2: 조건부 재시도
+**패턴 2: 조건부 재시도**
+
+예외 유형에 따라 재시도 여부를 결정합니다. 일시적 에러는 재시도하고, 영구적 에러는 로깅 후 건너뜁니다.
 
 ```java
 @KafkaListener(topics = "orders")
@@ -314,7 +287,9 @@ public void consume(OrderEvent event) {
 }
 ```
 
-### 패턴 3: 수동 재처리
+**패턴 3: 수동 재처리**
+
+DLT에서 메시지를 읽어 수동으로 검토하고 재처리합니다.
 
 ```java
 @KafkaListener(topics = "orders-dlt")
@@ -335,44 +310,9 @@ public void processDlt(
 }
 ```
 
-## Seek을 이용한 재처리
+#### 모니터링 및 알림
 
-### 특정 오프셋으로 이동
-
-```java
-@KafkaListener(topics = "orders", id = "orderListener")
-public void consume(OrderEvent event) {
-    processOrder(event);
-}
-
-// 필요 시 오프셋 재설정
-public void reprocessFrom(long offset) {
-    Consumer<?, ?> consumer = kafkaListenerEndpointRegistry
-        .getListenerContainer("orderListener")
-        .getConsumerFactory()
-        .createConsumer();
-
-    consumer.seek(new TopicPartition("orders", 0), offset);
-}
-```
-
-### SeekToCurrentErrorHandler 동작
-
-```mermaid
-sequenceDiagram
-    participant C as Consumer
-    participant K as Kafka
-
-    C->>K: poll() → offset 10
-    Note over C: 처리 실패
-    C->>C: seek(offset 10)
-    Note over C: 재시도...
-    C->>K: poll() → offset 10 (다시)
-```
-
-## 모니터링 및 알림
-
-### DLT 메시지 알림
+DLT에 메시지가 도착하면 즉시 알림을 보내 빠르게 대응할 수 있도록 합니다.
 
 ```java
 @DltHandler
@@ -400,46 +340,12 @@ public void handleDlt(
 }
 ```
 
-### DLT 대시보드 데이터
+#### 정리
 
-```java
-@Scheduled(fixedRate = 60000)
-public void collectDltMetrics() {
-    // DLT Topic들의 메시지 수 집계
-    Map<String, Long> dltCounts = dltTopics.stream()
-        .collect(Collectors.toMap(
-            topic -> topic,
-            this::getMessageCount
-        ));
+에러 처리 전략으로 @RetryableTopic은 선언적 재시도를, DefaultErrorHandler는 프로그래밍적 처리를, @DltHandler는 DLT 처리를 제공합니다.
 
-    metricsService.recordDltCounts(dltCounts);
-}
-```
+에러 유형별로 일시적 에러는 지수 백오프로 재시도하고, 영구적 에러는 즉시 DLT로 이동하며, 역직렬화 에러는 로깅 후 건너뜁니다. DLT에 적재된 메시지는 알림을 보내고 수동 검토합니다.
 
-## 정리
-
-```mermaid
-flowchart TB
-    subgraph Strategy["에러 처리 전략"]
-        R["@RetryableTopic\n선언적 재시도"]
-        E["DefaultErrorHandler\n프로그래밍적"]
-        D["@DltHandler\nDLT 처리"]
-    end
-
-    subgraph Types["에러 유형별"]
-        T1["일시적 → 재시도"]
-        T2["영구적 → DLT"]
-        T3["역직렬화 → 건너뛰기/DLT"]
-    end
-```
-
-| 상황 | 권장 처리 |
-|------|----------|
-| **일시적 에러** | 지수 백오프로 재시도 |
-| **영구적 에러** | 즉시 DLT로 이동 |
-| **역직렬화 에러** | 로깅 후 건너뛰기 |
-| **DLT 적재** | 알림 + 수동 검토 |
-
-## 다음 단계
+#### 다음 단계
 
 - [모니터링 기초](../monitoring/) - Kafka 모니터링 및 메트릭

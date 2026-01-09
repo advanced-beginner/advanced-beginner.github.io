@@ -1,24 +1,20 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-09"
 title: 기본 예제
 weight: 2
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
 
-# 기본 Producer/Consumer 예제
-
 Spring Kafka를 사용한 기본적인 메시지 송수신 구현을 설명합니다.
 
-> **사전 학습**: [Quick Start](../../quick-start/)를 먼저 완료하면 이 문서를 더 쉽게 이해할 수 있습니다.
+Quick Start를 먼저 완료하면 이 문서를 더 쉽게 이해할 수 있습니다. 이 문서에서는 Quick Start의 단순한 예제를 확장하여 실무에서 사용하는 패턴들을 학습합니다.
 
-이 문서에서는 Quick Start의 단순한 예제를 확장하여 실무에서 사용하는 패턴들을 학습합니다.
+#### Producer 구현
 
----
+**KafkaTemplate 주입**
 
-## Producer 구현
-
-### KafkaTemplate 주입
+Spring Boot가 자동으로 KafkaTemplate을 생성하여 주입합니다. 별도의 Bean 설정 없이 의존성 주입을 받아 사용할 수 있습니다.
 
 ```java
 @Service
@@ -32,11 +28,9 @@ public class MessageProducer {
 }
 ```
 
-> Spring Boot가 자동으로 `KafkaTemplate`을 생성하여 주입합니다.
+**동기 전송**
 
-### 동기 전송
-
-Quick Start에서는 `send()`의 결과를 확인하지 않았습니다. 실무에서는 전송 결과를 확인해야 할 때가 많습니다.
+Quick Start에서는 send() 메서드의 결과를 확인하지 않았습니다. 실무에서는 전송 결과를 확인해야 할 때가 많습니다. get() 메서드를 호출하면 전송이 완료될 때까지 블로킹되어 결과를 확인할 수 있습니다.
 
 ```java
 public void sendSync(String topic, String message) {
@@ -67,7 +61,9 @@ sequenceDiagram
     KT-->>App: SendResult (블로킹)
 ```
 
-### 비동기 전송
+**비동기 전송**
+
+비동기 전송은 전송 요청 후 즉시 반환하고, 결과는 콜백으로 처리합니다. 이 방식은 처리량이 높지만 전송 실패 처리가 복잡해질 수 있습니다.
 
 ```java
 public void sendAsync(String topic, String message) {
@@ -99,7 +95,9 @@ sequenceDiagram
     KT-->>App: 콜백 실행
 ```
 
-### Key와 함께 전송
+**Key와 함께 전송**
+
+Message Key를 사용하면 동일한 Key를 가진 메시지가 항상 같은 Partition으로 전송됩니다. 이는 특정 데이터의 순서를 보장해야 할 때 필수적입니다.
 
 ```java
 public void sendWithKey(String topic, String key, String message) {
@@ -107,11 +105,9 @@ public void sendWithKey(String topic, String key, String message) {
 }
 ```
 
-**Key 사용 시 장점:**
-- 동일 Key는 동일 Partition으로 전송
-- 순서 보장 필요 시 필수
+**특정 Partition으로 전송**
 
-### 특정 Partition으로 전송
+필요한 경우 특정 Partition을 직접 지정하여 전송할 수도 있습니다.
 
 ```java
 public void sendToPartition(String topic, int partition, String key, String message) {
@@ -119,13 +115,11 @@ public void sendToPartition(String topic, int partition, String key, String mess
 }
 ```
 
----
+#### Consumer 구현
 
-## Consumer 구현
+**기본 @KafkaListener**
 
-### 기본 @KafkaListener
-
-Quick Start에서 사용한 가장 기본적인 형태입니다.
+Quick Start에서 사용한 가장 기본적인 형태입니다. @KafkaListener 어노테이션을 사용하면 지정한 Topic의 메시지를 자동으로 수신합니다.
 
 ```java
 @Component
@@ -138,9 +132,9 @@ public class MessageConsumer {
 }
 ```
 
-### ConsumerRecord로 수신
+**ConsumerRecord로 수신**
 
-메시지 외에 메타데이터도 필요할 때 사용합니다.
+메시지 본문 외에 파티션, 오프셋, 키, 타임스탬프 등의 메타데이터도 필요할 때 ConsumerRecord를 사용합니다.
 
 ```java
 @KafkaListener(topics = "quickstart-topic")
@@ -154,7 +148,9 @@ public void consume(ConsumerRecord<String, String> record) {
 }
 ```
 
-### 여러 Topic 구독
+**여러 Topic 구독**
+
+하나의 Listener로 여러 Topic을 구독할 수 있습니다.
 
 ```java
 @KafkaListener(topics = {"topic-a", "topic-b", "topic-c"})
@@ -163,17 +159,20 @@ public void consumeMultiple(String message) {
 }
 ```
 
-### 패턴으로 구독
+**패턴으로 구독**
+
+정규식 패턴을 사용하면 특정 패턴에 맞는 모든 Topic을 구독할 수 있습니다. 예를 들어 order-created, order-paid, order-shipped 등을 한 번에 구독합니다.
 
 ```java
 @KafkaListener(topicPattern = "order-.*")
 public void consumePattern(String message) {
-    // order-created, order-paid, order-shipped 등 모두 수신
     log.info("주문 이벤트: {}", message);
 }
 ```
 
-### 배치 수신
+**배치 수신**
+
+batch 옵션을 true로 설정하면 여러 메시지를 한 번에 받아 처리할 수 있습니다. 대량 데이터 처리 시 효율적입니다.
 
 ```java
 @KafkaListener(topics = "quickstart-topic", batch = "true")
@@ -185,13 +184,11 @@ public void consumeBatch(List<String> messages) {
 }
 ```
 
----
+#### 수동 Offset 커밋
 
-## 수동 Offset 커밋
+Quick Start에서는 자동 커밋을 사용했습니다. 메시지 처리가 실패했을 때 재처리가 필요하다면 수동 커밋을 사용합니다. 수동 커밋은 메시지 처리가 성공한 후에만 Offset을 커밋하므로, 실패 시 해당 메시지를 다시 처리할 수 있습니다.
 
-Quick Start에서는 자동 커밋을 사용했습니다. 메시지 처리 실패 시 재처리가 필요하다면 수동 커밋을 사용합니다.
-
-### 설정
+**설정**
 
 ```yaml
 spring:
@@ -202,7 +199,9 @@ spring:
       ack-mode: manual
 ```
 
-### 구현
+**구현**
+
+Acknowledgment 객체의 acknowledge() 메서드를 호출해야 Offset이 커밋됩니다. 처리 실패 시 커밋하지 않으면 다음 Consumer 시작 시 해당 메시지가 다시 전달됩니다.
 
 ```java
 @KafkaListener(topics = "quickstart-topic")
@@ -229,11 +228,11 @@ flowchart TB
     D --> F[재시작 시 재처리]
 ```
 
----
+#### 에러 처리
 
-## 에러 처리
+**ErrorHandler 설정**
 
-### ErrorHandler 설정
+DefaultErrorHandler를 Bean으로 등록하면 Consumer에서 예외 발생 시 자동으로 재시도합니다. FixedBackOff는 고정된 간격으로 지정된 횟수만큼 재시도합니다.
 
 ```java
 @Configuration
@@ -248,7 +247,9 @@ public class KafkaConfig {
 }
 ```
 
-### @RetryableTopic 사용
+**@RetryableTopic 사용**
+
+@RetryableTopic 어노테이션을 사용하면 선언적으로 재시도 정책을 정의할 수 있습니다. 재시도가 모두 실패하면 메시지가 Dead Letter Topic(DLT)으로 이동합니다.
 
 ```java
 @RetryableTopic(
@@ -263,7 +264,9 @@ public void consume(String message) {
 }
 ```
 
-### Dead Letter Topic (DLT)
+**Dead Letter Topic (DLT)**
+
+재시도 후에도 처리할 수 없는 메시지는 DLT로 이동합니다. DLT의 메시지는 별도로 모니터링하고 수동으로 처리합니다.
 
 ```mermaid
 flowchart LR
@@ -273,15 +276,13 @@ flowchart LR
     D -->|수동 처리| E[관리자]
 ```
 
----
-
-## 전체 예제 코드
+#### 전체 예제 코드
 
 Quick Start 예제를 확장한 버전입니다.
 
-### Producer (REST API 확장)
+**Producer (REST API 확장)**
 
-Quick Start에서는 단순 문자열만 전송했습니다. 실무에서는 key와 함께 JSON 객체를 전송하는 경우가 많습니다.
+Quick Start에서는 단순 문자열만 전송했습니다. 실무에서는 Key와 함께 JSON 객체를 전송하는 경우가 많습니다.
 
 ```java
 @RestController
@@ -312,7 +313,7 @@ public class MessageController {
 record MessageRequest(String topic, String key, String message) {}
 ```
 
-**API 사용 예시:**
+API 사용 예시입니다.
 
 ```bash
 # Quick Start와 동일한 방식
@@ -326,7 +327,9 @@ curl -X POST http://localhost:8080/api/messages/advanced \
   -d '{"topic": "quickstart-topic", "key": "user-123", "message": "Hello!"}'
 ```
 
-### Consumer (수동 커밋)
+**Consumer (수동 커밋)**
+
+수동 커밋을 사용하는 Consumer 구현입니다. 처리 성공 시에만 acknowledge()를 호출합니다.
 
 ```java
 @Component
@@ -362,11 +365,11 @@ public class MessageConsumer {
 }
 ```
 
----
+#### 테스트
 
-## 테스트
+**임베디드 Kafka**
 
-### 임베디드 Kafka
+@EmbeddedKafka 어노테이션을 사용하면 별도의 Kafka 설치 없이 통합 테스트를 실행할 수 있습니다.
 
 ```java
 @SpringBootTest
@@ -385,28 +388,12 @@ class KafkaIntegrationTest {
 }
 ```
 
----
+#### 정리
 
-## 정리
+Producer는 KafkaTemplate을 사용하여 메시지를 전송합니다. Consumer는 @KafkaListener 어노테이션으로 메시지를 수신합니다. 처리 완료를 명시적으로 확인하려면 Acknowledgment를 사용한 수동 커밋을 구현합니다. 에러 처리는 @RetryableTopic으로 재시도와 DLT를 설정합니다.
 
-| 구분 | 클래스/어노테이션 | 용도 |
-|------|-----------------|------|
-| **Producer** | `KafkaTemplate` | 메시지 전송 |
-| **Consumer** | `@KafkaListener` | 메시지 수신 |
-| **수동 커밋** | `Acknowledgment` | 처리 완료 확인 |
-| **에러 처리** | `@RetryableTopic` | 재시도 및 DLT |
+Quick Start와 기본 예제의 차이점을 정리하면, Quick Start는 Fire-and-forget 방식으로 전송하고 자동 커밋을 사용하며 에러 처리나 Key 사용이 없습니다. 기본 예제는 동기/비동기 전송을 선택할 수 있고 수동 커밋을 지원하며 재시도와 DLT를 통한 에러 처리, Key 사용을 지원합니다.
 
-## Quick Start vs 기본 예제
-
-| 항목 | Quick Start | 기본 예제 |
-|------|-------------|-----------|
-| 전송 방식 | Fire-and-forget | 동기/비동기 선택 |
-| Offset 커밋 | 자동 | 수동 가능 |
-| 에러 처리 | 없음 | 재시도 + DLT |
-| Key 사용 | 없음 | 지원 |
-
----
-
-## 다음 단계
+#### 다음 단계
 
 - [주문 시스템](../order-system/) - 실전 예제

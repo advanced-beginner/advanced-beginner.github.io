@@ -6,91 +6,80 @@ author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
 
-# Kafka 생태계
+Kafka는 메시지 브로커 그 이상의 역할을 합니다. Kafka를 중심으로 데이터 파이프라인을 구축하고, 스키마를 관리하며, 실시간 스트림 처리를 수행하는 완성된 생태계가 형성되어 있습니다. 이 생태계의 핵심 컴포넌트는 Kafka Connect, Schema Registry, Kafka Streams입니다. 각 컴포넌트는 독립적으로 동작하면서도 함께 사용할 때 더 큰 시너지를 발휘합니다.
 
-Kafka는 단순한 메시지 브로커를 넘어, 데이터 파이프라인과 스트림 처리 애플리케이션을 구축하기 위한 완성된 생태계를 제공합니다.
+Kafka Connect는 외부 시스템과 Kafka 사이에서 데이터를 이동시킵니다. 데이터베이스의 변경 사항을 Kafka로 스트리밍하거나, Kafka의 메시지를 Elasticsearch나 S3로 적재하는 작업을 코딩 없이 설정만으로 구현할 수 있습니다. Schema Registry는 메시지의 스키마를 중앙에서 관리하여 Producer와 Consumer 간의 데이터 호환성을 보장합니다. Kafka Streams는 Kafka 토픽에 저장된 데이터를 실시간으로 처리하고 변환하는 라이브러리입니다.
 
-| 검증 환경 | 버전 |
-|----------|------|
-| Kafka | 3.6.1 (KRaft) |
-| Confluent Platform | 7.5.x |
-| Spring Boot | 3.2.x |
-| Spring Kafka | 3.1.x |
-| Java | 17 |
+이 문서에서는 각 컴포넌트가 해결하는 문제, 동작 원리, 그리고 실제 사용 방법을 상세히 설명합니다. 모든 예제는 Confluent Platform 7.5.x와 Spring Boot 3.2.x 환경에서 검증되었습니다.
 
-> 이 문서의 코드 예제는 위 환경에서 컴파일 및 동작이 확인되었습니다.
+#### 생태계 전체 구조
 
-## 전체 아키텍처
+Kafka 생태계에서 데이터의 흐름을 이해하면 각 컴포넌트의 역할이 명확해집니다. 외부 시스템에서 데이터가 발생하면 Kafka Connect의 Source Connector가 이를 Kafka 토픽으로 전송합니다. 이 과정에서 Schema Registry가 메시지의 스키마를 검증하고 저장합니다. Kafka에 저장된 데이터는 Kafka Streams를 통해 실시간으로 처리되거나, Sink Connector를 통해 다른 시스템으로 전달됩니다.
+
+이러한 아키텍처의 장점은 각 컴포넌트가 독립적으로 확장 가능하다는 것입니다. 데이터 수집량이 늘어나면 Source Connector의 태스크 수를 늘리고, 처리량이 늘어나면 Streams 인스턴스를 추가합니다. 각 부분이 느슨하게 결합되어 있어 한 컴포넌트의 장애가 전체 시스템에 미치는 영향을 최소화할 수 있습니다.
 
 ```mermaid
 flowchart TB
-    subgraph DataSource["데이터 소스"]
+    subgraph Source["데이터 소스"]
         DB[(Database)]
         LOG[Log Files]
-        API[APIs]
+        API[REST APIs]
     end
 
-    subgraph DataSink["데이터 싱크"]
-        DW[(Data Warehouse)]
-        ES[(Elasticsearch)]
-        HDFS[(HDFS)]
-    end
-
-    subgraph KafkaPlatform["Kafka 플랫폼"]
-        CONNECT[Kafka Connect]
+    subgraph KafkaPlatform["Kafka Platform"]
+        CONNECT_SRC[Source Connector]
         BROKER[Kafka Broker]
         STREAMS[Kafka Streams]
         SCHEMA[Schema Registry]
+        CONNECT_SINK[Sink Connector]
     end
 
-    DataSource --"Source Connector"--> CONNECT
-    CONNECT --"데이터"--> BROKER
-    BROKER --"데이터"--> STREAMS
-    STREAMS --"처리된 데이터"--> BROKER
-    BROKER --"Sink Connector"--> CONNECT
-    CONNECT --> DataSink
+    subgraph Sink["데이터 싱크"]
+        DW[(Data Warehouse)]
+        ES[(Elasticsearch)]
+        S3[(S3)]
+    end
 
-    STREAMS --"스키마 조회/등록"--> SCHEMA
-    CONNECT --"스키마 조회/등록"--> SCHEMA
+    Source --> CONNECT_SRC
+    CONNECT_SRC --> BROKER
+    BROKER --> STREAMS
+    STREAMS --> BROKER
+    BROKER --> CONNECT_SINK
+    CONNECT_SINK --> Sink
+
+    CONNECT_SRC -.->|스키마 등록| SCHEMA
+    STREAMS -.->|스키마 조회| SCHEMA
 ```
 
-### 컴포넌트별 역할
+#### Kafka Connect
 
-| 컴포넌트 | 역할 | 사용 시기 |
-|---------|------|----------|
-| **Kafka Connect** | 외부 시스템 ↔ Kafka 데이터 이동 | DB, 파일, 클라우드 연동 |
-| **Schema Registry** | 메시지 스키마 관리 | 데이터 일관성 보장 필요 시 |
-| **Kafka Streams** | 실시간 스트림 처리 | 집계, 조인, 변환 필요 시 |
+Kafka Connect는 Kafka와 외부 시스템 간에 데이터를 안정적으로 스트리밍하기 위한 프레임워크입니다. 데이터베이스, 파일 시스템, 클라우드 스토리지, 검색 엔진 등 다양한 시스템과 Kafka를 연결할 수 있습니다. 가장 큰 장점은 코딩 없이 JSON 설정만으로 데이터 파이프라인을 구축할 수 있다는 것입니다.
 
----
+**왜 Kafka Connect가 필요한가**
 
-## 1. Kafka Connect
+Kafka와 외부 시스템을 연동할 때 직접 Producer나 Consumer를 개발할 수도 있습니다. 하지만 이 방식에는 여러 문제가 있습니다. 먼저 중복 개발이 발생합니다. MySQL에서 데이터를 가져오는 코드, PostgreSQL에서 가져오는 코드, Oracle에서 가져오는 코드가 각각 필요합니다. 비슷한 로직을 반복해서 작성해야 합니다.
 
-**Kafka Connect**는 Kafka와 다른 시스템 간에 데이터를 안정적으로 스트리밍하기 위한 프레임워크입니다. **코딩 없이 설정만으로** 데이터 파이프라인을 구축할 수 있습니다.
+에러 처리도 직접 구현해야 합니다. 네트워크 오류가 발생하면 어떻게 재시도할 것인지, 오프셋을 어떻게 관리할 것인지, 중복 데이터를 어떻게 방지할 것인지 모두 개발자가 결정하고 구현해야 합니다. 확장성 있는 병렬 처리 로직도 필요합니다. 단일 스레드로는 처리량이 부족할 때 어떻게 스케일 아웃할 것인지 고민해야 합니다.
 
-### 왜 Kafka Connect가 필요한가?
+Kafka Connect는 이 모든 문제를 해결합니다. 이미 검증된 Connector를 가져다 쓰면 되므로 개발 시간이 단축됩니다. 재시도, 오프셋 관리, 에러 처리가 프레임워크 레벨에서 제공됩니다. 분산 모드로 실행하면 여러 워커에서 태스크를 병렬로 처리하여 처리량을 높일 수 있습니다.
 
-직접 Producer/Consumer를 개발하면:
-- **중복 개발**: 비슷한 연동 코드를 매번 작성
-- **에러 처리**: 재시도, 오프셋 관리 직접 구현
-- **확장성**: 병렬 처리 로직 직접 구현
+**핵심 구성요소**
 
-Kafka Connect는 이를 표준화하여 **설정만으로** 안정적인 파이프라인을 제공합니다.
+Kafka Connect는 여러 개념으로 구성됩니다. Source Connector는 외부 시스템에서 데이터를 읽어 Kafka 토픽으로 전송합니다. Debezium MySQL Connector가 대표적인 예입니다. MySQL 데이터베이스의 변경 사항(INSERT, UPDATE, DELETE)을 실시간으로 감지하여 Kafka 토픽으로 스트리밍합니다.
 
-### 핵심 개념
+Sink Connector는 반대 방향으로 동작합니다. Kafka 토픽에서 메시지를 읽어 외부 시스템으로 전송합니다. Elasticsearch Sink Connector는 Kafka 토픽의 메시지를 Elasticsearch 인덱스로 적재합니다. S3 Sink Connector는 메시지를 AWS S3 버킷에 파일로 저장합니다.
 
-| 컴포넌트 | 역할 | 예시 |
-|---------|------|------|
-| **Source Connector** | 외부 시스템 → Kafka | DB 변경 → Kafka 토픽 |
-| **Sink Connector** | Kafka → 외부 시스템 | Kafka 토픽 → Elasticsearch |
-| **Converter** | 데이터 형식 변환 | JSON, Avro, Protobuf |
-| **Transform (SMT)** | 간단한 메시지 변환 | 필드 추가/제거, 라우팅 |
-| **Worker** | Connector를 실행하는 프로세스 | Standalone/Distributed |
+Converter는 데이터 형식을 변환합니다. Kafka 메시지는 바이트 배열이므로 실제 데이터 형식(JSON, Avro, Protobuf 등)과의 변환이 필요합니다. JsonConverter는 JSON 형식을, AvroConverter는 Avro 형식을 처리합니다.
 
-### Docker Compose 설정
+Transform(SMT, Single Message Transform)은 메시지를 변환하는 가벼운 처리기입니다. 필드를 추가하거나 제거하고, 필드 이름을 변경하거나, 특정 조건에 따라 메시지를 라우팅하는 등의 간단한 변환을 수행합니다. 복잡한 변환은 Kafka Streams를 사용해야 합니다.
+
+Worker는 Connector와 Task를 실행하는 JVM 프로세스입니다. Standalone 모드는 단일 워커에서 실행되며 개발과 테스트에 적합합니다. Distributed 모드는 여러 워커가 클러스터를 구성하며 프로덕션 환경에 적합합니다. 분산 모드에서는 워커가 추가되거나 제거될 때 태스크가 자동으로 재분배됩니다.
+
+**Docker Compose 설정**
+
+Kafka Connect를 실행하려면 먼저 Kafka 클러스터가 필요합니다. 아래 Docker Compose 설정은 KRaft 모드의 Kafka와 Kafka Connect를 함께 구성합니다. MySQL도 포함하여 CDC(Change Data Capture) 테스트를 바로 시작할 수 있습니다.
 
 ```yaml
-# docker-compose-connect.yml
 version: '3.8'
 services:
   kafka:
@@ -138,11 +127,13 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: rootpass
       MYSQL_DATABASE: orders
-    volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 ```
 
-### Source Connector 설정 예시: MySQL CDC
+**Source Connector 구성: MySQL CDC**
+
+Debezium MySQL Connector를 사용하면 MySQL 데이터베이스의 변경 사항을 실시간으로 Kafka에 스트리밍할 수 있습니다. 이 방식을 CDC(Change Data Capture)라고 합니다. MySQL의 바이너리 로그를 읽어서 INSERT, UPDATE, DELETE 이벤트를 감지합니다.
+
+아래 설정은 orders 데이터베이스의 order_items 테이블 변경 사항을 cdc.orders.order_items 토픽으로 전송합니다. database.server.id는 MySQL 복제에서 사용하는 고유 ID입니다. 같은 MySQL 서버에 여러 Connector를 연결할 때는 서로 다른 ID를 사용해야 합니다.
 
 ```json
 {
@@ -165,6 +156,8 @@ services:
 }
 ```
 
+Connector를 등록하고 관리하는 것은 REST API를 통해 수행합니다. 아래 명령은 Connector를 등록하고 상태를 확인하는 방법입니다. Connector가 성공적으로 시작되면 status 필드가 RUNNING으로 표시됩니다.
+
 ```bash
 # Connector 등록
 curl -X POST http://localhost:8083/connectors \
@@ -174,11 +167,15 @@ curl -X POST http://localhost:8083/connectors \
 # Connector 상태 확인
 curl http://localhost:8083/connectors/mysql-source-connector/status
 
-# Connector 목록
+# Connector 목록 조회
 curl http://localhost:8083/connectors
 ```
 
-### Sink Connector 설정 예시: Elasticsearch
+**Sink Connector 구성: Elasticsearch**
+
+Sink Connector는 Kafka 토픽의 메시지를 외부 시스템으로 전송합니다. Elasticsearch Sink Connector는 Kafka 메시지를 Elasticsearch 인덱스로 적재합니다. 이를 통해 Kafka에 저장된 데이터를 검색 가능하게 만들 수 있습니다.
+
+아래 설정은 cdc.orders.order_items 토픽의 메시지를 Elasticsearch로 전송합니다. key.ignore가 true이면 메시지 키를 Elasticsearch 문서 ID로 사용하지 않습니다. behavior.on.null.values가 delete이면 값이 null인 메시지를 받았을 때 해당 문서를 삭제합니다. 이는 CDC에서 DELETE 이벤트를 처리하는 방식입니다.
 
 ```json
 {
@@ -196,88 +193,60 @@ curl http://localhost:8083/connectors
 }
 ```
 
-### Connect 데이터 흐름
+**자주 사용되는 Connector**
+
+Kafka Connect 생태계에는 다양한 Connector가 존재합니다. Debezium 프로젝트는 MySQL, PostgreSQL, MongoDB, Oracle 등 주요 데이터베이스의 CDC Connector를 제공합니다. Confluent는 JDBC, Elasticsearch, S3, HDFS 등 다양한 시스템용 Connector를 제공합니다. 대부분의 일반적인 사용 사례는 이미 존재하는 Connector로 해결할 수 있습니다.
+
+Connector를 선택할 때는 커뮤니티 활성도와 문서화 수준을 확인해야 합니다. Debezium과 Confluent가 제공하는 Connector는 활발하게 유지보수되고 있으며 문서화가 잘 되어 있습니다. 직접 Connector를 개발해야 하는 경우는 드물지만, 필요하다면 Kafka Connect API를 사용하여 커스텀 Connector를 구현할 수 있습니다.
+
+#### Schema Registry
+
+Schema Registry는 Kafka 메시지의 스키마를 중앙에서 관리하는 서비스입니다. Producer가 메시지를 보낼 때 스키마를 등록하고, Consumer가 메시지를 읽을 때 스키마를 조회합니다. 이를 통해 Producer와 Consumer 간의 데이터 호환성을 보장할 수 있습니다.
+
+**왜 Schema Registry가 필요한가**
+
+JSON 형식의 메시지를 주고받을 때 흔히 발생하는 문제가 있습니다. Producer가 user_id를 숫자로 보냈는데 Consumer가 문자열을 기대한다면 역직렬화 오류가 발생합니다. 이 문제는 런타임에 발견되므로 이미 장애가 발생한 후입니다.
+
+스키마가 변경되는 경우는 더 복잡합니다. 새로운 필드를 추가하거나 기존 필드를 삭제할 때 모든 Consumer가 동시에 업데이트되지 않습니다. 일부 Consumer는 이전 버전의 스키마를 사용하고, 일부는 새 버전을 사용합니다. 이 상황에서 메시지가 올바르게 처리되려면 스키마 호환성이 보장되어야 합니다.
+
+Schema Registry는 이 문제를 해결합니다. 모든 스키마가 중앙에 등록되고, 새로운 스키마가 등록될 때 기존 스키마와의 호환성이 자동으로 검사됩니다. 호환되지 않는 변경은 등록 단계에서 거부되므로 런타임 오류를 방지할 수 있습니다.
 
 ```mermaid
-graph LR
-    A[MySQL] --"Debezium CDC"--> B[Kafka Connect]
-    B --"cdc.orders.* 토픽"--> C[Kafka]
-    C --"cdc.orders.* 토픽"--> D[Kafka Connect]
-    D --"Elasticsearch Sink"--> E[Elasticsearch]
+flowchart LR
+    P[Producer] -->|1. 스키마 등록| SR[Schema Registry]
+    SR -->|2. 스키마 ID 반환| P
+    P -->|3. 스키마 ID + 데이터| K[Kafka]
+    K -->|4. 스키마 ID + 데이터| C[Consumer]
+    C -->|5. 스키마 ID로 조회| SR
+    SR -->|6. 스키마 반환| C
+    C -->|7. 역직렬화| APP[Application]
 ```
 
-### 주요 Connector 목록
+**Docker Compose 설정**
 
-| Connector | 용도 | 제공 |
-|-----------|------|------|
-| **Debezium MySQL** | MySQL CDC | Debezium |
-| **Debezium PostgreSQL** | PostgreSQL CDC | Debezium |
-| **JDBC Source/Sink** | 범용 DB 연동 | Confluent |
-| **Elasticsearch Sink** | 검색 엔진 연동 | Confluent |
-| **S3 Sink** | AWS S3 적재 | Confluent |
-| **HDFS Sink** | Hadoop 적재 | Confluent |
-| **MongoDB Source/Sink** | MongoDB 연동 | MongoDB |
-
----
-
-## 2. Schema Registry
-
-**Schema Registry**는 메시지의 스키마(구조)를 중앙에서 관리하고 검증하는 서비스입니다.
-
-### 왜 Schema Registry가 필요한가?
-
-스키마가 없다면:
-
-```
-Producer가 전송: { "user_id": 123 }       (int)
-Consumer가 기대: { "user_id": "123" }     (string)
-
-→ 역직렬화 오류!
-→ 런타임에 발견 → 장애
-```
-
-Schema Registry는 **컴파일 타임**에 호환성을 검증합니다.
-
-```mermaid
-graph TD
-    subgraph Before["Schema Registry 없음"]
-        P["Producer\n(user_id: int)"] --> K[Kafka]
-        K --> C["Consumer\n(user_id: string 예상)"]
-        C --> X["역직렬화 오류!"]
-    end
-
-    subgraph After["Schema Registry 도입"]
-        P2["Producer\n(user_id: int)"] --"스키마 검증"--> SR[Schema Registry]
-        SR --"성공"--> P2
-        P2 --"Avro + 스키마 ID"--> K2[Kafka]
-        K2 --> C2["Consumer"]
-        C2 --"스키마 ID로 조회"--> SR
-        SR --"스키마 반환"--> C2
-        C2 --> OK["안전하게 역직렬화"]
-    end
-```
-
-### Docker Compose 설정
+Schema Registry는 Kafka 클러스터와 별도의 서비스로 실행됩니다. 내부적으로 스키마 정보를 _schemas라는 Kafka 토픽에 저장합니다. 아래 설정을 기존 Docker Compose 파일에 추가하면 됩니다.
 
 ```yaml
-# docker-compose-schema.yml (기존에 추가)
-  schema-registry:
-    image: confluentinc/cp-schema-registry:7.5.0
-    hostname: schema-registry
-    depends_on:
-      - kafka
-    ports:
-      - "8081:8081"
-    environment:
-      SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092
-      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+schema-registry:
+  image: confluentinc/cp-schema-registry:7.5.0
+  hostname: schema-registry
+  depends_on:
+    - kafka
+  ports:
+    - "8081:8081"
+  environment:
+    SCHEMA_REGISTRY_HOST_NAME: schema-registry
+    SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092
+    SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
 ```
 
-### Avro 스키마 정의
+**Avro 스키마 정의**
+
+Schema Registry는 Avro, Protobuf, JSON Schema 형식을 지원합니다. Avro가 가장 널리 사용되는 형식입니다. Avro는 스키마가 데이터와 함께 저장되며, 풍부한 데이터 타입을 지원하고, 스키마 진화(evolution)를 위한 규칙이 잘 정의되어 있습니다.
+
+아래는 주문 데이터를 위한 Avro 스키마 예시입니다. 각 필드의 타입과 이름이 명시되어 있습니다. logicalType은 논리적 타입을 지정합니다. timestamp-millis는 long 타입 값이 밀리초 단위 타임스탬프임을 나타냅니다.
 
 ```json
-// order.avsc
 {
   "type": "record",
   "name": "Order",
@@ -292,24 +261,11 @@ graph TD
 }
 ```
 
-### Spring Boot 연동
+**Spring Boot 연동**
 
-```xml
-<!-- pom.xml -->
-<dependency>
-    <groupId>io.confluent</groupId>
-    <artifactId>kafka-avro-serializer</artifactId>
-    <version>7.5.0</version>
-</dependency>
-<dependency>
-    <groupId>org.apache.avro</groupId>
-    <artifactId>avro</artifactId>
-    <version>1.11.3</version>
-</dependency>
-```
+Spring Boot에서 Schema Registry를 사용하려면 Confluent의 Avro 직렬화 라이브러리를 의존성에 추가해야 합니다. kafka-avro-serializer가 Producer용, kafka-avro-deserializer가 Consumer용입니다. 실제로는 둘 다 같은 라이브러리에 포함되어 있습니다.
 
 ```yaml
-# application.yml
 spring:
   kafka:
     bootstrap-servers: localhost:9092
@@ -324,12 +280,9 @@ spring:
       specific.avro.reader: true
 ```
 
-```java
-import com.example.kafka.Order;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Component;
-import lombok.RequiredArgsConstructor;
+specific.avro.reader가 true이면 Avro가 생성한 구체적인 Java 클래스로 역직렬화됩니다. false이면 GenericRecord라는 범용 객체로 역직렬화됩니다. 구체적인 클래스를 사용하면 IDE의 자동완성과 컴파일 시점 타입 체크를 활용할 수 있어 더 안전합니다.
 
+```java
 @Component
 @RequiredArgsConstructor
 public class OrderAvroProducer {
@@ -342,14 +295,17 @@ public class OrderAvroProducer {
 }
 ```
 
-### 스키마 호환성 정책
+**스키마 호환성 정책**
 
-| 정책 | 설명 | 허용되는 변경 |
-|------|------|--------------|
-| **BACKWARD** | 새 스키마로 이전 데이터 읽기 가능 | 필드 삭제, 기본값 있는 필드 추가 |
-| **FORWARD** | 이전 스키마로 새 데이터 읽기 가능 | 필드 추가, 기본값 있는 필드 삭제 |
-| **FULL** | 양방향 호환 | 기본값 있는 필드만 추가/삭제 |
-| **NONE** | 호환성 검사 안 함 | 모든 변경 허용 (비권장) |
+Schema Registry는 네 가지 호환성 정책을 지원합니다. 적절한 정책을 선택하는 것이 중요합니다.
+
+BACKWARD 호환성은 새로운 스키마로 이전 데이터를 읽을 수 있음을 보장합니다. Consumer를 먼저 업데이트하는 시나리오에 적합합니다. 필드를 삭제하거나 기본값이 있는 필드를 추가하는 것이 허용됩니다. 이것이 기본 정책입니다.
+
+FORWARD 호환성은 이전 스키마로 새로운 데이터를 읽을 수 있음을 보장합니다. Producer를 먼저 업데이트하는 시나리오에 적합합니다. 필드를 추가하거나 기본값이 있는 필드를 삭제하는 것이 허용됩니다.
+
+FULL 호환성은 양방향 호환을 보장합니다. Producer와 Consumer를 어떤 순서로든 업데이트할 수 있습니다. 기본값이 있는 필드만 추가하거나 삭제할 수 있으므로 가장 제한적입니다.
+
+NONE은 호환성 검사를 수행하지 않습니다. 모든 변경이 허용되지만, 런타임 오류의 위험이 있으므로 권장하지 않습니다.
 
 ```bash
 # 호환성 정책 설정
@@ -365,75 +321,38 @@ curl -X POST http://localhost:8081/subjects/orders-avro-value/versions \
 # 호환성 테스트
 curl -X POST http://localhost:8081/compatibility/subjects/orders-avro-value/versions/latest \
   -H "Content-Type: application/vnd.schemaregistry.v1+json" \
-  -d '{"schema": "{\"type\":\"record\",\"name\":\"Order\",...}"}'
+  -d '{"schema": "{...new schema...}"}'
 ```
 
----
+#### Kafka Streams
 
-## 3. Kafka Streams
+Kafka Streams는 Kafka 토픽의 데이터를 실시간으로 처리하는 Java 라이브러리입니다. Apache Flink나 Spark Streaming과 달리 별도의 클러스터가 필요 없습니다. 일반 Java 애플리케이션에 라이브러리로 추가하여 사용합니다. 애플리케이션 인스턴스를 늘리면 자동으로 병렬 처리됩니다.
 
-**Kafka Streams**는 Kafka 토픽의 데이터를 실시간으로 처리하고 분석하는 **자바 라이브러리**입니다.
+**왜 Kafka Streams인가**
 
-### 왜 Kafka Streams인가?
+실시간 데이터 처리에는 여러 선택지가 있습니다. Consumer를 직접 구현하면 간단한 변환은 가능하지만, 윈도우 집계, 스트림 조인, 상태 관리 등의 복잡한 처리는 직접 구현해야 합니다. Apache Flink나 Spark Streaming은 풍부한 기능을 제공하지만 별도의 클러스터를 운영해야 합니다.
 
-| 방식 | 복잡도 | 인프라 | 사용 시기 |
-|------|-------|--------|----------|
-| **Consumer 직접 구현** | 높음 | 없음 | 단순 소비 |
-| **Kafka Streams** | 중간 | 없음 | 실시간 처리 |
-| **Apache Flink** | 높음 | 별도 클러스터 | 대규모 처리 |
-| **Apache Spark** | 높음 | 별도 클러스터 | 배치 + 스트림 |
+Kafka Streams는 중간 지점에 위치합니다. 윈도우 집계, 스트림-테이블 조인, 상태 저장소 등 스트림 처리에 필요한 기본 기능을 제공하면서도 별도 클러스터 없이 라이브러리만으로 동작합니다. 처리량을 늘리려면 애플리케이션 인스턴스를 추가하면 됩니다. Kafka의 Consumer Group과 동일한 방식으로 파티션이 자동 분배됩니다.
 
-Kafka Streams는 **별도 클러스터 없이** 라이브러리만으로 스트림 처리가 가능합니다.
+**핵심 개념**
 
-### 핵심 개념
+Kafka Streams에서 데이터는 KStream과 KTable이라는 두 가지 추상화로 표현됩니다.
 
-| 개념 | 설명 | 예시 |
-|------|------|------|
-| **KStream** | 이벤트 스트림 (변경 불가) | 클릭 로그, 주문 이벤트 |
-| **KTable** | 상태 테이블 (최신 값만) | 사용자 프로필, 상품 재고 |
-| **GlobalKTable** | 전체 복제 테이블 | 코드 테이블, 설정 |
-| **Topology** | 처리 흐름 정의 | DAG 형태 |
+KStream은 레코드 스트림입니다. 각 레코드는 독립적인 이벤트로 취급됩니다. 클릭 로그, 주문 이벤트, 센서 데이터 등 시간에 따라 발생하는 이벤트를 처리할 때 적합합니다. 같은 키를 가진 여러 레코드가 있어도 각각 별개로 처리됩니다.
 
-### Spring Boot 연동
+KTable은 변경 로그(changelog) 스트림입니다. 각 키에 대해 최신 값만 유지됩니다. 사용자 프로필, 상품 재고, 설정 값 등 현재 상태를 나타내는 데이터에 적합합니다. 같은 키로 새 레코드가 들어오면 이전 값은 덮어씌워집니다.
 
-```xml
-<!-- pom.xml -->
-<dependency>
-    <groupId>org.apache.kafka</groupId>
-    <artifactId>kafka-streams</artifactId>
-</dependency>
-<dependency>
-    <groupId>org.springframework.kafka</groupId>
-    <artifactId>spring-kafka</artifactId>
-</dependency>
-```
+GlobalKTable은 모든 파티션의 데이터가 모든 인스턴스에 복제되는 특별한 테이블입니다. 작은 크기의 참조 데이터(국가 코드, 상품 카테고리 등)를 스트림과 조인할 때 유용합니다.
 
-```yaml
-# application.yml
-spring:
-  kafka:
-    streams:
-      application-id: order-aggregation-app
-      bootstrap-servers: localhost:9092
-      properties:
-        default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
-        default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
-```
+Topology는 데이터 처리 흐름을 정의하는 DAG(Directed Acyclic Graph)입니다. 소스 프로세서가 토픽에서 데이터를 읽고, 스트림 프로세서가 데이터를 변환하고, 싱크 프로세서가 결과를 토픽에 씁니다.
 
-### 실시간 주문 집계 예제
+**실시간 주문 집계 예제**
+
+아래 예제는 주문 이벤트를 실시간으로 집계하여 고객별 5분 단위 주문 총액을 계산합니다. 동시에 10만원 이상의 고액 주문을 별도 토픽으로 필터링합니다.
+
+Spring Boot의 @EnableKafkaStreams 어노테이션을 사용하면 Kafka Streams를 자동으로 구성할 수 있습니다. KStream 빈을 정의하면 애플리케이션 시작 시 자동으로 토폴로지가 구성되고 실행됩니다.
 
 ```java
-import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.kstream.*;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.annotation.EnableKafkaStreams;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
-
-import java.time.Duration;
-
 @Slf4j
 @Configuration
 @EnableKafkaStreams
@@ -443,29 +362,25 @@ public class OrderStreamConfig {
 
     @Bean
     public KStream<String, String> orderStream(StreamsBuilder builder) {
-        // 1. orders 토픽에서 스트림 생성
         KStream<String, String> orders = builder.stream("orders");
 
-        // 2. 고객별 실시간 주문 금액 집계
         KTable<Windowed<String>, Double> customerTotals = orders
-            .mapValues(this::extractAmount)  // 주문 금액 추출
-            .groupBy((key, amount) -> extractCustomerId(key))  // 고객 ID로 그룹화
-            .windowedBy(TimeWindows.ofSizeWithNoGrace(Duration.ofMinutes(5)))  // 5분 윈도우
+            .mapValues(this::extractAmount)
+            .groupBy((key, amount) -> extractCustomerId(key))
+            .windowedBy(TimeWindows.ofSizeWithNoGrace(Duration.ofMinutes(5)))
             .aggregate(
-                () -> 0.0,  // 초기값
-                (customerId, amount, total) -> total + amount,  // 집계 로직
+                () -> 0.0,
+                (customerId, amount, total) -> total + amount,
                 Materialized.with(Serdes.String(), Serdes.Double())
             );
 
-        // 3. 결과를 customer-totals 토픽으로 전송
         customerTotals.toStream()
             .map((windowedKey, total) ->
                 KeyValue.pair(windowedKey.key(),
-                    String.format("{\"customerId\":\"%s\",\"total\":%.2f,\"window\":\"%s\"}",
-                        windowedKey.key(), total, windowedKey.window().startTime())))
+                    String.format("{\"customerId\":\"%s\",\"total\":%.2f}",
+                        windowedKey.key(), total)))
             .to("customer-totals");
 
-        // 4. 고액 주문 필터링 (실시간 알림용)
         orders
             .filter((key, value) -> extractAmount(value) > 100000)
             .to("high-value-orders");
@@ -483,56 +398,47 @@ public class OrderStreamConfig {
     }
 
     private String extractCustomerId(String key) {
-        // key format: "order-{customerId}-{orderId}"
         String[] parts = key.split("-");
         return parts.length > 1 ? parts[1] : "unknown";
     }
 }
 ```
 
-### Streams Topology 시각화
-
-```mermaid
-graph TD
-    A[orders 토픽] --> B[mapValues: 금액 추출]
-    B --> C[groupBy: 고객 ID]
-    C --> D[windowedBy: 5분 윈도우]
-    D --> E[aggregate: 금액 합산]
-    E --> F[customer-totals 토픽]
-
-    A --> G[filter: 10만원 초과]
-    G --> H[high-value-orders 토픽]
+```yaml
+spring:
+  kafka:
+    streams:
+      application-id: order-aggregation-app
+      bootstrap-servers: localhost:9092
+      properties:
+        default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+        default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
 ```
 
-### KStream vs KTable
+**KStream과 KTable 조인**
+
+스트림 처리에서 자주 필요한 패턴 중 하나는 이벤트 스트림에 참조 데이터를 결합하는 것입니다. 예를 들어 클릭 이벤트에 사용자 프로필 정보를 추가하거나, 주문 이벤트에 상품 정보를 추가하는 경우입니다.
+
+KStream과 KTable을 조인하면 스트림의 각 레코드에 테이블의 현재 값이 결합됩니다. 테이블의 값이 업데이트되면 이후 조인에 반영됩니다. 이는 데이터베이스 조인과 유사하지만, 데이터가 실시간으로 흐른다는 점이 다릅니다.
 
 ```java
-// KStream: 모든 이벤트 처리
 KStream<String, String> clickStream = builder.stream("clicks");
-// 클릭 1: {userId: A, page: home}
-// 클릭 2: {userId: A, page: product}
-// → 두 이벤트 모두 처리됨
-
-// KTable: 최신 값만 유지
 KTable<String, String> userProfiles = builder.table("user-profiles");
-// 업데이트 1: {userId: A, name: "Kim"}
-// 업데이트 2: {userId: A, name: "Lee"}
-// → A의 값은 "Lee"만 유지
 
-// Stream-Table 조인
 KStream<String, String> enrichedClicks = clickStream.join(
     userProfiles,
     (click, profile) -> click + " by " + profile
 );
 ```
 
----
+#### 문제 해결 가이드
 
-## 트러블슈팅 가이드
+Kafka 생태계 컴포넌트를 운영하다 보면 다양한 문제를 마주하게 됩니다. 자주 발생하는 문제와 해결 방법을 정리합니다.
 
-### Kafka Connect 문제
+**Kafka Connect 문제**
 
-**Connector가 FAILED 상태**
+Connector가 FAILED 상태가 되면 먼저 REST API로 상태를 확인합니다. trace 필드에 상세한 오류 메시지가 포함되어 있습니다. 설정 오류인 경우가 많으므로 연결 정보, 인증 정보, 테이블 이름 등을 확인합니다. 일시적인 네트워크 오류라면 Connector를 재시작하면 됩니다.
+
 ```bash
 # 상태 확인
 curl http://localhost:8083/connectors/my-connector/status
@@ -542,32 +448,28 @@ docker logs connect 2>&1 | grep -i error
 
 # Connector 재시작
 curl -X POST http://localhost:8083/connectors/my-connector/restart
-```
 
-**Task가 실패하는 경우**
-```bash
-# Task 개별 재시작
+# 특정 Task 재시작
 curl -X POST http://localhost:8083/connectors/my-connector/tasks/0/restart
 ```
 
-### Schema Registry 문제
+**Schema Registry 문제**
 
-**호환성 오류**
+호환성 오류가 발생하면 새 스키마가 기존 스키마와 호환되지 않는다는 의미입니다. 먼저 현재 호환성 정책을 확인하고, 기존 스키마와 새 스키마를 비교합니다. BACKWARD 호환성에서는 필드 추가 시 반드시 기본값을 지정해야 합니다. 정책을 변경해야 한다면 데이터 마이그레이션 계획을 세워야 합니다.
+
+```bash
+# 호환성 정책 확인
+curl http://localhost:8081/config/topic-value
+
+# 기존 스키마 확인
+curl http://localhost:8081/subjects/topic-value/versions/latest
 ```
-io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException:
-Schema being registered is incompatible with an earlier schema
-```
 
-해결:
-1. 호환성 정책 확인: `curl http://localhost:8081/config/topic-value`
-2. 기존 스키마 확인: `curl http://localhost:8081/subjects/topic-value/versions/latest`
-3. 호환되는 변경만 적용하거나 정책 변경
+**Kafka Streams 문제**
 
-### Kafka Streams 문제
+리밸런싱이 자주 발생하면 처리 성능에 영향을 줍니다. max.poll.interval.ms와 session.timeout.ms 값을 조정하여 안정성을 높일 수 있습니다. 처리 시간이 긴 경우 max.poll.interval.ms를 늘려야 합니다. 상태 저장소 오류가 발생하면 상태 디렉토리를 정리하고 재시작합니다. 다만 이 경우 상태가 처음부터 다시 구축됩니다.
 
-**리밸런싱 자주 발생**
 ```yaml
-# application.yml 튜닝
 spring:
   kafka:
     streams:
@@ -577,38 +479,20 @@ spring:
         num.stream.threads: 2
 ```
 
-**상태 저장소 오류**
-```bash
-# 상태 디렉토리 정리
-rm -rf /tmp/kafka-streams/<application-id>
-```
+#### 컴포넌트 선택 가이드
 
----
+Kafka 생태계의 각 컴포넌트는 서로 다른 문제를 해결합니다. 상황에 맞는 컴포넌트를 선택하는 것이 중요합니다.
 
-## 정리
+외부 시스템과의 데이터 연동이 필요하면 Kafka Connect를 사용합니다. 데이터베이스 변경 사항을 Kafka로 스트리밍하거나, Kafka의 데이터를 데이터 웨어하우스나 검색 엔진으로 적재하는 경우입니다. 대부분의 일반적인 시스템용 Connector가 이미 존재하므로 코딩 없이 설정만으로 파이프라인을 구축할 수 있습니다.
 
-| 컴포넌트 | 한 줄 요약 | 주요 사용 사례 | 복잡도 |
-|---------|-----------|---------------|--------|
-| **Kafka Connect** | 코드 없이 데이터 파이프라인 | DB ↔ Kafka, S3 ↔ Kafka | 낮음 |
-| **Schema Registry** | 스키마 중앙 관리 | 데이터 거버넌스, Avro/Protobuf | 중간 |
-| **Kafka Streams** | 실시간 스트림 처리 | 실시간 집계, 이벤트 기반 서비스 | 중간 |
+데이터 스키마의 일관성과 진화 관리가 필요하면 Schema Registry를 사용합니다. 여러 팀이 동일한 토픽을 사용하거나, 스키마 변경이 빈번한 경우에 특히 유용합니다. Avro나 Protobuf를 사용하면 스키마 호환성이 자동으로 검증되고, 타입 안전성이 보장됩니다.
 
-### 선택 가이드
+실시간 데이터 처리와 변환이 필요하면 Kafka Streams를 사용합니다. 실시간 집계, 스트림 조인, 이벤트 기반 애플리케이션에 적합합니다. 별도 클러스터 없이 라이브러리만으로 동작하므로 운영 부담이 적습니다. 다만 대규모 처리나 복잡한 CEP(Complex Event Processing)가 필요한 경우 Apache Flink를 고려해야 합니다.
 
-```
-Q: 외부 시스템 연동이 필요한가?
-  → Yes: Kafka Connect
+#### 다음 단계
 
-Q: 메시지 구조 일관성이 중요한가?
-  → Yes: Schema Registry
+이 문서에서는 Kafka 생태계의 핵심 컴포넌트들을 살펴보았습니다. 각 컴포넌트의 역할과 사용 방법을 이해했다면, 실제 예제를 통해 직접 구축해볼 수 있습니다.
 
-Q: 실시간 데이터 변환/집계가 필요한가?
-  → Yes: Kafka Streams
-  → 대규모: Apache Flink 고려
-```
-
-## 다음 단계
-
-- [실습 예제](../../examples/) - 생태계 컴포넌트 실습
-- [보안](../security/) - Schema Registry, Connect 보안 설정
-- [모니터링](../monitoring/) - Connect, Streams 메트릭
+- [실습 예제](../../examples/) - Kafka Connect, Schema Registry, Kafka Streams 실습
+- [보안](../security/) - 생태계 컴포넌트의 보안 설정
+- [모니터링](../monitoring/) - Connect와 Streams 메트릭 모니터링

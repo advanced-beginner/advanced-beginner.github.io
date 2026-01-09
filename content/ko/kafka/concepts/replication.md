@@ -6,681 +6,164 @@ author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
 
-# Replication
+데이터 복제는 Kafka의 고가용성과 내결함성의 핵심입니다. 복제가 없으면 단일 Broker 장애로 인해 데이터가 영구적으로 유실될 수 있습니다. 이 문서에서는 Kafka의 복제 메커니즘이 어떻게 동작하는지, 그리고 프로덕션 환경에서 어떻게 설정해야 하는지 상세히 설명합니다.
 
-데이터 복제와 고가용성 메커니즘을 이해합니다.
+Kafka는 각 Partition을 여러 Broker에 복제하여 저장합니다. 하나의 Broker가 장애를 일으켜도 다른 Broker에 동일한 데이터가 있으므로 서비스가 계속될 수 있습니다. 복제본 중 하나는 Leader 역할을 하고 나머지는 Follower 역할을 합니다. 모든 읽기와 쓰기는 Leader를 통해 이루어지고, Follower는 Leader의 데이터를 지속적으로 복제합니다.
 
-| 검증 환경 | 버전 |
-|----------|------|
-| Kafka | 3.6.1 (KRaft) |
-| Spring Boot | 3.2.x |
-| Spring Kafka | 3.1.x |
-| Java | 17 |
+#### 왜 Replication이 필요한가
 
-> 이 문서의 코드 예제는 위 환경에서 컴파일 및 동작이 확인되었습니다.
+단일 Broker에만 데이터를 저장하면 장애 시 복구할 방법이 없습니다. 실제로 어떤 일이 발생하는지 살펴보겠습니다.
 
-## 왜 Replication이 필요한가?
+복제 없이 운영하다가 Broker가 다운되면 해당 Broker에 저장된 모든 Partition 데이터가 영구적으로 유실됩니다. Producer는 메시지 전송에 실패하고, Consumer는 해당 Partition에서 더 이상 메시지를 읽을 수 없습니다. 백업이 없다면 데이터를 되살릴 방법이 없습니다.
 
-단일 Broker에 데이터를 저장하면 장애 시 데이터 유실이 발생합니다.
-
-**실제로 어떤 일이 생기는가?**
-
-복제 없이 운영하다가 Broker가 다운되면:
-- 해당 Broker의 모든 Partition 데이터 **영구 유실**
-- Producer는 메시지 전송 실패
-- Consumer는 해당 Partition 소비 불가
-- **복구 방법 없음** - 백업이 없으면 데이터를 되살릴 수 없음
-
-복제가 있으면:
-- Leader 장애 시 Follower가 **수 초 내에 자동 승격**
-- Producer/Consumer는 잠시 끊겼다가 새 Leader로 자동 연결
-- 데이터 유실 없음 (ISR 설정에 따라)
+복제가 있으면 상황이 완전히 다릅니다. Leader Broker가 장애를 일으키면 ISR(In-Sync Replicas) 중 하나가 수 초 내에 새로운 Leader로 자동 승격됩니다. Producer와 Consumer는 잠시 연결이 끊겼다가 새 Leader로 자동 연결됩니다. 데이터 유실 없이 서비스가 계속됩니다.
 
 ```mermaid
 flowchart TB
-    subgraph Problem["복제 없는 경우"]
-        P1[Producer] --> B1[Broker 1]
-        B1 -->|장애!| X[데이터 유실]
+    subgraph Without["복제 없는 경우"]
+        P1[Producer] --> B1[Broker]
+        B1 -->|장애| X[데이터 유실]
     end
 
-    subgraph Solution["복제 있는 경우"]
-        P2[Producer] --> B2[Broker 1\nLeader]
-        B2 -->|복제| B3[Broker 2\nFollower]
-        B2 -->|복제| B4[Broker 3\nFollower]
-        B2 -->|장애| B3
-        B3 -->|승격| B3L[새 Leader]
+    subgraph With["복제 있는 경우"]
+        P2[Producer] --> L[Leader]
+        L -->|복제| F1[Follower 1]
+        L -->|복제| F2[Follower 2]
+        L -->|장애 시| F1
+        F1 -->|승격| NL[새 Leader]
     end
 ```
 
-## Leader와 Follower
+#### Leader와 Follower의 역할
 
-각 Partition은 하나의 **Leader**와 여러 **Follower**로 구성됩니다.
+각 Partition은 하나의 Leader와 여러 Follower로 구성됩니다. Leader는 해당 Partition에 대한 모든 읽기와 쓰기 요청을 처리합니다. Producer가 메시지를 보내면 Leader가 받아서 저장하고, Follower들에게 복제합니다. Consumer가 메시지를 요청하면 Leader가 응답합니다.
+
+Follower의 역할은 Leader의 데이터를 지속적으로 복제하여 동기화 상태를 유지하는 것입니다. Follower는 직접 클라이언트 요청을 처리하지 않습니다. 대신 Leader에 장애가 발생했을 때 새로운 Leader로 승격될 준비를 합니다. 이 설계 덕분에 읽기와 쓰기의 일관성이 보장되고, 장애 시 빠른 복구가 가능합니다.
 
 ```mermaid
 flowchart TB
-    subgraph Partition["Topic A - Partition 0"]
-        L[Broker 1\nLeader]
-        F1[Broker 2\nFollower]
-        F2[Broker 3\nFollower]
-    end
-
-    P[Producer] -->|쓰기| L
-    L -->|복제| F1
-    L -->|복제| F2
+    P[Producer] -->|쓰기| L[Leader]
+    L -->|복제| F1[Follower 1]
+    L -->|복제| F2[Follower 2]
     L -->|읽기| C[Consumer]
 ```
 
-### 역할 분담
+Producer와 Consumer는 오직 Leader에만 연결됩니다. Kafka 클라이언트는 Broker에 연결할 때 메타데이터를 요청하여 각 Partition의 Leader 위치를 알아내고, 해당 Leader에 직접 연결합니다.
 
-| 역할 | 책임 |
-|------|------|
-| **Leader** | 모든 읽기/쓰기 처리, Follower에 데이터 복제 |
-| **Follower** | Leader 데이터 복제, Leader 장애 시 승격 대기 |
+#### Replication Factor 설정
 
-> **중요:** Producer와 Consumer는 **Leader에만** 연결됩니다.
+Replication Factor는 각 Partition의 복제본 수를 결정합니다. RF=1이면 복제가 없어 원본만 존재합니다. RF=2이면 원본과 복제본 하나가 있어 1대의 Broker 장애를 허용합니다. RF=3이면 원본과 두 개의 복제본이 있어 2대의 Broker 장애를 허용합니다.
 
-## Replication Factor
+프로덕션 환경에서는 RF=3을 권장합니다. RF=2는 언뜻 보기에 충분해 보이지만 실제 운영 상황을 고려하면 위험합니다. Broker A가 Leader이고 Broker B가 Follower인 상황에서 Broker A를 정기 점검으로 내리면 Broker B가 Leader로 승격됩니다. 이 시점에서 복제본은 1개만 존재합니다. 점검 중에 Broker B에 장애가 발생하면 데이터가 유실됩니다.
 
-**Replication Factor**는 각 Partition의 복제본 수입니다.
+RF=3이면 Broker A를 내려도 Broker B와 C가 남아 복제본 2개가 유지됩니다. 점검 중 Broker B에 장애가 발생해도 Broker C가 Leader로 승격되어 서비스가 계속됩니다. 저장 비용이 50% 증가하지만 운영 안정성이 크게 향상됩니다.
 
-```mermaid
-flowchart LR
-    subgraph RF1["RF=1 (복제 없음)"]
-        RF1_B1[Broker 1\nPartition 0]
-    end
+#### ISR (In-Sync Replicas) 이해하기
 
-    subgraph RF2["RF=2"]
-        RF2_B1[Broker 1\nLeader]
-        RF2_B2[Broker 2\nFollower]
-    end
+ISR은 Leader와 동기화된 복제본의 집합입니다. Follower가 Leader의 데이터를 제때 복제하지 못하면 ISR에서 제외됩니다. ISR에 포함되려면 replica.lag.time.max.ms(기본 30초) 이내에 Leader와 동기화되어야 합니다.
 
-    subgraph RF3["RF=3 (권장)"]
-        RF3_B1[Broker 1\nLeader]
-        RF3_B2[Broker 2\nFollower]
-        RF3_B3[Broker 3\nFollower]
-    end
-```
+ISR 개념이 중요한 이유는 Leader 선출과 관련이 있습니다. Leader 장애 시 새로운 Leader는 ISR 내에서만 선출됩니다. ISR에 포함된 Follower만이 Leader와 동기화된 최신 데이터를 가지고 있기 때문입니다. ISR에 없는 Follower가 Leader가 되면 동기화되지 않은 오래된 데이터로 서비스하게 되어 데이터 유실이 발생합니다.
 
-### RF별 특성
+**LEO와 High Watermark**
 
-| RF | 내결함성 | 저장 비용 | 권장 사용 |
-|----|---------|----------|----------|
-| 1 | 없음 | 1x | 개발/테스트 |
-| 2 | 1 Broker 장애 허용 | 2x | 일반 |
-| 3 | 2 Broker 장애 허용 | 3x | **프로덕션 권장** |
+복제가 어떻게 동작하는지 이해하려면 LEO(Log End Offset)와 High Watermark를 알아야 합니다. LEO는 각 복제본의 가장 마지막 메시지 다음 Offset입니다. Leader의 LEO가 100이면 0부터 99까지의 메시지가 저장되어 있다는 의미입니다. High Watermark는 모든 ISR에 복제가 완료된 Offset입니다. Consumer는 High Watermark까지만 읽을 수 있습니다.
 
-### 왜 RF=3이 프로덕션 권장인가?
+예를 들어 Leader의 LEO가 100이고 Follower의 LEO가 95라면 High Watermark는 95입니다. 메시지 96-100은 아직 Follower에 복제되지 않았습니다. 이 상태에서 Leader가 장애를 일으키면 Follower가 Leader로 승격되고, 메시지 96-100은 유실됩니다. 이것이 acks=all 설정이 중요한 이유입니다.
 
-**RF=2의 함정:**
+**replica.lag.time.max.ms 설정**
 
-언뜻 보면 "1대 장애 허용"이면 충분해 보입니다. 하지만 실제 운영 상황을 고려하면:
+이 설정은 Follower가 ISR에 유지되기 위해 허용되는 최대 지연 시간입니다. 값이 너무 짧으면 네트워크 일시 지연만으로도 Follower가 ISR에서 제외되어 불필요한 리밸런싱이 발생합니다. 값이 너무 길면 실제 장애 감지가 느려져 데이터 정합성 위험이 있습니다.
 
-```
-상황: RF=2, Broker A(Leader), Broker B(Follower)
-
-1. Broker A 정기 점검으로 내림
-   → Broker B가 Leader로 승격
-   → 현재 복제본 1개만 존재 (위험!)
-
-2. 점검 중 Broker B 장애 발생
-   → 데이터 유실! 복구 불가능
-```
-
-**RF=3의 안전성:**
-
-```
-상황: RF=3, Broker A(Leader), B(Follower), C(Follower)
-
-1. Broker A 정기 점검으로 내림
-   → Broker B가 Leader로 승격
-   → 여전히 복제본 2개 유지 (안전)
-
-2. 점검 중 Broker B 장애 발생
-   → Broker C가 Leader로 승격
-   → 여전히 복제본 1개 유지 (서비스 지속)
-
-3. Broker A 점검 완료 후 복귀
-   → 정상 복귀, 다시 복제본 3개
-```
-
-**비용 대비 효과:**
-
-| 항목 | RF=2 | RF=3 | 비고 |
-|------|------|------|------|
-| 저장 비용 | 2x | 3x | 50% 증가 |
-| 점검 중 장애 허용 | 0대 | 1대 | **RF=3만 가능** |
-| 데이터 유실 위험 | 중간 | 매우 낮음 | - |
-
-결론: 저장 비용 50% 증가로 **운영 안정성이 크게 향상**됩니다. 프로덕션에서는 RF=3을 사용하세요.
-
-## ISR (In-Sync Replicas)
-
-**ISR**은 Leader와 동기화된 복제본 집합입니다.
-
-```mermaid
-flowchart TB
-    subgraph Healthy["정상 상태"]
-        H_L[Leader\nOffset: 100]
-        H_F1[Follower 1\nOffset: 100]
-        H_F2[Follower 2\nOffset: 100]
-        H_ISR["ISR: {Leader, F1, F2}"]
-    end
-
-    subgraph Lagging["동기화 지연"]
-        L_L[Leader\nOffset: 100]
-        L_F1[Follower 1\nOffset: 100]
-        L_F2[Follower 2\nOffset: 80]
-        L_ISR["ISR: {Leader, F1}"]
-        L_NOTE[F2는 ISR에서 제외]
-    end
-```
-
-### 복제 내부 동작: LEO와 High Watermark
-
-복제가 **어떻게** 동작하는지 이해하면 문제 진단이 쉬워집니다.
-
-```
-Leader Partition:
-+----+----+----+----+----+----+----+----+
-| 0  | 1  | 2  | 3  | 4  | 5  | 6  | 7  |  ← 메시지들
-+----+----+----+----+----+----+----+----+
-                              ↑         ↑
-                              HW        LEO
-                         (High Watermark)  (Log End Offset)
-```
-
-| 용어 | 의미 | 중요성 |
-|------|------|--------|
-| **LEO (Log End Offset)** | 가장 마지막 메시지의 다음 Offset | Replica마다 다를 수 있음 |
-| **High Watermark (HW)** | 모든 ISR에 복제 완료된 Offset | Consumer는 여기까지만 읽을 수 있음 |
-
-**왜 이 구분이 중요한가:**
-
-```
-상황: Leader LEO=100, Follower LEO=95, HW=95
-
-- Producer가 보낸 메시지 96-100은 Leader에만 존재
-- Consumer는 95까지만 읽을 수 있음 (HW 기준)
-- 이 상태에서 Leader가 죽으면?
-  → Follower가 Leader로 승격
-  → 메시지 96-100은 유실됨 (ISR 설정에 따라 다름)
-```
-
-**복제 지연 확인 방법:**
+안정적인 네트워크에서는 10초가 적당합니다. 불안정한 네트워크에서는 기본값인 30초를 유지합니다. 지역 간 복제처럼 레이턴시가 높은 환경에서는 1분 이상으로 설정합니다.
 
 ```bash
-# 각 Replica의 LEO 확인
-kafka-replica-verification.sh --broker-list localhost:9092 \
-  --topic-white-list "orders"
-
-# 출력에서 LEO 차이가 크면 복제 지연 중
-```
-
-### ISR 조건
-
-Follower가 ISR에 포함되려면:
-- `replica.lag.time.max.ms` 이내에 Leader와 동기화
-- 기본값: 30초
-
-### ISR 설정이 운영에 미치는 영향
-
-`replica.lag.time.max.ms`는 "얼마나 느린 Follower까지 동기화된 것으로 인정할 것인가"를 결정합니다.
-
-**값이 너무 짧으면 (예: 5초):**
-```
-문제: 네트워크 일시 지연만으로도 ISR에서 제외됨
-
-상황:
-1. 네트워크 순간 지연 (3-5초)
-2. Follower가 ISR에서 제외
-3. 곧바로 복구되어 다시 ISR에 포함
-4. 반복되면서 불필요한 리밸런싱 발생
-
-결과: 클러스터 불안정, 불필요한 알림 폭주
-```
-
-**값이 너무 길면 (예: 5분):**
-```
-문제: 실제 장애 감지가 느려짐
-
-상황:
-1. Follower가 실제로 멈춤 (디스크 장애 등)
-2. 5분이 지나야 ISR에서 제외
-3. 그 사이 Leader 장애 발생 시 오래된 데이터의 Follower가 승격될 수 있음
-
-결과: 데이터 정합성 위험
-```
-
-**권장 설정:**
-
-| 환경 | replica.lag.time.max.ms | 이유 |
-|------|------------------------|------|
-| 안정적인 네트워크 | 10000 (10초) | 빠른 장애 감지 |
-| 불안정한 네트워크 | 30000 (30초, 기본값) | 순간 지연 허용 |
-| 지역 간 복제 | 60000+ (1분+) | 높은 레이턴시 고려 |
-
-**모니터링 필수 지표:**
-```bash
-# ISR 축소 확인 - 자주 발생하면 설정 검토 필요
-kafka-topics.sh --describe --topic orders --bootstrap-server localhost:9092
-
-# Under-replicated partitions - 0이 아니면 즉시 확인
+# Under-replicated partitions 확인 - 0이어야 정상
 kafka-topics.sh --describe --under-replicated-partitions \
   --bootstrap-server localhost:9092
 ```
 
-```mermaid
-sequenceDiagram
-    participant L as Leader
-    participant F1 as Follower 1
-    participant F2 as Follower 2
+#### Leader Election 과정
 
-    L->>L: 메시지 수신 (Offset 100)
-    L->>F1: 복제
-    L->>F2: 복제
+Leader 장애가 발생하면 Controller가 이를 감지하고 새로운 Leader를 선출합니다. Controller는 클러스터의 메타데이터를 관리하는 특별한 Broker입니다. KRaft 모드에서는 일부 Broker가 Controller 역할을 겸합니다.
 
-    F1-->>L: 동기화 완료
-    Note over L,F1: ISR 유지
+Controller가 장애를 감지하면 ISR 중에서 새로운 Leader를 선택합니다. 새 Leader가 결정되면 Controller가 해당 Broker에 통보하고, 다른 Follower들에게도 새 Leader 정보를 전파합니다. 이 과정은 보통 수 초 내에 완료됩니다.
 
-    Note over F2: 네트워크 지연
-    Note over L,F2: 30초 초과 시 ISR 제외
-```
+ISR이 비어있을 때 어떻게 할지는 unclean.leader.election.enable 설정으로 결정합니다. false(기본값)이면 ISR이 비어있으면 Leader 선출이 불가능하여 해당 Partition은 오프라인 상태가 됩니다. 데이터 유실보다 가용성 중단이 나은 경우입니다. true이면 동기화되지 않은 Follower라도 Leader로 선출될 수 있습니다. 가용성이 중요하고 데이터 유실을 감수할 수 있는 경우입니다. 프로덕션에서는 반드시 false로 유지해야 합니다.
 
-## Leader Election
+#### min.insync.replicas 설정
 
-Leader 장애 시 새로운 Leader를 선출하는 과정입니다.
+min.insync.replicas는 메시지 쓰기가 성공하기 위해 필요한 최소 ISR 수입니다. RF=3이고 min.insync.replicas=2이면 최소 2개의 복제본에 메시지가 저장되어야 쓰기가 성공합니다.
 
-```mermaid
-sequenceDiagram
-    participant C as Controller
-    participant L as Leader (Broker 1)
-    participant F1 as Follower 1 (Broker 2)
-    participant F2 as Follower 2 (Broker 3)
+ISR이 1개만 남으면(예: 2대의 Broker 장애) Producer가 acks=all로 메시지를 보내도 실패합니다. min.insync.replicas 조건을 충족하지 못하기 때문입니다. 이는 데이터 안전성을 위한 의도적인 설계입니다. 복제본이 부족한 상태에서 쓰기를 허용하면 해당 메시지가 유실될 위험이 높습니다.
 
-    Note over L: Leader 장애 발생!
+프로덕션 권장 설정은 RF=3, min.insync.replicas=2, acks=all입니다. 이 조합은 1대의 Broker 장애를 허용하면서도 데이터 안전성을 보장합니다.
 
-    C->>C: 장애 감지
-    C->>C: ISR 중 새 Leader 선택
-    C->>F1: Leader 승격 통보
-    F1->>F1: Leader로 승격
+#### Zookeeper와 KRaft 비교
 
-    Note over F1: 새 Leader
-    C->>F2: 새 Leader 정보 전파
-```
+Kafka 3.3 이전에는 클러스터 메타데이터 관리에 Zookeeper가 필수였습니다. Broker 상태, Topic 정보, Partition 할당, ACL 등의 정보를 Zookeeper가 관리했습니다. 하지만 Zookeeper는 외부 시스템으로서 추가적인 운영 부담을 주었고, Partition 수가 많아지면 성능 병목이 발생했습니다.
 
-### 선출 규칙
+KRaft(Kafka Raft) 모드는 Kafka 자체적으로 메타데이터를 관리하는 새로운 방식입니다. Zookeeper가 필요 없어져 운영 복잡도가 낮아집니다. 메타데이터 동기화가 빨라져 Partition 확장성이 향상됩니다. 클러스터 시작 시간이 단축되고 장애 복구도 빨라집니다.
 
-1. **ISR 우선**: ISR 내의 Follower 중에서 선출
-2. **Unclean Leader Election**: ISR이 비어있을 때 비동기 Follower 선출 (데이터 유실 가능)
+신규 프로젝트에서는 KRaft 모드를 사용하는 것이 좋습니다. Kafka 3.3부터 프로덕션에서 사용 가능하며, Kafka 4.0부터는 Zookeeper 지원이 제거될 예정입니다.
 
 ```yaml
-# Topic 설정
-unclean.leader.election.enable: false  # 권장: 데이터 유실 방지
-```
-
-## min.insync.replicas
-
-메시지 쓰기 시 필요한 최소 ISR 수입니다.
-
-```mermaid
-flowchart TB
-    subgraph Config["RF=3, min.insync.replicas=2"]
-        L[Leader]
-        F1[Follower 1]
-        F2[Follower 2]
-    end
-
-    subgraph Scenario1["정상: ISR=3"]
-        S1[쓰기 성공]
-    end
-
-    subgraph Scenario2["F2 장애: ISR=2"]
-        S2[쓰기 성공]
-    end
-
-    subgraph Scenario3["F1,F2 장애: ISR=1"]
-        S3[쓰기 실패!]
-    end
-```
-
-### 권장 설정
-
-| 환경 | RF | min.insync.replicas |
-|------|----|--------------------|
-| 개발 | 1 | 1 |
-| 프로덕션 | 3 | 2 |
-
-## Zookeeper vs KRaft
-
-Kafka의 메타데이터 관리 방식 비교:
-
-```mermaid
-flowchart TB
-    subgraph Zookeeper["Zookeeper 모드 (구버전)"]
-        ZK[Zookeeper Cluster]
-        KB1[Kafka Broker 1]
-        KB2[Kafka Broker 2]
-        KB3[Kafka Broker 3]
-        ZK <--> KB1
-        ZK <--> KB2
-        ZK <--> KB3
-    end
-
-    subgraph KRaft["KRaft 모드 (신버전)"]
-        KR1[Kafka Broker 1\nController]
-        KR2[Kafka Broker 2]
-        KR3[Kafka Broker 3]
-        KR1 <--> KR2
-        KR1 <--> KR3
-    end
-```
-
-### 비교
-
-| 항목 | Zookeeper | KRaft |
-|------|-----------|-------|
-| **외부 의존성** | 필요 | 불필요 |
-| **운영 복잡도** | 높음 | 낮음 |
-| **Partition 확장성** | 제한적 | 향상 |
-| **복구 시간** | 느림 | 빠름 |
-| **Kafka 버전** | 2.x 이하 | 3.3+ 권장 |
-
-> **권장:** 신규 프로젝트는 **KRaft 모드**를 사용하세요.
-
-### KRaft 설정 예시
-
-```yaml
-# docker-compose.yml
+# KRaft 모드 Docker Compose 설정
 environment:
   KAFKA_PROCESS_ROLES: broker,controller
   KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
 ```
 
-## 정리
+#### 장애 시나리오와 대응
 
-```mermaid
-flowchart TB
-    subgraph Replication["Replication 핵심"]
-        R1[Leader/Follower 구조]
-        R2[ISR - 동기화된 복제본]
-        R3[자동 Leader Election]
-    end
+**시나리오 1: 단일 Broker 장애**
 
-    subgraph Config["권장 설정"]
-        C1["RF=3"]
-        C2["min.insync.replicas=2"]
-        C3["KRaft 모드"]
-    end
+3대 클러스터에서 1대가 다운되면 해당 Broker가 Leader인 Partition들은 자동으로 새 Leader가 선출됩니다. 서비스 중단 시간은 수 초입니다. 해당 Broker의 Follower Partition들은 ISR에서 제외됩니다. 장애 Broker를 복구한 후 ISR에 다시 포함되는지 확인합니다.
 
-    Replication --> Config
-```
+**시나리오 2: 과반수 Broker 장애**
 
-| 개념 | 역할 |
-|------|------|
-| **Replication Factor** | 데이터 복사본 수 |
-| **ISR** | 동기화된 복제본 집합 |
-| **Leader Election** | 자동 장애 복구 |
-| **KRaft** | 단순화된 클러스터 관리 |
+3대 중 2대가 다운되면 대부분의 Partition에서 ISR이 1개 이하가 됩니다. min.insync.replicas=2 조건을 충족하지 못해 Producer는 쓰기에 실패합니다. Consumer는 Leader가 살아있다면 읽기는 가능합니다. 최소 1대라도 빨리 복구해야 합니다. 긴급 상황에서는 일시적으로 min.insync.replicas=1로 변경할 수 있지만, 데이터 유실 위험을 감수해야 합니다.
 
----
+**시나리오 3: 전체 클러스터 재시작**
 
-## 장애 시나리오와 대응
+계획된 유지보수로 전체 클러스터를 재시작해야 할 때는 Rolling Restart를 사용합니다. 한 대씩 순차적으로 재시작하고, 각 Broker 재시작 후 ISR 복구를 확인한 후 다음 Broker를 진행합니다. controlled.shutdown.enable=true가 설정되어 있어야 깨끗한 종료가 됩니다. 한꺼번에 재시작하면 Leader Election이 폭주하고 데이터 정합성 문제가 발생할 수 있습니다.
 
-### 시나리오 1: 단일 Broker 장애
+#### acks 설정과 Replication의 관계
 
-**상황:** 3대 클러스터에서 1대 다운 (RF=3, min.insync.replicas=2)
+Producer의 acks 설정은 복제와 밀접한 관련이 있습니다. acks=0이면 Producer는 전송만 하고 응답을 기다리지 않습니다. 가장 빠르지만 메시지 유실 가능성이 높습니다. acks=1이면 Leader가 저장을 확인하면 성공입니다. Leader 장애 시 복제되지 않은 메시지가 유실될 수 있습니다. acks=all이면 모든 ISR에 저장이 완료되어야 성공입니다. 가장 안전하지만 지연 시간이 늘어납니다.
 
-```
-영향:
-- 해당 Broker가 Leader인 Partition들 → 자동으로 새 Leader 선출
-- 해당 Broker의 Follower Partition들 → ISR에서 제외
-- 서비스 중단 시간: 수 초 (Leader Election 시간)
-
-대응:
-1. 자동 복구 확인: kafka-topics.sh --describe로 Leader 확인
-2. 장애 Broker 원인 분석 및 복구
-3. 복구 후 Follower가 ISR에 다시 포함되는지 확인
-```
-
-### 시나리오 2: 과반수 Broker 장애
-
-**상황:** 3대 클러스터에서 2대 다운
-
-```
-영향:
-- ISR이 1개 이하가 되어 min.insync.replicas=2 조건 불충족
-- Producer는 acks=all 설정 시 쓰기 실패
-- Consumer는 읽기 가능 (Leader가 살아있다면)
-
-대응:
-1. 긴급 복구: 최소 1대라도 빨리 복구
-2. 일시적으로 min.insync.replicas=1로 변경 (데이터 유실 위험 감수)
-3. 근본 원인 분석 (동시 장애는 보통 공통 원인 있음)
-```
-
-### 시나리오 3: 전체 클러스터 재시작
-
-**상황:** 계획된 유지보수로 전체 클러스터 재시작
-
-```
-권장 절차:
-1. Rolling Restart 사용 (한 대씩 순차적으로)
-2. 각 Broker 재시작 후 ISR 복구 확인 후 다음 진행
-3. controlled.shutdown.enable=true 확인 (깨끗한 종료)
-
-주의:
-- 한꺼번에 재시작하면 Leader Election 폭주
-- 데이터 정합성 문제 발생 가능
-```
-
----
-
-## 실무 팁
-
-### 1. acks 설정과 Replication의 관계
-
-| acks | 동작 | 데이터 안전성 | 성능 |
-|------|------|-------------|------|
-| 0 | 전송만 (응답 안 기다림) | 낮음 | 최고 |
-| 1 | Leader 저장 확인 | 중간 | 높음 |
-| all | 모든 ISR 저장 확인 | **높음** | 중간 |
-
-**권장:** 프로덕션에서는 `acks=all` + `min.insync.replicas=2` 조합
+프로덕션에서는 acks=all과 min.insync.replicas=2 조합을 권장합니다.
 
 ```yaml
-# application.yml
 spring:
   kafka:
     producer:
-      acks: all  # 모든 ISR에 저장 확인
+      acks: all
 ```
 
-### 2. Unclean Leader Election 주의
+#### 복제 성능 영향
 
-```yaml
-# 절대 프로덕션에서 true로 설정하지 마세요
-unclean.leader.election.enable: false  # 기본값이 false
-```
+복제는 안전성을 높이지만 성능에 영향을 줍니다. acks=0일 때 쓰기 지연시간은 1ms 미만입니다. acks=1일 때는 1-5ms 정도입니다. acks=all, RF=3일 때는 5-15ms 정도입니다. 원격 데이터센터 간 복제에서는 50-200ms까지 늘어날 수 있습니다.
 
-**true로 설정하면:**
-- ISR이 비어있을 때 동기화 안 된 Follower가 Leader로 승격
-- 그 사이 Producer가 보낸 메시지 유실 가능
-- **데이터 정합성보다 가용성이 중요한 경우에만** 고려
+네트워크 대역폭도 RF배로 증가합니다. 100MB/sec의 쓰기 처리량이면 RF=3일 때 Leader에서 두 Follower로 각각 100MB/sec씩 복제되어 총 200MB/sec의 추가 네트워크 사용이 발생합니다. Broker 간 네트워크는 10Gbps 이상을 권장합니다.
 
-### 3. Broker 추가 시 주의사항
+#### 프로덕션 체크리스트
 
-새 Broker를 추가해도 **기존 Partition은 자동으로 재배치되지 않습니다**.
+배포 전에 다음 사항을 확인합니다. Replication Factor가 3 이상인지, min.insync.replicas가 2 이상인지, unclean.leader.election.enable이 false인지 확인합니다. 모든 Broker가 다른 랙이나 가용영역에 분산되어 있는지 확인합니다. 모니터링과 알림이 설정되어 있는지 확인합니다.
+
+일일 모니터링에서는 Under-replicated partitions가 0인지, Offline partitions가 0인지 확인합니다. ISR 축소/확장 이벤트가 빈번하지 않은지 로그를 확인합니다.
 
 ```bash
-# 수동으로 Partition 재배치 필요
-kafka-reassign-partitions.sh --reassignment-json-file plan.json \
-  --bootstrap-server localhost:9092 --execute
-```
-
-또는 Cruise Control 같은 자동화 도구 사용을 권장합니다.
-
-### 4. 권장 클러스터 구성
-
-| 환경 | Broker 수 | RF | min.insync.replicas |
-|------|----------|----|--------------------|
-| 개발 | 1 | 1 | 1 |
-| 스테이징 | 3 | 2 | 1 |
-| **프로덕션** | **3+** | **3** | **2** |
-| 대규모 | 5+ | 3 | 2 |
-
----
-
-## 프로덕션 운영 체크리스트
-
-### 배포 전 점검
-
-```
-□ Replication Factor가 3 이상인가?
-□ min.insync.replicas가 2 이상인가?
-□ unclean.leader.election.enable이 false인가?
-□ 모든 Broker가 다른 랙/가용영역에 분산되어 있는가?
-□ 모니터링/알림이 설정되어 있는가?
-```
-
-### 일일 모니터링 점검
-
-```bash
-# 1. Under-replicated partition 확인 (0이어야 정상)
+# Under-replicated partition 확인
 kafka-topics.sh --describe --under-replicated-partitions \
   --bootstrap-server localhost:9092
 
-# 2. Offline partition 확인 (0이어야 정상)
+# Offline partition 확인
 kafka-topics.sh --describe --unavailable-partitions \
   --bootstrap-server localhost:9092
-
-# 3. ISR 축소/확장 이벤트 확인 (로그)
-grep -E "ISR|shrunk|expanded" /var/log/kafka/server.log
 ```
 
-### 핵심 알림 규칙
+#### 다음 단계
 
-```yaml
-# Prometheus alerting rules
-groups:
-  - name: kafka-replication-alerts
-    rules:
-      # Under-replicated partitions > 0 이면 경고
-      - alert: UnderReplicatedPartitions
-        expr: kafka_server_replicamanager_underreplicatedpartitions > 0
-        for: 5m
-        labels:
-          severity: warning
-        annotations:
-          summary: "{{ $value }}개의 partition이 복제 부족 상태"
+이 문서에서는 Kafka의 복제 메커니즘을 상세히 살펴보았습니다. 다음으로 acks, Message Key, Retention 등 실무에서 자주 마주치는 심화 개념을 학습할 수 있습니다.
 
-      # ISR 축소가 빈번하면 경고
-      - alert: FrequentISRShrink
-        expr: rate(kafka_server_replicamanager_isrshrinks_total[5m]) > 0.1
-        for: 10m
-        labels:
-          severity: warning
-        annotations:
-          summary: "ISR 축소가 빈번함 - 네트워크/디스크 점검 필요"
-
-      # Offline partition은 즉시 알림
-      - alert: OfflinePartitions
-        expr: kafka_controller_kafkacontroller_offlinepartitionscount > 0
-        for: 1m
-        labels:
-          severity: critical
-        annotations:
-          summary: "{{ $value }}개의 partition이 오프라인 상태!"
-```
-
----
-
-## 장애 복구 플레이북
-
-### 상황 1: Under-replicated Partition 발생
-
-```bash
-# 1. 어떤 partition이 문제인지 확인
-kafka-topics.sh --describe --under-replicated-partitions \
-  --bootstrap-server localhost:9092
-
-# 2. 해당 Broker의 상태 확인
-# - Broker가 살아있는가?
-# - CPU/메모리/디스크는 정상인가?
-# - 네트워크 연결은 정상인가?
-
-# 3. Broker 로그 확인
-tail -f /var/log/kafka/server.log | grep -E "ERROR|WARN"
-
-# 4. 복제 상태 확인
-kafka-replica-verification.sh --broker-list localhost:9092 \
-  --topic-white-list ".*"
-```
-
-### 상황 2: Broker 완전 장애
-
-```bash
-# 1. 영향받는 partition 확인
-kafka-topics.sh --describe --bootstrap-server localhost:9092 \
-  | grep "Isr:" | grep -v "broker-id-of-failed-broker"
-
-# 2. Leader 재선출 상태 확인
-kafka-leader-election.sh --bootstrap-server localhost:9092 \
-  --election-type preferred --all-topic-partitions
-
-# 3. Broker 복구 후 확인
-# - 복구된 Broker가 ISR에 다시 포함되는지 확인
-# - Under-replicated partition이 0이 되는지 확인
-```
-
-### 상황 3: 긴급 - 데이터 유실 방지
-
-```bash
-# 일시적으로 쓰기 허용 조건 완화 (주의: 데이터 유실 위험 증가)
-# 정상화 후 반드시 원복해야 함!
-
-# Topic 레벨에서 min.insync.replicas 변경
-kafka-configs.sh --alter --entity-type topics --entity-name orders \
-  --add-config min.insync.replicas=1 \
-  --bootstrap-server localhost:9092
-
-# 정상화 후 원복
-kafka-configs.sh --alter --entity-type topics --entity-name orders \
-  --add-config min.insync.replicas=2 \
-  --bootstrap-server localhost:9092
-```
-
----
-
-## 복제 성능 영향
-
-복제는 안전성을 높이지만 성능에 영향을 줍니다. 트레이드오프를 이해하세요.
-
-### 쓰기 지연시간 (Latency)
-
-| 설정 | 대략적 지연시간 | 안전성 |
-|------|---------------|--------|
-| acks=0 | < 1ms | 낮음 |
-| acks=1 | 1-5ms | 중간 |
-| acks=all, RF=3 | 5-15ms | 높음 |
-| acks=all, RF=3, 원격 DC | 50-200ms | 매우 높음 |
-
-> ⚠️ 위 수치는 참고용입니다. 실제 환경에서 반드시 측정하세요.
-
-### 네트워크 대역폭 계산
-
-복제는 네트워크 대역폭을 RF배 사용합니다:
-
-```
-예시: 100MB/sec 쓰기 처리량, RF=3
-
-- Producer → Leader: 100MB/sec
-- Leader → Follower1: 100MB/sec
-- Leader → Follower2: 100MB/sec
-- 총 네트워크 사용: 300MB/sec + Consumer 읽기
-
-권장: Broker간 네트워크는 10Gbps 이상
-```
-
-## 다음 단계
-
-- [심화 개념](../advanced-concepts/) - acks, Message Key, Retention
+- [심화 개념](../advanced-concepts/) - acks, Message Key, Retention, Idempotent Producer
