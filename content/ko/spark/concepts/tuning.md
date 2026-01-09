@@ -1,31 +1,29 @@
 ---
 title: 성능 튜닝
 weight: 10
-lastmod: "2026-01-07"
+lastmod: "2026-01-09"
 ---
-
-# 성능 튜닝
 
 Spark 애플리케이션의 성능을 최적화하는 전략과 구체적인 설정 방법을 알아봅니다.
 
-## 튜닝 원칙
+#### 튜닝 원칙
 
-### 튜닝 순서
+**튜닝 순서**
 
 1. **코드 최적화** — 알고리즘과 로직 개선
 2. **데이터 구조 최적화** — 파티셔닝, 스키마 최적화
 3. **리소스 설정** — 메모리, CPU, 파티션 수
 4. **세부 설정** — Spark 설정 파라미터
 
-### 측정 도구
+**측정 도구**
 
 - **Spark UI**: Job, Stage, Task 분석
 - **Event Log**: 상세 실행 이력
 - **Metrics**: Executor 메트릭 모니터링
 
-## 코드 수준 최적화
+#### 코드 수준 최적화
 
-### 1. 셔플 최소화
+**1. 셔플 최소화**
 
 ```java
 // 나쁨: 불필요한 셔플
@@ -42,7 +40,7 @@ Dataset<Row> result = df
 // orderBy는 정말 필요할 때만
 ```
 
-### 2. 조기 필터링
+**2. 조기 필터링**
 
 ```java
 // 나쁨: 조인 후 필터
@@ -54,7 +52,7 @@ Dataset<Row> filtered = large.filter(col("status").equalTo("ACTIVE"));
 Dataset<Row> joined = filtered.join(small, "key");
 ```
 
-### 3. 컬럼 선택
+**3. 컬럼 선택**
 
 ```java
 // 나쁨: 모든 컬럼 유지
@@ -69,7 +67,7 @@ Dataset<Row> result = df.select("id", "category", "value")
     .agg(sum("value"));
 ```
 
-### 4. Broadcast Join
+**4. Broadcast Join**
 
 ```java
 import static org.apache.spark.sql.functions.broadcast;
@@ -84,7 +82,7 @@ Dataset<Row> result = largeTable.join(
 spark.conf().set("spark.sql.autoBroadcastJoinThreshold", "100MB");
 ```
 
-### 5. 캐싱 활용
+**5. 캐싱 활용**
 
 ```java
 // 반복 사용 데이터 캐시
@@ -99,9 +97,9 @@ process3(processed);
 processed.unpersist();
 ```
 
-## 데이터 구조 최적화
+#### 데이터 구조 최적화
 
-### 1. 파일 포맷
+**1. 파일 포맷**
 
 | 포맷 | 압축 | 컬럼 프루닝 | 용도 |
 |------|------|------------|------|
@@ -119,7 +117,7 @@ df.write()
     .parquet("output/data");
 ```
 
-### 2. 파티셔닝 전략
+**2. 파티셔닝 전략**
 
 ```java
 // 쿼리 패턴에 맞는 파티셔닝
@@ -134,7 +132,7 @@ Dataset<Row> jan2024 = spark.read()
 // year=2024/month=1 파티션만 읽음
 ```
 
-### 3. 버케팅
+**3. 버케팅**
 
 ```java
 // 조인 키로 버케팅
@@ -146,7 +144,7 @@ df.write()
 // 같은 버케팅의 테이블 조인 시 셔플 없음
 ```
 
-### 4. 작은 파일 문제 해결
+**4. 작은 파일 문제 해결**
 
 ```java
 // 쓰기 전 파티션 조정
@@ -160,9 +158,9 @@ df.write()
     .parquet("output");
 ```
 
-## 리소스 설정
+#### 리소스 설정
 
-### 메모리 구조
+**메모리 구조**
 
 ```
 Executor 메모리 (spark.executor.memory)
@@ -175,7 +173,7 @@ Executor 메모리 (spark.executor.memory)
 └── 사용자: 40%
 ```
 
-### 권장 설정
+**권장 설정**
 
 ```bash
 # Executor 설정
@@ -192,7 +190,7 @@ spark.default.parallelism=200     # RDD 기본 파티션 수
 spark.sql.shuffle.partitions=200  # SQL 셔플 파티션 수
 ```
 
-### 클러스터 사이징 가이드
+**클러스터 사이징 가이드**
 
 ```
 총 코어 수 = spark.executor.instances × spark.executor.cores
@@ -202,7 +200,7 @@ spark.sql.shuffle.partitions=200  # SQL 셔플 파티션 수
 → 파티션 수: 400~800
 ```
 
-### Executor 메모리 계산
+**Executor 메모리 계산**
 
 ```
 spark.executor.memory = 컨테이너 메모리 × 0.9 - 오버헤드
@@ -212,9 +210,9 @@ spark.executor.memory = 컨테이너 메모리 × 0.9 - 오버헤드
 - spark.executor.memory: 약 8GB
 ```
 
-## 셔플 최적화
+#### 셔플 최적화
 
-### 셔플 관련 설정
+**셔플 관련 설정**
 
 ```java
 // 셔플 파티션 수 (가장 중요)
@@ -230,7 +228,7 @@ spark.conf().set("spark.shuffle.compress", "true");
 spark.conf().set("spark.shuffle.spill.compress", "true");
 ```
 
-### AQE (Adaptive Query Execution)
+**AQE (Adaptive Query Execution)**
 
 Spark 3.0+에서 자동 최적화:
 
@@ -249,9 +247,9 @@ spark.conf().set("spark.sql.adaptive.localShuffleReader.enabled", "true");
 spark.conf().set("spark.sql.adaptive.skewJoin.enabled", "true");
 ```
 
-## 직렬화 최적화
+#### 직렬화 최적화
 
-### Kryo 직렬화
+**Kryo 직렬화**
 
 ```java
 SparkSession spark = SparkSession.builder()
@@ -264,16 +262,16 @@ spark.conf().set("spark.kryo.classesToRegister",
     "com.example.MyClass1,com.example.MyClass2");
 ```
 
-### 직렬화 비교
+**직렬화 비교**
 
 | 직렬화 | 속도 | 크기 | 설정 |
 |--------|------|------|------|
 | Java (기본) | 느림 | 큼 | 없음 |
 | Kryo | 빠름 | 작음 | 권장 |
 
-## GC 최적화
+#### GC 최적화
 
-### GC 설정
+**GC 설정**
 
 ```bash
 # G1GC 사용 (큰 힙에 적합)
@@ -283,7 +281,7 @@ spark.executor.extraJavaOptions=-XX:+UseG1GC -XX:MaxGCPauseMillis=200
 spark.executor.extraJavaOptions=-XX:+PrintGCDetails -XX:+PrintGCTimeStamps
 ```
 
-### Off-Heap 메모리
+**Off-Heap 메모리**
 
 ```java
 // Off-Heap 활성화 (GC 영향 감소)
@@ -291,9 +289,9 @@ spark.conf().set("spark.memory.offHeap.enabled", "true");
 spark.conf().set("spark.memory.offHeap.size", "2g");
 ```
 
-## SQL 최적화
+#### SQL 최적화
 
-### 조인 전략 힌트
+**조인 전략 힌트**
 
 ```sql
 -- 브로드캐스트 힌트
@@ -309,7 +307,7 @@ SELECT /*+ SORT_MERGE(t1, t2) */ *
 FROM t1 JOIN t2 ON t1.id = t2.id;
 ```
 
-### 쿼리 최적화
+**쿼리 최적화**
 
 ```java
 // 실행 계획 확인
@@ -324,9 +322,9 @@ spark.sql("ANALYZE TABLE my_table COMPUTE STATISTICS");
 spark.sql("ANALYZE TABLE my_table COMPUTE STATISTICS FOR COLUMNS col1, col2");
 ```
 
-## 스트리밍 튜닝
+#### 스트리밍 튜닝
 
-### 처리량 최적화
+**처리량 최적화**
 
 ```java
 // 트리거 간격
@@ -340,9 +338,9 @@ spark.conf().set("spark.sql.streaming.stateStore.providerClass",
     "org.apache.spark.sql.execution.streaming.state.RocksDBStateStoreProvider");
 ```
 
-## 성능 모니터링
+#### 성능 모니터링
 
-### Spark UI 활용
+**Spark UI 활용**
 
 주요 확인 사항:
 1. **Jobs**: 전체 Job 수행 시간
@@ -351,7 +349,7 @@ spark.conf().set("spark.sql.streaming.stateStore.providerClass",
 4. **Storage**: 캐시 사용량
 5. **SQL**: 쿼리 실행 계획
 
-### 메트릭 확인
+**메트릭 확인**
 
 ```java
 // 실행 중 메트릭
@@ -367,9 +365,9 @@ df.count();  // 캐시 로드
 df.explain(true);
 ```
 
-## 체크리스트
+#### 체크리스트
 
-### 코드 체크리스트
+**코드 체크리스트**
 
 - [ ] 불필요한 셔플 제거
 - [ ] 조기 필터링 적용
@@ -378,14 +376,14 @@ df.explain(true);
 - [ ] 반복 사용 데이터 캐싱
 - [ ] UDF 대신 내장 함수 사용
 
-### 데이터 체크리스트
+**데이터 체크리스트**
 
 - [ ] Parquet 포맷 사용
 - [ ] 적절한 파티셔닝
 - [ ] 작은 파일 병합
 - [ ] 스키마 명시적 지정
 
-### 설정 체크리스트
+**설정 체크리스트**
 
 - [ ] AQE 활성화
 - [ ] 적절한 셔플 파티션 수
@@ -393,12 +391,12 @@ df.explain(true);
 - [ ] 브로드캐스트 임계값 조정
 - [ ] 메모리/코어 적절 할당
 
-## 다음 단계
+#### 다음 단계
 
 - [배포와 클러스터 관리](../deployment/) - 프로덕션 환경 구성
 - [FAQ](../../appendix/faq/) - 자주 발생하는 성능 문제 해결
 
-## 관련 문서
+#### 관련 문서
 
 - [아키텍처](../architecture/) - Driver/Executor 메모리 구조
 - [파티셔닝과 셔플](../partitioning/) - 셔플 최적화 상세

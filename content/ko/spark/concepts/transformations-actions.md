@@ -1,16 +1,14 @@
 ---
 title: Transformation과 Action
 weight: 5
-lastmod: "2026-01-07"
+lastmod: "2026-01-09"
 ---
-
-# Transformation과 Action
 
 Spark의 모든 연산은 **Transformation**과 **Action** 두 가지로 분류됩니다. 이 구분을 이해하는 것이 Spark 프로그래밍의 핵심입니다.
 
-## 핵심 개념
+#### 핵심 개념
 
-### Transformation
+**Transformation**
 
 **Transformation**은 기존 RDD/DataFrame에서 새로운 RDD/DataFrame을 생성하는 연산입니다.
 
@@ -27,7 +25,7 @@ Dataset<Row> selected = filtered.select("name", "age");    // Transformation
 // 아직 아무 것도 실행되지 않음!
 ```
 
-### Action
+**Action**
 
 **Action**은 실제 계산을 트리거하고 결과를 반환하는 연산입니다.
 
@@ -42,9 +40,9 @@ selected.show();                      // Action! → Job 실행
 List<Row> rows = selected.collectAsList();  // Action! → Job 실행
 ```
 
-## 왜 지연 평가인가?
+#### 왜 지연 평가인가?
 
-### 1. 최적화 기회
+**1. 최적화 기회**
 
 지연 평가를 통해 Spark는 전체 DAG를 분석하고 최적화할 수 있습니다.
 
@@ -60,7 +58,7 @@ Dataset<Row> result = df
 // → 실제로는 "name", "age"만 읽고 필터링
 ```
 
-### 2. 파이프라이닝
+**2. 파이프라이닝**
 
 여러 Transformation을 하나의 Stage에서 파이프라이닝:
 
@@ -75,7 +73,7 @@ Dataset<Row> result = df
 // filter1 → map → filter2 를 각 레코드에 연속 적용
 ```
 
-### 3. 불필요한 계산 회피
+**3. 불필요한 계산 회피**
 
 ```java
 Dataset<Row> expensive = df
@@ -87,9 +85,9 @@ Dataset<Row> expensive = df
 Row first = expensive.first();
 ```
 
-## Transformation 종류
+#### Transformation 종류
 
-### Narrow Transformation
+**Narrow Transformation**
 
 각 입력 파티션이 최대 하나의 출력 파티션에 기여합니다. **셔플이 발생하지 않습니다.**
 
@@ -125,7 +123,7 @@ Dataset<Row> sampled = df.sample(0.1);  // 10% 샘플
 - 매우 효율적
 - 연속 Narrow Transformation은 파이프라이닝됨
 
-### Wide Transformation
+**Wide Transformation**
 
 여러 입력 파티션의 데이터가 하나의 출력 파티션에 기여합니다. **셔플이 발생합니다.**
 
@@ -156,9 +154,9 @@ JavaPairRDD<String, Integer> reduced = pairRdd.reduceByKey(Integer::sum);
 - Stage 경계가 됨
 - 성능에 가장 큰 영향
 
-## Action 종류
+#### Action 종류
 
-### 값 반환 Action
+**값 반환 Action**
 
 ```java
 // collect - 모든 데이터를 Driver로 (주의: 대용량 시 OOM)
@@ -178,7 +176,7 @@ long rowCount = df.count();
 int sum = numbersRdd.reduce(Integer::sum);
 ```
 
-### 출력 Action
+**출력 Action**
 
 ```java
 // show - 콘솔 출력
@@ -194,7 +192,7 @@ df.printSchema();
 df.describe("age", "salary").show();
 ```
 
-### 저장 Action
+**저장 Action**
 
 ```java
 // write - 파일 저장
@@ -225,9 +223,9 @@ df.foreachPartition(partition -> {
 });
 ```
 
-## 실행 흐름 이해
+#### 실행 흐름 이해
 
-### DAG 구성과 실행
+**DAG 구성과 실행**
 
 ```java
 Dataset<Row> df = spark.read().csv("data.csv");
@@ -246,7 +244,7 @@ long count = step3.count();  // Job 1 실행
 step3.show();               // Job 2 실행 (처음부터 다시 계산)
 ```
 
-### Job, Stage, Task 관계
+**Job, Stage, Task 관계**
 
 ```java
 Dataset<Row> result = df
@@ -271,7 +269,7 @@ Job 1
     └── [Task 1] [Task 2] [Task 3] ...
 ```
 
-## 캐싱과 재사용
+#### 캐싱과 재사용
 
 같은 DataFrame을 여러 Action에서 사용하면 매번 재계산됩니다. 캐싱으로 이를 방지할 수 있습니다.
 
@@ -293,21 +291,21 @@ processed.write().parquet("...");    // 캐시에서 읽음
 processed.unpersist();               // 캐시 해제
 ```
 
-### 언제 캐싱하나?
+**언제 캐싱하나?**
 
 1. **같은 DataFrame을 여러 Action에서 사용할 때**
 2. **반복 알고리즘** (머신러닝 등)
 3. **대화형 분석** (동일 데이터 반복 탐색)
 
-### 캐싱하면 안 되는 경우
+**캐싱하면 안 되는 경우**
 
 1. **한 번만 사용하는 DataFrame**
 2. **메모리가 부족한 경우**
 3. **원본 데이터가 자주 변경되는 경우**
 
-## 주의사항
+#### 주의사항
 
-### 1. Action 없이 Transformation만으로는 실행 안 됨
+**1. Action 없이 Transformation만으로는 실행 안 됨**
 
 ```java
 // 아무 것도 실행되지 않음!
@@ -320,7 +318,7 @@ Dataset<Row> result = df
 result.count();  // 이제 실행됨
 ```
 
-### 2. foreach에서 Driver 변수 수정 불가
+**2. foreach에서 Driver 변수 수정 불가**
 
 ```java
 // 잘못된 코드 - 동작 안 함!
@@ -332,7 +330,7 @@ System.out.println(counter[0]);   // 항상 0 출력
 long count = df.count();          // Action 사용
 ```
 
-### 3. collect는 대용량 데이터에서 위험
+**3. collect는 대용량 데이터에서 위험**
 
 ```java
 // 위험! - 10억 행을 Driver 메모리로
@@ -344,7 +342,7 @@ hugeDataFrame.show(100);                      // 출력만
 hugeDataFrame.write().parquet("output");      // 분산 저장
 ```
 
-### 4. 실행 계획 확인하기
+**4. 실행 계획 확인하기**
 
 ```java
 // 실행 전에 계획 확인
@@ -359,9 +357,9 @@ df.filter(...).groupBy(...).agg(...).explain();
 //          +- FileScan parquet(...)
 ```
 
-## 실전 팁
+#### 실전 팁
 
-### 1. Wide Transformation 최소화
+**1. Wide Transformation 최소화**
 
 ```java
 // 비효율: 두 번의 Wide Transformation
@@ -373,7 +371,7 @@ df.groupBy("dept").agg(sum("salary"))
   .show();  // 정렬 불필요하면 orderBy 제거
 ```
 
-### 2. 필터링은 가능한 빨리
+**2. 필터링은 가능한 빨리**
 
 ```java
 // 비효율: 조인 후 필터
@@ -385,7 +383,7 @@ employees.filter(col("status").equalTo("ACTIVE"))
          .join(departments, "dept_id");
 ```
 
-### 3. select로 필요한 컬럼만
+**3. select로 필요한 컬럼만**
 
 ```java
 // 비효율: 모든 컬럼 유지
@@ -400,7 +398,7 @@ df.select("id", "category", "value")
   .agg(sum("value"));
 ```
 
-## 요약
+#### 요약
 
 | 구분 | Transformation | Action |
 |------|---------------|--------|
@@ -409,12 +407,12 @@ df.select("id", "category", "value")
 | DAG | 추가 | 트리거 |
 | 예시 | map, filter, groupBy | count, show, collect |
 
-## 다음 단계
+#### 다음 단계
 
 - [파티셔닝과 셔플](../partitioning/) - Wide Transformation의 내부 동작
 - [캐싱과 영속성](../caching/) - 중간 결과 재사용
 
-## 관련 문서
+#### 관련 문서
 
 - [아키텍처](../architecture/) - Job, Stage, Task의 실행 구조
 - [RDD 기초](../rdd/) - 저수준 Transformation API

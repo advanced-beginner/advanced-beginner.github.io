@@ -1,16 +1,14 @@
 ---
 title: 기본 예제
 weight: 2
-lastmod: "2026-01-07"
+lastmod: "2026-01-09"
 ---
-
-# 기본 예제
 
 Spark의 핵심 기능을 활용하는 예제 코드입니다.
 
-## 데이터 로딩
+#### 데이터 로딩
 
-### CSV 파일 읽기
+**CSV 파일 읽기**
 
 ```java
 import org.apache.spark.sql.SparkSession;
@@ -50,7 +48,7 @@ public class CsvExample {
 }
 ```
 
-### JSON 파일 읽기
+**JSON 파일 읽기**
 
 ```java
 // 단일 파일
@@ -67,7 +65,7 @@ Dataset<Row> dfLines = spark.read().json("data/users.jsonl");
 df.show();
 ```
 
-### Parquet 파일 읽기
+**Parquet 파일 읽기**
 
 ```java
 // Parquet (권장 포맷)
@@ -79,7 +77,7 @@ Dataset<Row> selected = spark.read()
         .select("id", "name");
 ```
 
-### JDBC로 데이터베이스 읽기
+**JDBC로 데이터베이스 읽기**
 
 ```java
 Dataset<Row> df = spark.read()
@@ -101,9 +99,9 @@ Dataset<Row> dfQuery = spark.read()
         .load();
 ```
 
-## 데이터 변환
+#### 데이터 변환
 
-### 컬럼 연산
+**컬럼 연산**
 
 ```java
 import static org.apache.spark.sql.functions.*;
@@ -141,7 +139,7 @@ Dataset<Row> casted = employees.withColumn(
 enhanced.show();
 ```
 
-### 필터링
+**필터링**
 
 ```java
 // 단일 조건
@@ -171,7 +169,7 @@ Dataset<Row> depts = employees.filter(
 filtered.show();
 ```
 
-### 정렬
+**정렬**
 
 ```java
 // 단일 컬럼
@@ -191,9 +189,9 @@ Dataset<Row> nullsLast = employees.orderBy(col("salary").desc_nulls_last());
 multiSort.show();
 ```
 
-## 집계
+#### 집계
 
-### 기본 집계
+**기본 집계**
 
 ```java
 // 전체 집계
@@ -210,7 +208,7 @@ Dataset<Row> stats = employees.agg(
 stats.show();
 ```
 
-### 그룹별 집계
+**그룹별 집계**
 
 ```java
 // 단일 그룹
@@ -234,7 +232,7 @@ Dataset<Row> byDeptLevel = employees
 byDept.show();
 ```
 
-### 피벗
+**피벗**
 
 ```java
 // 피벗 테이블
@@ -252,9 +250,9 @@ pivoted.show();
 // +----------+-------+-------+------+
 ```
 
-## 조인
+#### 조인
 
-### 기본 조인
+**기본 조인**
 
 ```java
 Dataset<Row> employees = spark.read().parquet("employees.parquet");
@@ -279,7 +277,7 @@ Dataset<Row> leftJoined = employees.join(
 // 조인 유형: inner, left, right, full, left_semi, left_anti, cross
 ```
 
-### 다중 조건 조인
+**다중 조건 조인**
 
 ```java
 Dataset<Row> multiJoin = orders.join(
@@ -289,7 +287,7 @@ Dataset<Row> multiJoin = orders.join(
 );
 ```
 
-### 브로드캐스트 조인
+**브로드캐스트 조인**
 
 ```java
 import static org.apache.spark.sql.functions.broadcast;
@@ -301,7 +299,7 @@ Dataset<Row> optimized = employees.join(
 );
 ```
 
-## SQL 사용
+#### SQL 사용
 
 ```java
 // 임시 뷰 등록
@@ -346,9 +344,9 @@ Dataset<Row> cteResult = spark.sql("""
 cteResult.show();
 ```
 
-## 데이터 저장
+#### 데이터 저장
 
-### 파일 저장
+**파일 저장**
 
 ```java
 // Parquet (권장)
@@ -376,7 +374,7 @@ result.coalesce(1)
     .csv("output/single_file");
 ```
 
-### 저장 모드
+**저장 모드**
 
 | 모드 | 설명 |
 |------|------|
@@ -385,7 +383,7 @@ result.coalesce(1)
 | `ignore` | 이미 존재하면 무시 |
 | `error` (기본) | 이미 존재하면 오류 |
 
-## 종합 예제: 매출 분석
+#### 종합 예제: 매출 분석
 
 ```java
 public class SalesAnalysisExample {
@@ -518,11 +516,11 @@ public class SalesAnalysisExample {
 
 ---
 
-## 실제 공개 데이터셋 예제
+#### 실제 공개 데이터셋 예제
 
 실무에서 자주 활용하는 공개 데이터셋을 사용한 예제입니다.
 
-### NYC 택시 데이터 분석
+**NYC 택시 데이터 분석**
 
 뉴욕시 택시 데이터(TLC Trip Record Data)는 빅데이터 분석 학습에 가장 많이 사용되는 공개 데이터셋입니다.
 
@@ -651,7 +649,7 @@ wget https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-01.par
 wget https://d37ci6vzurychx.cloudfront.net/misc/taxi_zone_lookup.csv
 ```
 
-### Kaggle 데이터셋 활용 예제
+**Kaggle 데이터셋 활용 예제**
 
 [Kaggle](https://www.kaggle.com)은 다양한 실무 데이터셋을 제공합니다.
 
@@ -736,7 +734,7 @@ public class FraudDetectionAnalysis {
 }
 ```
 
-### 공개 데이터셋 목록
+**공개 데이터셋 목록**
 
 | 데이터셋 | 크기 | 용도 | 다운로드 |
 |----------|------|------|----------|
@@ -746,7 +744,7 @@ public class FraudDetectionAnalysis {
 | **Common Crawl** | 수TB | 대규모 웹 분석 | [commoncrawl.org](https://commoncrawl.org/) |
 | **Wikipedia Dumps** | 수십GB | NLP, 지식 그래프 | [dumps.wikimedia.org](https://dumps.wikimedia.org/) |
 
-## 다음 단계
+#### 다음 단계
 
 예제를 완료했다면:
 

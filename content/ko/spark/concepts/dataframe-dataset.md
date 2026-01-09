@@ -1,16 +1,14 @@
 ---
 title: DataFrame과 Dataset
 weight: 3
-lastmod: "2026-01-07"
+lastmod: "2026-01-09"
 ---
-
-# DataFrame과 Dataset
 
 DataFrame과 Dataset은 Spark의 현대적인 고수준 API입니다. RDD보다 사용하기 쉽고, Catalyst Optimizer를 통한 자동 최적화를 제공합니다.
 
-## 개념 정리
+#### 개념 정리
 
-### DataFrame
+**DataFrame**
 
 **DataFrame**은 이름 있는 컬럼으로 구성된 분산 데이터 컬렉션입니다. 관계형 데이터베이스의 테이블이나 Python/R의 DataFrame과 유사합니다.
 
@@ -19,7 +17,7 @@ DataFrame과 Dataset은 Spark의 현대적인 고수준 API입니다. RDD보다 
 Dataset<Row> df = spark.read().json("employees.json");
 ```
 
-### Dataset
+**Dataset**
 
 **Dataset**은 특정 타입을 가진 분산 데이터 컬렉션입니다. 컴파일 타임 타입 안전성을 제공합니다.
 
@@ -35,7 +33,7 @@ Encoder<Employee> encoder = Encoders.bean(Employee.class);
 Dataset<Employee> ds = spark.read().json("employees.json").as(encoder);
 ```
 
-### Java에서의 사용
+**Java에서의 사용**
 
 | 개념 | Java 표현 | 설명 |
 |------|----------|------|
@@ -43,9 +41,9 @@ Dataset<Employee> ds = spark.read().json("employees.json").as(encoder);
 | Dataset | `Dataset<T>` | 타입 파라미터로 POJO 사용 |
 | Row | `org.apache.spark.sql.Row` | 스키마 기반 제네릭 행 |
 
-## DataFrame 생성
+#### DataFrame 생성
 
-### 1. 파일에서 생성
+**1. 파일에서 생성**
 
 ```java
 import org.apache.spark.sql.SparkSession;
@@ -79,7 +77,7 @@ Dataset<Row> jdbcDf = spark.read()
         .load();
 ```
 
-### 2. 프로그래밍 방식으로 생성
+**2. 프로그래밍 방식으로 생성**
 
 ```java
 import org.apache.spark.sql.RowFactory;
@@ -114,7 +112,7 @@ df.show();
 // +-------+---+-----------+
 ```
 
-### 3. POJO에서 생성
+**3. POJO에서 생성**
 
 ```java
 import org.apache.spark.sql.Encoders;
@@ -156,9 +154,9 @@ Dataset<Employee> ds = spark.createDataset(employees, Encoders.bean(Employee.cla
 ds.show();
 ```
 
-## 기본 연산
+#### 기본 연산
 
-### 스키마 확인
+**스키마 확인**
 
 ```java
 // 스키마 출력
@@ -175,7 +173,7 @@ String[] columns = df.columns();
 StructType schema = df.schema();
 ```
 
-### 데이터 확인
+**데이터 확인**
 
 ```java
 // 상위 n개 행 출력
@@ -202,7 +200,7 @@ df.describe("age", "salary").show();
 // +-------+------------------+------------------+
 ```
 
-### Select (컬럼 선택)
+**Select (컬럼 선택)**
 
 ```java
 import static org.apache.spark.sql.functions.*;
@@ -228,7 +226,7 @@ df.select(
 ).show();
 ```
 
-### Filter (조건 필터링)
+**Filter (조건 필터링)**
 
 ```java
 // 문자열 조건
@@ -256,7 +254,7 @@ df.filter(col("name").contains("li")).show();
 df.filter(col("name").rlike("^A.*e$")).show();  // 정규식
 ```
 
-### 컬럼 추가/수정/삭제
+**컬럼 추가/수정/삭제**
 
 ```java
 // 새 컬럼 추가
@@ -278,7 +276,7 @@ Dataset<Row> droppedMultiple = df.drop("department", "age");
 Dataset<Row> casted = df.withColumn("age", col("age").cast(DataTypes.DoubleType));
 ```
 
-### 정렬
+**정렬**
 
 ```java
 // 오름차순 정렬
@@ -297,9 +295,9 @@ df.orderBy(col("age").asc_nulls_first()).show();
 df.orderBy(col("age").desc_nulls_last()).show();
 ```
 
-## 집계 연산
+#### 집계 연산
 
-### groupBy
+**groupBy**
 
 ```java
 // 단일 컬럼 그룹화
@@ -323,7 +321,7 @@ df.groupBy("department", "level")
     .show();
 ```
 
-### 집계 함수
+**집계 함수**
 
 ```java
 import static org.apache.spark.sql.functions.*;
@@ -345,7 +343,7 @@ df.agg(
 ).show();
 ```
 
-### Window 함수
+**Window 함수**
 
 ```java
 import org.apache.spark.sql.expressions.Window;
@@ -383,7 +381,7 @@ WindowSpec runningWindow = Window
 df.withColumn("running_total", sum("salary").over(runningWindow)).show();
 ```
 
-## Join
+#### Join
 
 ```java
 Dataset<Row> employees = spark.read().json("employees.json");
@@ -410,7 +408,7 @@ employees.join(departments, col("department_id").equalTo(col("id")), "left_anti"
 employees.crossJoin(departments);
 ```
 
-### Join 최적화
+**Join 최적화**
 
 ```java
 import static org.apache.spark.sql.functions.broadcast;
@@ -426,7 +424,7 @@ Dataset<Row> optimizedJoin = employees.join(
 spark.conf().set("spark.sql.autoBroadcastJoinThreshold", "50MB");
 ```
 
-## Dataset (타입 안전 API)
+#### Dataset (타입 안전 API)
 
 Java에서 Dataset을 사용하면 컴파일 타임에 타입 체크가 가능합니다.
 
@@ -465,7 +463,7 @@ Employee oldest = employeeDs.reduce(
 );
 ```
 
-### Encoder 유형
+**Encoder 유형**
 
 ```java
 // 기본 타입
@@ -485,7 +483,7 @@ Encoders.tuple(Encoders.STRING(), Encoders.INT())
 Encoders.kryo(MyClass.class)
 ```
 
-## DataFrame vs Dataset 선택 기준
+#### DataFrame vs Dataset 선택 기준
 
 | 상황 | 권장 API |
 |------|---------|
@@ -496,7 +494,7 @@ Encoders.kryo(MyClass.class)
 | Python/R과 호환성 | DataFrame |
 | 최고 성능 필요 | DataFrame (Tungsten 최적화) |
 
-## 실전 예제: 매출 분석
+#### 실전 예제: 매출 분석
 
 ```java
 public class SalesAnalysis {
@@ -569,11 +567,11 @@ public class SalesAnalysis {
 
 ---
 
-## Java vs Scala 코드 비교
+#### Java vs Scala 코드 비교
 
 동일한 로직을 Java와 Scala로 작성한 비교입니다. Java 개발자가 Scala 문서를 읽을 때 참고하세요.
 
-### DataFrame 생성 및 조회
+**DataFrame 생성 및 조회**
 
 | 작업 | Java | Scala |
 |------|------|-------|
@@ -582,7 +580,7 @@ public class SalesAnalysis {
 | 스키마 출력 | `df.printSchema()` | `df.printSchema()` |
 | 컬럼 참조 | `col("name")` | `$"name"` 또는 `col("name")` |
 
-### 코드 예시 비교
+**코드 예시 비교**
 
 **Java:**
 ```java
@@ -614,7 +612,7 @@ val result = df
   .orderBy($"avg_salary".desc)
 ```
 
-### 주요 차이점
+**주요 차이점**
 
 | 구분 | Java | Scala | 설명 |
 |------|------|-------|------|
@@ -626,7 +624,7 @@ val result = df
 | **람다** | `row -> row.getInt(0)` | `row => row.getInt(0)` | 화살표 문법 차이 |
 | **익명 함수** | `(MapFunction<T,R>)` | 타입 추론 | Java는 명시적 캐스트 필요 |
 
-### Dataset 타입 안전 코드 비교
+**Dataset 타입 안전 코드 비교**
 
 **Java:**
 ```java
@@ -657,7 +655,7 @@ val names = ds.map(_.name)
 > **Note**: Scala의 case class는 자동으로 Encoder가 생성되어 Java보다 간결합니다.
 > Java 17+의 `record`를 사용하면 비슷하게 간결해집니다.
 
-## 다음 단계
+#### 다음 단계
 
 DataFrame과 Dataset을 이해했다면:
 

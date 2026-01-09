@@ -1,14 +1,12 @@
 ---
 title: 모니터링 설정
 weight: 4
-lastmod: "2026-01-07"
+lastmod: "2026-01-09"
 ---
-
-# Spark 모니터링 설정 가이드
 
 프로덕션 환경에서 Spark 애플리케이션을 안정적으로 운영하기 위한 모니터링 설정 가이드입니다.
 
-## 모니터링 아키텍처
+#### 모니터링 아키텍처
 
 ```mermaid
 flowchart TB
@@ -40,9 +38,9 @@ flowchart TB
     Grafana --> AlertManager
 ```
 
-## Spark UI 설정
+#### Spark UI 설정
 
-### 기본 Spark UI 활성화
+**기본 Spark UI 활성화**
 
 ```java
 SparkSession spark = SparkSession.builder()
@@ -58,7 +56,7 @@ SparkSession spark = SparkSession.builder()
         .getOrCreate();
 ```
 
-### History Server 설정
+**History Server 설정**
 
 애플리케이션 종료 후에도 로그를 확인할 수 있습니다.
 
@@ -82,9 +80,9 @@ SparkSession spark = SparkSession.builder()
         .getOrCreate();
 ```
 
-## Prometheus + Grafana 연동
+#### Prometheus + Grafana 연동
 
-### 1. Prometheus 메트릭 설정
+**1. Prometheus 메트릭 설정**
 
 `metrics.properties` 파일을 생성합니다:
 
@@ -96,7 +94,7 @@ master.sink.prometheusServlet.path=/metrics/master/prometheus
 applications.sink.prometheusServlet.path=/metrics/applications/prometheus
 ```
 
-### 2. Spark 설정
+**2. Spark 설정**
 
 ```java
 SparkSession spark = SparkSession.builder()
@@ -112,7 +110,7 @@ SparkSession spark = SparkSession.builder()
         .getOrCreate();
 ```
 
-### 3. Prometheus 설정
+**3. Prometheus 설정**
 
 ```yaml
 # prometheus.yml
@@ -129,7 +127,7 @@ scrape_configs:
       - targets: ['executor1:4040', 'executor2:4040']
 ```
 
-### 4. Grafana 대시보드 쿼리 예시
+**4. Grafana 대시보드 쿼리 예시**
 
 ```promql
 # 활성 Executor 수
@@ -153,9 +151,9 @@ rate(spark_executor_failedTasks_total{app_name="$app"}[5m]) /
 rate(spark_executor_completedTasks_total{app_name="$app"}[5m]) * 100
 ```
 
-## 커스텀 메트릭 구현
+#### 커스텀 메트릭 구현
 
-### 애플리케이션 레벨 메트릭
+**애플리케이션 레벨 메트릭**
 
 ```java
 import org.apache.spark.sql.SparkSession;
@@ -231,7 +229,7 @@ public class CustomMetricsCollector implements Source {
 }
 ```
 
-### 메트릭 적용 예제
+**메트릭 적용 예제**
 
 ```java
 public class MonitoredETLJob {
@@ -283,9 +281,9 @@ public class MonitoredETLJob {
 }
 ```
 
-## 로깅 설정
+#### 로깅 설정
 
-### Log4j2 설정 (권장)
+**Log4j2 설정 (권장)**
 
 ```xml
 <!-- log4j2.xml -->
@@ -350,7 +348,7 @@ public class MonitoredETLJob {
 </Configuration>
 ```
 
-### 구조화된 로깅
+**구조화된 로깅**
 
 ```java
 import org.slf4j.Logger;
@@ -386,9 +384,9 @@ public class StructuredLoggingExample {
 }
 ```
 
-## 알림 설정
+#### 알림 설정
 
-### Grafana Alert Rules (YAML)
+**Grafana Alert Rules (YAML)**
 
 ```yaml
 # grafana-alerts.yml
@@ -434,9 +432,9 @@ groups:
           summary: "디스크 Spill 1GB 초과 - 메모리 증설 필요"
 ```
 
-## 모니터링 체크리스트
+#### 모니터링 체크리스트
 
-### 일일 점검 항목
+**일일 점검 항목**
 
 | 메트릭 | 정상 범위 | 주의 | 위험 |
 |--------|-----------|------|------|
@@ -446,7 +444,7 @@ groups:
 | **Shuffle Spill** | 0 | < 100MB | > 1GB |
 | **처리 지연** | < 예상 시간 | 1.5x | > 2x |
 
-### 주간 점검 항목
+**주간 점검 항목**
 
 ```java
 // 주간 성능 리포트 생성
@@ -482,7 +480,7 @@ public class WeeklyReportGenerator {
 }
 ```
 
-## 관련 문서
+#### 관련 문서
 
 - [성능 튜닝](../../concepts/tuning/) - 모니터링 결과를 기반으로 최적화
 - [FAQ - 디버깅 가이드](../../appendix/faq/#spark-ui-활용-디버깅-가이드) - 문제 해결

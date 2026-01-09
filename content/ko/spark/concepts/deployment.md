@@ -1,14 +1,12 @@
 ---
 title: 배포와 클러스터 관리
 weight: 11
-lastmod: "2026-01-07"
+lastmod: "2026-01-09"
 ---
-
-# 배포와 클러스터 관리
 
 Spark 애플리케이션을 다양한 클러스터 환경에 배포하고 관리하는 방법을 알아봅니다.
 
-## 클러스터 매니저 유형
+#### 클러스터 매니저 유형
 
 | 유형 | 특징 | 적합한 환경 |
 |------|------|------------|
@@ -18,7 +16,7 @@ Spark 애플리케이션을 다양한 클러스터 환경에 배포하고 관리
 | **Kubernetes** | 컨테이너 기반 | 클라우드 네이티브 |
 | **Mesos** | 범용 스케줄러 | 다양한 워크로드 혼합 |
 
-## Local 모드
+#### Local 모드
 
 개발과 테스트에 사용합니다.
 
@@ -31,11 +29,11 @@ SparkSession spark = SparkSession.builder()
     .getOrCreate();
 ```
 
-## Standalone 클러스터
+#### Standalone 클러스터
 
 Spark에 내장된 간단한 클러스터 매니저입니다.
 
-### 클러스터 시작
+**클러스터 시작**
 
 ```bash
 # Master 시작
@@ -48,7 +46,7 @@ $SPARK_HOME/sbin/start-worker.sh spark://master-host:7077
 $SPARK_HOME/sbin/start-all.sh
 ```
 
-### 애플리케이션 제출
+**애플리케이션 제출**
 
 ```bash
 spark-submit \
@@ -59,7 +57,7 @@ spark-submit \
   myapp.jar
 ```
 
-### conf/spark-defaults.conf
+**conf/spark-defaults.conf**
 
 ```properties
 spark.master                     spark://master-host:7077
@@ -69,11 +67,11 @@ spark.executor.cores             4
 spark.default.parallelism        200
 ```
 
-## YARN
+#### YARN
 
 Hadoop YARN에서 Spark를 실행합니다.
 
-### 환경 설정
+**환경 설정**
 
 ```bash
 # HADOOP_CONF_DIR 설정
@@ -83,7 +81,7 @@ export HADOOP_CONF_DIR=/etc/hadoop/conf
 spark.hadoop.fs.defaultFS=hdfs://namenode:8020
 ```
 
-### 애플리케이션 제출
+**애플리케이션 제출**
 
 ```bash
 # Client 모드 (Driver가 로컬)
@@ -105,7 +103,7 @@ spark-submit \
   myapp.jar
 ```
 
-### YARN 설정
+**YARN 설정**
 
 ```properties
 # Executor 설정
@@ -124,7 +122,7 @@ spark.shuffle.service.enabled=true
 spark.yarn.queue=production
 ```
 
-### 동적 할당
+**동적 할당**
 
 워크로드에 따라 Executor 수를 자동 조절합니다.
 
@@ -143,11 +141,11 @@ spark.dynamicAllocation.executorIdleTimeout=60s
 spark.shuffle.service.enabled=true
 ```
 
-## Kubernetes
+#### Kubernetes
 
 컨테이너 환경에서 Spark를 실행합니다.
 
-### 애플리케이션 제출
+**애플리케이션 제출**
 
 ```bash
 spark-submit \
@@ -162,7 +160,7 @@ spark-submit \
   local:///opt/spark/examples/jars/myapp.jar
 ```
 
-### Kubernetes 설정
+**Kubernetes 설정**
 
 ```properties
 # 기본 설정
@@ -188,7 +186,7 @@ spark.kubernetes.driver.volumes.persistentVolumeClaim.data.options.claimName=spa
 spark.kubernetes.driver.secretKeyRef.AWS_ACCESS_KEY_ID=aws-secret:access-key
 ```
 
-### Docker 이미지 빌드
+**Docker 이미지 빌드**
 
 ```dockerfile
 # Dockerfile
@@ -207,9 +205,9 @@ docker build -t my-registry/spark-app:1.0 .
 docker push my-registry/spark-app:1.0
 ```
 
-## spark-submit 옵션
+#### spark-submit 옵션
 
-### 기본 옵션
+**기본 옵션**
 
 ```bash
 spark-submit \
@@ -221,7 +219,7 @@ spark-submit \
   arg1 arg2                             # 애플리케이션 인자
 ```
 
-### 리소스 옵션
+**리소스 옵션**
 
 ```bash
 spark-submit \
@@ -234,7 +232,7 @@ spark-submit \
   myapp.jar
 ```
 
-### 의존성 옵션
+**의존성 옵션**
 
 ```bash
 spark-submit \
@@ -246,7 +244,7 @@ spark-submit \
   myapp.jar
 ```
 
-### 설정 옵션
+**설정 옵션**
 
 ```bash
 spark-submit \
@@ -257,9 +255,9 @@ spark-submit \
   myapp.jar
 ```
 
-## Fat JAR 생성
+#### Fat JAR 생성
 
-### Gradle (Shadow Plugin)
+**Gradle (Shadow Plugin)**
 
 ```groovy
 // build.gradle
@@ -292,7 +290,7 @@ shadowJar {
 # build/libs/myapp-1.0.jar 생성
 ```
 
-### Maven (Shade Plugin)
+**Maven (Shade Plugin)**
 
 ```xml
 <plugin>
@@ -318,9 +316,9 @@ shadowJar {
 </plugin>
 ```
 
-## 모니터링
+#### 모니터링
 
-### Spark History Server
+**Spark History Server**
 
 완료된 애플리케이션의 UI를 제공합니다.
 
@@ -335,7 +333,7 @@ $SPARK_HOME/sbin/start-history-server.sh
 # 접속: http://history-server:18080
 ```
 
-### 메트릭 수집
+**메트릭 수집**
 
 ```properties
 # Prometheus 메트릭
@@ -348,7 +346,7 @@ spark.metrics.conf.*.sink.graphite.host=graphite-host
 spark.metrics.conf.*.sink.graphite.port=2003
 ```
 
-### 로깅 설정
+**로깅 설정**
 
 ```properties
 # log4j2.properties
@@ -364,16 +362,16 @@ logger.myapp.name = com.example
 logger.myapp.level = INFO
 ```
 
-## 보안
+#### 보안
 
-### Kerberos 인증
+**Kerberos 인증**
 
 ```properties
 spark.yarn.principal=spark@EXAMPLE.COM
 spark.yarn.keytab=/path/to/spark.keytab
 ```
 
-### SSL/TLS
+**SSL/TLS**
 
 ```properties
 # Executor-Driver 간 통신 암호화
@@ -384,7 +382,7 @@ spark.ssl.trustStore=/path/to/truststore
 spark.ssl.trustStorePassword=password
 ```
 
-### 접근 제어
+**접근 제어**
 
 ```properties
 # ACL 활성화
@@ -394,9 +392,9 @@ spark.modify.acls=developer1,developer2
 spark.ui.view.acls=viewer1,viewer2
 ```
 
-## 운영 팁
+#### 운영 팁
 
-### 애플리케이션 관리
+**애플리케이션 관리**
 
 ```bash
 # 실행 중인 애플리케이션 목록 (YARN)
@@ -409,7 +407,7 @@ yarn application -kill application_xxx
 yarn logs -applicationId application_xxx
 ```
 
-### 장애 대응
+**장애 대응**
 
 ```properties
 # 재시도 설정
@@ -423,7 +421,7 @@ spark.speculation.multiplier=1.5
 spark.speculation.quantile=0.75
 ```
 
-### 리소스 정리
+**리소스 정리**
 
 ```properties
 # 임시 파일 정리
@@ -435,9 +433,9 @@ spark.shuffle.service.enabled=true
 spark.shuffle.registration.timeout=60000ms
 ```
 
-## 클라우드 배포
+#### 클라우드 배포
 
-### AWS EMR
+**AWS EMR**
 
 ```bash
 aws emr create-cluster \
@@ -448,7 +446,7 @@ aws emr create-cluster \
   --instance-count 3
 ```
 
-### GCP Dataproc
+**GCP Dataproc**
 
 ```bash
 gcloud dataproc clusters create spark-cluster \
@@ -458,11 +456,11 @@ gcloud dataproc clusters create spark-cluster \
   --num-workers=3
 ```
 
-### Azure HDInsight / Databricks
+**Azure HDInsight / Databricks**
 
 각 플랫폼의 관리 콘솔 또는 CLI를 통해 클러스터를 생성합니다.
 
-## 다음 단계
+#### 다음 단계
 
 - [FAQ](../../appendix/faq/) - 운영 중 자주 발생하는 문제
 - [참고 자료](../../appendix/references/) - 추가 학습 자료

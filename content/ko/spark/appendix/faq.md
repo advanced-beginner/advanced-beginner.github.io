@@ -1,16 +1,14 @@
 ---
 title: FAQ
 weight: 2
-lastmod: "2026-01-07"
+lastmod: "2026-01-09"
 ---
-
-# FAQ
 
 자주 묻는 질문과 흔히 발생하는 문제의 해결 방법을 제공합니다.
 
-## 일반 질문
+#### 일반 질문
 
-### Spark는 어떤 Java 버전을 지원하나요?
+**Spark는 어떤 Java 버전을 지원하나요?**
 
 Spark 3.5는 Java 8, 11, 17을 지원합니다. Java 21은 아직 공식 지원되지 않습니다.
 
@@ -18,18 +16,18 @@ Spark 3.5는 Java 8, 11, 17을 지원합니다. Java 21은 아직 공식 지원�
 java -version  # 버전 확인
 ```
 
-### Scala 없이 Java만으로 Spark를 사용할 수 있나요?
+**Scala 없이 Java만으로 Spark를 사용할 수 있나요?**
 
 네, 가능합니다. Spark는 Java API를 완벽히 지원합니다. 다만 Spark 런타임이 Scala로 작성되어 있어 Scala 라이브러리가 의존성에 포함됩니다.
 
-### DataFrame과 Dataset의 차이는 무엇인가요?
+**DataFrame과 Dataset의 차이는 무엇인가요?**
 
 - **DataFrame** (`Dataset<Row>`): 스키마는 있지만 컴파일 타임 타입 체크 없음
 - **Dataset** (`Dataset<T>`): POJO 타입을 사용해 컴파일 타임 타입 안전성 제공
 
 Java에서는 DataFrame이 `Dataset<Row>`의 별칭입니다.
 
-### RDD와 DataFrame 중 무엇을 사용해야 하나요?
+**RDD와 DataFrame 중 무엇을 사용해야 하나요?**
 
 **DataFrame을 권장합니다.** 이유:
 - Catalyst Optimizer의 자동 최적화
@@ -38,9 +36,9 @@ Java에서는 DataFrame이 `Dataset<Row>`의 별칭입니다.
 
 RDD는 저수준 제어가 필요하거나 비구조화 데이터를 처리할 때 사용합니다.
 
-## 오류 해결
+#### 오류 해결
 
-### OutOfMemoryError
+**OutOfMemoryError**
 
 ```
 java.lang.OutOfMemoryError: Java heap space
@@ -60,7 +58,7 @@ java.lang.OutOfMemoryError: Java heap space
 spark-submit --driver-memory 4g --executor-memory 8g
 ```
 
-### Shuffle 중 디스크 공간 부족
+**Shuffle 중 디스크 공간 부족**
 
 ```
 No space left on device
@@ -75,7 +73,7 @@ spark.local.dir=/data/spark-local
 spark.local.dir=/data/spark1,/data/spark2
 ```
 
-### Task 실패 후 재시도 소진
+**Task 실패 후 재시도 소진**
 
 ```
 Task failed, total retries exceeded
@@ -90,7 +88,7 @@ spark.task.maxFailures=8
 spark.speculation=true
 ```
 
-### 직렬화 오류
+**직렬화 오류**
 
 ```
 NotSerializableException
@@ -117,7 +115,7 @@ df.foreachPartition(partition -> {
 });
 ```
 
-### 로깅 충돌
+**로깅 충돌**
 
 ```
 SLF4J: Class path contains multiple SLF4J bindings
@@ -132,7 +130,7 @@ configurations.all {
 }
 ```
 
-### SparkContext 중복 생성
+**SparkContext 중복 생성**
 
 ```
 Only one SparkContext may be running in this JVM
@@ -150,7 +148,7 @@ if (SparkSession.getActiveSession().isDefined()) {
 }
 ```
 
-### Windows에서 Hadoop 오류
+**Windows에서 Hadoop 오류**
 
 ```
 Could not locate executable winutils.exe
@@ -166,9 +164,9 @@ Could not locate executable winutils.exe
 System.setProperty("hadoop.home.dir", "C:\\hadoop");
 ```
 
-## 성능 관련
+#### 성능 관련
 
-### 작업이 예상보다 느립니다
+**작업이 예상보다 느립니다**
 
 **체크리스트**:
 1. **셔플 최소화**: Wide Transformation 줄이기
@@ -178,7 +176,7 @@ System.setProperty("hadoop.home.dir", "C:\\hadoop");
 5. **캐싱**: 반복 사용 데이터 캐시
 6. **Parquet 사용**: 컬럼 기반 포맷으로 변경
 
-### 적절한 파티션 수는 얼마인가요?
+**적절한 파티션 수는 얼마인가요?**
 
 ```
 권장 파티션 수 = 총 코어 수 × 2~4
@@ -189,7 +187,7 @@ System.setProperty("hadoop.home.dir", "C:\\hadoop");
 - 50코어 클러스터 → 100~200 파티션
 - 100GB 데이터 → 500~1000 파티션
 
-### 캐싱이 효과가 없는 것 같습니다
+**캐싱이 효과가 없는 것 같습니다**
 
 **확인 사항**:
 1. 실제로 캐시되었는지: Spark UI의 Storage 탭 확인
@@ -202,7 +200,7 @@ df.count();  // 여기서 실제 캐싱 발생
 df.show();   // 캐시에서 읽음
 ```
 
-### 조인이 너무 느립니다
+**조인이 너무 느립니다**
 
 **해결 방법**:
 1. **작은 테이블 브로드캐스트**
@@ -221,16 +219,16 @@ filtered.join(small, "key")
 df.write().bucketBy(100, "key").saveAsTable("bucketed");
 ```
 
-## 스트리밍 관련
+#### 스트리밍 관련
 
-### 스트리밍 쿼리가 멈춥니다
+**스트리밍 쿼리가 멈춥니다**
 
 **확인 사항**:
 1. 체크포인트 디렉토리 쓰기 권한
 2. Kafka 연결 상태
 3. 상태 저장소 메모리
 
-### 늦게 도착하는 데이터가 처리되지 않습니다
+**늦게 도착하는 데이터가 처리되지 않습니다**
 
 **해결**: Watermark 설정
 ```java
@@ -239,23 +237,23 @@ df.withWatermark("timestamp", "10 minutes")
   .count()
 ```
 
-## 배포 관련
+#### 배포 관련
 
-### YARN에서 실행이 안 됩니다
+**YARN에서 실행이 안 됩니다**
 
 **확인 사항**:
 1. `HADOOP_CONF_DIR` 환경 변수 설정
 2. YARN 큐 권한
 3. 리소스 설정 (메모리, 코어)
 
-### Kubernetes에서 Pod가 Pending 상태입니다
+**Kubernetes에서 Pod가 Pending 상태입니다**
 
 **확인 사항**:
 1. 리소스 요청량 확인
 2. PV/PVC 상태
 3. Service Account 권한
 
-### 애플리케이션 로그를 어디서 볼 수 있나요?
+**애플리케이션 로그를 어디서 볼 수 있나요?**
 
 ```bash
 # YARN
@@ -269,9 +267,9 @@ kubectl logs spark-executor-xxx
 http://history-server:18080
 ```
 
-## 기타
+#### 기타
 
-### Spark UI에 접속할 수 없습니다
+**Spark UI에 접속할 수 없습니다**
 
 **로컬 모드**:
 ```
@@ -288,7 +286,7 @@ yarn application -list  # Application ID 확인
 http://history-server:18080
 ```
 
-### 특정 Executor만 느립니다
+**특정 Executor만 느립니다**
 
 **가능한 원인**:
 1. 데이터 스큐: 특정 파티션에 데이터 집중
@@ -302,7 +300,7 @@ spark.speculation=true
 spark.speculation.multiplier=1.5
 ```
 
-### DataFrame을 POJO 리스트로 변환하려면?
+**DataFrame을 POJO 리스트로 변환하려면?**
 
 ```java
 Encoder<Employee> encoder = Encoders.bean(Employee.class);
@@ -311,11 +309,11 @@ List<Employee> employees = df.as(encoder).collectAsList();
 
 주의: `collect()`는 모든 데이터를 Driver로 가져오므로 대용량 데이터에서는 사용하지 마세요.
 
-## Spark UI 활용 디버깅 가이드
+#### Spark UI 활용 디버깅 가이드
 
 Spark 성능 문제 해결의 핵심은 Spark UI를 체계적으로 분석하는 것입니다.
 
-### 디버깅 플로우
+**디버깅 플로우**
 
 ```mermaid
 flowchart TD
@@ -341,7 +339,7 @@ flowchart TD
     P -->|Yes| Q[GC, 네트워크, 디스크 확인]
 ```
 
-### 1. Jobs 탭 분석
+**1. Jobs 탭 분석**
 
 ```
 확인 항목:
@@ -354,7 +352,7 @@ flowchart TD
 - 특정 Job이 비정상적으로 오래 걸림
 - 반복 Job 간 시간 편차가 큼
 
-### 2. Stages 탭 분석 (가장 중요)
+**2. Stages 탭 분석 (가장 중요)**
 
 ```
 핵심 메트릭:
@@ -374,7 +372,7 @@ flowchart TD
 | Shuffle Read | 균등 분포 | 일부만 큼 → **스큐** |
 | GC Time | < 10% | > 30% → **메모리 부족** |
 
-### 3. 스큐 진단 및 해결
+**3. 스큐 진단 및 해결**
 
 **진단 코드:**
 
@@ -411,7 +409,7 @@ Dataset<Row> salted = df.withColumn("salted_key",
 df1.join(broadcast(smallDf), "key");
 ```
 
-### 4. OOM 디버깅
+**4. OOM 디버깅**
 
 **Driver OOM:**
 ```
@@ -445,7 +443,7 @@ System.out.println("파티션당 크기: " + (totalSize / numPartitions / 1024 /
 df = df.repartition(200);  // 파티션 크기가 200MB 정도 되도록
 ```
 
-### 5. 셔플 최적화 진단
+**5. 셔플 최적화 진단**
 
 **셔플이 많은지 확인:**
 
@@ -469,7 +467,7 @@ df.groupBy("a").agg(
 );
 ```
 
-### 6. 로그 분석
+**6. 로그 분석**
 
 ```bash
 # Driver 로그에서 오류 찾기
@@ -482,7 +480,7 @@ grep -i "shuffle\|fetch\|timeout" executor.log
 grep -i "gc\|pause\|heap" executor.log
 ```
 
-### 7. 성능 체크리스트
+**7. 성능 체크리스트**
 
 ```
 □ 셔플 파티션 수가 적절한가? (기본 200, 데이터 크기에 따라 조정)

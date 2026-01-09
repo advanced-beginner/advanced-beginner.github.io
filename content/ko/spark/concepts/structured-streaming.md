@@ -1,18 +1,16 @@
 ---
 title: Structured Streaming
 weight: 8
-lastmod: "2026-01-07"
+lastmod: "2026-01-09"
 ---
-
-# Structured Streaming
 
 Structured Streaming은 Spark의 스트림 처리 엔진입니다. 배치 처리와 동일한 DataFrame/Dataset API를 사용하여 실시간 데이터를 처리합니다.
 
-## Structured Streaming이란?
+#### Structured Streaming이란?
 
 **Structured Streaming**은 스트림 데이터를 무한히 추가되는 테이블로 취급합니다. 새 데이터가 도착하면 증분 처리(incremental processing)를 수행합니다.
 
-### 핵심 개념
+**핵심 개념**
 
 ```
 입력 스트림 (무한 테이블)
@@ -22,7 +20,7 @@ Structured Streaming은 Spark의 스트림 처리 엔진입니다. 배치 처리
 출력 (지속적으로 업데이트되는 결과 테이블)
 ```
 
-### 배치 vs 스트리밍 코드 비교
+**배치 vs 스트리밍 코드 비교**
 
 ```java
 // 배치 처리 (정적 데이터)
@@ -50,9 +48,9 @@ result.writeStream()                        // writeStream으로 변경
         .awaitTermination();
 ```
 
-## 기본 사용법
+#### 기본 사용법
 
-### 스트림 읽기
+**스트림 읽기**
 
 ```java
 SparkSession spark = SparkSession.builder()
@@ -86,7 +84,7 @@ Dataset<Row> rateStream = spark.readStream()
         .load();
 ```
 
-### 스트림 처리
+**스트림 처리**
 
 스트림 DataFrame에 일반 DataFrame과 동일한 연산 적용:
 
@@ -108,7 +106,7 @@ Dataset<Row> aggregated = stream
         );
 ```
 
-### 스트림 쓰기
+**스트림 쓰기**
 
 ```java
 StreamingQuery query = result.writeStream()
@@ -126,7 +124,7 @@ query.awaitTermination();
 // query.isActive(), query.stop() 등으로 관리
 ```
 
-## 출력 모드 (Output Mode)
+#### 출력 모드 (Output Mode)
 
 | 모드 | 설명 | 사용 시점 |
 |------|------|----------|
@@ -154,7 +152,7 @@ aggregated.writeStream()
     .start();
 ```
 
-## 트리거 (Trigger)
+#### 트리거 (Trigger)
 
 데이터 처리 빈도를 제어합니다.
 
@@ -178,9 +176,9 @@ import org.apache.spark.sql.streaming.Trigger;
 .trigger(Trigger.Continuous("1 second"))
 ```
 
-## Kafka 연동
+#### Kafka 연동
 
-### Kafka에서 읽기
+**Kafka에서 읽기**
 
 ```java
 Dataset<Row> kafkaStream = spark.readStream()
@@ -202,7 +200,7 @@ Dataset<Row> parsed = kafkaStream
         .select("data.*");
 ```
 
-### Kafka에 쓰기
+**Kafka에 쓰기**
 
 ```java
 // 결과를 Kafka로 전송
@@ -216,11 +214,11 @@ result
     .start();
 ```
 
-## 윈도우 연산
+#### 윈도우 연산
 
 시간 기반 집계를 위한 윈도우 함수입니다.
 
-### Tumbling Window (텀블링 윈도우)
+**Tumbling Window (텀블링 윈도우)**
 
 겹치지 않는 고정 크기 윈도우:
 
@@ -242,7 +240,7 @@ Dataset<Row> windowedCounts = stream
 // +------------------------------------------+--------+-----+
 ```
 
-### Sliding Window (슬라이딩 윈도우)
+**Sliding Window (슬라이딩 윈도우)**
 
 겹치는 윈도우:
 
@@ -258,7 +256,7 @@ Dataset<Row> slidingCounts = stream
 // 각 이벤트가 2개 윈도우에 포함될 수 있음
 ```
 
-### Session Window (세션 윈도우)
+**Session Window (세션 윈도우)**
 
 활동 기반 동적 윈도우:
 
@@ -273,7 +271,7 @@ Dataset<Row> sessionCounts = stream
     .count();
 ```
 
-## Watermark
+#### Watermark
 
 늦게 도착하는 데이터(late data)를 처리하기 위한 메커니즘입니다.
 
@@ -290,7 +288,7 @@ Dataset<Row> result = stream
 // 워터마크보다 오래된 데이터는 무시됨
 ```
 
-### Watermark 동작
+**Watermark 동작**
 
 ```
 이벤트 시간 순서:
@@ -301,11 +299,11 @@ Dataset<Row> result = stream
 - 09:55 이벤트: 워터마크(10:00) 이전 → 무시됨
 ```
 
-## 상태 관리
+#### 상태 관리
 
 집계 쿼리는 상태(state)를 유지합니다.
 
-### 상태 저장소 설정
+**상태 저장소 설정**
 
 ```java
 // RocksDB 상태 저장소 사용 (대용량 상태에 적합)
@@ -318,7 +316,7 @@ spark.conf().set(
 spark.conf().set("spark.sql.streaming.stateStore.rocksdb.memory.mb", "256");
 ```
 
-### 상태 타임아웃
+**상태 타임아웃**
 
 ```java
 // 그룹 상태에 타임아웃 설정 (mapGroupsWithState/flatMapGroupsWithState)
@@ -331,9 +329,9 @@ spark.conf().set("spark.sql.streaming.stateStore.rocksdb.memory.mb", "256");
 );
 ```
 
-## 조인
+#### 조인
 
-### Stream-Static 조인
+**Stream-Static 조인**
 
 스트림과 정적 데이터 조인:
 
@@ -347,7 +345,7 @@ Dataset<Row> enriched = stream.join(
 );
 ```
 
-### Stream-Stream 조인
+**Stream-Stream 조인**
 
 두 스트림 조인 (워터마크 필수):
 
@@ -376,7 +374,7 @@ Dataset<Row> joined = impressions.join(
 );
 ```
 
-## 쿼리 모니터링
+#### 쿼리 모니터링
 
 ```java
 StreamingQuery query = result.writeStream()
@@ -400,7 +398,7 @@ if (progress != null) {
 query.stop();
 ```
 
-### 쿼리 리스너
+**쿼리 리스너**
 
 ```java
 spark.streams().addListener(new StreamingQueryListener() {
@@ -421,7 +419,7 @@ spark.streams().addListener(new StreamingQueryListener() {
 });
 ```
 
-## 실전 예제: 실시간 매출 집계
+#### 실전 예제: 실시간 매출 집계
 
 ```java
 public class RealTimeSalesAggregation {
@@ -487,7 +485,7 @@ public class RealTimeSalesAggregation {
 }
 ```
 
-## 다음 단계
+#### 다음 단계
 
 - [MLlib](../mllib/) - Spark로 머신러닝
 - [성능 튜닝](../tuning/) - 스트리밍 성능 최적화

@@ -1,14 +1,12 @@
 ---
 title: ETL 파이프라인
 weight: 6
-lastmod: "2026-01-07"
+lastmod: "2026-01-09"
 ---
-
-# 실무 ETL 파이프라인 예제
 
 프로덕션 환경에서 사용 가능한 완전한 ETL(Extract-Transform-Load) 파이프라인 예제입니다.
 
-## 파이프라인 아키텍처
+#### 파이프라인 아키텍처
 
 ```mermaid
 flowchart LR
@@ -40,7 +38,7 @@ flowchart LR
     Agg --> Cache
 ```
 
-## 프로젝트 구조
+#### 프로젝트 구조
 
 ```
 etl-pipeline/
@@ -65,9 +63,9 @@ etl-pipeline/
 └── build.gradle.kts
 ```
 
-## 기본 ETL 구조
+#### 기본 ETL 구조
 
-### 추상 ETL 작업 클래스
+**추상 ETL 작업 클래스**
 
 ```java
 package com.example.etl.job;
@@ -155,7 +153,7 @@ public abstract class AbstractEtlJob {
 }
 ```
 
-### ETL 결과 클래스
+**ETL 결과 클래스**
 
 ```java
 package com.example.etl.job;
@@ -177,9 +175,9 @@ public record EtlResult(
 }
 ```
 
-## 매출 데이터 ETL 예제
+#### 매출 데이터 ETL 예제
 
-### 전체 구현
+**전체 구현**
 
 ```java
 package com.example.etl.job;
@@ -365,7 +363,7 @@ public class SalesEtlJob extends AbstractEtlJob {
 }
 ```
 
-### 검증 결과 클래스
+**검증 결과 클래스**
 
 ```java
 package com.example.etl.job;
@@ -386,9 +384,9 @@ public record ValidationResult(
 }
 ```
 
-## 데이터 정제 유틸리티
+#### 데이터 정제 유틸리티
 
-### 범용 데이터 클리너
+**범용 데이터 클리너**
 
 ```java
 package com.example.etl.transformer;
@@ -499,9 +497,9 @@ public class DataCleaner {
 }
 ```
 
-## 증분 ETL (Incremental)
+#### 증분 ETL (Incremental)
 
-### CDC 기반 증분 처리
+**CDC 기반 증분 처리**
 
 ```java
 package com.example.etl.job;
@@ -612,9 +610,9 @@ public class IncrementalEtlJob {
 }
 ```
 
-## 에러 처리 및 재시도
+#### 에러 처리 및 재시도
 
-### 견고한 ETL 러너
+**견고한 ETL 러너**
 
 ```java
 package com.example.etl;
@@ -703,7 +701,7 @@ public class EtlRunner {
 }
 ```
 
-## 스케줄링 (Spring)
+#### 스케줄링 (Spring)
 
 ```java
 package com.example.etl;
@@ -739,7 +737,7 @@ public class EtlScheduler {
 }
 ```
 
-## 관련 문서
+#### 관련 문서
 
 - [기본 예제](../basic/) - DataFrame 기본 연산
 - [모니터링](../monitoring/) - 파이프라인 모니터링

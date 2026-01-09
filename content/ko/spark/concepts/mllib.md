@@ -1,16 +1,14 @@
 ---
 title: MLlib
 weight: 9
-lastmod: "2026-01-07"
+lastmod: "2026-01-09"
 ---
-
-# MLlib (Machine Learning Library)
 
 MLlib은 Spark의 분산 머신러닝 라이브러리입니다. 대규모 데이터셋에서 머신러닝 모델을 학습하고 예측할 수 있습니다.
 
-## MLlib 개요
+#### MLlib 개요
 
-### 두 가지 API
+**두 가지 API**
 
 | API | 패키지 | 데이터 타입 | 상태 |
 |-----|--------|-----------|------|
@@ -19,7 +17,7 @@ MLlib은 Spark의 분산 머신러닝 라이브러리입니다. 대규모 데이
 
 이 가이드는 **spark.ml** (DataFrame 기반) API를 다룹니다.
 
-### 주요 구성요소
+**주요 구성요소**
 
 - **Transformer**: 데이터 변환 (fit 없이 transform)
 - **Estimator**: 학습 가능한 모델 (fit으로 Transformer 생성)
@@ -27,7 +25,7 @@ MLlib은 Spark의 분산 머신러닝 라이브러리입니다. 대규모 데이
 - **Evaluator**: 모델 성능 평가
 - **CrossValidator/TrainValidationSplit**: 하이퍼파라미터 튜닝
 
-## 기본 워크플로우
+#### 기본 워크플로우
 
 ```java
 import org.apache.spark.ml.classification.LogisticRegression;
@@ -77,9 +75,9 @@ model.write().overwrite().save("models/logistic-regression");
 LogisticRegressionModel loadedModel = LogisticRegressionModel.load("models/logistic-regression");
 ```
 
-## 특성 변환 (Feature Transformation)
+#### 특성 변환 (Feature Transformation)
 
-### VectorAssembler
+**VectorAssembler**
 
 여러 컬럼을 하나의 특성 벡터로 결합:
 
@@ -92,7 +90,7 @@ VectorAssembler assembler = new VectorAssembler()
 Dataset<Row> assembled = assembler.transform(data);
 ```
 
-### StringIndexer
+**StringIndexer**
 
 문자열을 숫자 인덱스로 변환:
 
@@ -106,7 +104,7 @@ StringIndexerModel indexerModel = indexer.fit(data);
 Dataset<Row> indexed = indexerModel.transform(data);
 ```
 
-### OneHotEncoder
+**OneHotEncoder**
 
 범주형 변수를 원-핫 인코딩:
 
@@ -118,7 +116,7 @@ OneHotEncoder encoder = new OneHotEncoder()
 Dataset<Row> encoded = encoder.fit(indexed).transform(indexed);
 ```
 
-### StandardScaler
+**StandardScaler**
 
 특성 정규화:
 
@@ -133,7 +131,7 @@ StandardScalerModel scalerModel = scaler.fit(data);
 Dataset<Row> scaled = scalerModel.transform(data);
 ```
 
-### Tokenizer / HashingTF
+**Tokenizer / HashingTF**
 
 텍스트 처리:
 
@@ -155,7 +153,7 @@ IDF idf = new IDF()
         .setOutputCol("tfidf");
 ```
 
-## Pipeline
+#### Pipeline
 
 여러 단계를 하나의 워크플로우로 연결:
 
@@ -201,9 +199,9 @@ model.write().overwrite().save("models/pipeline");
 PipelineModel loadedModel = PipelineModel.load("models/pipeline");
 ```
 
-## 분류 (Classification)
+#### 분류 (Classification)
 
-### 로지스틱 회귀
+**로지스틱 회귀**
 
 ```java
 LogisticRegression lr = new LogisticRegression()
@@ -219,7 +217,7 @@ System.out.println("Coefficients: " + model.coefficientMatrix());
 System.out.println("Intercept: " + model.interceptVector());
 ```
 
-### 결정 트리
+**결정 트리**
 
 ```java
 DecisionTreeClassifier dt = new DecisionTreeClassifier()
@@ -235,7 +233,7 @@ DecisionTreeClassificationModel model = dt.fit(training);
 System.out.println("Feature Importances: " + model.featureImportances());
 ```
 
-### 랜덤 포레스트
+**랜덤 포레스트**
 
 ```java
 RandomForestClassifier rf = new RandomForestClassifier()
@@ -248,7 +246,7 @@ RandomForestClassifier rf = new RandomForestClassifier()
 RandomForestClassificationModel model = rf.fit(training);
 ```
 
-### Gradient Boosted Trees
+**Gradient Boosted Trees**
 
 ```java
 GBTClassifier gbt = new GBTClassifier()
@@ -261,9 +259,9 @@ GBTClassifier gbt = new GBTClassifier()
 GBTClassificationModel model = gbt.fit(training);
 ```
 
-## 회귀 (Regression)
+#### 회귀 (Regression)
 
-### 선형 회귀
+**선형 회귀**
 
 ```java
 LinearRegression lr = new LinearRegression()
@@ -279,7 +277,7 @@ System.out.println("RMSE: " + summary.rootMeanSquaredError());
 System.out.println("R2: " + summary.r2());
 ```
 
-### 랜덤 포레스트 회귀
+**랜덤 포레스트 회귀**
 
 ```java
 RandomForestRegressor rf = new RandomForestRegressor()
@@ -290,9 +288,9 @@ RandomForestRegressor rf = new RandomForestRegressor()
 RandomForestRegressionModel model = rf.fit(training);
 ```
 
-## 클러스터링 (Clustering)
+#### 클러스터링 (Clustering)
 
-### K-Means
+**K-Means**
 
 ```java
 KMeans kmeans = new KMeans()
@@ -316,7 +314,7 @@ Dataset<Row> predictions = model.transform(data);
 double cost = model.summary().trainingCost();
 ```
 
-### 이상 탐지 (Isolation Forest 대안)
+**이상 탐지 (Isolation Forest 대안)**
 
 ```java
 // Spark MLlib에는 Isolation Forest가 없음
@@ -328,9 +326,9 @@ Dataset<Row> anomalies = withDistance
     .filter(col("distanceToCenter").gt(threshold));
 ```
 
-## 모델 평가
+#### 모델 평가
 
-### 분류 평가
+**분류 평가**
 
 ```java
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
@@ -355,7 +353,7 @@ double auc = binEvaluator.evaluate(predictions);
 System.out.println("AUC: " + auc);
 ```
 
-### 회귀 평가
+**회귀 평가**
 
 ```java
 import org.apache.spark.ml.evaluation.RegressionEvaluator;
@@ -369,9 +367,9 @@ double rmse = evaluator.evaluate(predictions);
 System.out.println("RMSE: " + rmse);
 ```
 
-## 하이퍼파라미터 튜닝
+#### 하이퍼파라미터 튜닝
 
-### CrossValidator
+**CrossValidator**
 
 ```java
 import org.apache.spark.ml.tuning.CrossValidator;
@@ -402,7 +400,7 @@ PipelineModel bestModel = (PipelineModel) cvModel.bestModel();
 double[] avgMetrics = cvModel.avgMetrics();
 ```
 
-### TrainValidationSplit
+**TrainValidationSplit**
 
 교차 검증보다 빠른 대안:
 
@@ -419,7 +417,7 @@ TrainValidationSplit tvs = new TrainValidationSplit()
 TrainValidationSplitModel tvsModel = tvs.fit(training);
 ```
 
-## 실전 예제: 고객 이탈 예측
+#### 실전 예제: 고객 이탈 예측
 
 ```java
 public class ChurnPrediction {
@@ -528,7 +526,7 @@ public class ChurnPrediction {
 }
 ```
 
-## 다음 단계
+#### 다음 단계
 
 - [성능 튜닝](../tuning/) - ML 워크로드 최적화
 - [배포](../deployment/) - 모델 서빙과 배치 예측
