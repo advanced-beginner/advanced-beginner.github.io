@@ -25,7 +25,7 @@ weight: 1
 | Java (선택) | `java -version` | `openjdk version "17.x.x"` (sbt가 자동 설치 가능) |
 | 터미널 | - | bash, zsh, PowerShell 중 하나 |
 
-#### Step 1/5: Scala 설치 (~2분)
+## Step 1/5: Scala 설치 (~2분)
 
 Scala를 설치하는 가장 쉬운 방법은 Coursier를 사용하는 것입니다. Coursier는 Scala, sbt, 그리고 다양한 Scala 도구를 한 번에 설치해주는 공식 설치 도구입니다.
 
@@ -83,7 +83,7 @@ cs install scala:3
 cs install scala:2.13.12
 ```
 
-#### Step 2/5: Hello World (~1분)
+## Step 2/5: Hello World (~1분)
 
 Scala의 기본 문법을 확인하는 가장 좋은 방법은 간단한 Hello World 프로그램을 작성하는 것입니다. REPL에서 바로 실행하거나 파일로 저장해서 실행할 수 있습니다.
 
@@ -143,7 +143,7 @@ scala Hello.scala
 # Hello, Scala 2!
 ```
 
-#### Step 3/5: sbt 프로젝트 생성 (~3분)
+## Step 3/5: sbt 프로젝트 생성 (~3분)
 
 실제 프로젝트에서는 sbt(Scala Build Tool)를 사용합니다. sbt는 의존성 관리, 컴파일, 테스트, 패키징 등 프로젝트 빌드에 필요한 모든 기능을 제공하는 Scala 표준 빌드 도구입니다.
 
@@ -229,7 +229,7 @@ sbt run
 | `sbt console` | REPL 실행 (프로젝트 의존성 포함) |
 | `sbt ~compile` | 파일 변경 시 자동 컴파일 |
 
-#### Step 4/5: IDE 설정 (~2분)
+## Step 4/5: IDE 설정 (~2분)
 
 효율적인 Scala 개발을 위해서는 IDE 설정이 중요합니다. 코드 자동 완성, 타입 검사, 리팩토링 지원 등을 받을 수 있습니다. 두 가지 주요 선택지가 있습니다.
 
@@ -249,7 +249,7 @@ VS Code는 가볍고 빠른 에디터로, Metals 확장을 통해 Scala Language
 3. sbt 프로젝트 폴더 열기
 4. "Import build" 클릭
 
-#### Step 5/5: 간단한 예제 (~2분)
+## Step 5/5: 간단한 예제 (~2분)
 
 설치가 완료되었으니 Scala의 기본 문법을 간단한 예제로 살펴봅니다. 아래 코드들은 Scala의 핵심적인 특징인 타입 추론, 불변성, 함수형 컬렉션 연산을 보여줍니다.
 
@@ -312,15 +312,23 @@ val sum = numbers.reduce(_ + _)
 // 15
 ```
 
-#### 다음 단계
+## 다음 단계
 
-Quick Start를 완료했습니다! 환경 설정이 끝났으니 이제 Scala의 핵심 개념들을 하나씩 배워볼 차례입니다.
+{{< callout type="success" title="🎉 축하합니다!" >}}
+Scala Quick Start를 성공적으로 완료했습니다! 이제 여러분은:
+- Scala 개발 환경을 구축했습니다
+- REPL에서 코드를 실행할 수 있습니다
+- sbt 프로젝트를 생성하고 관리할 수 있습니다
+- IDE에서 Scala 프로젝트를 열고 작업할 수 있습니다
+{{< /callout >}}
+
+환경 설정이 끝났으니 이제 Scala의 핵심 개념들을 하나씩 배워볼 차례입니다.
 
 1. **[기본 문법](../concepts/basics/)** — 변수, 타입, 타입 추론 자세히 배우기
 2. **[제어 구조](../concepts/control-structures/)** — if, for, match 표현식
 3. **[함수와 메서드](../concepts/functions-methods/)** — 함수 정의와 고급 기능
 
-#### 트러블슈팅
+## 트러블슈팅
 
 설치나 실행 중 문제가 발생하면 아래 해결책을 참고하세요. 대부분의 문제는 환경 변수 설정이나 캐시 관련입니다.
 
