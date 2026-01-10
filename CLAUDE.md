@@ -14,7 +14,7 @@ Kafka Guidance 101은 **한글 기술 문서 사이트**입니다. Hugo 정적 �
 
 - **사이트 URL**: https://advanced-beginner.github.io/
 - **콘텐츠 언어**: 한글 (ko)
-- **테마**: hugo-theme-relearn (git submodule)
+- **테마**: hugo-book (git submodule)
 
 ## 개발 명령어
 
@@ -51,7 +51,7 @@ examples/             # Spring Boot Kafka 예제
 docker/               # Kafka Docker Compose (KRaft, Zookeeper 없음)
 docs/                 # 프로젝트 문서 (PRD, 아키텍처)
 themes/               # Hugo 테마 (git submodule)
-layouts/partials/     # Mermaid.js 커스텀 설정
+layouts/partials/     # SEO, GTM, Mermaid 커스텀 설정 (docs/inject/)
 ```
 
 ### 콘텐츠 구성
