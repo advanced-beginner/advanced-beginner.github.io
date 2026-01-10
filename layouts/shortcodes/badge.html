@@ -1,0 +1,13 @@
+{{- $style := or (.Get "style") (.Get 0) "default" -}}
+{{- $title := or (.Get "title") (.Get 1) -}}
+{{- $value := or (.Get "value") (.Get 2) -}}
+{{- $content := "" -}}
+{{- if .Inner -}}
+  {{- $content = .Inner | plainify -}}
+{{- end -}}
+<span class="book-badge {{ $style }}">
+  {{- with $title -}}<span class="book-badge-title">{{ . | plainify }}</span>{{- end -}}
+  {{- with $value -}}<span class="book-badge-value">{{ . | plainify }}</span>{{- end -}}
+  {{- with $content -}}<span class="book-badge-value">{{ . }}</span>{{- end -}}
+</span>
+{{- /* remove whitespaces */ -}}
