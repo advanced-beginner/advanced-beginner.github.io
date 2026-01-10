@@ -80,6 +80,8 @@ graph TB
     Instance --> Result
 ```
 
+*위 다이어그램은 타입 클래스의 세 가지 구성 요소와 사용 흐름을 보여줍니다.*
+
 타입 클래스는 세 부분으로 구성됩니다:
 
 1. **타입 클래스 자체** - 트레이트로 정의된 인터페이스
@@ -243,6 +245,12 @@ people.sorted(using Ordering.by(_.name))
 // List(Person(Alice,30), Person(Bob,25), Person(Carol,35))
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- Ordering은 표준 라이브러리의 정렬용 타입 클래스
+- `Ordering.by`로 특정 필드 기준 정렬
+- `using`으로 특정 인스턴스 명시적 선택
+{{< /callout >}}
+
 #### Monoid 타입 클래스
 
 결합 연산과 항등원을 정의하는 대수적 구조입니다. 병렬 처리나 폴딩 연산에 유용합니다.
@@ -274,6 +282,12 @@ combineAll(List("a", "b", "c"))            // "abc"
 combineAll(List(List(1, 2), List(3, 4)))   // List(1, 2, 3, 4)
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- Monoid: 항등원(empty)과 결합 연산(combine) 정의
+- 폴딩, 병렬 처리에 유용한 대수적 구조
+- Int, String, List 등 다양한 타입에 적용 가능
+{{< /callout >}}
+
 #### 타입 클래스 vs 상속
 
 타입 클래스와 전통적인 상속 방식의 차이점을 비교합니다.
@@ -284,6 +298,12 @@ combineAll(List(List(1, 2), List(3, 4)))   // List(1, 2, 3, 4)
 | 여러 구현 | 가능 | 불가 |
 | 기존 타입 확장 | 가능 | 제한적 |
 | 성능 | 약간의 오버헤드 | 직접 호출 |
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 타입 클래스: 기존 타입 수정 없이 기능 추가
+- 상속: 타입 정의 시점에 기능 결정
+- 같은 타입에 여러 구현 가능 (타입 클래스)
+{{< /callout >}}
 
 #### 모범 사례
 
@@ -318,6 +338,12 @@ object Show extends LowPriorityInstances:
     def show(list: List[Int]): String =
       list.map(s.show).mkString("[", ", ", "]")
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 컴패니언 객체에 인스턴스 정의시 자동 암시적 범위 포함
+- 상속으로 우선순위 지정 가능
+- 더 구체적인 인스턴스가 우선 선택됨
+{{< /callout >}}
 
 #### 연습 문제
 
