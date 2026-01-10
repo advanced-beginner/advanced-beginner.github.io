@@ -27,7 +27,7 @@ author:
 
 Spark의 핵심 기능을 활용하는 예제 코드입니다.
 
-#### 데이터 로딩
+## 데이터 로딩
 
 **CSV 파일 읽기**
 
@@ -126,7 +126,7 @@ Dataset<Row> dfQuery = spark.read()
         .load();
 ```
 
-#### 데이터 변환
+## 데이터 변환
 
 **컬럼 연산**
 
@@ -223,7 +223,7 @@ Dataset<Row> nullsLast = employees.orderBy(col("salary").desc_nulls_last());
 multiSort.show();
 ```
 
-#### 집계
+## 집계
 
 **기본 집계**
 
@@ -291,7 +291,7 @@ pivoted.show();
 - **orderBy()**: 집계 후 정렬로 가독성 향상
 {{% /notice %}}
 
-#### 조인
+## 조인
 
 **기본 조인**
 
@@ -347,7 +347,7 @@ Dataset<Row> optimized = employees.join(
 - **다중 조건**: `.and()` 연산자로 복합 조인 조건 구성
 {{% /notice %}}
 
-#### SQL 사용
+## SQL 사용
 
 ```java
 // 임시 뷰 등록
@@ -399,7 +399,7 @@ cteResult.show();
 - **복잡한 분석**: Window 함수, CTE 등은 SQL이 더 직관적
 {{% /notice %}}
 
-#### 데이터 저장
+## 데이터 저장
 
 **파일 저장**
 
@@ -445,7 +445,7 @@ result.coalesce(1)
 - **저장 모드**: 프로덕션에서는 `append` 또는 명시적 `overwrite` 사용
 {{% /notice %}}
 
-#### 종합 예제: 매출 분석
+## 종합 예제: 매출 분석
 
 ```java
 public class SalesAnalysisExample {
@@ -578,7 +578,7 @@ public class SalesAnalysisExample {
 
 ---
 
-#### 실제 공개 데이터셋 예제
+## 실제 공개 데이터셋 예제
 
 실무에서 자주 활용하는 공개 데이터셋을 사용한 예제입니다.
 
@@ -701,7 +701,7 @@ public class NYCTaxiAnalysis {
 }
 ```
 
-#### 데이터 다운로드 방법
+## 데이터 다운로드 방법
 
 ```bash
 # NYC TLC 공식 데이터 (Parquet 형식, ~50MB/월)
@@ -806,7 +806,7 @@ public class FraudDetectionAnalysis {
 | **Common Crawl** | 수TB | 대규모 웹 분석 | [commoncrawl.org](https://commoncrawl.org/) |
 | **Wikipedia Dumps** | 수십GB | NLP, 지식 그래프 | [dumps.wikimedia.org](https://dumps.wikimedia.org/) |
 
-#### 다음 단계
+## 다음 단계
 
 예제를 완료했다면:
 

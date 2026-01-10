@@ -27,7 +27,7 @@ author:
 
 Delta Lake를 활용하여 데이터 레이크에 ACID 트랜잭션, 스키마 관리, 시간 여행 기능을 추가합니다.
 
-#### Delta Lake란?
+##Delta Lake란?
 
 **기존 데이터 레이크의 문제**
 
@@ -68,7 +68,7 @@ flowchart LR
 
 ---
 
-#### 환경 설정
+##환경 설정
 
 **build.sbt**
 
@@ -109,7 +109,7 @@ val spark = SparkSession.builder()
 
 ---
 
-#### 기본 CRUD 연산
+##기본 CRUD 연산
 
 **Create: Delta 테이블 생성**
 
@@ -231,7 +231,7 @@ deltaTable.as("target")
 
 ---
 
-#### 시간 여행 (Time Travel)
+##시간 여행 (Time Travel)
 
 **버전별 조회**
 
@@ -297,7 +297,7 @@ spark.sql("RESTORE orders TO VERSION AS OF 1")
 
 ---
 
-#### 스키마 진화 (Schema Evolution)
+##스키마 진화 (Schema Evolution)
 
 **컬럼 추가**
 
@@ -335,7 +335,7 @@ newSchema.write
 
 ---
 
-#### 최적화 (Optimization)
+##최적화 (Optimization)
 
 **Compaction (파일 병합)**
 
@@ -385,7 +385,7 @@ spark.sql("VACUUM orders RETAIN 168 HOURS")
 
 ---
 
-#### Change Data Feed (CDC)
+##Change Data Feed (CDC)
 
 **CDC 활성화**
 
@@ -451,7 +451,7 @@ changesStream.writeStream
 
 ---
 
-#### 실전 예제: ETL 파이프라인
+##실전 예제: ETL 파이프라인
 
 **Bronze → Silver → Gold 아키텍처**
 
@@ -575,7 +575,7 @@ object DeltaLakePipeline extends App {
 
 ---
 
-#### Spark Streaming과 연동
+##Spark Streaming과 연동
 
 **Streaming 쓰기**
 
@@ -623,7 +623,7 @@ deltaStream
 
 ---
 
-#### 주의 사항
+##주의 사항
 
 | 항목 | 주의점 |
 |------|--------|
@@ -634,7 +634,7 @@ deltaStream
 
 ---
 
-#### 다음 단계
+##다음 단계
 
 - [Structured Streaming](../concepts/structured-streaming/) - 실시간 처리
 - [성능 튜닝](../concepts/tuning/) - Spark 최적화
