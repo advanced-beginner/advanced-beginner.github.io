@@ -1,9 +1,23 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: 에러 처리 심화
 weight: 9
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- 에러 유형: 역직렬화 에러(건너뛰기), 일시적 에러(재시도), 영구적 에러(DLT)
+- @RetryableTopic으로 선언적 재시도 및 DLT 처리 (Spring Kafka 2.7+)
+- DefaultErrorHandler + DeadLetterPublishingRecoverer로 DLT 발행
+- 역직렬화 에러는 ErrorHandlingDeserializer로 처리
+- DLT 메시지 도착 시 알림 설정으로 빠른 대응 필요
+{{< /callout >}}
+
+**대상 독자**: Consumer 에러 처리 전략을 구현하려는 개발자
+
+**선수 지식**: [Consumer Group & Offset](../consumer-group/)의 Consumer 동작 원리, Spring Kafka 기초
+
 ---
 
 Kafka Consumer의 에러 처리 전략과 Dead Letter Topic 패턴을 이해합니다.

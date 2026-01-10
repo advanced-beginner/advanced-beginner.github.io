@@ -1,9 +1,23 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: Consumer 튜닝
 weight: 8
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- fetch.min.bytes/fetch.max.wait.ms로 배치 효율과 지연시간 균형 조절
+- max.poll.records와 max.poll.interval.ms가 리밸런싱 방지의 핵심
+- session.timeout.ms는 heartbeat.interval.ms의 3배 이상 권장
+- 처리량 최적화: fetch.min.size 증가, max.poll.records 증가
+- 지연시간 최적화: fetch.min.size 감소, fetch.max.wait 감소
+{{< /callout >}}
+
+**대상 독자**: Consumer 성능을 최적화하려는 개발자, 운영 안정성을 높이려는 운영자
+
+**선수 지식**: [Consumer Group & Offset](../consumer-group/)의 Consumer 동작 원리
+
 ---
 
 Consumer 성능 최적화와 안정적인 운영을 위한 설정을 이해합니다.
@@ -36,7 +50,15 @@ flowchart LR
     PROCESS --> COMMIT
 ```
 
+*다이어그램: Consumer 내부 구조 - Broker에서 Fetcher가 데이터를 가져오고, poll()을 통해 애플리케이션에 전달, 처리 후 Offset 커밋하는 흐름. 각 단계에서 관련 설정이 적용됨.*
+
 핵심 설정으로 `fetch.min.bytes`는 최소 페치 크기(기본값 1), `fetch.max.wait.ms`는 페치 대기 시간(기본값 500ms), `max.poll.records`는 poll당 최대 레코드 수(기본값 500), `max.poll.interval.ms`는 poll 간격 최대값(기본값 5분), `session.timeout.ms`는 세션 타임아웃(기본값 45초), `heartbeat.interval.ms`는 하트비트 간격(기본값 3초)입니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Consumer 동작: Fetcher → poll() → 메시지 처리 → Offset 커밋
+- 핵심 설정: fetch.min.bytes, max.poll.records, max.poll.interval.ms
+- 설정 조합에 따라 처리량과 지연시간 균형 조절 가능
+{{< /callout >}}
 
 #### Fetch 설정
 
@@ -57,6 +79,12 @@ spring:
 ```
 
 min=1, wait=500 조합은 즉시 응답하여 지연 시간을 최소화합니다. min=1KB, wait=500 조합은 배치를 우선하여 처리량을 증가시킵니다. min=1KB, wait=100 조합은 빠른 응답과 배치의 균형을 맞춥니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- fetch.min.bytes: 응답 전 최소 데이터 크기 (1=즉시, 1KB+=배치 효율)
+- fetch.max.wait.ms: min 충족 못해도 응답하는 최대 대기 시간
+- 두 설정으로 배치 효율과 지연시간 사이 균형 조절
+{{< /callout >}}
 
 #### Poll 설정
 
@@ -84,7 +112,15 @@ sequenceDiagram
     K->>K: 리밸런싱 시작!
 ```
 
+*다이어그램: Consumer가 poll() 후 레코드 처리 중 6분이 경과하면 max.poll.interval.ms(5분) 초과로 그룹에서 제외되고 리밸런싱이 시작되는 흐름.*
+
 설정 규칙은 `max.poll.interval.ms` > (레코드당 처리시간 × `max.poll.records`)입니다. 예를 들어 레코드당 100ms 처리 시간에 max.poll.records=500이면 필요 시간이 50초이므로 max.poll.interval.ms는 최소 60초 이상이어야 합니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- max.poll.records: 한 번에 가져오는 레코드 수 (작으면 빠른 처리, 크면 배치 효율)
+- max.poll.interval.ms: poll() 간격 초과 시 리밸런싱 발생
+- 설정 규칙: max.poll.interval.ms > (처리시간 × max.poll.records)
+{{< /callout >}}
 
 ```yaml
 spring:
@@ -258,7 +294,15 @@ flowchart TB
     P5 --> C3
 ```
 
+*다이어그램: 6개 Partition을 가진 Topic에서 concurrency=3으로 설정하면 각 스레드가 2개씩 Partition을 담당하는 구조.*
+
 규칙은 concurrency <= Partition 수입니다. concurrency가 Partition 수보다 크면 일부 스레드가 유휴 상태가 됩니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- concurrency 설정으로 Consumer 스레드 수 조절
+- 규칙: concurrency <= Partition 수 (초과 시 유휴 스레드 발생)
+- 6 Partition + concurrency=3 = 스레드당 2 Partition 담당
+{{< /callout >}}
 
 #### Consumer Lag 관리
 

@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: 마이크로서비스 연동
 weight: 4
 author: "@kimbenji"
@@ -7,6 +7,22 @@ author_url: "http://github.com/kimbenji"
 ---
 
 마이크로서비스 환경에서 Kafka를 활용한 이벤트 기반 통신을 구현합니다.
+
+{{% notice style="tip" title="TL;DR" %}}
+- **이벤트 체이닝**: 주문 -> 결제 -> 배송 -> 알림 순서로 이벤트 전파
+- **Correlation ID**: 분산 추적을 위한 상관 ID 전파
+- **Saga 패턴**: 보상 트랜잭션으로 분산 트랜잭션 처리
+- **멱등성**: 중복 메시지 안전하게 처리
+{{% /notice %}}
+
+#### 대상 독자 및 선수 지식
+
+| 항목 | 설명 |
+|------|------|
+| **대상 독자** | 마이크로서비스 아키텍처에서 이벤트 기반 통신을 구축하려는 개발자 |
+| **선수 지식** | Kafka 기본, Spring Boot, [주문 시스템](../order-system/) 예제 이해 |
+| **필수 환경** | Docker, JDK 17+, 여러 서비스를 실행할 수 있는 환경 |
+| **예상 소요 시간** | 약 60분 |
 
 #### 시나리오: 주문 처리 시스템
 
@@ -48,6 +64,8 @@ flowchart LR
     T1 & T2 & T3 --> N1
 ```
 
+*[다이어그램 설명: 주문 서비스가 orders Topic에 이벤트를 발행하면 결제 서비스가 수신합니다. 결제 서비스는 payments Topic에 결과를 발행하고, 배송 서비스가 이를 수신하여 shipments Topic에 발행합니다. 알림 서비스는 모든 Topic을 구독합니다.]*
+
 #### 공통 이벤트 정의
 
 **이벤트 스키마**
@@ -86,6 +104,12 @@ public class ShipmentCreatedEvent extends BaseEvent {
     private LocalDateTime estimatedDelivery;
 }
 ```
+
+{{% notice style="info" title="공통 이벤트 정의 핵심 포인트" %}}
+- **BaseEvent 상속**: eventId, eventType, occurredAt, correlationId 공통 필드
+- **correlationId**: 분산 추적을 위해 모든 이벤트에 전파
+- **도메인별 이벤트**: OrderCreatedEvent, PaymentCompletedEvent, ShipmentCreatedEvent 등
+{{% /notice %}}
 
 #### 주문 서비스 (Order Service)
 
@@ -182,6 +206,12 @@ public class OrderController {
     }
 }
 ```
+
+{{% notice style="info" title="주문 서비스 핵심 포인트" %}}
+- **신뢰성 설정**: `acks: all`, `enable.idempotence: true`로 메시지 안정성 확보
+- **비동기 발행**: 로컬 DB 저장 후 이벤트 발행, 즉시 응답 반환
+- **orderId Key**: 같은 주문 이벤트의 순서 보장
+{{% /notice %}}
 
 #### 결제 서비스 (Payment Service)
 
@@ -290,6 +320,12 @@ public class PaymentProducer {
 }
 ```
 
+{{% notice style="info" title="결제 서비스 핵심 포인트" %}}
+- **멱등성 체크**: `isAlreadyProcessed()`로 중복 처리 방지
+- **성공/실패 분기**: 결과에 따라 PaymentCompleted 또는 PaymentFailed 이벤트 발행
+- **correlationId 전파**: 원본 이벤트의 correlationId를 새 이벤트에 포함
+{{% /notice %}}
+
 #### 배송 서비스 (Shipment Service)
 
 **ShipmentConsumer**
@@ -341,6 +377,12 @@ public class ShipmentConsumer {
 }
 ```
 
+{{% notice style="info" title="배송 서비스 핵심 포인트" %}}
+- **이벤트 필터링**: PaymentStatus.COMPLETED인 경우만 처리
+- **체이닝**: 결제 완료 이벤트 수신 -> 배송 생성 -> 배송 이벤트 발행
+- **에러 전파**: 예외 발생 시 throw하여 재시도 유도
+{{% /notice %}}
+
 #### 알림 서비스 (Notification Service)
 
 **NotificationConsumer**
@@ -391,6 +433,12 @@ public class NotificationConsumer {
     }
 }
 ```
+
+{{% notice style="info" title="알림 서비스 핵심 포인트" %}}
+- **다중 Topic 구독**: orders, payments, shipments Topic 동시 구독
+- **eventType 헤더**: 이벤트 유형별 알림 내용 분기
+- **실패 허용**: 알림 실패는 acknowledge 후 재시도하지 않음 (비핵심 기능)
+{{% /notice %}}
 
 #### Saga 패턴: 분산 트랜잭션
 
@@ -447,6 +495,12 @@ public class OrderSagaOrchestrator {
     }
 }
 ```
+
+{{% notice style="info" title="Saga 패턴 핵심 포인트" %}}
+- **보상 트랜잭션**: 실패 이벤트 수신 시 이전 작업 취소 (주문 취소, 환불 요청)
+- **이벤트 리스닝**: 결제 실패, 배송 실패 이벤트 구독하여 보상 처리
+- **데이터 일관성**: 분산 환경에서 최종 일관성(Eventual Consistency) 유지
+{{% /notice %}}
 
 #### 모니터링: 분산 추적
 
@@ -515,6 +569,12 @@ public class ConsumerLagMonitor {
 }
 ```
 
+{{% notice style="info" title="모니터링 핵심 포인트" %}}
+- **Correlation ID**: ProducerInterceptor로 모든 메시지에 추적 ID 자동 추가
+- **Consumer Lag**: 처리 지연 지표, 1000 이상이면 경고
+- **Micrometer 연동**: `meterRegistry.gauge()`로 Prometheus 등에 메트릭 노출
+{{% /notice %}}
+
 #### 테스트
 
 **통합 테스트 (Testcontainers)**
@@ -562,6 +622,12 @@ class OrderServiceIntegrationTest {
     }
 }
 ```
+
+{{% notice style="info" title="테스트 핵심 포인트" %}}
+- **Testcontainers**: 실제 Kafka 컨테이너로 통합 테스트
+- **DynamicPropertySource**: 테스트용 bootstrap-servers 동적 설정
+- **메시지 검증**: Topic에서 메시지를 소비하여 Key, Value 검증
+{{% /notice %}}
 
 #### 체크리스트
 

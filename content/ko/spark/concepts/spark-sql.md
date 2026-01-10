@@ -1,10 +1,25 @@
 ---
 title: Spark SQL
 weight: 4
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- Spark SQL은 SQL 문법으로 DataFrame을 쿼리할 수 있는 모듈
+- Catalyst Optimizer가 4단계(Analysis → Optimization → Planning → CodeGen)로 쿼리 최적화
+- AQE(Adaptive Query Execution)로 런타임 최적화 (Spark 3.0+)
+- DataFrame API와 SQL은 동일한 실행 엔진 사용, 성능 차이 없음
+{{< /callout >}}
+
+**대상 독자**: SQL에 익숙한 데이터 엔지니어 및 분석가
+
+**선수 지식**:
+- 표준 SQL 문법 (SELECT, JOIN, GROUP BY, Window 함수)
+- [DataFrame과 Dataset](../dataframe-dataset/) 기본 이해
+
 ---
 
 Spark SQL은 구조화된 데이터 처리를 위한 Spark 모듈입니다. SQL 쿼리와 DataFrame API를 모두 지원하며, 동일한 실행 엔진(Catalyst Optimizer)을 사용합니다.
@@ -15,6 +30,13 @@ Spark SQL은 구조화된 데이터 처리를 위한 Spark 모듈입니다. SQL 
 2. **최적화**: Catalyst Optimizer가 쿼리 자동 최적화
 3. **다양한 데이터 소스**: JDBC, Parquet, JSON, Hive 등 통합
 4. **DataFrame과 상호 운용**: SQL 결과가 DataFrame으로 반환
+
+{{< callout type="info" title="핵심 포인트" >}}
+- SQL과 DataFrame API는 동일한 Catalyst Optimizer 사용
+- SQL 결과는 항상 DataFrame으로 반환
+- 임시 뷰로 DataFrame을 SQL에서 테이블처럼 쿼리
+- Hive 메타스토어 통합으로 영구 테이블 관리 가능
+{{< /callout >}}
 
 #### Catalyst Optimizer 심층 이해
 
@@ -47,6 +69,8 @@ flowchart LR
         F --> G
     end
 ```
+
+*그림: Catalyst Optimizer 쿼리 처리 단계 - SQL/DataFrame이 Unresolved Plan → Analyzed Plan → Optimized Plan → Physical Plans → Selected Plan → RDD 코드 생성 순으로 변환됩니다.*
 
 **각 단계 상세**
 

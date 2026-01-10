@@ -1,8 +1,19 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: 동시성
 weight: 16
 ---
+
+{{< callout type="info" title="TL;DR" >}}
+- **Future**: 비동기 계산 결과를 나타내는 타입
+- **ExecutionContext**: 스레드 풀 관리, 암시적 파라미터로 전달
+- **map/flatMap**: Future 조합, for comprehension 사용 가능
+- **Promise**: Future를 직접 완료할 수 있는 쓰기 전용 타입
+- 고급 라이브러리: Cats Effect, ZIO, Akka
+{{< /callout >}}
+
+**대상 독자:** 비동기 프로그래밍 기초를 이해한 개발자
+**선수 지식:** 고차 함수, for comprehension, 암시적 매개변수
 
 Scala는 `Future`를 통해 비동기 프로그래밍을 지원합니다. 이 문서에서는 `Future`, `Promise`, `ExecutionContext`를 다룹니다. 비동기 프로그래밍을 통해 I/O 대기 시간 동안 다른 작업을 수행할 수 있어 애플리케이션의 처리량을 크게 향상시킬 수 있습니다.
 
@@ -40,6 +51,12 @@ import java.util.concurrent.Executors
 implicit val ec: ExecutionContext =
   ExecutionContext.fromExecutor(Executors.newFixedThreadPool(4))
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Future는 `Future { ... }` 블록으로 생성
+- ExecutionContext가 스레드 풀 관리
+- 생성 즉시 백그라운드에서 계산 시작
+{{< /callout >}}
 
 #### Future 조합
 
@@ -100,6 +117,13 @@ val parallel = for {
 } yield a + b
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- `map`: 성공 결과 변환
+- `flatMap`: Future 반환 함수로 변환 (순차 연결)
+- for comprehension 내 Future 생성 = 순차 실행
+- 미리 Future 생성 후 조합 = 병렬 실행
+{{< /callout >}}
+
 #### 에러 처리
 
 Future는 성공 또는 실패 상태를 가집니다. 실패한 Future를 복구하거나 다른 Future로 대체하는 여러 방법이 있습니다.
@@ -138,6 +162,12 @@ val failure = Future.failed(new Exception("에러"))
 val exception: Future[Throwable] = failure.failed
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- `recover`: 실패를 기본값으로 대체
+- `recoverWith`: 실패를 다른 Future로 대체
+- `failed`: 실패한 Future의 예외 추출
+{{< /callout >}}
+
 #### 결과 대기
 
 비동기 결과를 동기적으로 기다려야 하는 경우가 있습니다. 테스트나 애플리케이션 종료 시점에서 주로 사용됩니다.
@@ -168,6 +198,12 @@ future.onComplete {
   case Failure(e)     => println(s"실패: ${e.getMessage}")
 }
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- `Await.result`: 블로킹 대기 (테스트용)
+- `onComplete`: 완료 시 콜백 실행
+- 프로덕션에서는 Await 사용 피하기
+{{< /callout >}}
 
 #### Promise
 
@@ -210,6 +246,12 @@ def timeout[T](future: Future[T], duration: FiniteDuration): Future[T] = {
 }
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- Promise는 Future를 직접 완료할 수 있는 쓰기 전용 타입
+- `success`/`failure`로 결과 설정
+- 타임아웃, 콜백 기반 API 래핑에 유용
+{{< /callout >}}
+
 #### 유틸리티 메서드
 
 Future 컴패니언 객체는 여러 Future를 조합하는 유틸리티 메서드를 제공합니다.
@@ -247,6 +289,12 @@ val futures = List(
 val first = Future.firstCompletedOf(futures)
 // Future("fast")
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- `Future.sequence`: `List[Future[A]]` -> `Future[List[A]]`
+- `Future.traverse`: 리스트 요소에 비동기 함수 적용
+- `Future.firstCompletedOf`: 가장 먼저 완료되는 Future 반환
+{{< /callout >}}
 
 #### 고급 라이브러리
 
@@ -418,6 +466,8 @@ flowchart LR
     Future --> |"간단한 비동기"| Use1["웹 API 호출"]
     IO/ZIO --> |"복잡한 비동기"| Use2["비즈니스 로직"]
 ```
+
+*위 다이어그램은 Future와 IO/ZIO의 특성 및 적합한 사용 사례를 비교합니다.*
 
 #### 연습 문제
 

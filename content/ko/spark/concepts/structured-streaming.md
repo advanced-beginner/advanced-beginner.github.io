@@ -1,10 +1,26 @@
 ---
 title: Structured Streaming
 weight: 8
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- Structured Streaming은 스트림을 무한히 추가되는 테이블로 처리
+- 배치와 동일한 DataFrame API 사용 (readStream/writeStream만 변경)
+- Output Mode: append(새 행), complete(전체), update(변경분)
+- Watermark로 늦게 도착하는 데이터(late data) 처리
+{{< /callout >}}
+
+**대상 독자**: 실시간 데이터 처리가 필요한 데이터 엔지니어
+
+**선수 지식**:
+- [DataFrame과 Dataset](../dataframe-dataset/) API
+- Kafka 기본 개념 (선택 사항)
+- 이벤트 시간 vs 처리 시간 개념
+
 ---
 
 Structured Streaming은 Spark의 스트림 처리 엔진입니다. 배치 처리와 동일한 DataFrame/Dataset API를 사용하여 실시간 데이터를 처리합니다.
@@ -50,6 +66,13 @@ result.writeStream()                        // writeStream으로 변경
         .start()
         .awaitTermination();
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 스트림은 무한히 추가되는 테이블로 모델링
+- `read()` → `readStream()`, `write()` → `writeStream()`으로 변경만 하면 됨
+- 동일한 DataFrame API로 배치와 스트리밍 코드 통합
+- 증분 처리(incremental processing)로 효율적인 스트림 처리
+{{< /callout >}}
 
 #### 기본 사용법
 

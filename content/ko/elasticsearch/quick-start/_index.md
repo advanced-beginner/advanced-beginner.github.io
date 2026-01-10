@@ -1,10 +1,26 @@
 ---
 title: Quick Start
 weight: 1
-lastmod: 2026-01-08
+lastmod: 2026-01-10
 ---
 
 # Quick Start
+
+{{< callout type="tip" title="TL;DR" >}}
+Docker로 Elasticsearch를 실행하고, Kibana Dev Tools에서 문서 저장/검색을 직접 해봅니다.
+- **소요 시간**: 약 10-15분
+- **결과물**: 상품 데이터 저장 및 검색 쿼리 실행
+{{< /callout >}}
+
+## 학습 목표
+
+이 튜토리얼을 완료하면 다음을 할 수 있습니다:
+- Docker로 Elasticsearch와 Kibana를 실행할 수 있습니다
+- Kibana Dev Tools에서 REST API를 실행할 수 있습니다
+- 문서를 저장(PUT)하고 검색(GET)할 수 있습니다
+- 조건 검색(bool query)의 기본 구조를 이해합니다
+
+**총 4단계, 약 10-15분 소요**
 
 5분 만에 Elasticsearch에 데이터를 저장하고 검색해보세요.
 
@@ -17,12 +33,32 @@ flowchart LR
     C --> D[결과 반환]
 ```
 
+*다이어그램: 문서를 저장하면 Elasticsearch에 인덱싱되고, 검색 요청 시 결과가 반환되는 기본 흐름입니다.*
+
 ## 준비물
 
 - **Docker Desktop** 또는 Docker Engine
 - **curl** 또는 웹 브라우저
 
-## Step 1: Elasticsearch 시작
+### 선수 조건 검증
+
+아래 명령어로 Docker가 설치되어 있는지 확인하세요:
+
+```bash
+docker --version
+# 예상 출력: Docker version 24.x.x 이상
+
+docker-compose --version
+# 예상 출력: Docker Compose version v2.x.x 이상
+```
+
+{{% notice style="warning" title="Docker가 없다면?" %}}
+[Docker Desktop 공식 사이트](https://www.docker.com/products/docker-desktop/)에서 설치하세요.
+{{% /notice %}}
+
+## Step 1/4: Elasticsearch 시작
+
+**예상 소요 시간: 3-5분** (첫 실행 시 이미지 다운로드 포함)
 
 Docker Compose로 Elasticsearch와 Kibana를 실행합니다.
 
@@ -64,7 +100,9 @@ curl -s http://localhost:9200/_cluster/health | jq
 }
 ```
 
-## Step 2: Kibana Dev Tools 접속
+## Step 2/4: Kibana Dev Tools 접속
+
+**예상 소요 시간: 1분**
 
 브라우저에서 Kibana에 접속합니다:
 
@@ -76,7 +114,9 @@ http://localhost:5601
 
 > **Dev Tools**: Elasticsearch API를 직접 실행할 수 있는 콘솔입니다.
 
-## Step 3: 첫 번째 문서 저장
+## Step 3/4: 첫 번째 문서 저장
+
+**예상 소요 시간: 3분**
 
 Dev Tools 콘솔에서 상품 데이터를 저장합니다:
 
@@ -127,7 +167,9 @@ PUT /products/_doc/4
 }
 ```
 
-## Step 4: 검색하기
+## Step 4/4: 검색하기
+
+**예상 소요 시간: 3분**
 
 ### 전체 검색
 
@@ -192,6 +234,13 @@ GET /products/_search
 
 **축하합니다!** Elasticsearch의 기본 동작을 확인했습니다.
 
+{{< callout type="info" title="Quick Start 완료!" >}}
+이제 다음을 할 수 있습니다:
+- Elasticsearch에 JSON 문서를 저장 (PUT /index/_doc/id)
+- 전체 검색 (match_all) 및 키워드 검색 (match)
+- 조건 검색 (bool query의 must, filter)
+{{< /callout >}}
+
 ## 종료
 
 ```bash
@@ -223,6 +272,8 @@ sequenceDiagram
     Index-->>ES: 매칭 문서
     ES-->>Client: 검색 결과 반환
 ```
+
+*다이어그램: 클라이언트가 문서를 저장하면 Elasticsearch가 인덱싱(역색인 생성)하고, 검색 요청 시 역색인을 통해 빠르게 결과를 반환하는 흐름입니다.*
 
 1. **문서 저장**: JSON 형태의 문서를 인덱스에 저장했습니다
 2. **인덱싱**: Elasticsearch가 자동으로 역색인(Inverted Index)을 생성했습니다

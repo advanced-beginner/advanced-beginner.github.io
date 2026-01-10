@@ -1,10 +1,18 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: FAQ
 weight: 3
 ---
 
 Scala에 대해 자주 묻는 질문과 답변입니다. 질문을 카테고리별로 분류하여 빠르게 원하는 정보를 찾을 수 있도록 했습니다.
+
+{{% notice style="tip" title="TL;DR" %}}
+- **버전 선택**: 새 프로젝트는 Scala 3, Spark 사용 시 Scala 2.12/2.13
+- **val vs var**: 항상 `val`(불변) 우선 사용
+- **null 대신 Option**: `Option`, `Some`, `None`으로 안전한 null 처리
+- **IDE**: IntelliJ IDEA + Scala 플러그인 (가장 완성도 높음)
+- **성능**: Java와 동등, 컬렉션 체이닝과 람다 사용 시 주의
+{{% /notice %}}
 
 #### 일반
 
@@ -39,6 +47,11 @@ Scala 학습과 관련된 일반적인 질문들입니다.
 - 매크로/메타프로그래밍
 
 점진적으로 학습하세요. 모든 고급 기능을 처음부터 알 필요는 없습니다.
+
+{{% notice style="note" title="핵심 포인트" %}}
+- Scala 3는 새 프로젝트에 권장, Spark 사용 시에는 Scala 2 유지
+- 기초는 어렵지 않으나 고급 타입 시스템은 점진적으로 학습 필요
+{{% /notice %}}
 
 #### 문법
 
@@ -99,6 +112,12 @@ def printMessage(): Unit = println("Hello")
 val unit: Unit = ()
 ```
 
+{{% notice style="note" title="핵심 포인트" %}}
+- `val`(불변)을 기본으로, `var`(가변)는 필요할 때만 사용
+- `lazy val`은 첫 접근 시 초기화, `def`는 호출마다 재계산
+- 세미콜론은 한 줄에 여러 문장 작성 시에만 필요
+{{% /notice %}}
+
 #### 함수형 프로그래밍
 
 함수형 프로그래밍 패턴에 관한 질문들입니다.
@@ -158,6 +177,12 @@ Some(1).flatMap(x =>
 // 결과: Some(3)
 ```
 
+{{% notice style="note" title="핵심 포인트" %}}
+- `Option`으로 null을 안전하게 대체, `getOrElse`로 기본값 처리
+- `map`은 값 변환, `flatMap`은 중첩 컨테이너 평탄화
+- for comprehension은 `flatMap`/`map` 체인의 가독성 좋은 표현
+{{% /notice %}}
+
 #### 트러블슈팅
 
 개발 중 자주 발생하는 문제와 해결책입니다.
@@ -203,6 +228,12 @@ import zio.prelude._      // ZIO 확장 메서드
 2. sbt 탭에서 **Reload**
 3. **Build** → **Rebuild Project**
 
+{{% notice style="note" title="핵심 포인트" %}}
+- "implicit not found"는 필요한 타입 클래스 인스턴스 정의/import로 해결
+- 확장 메서드 에러는 올바른 import 구문 확인
+- 컴파일 속도 개선: 증분 컴파일(`sbt ~compile`) 활용
+{{% /notice %}}
+
 #### 성능
 
 Scala 성능에 관한 질문들입니다.
@@ -227,6 +258,12 @@ val list2 = 0 :: list1  // list1의 데이터 재사용
 
 성능이 정말 중요하면 `Array`나 가변 컬렉션을 사용하세요.
 
+{{% notice style="note" title="핵심 포인트" %}}
+- Scala 런타임 성능은 Java와 동등 (JVM 바이트코드)
+- 불변 컬렉션은 구조적 공유로 효율적, 극한 성능 필요 시 `Array` 사용
+- `@tailrec`으로 꼬리 재귀 최적화 검증
+{{% /notice %}}
+
 #### 도구
 
 개발 도구 선택에 관한 질문들입니다.
@@ -247,6 +284,12 @@ val list2 = 0 :: list1  // list1의 데이터 재사용
 - **ScalaTest**: 가장 널리 사용, 다양한 스타일
 - **MUnit**: 간단하고 가벼움 (Scala 3 권장)
 - **Specs2**: BDD 스타일
+
+{{% notice style="note" title="핵심 포인트" %}}
+- IDE: IntelliJ IDEA(완성도 높음) 또는 VS Code + Metals(가벼움)
+- 빌드: sbt(표준), Mill(빠름), Gradle(Java 혼합 시)
+- 테스트: ScalaTest(범용), MUnit(Scala 3 경량)
+{{% /notice %}}
 
 #### 추가 질문
 

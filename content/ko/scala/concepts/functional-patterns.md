@@ -1,8 +1,19 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: 함수형 프로그래밍 패턴
 weight: 17
 ---
+
+{{< callout type="info" title="TL;DR" >}}
+- **참조 투명성**: 함수 호출을 결과로 대체해도 의미 변화 없음
+- **Functor**: `map` 연산, 구조 유지하며 값 변환
+- **Monad**: `flatMap` 연산, 순차적 효과 연결
+- **Option/Either/Try**: 실패 가능한 연산의 타입 안전한 표현
+- Cats, ZIO 등 함수형 라이브러리로 더 강력한 추상화 가능
+{{< /callout >}}
+
+**대상 독자:** 고차 함수와 For Comprehension을 이해한 개발자
+**선수 지식:** map, flatMap, filter, 제네릭
 
 이 문서에서는 Scala에서 사용되는 핵심 함수형 프로그래밍 패턴을 다룹니다. 함수형 프로그래밍은 부수 효과를 최소화하고 순수 함수와 불변 데이터를 활용하여 예측 가능하고 테스트하기 쉬운 코드를 작성하는 패러다임입니다.
 
@@ -35,6 +46,12 @@ val a = increment()  // 1
 val b = increment()  // 2 (결과가 달라짐!)
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- 참조 투명한 함수는 동일 입력에 동일 출력 보장
+- 외부 상태에 의존하거나 변경하지 않음
+- 코드 추론과 테스트가 쉬워짐
+{{< /callout >}}
+
 #### 불변성
 
 불변성(Immutability)은 함수형 프로그래밍의 핵심 원칙입니다. 데이터를 변경하지 않고 새 데이터를 생성하여 부수 효과를 방지합니다. 불변 데이터는 스레드 안전하고 추론하기 쉬우며, 캐싱과 공유가 자유롭습니다.
@@ -49,6 +66,12 @@ case class Person(name: String, age: Int)
 val alice = Person("Alice", 30)
 val olderAlice = alice.copy(age = 31)  // alice는 변경되지 않음
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 불변 데이터는 스레드 안전하고 추론이 쉬움
+- `copy` 메서드로 변경된 복사본 생성
+- 캐싱과 공유가 자유로움
+{{< /callout >}}
 
 #### Functor
 
@@ -86,6 +109,12 @@ given Functor[List] with
   def map[A, B](fa: List[A])(f: A => B): List[B] = fa.map(f)
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- Functor는 `map` 연산을 가진 타입
+- 항등 법칙과 합성 법칙을 만족해야 함
+- List, Option, Future 등 대부분의 컨테이너가 Functor
+{{< /callout >}}
+
 #### Applicative
 
 Applicative는 독립적인 효과를 결합합니다. Functor보다 강력하며, 여러 독립적인 컨텍스트의 값들을 결합할 수 있습니다. `pure`는 값을 컨텍스트에 넣고, `ap`는 컨텍스트 안의 함수를 컨텍스트 안의 값에 적용합니다.
@@ -104,6 +133,12 @@ val sum: Option[Int] = (some1, some2) match
   case (Some(a), Some(b)) => Some(a + b)
   case _ => None
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Applicative는 독립적인 효과를 결합
+- `pure`로 값을 컨텍스트에 넣음
+- `ap`로 컨텍스트 안의 함수를 값에 적용
+{{< /callout >}}
 
 #### Monad
 
@@ -131,6 +166,8 @@ flowchart LR
         FC --> Result
     end
 ```
+
+*위 다이어그램은 flatMap 연산과 For Comprehension의 동작 흐름을 보여줍니다.*
 
 **Monad 법칙**
 
@@ -176,6 +213,12 @@ yield orders
 // Future(List("Order1-User1"))
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- Monad는 `flatMap`으로 순차적 효과 연결
+- 왼쪽/오른쪽 항등, 결합 법칙을 만족해야 함
+- Option, Either, Future 등이 대표적인 Monad
+{{< /callout >}}
+
 #### Option - null 대체
 
 Option은 값이 있거나 없을 수 있는 경우를 타입 안전하게 표현합니다. null을 사용하는 대신 Option을 사용하면 NullPointerException을 컴파일 타임에 방지할 수 있습니다.
@@ -197,6 +240,12 @@ divide(10, 0).getOrElse(0)  // 0
 // fold
 divide(10, 2).fold(0)(_ * 2)  // 10
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Option은 값의 유무를 Some/None으로 표현
+- null 대신 사용하여 NullPointerException 방지
+- `getOrElse`, `fold`, `map`, `flatMap`으로 안전하게 처리
+{{< /callout >}}
 
 #### Either - 에러 처리
 
@@ -227,6 +276,12 @@ createPerson("Alice", 30)  // Right(Person("Alice", 30))
 createPerson("", 30)       // Left(EmptyName("name"))
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- Either는 Left(실패) 또는 Right(성공)로 결과 표현
+- 에러 타입을 명시적으로 정의 가능
+- for comprehension으로 검증 체이닝 가능
+{{< /callout >}}
+
 #### Try - 예외 처리
 
 Try는 예외가 발생할 수 있는 연산을 캡슐화합니다. Success 또는 Failure로 결과를 표현하며, 예외를 값으로 다룰 수 있게 해줍니다.
@@ -251,6 +306,12 @@ parseInt("abc").getOrElse(0)  // 0
 parseInt("abc").recover { case _: NumberFormatException => 0 }
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- Try는 예외를 Success/Failure로 캡슐화
+- 예외를 던지는 대신 값으로 다룸
+- `recover`, `recoverWith`로 실패 복구 가능
+{{< /callout >}}
+
 #### 함수 합성
 
 함수 합성은 작은 함수들을 결합하여 더 큰 함수를 만드는 기법입니다. `andThen`은 왼쪽에서 오른쪽으로, `compose`는 오른쪽에서 왼쪽으로 함수를 연결합니다.
@@ -268,6 +329,12 @@ pipeline(3)  // ((3 + 1) * 2)^2 = 64
 val composed = square compose double compose addOne
 composed(3)  // (3 + 1) * 2)^2 = 64
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- `andThen`: 왼쪽에서 오른쪽으로 함수 연결
+- `compose`: 오른쪽에서 왼쪽으로 함수 연결
+- 작은 함수들을 결합하여 복잡한 변환 구성
+{{< /callout >}}
 
 #### 커링과 부분 적용
 

@@ -1,10 +1,26 @@
 ---
 title: RDD 기초
 weight: 2
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- RDD(Resilient Distributed Dataset)는 분산 불변 데이터 컬렉션으로 Spark의 기본 데이터 추상화
+- Transformation(지연 평가)과 Action(즉시 실행)으로 데이터 처리
+- Lineage를 통해 장애 발생 시 자동 복구 가능
+- 현재는 DataFrame/Dataset을 권장하지만, 저수준 제어가 필요할 때 RDD 사용
+{{< /callout >}}
+
+**대상 독자**: Java/Spring 개발자, Spark 기본 개념을 학습하려는 초급자
+
+**선수 지식**:
+- Java 컬렉션 API (List, Map 등)
+- 람다 표현식 및 함수형 프로그래밍 기초
+- [아키텍처](../architecture/) 문서 이해
+
 ---
 
 RDD는 Spark의 가장 기본적인 데이터 추상화입니다. DataFrame과 Dataset의 기반이 되는 저수준 API로, Spark의 동작 원리를 이해하는 데 필수적입니다.
@@ -26,6 +42,13 @@ RDD는 Spark의 가장 기본적인 데이터 추상화입니다. DataFrame과 D
 | **지연 평가(Lazy)** | Transformation은 즉시 실행되지 않음 |
 | **타입 안전(Type-safe)** | 제네릭으로 타입 지정 가능 |
 | **장애 복구(Fault-tolerant)** | Lineage로 손실 데이터 재계산 |
+
+{{< callout type="info" title="핵심 포인트" >}}
+- RDD는 불변, 분산, 지연 평가되는 데이터 컬렉션
+- Lineage(혈통)를 통해 장애 시 자동 복구
+- 타입 안전한 API 제공 (제네릭 지원)
+- DataFrame/Dataset의 기반 기술
+{{< /callout >}}
 
 #### RDD 생성
 
@@ -98,6 +121,13 @@ JavaRDD<Integer> doubled = numbers.map(n -> n * 2);
 JavaRDD<Integer> evens = numbers.filter(n -> n % 2 == 0);
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- `parallelize()`: 로컬 컬렉션을 분산 RDD로 변환
+- `textFile()`: 파일에서 RDD 생성 (HDFS, S3 지원)
+- `map()`, `filter()`: 기존 RDD에서 새 RDD 생성 (Transformation)
+- 파티션 수는 병렬성에 직접적 영향
+{{< /callout >}}
+
 #### Transformation
 
 Transformation은 기존 RDD에서 새 RDD를 생성하는 연산입니다. **지연 평가**되어 즉시 실행되지 않습니다.
@@ -123,6 +153,8 @@ graph TB
         W3 --> W2_out
     end
 ```
+
+*그림: Narrow vs Wide Transformation - Narrow는 파티션 간 데이터 이동 없이 1:1 변환, Wide는 여러 파티션의 데이터가 재분배(셔플)되어 새 파티션으로 이동합니다.*
 
 | 유형 | 예시 | 특징 |
 |------|------|------|
@@ -243,6 +275,13 @@ JavaPairRDD<String, Tuple2<Integer, Optional<String>>> leftJoined =
 // fullOuterJoin: 양쪽 모두
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- **Narrow**: map, filter, flatMap - 셔플 없이 파이프라이닝 가능
+- **Wide**: groupByKey, reduceByKey, join - 셔플 발생으로 비용 높음
+- `groupByKey`보다 `reduceByKey` 권장 (메모리 효율적)
+- Pair RDD로 키-값 기반 집계와 조인 가능
+{{< /callout >}}
+
 #### Action
 
 Action은 RDD를 실제로 계산하고 결과를 반환하는 연산입니다.
@@ -290,6 +329,13 @@ Map<Integer, Long> valueCounts = numbers.countByValue();
 numbers.saveAsTextFile("output/numbers");
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- Action 호출 시 실제 계산 시작 (지연 평가 트리거)
+- `collect()`는 대용량 데이터에서 OOM 위험 - `take(n)` 권장
+- `reduce()`, `fold()`, `aggregate()`로 분산 집계
+- `foreach()`는 Executor에서 실행됨 (Driver 변수 수정 불가)
+{{< /callout >}}
+
 #### Lineage (혈통)
 
 RDD는 자신이 어떻게 생성되었는지에 대한 정보(lineage)를 유지합니다. 이를 통해:
@@ -320,6 +366,13 @@ System.out.println(filtered.toDebugString());
  |  MapPartitionsRDD[1] at flatMap at RddExample.java:14 []
  |  data.txt MapPartitionsRDD[0] at textFile at RddExample.java:13 []
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Lineage는 RDD가 어떻게 만들어졌는지의 계보 정보
+- 장애 발생 시 손실된 파티션만 Lineage를 따라 재계산
+- `toDebugString()`으로 Lineage 확인 가능
+- 지연 평가와 최적화의 기반
+{{< /callout >}}
 
 #### Narrow vs Wide Dependencies
 
@@ -353,6 +406,13 @@ JavaPairRDD<String, Tuple2<Integer, String>> joined = rdd1.join(rdd2);
 - 네트워크 I/O, 디스크 I/O 발생
 - Stage 경계가 됨
 - 성능에 큰 영향
+
+{{< callout type="info" title="핵심 포인트" >}}
+- **Narrow**: 부모 파티션 1개 → 자식 파티션 1개 (파이프라이닝)
+- **Wide**: 부모 파티션 여러 개 → 자식 파티션 여러 개 (셔플)
+- Wide Dependency는 Stage 경계가 되어 성능에 큰 영향
+- 셔플 최소화가 Spark 튜닝의 핵심
+{{< /callout >}}
 
 #### 영속성 (Persistence)
 
@@ -389,6 +449,13 @@ filtered.unpersist();
 | MEMORY_AND_DISK_SER | O | O | O | 1 |
 | DISK_ONLY | X | O | X | 1 |
 | *_2 | - | - | - | 2 |
+
+{{< callout type="info" title="핵심 포인트" >}}
+- `cache()` = `persist(MEMORY_ONLY)`
+- 여러 Action에서 사용할 RDD는 반드시 캐시
+- 메모리 부족 시 `MEMORY_AND_DISK` 사용
+- 사용 후 `unpersist()`로 메모리 해제 권장
+{{< /callout >}}
 
 #### RDD vs DataFrame/Dataset
 
@@ -436,6 +503,13 @@ Dataset<Row> df2 = spark.read().json(jsonRdd);
 JavaRDD<Integer> numberRdd = sc.parallelize(Arrays.asList(1, 2, 3));
 Dataset<Integer> ds = spark.createDataset(numberRdd.rdd(), Encoders.INT());
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- **RDD 권장**: 저수준 제어, 비구조화 데이터, 특수 직렬화
+- **DataFrame/Dataset 권장**: 구조화 데이터, SQL, 성능 최적화
+- `df.javaRDD()`로 DataFrame → RDD 변환
+- `spark.createDataset()`으로 RDD → Dataset 변환
+{{< /callout >}}
 
 #### 실전 예제: 로그 분석
 

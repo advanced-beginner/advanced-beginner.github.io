@@ -1,8 +1,19 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: 고급 타입 시스템
 weight: 14
 ---
+
+{{< callout type="info" title="TL;DR" >}}
+- **Union Types (`|`)**: 여러 타입 중 하나, `Int | String`
+- **Intersection Types (`&`)**: 여러 타입 모두 만족, `A & B`
+- **Opaque Types**: 런타임 오버헤드 없는 타입 안전성
+- **Match Types**: 타입 수준 패턴 매칭
+- Scala 3 전용 기능으로 더 강력한 타입 표현 가능
+{{< /callout >}}
+
+**대상 독자:** 제네릭과 변성을 이해한 Scala 개발자
+**선수 지식:** 타입 매개변수, 타입 경계, 변성
 
 Scala 3는 더욱 강력하고 표현력 있는 타입 시스템을 제공합니다. 이 문서에서는 Scala 3의 새로운 타입 기능을 다룹니다.
 
@@ -47,6 +58,12 @@ def divideUnion(a: Int, b: Int): Int | String =
   if b == 0 then "0으로 나눌 수 없음" else a / b
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- Union Type은 `A | B` 형태로 여러 타입 중 하나를 표현
+- Either와 달리 래퍼 없이 직접 값을 다룸
+- 패턴 매칭으로 타입을 구분하여 처리
+{{< /callout >}}
+
 #### Intersection Types (&)
 
 Intersection Type은 여러 타입을 모두 만족하는 타입입니다. 객체가 여러 trait를 동시에 구현해야 할 때 유용합니다.
@@ -80,6 +97,12 @@ type Aged = { def age: Int }
 def describe(obj: Named & Aged): String =
   s"${obj.name}, ${obj.age}세"
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Intersection Type은 `A & B` 형태로 여러 타입을 모두 만족
+- 객체가 여러 trait를 동시에 구현해야 할 때 사용
+- 구조적 타입과 결합하여 유연한 타입 정의 가능
+{{< /callout >}}
 
 #### Opaque Types
 
@@ -131,6 +154,12 @@ val total = dollars + more  // OK: USD + USD
 // val mixed = dollars + eur(50)  // 컴파일 에러! USD + EUR
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- Opaque Type은 외부에서는 다른 타입으로 취급되는 타입 별칭
+- 런타임 오버헤드 없이 타입 안전성 제공 (박싱 없음)
+- 도메인 모델링에서 타입 혼동 방지에 유용
+{{< /callout >}}
+
 #### Match Types
 
 Match Type은 타입 레벨에서 패턴 매칭을 수행합니다. 입력 타입에 따라 다른 결과 타입을 계산할 수 있습니다.
@@ -157,6 +186,12 @@ type Flatten[X] = X match
 val x: Flatten[List[List[List[Int]]]] = List(1, 2, 3)
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- Match Type은 타입 수준에서 패턴 매칭 수행
+- 입력 타입에 따라 다른 결과 타입 계산
+- 재귀적 Match Types로 복잡한 타입 변환 가능
+{{< /callout >}}
+
 #### Type Lambdas
 
 Type Lambda는 타입 생성자를 타입 매개변수로 전달할 수 있게 해줍니다. 고차 타입을 다룰 때 유용합니다.
@@ -174,6 +209,12 @@ type Result = [A] =>> Either[String, A]
 val ok: Result[Int] = Right(42)
 val err: Result[Int] = Left("에러")
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Type Lambda는 `[X] =>> F[X]` 형태로 타입 생성자 표현
+- 고차 타입을 다룰 때 타입 매개변수 부분 적용에 유용
+- Scala 2의 복잡한 문법을 간결하게 대체
+{{< /callout >}}
 
 #### Dependent Function Types
 

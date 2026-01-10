@@ -1,10 +1,26 @@
 ---
 title: 성능 튜닝
 weight: 10
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- 튜닝 순서: 코드 최적화 → 데이터 구조 → 리소스 설정 → 세부 설정
+- 핵심 전략: 셔플 최소화, 조기 필터링, Broadcast Join, 캐싱
+- Executor 권장: 코어당 5GB, 4~5코어가 최적
+- AQE + Kryo 직렬화 + 적절한 파티션 수가 기본 설정
+{{< /callout >}}
+
+**대상 독자**: 프로덕션 Spark 워크로드를 최적화하는 시니어 엔지니어
+
+**선수 지식**:
+- [파티셔닝과 셔플](../partitioning/) 이해
+- [캐싱과 영속성](../caching/) 이해
+- Spark UI 기본 사용법
+
 ---
 
 Spark 애플리케이션의 성능을 최적화하는 전략과 구체적인 설정 방법을 알아봅니다.
@@ -23,6 +39,13 @@ Spark 애플리케이션의 성능을 최적화하는 전략과 구체적인 설
 - **Spark UI**: Job, Stage, Task 분석
 - **Event Log**: 상세 실행 이력
 - **Metrics**: Executor 메트릭 모니터링
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 튜닝 우선순위: 코드 → 데이터 구조 → 리소스 → 설정
+- 측정 없이 튜닝 금지 - Spark UI로 병목 확인 필수
+- 데이터 스큐 해결이 가장 큰 성능 개선 효과
+- AQE 활성화로 런타임 자동 최적화 (Spark 3.0+)
+{{< /callout >}}
 
 #### 코드 수준 최적화
 

@@ -1,10 +1,26 @@
 ---
 title: DataFrame과 Dataset
 weight: 3
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- DataFrame은 스키마가 있는 분산 테이블, Dataset은 타입 안전한 분산 컬렉션
+- Java에서 DataFrame = `Dataset<Row>`, 타입 Dataset = `Dataset<T>`
+- Catalyst Optimizer를 통한 자동 최적화로 RDD보다 성능 우수
+- SQL 스타일 작업은 DataFrame, 복잡한 비즈니스 로직은 Dataset 권장
+{{< /callout >}}
+
+**대상 독자**: Java/Spring 개발자, Spark 데이터 처리를 시작하는 중급자
+
+**선수 지식**:
+- Java Generics 및 함수형 인터페이스 (Function, Consumer 등)
+- SQL 기본 문법 (SELECT, WHERE, GROUP BY)
+- [RDD 기초](../rdd/) 문서 이해 권장
+
 ---
 
 DataFrame과 Dataset은 Spark의 현대적인 고수준 API입니다. RDD보다 사용하기 쉽고, Catalyst Optimizer를 통한 자동 최적화를 제공합니다.
@@ -43,6 +59,13 @@ Dataset<Employee> ds = spark.read().json("employees.json").as(encoder);
 | DataFrame | `Dataset<Row>` | 스키마는 있지만 Row 타입 |
 | Dataset | `Dataset<T>` | 타입 파라미터로 POJO 사용 |
 | Row | `org.apache.spark.sql.Row` | 스키마 기반 제네릭 행 |
+
+{{< callout type="info" title="핵심 포인트" >}}
+- DataFrame = `Dataset<Row>` (스키마 기반, 런타임 타입 체크)
+- Dataset = `Dataset<T>` (타입 파라미터, 컴파일 타임 타입 체크)
+- Java에서 Dataset 사용 시 Encoder 필수 (Encoders.bean())
+- Catalyst Optimizer가 쿼리를 자동 최적화
+{{< /callout >}}
 
 #### DataFrame 생성
 
@@ -156,6 +179,13 @@ List<Employee> employees = Arrays.asList(
 Dataset<Employee> ds = spark.createDataset(employees, Encoders.bean(Employee.class));
 ds.show();
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- `spark.read()`: CSV, JSON, Parquet, JDBC 등 다양한 소스 지원
+- `inferSchema`: 스키마 자동 추론 (대용량에서는 명시적 스키마 권장)
+- POJO는 기본 생성자와 Getter/Setter 필수 (JavaBean 규약)
+- Parquet이 가장 권장되는 포맷 (압축 + 컬럼 기반)
+{{< /callout >}}
 
 #### 기본 연산
 
@@ -298,6 +328,13 @@ df.orderBy(col("age").asc_nulls_first()).show();
 df.orderBy(col("age").desc_nulls_last()).show();
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- `select()`, `filter()`, `withColumn()`: 가장 자주 사용하는 연산
+- `col("name")` 또는 `df.col("name")`으로 컬럼 참조
+- `filter()`와 `where()`는 동일한 연산
+- 체이닝으로 여러 연산을 연결 가능 (지연 평가)
+{{< /callout >}}
+
 #### 집계 연산
 
 **groupBy**
@@ -384,6 +421,13 @@ WindowSpec runningWindow = Window
 df.withColumn("running_total", sum("salary").over(runningWindow)).show();
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- `groupBy().agg()`: SQL GROUP BY와 동일
+- Window 함수: 파티션 내 순위, 누적 합계, 이전/다음 값 접근
+- `collect_list()`, `collect_set()`: 그룹 내 값들을 배열로 수집
+- Window 정의: `partitionBy()` + `orderBy()` + 범위 지정
+{{< /callout >}}
+
 #### Join
 
 ```java
@@ -426,6 +470,13 @@ Dataset<Row> optimizedJoin = employees.join(
 // 자동 Broadcast 임계값 설정 (기본 10MB)
 spark.conf().set("spark.sql.autoBroadcastJoinThreshold", "50MB");
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Join 유형: inner, left, right, full, left_semi, left_anti
+- `broadcast()`: 작은 테이블을 모든 노드에 복제하여 셔플 회피
+- 자동 Broadcast 임계값 기본 10MB (조정 가능)
+- 대용량 테이블 간 조인 시 셔플 비용 고려 필수
+{{< /callout >}}
 
 #### Dataset (타입 안전 API)
 
@@ -485,6 +536,13 @@ Encoders.tuple(Encoders.STRING(), Encoders.INT())
 // Kryo (범용, 직렬화 오버헤드 있음)
 Encoders.kryo(MyClass.class)
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- `df.as(encoder)`: DataFrame → Dataset 변환
+- `FilterFunction`, `MapFunction`: 타입 안전한 람다 연산
+- Encoder가 직렬화 담당 (Encoders.bean, Encoders.STRING 등)
+- Dataset은 컴파일 타임 타입 체크로 안전성 향상
+{{< /callout >}}
 
 #### DataFrame vs Dataset 선택 기준
 

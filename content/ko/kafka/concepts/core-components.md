@@ -1,9 +1,23 @@
 ---
-lastmod: "2026-01-08"
+lastmod: "2026-01-10"
 title: 핵심 구성요소
 weight: 1
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- **Producer**: 메시지를 발행하고 Partition을 선택하여 Broker로 전송
+- **Consumer**: Consumer Group 단위로 Partition에서 메시지를 읽고 Offset 관리
+- **Broker**: 메시지를 저장하고 복제하며 Leader/Follower 구조로 고가용성 제공
+- **Topic**: 메시지를 논리적으로 분류하는 채널
+- **Partition**: Topic을 물리적으로 분할하여 병렬 처리 가능하게 하는 단위
+{{< /callout >}}
+
+**대상 독자**: Kafka를 처음 접하는 개발자 또는 분산 메시지 시스템의 기본 개념을 학습하려는 분
+
+**선수 지식**: 기본적인 네트워크 통신 개념, REST API 사용 경험, Spring Boot 기초
+
 ---
 
 Kafka는 다섯 가지 핵심 구성요소로 이루어져 있습니다. Producer는 메시지를 발행하고, Consumer는 메시지를 소비하며, Broker는 메시지를 저장하고 전달합니다. Topic은 메시지를 논리적으로 분류하는 채널이고, Partition은 Topic을 물리적으로 분할하여 병렬 처리를 가능하게 합니다. 이 다섯 가지 구성요소가 어떻게 상호작용하는지 이해하면 Kafka 기반 시스템을 설계하고 운영하는 데 필요한 기초를 갖추게 됩니다.
@@ -35,6 +49,14 @@ flowchart TB
         K -->|구독| B3[배송]
     end
 ```
+
+*다이어그램: 왼쪽은 동기 호출 방식으로 주문에서 결제, 결제에서 배송으로 순차적으로 호출하는 구조. 오른쪽은 Kafka를 통한 비동기 이벤트 방식으로 주문이 Kafka에 발행하면 결제와 배송이 독립적으로 구독하는 구조.*
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Kafka는 서비스 간 강한 결합, 장애 전파, 성능 병목 문제를 해결한다
+- 이벤트 기반 비동기 통신으로 서비스가 독립적으로 동작할 수 있다
+- 메시지는 Kafka에 저장되어 서비스 장애 시에도 유실되지 않는다
+{{< /callout >}}
 
 #### 전체 구조 이해하기
 
@@ -68,6 +90,14 @@ flowchart LR
     T1P0 --> C1
     T1P1 --> C2
 ```
+
+*다이어그램: Producer 1, 2가 각각 Kafka Cluster의 Broker 1, 2에 있는 orders Topic의 Partition 0, 1로 메시지를 전송하고, Consumer Group의 Consumer 1, 2가 각 Partition에서 메시지를 읽는 구조.*
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Kafka 클러스터는 여러 Broker로 구성되어 고가용성 제공
+- Topic은 여러 Partition으로 나뉘어 병렬 처리 가능
+- Consumer Group 내 각 Consumer는 서로 다른 Partition을 담당
+{{< /callout >}}
 
 #### Producer의 역할과 동작 원리
 
@@ -118,6 +148,13 @@ spring:
         enable.idempotence: true
         max.in.flight.requests.per.connection: 5
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Producer는 직렬화 -> Partition 선택 -> 배치 전송 순서로 동작
+- Key 기반 Partitioning으로 같은 Key는 항상 같은 Partition에 저장
+- acks 설정으로 전송 보장 수준 조절 (acks=all 권장)
+- enable.idempotence=true로 중복 전송 방지 (Kafka 3.0+ 기본값)
+{{< /callout >}}
 
 #### Consumer의 역할과 동작 원리
 
@@ -175,6 +212,13 @@ spring:
         max.poll.interval.ms: 300000
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- Consumer는 pull 방식으로 자신의 처리 속도에 맞게 메시지를 가져옴
+- Offset을 통해 읽기 위치 추적, __consumer_offsets Topic에 저장
+- Consumer Group 내 각 Partition은 하나의 Consumer만 담당
+- auto-offset-reset으로 시작 위치, enable-auto-commit으로 커밋 방식 설정
+{{< /callout >}}
+
 #### Broker의 역할과 클러스터 구성
 
 Broker는 Kafka의 핵심 서버입니다. 메시지를 받아서 디스크에 저장하고, Consumer의 요청에 따라 메시지를 전달합니다. Kafka가 높은 처리량을 달성할 수 있는 이유 중 하나는 Broker의 저장 방식에 있습니다. Broker는 메시지를 순차적으로 디스크에 기록합니다. 랜덤 I/O가 아닌 순차 I/O는 디스크의 물리적 특성상 훨씬 빠릅니다. 또한 운영체제의 페이지 캐시를 적극 활용하여 자주 접근하는 데이터는 메모리에서 바로 제공합니다.
@@ -205,6 +249,8 @@ flowchart TB
     L0 -->|복제| F0b
 ```
 
+*다이어그램: Kafka Cluster의 3개 Broker가 orders Partition 0의 Leader(Broker 1)와 Follower(Broker 2, 3)로 구성되어 Leader가 Follower들에게 데이터를 복제하는 구조.*
+
 Broker 설정에서 가장 중요한 것은 replication.factor와 min.insync.replicas입니다. replication.factor=3은 각 Partition이 3개의 복제본을 가짐을 의미합니다. min.insync.replicas=2는 Producer가 acks=all로 메시지를 보낼 때 최소 2개의 복제본에 기록되어야 성공으로 간주함을 의미합니다. 이 설정은 1개의 Broker가 장애를 일으켜도 데이터 유실 없이 서비스를 계속할 수 있게 합니다.
 
 ```properties
@@ -219,6 +265,13 @@ log.segment.bytes=1073741824
 ```
 
 Broker를 우체국에 비유할 수 있습니다. 편지(메시지)를 받아서 보관하고, 수신자(Consumer)가 찾아오면 전달합니다. 여러 우체국(Broker)이 협력하면 하나의 우체국에 문제가 생겨도 다른 우체국에서 서비스를 계속할 수 있습니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Broker는 순차 I/O와 페이지 캐시로 높은 처리량 달성
+- Leader/Follower 구조로 장애 시 자동 Failover
+- KRaft 모드(Kafka 3.3+)로 Zookeeper 없이 클러스터 운영 가능
+- replication.factor=3, min.insync.replicas=2 설정 권장
+{{< /callout >}}
 
 #### Topic의 역할과 설계 원칙
 
@@ -245,6 +298,13 @@ kafka-topics.sh --bootstrap-server localhost:9092 \
 
 Topic을 TV 채널에 비유할 수 있습니다. 뉴스 채널, 스포츠 채널, 드라마 채널처럼 주제별로 구분됩니다. 시청자(Consumer)는 관심 있는 채널만 선택하여 시청할 수 있습니다. 각 채널은 독립적으로 운영되어 뉴스 채널에 문제가 생겨도 스포츠 채널은 정상 방송됩니다.
 
+{{< callout type="info" title="핵심 포인트" >}}
+- Topic은 메시지를 논리적으로 분류하는 채널
+- 명확한 네이밍 컨벤션 필수 (orders, payment-completed 등)
+- 각 Topic은 독립적인 보관 정책 설정 가능
+- Partition 수는 나중에 늘릴 수 있지만 줄일 수 없음
+{{< /callout >}}
+
 #### Partition의 역할과 병렬 처리
 
 Partition은 Topic을 물리적으로 분할한 단위입니다. 하나의 Topic이 여러 Partition으로 나뉘면 여러 Consumer가 동시에 메시지를 처리할 수 있습니다. Partition이 없다면 아무리 많은 Consumer를 투입해도 하나의 Consumer만 메시지를 처리할 수 있어 병목이 발생합니다.
@@ -268,9 +328,18 @@ flowchart TB
     end
 ```
 
+*다이어그램: orders Topic이 Partition 0, 1, 2로 나뉘고, Consumer Group의 Consumer 1, 2, 3이 각각 하나의 Partition을 담당하여 병렬로 메시지를 처리하는 구조.*
+
 Partition을 마트의 계산대에 비유할 수 있습니다. 계산대가 하나뿐이면 줄이 길어지고 대기 시간이 늘어납니다. 계산대를 늘리면 더 많은 고객을 동시에 처리할 수 있습니다. 하지만 계산대가 너무 많으면 직원 배치와 관리 비용이 증가합니다. 적정 수의 계산대를 유지하는 것이 효율적입니다.
 
 Partition 할당 전략은 메시지를 어떤 Partition에 보낼지 결정합니다. Key가 없으면 라운드로빈 방식으로 Partition에 고르게 분배됩니다. Key가 있으면 Key의 해시값을 기반으로 Partition을 선택합니다. 같은 Key는 항상 같은 Partition으로 가므로 순서가 보장됩니다. 예를 들어 orderId를 Key로 사용하면 같은 주문에 대한 모든 이벤트가 순서대로 처리됩니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Partition은 병렬 처리의 단위, Partition 수만큼 Consumer 병렬 처리 가능
+- Partition 내에서만 순서 보장, 전체 순서가 필요하면 같은 Key 사용
+- Partition 수는 목표 처리량과 Consumer 수를 고려하여 설정
+- Partition이 너무 많으면 오버헤드 발생 (파일 핸들, 리밸런싱 시간)
+{{< /callout >}}
 
 #### 구성요소 간 상호작용
 
@@ -289,6 +358,14 @@ flowchart TB
     C -->|"7. Offset 커밋"| OS[__consumer_offsets]
 ```
 
+*다이어그램: Producer가 Topic에 메시지 발행 -> Partition 선택 -> Leader Broker 저장 -> Follower 복제 -> Consumer Group에 전달 -> Consumer 비즈니스 처리 -> __consumer_offsets에 Offset 커밋하는 전체 메시지 흐름.*
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 메시지는 직렬화 -> Partition 선택 -> Leader 저장 -> Follower 복제 순서로 처리
+- Consumer는 poll 방식으로 메시지를 가져오고 처리 후 Offset 커밋
+- __consumer_offsets Topic에 커밋 정보 저장으로 재시작 시 복구 가능
+{{< /callout >}}
+
 #### 자주 발생하는 문제와 해결 방법
 
 Producer가 메시지를 보내지 못하는 경우는 대부분 연결 문제입니다. bootstrap-servers 주소가 올바른지, 해당 Broker에 네트워크로 접근 가능한지 확인해야 합니다. Topic이 존재하지 않고 auto.create.topics.enable이 false로 설정되어 있다면 Topic을 먼저 생성해야 합니다. Broker 로그에서 인증이나 권한 관련 오류 메시지가 있는지도 확인합니다.
@@ -306,6 +383,13 @@ kafka-consumer-groups.sh --bootstrap-server localhost:9092 \
 kafka-console-consumer.sh --bootstrap-server localhost:9092 \
   --topic orders --from-beginning --max-messages 10
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Producer 연결 문제는 bootstrap-servers 주소와 네트워크 접근성 확인
+- Consumer가 메시지를 못 받으면 group-id, Topic 구독, auto-offset-reset 확인
+- 순서 보장이 필요하면 같은 Key를 사용하여 같은 Partition으로 전송
+- kafka-consumer-groups.sh로 Consumer Group 상태와 Lag 확인 가능
+{{< /callout >}}
 
 #### 다음 단계
 

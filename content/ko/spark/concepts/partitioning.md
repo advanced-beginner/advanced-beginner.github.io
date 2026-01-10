@@ -1,10 +1,25 @@
 ---
 title: 파티셔닝과 셔플
 weight: 6
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- 파티션은 데이터의 논리적 분할 단위, 각 파티션이 하나의 Task로 처리
+- 셔플은 파티션 간 데이터 재분배로 Spark에서 가장 비용이 높은 연산
+- 권장 파티션 크기: 100~200MB, 파티션 수 = 코어 수 x 2~4
+- AQE(Spark 3.0+)가 런타임에 파티션 수 자동 조정
+{{< /callout >}}
+
+**대상 독자**: Spark 성능 튜닝을 시작하는 데이터 엔지니어
+
+**선수 지식**:
+- [아키텍처](../architecture/) 문서의 Stage, Task 개념
+- [Transformation과 Action](../transformations-actions/)의 Wide/Narrow 구분
+
 ---
 
 파티셔닝은 Spark 성능의 핵심입니다. 데이터가 어떻게 분산되는지 이해하고 최적화하는 것이 대규모 데이터 처리의 관건입니다.
@@ -29,6 +44,13 @@ DataFrame (1억 행)
 | 너무 적음 | 병렬성 저하, 메모리 부족 가능, 일부 노드만 사용 |
 | 너무 많음 | 스케줄링 오버헤드, 작은 태스크 비효율, 셔플 비용 증가 |
 | 적절함 | 균형 잡힌 부하 분산, 효율적인 리소스 사용 |
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 파티션 1개 = Task 1개 = 병렬 처리 단위
+- 너무 적으면 병렬성 저하, 너무 많으면 스케줄링 오버헤드
+- 권장: 파티션당 100~200MB, 총 파티션 수 = 코어 수 x 2~4
+- `df.rdd().getNumPartitions()`으로 현재 파티션 수 확인
+{{< /callout >}}
 
 #### 파티션 수 확인 및 조정
 

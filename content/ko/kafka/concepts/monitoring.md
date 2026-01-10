@@ -1,9 +1,23 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: 모니터링 기초
 weight: 10
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- Consumer Lag이 가장 중요한 메트릭, 증가 추세 시 즉시 조치 필요
+- Broker 핵심 메트릭: UnderReplicatedPartitions, ActiveControllerCount, OfflinePartitionsCount
+- Producer 메트릭: record-send-rate, record-error-rate, request-latency-avg
+- Prometheus + Grafana로 시각화 및 알림 설정 권장
+- Lag 급증 시: Consumer 상태 → 처리 속도 → 리밸런싱 → 스케일 아웃 순서로 확인
+{{< /callout >}}
+
+**대상 독자**: Kafka 클러스터를 운영하고 모니터링하려는 운영자 및 개발자
+
+**선수 지식**: [Consumer Group & Offset](../consumer-group/)의 Offset과 Lag 개념
+
 ---
 
 Kafka 클러스터와 애플리케이션의 핵심 메트릭을 이해합니다.

@@ -1,10 +1,25 @@
 ---
 title: Transformation과 Action
 weight: 5
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- Transformation은 지연 평가(Lazy)되어 DAG에 추가만 됨
+- Action 호출 시 전체 DAG가 실행되어 Job 생성
+- Narrow(셔플 없음) vs Wide(셔플 발생) Transformation 구분이 성능 핵심
+- 같은 DataFrame을 여러 번 사용하면 매번 재계산 → 캐싱 필요
+{{< /callout >}}
+
+**대상 독자**: Spark 연산의 실행 시점을 이해하고자 하는 개발자
+
+**선수 지식**:
+- [아키텍처](../architecture/) 문서의 Job, Stage, Task 개념
+- Java Stream API의 지연 평가 개념
+
 ---
 
 Spark의 모든 연산은 **Transformation**과 **Action** 두 가지로 분류됩니다. 이 구분을 이해하는 것이 Spark 프로그래밍의 핵심입니다.

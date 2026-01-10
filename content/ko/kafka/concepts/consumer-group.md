@@ -1,9 +1,23 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: Consumer Group & Offset
 weight: 3
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- Consumer Group은 동일 목적의 Consumer들을 묶어 병렬 처리하는 논리적 그룹
+- 핵심 규칙: 하나의 Partition은 Group 내에서 하나의 Consumer만 읽을 수 있음
+- Offset은 Partition 내 메시지 위치 번호로, __consumer_offsets 토픽에 저장
+- 자동 커밋은 간편하지만 데이터 유실 위험, 수동 커밋은 정확한 제어 가능
+- Consumer 장애 시 리밸런싱으로 Partition이 자동 재분배됨
+{{< /callout >}}
+
+**대상 독자**: Kafka Consumer를 개발하거나 운영하는 개발자, 병렬 처리와 상태 관리를 학습하려는 분
+
+**선수 지식**: [메시지 흐름](../message-flow/)의 Topic과 Partition 개념, [Replication](../replication/)의 Leader/Follower 개념
+
 ---
 
 병렬 처리와 진행 상태 관리의 핵심 개념을 이해합니다. 이 문서는 Kafka 3.6.x 기준으로 작성되었으며, Spring Boot 3.2.x와 Spring Kafka 3.1.x, Java 17 환경에서 코드 예제가 검증되었습니다.
@@ -33,6 +47,8 @@ flowchart TB
     P2 --> C3
 ```
 
+*다이어그램: orders Topic의 3개 Partition이 order-service Consumer Group의 3개 Consumer에 1:1로 할당되어 각 Consumer가 하나의 Partition을 전담하는 구조.*
+
 위 다이어그램에서 orders 토픽은 3개의 Partition으로 구성되어 있고, order-service Consumer Group에는 3개의 Consumer가 있습니다. 각 Consumer가 하나의 Partition을 전담하여 처리하는 것을 볼 수 있습니다. 이것이 바로 Consumer Group의 핵심 동작 방식입니다.
 
 **핵심 규칙: 하나의 Partition은 Consumer Group 내에서 하나의 Consumer만 읽을 수 있다**
@@ -42,6 +58,12 @@ flowchart TB
 **왜 이런 설계인가?**
 
 Kafka 창시자 Jay Kreps가 이 규칙을 선택한 데는 명확한 이유가 있습니다. 첫째, 단순성입니다. Partition 내 순서만 보장하면 되므로 분산 락과 같은 복잡한 동기화 메커니즘이 필요 없습니다. 둘째, 성능입니다. Consumer 간 조율 오버헤드가 제거되어 처리 속도가 빨라집니다. 셋째, 확장성입니다. Partition 수가 곧 최대 병렬성을 의미하므로 스케일링 모델이 명확해집니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Consumer Group은 동일 목적의 Consumer들을 묶어 병렬 처리하는 논리적 그룹
+- 핵심 규칙: 하나의 Partition은 Group 내에서 하나의 Consumer만 읽을 수 있음
+- 이 규칙으로 순서 보장, 중복 처리 방지, 단순한 동기화 구현 가능
+{{< /callout >}}
 
 #### Consumer 수와 Partition 수의 관계
 
@@ -61,6 +83,12 @@ public void consume(String message) {
 ```
 
 실제 운영 환경에서는 Kubernetes Deployment의 replicas 설정으로 Consumer 인스턴스 수를 조절합니다. 토픽의 Partition 수를 먼저 결정하고, 이에 맞춰 replicas를 설정하는 것이 일반적인 패턴입니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Consumer 수 < Partition 수: 일부 Consumer가 여러 Partition 담당 (정상)
+- Consumer 수 = Partition 수: 최적의 1:1 매핑, 병렬 처리 효율 최대화
+- Consumer 수 > Partition 수: 유휴 Consumer 발생, 리소스 낭비
+{{< /callout >}}
 
 #### 여러 Consumer Group
 
@@ -93,7 +121,15 @@ flowchart TB
     P1 --> C3
 ```
 
+*다이어그램: orders Topic의 메시지가 order-service, analytics-service, notification-service 세 개의 Consumer Group에 독립적으로 전달되는 구조. 각 Group은 모든 메시지를 독립적으로 수신.*
+
 위 다이어그램에서 orders 토픽의 메시지는 세 개의 Consumer Group에 모두 전달됩니다. order-service는 주문을 처리하고, analytics-service는 분석 데이터를 수집하며, notification-service는 알림을 발송합니다. 각 그룹은 모든 메시지를 독립적으로 수신하고, 별도의 Offset을 관리하며(`__consumer_offsets` 토픽에 저장), 서로 영향 없이 자신의 속도로 메시지를 처리합니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 서로 다른 Consumer Group은 완전히 독립적으로 메시지 소비
+- 각 Group은 모든 메시지를 수신하고 별도의 Offset 관리
+- 하나의 Topic을 여러 서비스가 각자 목적으로 처리할 때 활용
+{{< /callout >}}
 
 #### Offset이란?
 
@@ -139,6 +175,12 @@ kafka-console-consumer.sh \
     --formatter "kafka.coordinator.group.GroupMetadataManager\$OffsetsMessageFormatter" \
     --from-beginning
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Offset은 Partition 내 메시지의 순차적 위치 번호 (0부터 시작)
+- Consumer Lag = Log End Offset - Committed Offset (처리 지연 측정)
+- Offset은 __consumer_offsets 토픽에 저장 (50개 Partition, RF=3)
+{{< /callout >}}
 
 #### Offset 커밋
 
@@ -262,6 +304,12 @@ kafka-consumer-groups.sh --describe --group order-service \
 
 위 출력에서 CURRENT-OFFSET이 표시되면 이미 Offset이 커밋된 상태입니다. 이 경우 earliest로 설정해도 처음부터 읽지 않습니다. Offset을 수동으로 리셋해야 하며, 자세한 방법은 [Consumer 심화 운영](../consumer-advanced/)에서 확인할 수 있습니다.
 
+{{< callout type="info" title="핵심 포인트" >}}
+- 자동 커밋은 간편하지만 데이터 유실 위험, 수동 커밋은 정확한 제어 가능
+- 데이터 정확성이 중요하면 수동 커밋(ack.acknowledge()) 사용
+- auto.offset.reset은 Offset이 없을 때만 적용, 이미 커밋된 경우 무시됨
+{{< /callout >}}
+
 #### 장애 복구와 리밸런싱
 
 Consumer가 장애로 중단되면 Kafka는 자동으로 리밸런싱을 수행합니다. 리밸런싱은 Consumer Group 내에서 Partition 할당을 재조정하는 과정입니다.
@@ -284,9 +332,17 @@ sequenceDiagram
     C2->>K: Committed Offset부터 재개
 ```
 
+*다이어그램: Consumer 1이 장애로 중단되면 Kafka가 리밸런싱을 시작하고, Consumer 1이 담당하던 Partition 0, 1을 Consumer 2에게 재할당하여 Committed Offset부터 처리를 재개하는 흐름.*
+
 Consumer 1이 장애로 중단되면 Kafka는 이를 감지하고 리밸런싱을 시작합니다. Consumer 1이 담당하던 Partition 0과 1이 Consumer 2에게 재할당됩니다. Consumer 2는 각 Partition의 Committed Offset부터 메시지 처리를 재개합니다.
 
 리밸런싱 중에는 해당 Consumer Group의 모든 Consumer가 일시적으로 메시지 처리를 중단합니다. 이 중단 시간을 최소화하는 것이 운영에서 중요한 포인트이며, 리밸런싱 최적화와 Lag 모니터링에 대한 자세한 내용은 [Consumer 심화 운영](../consumer-advanced/)에서 다룹니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Consumer 장애 시 Kafka가 자동으로 리밸런싱 수행
+- 새 Leader가 Committed Offset부터 처리 재개 (데이터 유실 없음)
+- 리밸런싱 중 모든 Consumer 일시 정지, 중단 시간 최소화가 핵심
+{{< /callout >}}
 
 #### 다른 메시지 시스템과의 비교
 

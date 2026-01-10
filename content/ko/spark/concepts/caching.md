@@ -1,10 +1,25 @@
 ---
 title: 캐싱과 영속성
 weight: 7
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- cache() = persist(MEMORY_ONLY), 여러 Action에서 재사용할 데이터 캐싱
+- Storage Level: MEMORY_ONLY(빠름), MEMORY_AND_DISK(안정), *_SER(메모리 절약)
+- 캐시는 첫 Action 시 저장되고, unpersist()로 해제
+- 체크포인트는 Lineage를 끊어 장애 복구와 긴 계보 문제 해결
+{{< /callout >}}
+
+**대상 독자**: 반복 연산 최적화가 필요한 데이터 엔지니어
+
+**선수 지식**:
+- [Transformation과 Action](../transformations-actions/) 지연 평가 이해
+- JVM 메모리 구조 기초
+
 ---
 
 Spark의 인메모리 컴퓨팅 능력을 활용하여 중간 결과를 캐시하고 재사용하는 방법을 알아봅니다.
@@ -34,6 +49,13 @@ processed.show();                            // 캐시에서 읽음 (빠름)
 processed.write().parquet("output");         // 캐시에서 읽음 (빠름)
 processed.unpersist();                       // 캐시 해제
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 같은 DataFrame을 여러 Action에서 사용하면 매번 재계산
+- `cache()`로 중간 결과를 메모리에 저장하여 재계산 방지
+- 첫 Action 호출 시 실제 캐싱 발생 (지연 평가)
+- 사용 후 `unpersist()`로 메모리 해제 권장
+{{< /callout >}}
 
 #### 기본 사용법
 

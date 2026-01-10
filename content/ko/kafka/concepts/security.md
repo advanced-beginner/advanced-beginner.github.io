@@ -1,9 +1,23 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: 보안
 weight: 11
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- Kafka 보안 3계층: SSL/TLS(암호화) → SASL(인증) → ACL(권한)
+- SSL/TLS로 전송 중 데이터 암호화, 양방향 TLS로 클라이언트 인증
+- SASL 메커니즘: SCRAM-SHA-256 권장 (프로덕션), PLAIN은 SSL과 함께만 사용
+- ACL로 Principal별 Topic/Group 접근 권한 세분화
+- allow.everyone.if.no.acl.found=false 설정으로 기본 거부 정책 적용
+{{< /callout >}}
+
+**대상 독자**: Kafka 클러스터 보안을 구성하려는 운영자 및 보안 담당자
+
+**선수 지식**: [핵심 구성요소](../core-components/)의 Broker, Producer, Consumer 개념, 기본적인 보안 개념(암호화, 인증, 인가)
+
 ---
 
 프로덕션 환경에서 Kafka를 안전하게 운영하기 위한 암호화, 인증, 권한 관리를 이해합니다.

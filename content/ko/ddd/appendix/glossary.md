@@ -1,7 +1,7 @@
 ---
 title: 용어 사전
 weight: 1
-lastmod: 2026-01-08
+lastmod: 2026-01-10
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
@@ -9,6 +9,12 @@ author_url: "http://github.com/kimbenji"
 # DDD 용어 사전
 
 Domain-Driven Design의 핵심 용어를 정리합니다. 상세 설명은 [개념 이해](../../concepts/) 섹션을 참고하세요.
+
+> **TL;DR**
+>
+> - **전략적 설계**: Bounded Context, Context Mapping, Ubiquitous Language로 도메인 경계와 언어 정의
+> - **전술적 설계**: Entity, Value Object, Aggregate, Repository, Domain Event로 도메인 모델 구현
+> - **아키텍처 패턴**: Layered, Hexagonal, CQRS, Event Sourcing으로 시스템 구조화
 
 ## 전략적 설계 (Strategic Design)
 
@@ -103,6 +109,13 @@ Domain-Driven Design의 핵심 용어를 정리합니다. 상세 설명은 [개�
 **특징:**
 - 표준 솔루션 구매/사용 가능
 - 예: 이메일, 결제 게이트웨이
+
+> **전략적 설계 핵심 포인트**
+>
+> - **Bounded Context**: 도메인 모델이 적용되는 명시적 경계
+> - **Context Mapping**: Bounded Context 간의 관계와 통합 방식 정의
+> - **Ubiquitous Language**: 개발자와 도메인 전문가가 공유하는 공통 언어
+> - **도메인 분류**: Core(핵심) > Supporting(지원) > Generic(일반) 순으로 투자 우선순위
 
 ---
 
@@ -317,6 +330,15 @@ public class OrderService {
 
 📖 [애플리케이션 계층 실습](../../examples/application-layer/)
 
+> **전술적 설계 핵심 포인트**
+>
+> - **Entity**: ID로 식별, 상태 변경 가능
+> - **Value Object**: 속성 값으로 동등성 판단, 불변
+> - **Aggregate**: 데이터 변경의 단위, Root를 통해서만 접근
+> - **Repository**: Aggregate Root의 영속성 추상화
+> - **Domain Event**: 도메인에서 발생한 의미 있는 사건 (과거형 명명)
+> - **Domain Service vs Application Service**: 도메인 로직 vs 유스케이스 조율
+
 ---
 
 ## 아키텍처 패턴
@@ -415,6 +437,13 @@ flowchart LR
 **관련 패턴:** [CQRS](#cqrs-command-query-responsibility-segregation), [Domain Event](#domain-event-도메인-이벤트)
 
 📖 [Event Sourcing 실습](../../examples/event-sourcing/) - EventStore, 스냅샷, 시간 여행 구현
+
+> **아키텍처 패턴 핵심 포인트**
+>
+> - **Layered Architecture**: 위에서 아래로만 의존 (Interfaces → Application → Domain → Infrastructure)
+> - **Hexagonal Architecture**: Port(인터페이스)와 Adapter(구현체)로 도메인을 외부로부터 보호
+> - **CQRS**: 명령(쓰기)과 조회(읽기) 모델 분리로 각각 최적화
+> - **Event Sourcing**: 상태 대신 이벤트를 저장하고 재생하여 현재 상태 도출
 
 ---
 

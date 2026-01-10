@@ -1,8 +1,18 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: 케이스 클래스
 weight: 5
 ---
+
+{{< callout type="info" title="TL;DR" >}}
+- 케이스 클래스는 **불변 데이터 모델링**을 위한 특별한 클래스입니다
+- `apply`, `unapply`, `copy`, `equals`, `hashCode`, `toString`이 자동 생성됩니다
+- `sealed trait` + 케이스 클래스로 ADT(대수적 데이터 타입)를 정의합니다
+- 패턴 매칭과 함께 사용할 때 진가를 발휘합니다
+{{< /callout >}}
+
+**대상 독자:** Scala 기본 문법을 익힌 개발자
+**선수 지식:** 클래스와 객체, 기본적인 타입 시스템 이해
 
 케이스 클래스는 **불변 데이터 모델링**을 위한 특별한 클래스입니다. 보일러플레이트 코드 없이 데이터 클래스를 정의할 수 있습니다. 컴파일러가 equals, hashCode, toString, copy 등 유용한 메서드를 자동으로 생성하므로 데이터 중심의 클래스를 매우 간결하게 정의할 수 있습니다. 특히 패턴 매칭과 함께 사용하면 그 진가를 발휘합니다.
 
@@ -104,6 +114,14 @@ println(person.toString)  // Person(Alice,30)
 println(person)           // Person(Alice,30)
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- `apply`: new 없이 인스턴스 생성
+- `unapply`: 패턴 매칭에서 필드 추출
+- `copy`: 일부 필드만 변경한 새 인스턴스 생성
+- `equals/hashCode`: 구조적 동등성 (필드 값 비교)
+- `toString`: 읽기 좋은 문자열 표현
+{{< /callout >}}
+
 #### 중첩 케이스 클래스
 
 케이스 클래스는 다른 케이스 클래스를 필드로 가질 수 있습니다. 중첩 copy를 사용하면 깊은 구조의 불변 객체도 쉽게 업데이트할 수 있습니다.
@@ -118,6 +136,11 @@ val emp = Employee("김철수", Address("서울", "12345"))
 val empInBusan = emp.copy(address = emp.address.copy(city = "부산"))
 println(empInBusan)  // Employee(김철수,Address(부산,12345))
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 중첩된 케이스 클래스는 `copy`를 연쇄적으로 사용하여 업데이트합니다
+- 깊은 구조의 불변 객체도 쉽게 수정할 수 있습니다
+{{< /callout >}}
 
 #### 패턴 매칭과 함께 사용
 
@@ -136,6 +159,12 @@ println(processOrder(Order(1, "노트북", 5)))   // 주문 #1: 노트북 5개
 println(processOrder(Order(2, "마우스", 150))) // 대량 주문
 println(processOrder(Order(3, "키보드", -1)))  // 잘못된 수량
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 케이스 클래스의 `unapply`로 필드를 쉽게 추출합니다
+- 가드 조건(`if`)으로 추가 필터링이 가능합니다
+- 와일드카드 `_`로 불필요한 필드를 무시합니다
+{{< /callout >}}
 
 #### ADT (Algebraic Data Types)
 
@@ -194,6 +223,13 @@ def describe(shape: Shape): String = shape match {
 }
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- `sealed trait` + 케이스 클래스로 ADT를 정의합니다
+- `sealed`는 같은 파일에서만 상속을 허용합니다
+- 컴파일러가 패턴 매칭의 완전성을 검사하고 누락된 케이스를 경고합니다
+- Scala 3에서는 `enum`으로 더 간결하게 정의할 수 있습니다
+{{< /callout >}}
+
 #### Option, Either, Try
 
 Scala 표준 라이브러리의 대표적인 케이스 클래스 활용 예입니다. 이들은 모두 sealed trait와 케이스 클래스로 정의된 ADT이며, null이나 예외 대신 타입 안전한 방식으로 실패 가능한 연산을 표현합니다.
@@ -238,6 +274,12 @@ def parseAge(input: String): Either[String, Int] =
   }
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- **Option**: 값이 있거나(`Some`) 없음(`None`)을 표현합니다
+- **Either**: 두 가지 가능한 결과 중 하나 (`Left`=실패, `Right`=성공)
+- null이나 예외 대신 타입 안전한 방식으로 실패를 표현합니다
+{{< /callout >}}
+
 #### 케이스 클래스 vs 일반 클래스
 
 아래 표는 케이스 클래스와 일반 클래스의 주요 차이점을 정리한 것입니다. 케이스 클래스는 불변 데이터 모델링에 최적화되어 있고, 일반 클래스는 가변 상태나 복잡한 동작이 필요할 때 적합합니다.
@@ -249,6 +291,12 @@ def parseAge(input: String): Either[String, Int] =
 | copy 메서드 | 자동 생성 | 직접 구현 필요 |
 | 패턴 매칭 | unapply 자동 | 직접 구현 필요 |
 | new 키워드 | 불필요 | 필요 |
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 케이스 클래스는 불변 데이터에 최적화되어 있습니다
+- 자동으로 구조적 비교, copy, 패턴 매칭을 지원합니다
+- 가변 상태가 필요하면 일반 클래스를 사용하세요
+{{< /callout >}}
 
 #### 모범 사례
 
@@ -299,6 +347,12 @@ case class Person(name: String, age: Int)
 case class Badge(id: String, level: String)
 case class Employee(person: Person, badge: Badge)
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 불변 데이터, 도메인 모델, DTO에 케이스 클래스를 사용합니다
+- `var` 사용을 피하고 불변성을 유지하세요
+- 케이스 클래스 상속 대신 합성을 사용하세요
+{{< /callout >}}
 
 #### 연습 문제
 

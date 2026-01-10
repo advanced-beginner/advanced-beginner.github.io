@@ -1,8 +1,18 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: For Comprehension
 weight: 10
 ---
+
+{{< callout type="info" title="TL;DR" >}}
+- For comprehension은 `flatMap`, `map`, `withFilter`의 문법적 설탕입니다
+- 중첩된 flatMap을 읽기 쉬운 선언적 형태로 작성할 수 있습니다
+- Option, Either, Future, List 등 다양한 모나딕 타입과 함께 사용됩니다
+- yield 없이 사용하면 부수 효과만 실행합니다 (foreach로 변환)
+{{< /callout >}}
+
+**대상 독자:** 고차 함수를 이해한 개발자
+**선수 지식:** map, flatMap, filter 고차 함수
 
 For Comprehension은 `flatMap`, `map`, `withFilter`를 우아하게 표현하는 문법적 설탕(syntactic sugar)입니다. 중첩된 flatMap과 map 호출을 읽기 쉬운 선언적 형태로 작성할 수 있게 해주며, Option, Either, Future, List 등 다양한 모나딕 타입과 함께 사용됩니다.
 
@@ -32,6 +42,8 @@ flowchart LR
     FC2 --> R2
     FC3 --> R3
 ```
+
+*다이어그램: for comprehension이 map, flatMap, withFilter 호출로 변환되는 과정을 보여줍니다. 단일 생성자는 map으로, 여러 생성자는 flatMap+map으로, 가드는 withFilter로 변환됩니다.*
 
 기본적인 for comprehension 문법은 다음과 같습니다.
 

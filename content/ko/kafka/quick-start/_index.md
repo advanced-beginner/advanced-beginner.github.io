@@ -1,10 +1,20 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: Quick Start
 weight: 1
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
+
+> **대상 독자**: Kafka를 처음 접하는 백엔드 개발자
+> **선수 지식**: Java 기본 문법, REST API 개념, Docker 기초
+> **이 문서를 읽으면**: Spring Boot에서 Kafka로 메시지를 전송하고 수신하는 전체 과정을 직접 실행할 수 있습니다
+
+{{< callout type="tip" title="TL;DR" >}}
+- Docker로 Kafka를 실행하고, Spring Boot 예제로 메시지 송수신을 테스트합니다
+- `KafkaTemplate.send()`로 메시지를 발행하고, `@KafkaListener`로 수신합니다
+- 전체 과정은 약 5분 소요됩니다
+{{< /callout >}}
 
 5분 만에 Kafka 메시지 송수신을 경험해보세요.
 
@@ -22,7 +32,15 @@ flowchart LR
 
 시작하기 전에 Docker Desktop 또는 Docker Engine, Java 17 이상, 그리고 IntelliJ IDEA나 VS Code 같은 IDE가 필요합니다.
 
-#### Step 1: Kafka 시작
+**시작 전 확인**
+
+| 항목 | 확인 명령어 | 예상 결과 |
+|------|-------------|-----------|
+| Docker | `docker --version` | `Docker version 24.x.x` 이상 |
+| Java | `java -version` | `openjdk version "17.x.x"` 이상 |
+| Git | `git --version` | `git version 2.x.x` |
+
+#### Step 1/4: Kafka 시작 (~1분)
 
 이 저장소의 루트 디렉토리에서 Docker Compose로 Kafka를 실행합니다.
 
@@ -49,7 +67,7 @@ kafka     "/etc/kafka/docker..."   Up
 
 Kafka가 완전히 시작되기까지 10-20초 정도 걸릴 수 있습니다.
 
-#### Step 2: 예제 프로젝트 실행
+#### Step 2/4: 예제 프로젝트 실행 (~2분)
 
 새 터미널에서 Quick Start 예제를 실행합니다.
 
@@ -61,7 +79,7 @@ cd examples/quick-start
 
 Windows 사용자는 `gradlew.bat bootRun` 명령을 사용합니다. 실행 완료 시 `Started QuickStartApplication in X.XXX seconds`라는 로그가 표시됩니다.
 
-#### Step 3: 메시지 전송
+#### Step 3/4: 메시지 전송 (~1분)
 
 새 터미널에서 REST API로 메시지를 전송합니다.
 
@@ -73,7 +91,7 @@ curl -X POST http://localhost:8080/api/messages \
 
 `메시지 전송 완료: Hello Kafka!`라는 응답이 반환됩니다.
 
-#### Step 4: 메시지 수신 확인
+#### Step 4/4: 메시지 수신 확인 (~1분)
 
 Spring Boot 애플리케이션이 실행 중인 터미널에서 Consumer가 메시지를 수신한 로그를 확인합니다.
 

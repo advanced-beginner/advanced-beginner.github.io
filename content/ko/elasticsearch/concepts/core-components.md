@@ -1,8 +1,19 @@
 ---
 title: 핵심 구성요소
 weight: 1
-lastmod: 2026-01-08
+lastmod: 2026-01-10
 ---
+
+{{< callout type="tip" title="TL;DR" >}}
+- **Cluster**: 여러 노드를 묶어 고가용성과 분산 처리를 제공하는 서버 그룹
+- **Node**: 클러스터를 구성하는 단일 Elasticsearch 서버 (Master, Data, Coordinating 역할)
+- **Index**: 문서들의 논리적 모음 (RDB의 테이블과 유사)
+- **Document**: JSON 형태의 데이터 단위 (RDB의 Row와 유사)
+- **Shard**: 인덱스를 수평 분할한 조각 (Primary/Replica로 구성)
+{{< /callout >}}
+
+**대상 독자**: Elasticsearch를 처음 접하는 개발자
+**선수 지식**: JSON 기본 문법, REST API 개념
 
 Elasticsearch의 핵심 구성요소인 Cluster, Node, Index, Document, Shard의 역할과 관계를 이해합니다.
 
@@ -26,6 +37,8 @@ flowchart TB
     P0 -.복제.-> R0
     P1 -.복제.-> R1
 ```
+
+*다이어그램: 클러스터 내 Master 노드와 Data 노드가 있으며, products 인덱스의 Primary Shard가 Replica Shard로 복제되는 구조를 보여줍니다.*
 
 ## Cluster (클러스터)
 
@@ -60,6 +73,12 @@ GET /_cluster/health
 }
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- 클러스터는 고유한 이름으로 식별되며, 같은 이름의 노드들이 자동으로 연결됩니다
+- 클러스터 상태(Green/Yellow/Red)로 전체 시스템 건강 상태를 한눈에 파악할 수 있습니다
+- `/_cluster/health` API로 현재 상태를 확인하세요
+{{< /callout >}}
+
 ---
 
 ## Node (노드)
@@ -84,6 +103,8 @@ flowchart LR
     M -.관리.-> D2
 ```
 
+*다이어그램: 클라이언트 요청이 Coordinating 노드를 통해 Data 노드로 라우팅되고, Master 노드가 전체를 관리하는 흐름을 보여줍니다.*
+
 | 역할 | 설명 | 설정 |
 |------|------|------|
 | **Master** | 클러스터 상태 관리, 인덱스 생성/삭제 | `node.roles: [master]` |
@@ -98,6 +119,12 @@ flowchart LR
 ```bash
 GET /_nodes
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 노드는 Master, Data, Coordinating, Ingest 등 다양한 역할을 수행할 수 있습니다
+- 소규모 클러스터에서는 한 노드가 여러 역할을 겸하고, 대규모에서는 역할을 분리합니다
+- `/_nodes` API로 노드 정보를 확인할 수 있습니다
+{{< /callout >}}
 
 ---
 
@@ -155,6 +182,12 @@ GET /products
 DELETE /products
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- 인덱스는 RDB의 테이블과 유사하며, Mapping(스키마)을 가집니다
+- `number_of_shards`는 생성 후 변경 불가하므로 신중히 결정하세요
+- `number_of_replicas`는 동적으로 변경 가능합니다
+{{< /callout >}}
+
 ---
 
 ## Document (문서)
@@ -207,6 +240,12 @@ POST /products/_update/1
 DELETE /products/_doc/1
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- 문서는 JSON 형태로 저장되며, `_id`로 고유하게 식별됩니다
+- `_version`으로 동시성 제어가 가능합니다
+- CRUD 작업은 RESTful API로 수행합니다 (PUT/POST/GET/DELETE)
+{{< /callout >}}
+
 ---
 
 ## Shard (샤드)
@@ -237,6 +276,8 @@ flowchart LR
     P1 -.-> R1
     P2 -.-> R2
 ```
+
+*다이어그램: 3개의 Primary Shard가 각각 다른 노드에 분산되고, 각 Primary의 Replica가 다른 노드에 배치되어 장애 대비를 하는 구조입니다.*
 
 | 유형 | 역할 | 특징 |
 |------|------|------|
@@ -280,6 +321,12 @@ products 1     p      STARTED 120  55mb  node-2
 products 1     r      STARTED 120  55mb  node-1
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- Primary Shard는 생성 후 변경 불가, Replica는 동적 변경 가능
+- 문서 ID의 해시값으로 담당 샤드가 결정됩니다: `shard = hash(id) % number_of_shards`
+- 샤드 하나당 20-40GB가 적정 크기입니다
+{{< /callout >}}
+
 ---
 
 ## 역색인 (Inverted Index)
@@ -312,6 +359,12 @@ Elasticsearch가 빠른 검색을 제공하는 핵심 원리입니다.
 
 > **핵심:** 모든 문서를 스캔하지 않고, 역색인에서 바로 찾습니다.
 
+{{< callout type="info" title="핵심 포인트" >}}
+- 역색인은 "단어 → 문서 목록" 형태로 구성됩니다
+- 일반 색인(문서 → 단어)과 반대 방향이라 "역색인"이라 부릅니다
+- 검색어의 교집합/합집합 연산으로 빠른 검색이 가능합니다
+{{< /callout >}}
+
 ---
 
 ## Lucene 내부 구조 (심화)
@@ -336,6 +389,8 @@ flowchart TB
     S2 --> Commit
     S3 --> Commit
 ```
+
+*다이어그램: 샤드 내부에 여러 개의 불변(Immutable) Segment가 있고, Commit Point가 활성 세그먼트 목록을 추적하며, Translog가 미커밋 변경사항을 보관하는 구조입니다.*
 
 | 구성요소 | 역할 | 특징 |
 |----------|------|------|
@@ -367,6 +422,8 @@ sequenceDiagram
     Translog->>Translog: Translog 삭제
 ```
 
+*다이어그램: 문서 인덱싱 시 메모리 버퍼와 Translog에 기록 후, Refresh로 새 세그먼트가 생성되어 검색 가능해지고, Flush로 디스크에 영구 저장되는 과정입니다.*
+
 ### 왜 Segment는 불변(Immutable)인가?
 
 1. **동시성 보장**: 락 없이 읽기 가능
@@ -395,6 +452,8 @@ flowchart LR
     S2 --> SM
     S3 --> SM
 ```
+
+*다이어그램: 여러 개의 작은 세그먼트(Seg 1, 2, 3)가 하나의 큰 세그먼트로 병합되는 과정을 보여줍니다.*
 
 **병합 시 발생하는 일:**
 - 삭제 표시된 문서 실제 제거
@@ -433,6 +492,12 @@ PUT /products/_settings
 { "refresh_interval": "1s" }
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- Segment는 불변(Immutable)이므로 삭제/수정 시 "삭제 표시"만 하고 나중에 Merge합니다
+- Refresh(1초)로 검색 가능해지고, Flush로 디스크에 영구 저장됩니다
+- Elasticsearch는 "준실시간(NRT)" 검색이며, 즉시 검색이 필요하면 `?refresh=true` 사용 (성능 주의)
+{{< /callout >}}
+
 ---
 
 ## 정리
@@ -450,6 +515,8 @@ flowchart TB
     D2["인덱스의 물리적 분할<br>분산 처리 단위"] -.-> D
     E2["JSON 데이터<br>RDB Row와 유사"] -.-> E
 ```
+
+*다이어그램: Cluster → Node → Index → Shard → Document의 계층 구조와 각 구성요소의 역할을 요약합니다.*
 
 ---
 

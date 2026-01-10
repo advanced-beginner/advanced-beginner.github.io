@@ -1,8 +1,18 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: 제네릭
 weight: 9
 ---
+
+{{< callout type="info" title="TL;DR" >}}
+- 제네릭은 **타입 안전한 재사용 가능한 코드**를 작성하게 해줍니다
+- 상한 경계(`A <: B`): A는 B의 하위 타입
+- 하한 경계(`A >: B`): A는 B의 상위 타입
+- 컨텍스트 경계(`A : Ordering`): 타입 클래스 인스턴스 요구
+{{< /callout >}}
+
+**대상 독자:** Java 제네릭에 익숙한 개발자
+**선수 지식:** 클래스, 트레이트, 기본 타입 시스템
 
 제네릭(Generics)을 사용하면 타입 안전하면서 재사용 가능한 코드를 작성할 수 있습니다. 타입 매개변수를 통해 다양한 타입에서 동작하는 클래스와 메서드를 정의할 수 있으며, 컴파일 시점에 타입 안전성을 보장받을 수 있습니다.
 
@@ -74,6 +84,12 @@ class Box[A](value: A) extends Container[A] {
 }
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- 클래스, 메서드, 트레이트에 타입 매개변수 선언 가능
+- 관례적으로 A, B, T 등 단일 대문자 사용
+- 컴파일러가 대부분의 경우 타입을 자동 추론
+{{< /callout >}}
+
 #### 타입 경계 (Type Bounds)
 
 타입 경계는 타입 매개변수가 가질 수 있는 타입의 범위를 제한합니다. 상한 경계와 하한 경계를 통해 타입 계층 구조에서 허용되는 범위를 지정할 수 있습니다.
@@ -105,6 +121,8 @@ graph TB
     end
 ```
 
+*위 다이어그램은 상한 경계와 하한 경계가 타입 계층에서 어떻게 동작하는지 보여줍니다.*
+
 **상한 경계 (Upper Bound)**
 
 상한 경계는 타입 매개변수가 특정 타입의 하위 타입이어야 함을 지정합니다.
@@ -126,6 +144,12 @@ def printNames[A <: Animal](animals: List[A]): Unit =
 printNames(List(Dog("바둑이"), Dog("멍멍이")))
 // printNames(List("not an animal"))  // 컴파일 에러
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- `A <: B`: A는 B의 하위 타입이어야 함
+- 타입 매개변수가 특정 메서드를 가짐을 보장
+- 제한된 범위의 타입만 허용하여 타입 안전성 확보
+{{< /callout >}}
 
 **하한 경계 (Lower Bound)**
 
@@ -150,6 +174,12 @@ addFruit(fruits, new RedApple)  // OK - RedApple은 Apple의 서브타입이므�
 
 > 💡 **하한 경계의 핵심:** `B >: Apple`은 "B는 Apple이거나 Apple의 상위 타입"을 의미합니다. 서브타입(RedApple)도 Apple로 업캐스트되어 사용 가능합니다.
 
+{{< callout type="info" title="핵심 포인트" >}}
+- `A >: B`: A는 B의 상위 타입이어야 함
+- 공변 타입에서 메서드 매개변수 다룰 때 사용
+- 서브타입도 업캐스트되어 사용 가능
+{{< /callout >}}
+
 **컨텍스트 경계 (Context Bound)**
 
 컨텍스트 경계는 특정 타입 클래스의 인스턴스가 암시적으로 존재해야 함을 선언합니다. `A : Ordering` 형태로 작성하며, 이는 `Ordering[A]` 타입의 암시적 값이 스코프에 있어야 함을 의미합니다.
@@ -171,6 +201,12 @@ def max2[A](a: A, b: A)(implicit ord: Ordering[A]): A =
   if (ord.gt(a, b)) a else b
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- `A : Ordering`: Ordering[A] 암시적 인스턴스 요구
+- 타입 클래스 패턴과 함께 자주 사용
+- `implicitly`로 암시적 값 접근
+{{< /callout >}}
+
 #### 타입 추론
 
 Scala 컴파일러는 대부분의 경우 타입 매개변수를 자동으로 추론합니다. 명시적 타입 지정이 필요한 경우는 빈 컬렉션 생성이나 None과 같이 추론할 정보가 부족할 때입니다.
@@ -184,6 +220,12 @@ val map = Map("a" -> 1, "b" -> 2)  // Map[String, Int]
 val empty = List.empty[Int]        // List[Int]
 val none: Option[Int] = None       // Option[Int]
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 대부분의 경우 타입 매개변수 자동 추론
+- 빈 컬렉션이나 None은 명시적 타입 필요
+- 추론 정보 부족 시 타입 지정
+{{< /callout >}}
 
 #### 공통 제네릭 타입
 
@@ -238,6 +280,12 @@ success.getOrElse(0)   // 42
 failure.getOrElse(0)   // 0
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- Option: 값의 유무 표현 (Some/None)
+- Either: 두 가지 결과 중 하나 (Left/Right)
+- Try: 예외 처리 캡슐화 (Success/Failure)
+{{< /callout >}}
+
 #### 제네릭 ADT
 
 제네릭을 사용하여 대수적 데이터 타입(ADT)을 정의할 수 있습니다. 타입 매개변수를 통해 다양한 결과 타입을 표현하는 범용적인 구조를 만들 수 있습니다.
@@ -257,6 +305,12 @@ divide(10, 2) match {
   case Error(e)   => println(s"오류: $e")
 }
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- sealed trait + case class로 제네릭 ADT 정의
+- Nothing 타입으로 사용하지 않는 타입 매개변수 처리
+- 패턴 매칭으로 타입 안전하게 분기
+{{< /callout >}}
 
 #### Java 제네릭과의 비교
 

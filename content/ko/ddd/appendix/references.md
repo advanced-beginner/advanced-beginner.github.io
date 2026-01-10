@@ -1,7 +1,7 @@
 ---
 title: 참고 자료
 weight: 2
-lastmod: 2026-01-09
+lastmod: 2026-01-10
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
@@ -9,6 +9,13 @@ author_url: "http://github.com/kimbenji"
 # 참고 자료
 
 DDD 학습을 위한 도서, 아티클, 발표 자료를 정리합니다.
+
+> **TL;DR**
+>
+> - **필독서**: Blue Book(원전), Red Book(구현), DDD Distilled(입문)
+> - **학습 순서**: 입문 → 기본 → 심화 → 실전 순으로 점진적 학습
+> - **한국어 자료**: DDD START(최범균), 우아한객체지향(조영호) 추천
+> - **실습**: 기존 프로젝트 리팩터링 또는 EventStorming으로 시작
 
 ## 필독서
 
@@ -57,6 +64,12 @@ DDD의 핵심 개념을 간결하게 정리한 입문서입니다.
 - 빠르게 개념 파악이 필요한 경우
 - 팀원 교육용
 
+> **필독서 핵심 포인트**
+>
+> - **Blue Book**: DDD 원전, 철학과 원리 이해에 필수
+> - **Red Book**: Blue Book 개념의 실제 구현 방법
+> - **DDD Distilled**: 입문자용 간결한 정리, 팀 교육에 적합
+
 ---
 
 ## 추천 도서
@@ -101,6 +114,12 @@ DDD는 아니지만 아키텍처 원칙을 이해하는 데 도움됩니다.
 - 계층 분리
 - 도메인 중심 설계
 
+> **추천 도서 핵심 포인트**
+>
+> - **Learning DDD**: 최신 실무(마이크로서비스, EventStorming) 반영
+> - **Patterns, Principles, and Practices of DDD**: 풍부한 코드 예제와 안티패턴
+> - **Clean Architecture**: DDD와 함께 사용하는 아키텍처 원칙
+
 ---
 
 ## 온라인 자료
@@ -133,6 +152,12 @@ Eric Evans가 운영하는 커뮤니티
 
 DDD 관련 리소스 모음
 
+> **온라인 자료 핵심 포인트**
+>
+> - **Martin Fowler's Blog**: 개념 명확화에 탁월 (Bounded Context, Aggregate, CQRS)
+> - **DDD Community**: Eric Evans가 운영하는 공식 커뮤니티
+> - **Awesome DDD**: GitHub에서 관리되는 종합 리소스 모음
+
 ---
 
 ## 발표 자료
@@ -158,6 +183,11 @@ DDD 관련 리소스 모음
 
 전략적 설계 패턴 강연
 
+> **발표 자료 핵심 포인트**
+>
+> - **EventStorming**: 도메인 탐색을 위한 시각적 워크숍 기법
+> - **Vaughn Vernon 강연**: 전략적 설계 패턴 이해에 도움
+
 ---
 
 ## 한국어 자료
@@ -173,6 +203,11 @@ DDD 관련 리소스 모음
 
 - **도서:** DDD START! 도메인 주도 설계 구현과 핵심 개념 익히기
 - **특징:** Java 기반, 실습 중심
+
+> **한국어 자료 핵심 포인트**
+>
+> - **우아한객체지향**: 객체지향 설계와 DDD 기본 개념 (무료 영상)
+> - **DDD START**: Java 기반 실습 중심 입문서
 
 ---
 
@@ -237,6 +272,12 @@ flowchart TB
 - [ ] Aggregate 경계가 적절한가?
 - [ ] Value Object를 활용하고 있는가?
 ```
+
+> **학습 로드맵 및 실습 핵심 포인트**
+>
+> - **학습 순서**: 입문(DDD Distilled) → 기본(Blue/Red Book) → 심화 → 실전
+> - **실습 추천**: 기존 프로젝트 리팩터링 → 새 프로젝트 시작 → 코드 리뷰
+> - **핵심 체크**: 도메인 용어 반영, 비즈니스 로직 위치, Aggregate 경계, Value Object 활용
 
 ---
 

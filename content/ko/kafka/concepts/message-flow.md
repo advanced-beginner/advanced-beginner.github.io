@@ -1,9 +1,23 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-10"
 title: 메시지 흐름
 weight: 2
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- Producer가 메시지를 직렬화하고 Partitioner가 대상 Partition을 결정
+- Key가 있으면 같은 Key는 같은 Partition으로 전송되어 순서 보장
+- Broker는 메시지를 Partition에 저장하고 ISR에 복제 후 ACK 반환
+- Consumer는 Pull 방식으로 메시지를 가져와 처리 후 Offset 커밋
+- At-Most-Once, At-Least-Once, Exactly-Once 세 가지 전달 보장 수준 제공
+{{< /callout >}}
+
+**대상 독자**: Kafka의 기본 구성요소를 이해한 개발자, 메시지 전달 과정의 상세 동작을 학습하려는 분
+
+**선수 지식**: [핵심 구성요소](../core-components/)의 Producer, Consumer, Broker, Topic, Partition 개념
+
 ---
 
 Kafka에서 메시지가 발행되고 소비되는 전체 과정을 이해하는 것은 안정적인 시스템 운영의 기초입니다. 메시지가 Producer에서 출발하여 Broker에 저장되고, Consumer가 읽어가는 각 단계에서 어떤 일이 일어나는지 알아야 문제 상황에서 원인을 빠르게 파악하고 해결할 수 있습니다.
@@ -41,6 +55,14 @@ sequenceDiagram
     C->>B: 6. Offset 커밋
 ```
 
+*다이어그램: Producer가 Broker에 메시지를 전송하면, Broker가 Partition에 저장 후 ACK 응답. Consumer가 poll로 메시지를 요청하면 Broker가 전달하고, Consumer가 처리 후 Offset을 커밋하는 전체 흐름.*
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 메시지 흐름은 발행(Producer→Broker), 저장(Broker), 소비(Broker→Consumer) 3단계로 구분
+- 각 단계의 동작 원리를 이해해야 순서 뒤바뀜, 중복 처리, 메시지 유실 문제 해결 가능
+- Pull 방식의 특성과 Offset 커밋 시점이 전달 보장 수준을 결정
+{{< /callout >}}
+
 #### 메시지 발행 단계
 
 Producer가 메시지를 Kafka에 전송하는 과정은 여러 단계로 이루어집니다. 먼저 애플리케이션에서 Key-Value 쌍으로 메시지를 생성합니다. Key는 선택 사항이지만 순서 보장이 필요한 경우 반드시 지정해야 합니다. 그 다음 Serializer가 객체를 바이트 배열로 변환합니다. 문자열이면 StringSerializer, JSON이면 JsonSerializer, Avro면 AvroSerializer를 사용합니다.
@@ -67,6 +89,13 @@ Key를 설계할 때는 업무 도메인을 고려해야 합니다. 주문 이�
 
 이 문제를 해결하려면 Key를 더 세분화해야 합니다. customer-대기업-order-123처럼 주문 ID를 포함하면 같은 고객의 주문도 여러 Partition에 분산됩니다. 다만 이 경우 같은 고객의 주문 간에는 순서가 보장되지 않으므로, 순서 보장이 필수인 경우에만 고객 ID를 Key로 사용해야 합니다.
 
+{{< callout type="info" title="핵심 포인트" >}}
+- Producer는 직렬화 → Partitioner → 전송 순서로 메시지를 처리
+- Key가 있으면 해시 기반으로 Partition 결정, 같은 Key는 같은 Partition으로 전송
+- Key가 없으면 라운드 로빈으로 균등 분배
+- 특정 Key에 메시지가 집중되면 Hot Partition 문제 발생, Key 세분화로 해결
+{{< /callout >}}
+
 #### 메시지 저장 단계
 
 Broker가 메시지를 받으면 해당 Partition의 로그 끝에 추가합니다. 이 저장 방식을 Append-only라고 합니다. 저장된 메시지는 수정할 수 없으며, 각 메시지에는 Partition 내에서 고유한 Offset이 할당됩니다. Offset은 0부터 시작하여 메시지가 추가될 때마다 1씩 증가합니다.
@@ -83,6 +112,13 @@ Kafka가 디스크에 저장하면서도 빠른 이유는 순차 I/O를 사용�
     ├── 00000000000012345678.log   # 두 번째 Segment
     └── ...
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Broker는 Append-only 방식으로 메시지를 Partition 로그에 저장
+- 순차 I/O, 페이지 캐시, Zero-Copy로 높은 처리량 달성
+- 각 메시지는 Partition 내에서 고유한 Offset을 가짐
+- Segment 파일 단위로 관리되며 retention 설정에 따라 자동 삭제
+{{< /callout >}}
 
 #### 메시지 소비 단계
 
@@ -117,6 +153,13 @@ public void consume(String message) {
 }
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- Consumer는 Pull 방식으로 자신의 처리 속도에 맞게 메시지를 가져옴
+- Push 방식과 달리 Consumer가 느려도 백프레셔 문제가 발생하지 않음
+- poll() 간격이 max.poll.interval.ms(기본 5분)를 초과하면 리밸런싱 발생
+- 처리 시간이 긴 작업은 별도 스레드로 위임하여 poll() 타임아웃 방지
+{{< /callout >}}
+
 #### 메시지 보장 수준
 
 Kafka는 세 가지 메시지 전달 보장 수준을 제공합니다. At-Most-Once는 메시지가 최대 한 번 전달되며 유실될 수 있습니다. 메시지를 가져온 직후 Offset을 커밋하고 처리하는 방식입니다. 처리 중 오류가 발생하면 해당 메시지는 다시 처리되지 않습니다. 로그나 메트릭처럼 일부 유실이 허용되는 경우에 사용합니다.
@@ -141,6 +184,13 @@ public void consume(ConsumerRecord<String, OrderEvent> record) {
     processedEventRepository.save(eventId);
 }
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- At-Most-Once: 유실 가능, 중복 없음 (로그, 메트릭 등에 적합)
+- At-Least-Once: 유실 없음, 중복 가능 (일반적 사용, 멱등성 처리 필요)
+- Exactly-Once: 유실/중복 없음 (트랜잭션 사용, 금융 등 정확성 필수 경우)
+- 대부분의 경우 At-Least-Once + 멱등성 처리 조합이 적절
+{{< /callout >}}
 
 #### 실무에서 흔한 실수
 
@@ -168,6 +218,13 @@ public void consume(String message, Acknowledgment ack) {
 
 네 번째 흔한 실수는 Partition 수보다 많은 Consumer를 배포하는 것입니다. 하나의 Partition은 Consumer Group 내에서 하나의 Consumer만 처리할 수 있습니다. Partition이 3개인데 Consumer가 5개면 2개는 유휴 상태가 됩니다. Consumer 수를 Partition 수 이하로 유지하거나, 확장이 필요하면 먼저 Partition 수를 늘려야 합니다.
 
+{{< callout type="info" title="핵심 포인트" >}}
+- 순서가 중요한 이벤트에는 반드시 Key를 지정해야 함
+- 자동 커밋 사용 시 처리 시간이 길면 메시지 유실 가능, 수동 커밋 권장
+- Consumer Lag이 증가하면 인스턴스 추가 또는 처리 로직 최적화 필요
+- Consumer 수는 Partition 수 이하로 유지 (초과 시 유휴 Consumer 발생)
+{{< /callout >}}
+
 #### 다른 메시징 시스템과의 비교
 
 Kafka, RabbitMQ, AWS SQS는 각각 다른 특성을 가지고 있어 상황에 맞는 선택이 중요합니다.
@@ -179,6 +236,13 @@ RabbitMQ는 전통적인 메시지 브로커로 복잡한 라우팅 규칙과 �
 AWS SQS는 완전 관리형 서비스로 운영 부담이 가장 적습니다. AWS Lambda와 통합이 용이하여 서버리스 아키텍처에 적합합니다. 다만 처리량에 제한이 있고, FIFO 큐를 사용해야만 순서가 보장됩니다.
 
 높은 처리량이 필요하거나, 메시지 재처리가 필요하거나, 여러 Consumer가 같은 메시지를 읽어야 하는 경우 Kafka가 적합합니다. 복잡한 라우팅이나 RPC 패턴이 필요하면 RabbitMQ가, 간단한 큐잉과 최소한의 운영 부담을 원하면 AWS SQS가 적합합니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Kafka: 높은 처리량, 메시지 보존/재처리, 여러 Consumer Group 독립 소비 가능
+- RabbitMQ: 복잡한 라우팅, RPC 패턴, 소비 후 메시지 삭제
+- AWS SQS: 완전 관리형, 간단한 큐잉, 서버리스 통합 용이
+- 요구사항에 맞는 시스템 선택이 중요
+{{< /callout >}}
 
 #### 운영 모니터링 가이드
 
@@ -192,6 +256,13 @@ kafka-consumer-groups.sh --describe --group order-service \
 Lag이 100 이하면 정상입니다. 100-1,000이면 Consumer 성능을 점검해야 합니다. 1,000-10,000이면 Consumer 추가나 최적화가 필요합니다. 10,000 이상이면 즉시 조치가 필요하며 처리 병목을 확인해야 합니다.
 
 문제가 발생했을 때는 다음 순서로 확인합니다. 먼저 Consumer lag을 확인하여 처리 병목 여부를 파악합니다. Consumer group 멤버 수를 확인하여 Consumer 장애 여부를 확인합니다. Broker의 CPU와 메모리를 확인하여 인프라 문제 여부를 판단합니다. Producer error rate를 확인하여 전송 실패 여부를 확인합니다. 마지막으로 네트워크 지연을 확인합니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Consumer Lag이 가장 중요한 모니터링 지표
+- Lag 100 이하 정상, 100~1000 주의, 1000~10000 경고, 10000 이상 긴급
+- 문제 발생 시: Lag → Consumer 상태 → Broker → Producer → 네트워크 순서로 확인
+- kafka-consumer-groups.sh 명령으로 실시간 Lag 확인 가능
+{{< /callout >}}
 
 #### 핵심 정리
 

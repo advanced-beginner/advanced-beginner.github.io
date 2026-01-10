@@ -1,10 +1,28 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: Delta Lake 통합
 weight: 6
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+{{% notice style="tip" title="TL;DR" %}}
+- **ACID 트랜잭션**: 동시 쓰기 시에도 데이터 일관성 보장
+- **시간 여행**: 과거 버전 조회/복원으로 데이터 복구 가능
+- **스키마 진화**: `mergeSchema` 옵션으로 컬럼 추가 안전하게 처리
+- **최적화**: OPTIMIZE(파일 병합), Z-ORDER(쿼리 최적화), VACUUM(정리)
+{{% /notice %}}
+
+## 대상 독자 및 선수 지식
+
+| 구분 | 내용 |
+|------|------|
+| **대상 독자** | 데이터 레이크 아키텍처를 개선하려는 데이터 엔지니어 |
+| **선수 지식** | Spark DataFrame API, Parquet 포맷 이해, [기본 예제](../basic/) 완료 |
+| **학습 목표** | Delta Lake로 신뢰성 있는 데이터 레이크를 구축할 수 있다 |
+| **예상 소요 시간** | 약 50분 |
+
 ---
 
 Delta Lake를 활용하여 데이터 레이크에 ACID 트랜잭션, 스키마 관리, 시간 여행 기능을 추가합니다.
@@ -37,6 +55,8 @@ flowchart LR
         D3 --> D4[00000.json<br/>트랜잭션 로그]
     end
 ```
+
+*다이어그램 설명: 기존 Parquet은 파일들만 존재하지만, Delta Lake는 동일한 Parquet 파일들과 함께 _delta_log/ 디렉토리에 트랜잭션 로그(JSON)를 저장하여 ACID와 버전 관리를 지원*
 
 | 기능 | 설명 |
 |------|------|
@@ -79,6 +99,13 @@ val spark = SparkSession.builder()
   .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog")
   .getOrCreate()
 ```
+
+{{% notice style="info" title="핵심 포인트: 환경 설정" %}}
+- **spark-sql-extensions**: Delta Lake SQL 명령어 활성화
+- **spark_catalog**: Delta 테이블을 기본 카탈로그로 등록
+- **버전 호환성**: Spark 3.5.x와 Delta 3.1.x 조합 권장
+- **Scala 버전**: Spark와 동일한 Scala 버전(2.13) 사용 필수
+{{% /notice %}}
 
 ---
 
@@ -195,6 +222,13 @@ deltaTable.as("target")
   .execute()
 ```
 
+{{% notice style="info" title="핵심 포인트: 기본 CRUD 연산" %}}
+- **MERGE (Upsert)**: 단일 트랜잭션으로 Insert + Update 처리
+- **조건부 Update/Delete**: `expr()` 또는 SQL WHERE 조건 사용
+- **DataFrame/SQL 혼용**: 동일한 테이블에 두 방식 모두 적용 가능
+- **트랜잭션 보장**: 실패 시 자동 롤백, 부분 쓰기 방지
+{{% /notice %}}
+
 ---
 
 #### 시간 여행 (Time Travel)
@@ -254,6 +288,13 @@ deltaTable.restoreToTimestamp("2024-01-16 10:00:00")
 spark.sql("RESTORE orders TO VERSION AS OF 1")
 ```
 
+{{% notice style="info" title="핵심 포인트: 시간 여행" %}}
+- **버전 조회**: `versionAsOf` 또는 `timestampAsOf` 옵션 사용
+- **히스토리 확인**: `deltaTable.history()`로 모든 변경 기록 조회
+- **버전 복원**: `restoreToVersion()` 또는 `restoreToTimestamp()`
+- **VACUUM 주의**: 정리된 버전은 시간 여행 불가 (기본 7일 보존)
+{{% /notice %}}
+
 ---
 
 #### 스키마 진화 (Schema Evolution)
@@ -284,6 +325,13 @@ newSchema.write
   .option("overwriteSchema", "true")
   .save("/data/orders")
 ```
+
+{{% notice style="info" title="핵심 포인트: 스키마 진화" %}}
+- **mergeSchema**: 새 컬럼 자동 추가 (기존 데이터는 null)
+- **overwriteSchema**: 스키마 완전 교체 (타입 변경 시 필요)
+- **자동 검증**: 호환되지 않는 변경은 자동 거부
+- **호환 가능 변경**: 컬럼 추가, nullable 변경 등
+{{% /notice %}}
 
 ---
 
@@ -327,6 +375,13 @@ spark.sql("VACUUM orders RETAIN 168 HOURS")
 
 // 주의: retention 기간 이전 버전은 시간 여행 불가
 ```
+
+{{% notice style="info" title="핵심 포인트: 최적화" %}}
+- **OPTIMIZE**: 작은 파일을 큰 파일로 병합 (읽기 성능 향상)
+- **Z-ORDER**: 자주 필터링하는 컬럼 기준 데이터 재배치
+- **VACUUM**: 오래된 버전 파일 삭제로 스토리지 절약
+- **파티션 지정**: 특정 파티션만 최적화하여 비용 절감
+{{% /notice %}}
 
 ---
 
@@ -386,6 +441,13 @@ changesStream.writeStream
   .format("console")
   .start()
 ```
+
+{{% notice style="info" title="핵심 포인트: Change Data Feed (CDC)" %}}
+- **활성화 필요**: `delta.enableChangeDataFeed = true` 테이블 속성
+- **변경 타입**: insert, update_preimage, update_postimage, delete
+- **버전 범위**: startingVersion ~ endingVersion으로 범위 지정
+- **Streaming 지원**: `readStream`으로 실시간 변경 사항 수신
+{{% /notice %}}
 
 ---
 
@@ -504,6 +566,13 @@ object DeltaLakePipeline extends App {
 }
 ```
 
+{{% notice style="info" title="핵심 포인트: Bronze-Silver-Gold 아키텍처" %}}
+- **Bronze**: 원본 그대로 저장 (스키마 유연, 품질 무관)
+- **Silver**: 정제/검증 완료 데이터 (중복 제거, 타입 변환)
+- **Gold**: 비즈니스 집계 테이블 (리포팅, 대시보드용)
+- **MERGE 활용**: Silver 레이어에서 증분 Upsert 처리
+{{% /notice %}}
+
 ---
 
 #### Spark Streaming과 연동
@@ -544,6 +613,13 @@ deltaStream
   .outputMode("complete")
   .start()
 ```
+
+{{% notice style="info" title="핵심 포인트: Spark Streaming 연동" %}}
+- **checkpointLocation**: 장애 복구를 위한 체크포인트 필수 설정
+- **append 모드**: Delta 테이블에 스트리밍 데이터 추가
+- **exactly-once**: 트랜잭션 로그로 중복 없는 처리 보장
+- **Delta as Source**: Delta 테이블을 스트리밍 소스로도 활용 가능
+{{% /notice %}}
 
 ---
 

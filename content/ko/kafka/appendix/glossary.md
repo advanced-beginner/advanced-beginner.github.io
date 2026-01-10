@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: 용어 사전
 weight: 1
 author: "@kimbenji"
@@ -7,6 +7,14 @@ author_url: "http://github.com/kimbenji"
 ---
 
 Kafka 관련 주요 용어를 정리합니다. 각 용어의 상세한 설명은 개념 이해 섹션을 참고하세요. 용어들은 알파벳 순서로 정렬되어 있으며, 관련 용어들은 상호 참조로 연결되어 있습니다.
+
+{{% notice style="tip" title="TL;DR" %}}
+- **핵심 구성요소**: Topic(논리적 채널), Partition(병렬 처리 단위), Broker(서버), Producer(발행자), Consumer(수신자)
+- **신뢰성**: ACK(전송 확인), ISR(동기화 복제본), Replication Factor(복제 수)
+- **Consumer 관리**: Consumer Group(병렬 처리), Offset(위치), Commit(저장), Rebalancing(재분배)
+- **Spring Kafka**: KafkaTemplate(Producer), @KafkaListener(Consumer)
+- **메타데이터 관리**: KRaft(신규 권장), Zookeeper(레거시)
+{{% /notice %}}
 
 #### A
 
@@ -155,6 +163,23 @@ Consumer Group 내에서 Partition을 재분배하는 과정입니다. Consumer�
 **Zookeeper**
 
 Kafka 클러스터의 메타데이터를 관리하는 외부 서비스입니다. Broker 목록, Topic 설정, Controller 선출 등을 담당했습니다. Kafka 3.3 이상에서는 KRaft 모드로 대체되어 Zookeeper 없이 운영이 가능합니다. 신규 클러스터는 KRaft 모드를 권장합니다. Replication 문서에서 Zookeeper와 KRaft의 차이를 설명합니다.
+
+{{< callout type="info" title="핵심 포인트: 용어 카테고리별 정리" >}}
+**아키텍처 용어**
+- **Broker**: Kafka 서버, **Topic**: 메시지 채널, **Partition**: 병렬 처리 단위
+
+**메시지 흐름 용어**
+- **Producer**: 메시지 발행, **Consumer**: 메시지 수신, **Offset**: Partition 내 위치
+
+**신뢰성 용어**
+- **ACK**: 전송 확인, **ISR**: 동기화된 복제본, **Leader/Follower**: 주/복제 Broker
+
+**Spring Kafka 용어**
+- **KafkaTemplate**: Producer 구현, **@KafkaListener**: Consumer 구현
+
+**클러스터 관리 용어**
+- **KRaft**: 신규 권장, **Zookeeper**: 레거시 모드
+{{< /callout >}}
 
 #### 다음 단계
 

@@ -1,9 +1,23 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: Producer 튜닝
 weight: 7
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- batch.size와 linger.ms로 배치 효율 조절 (OR 조건으로 동작)
+- linger.ms=5만으로도 처리량이 약 2.7배 증가 가능
+- compression.type: snappy(일반), lz4(고성능), zstd(고압축) 권장
+- Idempotent Producer(Kafka 3.0+ 기본)로 중복 방지 및 순서 보장
+- buffer.memory 부족 시 BufferExhaustedException 발생
+{{< /callout >}}
+
+**대상 독자**: Producer 성능을 최적화하려는 개발자, 대용량 메시지 처리가 필요한 운영자
+
+**선수 지식**: [심화 개념](../advanced-concepts/)의 acks, Idempotent Producer, [메시지 흐름](../message-flow/)의 Topic, Partition 개념
+
 ---
 
 Producer 성능을 최적화하는 핵심 설정들을 이해합니다. 이 문서는 Kafka 3.6.x 기준으로 작성되었으며, Spring Boot 3.2.x와 Spring Kafka 3.1.x, Java 17 환경에서 코드 예제가 검증되었습니다.
@@ -36,7 +50,15 @@ flowchart LR
     SENDER --> BROKER
 ```
 
+*다이어그램: Producer 내부 구조 - send() 호출 후 Serializer → Partitioner → Batch → Sender Thread → Broker 순서로 처리. batch.size 또는 linger.ms 조건 충족 시 전송.*
+
 핵심 설정으로 batch.size는 배치 크기(기본값 16KB), linger.ms는 배치 대기 시간(기본값 0ms), buffer.memory는 전체 버퍼 크기(기본값 32MB), compression.type은 압축 방식(기본값 none), max.in.flight.requests.per.connection은 동시 요청 수(기본값 5)입니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Producer 동작: send() → Serializer → Partitioner → Batch → Sender → Broker
+- batch.size와 linger.ms는 OR 조건으로 동작 (둘 중 하나 충족 시 전송)
+- 핵심 튜닝 포인트: batch.size, linger.ms, compression.type
+{{< /callout >}}
 
 #### batch.size
 
@@ -52,6 +74,12 @@ spring:
 ```
 
 작은 값은 낮은 지연과 낮은 처리량을 제공하며 실시간 요구사항에 적합합니다. 큰 값은 높은 처리량과 높은 지연을 제공하며 배치 처리에 적합합니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- batch.size: 한 번에 전송할 배치의 최대 크기 (기본값 16KB)
+- 작은 값: 낮은 지연 + 낮은 처리량 (실시간용)
+- 큰 값: 높은 처리량 + 높은 지연 (배치 처리용)
+{{< /callout >}}
 
 #### linger.ms
 
@@ -75,6 +103,8 @@ sequenceDiagram
     P->>K: 배치 전송 (3개)
 ```
 
+*다이어그램: linger.ms=0이면 메시지 도착 즉시 전송. linger.ms=5이면 5ms 대기 중 추가 메시지를 모아 배치로 전송.*
+
 ```yaml
 spring:
   kafka:
@@ -86,6 +116,12 @@ spring:
 기본값 0은 즉시 전송으로 지연 시간을 최소화합니다. 5~10ms는 적당한 배칭으로 일반적으로 권장됩니다. 100ms 이상은 최대 배칭으로 대용량 배치 처리에 적합합니다.
 
 batch.size와 linger.ms는 OR 조건으로 작동합니다. batch.size에 도달하거나 linger.ms가 초과되면 전송됩니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- linger.ms=0: 즉시 전송, 지연 최소화
+- linger.ms=5~20ms: 적당한 배칭, 일반적으로 권장
+- batch.size와 OR 조건: 둘 중 하나만 충족해도 전송
+{{< /callout >}}
 
 #### buffer.memory
 
@@ -127,7 +163,15 @@ flowchart LR
     end
 ```
 
+*다이어그램: 100KB 원본 데이터가 압축 방식에 따라 snappy ~50KB, lz4 ~45KB, zstd ~25KB로 감소하는 예시.*
+
 none은 압축률 0%, 최저 CPU, 최고 속도로 작은 메시지에 적합합니다. gzip은 최고 압축률이지만 최고 CPU와 최저 속도를 보여 저장 공간을 중시할 때 사용합니다. snappy는 중간 압축률, 낮은 CPU, 높은 속도로 일반적으로 권장됩니다. lz4는 중간 압축률, 낮은 CPU, 최고 속도로 고성능이 요구될 때 권장됩니다. zstd는 높은 압축률, 중간 CPU, 높은 속도로 Kafka 2.1 이상에서 사용 가능합니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 압축 권장: snappy(일반), lz4(고성능), zstd(고압축)
+- 압축 시 네트워크/저장 공간 50% 이상 절감 가능
+- gzip은 CPU 사용량 높음, CPU 병목 시 lz4/snappy 사용
+{{< /callout >}}
 
 ```yaml
 spring:
@@ -164,7 +208,15 @@ sequenceDiagram
     Note over K: 순서: 2, 3, 1 (뒤섞임!)
 ```
 
+*다이어그램: max.in.flight=5일 때 요청 1이 실패하고 요청 2, 3이 먼저 성공한 후 요청 1이 재전송되어 순서가 2, 3, 1로 뒤섞이는 문제.*
+
 Idempotent Producer(Kafka 3.0+ 기본 활성화)를 사용하면 시퀀스 번호로 순서가 보장되어 max.in.flight를 5까지 안전하게 사용할 수 있습니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- max.in.flight > 1: 재전송 시 순서 뒤섞임 가능
+- Idempotent Producer: 시퀀스 번호로 순서 보장 (Kafka 3.0+ 기본 활성화)
+- Idempotent + max.in.flight=5 조합 권장
+{{< /callout >}}
 
 ```yaml
 # 방법 1: Idempotent Producer (권장)

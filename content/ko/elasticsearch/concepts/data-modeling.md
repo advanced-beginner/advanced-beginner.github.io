@@ -1,8 +1,19 @@
 ---
 title: 데이터 모델링
 weight: 2
-lastmod: 2026-01-08
+lastmod: 2026-01-10
 ---
+
+{{< callout type="tip" title="TL;DR" >}}
+- **Mapping**: 문서 구조를 정의하는 스키마 (RDB의 테이블 정의와 유사)
+- **text**: 풀텍스트 검색용, Analyzer로 토큰화됨
+- **keyword**: 정확한 값 매칭, 정렬/집계용
+- **Analyzer**: 텍스트를 검색 가능한 토큰으로 변환 (한글은 Nori 사용)
+- **비정규화**: JOIN 없으므로 관련 데이터를 한 문서에 포함
+{{< /callout >}}
+
+**대상 독자**: Elasticsearch 검색 기능을 사용하려는 개발자
+**선수 지식**: [핵심 구성요소](../core-components/), JSON 기본 문법
 
 Elasticsearch에서 데이터를 효과적으로 저장하고 검색하기 위한 Mapping, Field Type, Analyzer 설계를 다룹니다.
 
@@ -46,6 +57,12 @@ PUT /products
   }
 }
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Mapping은 인덱스 생성 시 정의하며, 이후 필드 타입 변경이 제한적입니다
+- Dynamic Mapping으로 자동 타입 추론이 가능하지만, 프로덕션에서는 명시적 정의 권장
+- 스키마 변경이 필요하면 재인덱싱(Reindex)이 필요합니다
+{{< /callout >}}
 
 ---
 
@@ -261,6 +278,13 @@ GET /products/_search
 }
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- **text**: 풀텍스트 검색용, match 쿼리 사용
+- **keyword**: 정확한 값, 정렬/집계용, term 쿼리 사용
+- **Multi-field**: 하나의 필드를 text와 keyword로 동시 인덱싱 가능 (name.keyword)
+- **Nested**: 배열 내 객체 간 관계 유지가 필요할 때 사용 (Object는 평탄화됨)
+{{< /callout >}}
+
 ---
 
 ## Analyzer
@@ -277,6 +301,8 @@ flowchart LR
     --> D["Token Filter<br>(소문자 변환 등)"]
     --> E["토큰<br>#91;the, quick, brown, fox#93;"]
 ```
+
+*다이어그램: 입력 텍스트가 Character Filter, Tokenizer, Token Filter를 거쳐 최종 토큰으로 변환되는 과정입니다.*
 
 ### 기본 Analyzer
 
@@ -394,6 +420,13 @@ PUT /products
 }
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- Analyzer = Character Filter + Tokenizer + Token Filter
+- 한글은 Nori Analyzer 사용 권장 (decompound_mode: mixed)
+- `/_analyze` API로 분석 결과를 테스트할 수 있습니다
+- 동의어(Synonym) 처리는 Custom Analyzer로 설정
+{{< /callout >}}
+
 ---
 
 ## Dynamic Mapping
@@ -432,6 +465,12 @@ PUT /products
 | `strict` | 새 필드 발견 시 에러 |
 
 > **프로덕션 권장:** `strict` 또는 명시적 Mapping 정의
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Dynamic Mapping은 개발 시 편리하지만, 프로덕션에서는 예기치 않은 타입 추론 위험
+- `dynamic: strict`로 설정하면 정의되지 않은 필드 입력 시 에러 발생
+- `dynamic: false`는 새 필드를 저장하지만 인덱싱하지 않음 (검색 불가)
+{{< /callout >}}
 
 ---
 
@@ -483,6 +522,12 @@ products.forEach(p -> p.setStock(stocks.get(p.getId())));
 | 업데이트 | 전체 문서 재인덱싱 | 자식만 업데이트 |
 | 쿼리 복잡도 | 낮음 | 높음 |
 | 권장 상황 | 변경 적은 관계 | 변경 잦은 1:N |
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Elasticsearch는 JOIN을 지원하지 않으므로 비정규화가 기본 전략
+- 자주 변경되는 데이터는 Application-Side Join 고려
+- Nested는 성능이 좋지만 전체 문서 재인덱싱 필요, Parent-Child는 개별 업데이트 가능
+{{< /callout >}}
 
 ---
 
@@ -536,6 +581,13 @@ PUT /_index_template/logs
   }
 }
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 검색용 필드는 text + keyword Multi-field로 설정
+- 숫자 ID도 범위 검색이 없으면 keyword가 효율적
+- 검색하지 않는 필드는 `enabled: false`로 인덱싱 제외
+- 인덱스 템플릿으로 일관된 Mapping 적용
+{{< /callout >}}
 
 ---
 

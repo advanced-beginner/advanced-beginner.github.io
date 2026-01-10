@@ -1,8 +1,19 @@
 ---
 title: Vector Search (kNN)
 weight: 10
-lastmod: 2026-01-08
+lastmod: 2026-01-10
 ---
+
+{{< callout type="tip" title="TL;DR" >}}
+- **Vector Search**: 의미(Semantic) 기반 검색으로 키워드가 달라도 유사한 내용 검색 가능
+- **dense_vector**: 벡터를 저장하는 필드 타입, similarity로 유사도 계산 방식 지정
+- **kNN 쿼리**: k개의 가장 가까운 이웃 문서를 찾는 검색 방식
+- **하이브리드 검색**: kNN + 키워드 검색을 결합하여 최상의 결과 제공
+- **임베딩 모델**: 텍스트/이미지를 벡터로 변환 (한글은 다국어 모델 권장)
+{{< /callout >}}
+
+**대상 독자**: 시맨틱 검색이나 추천 시스템을 구현하려는 개발자
+**선수 지식**: [핵심 구성요소](../core-components/), [Query DSL](../query-dsl/), 기본적인 ML 개념
 
 Elasticsearch의 벡터 검색(kNN)을 사용하여 시맨틱 검색과 유사 이미지 검색을 구현하는 방법을 배웁니다.
 
@@ -35,9 +46,17 @@ flowchart LR
     H --> I[유사 문서 반환]
 ```
 
+*다이어그램: 텍스트/이미지가 임베딩 모델을 통해 벡터로 변환되어 Elasticsearch에 저장되고, 검색어도 같은 방식으로 벡터화되어 kNN으로 유사 문서를 찾는 흐름입니다.*
+
 1. **임베딩(Embedding)**: 텍스트/이미지를 고차원 벡터로 변환
 2. **저장**: 벡터를 Elasticsearch dense_vector 필드에 저장
 3. **검색**: 쿼리 벡터와 가장 가까운 문서를 kNN 알고리즘으로 검색
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Vector Search는 키워드가 아닌 "의미"로 검색하므로 동의어, 유사 표현도 찾습니다
+- 임베딩 모델이 텍스트를 벡터로 변환하며, 모델 선택이 검색 품질에 중요합니다
+- 검색 시 쿼리도 같은 모델로 벡터화해야 합니다
+{{< /callout >}}
 
 ---
 
@@ -83,6 +102,12 @@ PUT /products-vector
 | `dot_product` | 내적 | 이미 정규화된 벡터 (빠름) |
 | `l2_norm` | 유클리드 거리 | 거리 기반 유사도 |
 
+{{< callout type="info" title="핵심 포인트" >}}
+- `dims`는 사용하는 임베딩 모델의 차원수와 일치해야 합니다
+- `index: true`로 설정해야 kNN 검색이 가능합니다
+- 대부분의 텍스트 임베딩에는 `similarity: cosine` 사용
+{{< /callout >}}
+
 ---
 
 ## 문서 인덱싱
@@ -118,6 +143,12 @@ POST /_bulk
 {"index": {"_index": "products-vector", "_id": "2"}}
 {"name": "갤럭시북", "description_vector": [0.08, -0.21, ...]}
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 임베딩은 인덱싱 전에 외부 서비스나 라이브러리로 생성해야 합니다
+- 벡터 필드에는 정확히 dims 개수만큼의 float 값이 필요합니다
+- 대량 인덱싱 시 Bulk API 사용 권장
+{{< /callout >}}
 
 ---
 
@@ -194,6 +225,12 @@ GET /products-vector/_search
 ```
 
 > **하이브리드 검색**: 키워드 매칭(정확도)과 의미 검색(관련성)을 결합하여 최상의 결과 제공
+
+{{< callout type="info" title="핵심 포인트" >}}
+- `k`: 반환할 결과 수, `num_candidates`: 정확도와 속도의 트레이드오프
+- `filter`로 kNN 검색 전에 조건 필터링 가능
+- 하이브리드 검색으로 키워드 + 의미 검색 결합 시 `boost`로 가중치 조절
+{{< /callout >}}
 
 ---
 
@@ -350,6 +387,12 @@ public class EmbeddingService {
 }
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- 검색 시 쿼리를 벡터로 변환하는 EmbeddingService가 필요합니다
+- 유사 상품 추천은 기존 상품의 벡터를 쿼리 벡터로 사용
+- Spring Data Elasticsearch의 `@Field(type = FieldType.Dense_Vector)`로 매핑
+{{< /callout >}}
+
 ---
 
 ## 임베딩 모델 선택
@@ -362,6 +405,12 @@ public class EmbeddingService {
 | `multilingual-e5-large` | 1024 | 다국어 지원 | 한글 검색 |
 
 > **한글 검색 팁**: 다국어 모델(`multilingual-e5-*`)이나 한국어 특화 모델 사용 권장
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 모델 선택 시 차원수, 품질, 속도, 비용을 고려하세요
+- 한글 검색에는 다국어 모델(multilingual-e5-*) 또는 한국어 특화 모델 권장
+- OpenAI API(text-embedding-ada-002)는 품질이 높지만 비용 발생
+{{< /callout >}}
 
 ---
 
@@ -411,6 +460,12 @@ PUT /products-vector
 - `num_candidates` 낮춤 → 빠르지만 덜 정확
 - `num_candidates` 높임 → 정확하지만 느림
 
+{{< callout type="info" title="핵심 포인트" >}}
+- HNSW 파라미터(m, ef_construction)로 인덱싱 정확도와 속도 조절
+- `num_candidates`로 검색 정확도와 속도의 트레이드오프 조절
+- 정규화된 벡터는 `dot_product`가 `cosine`보다 빠름
+{{< /callout >}}
+
 ---
 
 ## 사용 사례
@@ -430,6 +485,12 @@ PUT /products-vector
 ### 4. FAQ 봇
 
 질문 임베딩 → 가장 유사한 FAQ 답변 반환
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 시맨틱 검색: 자연어 질의로 의미 기반 검색
+- 유사 상품/이미지 추천: 기존 아이템의 벡터로 유사 아이템 검색
+- FAQ/챗봇: 질문을 벡터화하여 가장 유사한 답변 반환
+{{< /callout >}}
 
 ---
 
