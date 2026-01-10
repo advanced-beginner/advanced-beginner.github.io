@@ -44,7 +44,15 @@ flowchart LR
     ALO -->|"중복 가능"| EOS
 ```
 
+*다이어그램: 메시지 전달 보장 수준 - At-Most-Once(유실 가능) → At-Least-Once(중복 가능) → Exactly-Once(정확히 1번) 순으로 안전성 증가.*
+
 At-Most-Once는 유실 가능하지만 중복은 없고, 최고 성능과 낮은 구현 복잡도를 가집니다. At-Least-Once는 유실 없지만 중복 가능하고, 높은 성능과 중간 복잡도를 가집니다. Exactly-Once는 유실도 중복도 없고, 중간 성능과 높은 복잡도를 가집니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- At-Most-Once: 유실 가능/중복 없음 (로그, 메트릭)
+- At-Least-Once: 유실 없음/중복 가능 (대부분의 이벤트)
+- Exactly-Once: 유실도 중복도 없음 (금융, 포인트, 재고)
+{{< /callout >}}
 
 #### At-Most-Once
 
@@ -124,7 +132,15 @@ sequenceDiagram
     Note over K: 모든 메시지가 원자적으로 보임
 ```
 
+*다이어그램: Kafka 트랜잭션 흐름 - initTransactions() → beginTransaction() → 여러 Partition에 send() → commitTransaction() 또는 abortTransaction().*
+
 트랜잭션 중 오류가 발생하면 abortTransaction()을 호출하여 모든 메시지를 무효화합니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Kafka 트랜잭션: 여러 Partition에 원자적 쓰기 보장
+- 모든 메시지가 성공하거나 모두 실패 (All or Nothing)
+- Transaction Coordinator가 트랜잭션 상태 관리
+{{< /callout >}}
 
 #### Spring Kafka 트랜잭션
 
@@ -244,6 +260,12 @@ Idempotent Producer는 단일 Partition에서 중복을 방지하고 자동 활�
 
 Transactional API는 여러 Partition에서 원자적 쓰기를 보장하고 transaction-id-prefix 설정이 필요합니다. read_committed로 Consumer 격리를 제공합니다. 약간의 성능 오버헤드가 있습니다.
 
+{{< callout type="info" title="핵심 포인트" >}}
+- Idempotent Producer: 단일 Partition 중복 방지, Kafka 3.0+ 기본 활성화
+- Transactional API: 여러 Partition 원자적 쓰기, transaction-id-prefix 필요
+- read_committed: 커밋된 메시지만 읽어 트랜잭션 격리 제공
+{{< /callout >}}
+
 #### 사용 가이드
 
 메시지 유실이 허용되면 At-Most-Once(acks=0)를 사용합니다. 유실은 안 되지만 중복이 허용되면 At-Least-Once와 멱등성 처리를 사용합니다. 중복도 허용되지 않고 여러 Topic/Partition에 원자적 쓰기가 필요하면 Transactions를 사용합니다. 단일 Partition 중복 방지만 필요하면 Idempotent Producer(기본값)로 충분합니다.
@@ -292,6 +314,12 @@ Kafka 트랜잭션은 유일한 선택지가 아닙니다. 2PC(Two-Phase Commit)
 **Kafka 트랜잭션의 한계**
 
 Kafka 트랜잭션으로 할 수 있는 것은 여러 Kafka Topic에 원자적 쓰기, Consume-Transform-Produce 원자성, Kafka 내부에서의 Exactly-Once입니다. 할 수 없는 것은 DB + Kafka 원자적 처리, 외부 API + Kafka 원자적 처리, 서비스 간 분산 트랜잭션입니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Kafka 트랜잭션 한계: Kafka 내부만 처리, 외부 시스템 연동 불가
+- DB + Kafka 원자적 처리 필요 시: Outbox 패턴 사용
+- Saga 패턴: 여러 서비스에 걸친 결과적 일관성 (보상 트랜잭션 필요)
+{{< /callout >}}
 
 **DB + Kafka를 함께 다뤄야 할 때**
 

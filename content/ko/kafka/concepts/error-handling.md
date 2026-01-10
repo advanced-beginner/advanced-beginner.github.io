@@ -39,7 +39,15 @@ flowchart TB
     PERM --> DLT["Dead Letter Topic"]
 ```
 
-역직렬화 에러는 JSON 파싱 실패와 같은 메시지 형식 문제입니다. 메시지 자체가 잘못되었으므로 재시도해도 해결되지 않습니다. 건너뛰거나 Dead Letter Topic으로 보냅니다.
+*다이어그램: 에러 유형별 처리 전략 - 역직렬화 에러는 건너뛰기/DLT, 일시적 에러는 재시도, 영구적 에러는 DLT로 전송.*
+
+역직렬화 에러는 JSON 파싱 실패와 같은 메시지 형식 문제입니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 역직렬화 에러: 메시지 형식 문제, 재시도 무의미 → 건너뛰기/DLT
+- 일시적 에러: DB 연결, 타임아웃 등 → 재시도로 해결 가능
+- 영구적 에러: 비즈니스 로직 실패 → DLT로 보내 별도 처리
+{{< /callout >}} 메시지 자체가 잘못되었으므로 재시도해도 해결되지 않습니다. 건너뛰거나 Dead Letter Topic으로 보냅니다.
 
 일시적 에러는 DB 연결 실패, 타임아웃과 같이 일시적으로 발생하는 문제입니다. 잠시 후 재시도하면 성공할 가능성이 높으므로 재시도 전략을 적용합니다.
 
@@ -104,6 +112,14 @@ flowchart LR
     RETRY -->|최대 재시도 초과| DEAD
     RETRY -->|성공| DONE[완료]
 ```
+
+*다이어그램: DLT 처리 흐름 - 메시지 처리 실패 시 재시도, 최대 재시도 초과 시 Dead Letter Topic으로 전송.*
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Dead Letter Topic: 재시도 후에도 실패한 메시지 저장 공간
+- 실패 메시지를 버리지 않고 보관하여 분석/수동 처리 가능
+- 기본 DLT Topic 이름: 원본-topic.DLT (예: orders.DLT)
+{{< /callout >}}
 
 **DeadLetterPublishingRecoverer**
 
@@ -209,6 +225,14 @@ flowchart LR
     R1 -->|성공| DONE2[완료]
     R2 -->|성공| DONE3[완료]
 ```
+
+*다이어그램: @RetryableTopic 재시도 흐름 - orders에서 실패 시 orders-retry-0, retry-1, retry-2를 거쳐 최종적으로 orders-dlt로 전송.*
+
+{{< callout type="info" title="핵심 포인트" >}}
+- @RetryableTopic: 선언적 재시도 및 DLT 처리 (Spring Kafka 2.7+)
+- 자동으로 재시도 Topic 생성: topic-retry-0, retry-1, ..., topic-dlt
+- @DltHandler로 DLT 메시지 처리 로직 구현
+{{< /callout >}}
 
 **고급 설정**
 

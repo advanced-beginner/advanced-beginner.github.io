@@ -43,6 +43,8 @@ graph LR
     end
 ```
 
+*위 다이어그램은 세 가지 변성(공변, 반공변, 무공변)에서 타입 관계가 어떻게 달라지는지 보여줍니다.*
+
 > 💡 **기억법:**
 > - **공변(+)**: "같은 방향" - Dog → Animal이면 Box[Dog] → Box[Animal]
 > - **반공변(-)**: "반대 방향" - Dog → Animal이면 Handler[Animal] → Handler[Dog]
@@ -95,6 +97,12 @@ val dogBox: Box[Dog] = new Box(new Dog)
 val animalBox: Box[Animal] = dogBox.set(new Cat)  // OK!
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- 공변(+A): Dog <: Animal이면 Box[Dog] <: Box[Animal]
+- 출력(반환) 위치에서만 사용 가능
+- 하한 경계로 입력 위치 제약 우회 가능
+{{< /callout >}}
+
 #### 반공변성 (-A)
 
 반공변 타입은 "소비자" 역할을 합니다. 값을 받는 타입에 적합하며, 입력 위치에서 사용됩니다.
@@ -126,6 +134,12 @@ trait Printer[-A] {
 }
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- 반공변(-A): Dog <: Animal이면 Printer[Animal] <: Printer[Dog]
+- 입력(매개변수) 위치에서만 사용 가능
+- 소비자 역할의 타입에 적합
+{{< /callout >}}
+
 #### 무공변 (A)
 
 무공변은 기본값입니다. 읽기와 쓰기가 모두 필요한 경우, 즉 입력과 출력 위치에서 모두 사용되는 타입에 적용됩니다.
@@ -137,6 +151,12 @@ class Container[A](var value: A)
 val dogContainer: Container[Dog] = new Container(new Dog)
 // val animalContainer: Container[Animal] = dogContainer  // 컴파일 에러!
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 무공변(A): 타입 간에 서브타입 관계 없음
+- 읽기와 쓰기가 모두 필요한 경우 사용
+- 기본값으로, 명시적 표기 불필요
+{{< /callout >}}
 
 #### Function의 변성
 
@@ -173,8 +193,16 @@ graph TB
     Note["Animal을 받는 함수는<br>Dog도 받을 수 있다"]
 ```
 
+*위 다이어그램은 함수 타입에서 입력은 반공변, 출력은 공변인 이유를 설명합니다.*
+
 > **해석:** `Animal => String` 함수를 `Dog => String`이 필요한 곳에 쓸 수 있습니다.
 > Animal을 처리할 수 있으면 Dog도 당연히 처리할 수 있기 때문입니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Function1[-T1, +R]: 입력 반공변, 출력 공변
+- Animal => String은 Dog => String의 서브타입
+- 더 일반적인 입력을 받는 함수는 더 구체적인 입력도 처리 가능
+{{< /callout >}}
 
 #### 실제 예제
 
@@ -211,6 +239,12 @@ val clickHandler: EventHandler[ClickEvent] =
 // ClickEvent 핸들러를 ButtonClickEvent 핸들러로 사용 가능
 val buttonHandler: EventHandler[ButtonClickEvent] = clickHandler
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- List[+A]: 공변, 불변 컬렉션
+- Array[A]: 무공변, Java 호환성 (가변)
+- EventHandler[-E]: 반공변, 이벤트 처리
+{{< /callout >}}
 
 #### 변성 규칙 요약
 
