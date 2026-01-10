@@ -25,7 +25,7 @@ author:
 
 Spark 애플리케이션을 다양한 클러스터 환경에 배포하고 관리하는 방법을 알아봅니다.
 
-#### 클러스터 매니저 유형
+##클러스터 매니저 유형
 
 | 유형 | 특징 | 적합한 환경 |
 |------|------|------------|
@@ -42,7 +42,7 @@ Spark 애플리케이션을 다양한 클러스터 환경에 배포하고 관리
 - **Kubernetes**: 컨테이너 기반, 클라우드 네이티브 환경
 {{< /callout >}}
 
-#### Local 모드
+##Local 모드
 
 개발과 테스트에 사용합니다.
 
@@ -55,7 +55,7 @@ SparkSession spark = SparkSession.builder()
     .getOrCreate();
 ```
 
-#### Standalone 클러스터
+##Standalone 클러스터
 
 Spark에 내장된 간단한 클러스터 매니저입니다.
 
@@ -93,7 +93,7 @@ spark.executor.cores             4
 spark.default.parallelism        200
 ```
 
-#### YARN
+##YARN
 
 Hadoop YARN에서 Spark를 실행합니다.
 
@@ -167,7 +167,7 @@ spark.dynamicAllocation.executorIdleTimeout=60s
 spark.shuffle.service.enabled=true
 ```
 
-#### Kubernetes
+##Kubernetes
 
 컨테이너 환경에서 Spark를 실행합니다.
 
@@ -231,7 +231,7 @@ docker build -t my-registry/spark-app:1.0 .
 docker push my-registry/spark-app:1.0
 ```
 
-#### spark-submit 옵션
+##spark-submit 옵션
 
 **기본 옵션**
 
@@ -281,7 +281,7 @@ spark-submit \
   myapp.jar
 ```
 
-#### Fat JAR 생성
+##Fat JAR 생성
 
 **Gradle (Shadow Plugin)**
 
@@ -342,7 +342,7 @@ shadowJar {
 </plugin>
 ```
 
-#### 모니터링
+##모니터링
 
 **Spark History Server**
 
@@ -388,7 +388,7 @@ logger.myapp.name = com.example
 logger.myapp.level = INFO
 ```
 
-#### 보안
+##보안
 
 **Kerberos 인증**
 
@@ -418,7 +418,7 @@ spark.modify.acls=developer1,developer2
 spark.ui.view.acls=viewer1,viewer2
 ```
 
-#### 운영 팁
+##운영 팁
 
 **애플리케이션 관리**
 
@@ -459,7 +459,7 @@ spark.shuffle.service.enabled=true
 spark.shuffle.registration.timeout=60000ms
 ```
 
-#### 클라우드 배포
+##클라우드 배포
 
 **AWS EMR**
 
@@ -486,7 +486,7 @@ gcloud dataproc clusters create spark-cluster \
 
 각 플랫폼의 관리 콘솔 또는 CLI를 통해 클러스터를 생성합니다.
 
-#### 다음 단계
+##다음 단계
 
 - [FAQ](../../appendix/faq/) - 운영 중 자주 발생하는 문제
 - [참고 자료](../../appendix/references/) - 추가 학습 자료

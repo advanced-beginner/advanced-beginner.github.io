@@ -25,7 +25,7 @@ author:
 
 Structured Streaming은 Spark의 스트림 처리 엔진입니다. 배치 처리와 동일한 DataFrame/Dataset API를 사용하여 실시간 데이터를 처리합니다.
 
-#### Structured Streaming이란?
+##Structured Streaming이란?
 
 **Structured Streaming**은 스트림 데이터를 무한히 추가되는 테이블로 취급합니다. 새 데이터가 도착하면 증분 처리(incremental processing)를 수행합니다.
 
@@ -74,7 +74,7 @@ result.writeStream()                        // writeStream으로 변경
 - 증분 처리(incremental processing)로 효율적인 스트림 처리
 {{< /callout >}}
 
-#### 기본 사용법
+##기본 사용법
 
 **스트림 읽기**
 
@@ -150,7 +150,7 @@ query.awaitTermination();
 // query.isActive(), query.stop() 등으로 관리
 ```
 
-#### 출력 모드 (Output Mode)
+##출력 모드 (Output Mode)
 
 | 모드 | 설명 | 사용 시점 |
 |------|------|----------|
@@ -178,7 +178,7 @@ aggregated.writeStream()
     .start();
 ```
 
-#### 트리거 (Trigger)
+##트리거 (Trigger)
 
 데이터 처리 빈도를 제어합니다.
 
@@ -202,7 +202,7 @@ import org.apache.spark.sql.streaming.Trigger;
 .trigger(Trigger.Continuous("1 second"))
 ```
 
-#### Kafka 연동
+##Kafka 연동
 
 **Kafka에서 읽기**
 
@@ -240,7 +240,7 @@ result
     .start();
 ```
 
-#### 윈도우 연산
+##윈도우 연산
 
 시간 기반 집계를 위한 윈도우 함수입니다.
 
@@ -297,7 +297,7 @@ Dataset<Row> sessionCounts = stream
     .count();
 ```
 
-#### Watermark
+##Watermark
 
 늦게 도착하는 데이터(late data)를 처리하기 위한 메커니즘입니다.
 
@@ -325,7 +325,7 @@ Dataset<Row> result = stream
 - 09:55 이벤트: 워터마크(10:00) 이전 → 무시됨
 ```
 
-#### 상태 관리
+##상태 관리
 
 집계 쿼리는 상태(state)를 유지합니다.
 
@@ -355,7 +355,7 @@ spark.conf().set("spark.sql.streaming.stateStore.rocksdb.memory.mb", "256");
 );
 ```
 
-#### 조인
+##조인
 
 **Stream-Static 조인**
 
@@ -400,7 +400,7 @@ Dataset<Row> joined = impressions.join(
 );
 ```
 
-#### 쿼리 모니터링
+##쿼리 모니터링
 
 ```java
 StreamingQuery query = result.writeStream()
@@ -445,7 +445,7 @@ spark.streams().addListener(new StreamingQueryListener() {
 });
 ```
 
-#### 실전 예제: 실시간 매출 집계
+##실전 예제: 실시간 매출 집계
 
 ```java
 public class RealTimeSalesAggregation {
@@ -511,7 +511,7 @@ public class RealTimeSalesAggregation {
 }
 ```
 
-#### 다음 단계
+##다음 단계
 
 - [MLlib](../mllib/) - Spark로 머신러닝
 - [성능 튜닝](../tuning/) - 스트리밍 성능 최적화

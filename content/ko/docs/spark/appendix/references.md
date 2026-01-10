@@ -17,7 +17,7 @@ Apache Spark 학습을 위한 공식 문서와 추가 자료를 안내합니다.
 - **커뮤니티**: Stack Overflow `apache-spark` 태그, GitHub Issues
 {{% /notice %}}
 
-#### 공식 문서
+##공식 문서
 
 **Apache Spark 공식 사이트**
 
@@ -54,7 +54,7 @@ Apache Spark 학습을 위한 공식 문서와 추가 자료를 안내합니다.
 - **클러스터**: 환경에 따라 YARN, Kubernetes, Standalone 중 선택
 {{% /notice %}}
 
-#### API 문서
+##API 문서
 
 **Java API**
 
@@ -73,7 +73,7 @@ Apache Spark 학습을 위한 공식 문서와 추가 자료를 안내합니다.
 - Scala API도 참조하면 더 많은 예제와 설명 확인 가능
 {{% /notice %}}
 
-#### 추가 학습 자료
+##추가 학습 자료
 
 **온라인 강좌**
 
@@ -100,7 +100,7 @@ Apache Spark 학습을 위한 공식 문서와 추가 자료를 안내합니다.
 - **문제 해결**: Stack Overflow `apache-spark` 태그 검색
 {{% /notice %}}
 
-#### 관련 기술 문서
+##관련 기술 문서
 
 **데이터 소스**
 
@@ -127,18 +127,18 @@ Apache Spark 학습을 위한 공식 문서와 추가 자료를 안내합니다.
 - **클라우드**: AWS EMR, GCP Dataproc, Azure HDInsight, Databricks
 {{% /notice %}}
 
-#### 버전별 릴리즈 노트
+##버전별 릴리즈 노트
 
 - **[Spark 3.5 Release](https://spark.apache.org/releases/spark-release-3-5-0.html)**
 - **[Spark 3.4 Release](https://spark.apache.org/releases/spark-release-3-4-0.html)**
 - **[Spark 3.3 Release](https://spark.apache.org/releases/spark-release-3-3-0.html)**
 
-#### 성능 벤치마크
+##성능 벤치마크
 
 - **[TPC-DS Benchmark](http://www.tpc.org/tpcds/)** — 결정 지원 시스템 벤치마크
 - **[Spark SQL Performance Tests](https://github.com/databricks/spark-sql-perf)** — Databricks 성능 테스트 도구
 
-#### 참고 도서
+##참고 도서
 
 **입문서**
 

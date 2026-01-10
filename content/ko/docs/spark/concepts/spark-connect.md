@@ -25,7 +25,7 @@ author:
 
 Spark Connect는 Spark 3.4에서 도입된 새로운 클라이언트-서버 아키텍처입니다. 씬 클라이언트(Thin Client)로 원격 Spark 클러스터에 연결할 수 있습니다.
 
-#### 기존 방식 vs Spark Connect
+##기존 방식 vs Spark Connect
 
 ```mermaid
 flowchart TB
@@ -68,7 +68,7 @@ flowchart TB
 - 서버만 업그레이드하면 모든 클라이언트에 적용
 {{< /callout >}}
 
-#### Spark Connect 장점
+##Spark Connect 장점
 
 **1. 가벼운 클라이언트**
 
@@ -100,7 +100,7 @@ flowchart TB
 - Python, Scala, Java, Go 등 지원
 - 향후 더 많은 언어 지원 예정
 
-#### 서버 설정
+##서버 설정
 
 **Spark Connect 서버 시작**
 
@@ -150,7 +150,7 @@ spark.connect.extensions.expression.classes=
 spark.connect.extensions.command.classes=
 ```
 
-#### Java 클라이언트 사용
+##Java 클라이언트 사용
 
 **의존성 설정**
 
@@ -224,7 +224,7 @@ SparkSession.builder().remote("sc://hostname:port;user_id=my_user")
 SparkSession.builder().remote("sc://hostname:port;use_ssl=true")
 ```
 
-#### 지원되는 기능
+##지원되는 기능
 
 **완전 지원**
 
@@ -248,7 +248,7 @@ SparkSession.builder().remote("sc://hostname:port;use_ssl=true")
 | GraphX | ❌ 미지원 | GraphFrame 사용 |
 | 로컬 파일 접근 | ❌ 미지원 | 서버 경로 또는 클라우드 스토리지 |
 
-#### Spring Boot 통합
+##Spring Boot 통합
 
 ```java
 package com.example.config;
@@ -313,7 +313,7 @@ spark:
     url: sc://spark-connect.internal:15002;token=${SPARK_TOKEN}
 ```
 
-#### 모범 사례
+##모범 사례
 
 **1. 연결 풀링**
 
@@ -366,7 +366,7 @@ try {
 }
 ```
 
-#### 마이그레이션 가이드
+##마이그레이션 가이드
 
 **기존 코드에서 Spark Connect로 전환**
 
@@ -394,7 +394,7 @@ Dataset<Row> df = spark.read().parquet("data.parquet");
 3. **UDF 서버 등록**: 사용자 정의 함수는 서버에 미리 등록
 4. **네트워크 지연**: 원격 연결로 인한 약간의 오버헤드 존재
 
-#### 언제 Spark Connect를 선택해야 할까
+##언제 Spark Connect를 선택해야 할까
 
 **Spark Connect 권장 상황**
 
@@ -415,7 +415,7 @@ Dataset<Row> df = spark.read().parquet("data.parquet");
 | **네트워크 지연 민감** | 직접 연결 대비 gRPC 오버헤드 존재 |
 | **레거시 시스템 통합** | 기존 코드 대규모 마이그레이션 필요 |
 
-#### 실무 인사이트
+##실무 인사이트
 
 **Java/Spring 환경에서의 현실적 고려사항**
 
@@ -448,7 +448,7 @@ Dataset<Row> df = spark.read().parquet("data.parquet");
 - 에러 메시지 개선으로 디버깅 용이
 - 연결 안정성 향상
 
-#### 관련 문서
+##관련 문서
 
 - [아키텍처](../architecture/) - Spark 클러스터 구조
 - [Spring Boot 통합](../../examples/spring-boot/) - Spring 연동

@@ -25,7 +25,7 @@ author:
 
 DataFrame과 Dataset은 Spark의 현대적인 고수준 API입니다. RDD보다 사용하기 쉽고, Catalyst Optimizer를 통한 자동 최적화를 제공합니다.
 
-#### 개념 정리
+##개념 정리
 
 **DataFrame**
 
@@ -67,7 +67,7 @@ Dataset<Employee> ds = spark.read().json("employees.json").as(encoder);
 - Catalyst Optimizer가 쿼리를 자동 최적화
 {{< /callout >}}
 
-#### DataFrame 생성
+##DataFrame 생성
 
 **1. 파일에서 생성**
 
@@ -187,7 +187,7 @@ ds.show();
 - Parquet이 가장 권장되는 포맷 (압축 + 컬럼 기반)
 {{< /callout >}}
 
-#### 기본 연산
+##기본 연산
 
 **스키마 확인**
 
@@ -335,7 +335,7 @@ df.orderBy(col("age").desc_nulls_last()).show();
 - 체이닝으로 여러 연산을 연결 가능 (지연 평가)
 {{< /callout >}}
 
-#### 집계 연산
+##집계 연산
 
 **groupBy**
 
@@ -428,7 +428,7 @@ df.withColumn("running_total", sum("salary").over(runningWindow)).show();
 - Window 정의: `partitionBy()` + `orderBy()` + 범위 지정
 {{< /callout >}}
 
-#### Join
+##Join
 
 ```java
 Dataset<Row> employees = spark.read().json("employees.json");
@@ -478,7 +478,7 @@ spark.conf().set("spark.sql.autoBroadcastJoinThreshold", "50MB");
 - 대용량 테이블 간 조인 시 셔플 비용 고려 필수
 {{< /callout >}}
 
-#### Dataset (타입 안전 API)
+##Dataset (타입 안전 API)
 
 Java에서 Dataset을 사용하면 컴파일 타임에 타입 체크가 가능합니다.
 
@@ -544,7 +544,7 @@ Encoders.kryo(MyClass.class)
 - Dataset은 컴파일 타임 타입 체크로 안전성 향상
 {{< /callout >}}
 
-#### DataFrame vs Dataset 선택 기준
+##DataFrame vs Dataset 선택 기준
 
 | 상황 | 권장 API |
 |------|---------|
@@ -555,7 +555,7 @@ Encoders.kryo(MyClass.class)
 | Python/R과 호환성 | DataFrame |
 | 최고 성능 필요 | DataFrame (Tungsten 최적화) |
 
-#### 실전 예제: 매출 분석
+##실전 예제: 매출 분석
 
 ```java
 public class SalesAnalysis {
@@ -628,7 +628,7 @@ public class SalesAnalysis {
 
 ---
 
-#### Java vs Scala 코드 비교
+##Java vs Scala 코드 비교
 
 동일한 로직을 Java와 Scala로 작성한 비교입니다. Java 개발자가 Scala 문서를 읽을 때 참고하세요.
 
@@ -716,7 +716,7 @@ val names = ds.map(_.name)
 > **Note**: Scala의 case class는 자동으로 Encoder가 생성되어 Java보다 간결합니다.
 > Java 17+의 `record`를 사용하면 비슷하게 간결해집니다.
 
-#### 실무 인사이트
+##실무 인사이트
 
 **Java 개발자를 위한 실전 가이드**
 
@@ -772,7 +772,7 @@ val names = ds.map(_.name)
    }
    ```
 
-#### 다음 단계
+##다음 단계
 
 DataFrame과 Dataset을 이해했다면:
 

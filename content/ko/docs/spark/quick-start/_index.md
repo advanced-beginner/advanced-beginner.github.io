@@ -19,7 +19,7 @@ author:
 
 5분 만에 Spark 애플리케이션을 실행하고 데이터를 처리해봅니다. 이 가이드를 따라하면 프로젝트 생성부터 데이터 조회까지 전체 과정을 경험할 수 있습니다.
 
-#### 전체 흐름
+## 전체 흐름
 
 아래 다이어그램은 Quick Start의 진행 순서를 보여줍니다:
 
@@ -31,7 +31,7 @@ flowchart LR
     D --> E[5. 결과 확인]
 ```
 
-#### 준비물
+## 준비물
 
 시작하기 전에 아래 환경을 준비합니다:
 
@@ -47,7 +47,7 @@ flowchart LR
 | Gradle | `gradle --version` | `Gradle 8.x` 이상 |
 | Maven (대안) | `mvn --version` | `Apache Maven 3.x.x` |
 
-#### Step 1/5: 프로젝트 생성 (~1분)
+## Step 1/5: 프로젝트 생성 (~1분)
 
 Spring Initializr나 IDE에서 Java 프로젝트를 생성합니다. 이 예제에서는 순수 Java 프로젝트로 시작합니다.
 
@@ -56,7 +56,7 @@ mkdir spark-quickstart
 cd spark-quickstart
 ```
 
-#### Step 2/5: Gradle 설정 (~2분)
+## Step 2/5: Gradle 설정 (~2분)
 
 `build.gradle` 파일을 생성합니다:
 
@@ -163,7 +163,7 @@ Maven을 선호한다면 아래 `pom.xml` 설정을 사용합니다:
 mvn compile exec:java
 ```
 
-#### Step 3/5: 샘플 데이터 생성 (~1분)
+## Step 3/5: 샘플 데이터 생성 (~1분)
 
 `src/main/resources/employees.csv` 파일을 생성합니다:
 
@@ -179,7 +179,7 @@ id,name,department,salary
 8,윤서연,Engineering,5200
 ```
 
-#### Step 4/5: Spark 애플리케이션 작성 (~3분)
+## Step 4/5: Spark 애플리케이션 작성 (~3분)
 
 `src/main/java/com/example/SparkQuickStart.java`:
 
@@ -252,7 +252,7 @@ public class SparkQuickStart {
 }
 ```
 
-#### Step 5/5: 실행 (~1분)
+## Step 5/5: 실행 (~1분)
 
 ```bash
 ./gradlew run
@@ -263,7 +263,7 @@ Windows의 경우:
 gradlew.bat run
 ```
 
-#### 예상 출력
+## 예상 출력
 
 정상적으로 실행되면 아래와 같은 출력을 확인할 수 있습니다:
 
@@ -327,7 +327,7 @@ root
 
 ---
 
-#### 프로덕션 수준 코드
+## 프로덕션 수준 코드
 
 실제 운영 환경에서는 예외 처리와 리소스 정리가 필수입니다:
 
@@ -428,7 +428,7 @@ public class SparkQuickStartProduction {
 
 ---
 
-#### 무엇이 일어났나요?
+## 무엇이 일어났나요?
 
 위 코드에서 각 단계가 어떻게 동작하는지 살펴봅니다.
 
@@ -485,7 +485,7 @@ spark.sql("SELECT * FROM employees WHERE ...");
 
 ---
 
-#### Java 개발자를 위한 비교
+## Java 개발자를 위한 비교
 
 기존 Java 코드와 Spark 코드를 비교하면 유사점과 차이점을 쉽게 이해할 수 있습니다.
 
@@ -508,7 +508,7 @@ Dataset<Row> highEarners = employees
 
 ---
 
-#### 트러블슈팅
+## 트러블슈팅
 
 Spark 실행 시 자주 발생하는 문제와 해결 방법입니다.
 
@@ -556,7 +556,7 @@ Windows에서 실행 시 `winutils.exe` 관련 경고가 나올 수 있습니다
 
 ---
 
-#### Spark UI 확인하기
+## Spark UI 확인하기
 
 Spark 애플리케이션 실행 중 `http://localhost:4040`에 접속하면 Spark UI를 확인할 수 있습니다:
 
@@ -569,7 +569,7 @@ Spark 애플리케이션 실행 중 `http://localhost:4040`에 접속하면 Spar
 
 ---
 
-#### 다음 단계
+## 다음 단계
 
 Quick Start를 완료했다면, 학습 목표에 따라 다음 문서를 선택하세요:
 

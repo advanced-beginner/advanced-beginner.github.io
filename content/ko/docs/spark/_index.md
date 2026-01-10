@@ -62,7 +62,7 @@ Spark 도입을 고려할 때는 데이터 규모와 처리 복잡도를 기준�
 - 밀리초 단위의 초저지연이 필요한 실시간 처리
 - 팀에 분산 시스템 운영 경험이 없고 일정이 촉박할 때
 
-#### 이 가이드에서 다루는 것
+## 이 가이드에서 다루는 것
 
 이 가이드는 Java/Spring 개발자가 Spark를 실무에 적용할 수 있도록 단계별로 구성되어 있습니다.
 
@@ -96,6 +96,13 @@ Spring Boot 기반의 실행 가능한 예제 코드입니다. 환경 설정부�
 - [환경 설정](examples/setup/) - Java/Spring Boot와 Spark 통합 환경 구성
 - [기본 예제](examples/basic/) - 데이터 로딩, 변환, 집계의 기초
 
+**[하우투 가이드](howto/)**
+
+특정 문제를 해결하기 위한 단계별 가이드입니다:
+- [OutOfMemoryError 해결하기](howto/oom-troubleshooting/) - 메모리 부족 오류 진단 및 해결
+- [데이터 스큐 해결하기](howto/data-skew/) - 파티션 불균형 해결
+- [셔플 최적화하기](howto/shuffle-optimization/) - 네트워크 I/O 최소화
+
 **[부록](appendix/)**
 
 학습 중 참고할 수 있는 보조 자료입니다:
@@ -103,7 +110,7 @@ Spring Boot 기반의 실행 가능한 예제 코드입니다. 환경 설정부�
 - [FAQ](appendix/faq/) - 자주 묻는 질문
 - [참고 자료](appendix/references/) - 공식 문서 및 추가 학습 자료
 
-#### Spark vs Hadoop MapReduce
+## Spark vs Hadoop MapReduce
 
 Spark와 하둡 MapReduce를 비교하면 Spark의 위치를 이해하기 쉽습니다:
 
@@ -121,14 +128,14 @@ Spark와 하둡 MapReduce를 비교하면 Spark의 위치를 이해하기 쉽습
 
 > **참고:** Spark는 하둡을 대체하는 것이 아니라 하둡 생태계(HDFS, YARN) 위에서 동작할 수 있습니다. 많은 기업이 저장소는 HDFS, 처리 엔진은 Spark를 사용합니다.
 
-#### 선수 지식
+## 선수 지식
 
 이 가이드를 효과적으로 학습하기 위해 다음 지식이 필요합니다:
 
 - **필수**: Java 기본, 컬렉션 API (Stream, Lambda)
 - **도움됨**: SQL 기초, Spring Boot 경험, 기본적인 분산 시스템 개념
 
-#### 학습 경로 가이드
+## 학습 경로 가이드
 
 역할과 목표에 따라 효율적인 학습 순서가 다릅니다. 아래 다이어그램은 역할별 권장 학습 경로를 보여줍니다:
 
@@ -209,7 +216,7 @@ Day 5:   배포 → Spark Connect
 
 각 문서는 독립적으로 읽을 수 있지만, 처음이라면 위 순서를 추천합니다.
 
-#### 흔한 오해
+## 흔한 오해
 
 Spark에 대해 자주 듣는 오해들을 정리합니다:
 

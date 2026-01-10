@@ -25,7 +25,7 @@ author:
 
 Spark 애플리케이션이 어떻게 분산 환경에서 실행되는지 이해합니다. Java/Spring 개발자에게 익숙한 개념과 비교하며 설명합니다.
 
-#### 핵심 구성요소
+## 핵심 구성요소
 
 Spark 클러스터는 세 가지 주요 컴포넌트로 구성됩니다:
 
@@ -162,7 +162,7 @@ Driver는 Spring 애플리케이션의 메인 컨텍스트와 유사합니다. �
 - 개발 시 `local[*]`, 프로덕션 시 YARN/K8s 사용
 {{< /callout >}}
 
-#### 애플리케이션 실행 흐름
+## 애플리케이션 실행 흐름
 
 Spark 애플리케이션이 제출되면 다음 순서로 실행됩니다:
 
@@ -202,7 +202,7 @@ sequenceDiagram
 - Task가 Executor에서 병렬 실행되고 결과가 Driver로 반환
 {{< /callout >}}
 
-#### Job, Stage, Task
+## Job, Stage, Task
 
 Action이 호출되면 Spark는 내부적으로 Job → Stage → Task 계층으로 작업을 분할합니다. 각 계층의 역할을 이해하면 Spark의 실행 모델을 파악할 수 있습니다.
 
@@ -256,7 +256,7 @@ Stage 2: [Task 2-1] [Task 2-2] [Task 2-3] [Task 2-4]
 - Wide Transformation(groupBy, join)이 Stage 경계를 만듦
 {{< /callout >}}
 
-#### DAG (Directed Acyclic Graph)
+## DAG (Directed Acyclic Graph)
 
 Spark는 Transformation을 **DAG**로 표현합니다. 이는 연산의 의존 관계를 나타내는 방향성 비순환 그래프입니다.
 
@@ -291,7 +291,7 @@ result.show();  // Action → DAG 실행
 - 장애 발생 시 DAG를 따라 손실된 파티션만 재계산
 {{< /callout >}}
 
-#### Java 개발자 관점에서 이해하기
+## Java 개발자 관점에서 이해하기
 
 Java 개발자가 Spark를 이해하기 위해 익숙한 개념과 비교해봅니다.
 
@@ -337,7 +337,7 @@ Dataset<Row> highPaid = employees
 - Spark는 장애 발생 시 자동 재시도로 내결함성 제공
 {{< /callout >}}
 
-#### 메모리 모델 (Unified Memory Management)
+## 메모리 모델 (Unified Memory Management)
 
 Spark 1.6부터 도입된 **통합 메모리 관리(Unified Memory Management)**는 실행과 저장 메모리를 동적으로 공유합니다. 이 모델을 이해하면 메모리 관련 문제를 효과적으로 해결할 수 있습니다.
 
@@ -454,7 +454,7 @@ SparkSession spark = SparkSession.builder()
 - Off-Heap 사용으로 GC 영향 최소화 가능
 {{< /callout >}}
 
-#### 배포 모드
+## 배포 모드
 
 Spark 애플리케이션은 Client Mode와 Cluster Mode 두 가지 방식으로 배포할 수 있습니다.
 
@@ -491,7 +491,7 @@ spark-submit --deploy-mode cluster myapp.jar
 - Cluster Mode는 네트워크 지연 최소화
 {{< /callout >}}
 
-#### 주요 설정
+## 주요 설정
 
 Spark 애플리케이션의 성능을 조절하는 주요 설정 항목들입니다.
 
@@ -553,7 +553,7 @@ SparkSession spark = SparkSession.builder()
 - 프로덕션에서는 --conf 파라미터로 외부화 권장
 {{< /callout >}}
 
-#### 실무 인사이트
+## 실무 인사이트
 
 **Java/Spring 환경에서의 실제 적용 경험**
 
@@ -593,7 +593,7 @@ SparkSession spark = SparkSession.builder()
 - Spark UI(4040)에서 Task 분포와 GC 시간 모니터링
 {{< /callout >}}
 
-#### 다음 단계
+## 다음 단계
 
 아키텍처를 이해했다면, 다음으로 데이터 추상화에 대해 학습하세요:
 

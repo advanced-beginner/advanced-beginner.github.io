@@ -24,7 +24,7 @@ author:
 
 Spark SQL은 구조화된 데이터 처리를 위한 Spark 모듈입니다. SQL 쿼리와 DataFrame API를 모두 지원하며, 동일한 실행 엔진(Catalyst Optimizer)을 사용합니다.
 
-#### Spark SQL의 장점
+##Spark SQL의 장점
 
 1. **익숙한 SQL 문법**: 기존 SQL 지식 그대로 활용
 2. **최적화**: Catalyst Optimizer가 쿼리 자동 최적화
@@ -38,7 +38,7 @@ Spark SQL은 구조화된 데이터 처리를 위한 Spark 모듈입니다. SQL 
 - Hive 메타스토어 통합으로 영구 테이블 관리 가능
 {{< /callout >}}
 
-#### Catalyst Optimizer 심층 이해
+##Catalyst Optimizer 심층 이해
 
 Catalyst는 Spark SQL의 쿼리 최적화 엔진입니다. 사용자가 작성한 쿼리를 분석하고 최적화하여 효율적인 실행 계획을 생성합니다.
 
@@ -74,7 +74,7 @@ flowchart LR
 
 **각 단계 상세**
 
-#### 1단계: Analysis (분석)
+##1단계: Analysis (분석)
 
 테이블과 컬럼 이름을 실제 스키마와 매핑합니다.
 
@@ -86,7 +86,7 @@ df.filter(col("salary").gt(5000));
 // Analyzed Plan: salary는 IntegerType, df의 3번째 컬럼
 ```
 
-#### 2단계: Logical Optimization (논리 최적화)
+##2단계: Logical Optimization (논리 최적화)
 
 규칙 기반으로 쿼리를 최적화합니다.
 
@@ -109,7 +109,7 @@ df.join(other, "id")
 // 2. "name"만 읽기 (Column Pruning)
 ```
 
-#### 3단계: Physical Planning (물리 계획)
+##3단계: Physical Planning (물리 계획)
 
 여러 실행 전략 중 최적의 방법을 선택합니다.
 
@@ -121,7 +121,7 @@ df.join(other, "id")
 // - 스트리밍: Shuffle Hash Join
 ```
 
-#### 4단계: Code Generation (코드 생성 - Tungsten)
+##4단계: Code Generation (코드 생성 - Tungsten)
 
 최적화된 Java 바이트코드를 런타임에 생성합니다.
 
@@ -202,7 +202,7 @@ AQE: 런타임에 5개 파티션으로 병합
 결과: 태스크 수 감소, 오버헤드 절감
 ```
 
-#### 기본 사용법
+##기본 사용법
 
 **임시 뷰 생성**
 
@@ -250,7 +250,7 @@ spark.catalog().dropTempView("my_view");
 spark.catalog().dropGlobalTempView("global_view");
 ```
 
-#### SQL 문법
+##SQL 문법
 
 **SELECT**
 
@@ -426,7 +426,7 @@ EXCEPT
 SELECT name FROM employees_busan;
 ```
 
-#### 내장 함수
+##내장 함수
 
 **문자열 함수**
 
@@ -599,7 +599,7 @@ SELECT
 FROM employees;
 ```
 
-#### Catalog API
+##Catalog API
 
 Spark SQL의 메타데이터를 프로그래밍 방식으로 관리합니다.
 
@@ -635,7 +635,7 @@ catalog.clearCache();
 catalog.refreshTable("employees");
 ```
 
-#### Hive 통합
+##Hive 통합
 
 Spark SQL은 Hive 메타스토어와 통합하여 영구 테이블을 관리할 수 있습니다.
 
@@ -682,7 +682,7 @@ spark.sql("SELECT * FROM employees").show();
 spark.sql("DROP TABLE IF EXISTS employees");
 ```
 
-#### 성능 최적화
+##성능 최적화
 
 **Explain Plan**
 
@@ -745,7 +745,7 @@ spark.conf().set("spark.sql.adaptive.coalescePartitions.enabled", "true");
 spark.conf().set("spark.sql.codegen.wholeStage", "true");
 ```
 
-#### 실전 예제: 복잡한 분석 쿼리
+##실전 예제: 복잡한 분석 쿼리
 
 ```java
 public class ComplexAnalysis {
@@ -827,7 +827,7 @@ public class ComplexAnalysis {
 }
 ```
 
-#### 다음 단계
+##다음 단계
 
 - [Transformation과 Action](../transformations-actions/) - 연산의 지연 평가 이해
 - [파티셔닝과 셔플](../partitioning/) - 분산 처리 최적화

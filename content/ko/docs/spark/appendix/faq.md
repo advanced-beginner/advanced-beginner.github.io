@@ -17,7 +17,7 @@ author:
 - **디버깅**: Spark UI의 Stages 탭에서 Task 분포와 스큐 확인
 {{% /notice %}}
 
-#### 일반 질문
+## 일반 질문
 
 **Spark는 어떤 Java 버전을 지원하나요?**
 
@@ -54,7 +54,7 @@ RDD는 저수준 제어가 필요하거나 비구조화 데이터를 처리할 �
 - RDD는 저수준 제어나 비구조화 데이터 처리 시에만 사용
 {{% /notice %}}
 
-#### 오류 해결
+## 오류 해결
 
 **OutOfMemoryError**
 
@@ -190,7 +190,7 @@ System.setProperty("hadoop.home.dir", "C:\\hadoop");
 - **로깅 충돌**: `slf4j-log4j12` 의존성 제외
 {{% /notice %}}
 
-#### 성능 관련
+## 성능 관련
 
 **작업이 예상보다 느립니다**
 
@@ -252,7 +252,7 @@ df.write().bucketBy(100, "key").saveAsTable("bucketed");
 - **셔플 최소화**: Wide Transformation 줄이기
 {{% /notice %}}
 
-#### 스트리밍 관련
+## 스트리밍 관련
 
 **스트리밍 쿼리가 멈춥니다**
 
@@ -275,7 +275,7 @@ df.withWatermark("timestamp", "10 minutes")
 - **늦은 데이터 처리**: `withWatermark()`로 지연 허용 시간 설정
 {{% /notice %}}
 
-#### 배포 관련
+## 배포 관련
 
 **YARN에서 실행이 안 됩니다**
 
@@ -311,7 +311,7 @@ http://history-server:18080
 - **로그 확인**: YARN은 `yarn logs`, K8s는 `kubectl logs`, History Server는 `:18080`
 {{% /notice %}}
 
-#### 기타
+## 기타
 
 **Spark UI에 접속할 수 없습니다**
 
@@ -359,7 +359,7 @@ List<Employee> employees = df.as(encoder).collectAsList();
 - **POJO 변환**: `Encoders.bean()` + `collectAsList()`, 대용량에서는 사용 주의
 {{% /notice %}}
 
-#### Spark UI 활용 디버깅 가이드
+## Spark UI 활용 디버깅 가이드
 
 Spark 성능 문제 해결의 핵심은 Spark UI를 체계적으로 분석하는 것입니다.
 
