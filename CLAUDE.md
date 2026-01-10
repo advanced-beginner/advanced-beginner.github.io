@@ -43,8 +43,9 @@ curl -X POST "http://localhost:8080/send?message=Hello"
 
 ```
 content/ko/           # 한글 문서 (메인 콘텐츠)
-├── kafka/            # Kafka 가이드 (20개 문서)
-└── ddd/              # DDD 가이드 (19개 문서)
+└── docs/             # hugo-book 테마용 문서 섹션
+    ├── kafka/        # Kafka 가이드 (20개 문서)
+    └── ddd/          # DDD 가이드 (19개 문서)
 examples/             # Spring Boot Kafka 예제
 ├── quick-start/      # 최소 설정 예제
 └── order-system/     # 도메인 주도 설계 예제

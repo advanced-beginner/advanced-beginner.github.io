@@ -85,7 +85,7 @@ params:
   # Hugo Book Theme 설정
   BookTheme: "auto"
   BookToC: true
-  BookSection: "*"
+  BookSection: docs
   BookSearch: true
   BookComments: false
   BookPortableLinks: "warning"
