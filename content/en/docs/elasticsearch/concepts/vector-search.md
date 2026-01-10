@@ -24,15 +24,15 @@ Traditional search is **keyword matching**. Searching "puppy" only finds documen
 
 ```mermaid
 flowchart LR
-    A[Text/Image] --> B[Embedding Model]
-    B --> C[Vector Conversion<br>[0.1, 0.3, -0.2, ...]]
-    C --> D[Store in Elasticsearch]
+    A["Text/Image"] --> B["Embedding Model"]
+    B --> C["Vector Conversion"]
+    C --> D["Store in Elasticsearch"]
 
-    E[Search Query] --> F[Embedding Model]
-    F --> G[Query Vector]
-    G --> H[kNN Search]
+    E["Search Query"] --> F["Embedding Model"]
+    F --> G["Query Vector"]
+    G --> H["kNN Search"]
     D --> H
-    H --> I[Return Similar Documents]
+    H --> I["Return Similar Documents"]
 ```
 
 1. **Embedding**: Convert text/image to high-dimensional vector
