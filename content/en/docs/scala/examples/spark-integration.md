@@ -415,6 +415,6 @@ spark-shell --master local[*]
 
 ## Next Steps
 
-- [Spark Guide]({{< relref "/spark" >}}) - Deep dive into Spark
-- [Kafka Integration]({{< relref "/kafka" >}}) - Structured Streaming + Kafka
+- [Spark Guide]({{< relref "/docs/spark" >}}) - Deep dive into Spark
+- [Kafka Integration]({{< relref "/docs/kafka" >}}) - Structured Streaming + Kafka
 - [Functional Patterns](../concepts/functional-patterns/) - FP in Spark

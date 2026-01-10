@@ -706,7 +706,7 @@ spark-shell --master local[*]
 
 Spark의 기본 사용법을 익혔다면 다음 주제들로 학습을 이어가세요.
 
-- [Spark 가이드]({{< relref "/spark" >}}) - Spark 심화 학습
-- [Kafka 연동]({{< relref "/kafka" >}}) - Structured Streaming + Kafka
+- [Spark 가이드]({{< relref "/docs/spark" >}}) - Spark 심화 학습
+- [Kafka 연동]({{< relref "/docs/kafka" >}}) - Structured Streaming + Kafka
 - [함수형 패턴](../concepts/functional-patterns/) - Spark에서의 함수형 프로그래밍
 

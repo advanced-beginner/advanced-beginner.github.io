@@ -788,4 +788,4 @@ class OrderTest {
 
 - [CQRS](../concepts/cqrs/) - 명령과 조회 분리
 - [도메인 이벤트](../concepts/domain-events/) - 이벤트 발행과 구독
-- [Kafka 연동]({{< relref "/kafka/examples/microservices" >}}) - 이벤트 외부 발행
+- [Kafka 연동]({{< relref "/docs/kafka/examples/microservices" >}}) - 이벤트 외부 발행

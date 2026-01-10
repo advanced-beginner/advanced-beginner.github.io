@@ -638,4 +638,4 @@ deltaStream
 
 - [Structured Streaming](../concepts/structured-streaming/) - 실시간 처리
 - [성능 튜닝](../concepts/tuning/) - Spark 최적화
-- [Kafka 연동]({{< relref "/kafka" >}}) - 스트림 소스
+- [Kafka 연동]({{< relref "/docs/kafka" >}}) - 스트림 소스
