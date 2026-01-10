@@ -1,0 +1,18 @@
+{{- $type := .Get "type" | default "info" -}}
+{{- $title := .Get "title" -}}
+{{- $class := "book-hint" -}}
+{{- if eq $type "tip" -}}
+  {{- $class = printf "%s info" $class -}}
+{{- else if eq $type "danger" -}}
+  {{- $class = printf "%s danger" $class -}}
+{{- else if eq $type "warning" -}}
+  {{- $class = printf "%s warning" $class -}}
+{{- else -}}
+  {{- $class = printf "%s info" $class -}}
+{{- end -}}
+<blockquote class="{{ $class }}">
+{{- if $title -}}
+<strong>{{ $title }}</strong><br>
+{{- end -}}
+{{ .Inner | markdownify }}
+</blockquote>
