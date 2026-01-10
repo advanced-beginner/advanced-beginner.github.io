@@ -1,8 +1,18 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: 클래스와 객체
 weight: 4
 ---
+
+{{< callout type="info" title="TL;DR" >}}
+- **클래스**: 생성자 매개변수를 선언부에 직접 작성하여 보일러플레이트를 줄입니다
+- **object**: 싱글톤 인스턴스를 언어 차원에서 지원합니다
+- **컴패니언 객체**: 클래스와 같은 이름으로 static 멤버를 대체합니다
+- **트레이트**: 다중 상속의 장점을 누리면서 다이아몬드 문제를 피합니다
+{{< /callout >}}
+
+**대상 독자:** Java/OOP 경험이 있는 개발자
+**선수 지식:** Scala 기본 문법, 함수와 메서드
 
 Scala는 객체지향과 함수형 프로그래밍을 모두 지원합니다. 클래스, 객체, 트레이트 등 OOP 기능을 함수형 패러다임과 조화롭게 사용할 수 있습니다. 특히 Scala의 object는 싱글톤 패턴을 언어 차원에서 지원하고, trait는 다중 상속의 문제를 해결하면서 코드 재사용을 극대화합니다.
 
@@ -99,6 +109,12 @@ class Person(val name: String, val age: Int) {
 {{% /tab %}}
 {{< /tabs >}}
 
+{{< callout type="info" title="핵심 포인트" >}}
+- 생성자 매개변수에 `val`/`var`를 붙이면 자동으로 필드가 됩니다
+- 기본 매개변수 값을 사용하면 보조 생성자보다 간결합니다
+- Scala 3에서는 콜론과 들여쓰기로 클래스 본문을 정의합니다
+{{< /callout >}}
+
 #### 객체 (Object)
 
 `object`는 싱글톤 인스턴스를 정의합니다. Java에서 싱글톤 패턴을 구현하려면 private 생성자, static 필드, 동기화 등 복잡한 코드가 필요하지만, Scala에서는 `object` 키워드 하나로 해결됩니다. object는 처음 접근할 때 지연 초기화되며, 스레드 안전합니다.
@@ -138,6 +154,12 @@ object MathUtils {
 println(MathUtils.square(5))  // 25
 println(MathUtils.PI)         // 3.14159
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- `object`는 싱글톤 인스턴스를 정의합니다 (new 없이 사용)
+- 지연 초기화되며 스레드 안전합니다
+- 유틸리티 메서드, 전역 상태, 팩토리에 적합합니다
+{{< /callout >}}
 
 #### 컴패니언 객체
 
@@ -183,6 +205,12 @@ object Person {
 val person = Person.create("김철수", 30)  // Some(Person)
 val invalid = Person.create("오류", -5)   // None
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 컴패니언 객체는 클래스와 같은 이름으로 같은 파일에 정의합니다
+- 서로의 `private` 멤버에 접근할 수 있습니다
+- `apply` 메서드로 new 없이 인스턴스를 생성할 수 있습니다
+{{< /callout >}}
 
 #### 트레이트 (Trait)
 
@@ -275,6 +303,12 @@ val processor = new TextProcessor
 println(processor.process("  hello world  "))  // HELLO WORLD
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- 트레이트는 구현을 포함할 수 있는 인터페이스입니다
+- `with` 키워드로 여러 트레이트를 믹스인할 수 있습니다
+- 트레이트 스태킹으로 동작을 조합할 수 있습니다 (선형화 순서)
+{{< /callout >}}
+
 #### 추상 클래스
 
 추상 클래스는 인스턴스화할 수 없으며 하위 클래스에서 구현해야 하는 추상 멤버를 정의할 수 있습니다. 트레이트와 달리 생성자 매개변수를 가질 수 있습니다.
@@ -312,6 +346,12 @@ println(dog.describe())  // 바둑이 은(는) 멍멍 소리를 냅니다.
 
 > **권장:** 특별한 이유가 없으면 트레이트를 사용하세요.
 
+{{< callout type="info" title="핵심 포인트" >}}
+- 추상 클래스는 생성자 매개변수를 가질 수 있습니다
+- 트레이트는 다중 상속이 가능하지만 추상 클래스는 단일 상속입니다
+- 일반적으로 트레이트를 선호하고, 생성자가 필요하면 추상 클래스를 사용합니다
+{{< /callout >}}
+
 #### 접근 제어자
 
 Scala의 접근 제어자는 Java보다 세밀합니다. 기본값은 public이며, private와 protected를 범위 지정자와 함께 사용하여 접근 범위를 정밀하게 제어할 수 있습니다.
@@ -330,6 +370,12 @@ class PackageAccess {
   private[mypackage] val packagePrivate = 5  // mypackage 내에서만
 }
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 기본값은 public이며, `private`와 `protected`를 사용합니다
+- `private[this]`는 같은 인스턴스에서만 접근 가능합니다
+- `private[패키지명]`으로 패키지 레벨 접근을 제어합니다
+{{< /callout >}}
 
 #### Enum (Scala 3)
 
@@ -385,6 +431,12 @@ val shapes: List[Shape] = List(Circle(5), Rectangle(3, 4), Triangle(6, 4))
 ```
 {{% /tab %}}
 {{< /tabs >}}
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Scala 3: `enum`으로 열거형과 ADT를 간결하게 정의합니다
+- Scala 2: `sealed trait` + `case object/class` 조합을 사용합니다
+- 매개변수가 있는 열거형과 ADT 스타일 모두 지원합니다
+{{< /callout >}}
 
 #### 연습 문제
 

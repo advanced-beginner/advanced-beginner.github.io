@@ -1,7 +1,24 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: Scala 2 vs Scala 3 비교
 weight: 3
+---
+
+{{% notice style="primary" title="TL;DR" %}}
+- **문법 간소화**: Scala 3는 들여쓰기 기반 구문, `then` 키워드 도입
+- **enum 지원**: `sealed trait` + `case object` 대신 네이티브 `enum` 사용
+- **암시적 재설계**: `implicit` → `given`/`using`/`extension`으로 역할 분리
+- **새 타입 기능**: Union Type (`|`), Opaque Type 추가
+- **하위 호환**: Scala 3는 대부분의 Scala 2 문법 지원, 점진적 마이그레이션 가능
+{{% /notice %}}
+
+**대상 독자**: Scala 2 경험자 또는 두 버전 모두 이해하고 싶은 개발자
+
+**선수 지식**:
+- Scala 기본 문법 이해
+- 함수형 프로그래밍 기초 개념
+- (선택) Scala 2 코드베이스 경험
+
 ---
 
 동일한 로직을 Scala 2와 Scala 3로 구현하여 차이점을 비교합니다. 두 버전 간의 문법 변화를 이해하면 코드를 마이그레이션하거나 양쪽 버전 모두에서 작업할 때 도움이 됩니다. 이 문서에서는 주요 변경 사항들을 실제 코드 예제로 보여줍니다.
@@ -123,6 +140,13 @@ val result = for {
 {{% /tab %}}
 {{< /tabs >}}
 
+{{% notice style="tip" title="핵심 포인트" %}}
+- **블록 구문**: Scala 3에서 중괄호 대신 들여쓰기 사용 가능
+- **if 표현식**: Scala 3에서 괄호 생략, `then` 키워드 도입
+- **for 표현식**: Scala 3에서 `do` 키워드로 부수 효과 루프 표현
+- 새 문법은 코드를 더 간결하고 Python처럼 읽기 쉽게 만듦
+{{% /notice %}}
+
 #### 열거형 (Enum)
 
 Scala 3에서 가장 환영받는 변화 중 하나는 네이티브 enum 지원입니다. Scala 2에서는 sealed trait과 case object/class를 조합해야 했던 패턴이 단일 enum 선언으로 간소화되었습니다.
@@ -181,6 +205,12 @@ val circle: Shape = Circle(5.0)
 ```
 {{% /tab %}}
 {{< /tabs >}}
+
+{{% notice style="tip" title="핵심 포인트" %}}
+- **Scala 3 enum**: 단순 열거형, 매개변수 열거형, ADT 모두 지원
+- **Scala 2**: `sealed trait` + `case object/class` 조합 필요
+- `enum`은 보일러플레이트를 대폭 줄이고 의도를 명확히 표현
+{{% /notice %}}
 
 #### 암시적 기능
 
@@ -300,6 +330,13 @@ val intShow = implicitly[Show[Int]]
 {{% /tab %}}
 {{< /tabs >}}
 
+{{% notice style="tip" title="핵심 포인트" %}}
+- **given/using**: 암시적 값과 매개변수를 명확히 분리
+- **extension**: 확장 메서드를 위한 전용 키워드 (implicit class 대체)
+- **summon**: `implicitly` 대체, 타입 클래스 인스턴스 조회
+- 역할별 키워드 분리로 코드 의도가 더 명확해짐
+{{% /notice %}}
+
 #### 진입점
 
 애플리케이션의 진입점 정의 방식도 간소화되었습니다. Scala 3에서는 `@main` 어노테이션을 사용하여 더 간단하게 메인 함수를 정의할 수 있으며, 명령줄 인자도 자동으로 파싱됩니다.
@@ -331,6 +368,12 @@ object Hello extends App {
 ```
 {{% /tab %}}
 {{< /tabs >}}
+
+{{% notice style="tip" title="핵심 포인트" %}}
+- **@main**: Scala 3의 새로운 진입점 어노테이션, 간결한 선언
+- **자동 인자 파싱**: `@main def greet(name: String)` 형태로 명령줄 인자 자동 처리
+- Scala 2: `def main(args: Array[String])` 또는 `extends App` 사용
+{{% /notice %}}
 
 #### 새로운 타입 기능 (Scala 3 전용)
 
@@ -368,6 +411,12 @@ object Money:
 case class USD(value: BigDecimal) extends AnyVal
 ```
 
+{{% notice style="tip" title="핵심 포인트" %}}
+- **Union Type (`|`)**: 여러 타입 중 하나임을 직접 표현 (Either 없이)
+- **Opaque Type**: 런타임 오버헤드 없는 타입 래핑 (Value Class 개선)
+- 두 기능 모두 Scala 3 전용, Scala 2에서는 대안 패턴 사용
+{{% /notice %}}
+
 #### 마이그레이션 요약
 
 Scala 2에서 Scala 3로 마이그레이션할 때 참고할 주요 변경 사항을 정리했습니다. 대부분의 변경은 더 명확하고 일관된 문법을 위한 것입니다.
@@ -381,6 +430,12 @@ Scala 2에서 Scala 3로 마이그레이션할 때 참고할 주요 변경 사�
 | `implicit class` | `extension` |
 | `sealed trait` + `case object` | `enum` |
 | `_` (와일드카드 import) | `*` |
+
+{{% notice style="tip" title="핵심 포인트" %}}
+- 암시적 기능이 가장 큰 변화: `implicit` → `given`, `using`, `extension`
+- `enum`으로 ADT 정의가 간단해짐
+- 와일드카드 import: `_` → `*`
+{{% /notice %}}
 
 #### 호환성
 
@@ -396,6 +451,12 @@ for (i <- 1 to 5) { println(i) }
 ```
 
 이 호환성 덕분에 Scala 2 코드베이스를 Scala 3로 마이그레이션할 때 모든 것을 한 번에 바꿀 필요가 없습니다. 새로운 코드는 Scala 3 스타일로 작성하면서 기존 코드는 점진적으로 업데이트할 수 있습니다.
+
+{{% notice style="tip" title="핵심 포인트" %}}
+- Scala 3 컴파일러는 대부분의 Scala 2 문법 지원
+- 점진적 마이그레이션 가능: 새 코드는 Scala 3 스타일, 기존 코드는 그대로
+- 권장하지 않지만 기존 `implicit`, 중괄호 문법도 동작함
+{{% /notice %}}
 
 #### 다음 단계
 

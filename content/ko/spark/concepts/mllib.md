@@ -1,10 +1,26 @@
 ---
 title: MLlib
 weight: 9
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- MLlib은 DataFrame 기반 분산 머신러닝 라이브러리 (spark.ml 패키지)
+- Pipeline으로 전처리 → 학습 → 예측 단계를 연결
+- Transformer(변환), Estimator(학습), Evaluator(평가) 패턴
+- CrossValidator/TrainValidationSplit로 하이퍼파라미터 튜닝
+{{< /callout >}}
+
+**대상 독자**: 대규모 데이터에서 머신러닝을 수행하려는 ML 엔지니어
+
+**선수 지식**:
+- [DataFrame과 Dataset](../dataframe-dataset/) API
+- 머신러닝 기본 개념 (분류, 회귀, 클러스터링)
+- 특성 공학(Feature Engineering) 기초
+
 ---
 
 MLlib은 Spark의 분산 머신러닝 라이브러리입니다. 대규모 데이터셋에서 머신러닝 모델을 학습하고 예측할 수 있습니다.
@@ -27,6 +43,13 @@ MLlib은 Spark의 분산 머신러닝 라이브러리입니다. 대규모 데이
 - **Pipeline**: 여러 단계를 연결
 - **Evaluator**: 모델 성능 평가
 - **CrossValidator/TrainValidationSplit**: 하이퍼파라미터 튜닝
+
+{{< callout type="info" title="핵심 포인트" >}}
+- **spark.ml** 패키지 사용 (DataFrame 기반, 권장)
+- **spark.mllib**은 RDD 기반으로 유지보수 모드
+- Transformer: 입력 DataFrame → 출력 DataFrame 변환
+- Estimator: fit()으로 학습하여 Transformer 생성
+{{< /callout >}}
 
 #### 기본 워크플로우
 

@@ -1,9 +1,23 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: Consumer 심화 운영
 weight: 4
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- session.timeout.ms는 장애 감지, max.poll.interval.ms는 처리 시간 제한 설정
+- Cooperative Sticky Assignor로 리밸런싱 영향 최소화 (Kafka 2.4+)
+- Static Group Membership으로 재시작 시 리밸런싱 방지 가능
+- Consumer Lag이 가장 중요한 모니터링 지표, 추세 관찰이 핵심
+- kafka-consumer-groups.sh로 Offset 수동 리셋 가능 (Consumer 중지 필요)
+{{< /callout >}}
+
+**대상 독자**: Kafka Consumer를 프로덕션에서 운영하는 개발자 및 운영자
+
+**선수 지식**: [Consumer Group & Offset](../consumer-group/)의 기본 개념, [Replication](../replication/)의 ISR과 Leader 개념
+
 ---
 
 리밸런싱 최적화, Consumer Lag 모니터링, 트러블슈팅을 다룹니다. 이 문서는 Kafka 3.6.x 기준으로 작성되었으며, Spring Boot 3.2.x와 Spring Kafka 3.1.x, Micrometer 1.12.x, Java 17 환경에서 코드 예제가 검증되었습니다.
@@ -32,6 +46,12 @@ spring:
 `heartbeat.interval.ms`는 Heartbeat 전송 주기입니다. Consumer가 주기적으로 Broker에게 "살아있다"는 신호를 보내는 간격입니다. session.timeout의 1/15 이하로 설정하는 것이 권장됩니다.
 
 `max.poll.interval.ms`는 poll() 호출 사이의 최대 허용 간격입니다. 이 시간 내에 다음 poll()을 호출하지 않으면 Consumer가 비정상으로 간주되어 그룹에서 제외됩니다. 메시지 처리 시간의 2배 정도로 설정하는 것이 권장됩니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- session.timeout.ms: Heartbeat 기반 장애 감지 (기본 45초)
+- max.poll.interval.ms: 처리 시간 제한 (기본 5분), 초과 시 리밸런싱
+- heartbeat.interval.ms는 session.timeout.ms의 1/15 이하로 설정 권장
+{{< /callout >}}
 
 **max.poll.interval.ms 문제와 해결**
 
@@ -89,6 +109,12 @@ public class OrderConsumer {
 
 비동기 처리 외에 `max.poll.records`를 축소하는 방법도 있습니다. 한 번에 가져오는 레코드 수를 줄이면 처리 시간이 단축됩니다. Spring Kafka에서는 `spring.kafka.consumer.max-poll-records: 10`과 같이 설정합니다(기본값 500).
 
+{{< callout type="info" title="핵심 포인트" >}}
+- 동기 외부 호출은 max.poll.interval.ms 초과로 리밸런싱 유발
+- 해결책: 비동기 처리 + 수동 커밋, 또는 max.poll.records 축소
+- DB에 먼저 저장 후 즉시 커밋, 별도 스레드에서 처리하는 패턴 권장
+{{< /callout >}}
+
 #### 리밸런싱 심층 분석
 
 리밸런싱 중에는 모든 Consumer가 일시 정지됩니다. Eager Protocol 기준으로 리밸런싱이 시작되면 모든 Consumer가 Partition을 해제(Stop-the-World)하고, Group Coordinator가 새로운 할당을 계산한 후, 각 Consumer에게 새 Partition을 할당합니다. 10개 Consumer 환경에서는 약 1초, 100개 Consumer 환경에서는 약 10초가 소요됩니다. 대규모 클러스터에서는 분 단위로 소요될 수도 있습니다.
@@ -124,6 +150,12 @@ spring:
 ```
 
 고정 ID를 부여하면 Consumer가 재시작되어도 같은 Consumer로 인식되어 불필요한 리밸런싱을 방지합니다. session.timeout.ms를 재시작에 필요한 시간보다 길게 설정해야 합니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Eager Protocol: 전체 Stop-the-World, 대규모 클러스터에서 분 단위 중단 발생
+- Cooperative Sticky Assignor: 필요한 것만 재할당, 영향 최소화 (Kafka 2.4+)
+- Static Group Membership: 재시작 시 리밸런싱 방지, K8s Rolling Update에 유용
+{{< /callout >}}
 
 **리밸런싱 모니터링 구현**
 
@@ -198,6 +230,12 @@ kafka-consumer-groups.sh --describe --group order-service \
 Lag 0~100은 정상 상태입니다. 100~1,000은 주의가 필요하며 처리 속도를 확인해야 합니다. 1,000~10,000은 경고 수준으로 Consumer 증설을 검토해야 합니다. 10,000 이상은 위험 상태로 즉시 대응이 필요합니다.
 
 LAG 수치보다 LAG 증가 추세가 더 중요합니다. LAG 1000이 유지되면 문제없지만, LAG 100이 계속 증가하면 조치가 필요합니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Consumer Lag = 처리해야 할 메시지 수, 가장 중요한 모니터링 지표
+- Lag 0~100: 정상, 100~1000: 주의, 1000~10000: 경고, 10000+: 위험
+- 절대값보다 증가 추세가 더 중요, 지속적 증가 시 즉시 조치 필요
+{{< /callout >}}
 
 **Prometheus + Grafana 모니터링**
 
@@ -279,6 +317,12 @@ kafka-get-offsets.sh --topic orders \
 ```
 
 특정 파티션만 LAG가 증가하면 Hot Partition(Key 편중) 문제입니다. Key 분산이나 Partition 추가로 해결합니다. 전체 LAG가 급증하면 Consumer 처리 속도가 부족한 것이므로 인스턴스를 증설합니다. LAG는 0인데 메시지가 누락되면 자동 커밋과 처리 실패가 원인일 수 있으므로 수동 커밋으로 변경합니다. 잦은 리밸런싱이 발생하면 session.timeout이 너무 짧은 것이므로 timeout을 증가시키거나 Static Membership을 적용합니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 특정 Partition Lag 증가: Hot Partition 문제, Key 분산 필요
+- 전체 Lag 급증: Consumer 처리 속도 부족, 인스턴스 증설
+- Lag 0인데 누락: 자동 커밋 + 처리 실패, 수동 커밋으로 변경
+{{< /callout >}}
 
 #### 프로덕션 배포 체크리스트
 

@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: 기본 예제
 weight: 2
 author: "@kimbenji"
@@ -7,6 +7,22 @@ author_url: "http://github.com/kimbenji"
 ---
 
 Spring Kafka를 사용한 기본적인 메시지 송수신 구현을 설명합니다.
+
+{{% notice style="tip" title="TL;DR" %}}
+- **Producer**: `KafkaTemplate`으로 동기/비동기 메시지 전송, Key 사용으로 Partition 지정
+- **Consumer**: `@KafkaListener`로 메시지 수신, 배치 처리 및 패턴 구독 지원
+- **수동 커밋**: `Acknowledgment`로 처리 완료 후 명시적 커밋
+- **에러 처리**: `@RetryableTopic`으로 재시도 및 Dead Letter Topic 설정
+{{% /notice %}}
+
+#### 대상 독자 및 선수 지식
+
+| 항목 | 설명 |
+|------|------|
+| **대상 독자** | Spring Boot 애플리케이션에서 Kafka를 사용하려는 백엔드 개발자 |
+| **선수 지식** | Java 기본 문법, Spring Boot 기초 (의존성 주입, REST API), Kafka 기본 개념 (Topic, Partition, Consumer Group) |
+| **사전 완료** | [Quick Start](../../quick-start/) 예제 완료, [환경 구성](../setup/) 설정 완료 |
+| **예상 소요 시간** | 약 30분 |
 
 Quick Start를 먼저 완료하면 이 문서를 더 쉽게 이해할 수 있습니다. 이 문서에서는 Quick Start의 단순한 예제를 확장하여 실무에서 사용하는 패턴들을 학습합니다.
 
@@ -61,6 +77,8 @@ sequenceDiagram
     KT-->>App: SendResult (블로킹)
 ```
 
+*[다이어그램 설명: Application이 KafkaTemplate의 send 메서드를 호출하면, KafkaTemplate이 Kafka에 메시지를 전송합니다. Kafka가 ACK를 반환하면 KafkaTemplate이 SendResult를 Application에 반환하며, 이 과정에서 Application은 블로킹됩니다.]*
+
 **비동기 전송**
 
 비동기 전송은 전송 요청 후 즉시 반환하고, 결과는 콜백으로 처리합니다. 이 방식은 처리량이 높지만 전송 실패 처리가 복잡해질 수 있습니다.
@@ -95,6 +113,8 @@ sequenceDiagram
     KT-->>App: 콜백 실행
 ```
 
+*[다이어그램 설명: Application이 KafkaTemplate의 send 메서드를 호출하면 즉시 CompletableFuture가 반환되어 Application은 다른 작업을 계속할 수 있습니다. 이후 KafkaTemplate이 Kafka에 메시지를 전송하고 ACK를 받으면 콜백이 실행됩니다.]*
+
 **Key와 함께 전송**
 
 Message Key를 사용하면 동일한 Key를 가진 메시지가 항상 같은 Partition으로 전송됩니다. 이는 특정 데이터의 순서를 보장해야 할 때 필수적입니다.
@@ -114,6 +134,13 @@ public void sendToPartition(String topic, int partition, String key, String mess
     kafkaTemplate.send(topic, partition, key, message);
 }
 ```
+
+{{% notice style="info" title="Producer 구현 핵심 포인트" %}}
+- **동기 전송**: `get()` 메서드로 전송 완료까지 블로킹하여 결과 확인
+- **비동기 전송**: `whenComplete()` 콜백으로 결과 처리, 높은 처리량 확보
+- **Key 사용**: 동일한 Key는 동일한 Partition으로 전송되어 순서 보장
+- **Partition 지정**: 필요시 특정 Partition에 직접 전송 가능
+{{% /notice %}}
 
 #### Consumer 구현
 
@@ -184,6 +211,13 @@ public void consumeBatch(List<String> messages) {
 }
 ```
 
+{{% notice style="info" title="Consumer 구현 핵심 포인트" %}}
+- **기본 Listener**: `@KafkaListener`로 Topic 지정, 메시지 자동 수신
+- **ConsumerRecord**: 메타데이터(Partition, Offset, Key, Timestamp) 함께 수신
+- **다중 Topic 구독**: 배열로 여러 Topic 지정 또는 정규식 패턴 사용
+- **배치 처리**: `batch = "true"` 설정으로 여러 메시지 한번에 처리
+{{% /notice %}}
+
 #### 수동 Offset 커밋
 
 Quick Start에서는 자동 커밋을 사용했습니다. 메시지 처리가 실패했을 때 재처리가 필요하다면 수동 커밋을 사용합니다. 수동 커밋은 메시지 처리가 성공한 후에만 Offset을 커밋하므로, 실패 시 해당 메시지를 다시 처리할 수 있습니다.
@@ -227,6 +261,14 @@ flowchart TB
     C --> E[다음 메시지]
     D --> F[재시작 시 재처리]
 ```
+
+*[다이어그램 설명: 메시지 수신 후 처리가 성공하면 acknowledge를 호출하여 Offset을 커밋하고 다음 메시지를 처리합니다. 처리가 실패하면 커밋하지 않아 Consumer 재시작 시 해당 메시지를 다시 처리합니다.]*
+
+{{% notice style="info" title="수동 Offset 커밋 핵심 포인트" %}}
+- **설정**: `enable-auto-commit: false`, `ack-mode: manual`로 수동 커밋 활성화
+- **커밋 시점**: 비즈니스 로직 성공 후 `ack.acknowledge()` 호출
+- **재처리 보장**: 커밋 전 실패 시 다음 Consumer 시작 때 재처리됨
+{{% /notice %}}
 
 #### 에러 처리
 
@@ -275,6 +317,14 @@ flowchart LR
     C -->|재시도 2 실패| D[quickstart-topic-dlt]
     D -->|수동 처리| E[관리자]
 ```
+
+*[다이어그램 설명: 메시지 처리 실패 시 retry Topic으로 이동하여 재시도합니다. 재시도가 모두 실패하면 Dead Letter Topic(DLT)으로 이동하고, 관리자가 수동으로 처리합니다.]*
+
+{{% notice style="info" title="에러 처리 핵심 포인트" %}}
+- **DefaultErrorHandler**: Bean 등록으로 자동 재시도, `FixedBackOff`로 재시도 간격/횟수 설정
+- **@RetryableTopic**: 선언적 재시도 정책, 실패 시 자동으로 DLT로 이동
+- **Dead Letter Topic**: 처리 불가능한 메시지 별도 보관, 모니터링 및 수동 처리 필요
+{{% /notice %}}
 
 #### 전체 예제 코드
 

@@ -1,9 +1,23 @@
 ---
-lastmod: "2026-01-08"
+lastmod: "2026-01-10"
 title: 생태계
 weight: 12
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- Kafka Connect: 외부 시스템과 Kafka 간 데이터 이동, 코딩 없이 설정으로 파이프라인 구축
+- Schema Registry: 메시지 스키마 중앙 관리, 호환성 검증으로 런타임 오류 방지
+- Kafka Streams: 실시간 스트림 처리 라이브러리, 별도 클러스터 불필요
+- Debezium: CDC(Change Data Capture)로 DB 변경사항을 Kafka로 스트리밍
+- 스키마 호환성: BACKWARD(기본), FORWARD, FULL, NONE 정책 지원
+{{< /callout >}}
+
+**대상 독자**: Kafka 생태계를 활용한 데이터 파이프라인을 구축하려는 개발자 및 데이터 엔지니어
+
+**선수 지식**: [핵심 구성요소](../core-components/)의 Topic, Producer, Consumer 개념, [메시지 흐름](../message-flow/)의 전체 데이터 흐름
+
 ---
 
 Kafka는 메시지 브로커 그 이상의 역할을 합니다. Kafka를 중심으로 데이터 파이프라인을 구축하고, 스키마를 관리하며, 실시간 스트림 처리를 수행하는 완성된 생태계가 형성되어 있습니다. 이 생태계의 핵심 컴포넌트는 Kafka Connect, Schema Registry, Kafka Streams입니다. 각 컴포넌트는 독립적으로 동작하면서도 함께 사용할 때 더 큰 시너지를 발휘합니다.

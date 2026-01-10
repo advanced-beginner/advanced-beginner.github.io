@@ -1,13 +1,21 @@
 ---
 title: FAQ
 weight: 2
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 author:
   name: Advanced Beginner
   github: advanced-beginner
 ---
 
 자주 묻는 질문과 흔히 발생하는 문제의 해결 방법을 제공합니다.
+
+{{% notice style="tip" title="TL;DR" %}}
+- **Java 버전**: Spark 3.5는 Java 8, 11, 17 지원 (21은 미지원)
+- **DataFrame vs RDD**: DataFrame 권장 (자동 최적화, 간결한 API)
+- **흔한 오류**: OutOfMemoryError(메모리 증가), NotSerializableException(직렬화 가능 객체만 사용)
+- **성능 튜닝**: 셔플 최소화, 적절한 파티션 수(코어 x 2~4), 브로드캐스트 조인 활용
+- **디버깅**: Spark UI의 Stages 탭에서 Task 분포와 스큐 확인
+{{% /notice %}}
 
 #### 일반 질문
 
@@ -38,6 +46,13 @@ Java에서는 DataFrame이 `Dataset<Row>`의 별칭입니다.
 - 다양한 데이터 소스 지원
 
 RDD는 저수준 제어가 필요하거나 비구조화 데이터를 처리할 때 사용합니다.
+
+{{% notice style="info" title="일반 질문 핵심 포인트" %}}
+- Spark 3.5는 **Java 8, 11, 17** 지원
+- Java만으로 Spark 사용 가능 (Scala 라이브러리는 런타임 의존성)
+- **DataFrame 권장**: Catalyst Optimizer 자동 최적화, 간결한 API
+- RDD는 저수준 제어나 비구조화 데이터 처리 시에만 사용
+{{% /notice %}}
 
 #### 오류 해결
 
@@ -167,6 +182,14 @@ Could not locate executable winutils.exe
 System.setProperty("hadoop.home.dir", "C:\\hadoop");
 ```
 
+{{% notice style="info" title="오류 해결 핵심 포인트" %}}
+- **OutOfMemoryError**: `spark.driver.memory`, `spark.executor.memory` 증가
+- **NotSerializableException**: 클로저에서 직렬화 가능한 객체만 참조, `foreachPartition`에서 객체 생성
+- **SparkContext 중복**: `getOrCreate()` 사용
+- **Windows winutils 오류**: HADOOP_HOME 환경 변수 설정
+- **로깅 충돌**: `slf4j-log4j12` 의존성 제외
+{{% /notice %}}
+
 #### 성능 관련
 
 **작업이 예상보다 느립니다**
@@ -222,6 +245,13 @@ filtered.join(small, "key")
 df.write().bucketBy(100, "key").saveAsTable("bucketed");
 ```
 
+{{% notice style="info" title="성능 관련 핵심 포인트" %}}
+- **파티션 수 공식**: 코어 수 x 2~4, 파티션 크기 100~200MB
+- **캐싱 확인**: cache() 후 첫 Action에서 실제 캐싱 발생, Spark UI Storage 탭 확인
+- **조인 최적화**: 작은 테이블 `broadcast()`, 조인 전 필터링, 버케팅 사용
+- **셔플 최소화**: Wide Transformation 줄이기
+{{% /notice %}}
+
 #### 스트리밍 관련
 
 **스트리밍 쿼리가 멈춥니다**
@@ -239,6 +269,11 @@ df.withWatermark("timestamp", "10 minutes")
   .groupBy(window(col("timestamp"), "5 minutes"))
   .count()
 ```
+
+{{% notice style="info" title="스트리밍 핵심 포인트" %}}
+- **쿼리 멈춤**: 체크포인트 권한, Kafka 연결, 상태 저장소 메모리 확인
+- **늦은 데이터 처리**: `withWatermark()`로 지연 허용 시간 설정
+{{% /notice %}}
 
 #### 배포 관련
 
@@ -269,6 +304,12 @@ kubectl logs spark-executor-xxx
 # Spark History Server
 http://history-server:18080
 ```
+
+{{% notice style="info" title="배포 핵심 포인트" %}}
+- **YARN**: `HADOOP_CONF_DIR` 환경 변수, 큐 권한, 리소스 설정 확인
+- **Kubernetes**: 리소스 요청량, PV/PVC 상태, Service Account 권한 확인
+- **로그 확인**: YARN은 `yarn logs`, K8s는 `kubectl logs`, History Server는 `:18080`
+{{% /notice %}}
 
 #### 기타
 
@@ -311,6 +352,12 @@ List<Employee> employees = df.as(encoder).collectAsList();
 ```
 
 주의: `collect()`는 모든 데이터를 Driver로 가져오므로 대용량 데이터에서는 사용하지 마세요.
+
+{{% notice style="info" title="기타 핵심 포인트" %}}
+- **Spark UI 접속**: 로컬 `:4040`, YARN은 Application Master URL, History Server `:18080`
+- **느린 Executor**: 데이터 스큐, 하드웨어 문제, GC 문제 확인 → `spark.speculation=true` 활성화
+- **POJO 변환**: `Encoders.bean()` + `collectAsList()`, 대용량에서는 사용 주의
+{{% /notice %}}
 
 #### Spark UI 활용 디버깅 가이드
 
@@ -496,3 +543,11 @@ grep -i "gc\|pause\|heap" executor.log
 □ Parquet 같은 컬럼 기반 포맷을 사용하는가?
 □ AQE가 활성화되어 있는가? (Spark 3.0+)
 ```
+
+{{% notice style="info" title="Spark UI 디버깅 핵심 포인트" %}}
+- **Jobs 탭**: 전체 Job 소요 시간, Stage 완료/실패 상태 확인
+- **Stages 탭 (가장 중요)**: Task Min/Max Duration 차이 10배 이상이면 스큐, GC Time > 10%면 메모리 부족
+- **스큐 해결**: AQE 스큐 조인, Salting, Broadcast Join
+- **OOM 해결**: 파티션 수 조정 (파티션당 200MB 정도), 메모리 증가
+- **셔플 최적화**: `explain()`에서 Exchange 확인, 같은 그룹에서 여러 집계 한 번에 수행
+{{% /notice %}}

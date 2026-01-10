@@ -1,7 +1,24 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: 기본 예제
 weight: 2
+---
+
+{{% notice style="primary" title="TL;DR" %}}
+- **케이스 클래스**로 불변 데이터 모델링, 자동 생성되는 `equals`, `copy` 활용
+- **Option**으로 null 안전성, **Either**로 상세한 에러 처리
+- **패턴 매칭**으로 타입에 따른 분기 처리
+- **컬렉션 API** (`map`, `filter`, `groupBy`)로 선언적 데이터 처리
+- **타입 클래스**로 확장 가능한 기능 구현
+{{% /notice %}}
+
+**대상 독자**: Scala 환경 설정을 마친 개발자, 실제 코드로 Scala를 학습하려는 분
+
+**선수 지식**:
+- Scala 개발 환경 설정 완료 ([환경 설정](../setup/) 참조)
+- 객체지향 프로그래밍 기본 개념
+- 함수형 프로그래밍 기초 (권장)
+
 ---
 
 Scala의 핵심 개념을 활용한 종합 예제입니다. 이 문서에서는 케이스 클래스, 패턴 매칭, 컬렉션 처리, Option, Either, 타입 클래스 등 실무에서 자주 사용하는 기능들을 예제 코드와 함께 설명합니다.
@@ -40,6 +57,12 @@ val order = Order.create(
 ```
 
 위 코드에서 Order.create 팩토리 메서드는 주문 라인이 비어있으면 None을 반환하고, 그렇지 않으면 Some(Order(...))를 반환합니다. 이렇게 하면 빈 주문이 생성되는 것을 컴파일 타임에 방지할 수 있습니다.
+
+{{% notice style="tip" title="핵심 포인트" %}}
+- **케이스 클래스**: 불변 데이터 표현에 적합, `equals`, `hashCode`, `toString`, `copy` 자동 생성
+- **팩토리 메서드**: 객체 생성 시 유효성 검사를 강제하여 잘못된 상태 방지
+- **Option 반환**: null 대신 Option으로 "값이 없을 수 있음"을 타입으로 표현
+{{% /notice %}}
 
 #### 예제 2: 주문 처리
 
@@ -80,6 +103,12 @@ order.foreach { o =>
 ```
 
 totalPrice 메서드는 각 주문 라인의 가격과 수량을 곱한 값들의 합계를 계산합니다. applyDiscount 메서드는 케이스 클래스의 copy 메서드를 중첩 사용하여 불변성을 유지하면서 할인을 적용합니다.
+
+{{% notice style="tip" title="핵심 포인트" %}}
+- **extension**: 기존 클래스를 수정하지 않고 새 메서드 추가 (Scala 3)
+- **copy**: 불변 객체의 일부 필드만 변경한 새 객체 생성
+- **고차 함수**: `map`, `sum`, `exists` 등으로 컬렉션을 선언적으로 처리
+{{% /notice %}}
 
 #### 예제 3: 에러 처리
 
@@ -128,6 +157,13 @@ createOrderLine("노트북", 1500000, 1) match
 
 for comprehension을 사용하면 Either 값들을 순차적으로 연결할 수 있습니다. 첫 번째 검증이 실패하면 즉시 Left를 반환하고, 모든 검증이 통과하면 최종 결과를 Right로 감싸서 반환합니다.
 
+{{% notice style="tip" title="핵심 포인트" %}}
+- **Either[L, R]**: `Left`는 실패, `Right`는 성공 (관례)
+- **enum**: 에러 타입을 열거형으로 정의하여 타입 안전성 확보
+- **for comprehension**: 여러 Either를 순차적으로 연결, 첫 실패에서 중단
+- **패턴 매칭**: 모든 에러 케이스를 명시적으로 처리
+{{% /notice %}}
+
 #### 예제 4: 컬렉션 처리
 
 함수형 스타일로 데이터를 처리합니다. Scala 컬렉션은 map, filter, groupBy, sortBy 등 풍부한 메서드를 제공합니다. 명령형 반복문 대신 이러한 선언적 메서드를 사용하면 코드가 간결하고 읽기 쉬워집니다.
@@ -175,6 +211,13 @@ val sortedByName = products.sortBy(_.name)
 
 filter는 조건에 맞는 요소만 추출하고, map은 각 요소를 변환합니다. groupBy는 키 함수를 기준으로 요소들을 그룹화하여 Map을 반환합니다. sortBy는 주어진 함수의 결과를 기준으로 정렬합니다.
 
+{{% notice style="tip" title="핵심 포인트" %}}
+- **filter**: 조건에 맞는 요소만 추출
+- **map**: 각 요소를 변환하여 새 컬렉션 생성
+- **groupBy**: 키 함수 기준으로 그룹화 → `Map[K, List[V]]` 반환
+- **sortBy**: 정렬 기준 지정, **maxBy/minBy**: 최대/최소 요소 추출
+{{% /notice %}}
+
 #### 예제 5: Option 활용
 
 null 대신 Option을 사용합니다. Option은 값이 있을 수도 있고 없을 수도 있는 상황을 타입으로 표현합니다. NullPointerException을 컴파일 타임에 방지할 수 있어 더 안전한 코드를 작성할 수 있습니다.
@@ -213,6 +256,13 @@ println(s"주문 합계: ${orderTotal.getOrElse(0.0)}원")
 ```
 
 Option에 map을 적용하면 값이 있는 경우에만 변환이 수행됩니다. for comprehension을 사용하면 여러 Option 값을 조합할 수 있으며, 중간에 None이 있으면 전체 결과가 None이 됩니다.
+
+{{% notice style="tip" title="핵심 포인트" %}}
+- **Option[T]**: `Some(값)` 또는 `None`으로 값의 존재 여부 표현
+- **getOrElse**: None일 때 기본값 반환
+- **map/flatMap**: 값이 있을 때만 변환 수행
+- **for comprehension**: 여러 Option 조합, 하나라도 None이면 전체가 None
+{{% /notice %}}
 
 #### 예제 6: 타입 클래스
 
@@ -259,6 +309,13 @@ println(products.toJson)
 ```
 
 given 키워드로 타입 클래스 인스턴스를 정의합니다. List에 대한 인코더는 요소 타입의 인코더가 있으면 자동으로 생성됩니다. extension을 통해 toJson 메서드를 모든 인코딩 가능한 타입에 추가합니다.
+
+{{% notice style="tip" title="핵심 포인트" %}}
+- **타입 클래스**: 기존 타입을 수정하지 않고 기능 추가하는 패턴
+- **trait**: 타입 클래스 인터페이스 정의
+- **given**: 타입 클래스 인스턴스 정의 (Scala 3)
+- **extension + using**: 조건부 확장 메서드 (인코더가 있는 타입에만 `toJson` 추가)
+{{% /notice %}}
 
 #### 예제 프로젝트 실행
 
@@ -329,6 +386,12 @@ println(s"성공적으로 조회된 사용자: ${results.length}명")
 
 ApiResponse를 Either나 Option으로 변환하는 확장 메서드를 정의했습니다. collect 메서드는 부분 함수를 사용하여 Right인 경우만 추출합니다.
 
+{{% notice style="tip" title="핵심 포인트" %}}
+- **API 응답 래퍼**: 상태 코드, 데이터, 에러 메시지를 하나의 타입으로 표현
+- **확장 메서드**: 응답을 `Either`나 `Option`으로 변환하여 일관된 에러 처리
+- **collect**: 특정 패턴에 맞는 요소만 추출하여 새 컬렉션 생성
+{{% /notice %}}
+
 #### 예제 8: 실무 시나리오 - 설정 관리
 
 환경별 설정을 타입 안전하게 관리하는 패턴입니다. enum으로 환경을 정의하고, 패턴 매칭을 통해 각 환경에 맞는 설정을 반환합니다.
@@ -394,6 +457,12 @@ config match
 ```
 
 Environment enum으로 가능한 환경을 열거하고, 각 환경에 대해 적절한 설정을 패턴 매칭으로 반환합니다. fromString 메서드는 문자열 입력을 받아 Either로 결과를 반환하므로 잘못된 환경 문자열도 안전하게 처리됩니다.
+
+{{% notice style="tip" title="핵심 포인트" %}}
+- **enum**: 가능한 값들을 타입으로 열거하여 컴파일 타임 안전성 확보
+- **패턴 매칭**: 각 환경에 맞는 설정을 명확하게 분기
+- **Either 반환**: 잘못된 입력을 안전하게 처리, 에러 메시지 전달 가능
+{{% /notice %}}
 
 #### 연습 과제
 

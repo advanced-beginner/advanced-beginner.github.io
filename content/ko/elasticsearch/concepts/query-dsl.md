@@ -1,8 +1,19 @@
 ---
 title: Query DSL
 weight: 3
-lastmod: 2026-01-08
+lastmod: 2026-01-10
 ---
+
+{{< callout type="tip" title="TL;DR" >}}
+- **Query Context**: 관련성 점수(score)를 계산하는 풀텍스트 검색
+- **Filter Context**: 점수 없이 조건만 확인, 캐싱되어 빠름
+- **match/match_phrase**: 풀텍스트 검색에 사용 (text 필드)
+- **term/terms/range**: 정확한 값 검색에 사용 (keyword 필드)
+- **bool**: must/should/must_not/filter로 쿼리 조합
+{{< /callout >}}
+
+**대상 독자**: Elasticsearch 기본 개념을 이해한 개발자
+**선수 지식**: [핵심 구성요소](../core-components/), JSON 기본 문법
 
 Elasticsearch의 Query DSL(Domain Specific Language)을 사용하여 다양한 검색 쿼리를 작성하는 방법을 배웁니다.
 
@@ -54,6 +65,12 @@ GET /products/_search
 ```
 
 > **성능 팁:** 정확한 값 비교는 `filter`에 넣어 캐싱 효과를 얻으세요.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Query Context는 "얼마나 잘 일치하는가"를 계산하여 score를 부여합니다
+- Filter Context는 "일치하는가/아닌가"만 판단하고 캐싱됩니다
+- 정확한 값 필터링(category, status 등)은 filter에 넣어 성능을 높이세요
+{{< /callout >}}
 
 ---
 
@@ -159,6 +176,12 @@ GET /products/_search
 | `most_fields` | 모든 필드 점수 합산 |
 | `cross_fields` | 여러 필드를 하나처럼 취급 |
 | `phrase` | match_phrase로 검색 |
+
+{{< callout type="info" title="핵심 포인트" >}}
+- `match`: 기본 풀텍스트 검색, OR 조건 (operator로 AND 변경 가능)
+- `match_phrase`: 단어 순서까지 일치해야 함, slop으로 허용 간격 조절
+- `multi_match`: 여러 필드 동시 검색, 필드별 가중치(^) 설정 가능
+{{< /callout >}}
 
 ---
 
@@ -331,6 +354,13 @@ GET /products/_search
 | `2` | 2글자 차이 허용 |
 | `AUTO` | 길이에 따라 자동 (권장) |
 
+{{< callout type="info" title="핵심 포인트" >}}
+- `term`: text 필드에 사용하면 안 됨! keyword 필드나 `.keyword` 서브필드에 사용
+- `range`: gte/gt/lte/lt로 범위 검색, 날짜에 `now-7d` 같은 상대 표현 가능
+- `wildcard`: 앞에 `*`가 오면 매우 느림, 가급적 피하세요
+- `fuzzy`: fuzziness=AUTO로 오타 허용 검색 가능
+{{< /callout >}}
+
 ---
 
 ## Bool 쿼리
@@ -439,6 +469,14 @@ GET /products/_search
 }
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- `must`: AND 조건, score에 영향
+- `filter`: AND 조건, score 무시, 캐싱됨 (성능 우수)
+- `should`: OR 조건, must/filter가 있으면 선택적 (score 부스팅용)
+- `must_not`: NOT 조건, 일치하면 제외
+- Bool 쿼리는 중첩하여 복잡한 조건 표현 가능
+{{< /callout >}}
+
 ---
 
 ## 검색 결과 제어
@@ -518,6 +556,12 @@ GET /products/_search
 }
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- `from + size`는 기본 10,000 제한, 대량 페이지네이션은 `search_after` 사용
+- `sort`로 정렬, `_source`로 반환 필드 제한 가능
+- `highlight`로 검색어 강조 표시 (pre_tags/post_tags 커스터마이즈)
+{{< /callout >}}
+
 ---
 
 ## SQL과 비교
@@ -581,6 +625,12 @@ GET /products/_search
   "search_after": ["2024-01-15T10:00:00", "abc123"]
 }
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- text 필드에 term 쿼리 사용 금지 → match 또는 `.keyword` 사용
+- 정확한 값 필터링은 filter 안에 넣어 캐싱 효과 활용
+- 10,000건 초과 페이지네이션은 `search_after` 사용
+{{< /callout >}}
 
 ---
 

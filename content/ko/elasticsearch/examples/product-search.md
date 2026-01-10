@@ -1,8 +1,16 @@
 ---
 title: 상품 검색 시스템
 weight: 3
-lastmod: 2026-01-08
+lastmod: 2026-01-10
 ---
+
+{{% notice style="tip" title="TL;DR" %}}
+- **Nori 분석기**로 한글 형태소 분석을 적용하여 "삼성전자" → "삼성", "전자" 검색을 구현합니다
+- **Edge N-gram**으로 자동완성 기능을 구현합니다
+- **Bool Query + Aggregation**으로 필터링과 패싯(facet)을 제공합니다
+- **하이라이팅**으로 검색어를 강조 표시합니다
+- 전체 소요 시간: 약 30분
+{{% /notice %}}
 
 한글 형태소 분석, 자동완성, 필터링을 포함한 실제 서비스 수준의 상품 검색 시스템을 구현합니다.
 
@@ -150,6 +158,12 @@ GET /products/_analyze
 }
 // 결과: ["맥", "맥북"]
 ```
+
+{{% notice style="note" title="핵심 포인트" %}}
+- `nori_tokenizer`의 `decompound_mode: mixed`로 복합어를 분해합니다
+- `edge_ngram`은 접두사 매칭용, 검색 시에는 `standard` 분석기를 사용합니다
+- `Multi-field`로 같은 필드를 여러 용도(검색, 정렬, 자동완성)로 활용합니다
+{{% /notice %}}
 
 ---
 
@@ -310,6 +324,12 @@ GET /products/_search
   }
 }
 ```
+
+{{% notice style="note" title="핵심 포인트" %}}
+- `multi_match`로 여러 필드를 동시에 검색하고, `fields` 가중치(`^3`)로 중요도를 조절합니다
+- `must`는 점수에 영향, `filter`는 캐싱되어 성능이 좋습니다
+- `aggs`로 필터 패싯을 제공하면 사용자가 결과를 좁힐 수 있습니다
+{{% /notice %}}
 
 ---
 
@@ -579,6 +599,12 @@ public class ProductController {
 }
 ```
 
+{{% notice style="note" title="핵심 포인트" %}}
+- `@MultiField`로 같은 필드를 여러 분석기로 인덱싱합니다
+- `ElasticsearchOperations`로 복잡한 Bool Query와 Aggregation을 구성합니다
+- `SearchHit`의 `getHighlightFields()`로 하이라이팅된 텍스트를 가져옵니다
+{{% /notice %}}
+
 ---
 
 ## 5. API 테스트
@@ -648,6 +674,12 @@ curl "http://localhost:8080/api/products/autocomplete?q=맥북"
   }
 }
 ```
+
+{{% notice style="note" title="핵심 포인트" %}}
+- **동의어**를 추가하면 "노트북", "랩탑" 같은 유사어 검색이 가능합니다
+- **function_score**로 베스트셀러나 리뷰 수에 따른 가중치를 부여합니다
+- 검색 품질 개선은 지속적인 테스트와 사용자 피드백 반영이 핵심입니다
+{{% /notice %}}
 
 ---
 

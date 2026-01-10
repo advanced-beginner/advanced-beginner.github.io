@@ -1,8 +1,15 @@
 ---
 title: 환경 설정
 weight: 1
-lastmod: 2026-01-08
+lastmod: 2026-01-10
 ---
+
+{{% notice style="tip" title="TL;DR" %}}
+- **Docker Compose**로 Elasticsearch 8.11 + Kibana 환경을 빠르게 구성합니다
+- **Spring Boot 3.2** + Spring Data Elasticsearch로 연동 설정을 완료합니다
+- **Nori 분석기**를 설치하여 한글 검색을 준비합니다
+- 전체 소요 시간: 약 15분
+{{% /notice %}}
 
 {{% notice style="info" title="버전 정보" %}}
 - **Elasticsearch / Kibana**: 8.11.0
@@ -111,6 +118,12 @@ docker-compose down
 docker-compose down -v
 ```
 
+{{% notice style="note" title="핵심 포인트" %}}
+- `single-node` 모드는 개발 환경 전용입니다
+- `xpack.security.enabled=false`는 개발용이며, 프로덕션에서는 반드시 활성화하세요
+- 포트 9200(REST API), 5601(Kibana)가 열려있는지 확인하세요
+{{% /notice %}}
+
 ---
 
 ## Spring Boot 프로젝트 설정
@@ -184,6 +197,12 @@ public class ElasticsearchConfig extends ElasticsearchConfiguration {
 }
 ```
 
+{{% notice style="note" title="핵심 포인트" %}}
+- `spring-boot-starter-data-elasticsearch` 의존성 하나로 연동 설정 완료
+- `application.yml`의 `uris` 설정이 Docker 환경과 일치해야 합니다
+- 로그 레벨을 DEBUG로 설정하면 ES 쿼리를 확인할 수 있습니다
+{{% /notice %}}
+
 ---
 
 ## 한글 분석기 (Nori) 설정
@@ -234,6 +253,12 @@ GET /_analyze
   ]
 }
 ```
+
+{{% notice style="note" title="핵심 포인트" %}}
+- Nori 설치는 Dockerfile에서 `elasticsearch-plugin install analysis-nori` 명령 실행
+- `_analyze` API로 토큰화 결과를 확인하여 분석기 동작 검증
+- 복합어 분해(`삼성전자` → `삼성`, `전자`)를 위해 `decompound_mode: mixed` 사용
+{{% /notice %}}
 
 ---
 
@@ -301,6 +326,12 @@ Elasticsearch cluster not available: connect timed out
 1. `application.yml`의 `uris` 주소 확인
 2. Elasticsearch가 완전히 시작될 때까지 대기 (healthcheck 통과 확인)
 3. Docker 네트워크 설정 확인 (같은 네트워크인지)
+
+{{% notice style="note" title="핵심 포인트" %}}
+- 대부분의 연결 문제는 Elasticsearch가 완전히 시작되기 전에 접속을 시도해서 발생합니다
+- `docker-compose ps`로 상태 확인, `curl localhost:9200`로 응답 확인
+- Linux에서 `vm.max_map_count` 설정은 필수입니다
+{{% /notice %}}
 
 ---
 

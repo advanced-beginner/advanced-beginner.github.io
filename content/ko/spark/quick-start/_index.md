@@ -1,11 +1,21 @@
 ---
 title: Quick Start
 weight: 1
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 author:
   name: Advanced Beginner
   github: advanced-beginner
 ---
+
+> **대상 독자**: 빅데이터 처리에 관심이 있는 Java 개발자
+> **선수 지식**: Java 기본 문법, SQL 기초, Gradle/Maven 사용 경험
+> **이 문서를 읽으면**: 로컬 환경에서 Spark 프로젝트를 생성하고, DataFrame으로 CSV 데이터를 조회/집계할 수 있습니다
+
+{{< callout type="tip" title="TL;DR" >}}
+- SparkSession은 Spark의 통합 진입점으로 `SparkSession.builder().getOrCreate()`로 생성합니다
+- DataFrame API로 필터링, 집계, SQL 쿼리를 실행할 수 있습니다
+- `local[*]` 모드로 로컬 개발 환경에서 바로 테스트할 수 있습니다
+{{< /callout >}}
 
 5분 만에 Spark 애플리케이션을 실행하고 데이터를 처리해봅니다. 이 가이드를 따라하면 프로젝트 생성부터 데이터 조회까지 전체 과정을 경험할 수 있습니다.
 
@@ -29,7 +39,15 @@ flowchart LR
 - **Gradle** 또는 **Maven**
 - **IDE** (IntelliJ IDEA, VS Code 등)
 
-#### Step 1: 프로젝트 생성
+**시작 전 확인**
+
+| 항목 | 확인 명령어 | 예상 결과 |
+|------|-------------|-----------|
+| Java | `java -version` | `openjdk version "17.x.x"` 이상 |
+| Gradle | `gradle --version` | `Gradle 8.x` 이상 |
+| Maven (대안) | `mvn --version` | `Apache Maven 3.x.x` |
+
+#### Step 1/5: 프로젝트 생성 (~1분)
 
 Spring Initializr나 IDE에서 Java 프로젝트를 생성합니다. 이 예제에서는 순수 Java 프로젝트로 시작합니다.
 
@@ -38,7 +56,7 @@ mkdir spark-quickstart
 cd spark-quickstart
 ```
 
-#### Step 2: Gradle 설정
+#### Step 2/5: Gradle 설정 (~2분)
 
 `build.gradle` 파일을 생성합니다:
 
@@ -145,7 +163,7 @@ Maven을 선호한다면 아래 `pom.xml` 설정을 사용합니다:
 mvn compile exec:java
 ```
 
-#### Step 3: 샘플 데이터 생성
+#### Step 3/5: 샘플 데이터 생성 (~1분)
 
 `src/main/resources/employees.csv` 파일을 생성합니다:
 
@@ -161,7 +179,7 @@ id,name,department,salary
 8,윤서연,Engineering,5200
 ```
 
-#### Step 4: Spark 애플리케이션 작성
+#### Step 4/5: Spark 애플리케이션 작성 (~3분)
 
 `src/main/java/com/example/SparkQuickStart.java`:
 
@@ -234,7 +252,7 @@ public class SparkQuickStart {
 }
 ```
 
-#### Step 5: 실행
+#### Step 5/5: 실행 (~1분)
 
 ```bash
 ./gradlew run

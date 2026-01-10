@@ -1,10 +1,18 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: 용어 사전
 weight: 1
 ---
 
 Scala 핵심 용어를 알파벳 순으로 정리합니다. 상세 설명은 [개념 이해](../../concepts/) 섹션을 참고하세요. 각 용어는 정의와 함께 관련 문서 링크를 제공합니다.
+
+{{% notice style="tip" title="TL;DR - 핵심 용어 5선" %}}
+- **Case Class**: 불변 데이터 클래스, `equals`/`copy` 자동 생성
+- **Option[A]**: null 대체, `Some(값)` 또는 `None`
+- **Pattern Matching**: 구조 분석 및 데이터 추출 (`match` 표현식)
+- **Trait**: 구현 포함 가능한 인터페이스, 믹스인 상속 지원
+- **given/using** (Scala 3): 암시적 값/매개변수의 새로운 문법
+{{% /notice %}}
 
 #### A
 
@@ -30,6 +38,12 @@ Scala 핵심 용어를 알파벳 순으로 정리합니다. 상세 설명은 [�
 
 **Currying (커링)**
 : 여러 인자를 받는 함수를 단일 인자 함수의 체인으로 변환하는 기법. [Higher-Order Function](#higher-order-function)과 함께 사용. → [함수와 메서드](../../concepts/functions-methods/)
+
+{{% notice style="note" title="A-C 핵심 포인트" %}}
+- **ADT**: `sealed trait` + `case class`로 타입 안전한 데이터 모델링
+- **Case Class**: 불변 데이터에 최적, 패턴 매칭과 함께 사용
+- **Companion Object**: 팩토리 메서드(`apply`)와 유틸리티 함수 배치
+{{% /notice %}}
 
 #### E
 
@@ -80,6 +94,12 @@ Scala 핵심 용어를 알파벳 순으로 정리합니다. 상세 설명은 [�
 **Intersection Type (&)**
 : 여러 타입을 모두 만족하는 타입. `A & B`. [Union Type](#union-type-)과 반대. → [고급 타입 시스템](../../concepts/type-system-advanced/)
 
+{{% notice style="note" title="E-I 핵심 포인트" %}}
+- **Either/Option**: null 대신 사용, 에러 처리의 함수형 방식
+- **flatMap**: Monad의 핵심, for comprehension으로 우아하게 표현
+- **given/using** (Scala 3): `implicit`을 대체하는 명확한 문법
+{{% /notice %}}
+
 #### L
 
 **Lazy val**
@@ -103,6 +123,12 @@ Scala 핵심 용어를 알파벳 순으로 정리합니다. 상세 설명은 [�
 
 **Option[A]**
 : 값이 있거나(`Some`) 없음(`None`)을 나타내는 타입. `null` 대체. [flatMap](#flatmap)과 [For Comprehension](#for-comprehension)으로 안전하게 처리. → [기초 문법](../../concepts/basics/)
+
+{{% notice style="note" title="L-O 핵심 포인트" %}}
+- **lazy val**: 비용이 큰 초기화를 첫 사용 시점까지 지연
+- **Monad**: `flatMap` + `pure`, 순차적 효과 조합의 핵심 추상화
+- **Option**: null 대신 `Some`/`None`으로 타입 안전한 처리
+{{% /notice %}}
 
 #### P
 
@@ -148,6 +174,12 @@ Scala 핵심 용어를 알파벳 순으로 정리합니다. 상세 설명은 [�
 **Type Inference**
 : 컴파일러가 타입을 자동으로 추론하는 기능. Scala의 강력한 타입 추론으로 보일러플레이트 감소. → [기초 문법](../../concepts/basics/)
 
+{{% notice style="note" title="P-T 핵심 포인트" %}}
+- **Pattern Matching**: `match` 표현식으로 데이터 구조 분해 및 분기
+- **Sealed**: 상속을 같은 파일로 제한, 패턴 매칭 완전성 검사
+- **Type Class**: 기존 타입에 기능 추가, Ad-hoc 다형성 구현
+{{% /notice %}}
+
 #### U
 
 **Union Type (|)**
@@ -171,6 +203,12 @@ Scala 핵심 용어를 알파벳 순으로 정리합니다. 상세 설명은 [�
 
 **yield**
 : [For Comprehension](#for-comprehension)에서 값을 생성하는 키워드. `map` 호출로 변환됨. → [For Comprehension 상세](../../concepts/for-comprehensions/)
+
+{{% notice style="note" title="U-Y 핵심 포인트" %}}
+- **Union Type** (`|`): Scala 3 전용, `Either` 대신 간결한 타입 표현
+- **val/var**: `val`(불변) 우선, `var`(가변)는 최소화
+- **Variance**: 공변(`+A`), 반공변(`-A`)으로 타입 관계 정의
+{{% /notice %}}
 
 ---
 

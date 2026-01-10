@@ -1,10 +1,26 @@
 ---
 title: Spark Connect
 weight: 12
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- Spark Connect는 gRPC 기반 클라이언트-서버 분리 아키텍처 (Spark 3.4+)
+- 경량 클라이언트(~10MB)로 원격 Spark 클러스터 접근
+- `SparkSession.builder().remote("sc://host:port")` 로 연결
+- DataFrame API 완전 지원, RDD API/Streaming은 제한적
+{{< /callout >}}
+
+**대상 독자**: 마이크로서비스 환경에서 Spark를 사용하려는 개발자
+
+**선수 지식**:
+- [아키텍처](../architecture/) 문서의 Driver/Executor 개념
+- gRPC 기본 개념 (선택 사항)
+- [DataFrame과 Dataset](../dataframe-dataset/) API
+
 ---
 
 Spark Connect는 Spark 3.4에서 도입된 새로운 클라이언트-서버 아키텍처입니다. 씬 클라이언트(Thin Client)로 원격 Spark 클러스터에 연결할 수 있습니다.
@@ -32,6 +48,8 @@ flowchart TB
     end
 ```
 
+*그림: 기존 방식 vs Spark Connect - 기존에는 Application이 Driver를 직접 포함했지만, Spark Connect에서는 Thin Client가 gRPC로 서버에 연결하고 서버가 Driver와 Executor를 관리합니다.*
+
 **주요 차이점**
 
 | 구분 | 기존 방식 | Spark Connect |
@@ -42,6 +60,13 @@ flowchart TB
 | **리소스 격리** | 클라이언트에 Driver 리소스 필요 | 서버에서만 리소스 사용 |
 | **업그레이드** | 클라이언트 재배포 필요 | 서버만 업그레이드 |
 | **안정성** | 클라이언트 충돌 시 작업 중단 | 서버 독립적으로 안정 |
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 기존: 애플리케이션에 Driver 내장 (모놀리식)
+- Spark Connect: 클라이언트-서버 분리, gRPC 통신
+- 클라이언트 크기: ~200MB → ~10MB로 경량화
+- 서버만 업그레이드하면 모든 클라이언트에 적용
+{{< /callout >}}
 
 #### Spark Connect 장점
 

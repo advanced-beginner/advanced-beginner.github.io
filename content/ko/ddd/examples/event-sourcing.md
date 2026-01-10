@@ -1,10 +1,27 @@
 ---
-lastmod: "2026-01-08"
+lastmod: "2026-01-10"
 title: Event Sourcing 실습
 weight: 4
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
+
+{{% notice style="primary" title="TL;DR" %}}
+- **Event Sourcing**: 상태 대신 이벤트를 저장. 이벤트 재생으로 상태 복원
+- **Event Store**: 이벤트 영속화 저장소. 버전 기반 낙관적 동시성 제어
+- **Event-Sourced Aggregate**: apply/when 패턴으로 이벤트 적용 및 상태 변경
+- **Snapshot**: 성능 최적화를 위해 주기적으로 상태 스냅샷 저장
+- **시점 복원**: 특정 버전까지의 이벤트만 재생하여 과거 상태 조회 가능
+{{% /notice %}}
+
+## 대상 독자 및 선수 지식
+
+| 항목 | 요구 수준 |
+|------|----------|
+| **대상 독자** | Event Sourcing 패턴을 실제로 구현해보려는 개발자 |
+| **DDD** | Aggregate, Domain Event 개념 이해 |
+| **Java** | Switch Expression, Pattern Matching 문법 |
+| **선수 문서** | [주문 도메인](../order-domain/), [애플리케이션 계층](../application-layer/) 완료 |
 
 Event Sourcing 패턴을 실제 주문 도메인에 구현합니다. 상태 대신 이벤트를 저장하고, 이벤트를 재생하여 상태를 복원합니다.
 
@@ -25,6 +42,8 @@ flowchart LR
     end
 ```
 
+> **다이어그램 설명**: 왼쪽(기존 방식)은 Order가 DB에 현재 상태(status: CONFIRMED, amount: 50000)를 저장합니다. 오른쪽(Event Sourcing)은 Order가 Event Store에 이벤트 시퀀스(OrderCreated, ItemAdded, OrderConfirmed)를 저장합니다.
+
 | 구분 | 기존 방식 | Event Sourcing |
 |------|----------|----------------|
 | **저장 대상** | 현재 상태 | 모든 이벤트 |
@@ -32,6 +51,13 @@ flowchart LR
 | **시점 복원** | 불가능 | 특정 시점 재현 가능 |
 | **디버깅** | 어려움 | 이벤트 추적 용이 |
 | **복잡도** | 낮음 | 높음 |
+
+{{% notice style="tip" title="핵심 포인트: Event Sourcing 개념" %}}
+- **상태 저장 X, 이벤트 저장 O**: 현재 상태는 이벤트 재생으로 계산
+- **완전한 이력**: 모든 변경 이력이 자동으로 보존됨
+- **시간 여행**: 특정 시점의 상태를 언제든 복원 가능
+- **트레이드오프**: 구현 복잡도 증가, 조회 성능 고려 필요
+{{% /notice %}}
 
 ---
 
@@ -138,6 +164,13 @@ public class OrderCancelledEvent extends DomainEvent {
     }
 }
 ```
+
+{{% notice style="tip" title="핵심 포인트: 도메인 이벤트" %}}
+- **버전 포함**: 각 이벤트는 Aggregate의 버전 번호를 포함
+- **불변**: 이벤트는 한번 생성되면 변경 불가
+- **자기 설명적**: getEventType()으로 이벤트 종류 식별
+- **필요한 데이터만**: 상태 복원에 필요한 최소한의 데이터만 포함
+{{% /notice %}}
 
 ---
 
@@ -283,6 +316,14 @@ public abstract class EventSourcedAggregate {
 }
 ```
 
+{{% notice style="tip" title="핵심 포인트: Event-Sourced Aggregate" %}}
+- **apply/when 패턴**: apply()가 이벤트를 기록하고, when()이 상태 변경
+- **명령 메서드**: 유효성 검증 후 이벤트 생성 (addItem, confirm, cancel)
+- **reconstitute**: 이벤트 리스트로부터 상태 복원
+- **uncommittedEvents**: 저장되지 않은 이벤트 추적
+- **버전 관리**: nextVersion()으로 순차적 버전 번호 할당
+{{% /notice %}}
+
 ---
 
 ## Event Store 구현
@@ -424,6 +465,13 @@ public class JpaEventStore implements EventStore {
 }
 ```
 
+{{% notice style="tip" title="핵심 포인트: Event Store" %}}
+- **Append-Only**: 이벤트는 추가만 가능, 수정/삭제 불가
+- **낙관적 동시성**: expectedVersion 검증으로 동시 수정 충돌 감지
+- **JSON 직렬화**: 이벤트를 JSON으로 저장하여 유연성 확보
+- **버전별 조회**: loadFromVersion()으로 특정 버전 이후 이벤트만 로드
+{{% /notice %}}
+
 ---
 
 ## Repository 구현
@@ -464,6 +512,13 @@ public class EventSourcedOrderRepository implements OrderRepository {
     }
 }
 ```
+
+{{% notice style="tip" title="핵심 포인트: Repository" %}}
+- **Event Store 위임**: 이벤트 저장/조회를 Event Store에 위임
+- **버전 계산**: 저장 시 expectedVersion = 현재 버전 - 미커밋 이벤트 수
+- **reconstitute 활용**: 이벤트로부터 Aggregate 복원
+- **Domain Repository 인터페이스**: 도메인 계층에 인터페이스 정의
+{{% /notice %}}
 
 ---
 
@@ -549,6 +604,13 @@ public class SnapshotStore {
     }
 }
 ```
+
+{{% notice style="tip" title="핵심 포인트: 스냅샷" %}}
+- **성능 최적화**: 이벤트가 많을 때 전체 재생 비용 절감
+- **주기적 생성**: SNAPSHOT_THRESHOLD(예: 100) 이벤트마다 스냅샷 생성
+- **부분 재생**: 스냅샷 + 이후 이벤트만 재생하여 상태 복원
+- **상태 직렬화**: Aggregate 상태를 JSON으로 저장
+{{% /notice %}}
 
 ---
 
@@ -636,6 +698,13 @@ public class OrderApplicationService {
 }
 ```
 
+{{% notice style="tip" title="핵심 포인트: Application Service" %}}
+- **시점 조회**: getOrderAtVersion()으로 특정 버전의 상태 조회
+- **이벤트 필터링**: version <= targetVersion 조건으로 과거 상태 복원
+- **외부 이벤트 발행**: 저장 후 ApplicationEventPublisher로 외부 시스템 알림
+- **표준 CRUD 패턴**: 기존 방식과 동일한 서비스 인터페이스 유지
+{{% /notice %}}
+
 ---
 
 ## 테스트
@@ -694,6 +763,13 @@ class OrderTest {
     }
 }
 ```
+
+{{% notice style="tip" title="핵심 포인트: 테스트" %}}
+- **이벤트 검증**: getUncommittedEvents()로 발생한 이벤트 확인
+- **상태 복원 테스트**: 이벤트 리스트로 reconstitute 후 상태 검증
+- **불변식 테스트**: 잘못된 상태 전이 시도 시 예외 발생 확인
+- **독립적 테스트**: DB 없이 도메인 로직만 단위 테스트 가능
+{{% /notice %}}
 
 ---
 

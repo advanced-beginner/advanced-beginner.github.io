@@ -1,10 +1,28 @@
 ---
 title: 환경 설정
 weight: 1
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+{{% notice style="tip" title="TL;DR" %}}
+- **Gradle 의존성**: `spark-core_2.13:3.5.1`, `spark-sql_2.13:3.5.1`
+- **로깅 충돌 방지**: `exclude group: 'org.slf4j'` 필수
+- **SparkSession**: `getOrCreate()`로 싱글톤 관리
+- **Windows**: winutils 설정 필요
+{{% /notice %}}
+
+## 대상 독자 및 선수 지식
+
+| 구분 | 내용 |
+|------|------|
+| **대상 독자** | Java/Spring Boot 프로젝트에 Spark를 도입하려는 개발자 |
+| **선수 지식** | Java 17, Gradle 기본, Spring Boot 경험 (선택) |
+| **학습 목표** | 로컬 환경에서 Spark 애플리케이션을 실행할 수 있다 |
+| **예상 소요 시간** | 약 15분 |
+
 ---
 
 Java/Spring Boot 프로젝트에서 Spark를 사용하기 위한 환경을 구성합니다.
@@ -109,6 +127,13 @@ public class SparkApp {
     }
 }
 ```
+
+{{% notice style="info" title="핵심 포인트: 순수 Java 설정" %}}
+- **Scala 버전 일치**: 모든 Spark 의존성은 동일한 Scala 버전(2.13) 사용
+- **로깅 충돌 제거**: `exclude group: 'org.slf4j'`로 충돌 방지
+- **메모리 설정**: `-Xmx2g` 이상 권장 (데이터 크기에 따라 조정)
+- **local[\*]**: 모든 CPU 코어 사용 (로컬 개발 모드)
+{{% /notice %}}
 
 #### Spring Boot 통합
 
@@ -321,6 +346,13 @@ public class DataController {
 }
 ```
 
+{{% notice style="info" title="핵심 포인트: Spring Boot 통합" %}}
+- **@Configuration + @Bean**: SparkSession을 Spring Bean으로 관리
+- **@PreDestroy**: 애플리케이션 종료 시 SparkSession 정리
+- **application.yml**: 환경별 Spark 설정 분리 (local, production)
+- **의존성 주입**: Service 레이어에서 SparkSession 주입받아 사용
+{{% /notice %}}
+
 #### 로깅 설정
 
 **log4j2.properties**
@@ -444,6 +476,13 @@ Unsupported class file major version
 ```bash
 java -version  # 버전 확인
 ```
+
+{{% notice style="info" title="핵심 포인트: 트러블슈팅" %}}
+- **SLF4J 충돌**: `configurations.all { exclude group: 'org.slf4j' }`로 해결
+- **SparkContext 중복**: `getOrCreate()` 메서드로 기존 세션 재사용
+- **메모리 부족**: `spark.driver.memory`, `spark.executor.memory` 증가
+- **Java 버전**: Spark 3.5는 Java 8, 11, 17 지원 (21은 미지원)
+{{% /notice %}}
 
 #### 다음 단계
 

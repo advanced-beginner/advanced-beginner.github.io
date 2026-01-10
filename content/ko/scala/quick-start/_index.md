@@ -1,14 +1,31 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: Quick Start
 weight: 1
 ---
+
+> **대상 독자**: Scala를 처음 시작하는 Java/Kotlin 개발자 또는 함수형 프로그래밍에 관심 있는 개발자
+> **선수 지식**: 프로그래밍 기본 개념, 터미널/명령줄 사용 경험
+> **이 문서를 읽으면**: Scala 개발 환경을 구축하고, REPL과 sbt 프로젝트에서 간단한 코드를 실행할 수 있습니다
+
+{{< callout type="tip" title="TL;DR" >}}
+- Coursier(`cs setup`)로 Scala, sbt를 한 번에 설치합니다
+- `val`(불변), `var`(가변), `def`(함수)가 Scala의 기본 키워드입니다
+- sbt는 Scala 표준 빌드 도구로, `sbt run`으로 프로젝트를 실행합니다
+{{< /callout >}}
 
 5분 만에 Scala를 설치하고 첫 번째 프로그램을 실행해봅니다. 이 가이드는 설치부터 sbt 프로젝트 생성, IDE 설정까지 실무에서 바로 사용할 수 있는 환경을 구축하는 과정을 안내합니다.
 
 > 🎯 **설치 없이 바로 실행:** [Scastie](https://scastie.scala-lang.org/)에서 브라우저로 Scala를 바로 실행해볼 수 있습니다!
 
-#### 1. Scala 설치
+**시작 전 확인**
+
+| 항목 | 확인 명령어 | 예상 결과 |
+|------|-------------|-----------|
+| Java (선택) | `java -version` | `openjdk version "17.x.x"` (sbt가 자동 설치 가능) |
+| 터미널 | - | bash, zsh, PowerShell 중 하나 |
+
+#### Step 1/5: Scala 설치 (~2분)
 
 Scala를 설치하는 가장 쉬운 방법은 Coursier를 사용하는 것입니다. Coursier는 Scala, sbt, 그리고 다양한 Scala 도구를 한 번에 설치해주는 공식 설치 도구입니다.
 
@@ -66,7 +83,7 @@ cs install scala:3
 cs install scala:2.13.12
 ```
 
-#### 2. Hello World
+#### Step 2/5: Hello World (~1분)
 
 Scala의 기본 문법을 확인하는 가장 좋은 방법은 간단한 Hello World 프로그램을 작성하는 것입니다. REPL에서 바로 실행하거나 파일로 저장해서 실행할 수 있습니다.
 
@@ -126,7 +143,7 @@ scala Hello.scala
 # Hello, Scala 2!
 ```
 
-#### 3. sbt 프로젝트 생성
+#### Step 3/5: sbt 프로젝트 생성 (~3분)
 
 실제 프로젝트에서는 sbt(Scala Build Tool)를 사용합니다. sbt는 의존성 관리, 컴파일, 테스트, 패키징 등 프로젝트 빌드에 필요한 모든 기능을 제공하는 Scala 표준 빌드 도구입니다.
 
@@ -212,7 +229,7 @@ sbt run
 | `sbt console` | REPL 실행 (프로젝트 의존성 포함) |
 | `sbt ~compile` | 파일 변경 시 자동 컴파일 |
 
-#### 4. IDE 설정
+#### Step 4/5: IDE 설정 (~2분)
 
 효율적인 Scala 개발을 위해서는 IDE 설정이 중요합니다. 코드 자동 완성, 타입 검사, 리팩토링 지원 등을 받을 수 있습니다. 두 가지 주요 선택지가 있습니다.
 
@@ -232,7 +249,7 @@ VS Code는 가볍고 빠른 에디터로, Metals 확장을 통해 Scala Language
 3. sbt 프로젝트 폴더 열기
 4. "Import build" 클릭
 
-#### 5. 간단한 예제
+#### Step 5/5: 간단한 예제 (~2분)
 
 설치가 완료되었으니 Scala의 기본 문법을 간단한 예제로 살펴봅니다. 아래 코드들은 Scala의 핵심적인 특징인 타입 추론, 불변성, 함수형 컬렉션 연산을 보여줍니다.
 

@@ -1,9 +1,23 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: 심화 개념
 weight: 5
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- acks=0(빠름/유실 가능), acks=1(Leader만 확인), acks=all(ISR 전체 확인, 권장)
+- acks=all + min.insync.replicas=2 조합으로 데이터 안전성 확보
+- Message Key로 같은 Partition에 전송하여 순서 보장, Partition 수 변경 주의
+- Retention: 시간 기반 삭제(기본 7일), 용량 기반 삭제, Log Compaction
+- Idempotent Producer(Kafka 3.0+ 기본)로 네트워크 오류 시 중복 방지
+{{< /callout >}}
+
+**대상 독자**: Kafka의 심화 개념을 이해하고 프로덕션 설정을 최적화하려는 개발자
+
+**선수 지식**: [메시지 흐름](../message-flow/)의 Topic, Partition, Broker 개념, [Replication](../replication/)의 ISR, Leader, Follower 개념
+
 ---
 
 acks, Message Key, Retention 정책을 이해합니다. 이 문서는 Kafka 3.6.x 기준으로 작성되었으며, Spring Boot 3.2.x와 Spring Kafka 3.1.x, Java 17 환경에서 코드 예제가 검증되었습니다.
@@ -37,6 +51,8 @@ flowchart TB
     end
 ```
 
+*다이어그램: acks=0은 응답 대기 없이 즉시 완료. acks=1은 Leader 저장 확인 후 완료. acks=all은 Leader가 모든 ISR Follower에 복제 완료 후 ACK 반환.*
+
 **acks=0**은 Producer가 Broker의 응답을 기다리지 않고 즉시 다음 메시지를 전송합니다. 가장 빠른 성능을 제공하지만, Broker에 도달했는지조차 확인하지 않으므로 메시지 유실 위험이 가장 높습니다. 로그 수집이나 메트릭처럼 일부 유실이 허용되는 경우에만 사용해야 합니다.
 
 **acks=1**은 Leader Broker가 메시지를 저장한 후 ACK를 반환합니다. Leader 저장은 확인되지만, Follower에 복제되기 전에 Leader가 장애를 일으키면 메시지가 유실될 수 있습니다. 속도와 안전성의 균형이 필요한 일반적인 이벤트 처리에 적합합니다.
@@ -61,6 +77,13 @@ flowchart TB
 ```
 
 이 문제를 해결하려면 `min.insync.replicas` 설정을 함께 사용해야 합니다. 이 설정은 ACK를 반환하기 위해 동기화되어 있어야 하는 최소 복제본 수를 지정합니다. `acks=all`과 `min.insync.replicas=2`를 함께 사용하면 ISR에 최소 2개 이상의 복제본이 있어야만 쓰기가 성공합니다. ISR이 1개로 줄어들면 쓰기 요청이 실패하여 데이터 안전성이 보장됩니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- acks=0: 가장 빠름, 유실 가능 (로그/메트릭용)
+- acks=1: Leader 확인만, Leader 장애 시 유실 가능
+- acks=all: 모든 ISR 확인, 가장 안전 (프로덕션 권장)
+- acks=all만으로는 불충분, min.insync.replicas=2와 함께 사용 필수
+{{< /callout >}}
 
 ```yaml
 # Topic 설정 (권장)

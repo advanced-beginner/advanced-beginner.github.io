@@ -1,8 +1,19 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: 매크로와 메타프로그래밍
 weight: 15
 ---
+
+{{< callout type="info" title="TL;DR" >}}
+- **inline**: 컴파일 타임에 코드를 인라인하여 런타임 오버헤드 제거
+- **inline if/match**: 조건부 컴파일, 타입별 최적화
+- **compiletime 패키지**: `error`, `constValue`, `summonInline` 등 컴파일 타임 연산
+- **매크로 (`${ }`)**: 컴파일 타임 코드 생성, `scala.quoted` API 사용
+- Scala 3 매크로는 Scala 2보다 타입 안전하고 간결
+{{< /callout >}}
+
+**대상 독자:** 타입 수준 프로그래밍에 익숙한 고급 개발자
+**선수 지식:** 제네릭, 타입 클래스, 고급 타입 시스템
 
 메타프로그래밍을 통해 컴파일 타임에 코드를 생성하거나 검증할 수 있습니다. Scala 3에서는 `inline`과 새로운 매크로 시스템을 제공합니다. 이 기능들을 활용하면 보일러플레이트 코드를 줄이고, 컴파일 시점에 최적화를 수행하며, 타입 안전한 코드 생성이 가능합니다.
 
@@ -58,6 +69,12 @@ inline def debug(inline msg: String): Unit =
 debug("디버그 메시지")  // Config.Debug가 false면 코드 자체가 제거됨
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- `inline def`: 호출 지점에서 함수 본문으로 대체
+- `inline val`: 상수가 컴파일 타임에 인라인
+- `inline if`: 조건에 따라 코드가 컴파일 타임에 선택
+{{< /callout >}}
+
 #### Inline Match
 
 컴파일 타임에 패턴 매칭을 수행합니다. `inline match`는 입력 타입에 따라 적절한 분기를 컴파일 타임에 선택하여 런타임 패턴 매칭 오버헤드를 제거합니다.
@@ -88,6 +105,12 @@ val s1: String = stringify(42)      // "42"
 val s2: String = stringify("hello") // "hello"
 val s3: String = stringify(3.14159) // "3.14"
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- `inline match`: 컴파일 타임 패턴 매칭
+- `transparent inline`: 더 정밀한 반환 타입 추론
+- 타입별로 최적화된 코드 생성
+{{< /callout >}}
 
 #### Compile-time Operations
 
@@ -144,6 +167,12 @@ inline def show[A](a: A): String =
   summonInline[Show[A]].show(a)
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- `error`: 컴파일 타임 에러 발생
+- `constValue`: 리터럴 타입에서 값 추출
+- `summonInline`: 컴파일 타임 타입 클래스 소환
+{{< /callout >}}
+
 #### 매크로
 
 Scala 3의 매크로는 `quotes` API를 사용합니다. 매크로를 통해 컴파일 타임에 코드를 분석하고 새로운 코드를 생성할 수 있습니다. `inline`보다 더 강력하지만 복잡도도 높습니다.
@@ -178,6 +207,12 @@ inline def toStringMacro[T](x: T): String = ${ toStringImpl('x) }
 def toStringImpl[T: Type](x: Expr[T])(using Quotes): Expr[String] =
   '{ ${x}.toString }
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- `${ ... }`: 스플라이스, 컴파일 타임에 실행
+- `'{ ... }`: 인용, 런타임 코드 표현
+- `Expr[T]`: 타입 안전한 표현식 래퍼
+{{< /callout >}}
 
 #### Scala 2 vs Scala 3 매크로
 

@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: 자주 묻는 질문
 weight: 4
 author: "@kimbenji"
@@ -7,6 +7,15 @@ author_url: "http://github.com/kimbenji"
 ---
 
 Kafka를 사용하면서 자주 받는 질문과 답변을 정리했습니다. 기본 개념부터 설정, 에러 처리, 성능 튜닝, 운영, Spring Kafka까지 주제별로 구성했습니다.
+
+{{% notice style="tip" title="TL;DR" %}}
+- **기본 개념**: Kafka는 메시지 큐가 아닌 분산 이벤트 스트리밍 플랫폼, Partition 단위 순서 보장
+- **설정**: `acks=all`로 안정성 확보, `auto.offset.reset=earliest` 권장, 수동 커밋으로 메시지 유실 방지
+- **에러 처리**: `@RetryableTopic`으로 재시도 후 Dead Letter Topic으로 이동
+- **성능**: Producer는 배치/압축, Consumer는 인스턴스 수 증가 및 fetch 설정 조정
+- **운영**: `replication.factor=3`, `min.insync.replicas=2` 권장
+- **Spring Kafka**: `KafkaTemplate`과 `@KafkaListener`로 간편하게 구현
+{{% /notice %}}
 
 #### 기본 개념
 
@@ -43,6 +52,13 @@ Key 선택 기준은 비즈니스 엔티티의 식별자를 사용하는 것입�
 Consumer Group은 병렬 처리와 장애 복구를 위해 필요합니다. 같은 Group ID를 가진 Consumer들은 Topic의 Partition을 나누어 처리합니다. 예를 들어 6개 Partition을 3개 Consumer가 처리하면 각 Consumer가 2개씩 담당합니다.
 
 장점으로는 Partition을 분배하여 처리량을 높일 수 있고, Consumer에 장애가 발생하면 해당 Consumer의 Partition이 다른 Consumer에게 자동으로 재할당되며, 독립적인 Consumer Group은 동일한 메시지를 각자 처리할 수 있어 여러 서비스가 같은 이벤트를 활용할 수 있습니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Kafka는 메시지 큐가 아니라 **분산 이벤트 스트리밍 플랫폼**입니다
+- 메시지 순서는 **같은 Partition 내에서만** 보장됩니다
+- Partition 수는 처음에 적게 시작하고 필요시 늘리세요 (줄일 수 없음)
+- Consumer Group으로 **병렬 처리**와 **장애 복구**를 구현합니다
+{{< /callout >}}
 
 #### 설정 관련
 
@@ -93,6 +109,12 @@ public void listen(String message, Acknowledgment ack) {
 ```
 
 수동 커밋을 사용하면 메시지 처리가 성공한 후에만 커밋하므로 실패 시 재처리가 가능합니다. 설정은 enable-auto-commit을 false로, ack-mode를 manual로 지정합니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- **acks=all**: 중요 데이터에는 모든 ISR 확인으로 안정성 확보
+- **auto.offset.reset=earliest**: 데이터 유실 방지를 위해 처음부터 읽기 권장
+- **enable.auto.commit=false**: 수동 커밋으로 처리 완료 후에만 Offset 저장
+{{< /callout >}}
 
 #### 에러 처리
 
@@ -149,6 +171,12 @@ spring:
 
 Consumer 측에서도 멱등성을 보장해야 합니다. 이미 처리한 메시지 ID를 저장하고, 중복 메시지가 들어오면 건너뛰는 방식으로 구현합니다. 또는 비즈니스 로직 자체가 멱등하도록 설계합니다. 예를 들어 "잔액에서 1000원 차감" 대신 "잔액을 50000원으로 설정"과 같이 구현합니다.
 
+{{< callout type="info" title="핵심 포인트" >}}
+- **@RetryableTopic**: 재시도 횟수와 백오프 전략 설정 가능
+- **Dead Letter Topic**: 처리 실패 메시지를 별도 Topic에 보관하여 수동 처리
+- **멱등성**: Producer는 `enable.idempotence=true`, Consumer는 비즈니스 로직에서 중복 처리 방지
+{{< /callout >}}
+
 #### 성능 튜닝
 
 **Q: Producer 처리량을 높이려면?**
@@ -199,6 +227,12 @@ kafka-consumer-groups.sh --bootstrap-server localhost:9092 \
 
 원인별 해결책은 다음과 같습니다. Consumer 수가 부족하면 인스턴스를 추가합니다. 외부 API 호출이 느리면 비동기 처리로 전환하고 타임아웃을 설정합니다. DB가 병목이면 배치 처리를 적용하고 인덱스를 최적화합니다. 비즈니스 로직이 비효율적이면 프로파일링으로 병목을 찾아 최적화합니다.
 
+{{< callout type="info" title="핵심 포인트" >}}
+- **Producer 튜닝**: `batch.size` 증가, `linger.ms` 설정, `compression.type=lz4` 적용
+- **Consumer 튜닝**: 인스턴스 수 증가, `fetch.min.bytes`와 `max.poll.records` 조정
+- **Consumer Lag**: 처리 속도 < 유입 속도일 때 발생, 병목 지점 파악 후 해결
+{{< /callout >}}
+
 #### 운영 관련
 
 **Q: Kafka를 모니터링하려면?**
@@ -239,6 +273,13 @@ retention.ms는 시간 기반으로 7일은 604800000ms입니다. retention.byte
 
 권장 기간은 일반 이벤트는 7일, 감사 로그는 90일 이상, 디버깅용은 1~3일입니다. 디스크 용량과 비즈니스 요구사항을 고려하여 결정합니다.
 
+{{< callout type="info" title="핵심 포인트" >}}
+- **모니터링 지표**: Consumer Lag, Under-replicated Partitions, Request Latency, Disk Usage
+- **고가용성**: `replication.factor=3`, `min.insync.replicas=2` 권장
+- **Broker 장애**: ISR 기반 자동 Leader Election으로 복구
+- **메시지 보존**: 비즈니스 요구에 따라 `retention.ms`와 `retention.bytes` 설정
+{{< /callout >}}
+
 #### Spring Kafka 관련
 
 **Q: KafkaTemplate vs KafkaProducer 차이는?**
@@ -275,6 +316,12 @@ spring:
 규칙은 다음과 같습니다. concurrency가 Partition 수 이하면 concurrency만큼 스레드가 생성됩니다. concurrency가 Partition 수를 초과하면 Partition 수만큼만 스레드가 생성되고 나머지는 유휴 상태가 됩니다.
 
 예를 들어 Partition이 6개이고 concurrency가 3이면 3개 스레드가 각각 2개 Partition을 담당합니다. Partition이 3개이고 concurrency가 6이면 3개 스레드만 생성되고 각각 1개 Partition을 담당합니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- **KafkaTemplate**: Spring 추상화 계층, 자동 설정 및 트랜잭션 지원
+- **@KafkaListener**: 선언적 Consumer 구현, `concurrency`로 스레드 수 조정
+- **스레드 규칙**: 실제 스레드 수 = min(concurrency, Partition 수)
+{{< /callout >}}
 
 #### 다음 단계
 

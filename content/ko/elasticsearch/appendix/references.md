@@ -1,8 +1,15 @@
 ---
 title: 참고 자료
 weight: 3
-lastmod: 2026-01-08
+lastmod: 2026-01-10
 ---
+
+{{% notice style="tip" title="TL;DR" %}}
+- **공식 문서**: Elastic 공식 가이드, Spring Data Elasticsearch 문서
+- **한글 자료**: 우아한형제들, 카카오, 네이버 D2 기술 블로그의 실무 사례
+- **클라우드 서비스**: Elastic Cloud(공식), Amazon OpenSearch(AWS 통합), Self-Managed(완전 통제)
+- **학습 경로**: 공식 무료 교육 → 한글 블로그 → Elastic 인증
+{{% /notice %}}
 
 공식 문서, 추천 도서, 커뮤니티 리소스 링크입니다.
 

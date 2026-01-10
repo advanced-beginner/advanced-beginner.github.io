@@ -1,9 +1,23 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-10"
 title: Replication
 weight: 4
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- Replication Factor(RF)는 Partition 복제본 수, 프로덕션에서 RF=3 권장
+- Leader가 읽기/쓰기 처리, Follower는 복제만 담당하다가 장애 시 승격
+- ISR(In-Sync Replicas)은 Leader와 동기화된 복제본 집합
+- min.insync.replicas=2 + acks=all 조합으로 데이터 안전성 확보
+- KRaft 모드(Kafka 3.3+)로 Zookeeper 없이 클러스터 운영 가능
+{{< /callout >}}
+
+**대상 독자**: Kafka 클러스터를 운영하거나 고가용성 시스템을 설계하는 개발자 및 운영자
+
+**선수 지식**: [핵심 구성요소](../core-components/)의 Broker, Partition 개념
+
 ---
 
 데이터 복제는 Kafka의 고가용성과 내결함성의 핵심입니다. 복제가 없으면 단일 Broker 장애로 인해 데이터가 영구적으로 유실될 수 있습니다. 이 문서에서는 Kafka의 복제 메커니즘이 어떻게 동작하는지, 그리고 프로덕션 환경에서 어떻게 설정해야 하는지 상세히 설명합니다.
@@ -34,6 +48,14 @@ flowchart TB
     end
 ```
 
+*다이어그램: 왼쪽은 복제 없는 경우로 Broker 장애 시 데이터 유실. 오른쪽은 복제 있는 경우로 Leader에서 Follower로 복제되어 Leader 장애 시 Follower가 새 Leader로 승격.*
+
+{{< callout type="info" title="핵심 포인트" >}}
+- 복제 없이 운영하면 단일 Broker 장애로 데이터 영구 유실
+- 복제가 있으면 Leader 장애 시 ISR 중 하나가 자동으로 새 Leader로 승격
+- 데이터 유실 없이 수 초 내 서비스 복구 가능
+{{< /callout >}}
+
 #### Leader와 Follower의 역할
 
 각 Partition은 하나의 Leader와 여러 Follower로 구성됩니다. Leader는 해당 Partition에 대한 모든 읽기와 쓰기 요청을 처리합니다. Producer가 메시지를 보내면 Leader가 받아서 저장하고, Follower들에게 복제합니다. Consumer가 메시지를 요청하면 Leader가 응답합니다.
@@ -48,6 +70,14 @@ flowchart TB
     L -->|읽기| C[Consumer]
 ```
 
+*다이어그램: Producer가 Leader에 쓰기 요청을 보내면 Leader가 Follower들에게 복제. Consumer는 Leader에서만 읽기. 모든 클라이언트 요청은 Leader를 통해 처리.*
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Leader가 모든 읽기/쓰기 요청 처리, Follower는 복제만 담당
+- Follower는 Leader 장애 시 새 Leader로 승격될 준비 상태 유지
+- 클라이언트는 메타데이터를 통해 Leader 위치를 알아내어 직접 연결
+{{< /callout >}}
+
 Producer와 Consumer는 오직 Leader에만 연결됩니다. Kafka 클라이언트는 Broker에 연결할 때 메타데이터를 요청하여 각 Partition의 Leader 위치를 알아내고, 해당 Leader에 직접 연결합니다.
 
 #### Replication Factor 설정
@@ -57,6 +87,12 @@ Replication Factor는 각 Partition의 복제본 수를 결정합니다. RF=1이
 프로덕션 환경에서는 RF=3을 권장합니다. RF=2는 언뜻 보기에 충분해 보이지만 실제 운영 상황을 고려하면 위험합니다. Broker A가 Leader이고 Broker B가 Follower인 상황에서 Broker A를 정기 점검으로 내리면 Broker B가 Leader로 승격됩니다. 이 시점에서 복제본은 1개만 존재합니다. 점검 중에 Broker B에 장애가 발생하면 데이터가 유실됩니다.
 
 RF=3이면 Broker A를 내려도 Broker B와 C가 남아 복제본 2개가 유지됩니다. 점검 중 Broker B에 장애가 발생해도 Broker C가 Leader로 승격되어 서비스가 계속됩니다. 저장 비용이 50% 증가하지만 운영 안정성이 크게 향상됩니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- RF=1: 복제 없음, 단일 장애로 데이터 유실
+- RF=2: 1대 장애 허용, 정기 점검 중 추가 장애 시 위험
+- RF=3: 2대 장애 허용, 프로덕션 권장 (저장 비용 50% 증가)
+{{< /callout >}}
 
 #### ISR (In-Sync Replicas) 이해하기
 
@@ -82,6 +118,12 @@ kafka-topics.sh --describe --under-replicated-partitions \
   --bootstrap-server localhost:9092
 ```
 
+{{< callout type="info" title="핵심 포인트" >}}
+- ISR: Leader와 동기화된 복제본 집합, Leader 선출 후보군
+- High Watermark: 모든 ISR에 복제 완료된 Offset, Consumer 읽기 한계
+- replica.lag.time.max.ms: ISR 유지 최대 지연 시간 (기본 30초)
+{{< /callout >}}
+
 #### Leader Election 과정
 
 Leader 장애가 발생하면 Controller가 이를 감지하고 새로운 Leader를 선출합니다. Controller는 클러스터의 메타데이터를 관리하는 특별한 Broker입니다. KRaft 모드에서는 일부 Broker가 Controller 역할을 겸합니다.
@@ -98,6 +140,12 @@ ISR이 1개만 남으면(예: 2대의 Broker 장애) Producer가 acks=all로 메
 
 프로덕션 권장 설정은 RF=3, min.insync.replicas=2, acks=all입니다. 이 조합은 1대의 Broker 장애를 허용하면서도 데이터 안전성을 보장합니다.
 
+{{< callout type="info" title="핵심 포인트" >}}
+- min.insync.replicas: ACK 반환에 필요한 최소 ISR 수
+- ISR 부족 시 Producer 쓰기 실패 (의도적 설계로 데이터 안전성 확보)
+- 프로덕션 권장: RF=3 + min.insync.replicas=2 + acks=all
+{{< /callout >}}
+
 #### Zookeeper와 KRaft 비교
 
 Kafka 3.3 이전에는 클러스터 메타데이터 관리에 Zookeeper가 필수였습니다. Broker 상태, Topic 정보, Partition 할당, ACL 등의 정보를 Zookeeper가 관리했습니다. 하지만 Zookeeper는 외부 시스템으로서 추가적인 운영 부담을 주었고, Partition 수가 많아지면 성능 병목이 발생했습니다.
@@ -112,6 +160,12 @@ environment:
   KAFKA_PROCESS_ROLES: broker,controller
   KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- KRaft: Kafka 자체적으로 메타데이터 관리, Zookeeper 불필요 (3.3+)
+- 장점: 운영 복잡도 감소, 빠른 시작/복구, 높은 확장성
+- Kafka 4.0부터 Zookeeper 지원 제거 예정, 신규 프로젝트는 KRaft 권장
+{{< /callout >}}
 
 #### 장애 시나리오와 대응
 

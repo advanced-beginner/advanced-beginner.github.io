@@ -1,8 +1,18 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: 제어 구조
 weight: 2
 ---
+
+{{< callout type="info" title="TL;DR" >}}
+- Scala의 if, for, match는 모두 **표현식**으로 값을 반환합니다
+- for comprehension은 컬렉션 변환과 모나딕 연산을 간결하게 표현합니다
+- match는 Java switch보다 강력하며 타입 매칭, 가드 조건을 지원합니다
+- while은 문(statement)이므로 함수형 코드에서는 가급적 피합니다
+{{< /callout >}}
+
+**대상 독자:** Java/Python 등 다른 언어 경험이 있는 개발자
+**선수 지식:** Scala 기본 문법(변수, 타입)
 
 Scala의 제어 구조는 **표현식(expression)**입니다. 즉, 모든 제어 구조가 값을 반환합니다. 이는 Java나 C와 같은 언어의 문(statement) 기반 제어 구조와 근본적으로 다릅니다. 표현식 기반 접근 방식은 코드를 더 간결하고 함수형으로 만듭니다.
 
@@ -79,6 +89,12 @@ if (x > 5) println("크다")
 // 명시적으로 Unit 타입
 val result: Unit = if (x > 5) println("크다")
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- if는 **표현식**이므로 값을 반환하며, 삼항 연산자가 필요 없습니다
+- Scala 3에서는 `then` 키워드로 더 자연스럽게 작성할 수 있습니다
+- else가 없으면 `Unit`을 반환할 수 있습니다
+{{< /callout >}}
 
 #### for 표현식
 
@@ -236,6 +252,13 @@ val result = for {
 {{% /tab %}}
 {{< /tabs >}}
 
+{{< callout type="info" title="핵심 포인트" >}}
+- for는 **표현식**이며 `yield`로 새 컬렉션을 생성합니다
+- 가드(`if`)로 조건 필터링, 중첩 생성자로 다중 반복이 가능합니다
+- 패턴 매칭과 함께 사용하여 튜플이나 Option 값을 분해할 수 있습니다
+- for comprehension은 map, flatMap, filter의 문법적 설탕입니다
+{{< /callout >}}
+
 #### while 루프
 
 `while`은 표현식이 아닌 문(statement)입니다. 값을 반환하지 않으며 `Unit`을 반환합니다. 가변 상태가 필요하므로 함수형 프로그래밍에서는 가급적 피합니다.
@@ -288,6 +311,12 @@ do {
 
 > **함수형 프로그래밍에서는 `while`보다 `for`나 재귀를 선호합니다.**
 > `while`은 가변 상태(`var`)가 필요하기 때문입니다.
+
+{{< callout type="info" title="핵심 포인트" >}}
+- while은 **문(statement)**이므로 값을 반환하지 않습니다 (`Unit` 반환)
+- 가변 상태(`var`)가 필요하므로 함수형 코드에서는 피합니다
+- `do-while`은 Scala 3에서 제거되었습니다
+{{< /callout >}}
 
 #### match 표현식
 
@@ -392,6 +421,13 @@ val dayName = day match {
 {{% /tab %}}
 {{< /tabs >}}
 
+{{< callout type="info" title="핵심 포인트" >}}
+- match는 **표현식**으로 값을 반환합니다
+- 값 매칭, 타입 매칭, 가드 조건(`if`), OR 패턴(`|`)을 지원합니다
+- `_`는 와일드카드로 모든 값과 매칭됩니다
+- Java의 switch보다 강력하며 패턴 매칭의 기초입니다
+{{< /callout >}}
+
 #### 표현식 vs 문
 
 Scala에서 거의 모든 것은 표현식입니다. 블록, try-catch, 심지어 throw까지 값을 반환합니다.
@@ -417,6 +453,13 @@ def divide(a: Int, b: Int): Int =
   if (b == 0) throw new ArithmeticException("0으로 나눌 수 없음")
   else a / b
 ```
+
+{{< callout type="info" title="핵심 포인트" >}}
+- Scala에서 거의 모든 것은 **표현식**입니다
+- 블록의 마지막 값이 결과값이 됩니다
+- try-catch도 표현식으로 값을 반환합니다
+- throw는 `Nothing` 타입의 표현식입니다
+{{< /callout >}}
 
 #### 연습 문제
 

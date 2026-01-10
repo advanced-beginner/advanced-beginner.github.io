@@ -1,10 +1,26 @@
 ---
 title: 배포와 클러스터 관리
 weight: 11
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- 클러스터 매니저: Local(개발), Standalone(소규모), YARN(Hadoop), K8s(클라우드)
+- 배포 모드: Client(디버깅), Cluster(프로덕션)
+- 동적 할당으로 워크로드에 따라 Executor 자동 조절
+- Fat JAR로 의존성 포함하여 spark-submit 실행
+{{< /callout >}}
+
+**대상 독자**: Spark 클러스터를 운영하는 DevOps/플랫폼 엔지니어
+
+**선수 지식**:
+- [아키텍처](../architecture/) 문서의 Driver/Executor 개념
+- Docker/Kubernetes 기초 (K8s 배포 시)
+- Hadoop YARN 기초 (YARN 배포 시)
+
 ---
 
 Spark 애플리케이션을 다양한 클러스터 환경에 배포하고 관리하는 방법을 알아봅니다.
@@ -18,6 +34,13 @@ Spark 애플리케이션을 다양한 클러스터 환경에 배포하고 관리
 | **YARN** | Hadoop 생태계 통합 | 기존 Hadoop 환경 |
 | **Kubernetes** | 컨테이너 기반 | 클라우드 네이티브 |
 | **Mesos** | 범용 스케줄러 | 다양한 워크로드 혼합 |
+
+{{< callout type="info" title="핵심 포인트" >}}
+- **Local**: 단일 JVM, 개발/테스트용
+- **Standalone**: Spark 내장, 소규모 전용 클러스터
+- **YARN**: Hadoop 생태계 통합, 기업 환경에서 가장 많이 사용
+- **Kubernetes**: 컨테이너 기반, 클라우드 네이티브 환경
+{{< /callout >}}
 
 #### Local 모드
 

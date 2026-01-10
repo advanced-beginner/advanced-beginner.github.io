@@ -1,8 +1,16 @@
 ---
 title: 용어 사전
 weight: 1
-lastmod: 2026-01-08
+lastmod: 2026-01-10
 ---
+
+{{% notice style="tip" title="TL;DR" %}}
+- **Index/Document/Field**: RDB의 Table/Row/Column에 대응
+- **Shard/Replica**: 데이터 분산과 복제의 기본 단위
+- **Analyzer/Tokenizer**: 텍스트를 검색 가능한 토큰으로 분해
+- **Query/Filter Context**: 점수 계산 여부에 따른 검색 방식 구분
+- 알파벳순으로 정렬, 각 용어에서 관련 개념 문서로 링크
+{{% /notice %}}
 
 Elasticsearch 핵심 용어를 빠르게 찾아볼 수 있습니다. 상세 설명은 [개념 이해](../../concepts/) 섹션을 참고하세요.
 

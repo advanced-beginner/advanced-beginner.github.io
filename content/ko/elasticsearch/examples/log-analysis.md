@@ -1,8 +1,16 @@
 ---
 title: 로그 분석 시스템
 weight: 4
-lastmod: 2026-01-08
+lastmod: 2026-01-10
 ---
+
+{{% notice style="tip" title="TL;DR" %}}
+- **Logback Appender**로 애플리케이션 로그를 Elasticsearch에 직접 전송합니다
+- **MDC**로 요청 ID, 사용자 ID를 로그에 자동 포함하여 추적성을 확보합니다
+- **집계(Aggregation)**로 에러율, 응답시간 백분위수 등을 분석합니다
+- **ILM**으로 로그 수명주기(Hot→Warm→Cold→Delete)를 자동 관리합니다
+- 전체 소요 시간: 약 40분
+{{% /notice %}}
 
 Elasticsearch를 사용하여 애플리케이션 로그를 수집, 저장, 분석하는 시스템을 구현합니다.
 
@@ -114,6 +122,12 @@ logs-2024.01.17
 ```
 
 > **장점**: 오래된 로그 삭제가 쉬움 (인덱스 단위 삭제)
+
+{{% notice style="note" title="핵심 포인트" %}}
+- `@timestamp`는 Date 타입으로 시계열 분석의 핵심 필드입니다
+- `level`, `logger`는 Keyword 타입으로 정확한 필터링에 사용합니다
+- 일별 인덱스 패턴(`logs-*`)으로 오래된 데이터를 쉽게 삭제할 수 있습니다
+{{% /notice %}}
 
 ---
 
@@ -228,6 +242,12 @@ public class RequestTrackingFilter extends OncePerRequestFilter {
     }
 }
 ```
+
+{{% notice style="note" title="핵심 포인트" %}}
+- `AsyncAppender`로 로깅이 애플리케이션 성능에 영향을 주지 않도록 합니다
+- `MDC`로 requestId, userId 등 컨텍스트 정보를 자동으로 로그에 포함합니다
+- `neverBlock=true`로 큐가 가득 차도 애플리케이션이 멈추지 않습니다
+{{% /notice %}}
 
 ---
 
@@ -351,6 +371,12 @@ public class LogSearchService {
     }
 }
 ```
+
+{{% notice style="note" title="핵심 포인트" %}}
+- `IndexCoordinates.of("logs-*")`로 모든 일별 인덱스를 한 번에 검색합니다
+- `request_id`로 특정 요청의 전체 로그를 추적할 수 있습니다
+- 시간 범위 필터는 `range` 쿼리로 구현합니다
+{{% /notice %}}
 
 ---
 
@@ -512,6 +538,12 @@ public class LogAnalyticsService {
 }
 ```
 
+{{% notice style="note" title="핵심 포인트" %}}
+- `dateHistogram`으로 시간대별 에러 추이를 분석합니다
+- `percentiles`로 응답시간 p50, p90, p95, p99를 계산합니다
+- `withMaxResults(0)`으로 문서 없이 집계 결과만 가져옵니다
+{{% /notice %}}
+
 ---
 
 ## 5. 인덱스 수명 관리 (ILM)
@@ -583,6 +615,13 @@ PUT /_index_template/logs
 }
 ```
 
+{{% notice style="note" title="핵심 포인트" %}}
+- **Hot**: 최신 데이터, SSD에서 빠른 검색
+- **Warm**: 7일 이후 데이터, 샤드 축소로 리소스 절약
+- **Cold**: 30일 이후 데이터, 저비용 스토리지
+- **Delete**: 90일 이후 자동 삭제로 스토리지 관리
+{{% /notice %}}
+
 ---
 
 ## 6. Kibana 대시보드 설정
@@ -642,6 +681,12 @@ if (log.isDebugEnabled()) {
   }
 }
 ```
+
+{{% notice style="note" title="핵심 포인트" %}}
+- **로깅 성능**: `log.debug("{}", value)` 형식으로 불필요한 문자열 연결을 피합니다
+- **refresh_interval**: 값을 늘리면 인덱싱 성능이 향상되지만 검색 지연이 발생합니다
+- **대량 로그**: `translog.durability: async`로 쓰기 성능을 높일 수 있습니다
+{{% /notice %}}
 
 ---
 

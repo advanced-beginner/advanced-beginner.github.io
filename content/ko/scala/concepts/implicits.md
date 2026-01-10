@@ -1,8 +1,18 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: Implicit / Given
 weight: 11
 ---
+
+{{< callout type="info" title="TL;DR" >}}
+- 암시적 기능은 컴파일러가 자동으로 값을 전달하거나 타입을 변환합니다
+- Scala 2: `implicit` / Scala 3: `given`/`using`/`extension`
+- **타입 클래스**, **확장 메서드**, **컨텍스트 전달**에 주로 사용됩니다
+- 너무 일반적인 타입(`String`, `Int`)의 암시적 정의는 피하세요
+{{< /callout >}}
+
+**대상 독자:** 고차 함수와 제네릭에 익숙한 개발자
+**선수 지식:** for comprehension, 타입 매개변수
 
 암시적 기능은 Scala의 강력한 기능 중 하나입니다. 컴파일러가 자동으로 값을 전달하거나 타입을 변환하여 보일러플레이트 코드를 줄이고 표현력을 높입니다. Scala 2의 `implicit`과 Scala 3의 `given`/`using`을 모두 다룹니다.
 

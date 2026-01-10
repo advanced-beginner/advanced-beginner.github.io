@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: 환경 구성
 weight: 1
 author: "@kimbenji"
@@ -7,6 +7,22 @@ author_url: "http://github.com/kimbenji"
 ---
 
 Spring Boot에서 Kafka를 사용하기 위한 환경 설정 레퍼런스입니다.
+
+{{% notice style="tip" title="TL;DR" %}}
+- **Kafka 실행**: Docker Compose로 KRaft 모드 Kafka 3.6.1 실행
+- **의존성**: `spring-kafka`, `spring-boot-starter-web` 추가
+- **기본 설정**: `bootstrap-servers`, Serializer/Deserializer, `group-id` 설정
+- **프로덕션**: `acks: all`, `enable.idempotence: true`로 안정성 확보
+{{% /notice %}}
+
+#### 대상 독자 및 선수 지식
+
+| 항목 | 설명 |
+|------|------|
+| **대상 독자** | Spring Boot 프로젝트에서 Kafka 환경을 구성하려는 개발자 |
+| **선수 지식** | Docker 기본 사용법, Gradle 또는 Maven 빌드 도구, Spring Boot 설정 파일(application.yml) |
+| **필수 도구** | Docker Desktop 또는 Docker Engine, JDK 17+, IDE (IntelliJ IDEA 권장) |
+| **예상 소요 시간** | 약 15분 |
 
 Quick Start를 완료했다면 이미 기본 환경을 구성한 것입니다. 이 문서는 설정 상세 내용과 프로덕션 환경 구성을 위한 참조 문서입니다.
 
@@ -67,6 +83,13 @@ docker-compose down
 docker-compose down -v
 ```
 
+{{% notice style="info" title="Docker Kafka 핵심 포인트" %}}
+- **KRaft 모드**: Zookeeper 없이 Kafka 자체 메타데이터 관리 (3.3 이상 권장)
+- **포트**: 9092 (클라이언트), 9093 (컨트롤러)
+- **볼륨**: `kafka-data`로 데이터 영속성 확보
+- **완전 초기화**: `docker-compose down -v`로 볼륨까지 삭제
+{{% /notice %}}
+
 #### Spring Boot 의존성
 
 **build.gradle.kts**
@@ -109,6 +132,12 @@ Maven을 사용하는 경우 다음과 같이 의존성을 추가합니다.
     </dependency>
 </dependencies>
 ```
+
+{{% notice style="info" title="의존성 핵심 포인트" %}}
+- **spring-kafka**: Kafka Producer/Consumer 추상화, KafkaTemplate 제공
+- **spring-boot-starter-web**: REST API 엔드포인트 구현용 (선택)
+- **spring-kafka-test**: 테스트용 EmbeddedKafka 제공
+{{% /notice %}}
 
 #### application.yml 설정
 
@@ -163,6 +192,13 @@ spring:
         max.poll.records: 500
         max.poll.interval.ms: 300000
 ```
+
+{{% notice style="info" title="application.yml 핵심 포인트" %}}
+- **bootstrap-servers**: Kafka 브로커 연결 주소 (필수)
+- **Serializer/Deserializer**: 문자열은 StringSerializer, 객체는 JsonSerializer 사용
+- **group-id**: Consumer Group 식별자, 서비스명 기반 권장
+- **프로덕션 설정**: `acks: all`로 데이터 안정성, `enable.idempotence: true`로 중복 방지
+{{% /notice %}}
 
 #### 설정 항목 상세
 
@@ -223,6 +259,12 @@ public void consume(OrderEvent event) {
 }
 ```
 
+{{% notice style="info" title="JSON 메시지 처리 핵심 포인트" %}}
+- **JsonSerializer/JsonDeserializer**: 객체를 JSON으로 자동 직렬화/역직렬화
+- **trusted.packages**: 역직렬화 허용 패키지 지정 (보안)
+- **Java Record**: 불변 데이터 클래스로 이벤트 정의 권장
+{{% /notice %}}
+
 #### 프로필별 설정
 
 환경별로 다른 설정을 적용하려면 프로필을 사용합니다.
@@ -262,6 +304,12 @@ spring:
     consumer:
       auto-offset-reset: latest
 ```
+
+{{% notice style="info" title="프로필별 설정 핵심 포인트" %}}
+- **환경 변수**: `${KAFKA_SERVERS:localhost:9092}` 형식으로 기본값 지정
+- **로컬 개발**: `earliest`로 모든 메시지 처음부터 읽기
+- **프로덕션**: 다중 브로커 지정, `latest`로 최신 메시지부터 읽기
+{{% /notice %}}
 
 #### 일반적인 오류와 해결
 

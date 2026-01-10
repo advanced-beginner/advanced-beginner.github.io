@@ -1,10 +1,18 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: 참고 자료
 weight: 4
 ---
 
 Scala 학습에 도움이 되는 참고 자료를 정리합니다. 공식 문서부터 서적, 온라인 강의, 커뮤니티까지 다양한 리소스를 카테고리별로 분류했습니다.
+
+{{% notice style="tip" title="TL;DR - 핵심 추천" %}}
+- **공식 문서**: [Scala 3 Book](https://docs.scala-lang.org/scala3/book/introduction.html) - 단계별 학습서
+- **입문서**: "Scala for the Impatient" - 빠른 학습에 최적
+- **함수형 심화**: "Scala with Cats" (무료 온라인) - 타입 클래스 마스터
+- **온라인 실습**: [Scastie](https://scastie.scala-lang.org/) - 브라우저에서 즉시 실행
+- **커뮤니티**: [Scala Discord](https://discord.gg/scala) - 실시간 질의응답
+{{% /notice %}}
 
 #### 공식 문서
 
@@ -31,6 +39,12 @@ Scala 프로젝트에서 사용하는 빌드 도구들의 공식 문서입니다
 
 - [sbt Documentation](https://www.scala-sbt.org/1.x/docs/) — sbt 공식 문서
 - [Mill Build Tool](https://mill-build.com/mill/Intro_to_Mill.html) — Mill 문서
+
+{{% notice style="note" title="핵심 포인트" %}}
+- **시작점**: Tour of Scala로 핵심 기능 빠르게 파악
+- **Scala 3**: 새 프로젝트라면 Scala 3 Book으로 학습
+- **빌드**: sbt가 표준, Mill은 빠른 대안
+{{% /notice %}}
 
 #### 서적
 
@@ -71,6 +85,12 @@ Scala를 처음 배우는 분께 추천하는 서적입니다.
 - **"Practical FP in Scala"**
   - 저자: Gabriel Volpe
   - 실무 함수형 프로그래밍
+
+{{% notice style="note" title="핵심 포인트" %}}
+- **입문**: "Scala for the Impatient" (빠른 학습) 또는 "Programming in Scala" (깊이 있는 학습)
+- **무료**: "Essential Scala", "Scala with Cats" 온라인 제공
+- **함수형 심화**: "Functional Programming in Scala" (레드북)
+{{% /notice %}}
 
 #### 실무 라이브러리 맛보기
 
@@ -188,6 +208,12 @@ user.asJson.noSpaces  // {"name":"Alice","age":30}
 | 웹 개발 | http4s + Circe | [http4s 튜토리얼](https://http4s.org/v0.23/docs/) |
 | 데이터 처리 | Spark | [Spark Scala API](https://spark.apache.org/docs/latest/api/scala/) |
 
+{{% notice style="note" title="핵심 포인트" %}}
+- **Cats/ZIO**: 함수형 프로그래밍 라이브러리, 타입 클래스와 효과 시스템
+- **http4s + Circe**: 함수형 웹 개발 스택
+- **Spark**: 빅데이터 처리, Scala 2 필요
+{{% /notice %}}
+
 ---
 
 #### 온라인 강의
@@ -208,6 +234,12 @@ user.asJson.noSpaces  // {"name":"Alice","age":30}
 
 - [Rock the JVM](https://rockthejvm.com/) — 종합적인 Scala 강의
 - [Zionomicon](https://www.zionomicon.com/) — ZIO 심화
+
+{{% notice style="note" title="핵심 포인트" %}}
+- **무료 추천**: Coursera의 Martin Odersky 강의 (Scala 창시자)
+- **유료**: Rock the JVM (종합적), Zionomicon (ZIO 심화)
+- **Scala 3**: 공식 문서의 New Features 페이지 필독
+{{% /notice %}}
 
 #### 라이브러리 문서
 
@@ -243,6 +275,12 @@ user.asJson.noSpaces  // {"name":"Alice","age":30}
 - [MUnit](https://scalameta.org/munit/) — 경량 테스트
 - [ScalaCheck](https://scalacheck.org/) — 속성 기반 테스트
 
+{{% notice style="note" title="핵심 포인트" %}}
+- **함수형**: Cats(타입 클래스), ZIO(효과 시스템), Cats Effect(비동기)
+- **웹**: http4s(함수형), Play(풀스택), Akka HTTP(액터 기반)
+- **데이터**: Doobie(DB), Circe(JSON), Spark(분산 처리)
+{{% /notice %}}
+
 #### 커뮤니티
 
 Scala 개발자들과 소통할 수 있는 채널들입니다.
@@ -264,6 +302,12 @@ Scala 개발자들과 소통할 수 있는 채널들입니다.
 - [Typelevel Blog](https://typelevel.org/blog/) — 함수형 Scala
 - [Li Haoyi's Blog](https://www.lihaoyi.com/) — Scala 팁
 
+{{% notice style="note" title="핵심 포인트" %}}
+- **실시간 질문**: Scala Discord, Typelevel Discord
+- **Q&A**: Stack Overflow(검색), Reddit r/scala(토론)
+- **최신 정보**: Scala Times 주간 뉴스레터 구독
+{{% /notice %}}
+
 #### 도구
 
 개발 생산성을 높여주는 도구들입니다.
@@ -279,6 +323,12 @@ Scala 개발자들과 소통할 수 있는 채널들입니다.
 - [Scaladex](https://index.scala-lang.org/) — 라이브러리 검색
 - [Scalafmt](https://scalameta.org/scalafmt/) — 코드 포맷터
 - [Scalafix](https://scalacenter.github.io/scalafix/) — 리팩토링 도구
+
+{{% notice style="note" title="핵심 포인트" %}}
+- **IDE**: IntelliJ(완성도), VS Code + Metals(가벼움)
+- **필수 도구**: Scastie(온라인 실행), Scaladex(라이브러리 검색)
+- **코드 품질**: Scalafmt(포맷팅), Scalafix(리팩토링)
+{{% /notice %}}
 
 #### 컨퍼런스
 

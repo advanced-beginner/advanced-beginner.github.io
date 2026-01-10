@@ -1,9 +1,23 @@
 ---
-lastmod: "2026-01-09"
+lastmod: "2026-01-10"
 title: 트랜잭션과 Exactly-Once
 weight: 6
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
+---
+
+{{< callout type="info" title="TL;DR" >}}
+- At-Most-Once: 유실 가능/중복 없음, At-Least-Once: 유실 없음/중복 가능
+- Exactly-Once: Idempotent Producer + Transactional API + read_committed 필요
+- Idempotent Producer는 Kafka 3.0+에서 기본 활성화, 단일 Partition 중복 방지
+- Kafka 트랜잭션은 여러 Partition에 원자적 쓰기 보장
+- DB + Kafka 원자적 처리가 필요하면 Outbox 패턴 사용
+{{< /callout >}}
+
+**대상 독자**: 메시지 전달 보장이 중요한 시스템을 개발하는 개발자
+
+**선수 지식**: [심화 개념](../advanced-concepts/)의 acks, Idempotent Producer 개념
+
 ---
 
 메시지 전달 보장 수준과 Kafka 트랜잭션을 이해합니다. 이 문서는 Kafka 3.6.x 기준으로 작성되었으며, Spring Boot 3.2.x와 Spring Kafka 3.1.x, Java 17 환경에서 코드 예제가 검증되었습니다.
