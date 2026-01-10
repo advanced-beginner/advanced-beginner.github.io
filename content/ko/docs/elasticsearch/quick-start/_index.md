@@ -4,8 +4,6 @@ weight: 1
 lastmod: 2026-01-10
 ---
 
-# Quick Start
-
 {{< callout type="tip" title="TL;DR" >}}
 Docker로 Elasticsearch를 실행하고, Kibana Dev Tools에서 문서 저장/검색을 직접 해봅니다.
 - **소요 시간**: 약 10-15분

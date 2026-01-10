@@ -4,8 +4,6 @@ weight: 1
 lastmod: 2026-01-08
 ---
 
-# Quick Start
-
 Store and search data in Elasticsearch in 5 minutes.
 
 ## Overview
