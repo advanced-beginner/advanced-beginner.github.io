@@ -440,6 +440,6 @@ class OrderServiceIntegrationTest {
 
 ## Next Steps
 
-- [Error Handling]({{< relref "/kafka/concepts/error-handling" >}}) - DLT, retry strategies
-- [Monitoring]({{< relref "/kafka/concepts/monitoring" >}}) - Metrics collection and alerts
-- [DDD Integration]({{< relref "/ddd/concepts/domain-events" >}}) - Domain event design
+- [Error Handling]({{< relref "/docs/kafka/concepts/error-handling" >}}) - DLT, retry strategies
+- [Monitoring]({{< relref "/docs/kafka/concepts/monitoring" >}}) - Metrics collection and alerts
+- [DDD Integration]({{< relref "/docs/ddd/concepts/domain-events" >}}) - Domain event design

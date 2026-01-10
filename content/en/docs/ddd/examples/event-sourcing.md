@@ -348,4 +348,4 @@ class OrderTest {
 
 - [CQRS](../concepts/cqrs/) - Command and Query separation
 - [Domain Events](../concepts/domain-events/) - Event publishing and subscribing
-- [Kafka Integration]({{< relref "/kafka/examples/microservices" >}}) - External event publishing
+- [Kafka Integration]({{< relref "/docs/kafka/examples/microservices" >}}) - External event publishing
