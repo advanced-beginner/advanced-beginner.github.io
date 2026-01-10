@@ -24,7 +24,7 @@ Kafka는 다섯 가지 핵심 구성요소로 이루어져 있습니다. Produce
 
 이 문서에서는 각 구성요소가 왜 필요한지, 어떤 역할을 하는지, 그리고 실제 코드에서 어떻게 사용하는지를 단계별로 설명합니다. 모든 코드 예제는 Spring Boot 3.2.x와 Spring Kafka 3.1.x 환경에서 검증되었습니다.
 
-#### 왜 Kafka가 필요한가
+## 왜 Kafka가 필요한가
 
 분산 시스템에서 서비스 간 통신은 필연적입니다. 주문 서비스가 결제 서비스를 호출하고, 결제 서비스가 배송 서비스를 호출하는 것처럼 말입니다. 하지만 이러한 직접적인 동기 호출 방식에는 세 가지 근본적인 문제가 있습니다.
 
@@ -58,7 +58,7 @@ flowchart TB
 - 메시지는 Kafka에 저장되어 서비스 장애 시에도 유실되지 않는다
 {{< /callout >}}
 
-#### 전체 구조 이해하기
+## 전체 구조 이해하기
 
 Kafka 클러스터는 여러 Broker로 구성됩니다. 각 Broker는 독립적인 서버이며, 함께 협력하여 고가용성과 확장성을 제공합니다. Producer는 메시지를 특정 Topic에 발행하고, Broker는 이 메시지를 Topic의 Partition에 저장합니다. Consumer는 자신이 속한 Consumer Group의 일원으로서 할당받은 Partition에서 메시지를 읽어갑니다.
 
@@ -99,7 +99,7 @@ flowchart LR
 - Consumer Group 내 각 Consumer는 서로 다른 Partition을 담당
 {{< /callout >}}
 
-#### Producer의 역할과 동작 원리
+## Producer의 역할과 동작 원리
 
 Producer는 메시지를 Kafka에 발행하는 클라이언트입니다. 단순히 메시지를 보내는 것처럼 보이지만, 내부적으로는 여러 복잡한 작업이 수행됩니다. 애플리케이션에서 send() 메서드를 호출하면 Producer는 먼저 메시지를 직렬화합니다. Java 객체를 바이트 배열로 변환하는 것입니다. 그 다음 Partitioner가 메시지를 어떤 Partition에 보낼지 결정합니다. 메시지 Key가 있으면 Key의 해시값을 기반으로 Partition을 선택하고, 없으면 라운드로빈 방식으로 분배합니다.
 
@@ -156,7 +156,7 @@ spring:
 - enable.idempotence=true로 중복 전송 방지 (Kafka 3.0+ 기본값)
 {{< /callout >}}
 
-#### Consumer의 역할과 동작 원리
+## Consumer의 역할과 동작 원리
 
 Consumer는 Kafka에서 메시지를 읽어가는 클라이언트입니다. Producer와 마찬가지로 단순해 보이지만 내부적으로는 복잡한 메커니즘이 동작합니다. Consumer는 push 방식이 아닌 poll 방식으로 동작합니다. 즉, Broker가 메시지를 밀어주는 것이 아니라 Consumer가 주기적으로 Broker에 요청하여 메시지를 가져옵니다. 이 방식 덕분에 Consumer는 자신의 처리 속도에 맞게 메시지를 가져올 수 있습니다.
 
@@ -219,7 +219,7 @@ spring:
 - auto-offset-reset으로 시작 위치, enable-auto-commit으로 커밋 방식 설정
 {{< /callout >}}
 
-#### Broker의 역할과 클러스터 구성
+## Broker의 역할과 클러스터 구성
 
 Broker는 Kafka의 핵심 서버입니다. 메시지를 받아서 디스크에 저장하고, Consumer의 요청에 따라 메시지를 전달합니다. Kafka가 높은 처리량을 달성할 수 있는 이유 중 하나는 Broker의 저장 방식에 있습니다. Broker는 메시지를 순차적으로 디스크에 기록합니다. 랜덤 I/O가 아닌 순차 I/O는 디스크의 물리적 특성상 훨씬 빠릅니다. 또한 운영체제의 페이지 캐시를 적극 활용하여 자주 접근하는 데이터는 메모리에서 바로 제공합니다.
 
@@ -273,13 +273,39 @@ Broker를 우체국에 비유할 수 있습니다. 편지(메시지)를 받아�
 - replication.factor=3, min.insync.replicas=2 설정 권장
 {{< /callout >}}
 
-#### Topic의 역할과 설계 원칙
+## Topic의 역할과 설계 원칙
 
 Topic은 메시지를 논리적으로 분류하는 채널입니다. 주문, 결제, 알림 등 서로 다른 종류의 이벤트를 분리하여 관리할 수 있습니다. 각 Topic은 독립적인 설정을 가집니다. 주문 데이터는 7일간 보관하고, 로그 데이터는 1일만 보관하는 식으로 비즈니스 요구사항에 맞게 구성할 수 있습니다.
 
 Topic 이름은 명확하고 일관된 네이밍 컨벤션을 따라야 합니다. 좋은 Topic 이름은 그 자체로 어떤 데이터가 흐르는지 알 수 있어야 합니다. orders, payment-completed, user-activity-logs처럼 도메인이나 이벤트를 명확히 표현하는 이름이 좋습니다. data, topic1, temp 같은 이름은 피해야 합니다. 팀이나 조직 차원에서 네이밍 컨벤션을 정하고 일관되게 적용하는 것이 중요합니다.
 
 Topic을 생성할 때는 Partition 수와 Replication Factor를 신중하게 결정해야 합니다. Partition 수는 나중에 늘릴 수는 있지만 줄일 수는 없습니다. Partition을 늘리면 기존 메시지 Key의 Partition 할당이 달라질 수 있으므로 순서 보장에 영향을 줄 수 있습니다. 따라서 처음부터 예상 처리량과 Consumer 수를 고려하여 적절한 Partition 수를 설정해야 합니다.
+
+### Topic과 Partition의 관계
+
+Topic은 논리적인 채널이고, Partition은 그 채널 안의 물리적인 저장 단위입니다. 아래 다이어그램은 하나의 Topic이 여러 Partition으로 나뉘고, 각 Partition이 서로 다른 Broker에 분산되는 구조를 보여줍니다.
+
+```mermaid
+flowchart TB
+    subgraph Topic["orders Topic (논리적 단위)"]
+        direction TB
+        P0["Partition 0<br/>Offset: 0→1→2→3"]
+        P1["Partition 1<br/>Offset: 0→1→2"]
+        P2["Partition 2<br/>Offset: 0→1→2→3→4"]
+    end
+
+    subgraph Brokers["Kafka Cluster (물리적 저장)"]
+        B1["Broker 1"]
+        B2["Broker 2"]
+        B3["Broker 3"]
+    end
+
+    P0 -.->|저장| B1
+    P1 -.->|저장| B2
+    P2 -.->|저장| B3
+```
+
+*다이어그램: orders Topic은 3개의 Partition으로 나뉘어 있으며, 각 Partition은 독립적인 Offset을 가집니다. 물리적으로 각 Partition은 서로 다른 Broker에 분산되어 저장됩니다.*
 
 ```bash
 # Topic 생성
@@ -305,7 +331,7 @@ Topic을 TV 채널에 비유할 수 있습니다. 뉴스 채널, 스포츠 채�
 - Partition 수는 나중에 늘릴 수 있지만 줄일 수 없음
 {{< /callout >}}
 
-#### Partition의 역할과 병렬 처리
+## Partition의 역할과 병렬 처리
 
 Partition은 Topic을 물리적으로 분할한 단위입니다. 하나의 Topic이 여러 Partition으로 나뉘면 여러 Consumer가 동시에 메시지를 처리할 수 있습니다. Partition이 없다면 아무리 많은 Consumer를 투입해도 하나의 Consumer만 메시지를 처리할 수 있어 병목이 발생합니다.
 
@@ -341,7 +367,7 @@ Partition 할당 전략은 메시지를 어떤 Partition에 보낼지 결정합�
 - Partition이 너무 많으면 오버헤드 발생 (파일 핸들, 리밸런싱 시간)
 {{< /callout >}}
 
-#### 구성요소 간 상호작용
+## 구성요소 간 상호작용
 
 다섯 가지 구성요소는 메시지가 Producer에서 Consumer까지 전달되는 과정에서 긴밀하게 협력합니다. Producer가 메시지를 발행하면 먼저 직렬화와 Partition 선택이 이루어집니다. 선택된 Partition의 Leader Broker가 메시지를 받아 로그에 추가하고, Follower Broker들이 이를 복제합니다. acks 설정에 따라 복제가 완료되면 Producer에게 응답을 보냅니다.
 
@@ -366,7 +392,7 @@ flowchart TB
 - __consumer_offsets Topic에 커밋 정보 저장으로 재시작 시 복구 가능
 {{< /callout >}}
 
-#### 자주 발생하는 문제와 해결 방법
+## 자주 발생하는 문제와 해결 방법
 
 Producer가 메시지를 보내지 못하는 경우는 대부분 연결 문제입니다. bootstrap-servers 주소가 올바른지, 해당 Broker에 네트워크로 접근 가능한지 확인해야 합니다. Topic이 존재하지 않고 auto.create.topics.enable이 false로 설정되어 있다면 Topic을 먼저 생성해야 합니다. Broker 로그에서 인증이나 권한 관련 오류 메시지가 있는지도 확인합니다.
 
@@ -391,7 +417,7 @@ kafka-console-consumer.sh --bootstrap-server localhost:9092 \
 - kafka-consumer-groups.sh로 Consumer Group 상태와 Lag 확인 가능
 {{< /callout >}}
 
-#### 다음 단계
+## 다음 단계
 
 이 문서에서는 Kafka의 다섯 가지 핵심 구성요소를 살펴보았습니다. 각 구성요소의 역할과 동작 원리를 이해했다면, 다음 단계로 메시지가 Producer에서 Consumer까지 전달되는 전체 흐름을 더 자세히 살펴볼 수 있습니다. Consumer Group과 Offset 관리, Replication 메커니즘도 실제 운영에서 중요한 주제입니다.
 
