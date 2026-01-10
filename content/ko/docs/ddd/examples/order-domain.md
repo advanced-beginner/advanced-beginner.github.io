@@ -1033,6 +1033,151 @@ class OrderTest {
 - **예외 검증**: `assertThatThrownBy()`로 비즈니스 규칙 위반 테스트
 {{% /notice %}}
 
+## 트러블슈팅
+
+### 문제: "Entity에서 다른 Aggregate를 조회해야 합니다"
+
+**증상**: Order 내부에서 Customer나 Product 정보가 필요함
+
+**원인**: Aggregate 경계를 넘어 다른 객체를 참조하려고 함
+
+**해결 방법**:
+1. 필요한 정보를 서비스 레이어에서 조회하여 전달하라
+2. 조회용 정보는 스냅샷으로 저장하라
+
+```java
+// ❌ Aggregate 내부에서 Repository 호출
+public class Order {
+    public void validate() {
+        Customer customer = customerRepository.findById(customerId); // 안 됨!
+    }
+}
+
+// ✅ 서비스에서 조회 후 전달
+@Service
+public class OrderApplicationService {
+    public void createOrder(CreateOrderCommand cmd) {
+        Customer customer = customerRepository.findById(cmd.customerId());
+        Money discount = discountPolicy.calculate(customer.getGrade());
+
+        Order order = Order.create(
+            cmd.customerId(),
+            customer.getName(),  // 표시용 스냅샷
+            discount,
+            cmd.orderLines()
+        );
+    }
+}
+```
+
+---
+
+### 문제: "Record 생성자에서 유효성 검증이 실패합니다"
+
+**증상**: `Money` 생성 시 `NullPointerException` 또는 검증 오류
+
+**원인**: Compact Constructor에서 파라미터 재할당 문법 오류
+
+**해결 방법**:
+
+```java
+// ❌ 잘못된 재할당 (this. 사용)
+public record Money(BigDecimal amount, Currency currency) {
+    public Money {
+        this.amount = amount.setScale(0); // 컴파일 오류!
+    }
+}
+
+// ✅ 올바른 재할당 (변수명만 사용)
+public record Money(BigDecimal amount, Currency currency) {
+    public Money {
+        Objects.requireNonNull(amount);
+        amount = amount.setScale(0, RoundingMode.HALF_UP);
+    }
+}
+```
+
+---
+
+### 문제: "JPA로 Aggregate를 저장할 때 OrderLine이 저장되지 않습니다"
+
+**증상**: Order는 저장되지만 OrderLine 테이블이 비어있음
+
+**원인**: JPA cascade 설정 누락 또는 연관관계 매핑 오류
+
+**해결 방법**:
+
+```java
+@Entity
+@Table(name = "orders")
+public class OrderJpaEntity {
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "order_id")
+    private List<OrderLineJpaEntity> orderLines = new ArrayList<>();
+
+    // Order 도메인 모델과 매핑
+    public static OrderJpaEntity fromDomain(Order order) {
+        OrderJpaEntity entity = new OrderJpaEntity();
+        entity.id = order.getId().value();
+        entity.orderLines = order.getOrderLines().stream()
+            .map(OrderLineJpaEntity::fromDomain)
+            .collect(toList());
+        entity.orderLines.forEach(line -> line.setOrder(entity));
+        return entity;
+    }
+}
+```
+
+---
+
+### 문제: "도메인 이벤트가 발행되지 않습니다"
+
+**증상**: `@EventListener`가 호출되지 않음
+
+**원인**: 이벤트가 등록만 되고 실제 발행되지 않음
+
+**해결 방법**:
+
+```java
+@Service
+@Transactional
+public class OrderApplicationService {
+
+    private final ApplicationEventPublisher eventPublisher;
+
+    public void confirmOrder(OrderId orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow();
+        order.confirm();
+        orderRepository.save(order);
+
+        // 수집된 이벤트 발행
+        order.getDomainEvents().forEach(eventPublisher::publishEvent);
+        order.clearDomainEvents();
+    }
+}
+```
+
+또는 Spring Data JPA의 `@DomainEvents` 어노테이션을 활용하라:
+
+```java
+public abstract class AggregateRoot<ID> {
+
+    @Transient
+    private final List<DomainEvent> domainEvents = new ArrayList<>();
+
+    @DomainEvents
+    public Collection<DomainEvent> domainEvents() {
+        return Collections.unmodifiableList(domainEvents);
+    }
+
+    @AfterDomainEventPublication
+    public void clearDomainEvents() {
+        domainEvents.clear();
+    }
+}
+```
+
 ## 다음 단계
 
 - [애플리케이션 계층](../application-layer/) - Use Case와 서비스 구현
