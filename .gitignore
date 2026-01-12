@@ -31,3 +31,6 @@ application-local.yml
 *.tmp
 *.bak
 *.swp
+# BMAD (local only)
+.bmad-core/
+.bmad-*/

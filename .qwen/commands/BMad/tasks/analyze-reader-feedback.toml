@@ -1,0 +1,31 @@
+description = " Executes the BMad Task: Analyze Reader Feedback"
+prompt = """
+CRITICAL: You are to execute the BMad Task defined below.
+
+READ THIS BEFORE EXECUTING THE TASK AS THE INSTRUCTIONS SPECIFIED!
+
+<!-- Powered by BMAD™ Core -->
+
+# ------------------------------------------------------------
+
+# 16. Analyze Reader Feedback
+
+# ------------------------------------------------------------
+
+---
+
+task:
+id: analyze-reader-feedback
+name: Analyze Reader Feedback
+description: Summarize reader comments, identify trends, update story bible.
+persona_default: beta-reader
+inputs:
+
+- publication-log.md
+  steps:
+- Cluster comments by theme.
+- Suggest course corrections.
+  output: retro.md
+  ...
+
+"""
