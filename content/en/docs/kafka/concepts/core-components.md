@@ -41,10 +41,10 @@ flowchart LR
 
     subgraph Kafka["Kafka Cluster"]
         subgraph Broker1["Broker 1"]
-            T1P0[Topic A\nPartition 0]
+            T1P0[Topic A<br>Partition 0]
         end
         subgraph Broker2["Broker 2"]
-            T1P1[Topic A\nPartition 1]
+            T1P1[Topic A<br>Partition 1]
         end
     end
 
@@ -107,9 +107,9 @@ public class OrderConsumer {
 ```mermaid
 flowchart TB
     subgraph Cluster["Kafka Cluster"]
-        B1[Broker 1\nLeader]
-        B2[Broker 2\nFollower]
-        B3[Broker 3\nFollower]
+        B1[Broker 1<br>Leader]
+        B2[Broker 2<br>Follower]
+        B3[Broker 3<br>Follower]
     end
 
     B1 <-->|Replication| B2
@@ -154,9 +154,9 @@ flowchart LR
 ```mermaid
 flowchart TB
     subgraph Topic["orders Topic"]
-        P0["Partition 0\n#91;msg1, msg4, msg7#93;"]
-        P1["Partition 1\n#91;msg2, msg5, msg8#93;"]
-        P2["Partition 2\n#91;msg3, msg6, msg9#93;"]
+        P0["Partition 0<br>#91;msg1, msg4, msg7#93;"]
+        P1["Partition 1<br>#91;msg2, msg5, msg8#93;"]
+        P2["Partition 2<br>#91;msg3, msg6, msg9#93;"]
     end
 
     subgraph Consumers["Consumer Group"]

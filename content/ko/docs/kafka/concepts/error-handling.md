@@ -29,9 +29,9 @@ Kafka Consumer에서 발생하는 에러는 크게 세 가지 유형으로 분�
 ```mermaid
 flowchart TB
     subgraph Errors["에러 유형"]
-        DESER["역직렬화 에러\n(메시지 형식 문제)"]
-        TRANS["일시적 에러\n(네트워크, DB 연결)"]
-        PERM["영구적 에러\n(비즈니스 로직 실패)"]
+        DESER["역직렬화 에러<br>(메시지 형식 문제)"]
+        TRANS["일시적 에러<br>(네트워크, DB 연결)"]
+        PERM["영구적 에러<br>(비즈니스 로직 실패)"]
     end
 
     DESER --> SKIP["건너뛰기/DLT"]

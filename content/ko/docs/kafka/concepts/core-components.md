@@ -73,10 +73,10 @@ flowchart LR
 
     subgraph Kafka["Kafka Cluster"]
         subgraph B1["Broker 1"]
-            T1P0[orders\nPartition 0]
+            T1P0[orders<br>Partition 0]
         end
         subgraph B2["Broker 2"]
-            T1P1[orders\nPartition 1]
+            T1P1[orders<br>Partition 1]
         end
     end
 
@@ -342,9 +342,9 @@ Partition 수를 결정할 때는 목표 처리량과 Consumer 수를 함께 고
 ```mermaid
 flowchart TB
     subgraph Topic["orders Topic"]
-        P0["Partition 0\n순서: 0,1,2,..."]
-        P1["Partition 1\n순서: 0,1,2,..."]
-        P2["Partition 2\n순서: 0,1,2,..."]
+        P0["Partition 0<br>순서: 0,1,2,..."]
+        P1["Partition 1<br>순서: 0,1,2,..."]
+        P2["Partition 2<br>순서: 0,1,2,..."]
     end
 
     subgraph CG["Consumer Group"]

@@ -27,7 +27,7 @@ flowchart LR
         LOGIC[Business Logic]
     end
 
-    BROKER -->|fetch.min.bytes\nfetch.max.wait.ms| FETCH
+    BROKER -->|fetch.min.bytes<br>fetch.max.wait.ms| FETCH
     FETCH -->|max.poll.records| POLL
     POLL --> PROCESS
     PROCESS --> LOGIC
@@ -163,8 +163,8 @@ sequenceDiagram
     end
 
     Note over C: Consumer failure!
-    Note over GC: No heartbeat for\nsession.timeout.ms
-    GC->>GC: Remove Consumer\nStart rebalancing
+    Note over GC: No heartbeat for<br>session.timeout.ms
+    GC->>GC: Remove Consumer<br>Start rebalancing
 ```
 
 ### Setting Relationship
@@ -217,7 +217,7 @@ sequenceDiagram
     Note over C: Failure during processing!
     Note over C: Only processed up to offset 5
     Note over K: But committed up to offset 9
-    Note over C: Restart from offset 10\n→ 5-9 lost!
+    Note over C: Restart from offset 10<br>→ 5-9 lost!
 ```
 
 ### Manual Commit
@@ -293,7 +293,7 @@ spring:
 ```mermaid
 flowchart TB
     subgraph Problem["During Rebalancing"]
-        STOP["All Consumers\npaused"]
+        STOP["All Consumers<br>paused"]
         REVOKE["Partitions revoked"]
         ASSIGN["Partitions reassigned"]
         RESUME["Consumers resumed"]
@@ -449,19 +449,19 @@ Partition 0:
 ```mermaid
 flowchart TB
     subgraph Fetch["Fetch Settings"]
-        F1["fetch.min.bytes\nfetch.max.wait.ms"]
+        F1["fetch.min.bytes<br>fetch.max.wait.ms"]
     end
 
     subgraph Poll["Poll Settings"]
-        P1["max.poll.records\nmax.poll.interval.ms"]
+        P1["max.poll.records<br>max.poll.interval.ms"]
     end
 
     subgraph Session["Session Settings"]
-        S1["session.timeout.ms\nheartbeat.interval.ms"]
+        S1["session.timeout.ms<br>heartbeat.interval.ms"]
     end
 
     subgraph Commit["Commit Strategy"]
-        C1["auto vs manual\ncommitSync vs Async"]
+        C1["auto vs manual<br>commitSync vs Async"]
     end
 ```
 

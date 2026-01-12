@@ -72,7 +72,7 @@ flowchart TB
         F2[Follower 2]
         L -.->|동기화 지연| F1
         L -.->|동기화 지연| F2
-        NOTE[Leader만 있어도\nacks=all 성공!]
+        NOTE[Leader만 있어도<br>acks=all 성공!]
     end
 ```
 

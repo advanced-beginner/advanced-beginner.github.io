@@ -13,9 +13,9 @@ Understanding the core security elements—encryption, authentication, and autho
 ```mermaid
 flowchart TB
     subgraph Security["Kafka Security"]
-        ENCRYPTION["Encryption\nSSL/TLS"]
-        AUTHENTICATION["Authentication\nSASL"]
-        AUTHORIZATION["Authorization\nACLs"]
+        ENCRYPTION["Encryption<br>SSL/TLS"]
+        AUTHENTICATION["Authentication<br>SASL"]
+        AUTHORIZATION["Authorization<br>ACLs"]
     end
 
     ENCRYPTION --> AUTHENTICATION

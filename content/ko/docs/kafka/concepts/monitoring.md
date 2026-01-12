@@ -44,9 +44,9 @@ flowchart LR
         direction LR
         O1["0"]
         O2["..."]
-        O3["800\nConsumer"]
+        O3["800<br>Consumer"]
         O4["..."]
-        O5["1000\nLatest"]
+        O5["1000<br>Latest"]
     end
 
     O3 -->|Lag: 200| O5
@@ -301,9 +301,9 @@ Lag이 급증했을 때 단계적으로 원인을 파악합니다.
 ```mermaid
 flowchart TB
     LAG[Lag 급증]
-    Q1{Consumer\n살아있음?}
-    Q2{처리 속도\n정상?}
-    Q3{리밸런싱\n발생?}
+    Q1{Consumer<br>살아있음?}
+    Q2{처리 속도<br>정상?}
+    Q3{리밸런싱<br>발생?}
 
     LAG --> Q1
     Q1 -->|No| RESTART[Consumer 재시작]

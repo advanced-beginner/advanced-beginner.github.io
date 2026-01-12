@@ -86,13 +86,13 @@ Without schemas, Consumers must guess message structure, and if Producers change
 ```mermaid
 graph TD
     subgraph Before["Without Schema Registry"]
-        P["Producer\n(user_id: int)"] --> K[Kafka]
-        K --> C["Consumer\n(expects user_id: string)"]
+        P["Producer<br>(user_id: int)"] --> K[Kafka]
+        K --> C["Consumer<br>(expects user_id: string)"]
         C --> X["Deserialization Error!"]
     end
 
     subgraph After["With Schema Registry"]
-        P2["Producer\n(user_id: int)"] --"Schema validation"--> SR[Schema Registry]
+        P2["Producer<br>(user_id: int)"] --"Schema validation"--> SR[Schema Registry]
         SR --"Success"--> P2
         P2 --"Avro + Schema ID"--> K2[Kafka]
         K2 --> C2["Consumer"]

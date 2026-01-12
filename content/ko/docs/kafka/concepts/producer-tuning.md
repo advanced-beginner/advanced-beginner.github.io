@@ -37,7 +37,7 @@ flowchart LR
     subgraph Producer["Producer 내부"]
         SER[Serializer]
         PART[Partitioner]
-        BATCH[Batch\nbuffer.memory]
+        BATCH[Batch<br>buffer.memory]
         SENDER[Sender Thread]
     end
 
@@ -46,7 +46,7 @@ flowchart LR
     end
 
     SEND --> SER --> PART --> BATCH
-    BATCH -->|batch.size 또는\nlinger.ms| SENDER
+    BATCH -->|batch.size 또는<br>linger.ms| SENDER
     SENDER --> BROKER
 ```
 

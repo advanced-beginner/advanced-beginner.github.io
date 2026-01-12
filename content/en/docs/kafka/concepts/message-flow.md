@@ -90,11 +90,11 @@ Broker stores messages in Partitions.
 flowchart TB
     subgraph Partition["Partition 0"]
         direction LR
-        O0["Offset 0\nmsg1"]
-        O1["Offset 1\nmsg2"]
-        O2["Offset 2\nmsg3"]
-        O3["Offset 3\nmsg4"]
-        NEW["Offset 4\nNew message"]
+        O0["Offset 0<br>msg1"]
+        O1["Offset 1<br>msg2"]
+        O2["Offset 2<br>msg3"]
+        O3["Offset 3<br>msg4"]
+        NEW["Offset 4<br>New message"]
     end
 
     MSG[New Message] -->|Append| NEW

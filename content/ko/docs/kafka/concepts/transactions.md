@@ -35,9 +35,9 @@ author_url: "http://github.com/kimbenji"
 ```mermaid
 flowchart LR
     subgraph Levels["전달 보장 수준"]
-        AMO["At-Most-Once\n최대 1번"]
-        ALO["At-Least-Once\n최소 1번"]
-        EOS["Exactly-Once\n정확히 1번"]
+        AMO["At-Most-Once<br>최대 1번"]
+        ALO["At-Least-Once<br>최소 1번"]
+        EOS["Exactly-Once<br>정확히 1번"]
     end
 
     AMO -->|"유실 가능"| ALO

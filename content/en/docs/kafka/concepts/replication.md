@@ -20,9 +20,9 @@ flowchart TB
     end
 
     subgraph Solution["With Replication"]
-        P2[Producer] --> B2[Broker 1\nLeader]
-        B2 -->|Replicate| B3[Broker 2\nFollower]
-        B2 -->|Replicate| B4[Broker 3\nFollower]
+        P2[Producer] --> B2[Broker 1<br>Leader]
+        B2 -->|Replicate| B3[Broker 2<br>Follower]
+        B2 -->|Replicate| B4[Broker 3<br>Follower]
         B2 -->|Failure| B3
         B3 -->|Promoted| B3L[New Leader]
     end
@@ -35,9 +35,9 @@ Each Partition consists of one **Leader** and multiple **Followers**.
 ```mermaid
 flowchart TB
     subgraph Partition["Topic A - Partition 0"]
-        L[Broker 1\nLeader]
-        F1[Broker 2\nFollower]
-        F2[Broker 3\nFollower]
+        L[Broker 1<br>Leader]
+        F1[Broker 2<br>Follower]
+        F2[Broker 3<br>Follower]
     end
 
     P[Producer] -->|Write| L
@@ -62,18 +62,18 @@ flowchart TB
 ```mermaid
 flowchart LR
     subgraph RF1["RF=1 (No replication)"]
-        RF1_B1[Broker 1\nPartition 0]
+        RF1_B1[Broker 1<br>Partition 0]
     end
 
     subgraph RF2["RF=2"]
-        RF2_B1[Broker 1\nLeader]
-        RF2_B2[Broker 2\nFollower]
+        RF2_B1[Broker 1<br>Leader]
+        RF2_B2[Broker 2<br>Follower]
     end
 
     subgraph RF3["RF=3 (Recommended)"]
-        RF3_B1[Broker 1\nLeader]
-        RF3_B2[Broker 2\nFollower]
-        RF3_B3[Broker 3\nFollower]
+        RF3_B1[Broker 1<br>Leader]
+        RF3_B2[Broker 2<br>Follower]
+        RF3_B3[Broker 3<br>Follower]
     end
 ```
 
@@ -92,16 +92,16 @@ flowchart LR
 ```mermaid
 flowchart TB
     subgraph Healthy["Healthy State"]
-        H_L[Leader\nOffset: 100]
-        H_F1[Follower 1\nOffset: 100]
-        H_F2[Follower 2\nOffset: 100]
+        H_L[Leader<br>Offset: 100]
+        H_F1[Follower 1<br>Offset: 100]
+        H_F2[Follower 2<br>Offset: 100]
         H_ISR["ISR: {Leader, F1, F2}"]
     end
 
     subgraph Lagging["Sync Lag"]
-        L_L[Leader\nOffset: 100]
-        L_F1[Follower 1\nOffset: 100]
-        L_F2[Follower 2\nOffset: 80]
+        L_L[Leader<br>Offset: 100]
+        L_F1[Follower 1<br>Offset: 100]
+        L_F2[Follower 2<br>Offset: 80]
         L_ISR["ISR: {Leader, F1}"]
         L_NOTE[F2 removed from ISR]
     end
@@ -211,7 +211,7 @@ flowchart TB
     end
 
     subgraph KRaft["KRaft Mode (New)"]
-        KR1[Kafka Broker 1\nController]
+        KR1[Kafka Broker 1<br>Controller]
         KR2[Kafka Broker 2]
         KR3[Kafka Broker 3]
         KR1 <--> KR2
