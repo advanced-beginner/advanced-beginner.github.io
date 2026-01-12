@@ -8,6 +8,6 @@
 </label>
 {{- /* remove whitespaces */ -}}
 <div class="book-tabs-content markdown-inner">
-{{ .Inner }}
+{{ .Inner | markdownify }}
 </div>
 {{- /* remove whitespaces */ -}}
