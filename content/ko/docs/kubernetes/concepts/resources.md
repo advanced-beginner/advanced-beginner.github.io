@@ -169,6 +169,23 @@ flowchart LR
 
 ## 권장 설정
 
+### 워크로드 유형별 권장 설정
+
+실제 운영에서 자주 사용되는 워크로드 유형별 시작점입니다.
+
+| 워크로드 | requests (CPU/Mem) | limits (CPU/Mem) | 특징 |
+|----------|-------------------|------------------|------|
+| **Spring Boot API** | 250m / 512Mi | 1000m / 1Gi | JVM 힙 고려 |
+| **Node.js API** | 100m / 128Mi | 500m / 256Mi | 가벼움 |
+| **Python Flask** | 100m / 128Mi | 500m / 512Mi | ML 라이브러리 시 증가 |
+| **Nginx (프록시)** | 50m / 64Mi | 200m / 128Mi | 매우 가벼움 |
+| **Redis (캐시)** | 100m / 256Mi | 500m / 512Mi | 메모리 중심 |
+| **Batch Job** | 500m / 512Mi | 2000m / 2Gi | 처리량 중심 |
+
+{{< callout type="warning" title="주의" >}}
+위 값은 시작점입니다. 실제 사용량을 모니터링(`kubectl top pods`)하여 조정하세요.
+{{< /callout >}}
+
 ### Java 애플리케이션
 
 ```yaml

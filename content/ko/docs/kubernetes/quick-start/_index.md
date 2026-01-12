@@ -322,6 +322,15 @@ Kubernetes에 애플리케이션 배포에 성공했습니다.
 - [ ] 브라우저에서 Nginx 페이지가 표시됩니다
 {{< /callout >}}
 
+### 방금 배운 핵심 개념
+
+| 개념 | 배운 것 | 다음에 배울 것 |
+|------|---------|---------------|
+| **Deployment** | Pod 2개를 자동으로 유지 | 롤링 업데이트, 롤백 |
+| **Service** | Pod에 고정 접근점 제공 | ClusterIP, LoadBalancer 차이 |
+| **kubectl** | apply, get 명령어 | describe, logs, exec |
+| **YAML** | 리소스 선언적 정의 | 더 많은 필드 (resources, probes) |
+
 ---
 
 ## 종료
