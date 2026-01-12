@@ -70,6 +70,16 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 - 한글 검색 최적화와 자동완성 구현
 - 클러스터 운영, 성능 튜닝, 장애 대응
 
+### [Observability](docs/observability/)
+
+시스템 관측성 실무 가이드. Metrics, Logs, Traces 3요소부터 Prometheus, Grafana, PromQL 심화까지.
+
+**배우는 것:**
+- 관측성 3요소(Metrics, Logs, Traces)의 역할과 상호 연결
+- Prometheus 아키텍처와 PromQL 쿼리 언어
+- SRE 황금 신호(Latency, Traffic, Errors, Saturation)
+- 분산 추적과 OpenTelemetry 통합
+
 ## 이 가이드의 특징
 
 **First Principles** — 표면적인 사용법이 아닌, 그 기술이 해결하려는 근본 문제부터 시작합니다. "어떻게"보다 "왜"를 먼저 이해하면 응용력이 생깁니다.
@@ -90,3 +100,5 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 - **Spark 내부 구조를 이해하고 싶다면** → [Spark 아키텍처](docs/spark/concepts/architecture/)
 - **검색 엔진을 도입하고 싶다면** → [Elasticsearch Quick Start](docs/elasticsearch/quick-start/)
 - **한글 검색을 최적화하고 싶다면** → [한글 검색 최적화](docs/elasticsearch/concepts/korean-search/)
+- **시스템 모니터링을 시작하고 싶다면** → [Observability Quick Start](docs/observability/quick-start/)
+- **PromQL을 깊이 배우고 싶다면** → [PromQL 심화](docs/observability/concepts/promql/)
