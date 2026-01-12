@@ -83,11 +83,12 @@ params:
     - /images/og-image.png
 
   # Hugo Book Theme 설정
-  BookTheme: "auto"
+  googleAnalytics = "GTM-W4X7HKDD"
+  BookTheme: "light"
   BookToC: true
   BookSection: docs
   BookSearch: true
   BookComments: false
   BookPortableLinks: "warning"
-  BookDateFormat: "January 2, 2006"
+  BookDateFormat: "2023-10-15"
   BookEditLink: "https://github.com/advanced-beginner/advanced-beginner.github.io/edit/main/{{ .Path }}"
