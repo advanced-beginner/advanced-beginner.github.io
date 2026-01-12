@@ -9,6 +9,57 @@ author:
 
 Kubernetes 학습과 운영에서 자주 묻는 질문과 답변을 정리합니다.
 
+## 시작하기 전에
+
+### Q: Kubernetes를 배우기 전에 알아야 할 것은?
+
+**A:** 다음 지식이 있으면 학습이 수월합니다:
+- **필수**: Docker 기본 (이미지 빌드, 컨테이너 실행)
+- **필수**: Linux 기본 명령어 (cd, ls, cat, grep)
+- **권장**: YAML 문법, 네트워크 기초 (IP, 포트, DNS)
+
+### Q: 로컬에서 Kubernetes를 어떻게 실습하나요?
+
+**A:** 세 가지 방법이 있습니다:
+
+| 도구 | 특징 | 권장 대상 |
+|------|------|----------|
+| Minikube | 가장 쉬움, 문서 많음 | 초보자 |
+| Kind | 빠른 시작, 다중 노드 | CI/CD |
+| Docker Desktop | 설치 간편 | macOS/Windows |
+
+초보자라면 Minikube로 시작하세요: `minikube start`
+
+### Q: 학습에 얼마나 시간이 걸리나요?
+
+**A:** 목표에 따라 다릅니다:
+- **기본 배포** (Pod, Deployment, Service): 1-2주
+- **운영 기초** (리소스, 스케일링, 모니터링): 1개월
+- **실무 숙련**: 3-6개월 (실제 프로젝트 경험 필요)
+
+### Q: YAML 문법이 어려워요. 꼭 알아야 하나요?
+
+**A:** 네, Kubernetes 리소스는 YAML로 정의합니다. 다행히 복잡한 문법은 사용하지 않습니다:
+- 들여쓰기 (스페이스 2칸)
+- 키-값 쌍 (`key: value`)
+- 리스트 (`- item`)
+
+`kubectl explain deployment.spec`으로 필드 설명을 볼 수 있습니다.
+
+### Q: kubectl 명령어가 너무 길어요. 단축키가 있나요?
+
+**A:** 자주 쓰는 단축 명령어:
+
+```bash
+# 별칭 설정 (~/.bashrc 또는 ~/.zshrc)
+alias k='kubectl'
+alias kgp='kubectl get pods'
+alias kgs='kubectl get services'
+alias kgd='kubectl get deployments'
+alias kd='kubectl describe'
+alias kl='kubectl logs'
+```
+
 ## 기본 개념
 
 ### Q: Pod와 컨테이너의 차이는 무엇인가요?

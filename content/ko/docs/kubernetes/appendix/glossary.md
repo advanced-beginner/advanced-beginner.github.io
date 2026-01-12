@@ -37,6 +37,27 @@ Kubernetes 학습과 운영에 필요한 핵심 용어를 정리합니다.
 ### Deployment
 Pod의 선언적 업데이트를 관리하는 워크로드입니다. ReplicaSet을 생성하고 롤링 업데이트, 롤백을 지원합니다.
 
+```yaml
+# 예시: 3개의 nginx Pod를 관리하는 Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.25
+```
+
 ### etcd
 Kubernetes 클러스터의 모든 상태를 저장하는 분산 키-값 저장소입니다. 고가용성을 위해 홀수 개로 클러스터링합니다.
 
@@ -83,6 +104,18 @@ Kubernetes 클러스터를 구성하는 머신(물리 또는 가상)입니다. W
 ### Pod
 Kubernetes의 최소 배포 단위입니다. 하나 이상의 컨테이너를 포함하며, 네트워크와 스토리지를 공유합니다.
 
+```yaml
+# 예시: nginx Pod
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.25
+```
+
 ### Probe
 컨테이너 상태를 확인하는 메커니즘입니다. Liveness, Readiness, Startup Probe가 있습니다.
 
@@ -105,6 +138,21 @@ Pod가 사용할 수 있는 최대 리소스 양입니다. 초과 시 CPU는 스
 
 ### Service
 Pod 집합에 대한 안정적인 네트워크 엔드포인트를 제공합니다. ClusterIP, NodePort, LoadBalancer 유형이 있습니다.
+
+```yaml
+# 예시: nginx Pod를 노출하는 Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+  - port: 80
+    targetPort: 80
+  type: ClusterIP
+```
 
 ### StatefulSet
 상태가 있는 애플리케이션(DB 등)을 위한 워크로드입니다. 순차 배포, 안정적인 네트워크 ID, 영구 스토리지를 제공합니다.

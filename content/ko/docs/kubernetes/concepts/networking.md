@@ -86,6 +86,49 @@ spring:
 
 Ingress는 클러스터 외부에서 내부 Service로의 HTTP/HTTPS 트래픽을 관리합니다.
 
+### 외부 요청 처리 흐름
+
+외부에서 들어오는 HTTP 요청이 Pod까지 전달되는 과정을 단계별로 살펴봅니다.
+
+```mermaid
+flowchart TB
+    subgraph External[외부]
+        User[사용자<br/>api.example.com/users]
+    end
+
+    subgraph Cluster[Kubernetes 클러스터]
+        subgraph Ingress[Ingress Layer]
+            LB[LoadBalancer<br/>External IP]
+            IC[Ingress Controller<br/>NGINX]
+            ING[Ingress 규칙]
+        end
+
+        subgraph Services[Service Layer]
+            SVC[user-service<br/>ClusterIP]
+        end
+
+        subgraph Pods[Pod Layer]
+            P1[Pod 1]
+            P2[Pod 2]
+        end
+    end
+
+    User -->|1. DNS 조회| LB
+    LB -->|2. 트래픽 전달| IC
+    IC -->|3. 규칙 매칭| ING
+    ING -->|4. 라우팅| SVC
+    SVC -->|5. 로드밸런싱| P1
+    SVC -->|5. 로드밸런싱| P2
+```
+
+| 단계 | 컴포넌트 | 동작 |
+|------|----------|------|
+| 1 | DNS/LB | 도메인을 LoadBalancer IP로 해석 |
+| 2 | LoadBalancer | 트래픽을 Ingress Controller로 전달 |
+| 3 | Ingress Controller | Ingress 규칙에서 host/path 매칭 |
+| 4 | Ingress → Service | 매칭된 Service로 라우팅 |
+| 5 | Service → Pod | 여러 Pod에 트래픽 분산 |
+
 ### Ingress vs LoadBalancer
 
 | 항목 | LoadBalancer | Ingress |

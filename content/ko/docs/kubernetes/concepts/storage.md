@@ -342,6 +342,118 @@ kubectl exec -it app-with-storage -- cat /app/data/test.txt
 # 출력: test data (데이터 유지됨)
 ```
 
+## 실제 사용 시나리오
+
+### 시나리오 1: 애플리케이션 로그 저장
+
+여러 Pod의 로그를 중앙에서 수집하기 위해 emptyDir을 사용합니다.
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-with-log-collector
+spec:
+  containers:
+  - name: app
+    image: my-app:1.0
+    volumeMounts:
+    - name: logs
+      mountPath: /var/log/app
+  - name: log-collector
+    image: fluent/fluentd:v1.16
+    volumeMounts:
+    - name: logs
+      mountPath: /var/log/app
+      readOnly: true
+  volumes:
+  - name: logs
+    emptyDir: {}
+```
+
+**사용 이유:** 앱 컨테이너가 로그를 파일로 생성하고, 사이드카 컨테이너가 이를 읽어 외부 시스템으로 전송합니다.
+
+### 시나리오 2: 파일 업로드 저장소
+
+사용자가 업로드한 파일을 영구 저장합니다.
+
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: upload-storage
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: file-server
+spec:
+  replicas: 1  # RWO는 단일 Pod만 가능
+  selector:
+    matchLabels:
+      app: file-server
+  template:
+    metadata:
+      labels:
+        app: file-server
+    spec:
+      containers:
+      - name: server
+        image: nginx:1.25
+        volumeMounts:
+        - name: uploads
+          mountPath: /usr/share/nginx/html/uploads
+      volumes:
+      - name: uploads
+        persistentVolumeClaim:
+          claimName: upload-storage
+```
+
+**주의:** `ReadWriteOnce`는 단일 노드에서만 마운트 가능합니다. 여러 Pod에서 접근하려면 NFS 같은 `ReadWriteMany` 스토리지가 필요합니다.
+
+### 시나리오 3: 설정 파일 주입
+
+ConfigMap의 설정 파일을 애플리케이션에 전달합니다.
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  nginx.conf: |
+    server {
+        listen 80;
+        location / {
+            root /usr/share/nginx/html;
+        }
+    }
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.25
+    volumeMounts:
+    - name: config
+      mountPath: /etc/nginx/conf.d
+  volumes:
+  - name: config
+    configMap:
+      name: nginx-config
+```
+
+**장점:** ConfigMap 변경 시 Pod 내 파일이 자동으로 갱신됩니다 (수 분 소요).
+
 ---
 
 ## 다음 단계
