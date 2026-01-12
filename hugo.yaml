@@ -59,7 +59,7 @@ menu:
       url: "https://github.com/advanced-beginner/advanced-beginner.github.io"
       weight: 10
 
-googleAnalytics = "GTM-W4X7HKDD"
+googleAnalytics: "GTM-W4X7HKDD"
 params:
   author:
     name: kimbenji
