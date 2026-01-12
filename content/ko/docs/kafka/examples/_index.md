@@ -1,4 +1,5 @@
 ---
+bookCollapseSection: true
 lastmod: "2026-01-06"
 title: 실습 예제
 weight: 3
