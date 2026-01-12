@@ -9,6 +9,32 @@ author:
 
 Kubernetes 학습과 운영에 도움이 되는 공식 문서와 추가 학습 자료를 정리합니다.
 
+## 학습 단계별 추천 자료
+
+어디서부터 시작해야 할지 모르겠다면 아래 로드맵을 참고하세요.
+
+```mermaid
+flowchart TD
+    START[시작] --> L1[1단계: 입문]
+    L1 --> L2[2단계: 기초]
+    L2 --> L3[3단계: 심화]
+    L3 --> L4[4단계: 전문가]
+
+    L1 -.->|추천| R1[Kubernetes Basics 튜토리얼]
+    L2 -.->|추천| R2[kubectl Cheat Sheet + 이 가이드]
+    L3 -.->|추천| R3[Kubernetes in Action 도서]
+    L4 -.->|추천| R4[CKA/CKAD 자격증]
+```
+
+| 단계 | 목표 | 추천 자료 | 예상 기간 |
+|------|------|----------|----------|
+| **1. 입문** | 첫 배포 성공 | Kubernetes Basics, Play with K8s | 1주 |
+| **2. 기초** | 핵심 개념 이해 | 이 가이드, kubectl Cheat Sheet | 2-4주 |
+| **3. 심화** | 운영 역량 확보 | Kubernetes in Action, Prometheus | 1-3개월 |
+| **4. 전문가** | 자격증/아키텍처 | CKA/CKAD, Kubernetes Patterns | 3-6개월 |
+
+---
+
 ## 공식 문서
 
 ### Kubernetes 공식

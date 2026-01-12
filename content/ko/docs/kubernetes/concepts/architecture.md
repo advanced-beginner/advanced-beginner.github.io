@@ -305,6 +305,37 @@ HA 구성의 핵심 요소는 다음과 같습니다.
 
 관리형 Kubernetes(EKS, GKE, AKS)를 사용하면 Control Plane HA는 클라우드 제공자가 관리합니다.
 
+## 개발자 관점: 왜 아키텍처를 알아야 하나?
+
+배포 문제가 발생했을 때 **어떤 컴포넌트를 확인해야 하는지** 알기 위해서입니다.
+
+### 증상별 원인 컴포넌트
+
+| 증상 | 원인 컴포넌트 | 확인 방법 |
+|------|--------------|----------|
+| Pod가 Pending 상태 | Scheduler | `kubectl describe pod` → Events 확인 |
+| Pod가 생성되지 않음 | Controller Manager | `kubectl get events --sort-by=.lastTimestamp` |
+| Pod가 노드에서 시작 안 됨 | Kubelet | `kubectl describe node`, 노드 로그 |
+| Service 연결 안 됨 | kube-proxy | `kubectl get endpoints` |
+| 모든 명령이 안 됨 | API Server | `kubectl cluster-info` |
+
+### 컴포넌트 장애 시 영향도
+
+| 컴포넌트 | 장애 시 영향 | 기존 Pod | 긴급도 |
+|----------|-------------|----------|--------|
+| **API Server** | 모든 kubectl 불가, 신규 배포 불가 | 유지됨 | 🔴 Critical |
+| **etcd** | 클러스터 상태 유실, 복구 불가 | 유지됨 | 🔴 Critical |
+| **Scheduler** | 신규 Pod 배치 불가 | 유지됨 | 🟡 High |
+| **Controller Manager** | 자동 복구/스케일링 중단 | 유지됨 | 🟡 High |
+| **Kubelet (1개 노드)** | 해당 노드 Pod만 영향 | 다른 노드는 정상 | 🟢 Medium |
+| **kube-proxy** | 해당 노드 Service 라우팅 불가 | Pod 자체는 정상 | 🟢 Medium |
+
+{{< callout type="info" title="핵심 포인트" >}}
+Control Plane 장애 시에도 **이미 실행 중인 Pod는 계속 동작**합니다. 하지만 신규 배포, 스케일링, 자동 복구가 중단됩니다.
+{{< /callout >}}
+
+---
+
 ## 실습: 클러스터 구성요소 확인
 
 실제 클러스터에서 구성요소들을 확인해봅니다.
