@@ -1,4 +1,5 @@
 ---
+bookCollapseSection: true
 title: 개념 이해
 weight: 2
 lastmod: "2026-01-09"

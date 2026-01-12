@@ -1,4 +1,5 @@
 ---
+bookCollapseSection: true
 title: Quick Start
 weight: 1
 lastmod: 2026-01-10

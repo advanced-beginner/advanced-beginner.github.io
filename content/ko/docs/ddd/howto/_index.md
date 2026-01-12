@@ -1,4 +1,5 @@
 ---
+bookCollapseSection: true
 title: 하우투 가이드
 weight: 4
 lastmod: "2026-01-10"
