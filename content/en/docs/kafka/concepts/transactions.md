@@ -13,9 +13,9 @@ Understanding message delivery guarantees and Kafka transactions.
 ```mermaid
 flowchart LR
     subgraph Levels["Delivery Guarantee Levels"]
-        AMO["At-Most-Once\nMax 1 time"]
-        ALO["At-Least-Once\nMin 1 time"]
-        EOS["Exactly-Once\nExactly 1 time"]
+        AMO["At-Most-Once<br>Max 1 time"]
+        ALO["At-Least-Once<br>Min 1 time"]
+        EOS["Exactly-Once<br>Exactly 1 time"]
     end
 
     AMO -->|"May lose"| ALO
@@ -272,11 +272,11 @@ flowchart TB
     end
 
     subgraph ReadUncommitted["read_uncommitted"]
-        RU["msg1, msg2, msg3, msg4\nReads all"]
+        RU["msg1, msg2, msg3, msg4<br>Reads all"]
     end
 
     subgraph ReadCommitted["read_committed"]
-        RC["Reads only msg1, msg2\n(waits for msg3)"]
+        RC["Reads only msg1, msg2<br>(waits for msg3)"]
     end
 ```
 
@@ -344,14 +344,14 @@ flowchart TB
 
 ```mermaid
 flowchart TB
-    Q1{Message loss\nacceptable?}
-    Q2{Duplication\nacceptable?}
-    Q3{Atomic processing\nacross Topics/Partitions?}
+    Q1{Message loss<br>acceptable?}
+    Q2{Duplication<br>acceptable?}
+    Q3{Atomic processing<br>across Topics/Partitions?}
 
     Q1 -->|Yes| AMO[At-Most-Once]
     Q1 -->|No| Q2
 
-    Q2 -->|Yes| ALO[At-Least-Once\n+ Idempotent handling]
+    Q2 -->|Yes| ALO[At-Least-Once<br>+ Idempotent handling]
     Q2 -->|No| Q3
 
     Q3 -->|No| IDP[Idempotent Producer]
@@ -420,10 +420,10 @@ public void handleOrder(OrderEvent event) {
 ```mermaid
 flowchart TB
     subgraph Summary["Message Delivery Guarantees"]
-        AMO["At-Most-Once\nacks=0, no retries"]
-        ALO["At-Least-Once\nacks=all, with retries"]
-        IDP["+ Idempotent\nenable.idempotence"]
-        TXN["+ Transactions\ntransaction-id-prefix"]
+        AMO["At-Most-Once<br>acks=0, no retries"]
+        ALO["At-Least-Once<br>acks=all, with retries"]
+        IDP["+ Idempotent<br>enable.idempotence"]
+        TXN["+ Transactions<br>transaction-id-prefix"]
     end
 
     AMO --> ALO

@@ -13,10 +13,10 @@ Understanding core metrics for Kafka clusters and applications.
 ```mermaid
 flowchart TB
     subgraph Monitoring["Monitoring Targets"]
-        BROKER["Broker\nCluster status"]
-        PRODUCER["Producer\nSend performance"]
-        CONSUMER["Consumer\nLag, processing speed"]
-        TOPIC["Topic/Partition\nStatus"]
+        BROKER["Broker<br>Cluster status"]
+        PRODUCER["Producer<br>Send performance"]
+        CONSUMER["Consumer<br>Lag, processing speed"]
+        TOPIC["Topic/Partition<br>Status"]
     end
 ```
 
@@ -39,9 +39,9 @@ flowchart LR
         direction LR
         O1["0"]
         O2["..."]
-        O3["800\nConsumer"]
+        O3["800<br>Consumer"]
         O4["..."]
-        O5["1000\nLatest"]
+        O5["1000<br>Latest"]
     end
 
     O3 -->|Lag: 200| O5
@@ -308,9 +308,9 @@ public void consume(ConsumerRecord<String, OrderEvent> record) {
 ```mermaid
 flowchart TB
     LAG[Lag Spike]
-    Q1{Consumer\nalive?}
-    Q2{Processing speed\nnormal?}
-    Q3{Rebalancing\noccurred?}
+    Q1{Consumer<br>alive?}
+    Q2{Processing speed<br>normal?}
+    Q3{Rebalancing<br>occurred?}
 
     LAG --> Q1
     Q1 -->|No| RESTART[Restart Consumer]
@@ -348,9 +348,9 @@ flowchart TB
 ```mermaid
 flowchart TB
     subgraph Metrics["Core Metrics"]
-        LAG["Consumer Lag\nMost important"]
-        ERR["Error Rate\nQuality indicator"]
-        LAT["Latency\nPerformance indicator"]
+        LAG["Consumer Lag<br>Most important"]
+        ERR["Error Rate<br>Quality indicator"]
+        LAT["Latency<br>Performance indicator"]
     end
 
     subgraph Tools["Tools"]

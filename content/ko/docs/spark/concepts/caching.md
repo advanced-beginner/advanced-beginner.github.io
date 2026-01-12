@@ -24,7 +24,7 @@ author:
 
 Spark의 인메모리 컴퓨팅 능력을 활용하여 중간 결과를 캐시하고 재사용하는 방법을 알아봅니다.
 
-##캐싱이란?
+## 캐싱이란?
 
 **캐싱(Caching)**은 RDD/DataFrame을 메모리나 디스크에 저장하여 후속 연산에서 재사용하는 것입니다.
 
@@ -57,7 +57,7 @@ processed.unpersist();                       // 캐시 해제
 - 사용 후 `unpersist()`로 메모리 해제 권장
 {{< /callout >}}
 
-##기본 사용법
+## 기본 사용법
 
 **cache()**
 
@@ -104,7 +104,7 @@ df.persist(StorageLevel.DISK_ONLY());
 df.persist(StorageLevel.MEMORY_AND_DISK_2());
 ```
 
-##Storage Level 상세
+## Storage Level 상세
 
 | Storage Level | 메모리 사용 | 디스크 사용 | 직렬화 | 복제 | 특징 |
 |--------------|------------|------------|--------|------|------|
@@ -126,7 +126,7 @@ df.persist(StorageLevel.MEMORY_AND_DISK_2());
 고가용성 필요 → *_2 계열
 ```
 
-##캐싱 vs 체크포인트
+## 캐싱 vs 체크포인트
 
 **캐싱 (cache/persist)**
 
@@ -181,7 +181,7 @@ for (int iter = 0; iter < 100; iter++) {
 }
 ```
 
-##캐시 관리
+## 캐시 관리
 
 **캐시 상태 확인**
 
@@ -216,7 +216,7 @@ spark.catalog().clearCache();
 spark.catalog().refreshTable("table_name");
 ```
 
-##SQL에서의 캐싱
+## SQL에서의 캐싱
 
 ```sql
 -- 테이블 캐시
@@ -236,7 +236,7 @@ UNCACHE TABLE employees;
 CLEAR CACHE;
 ```
 
-##캐싱 모범 사례
+## 캐싱 모범 사례
 
 **1. 여러 번 사용되는 데이터만 캐시**
 
@@ -301,7 +301,7 @@ spark.conf().set("spark.serializer", "org.apache.spark.serializer.KryoSerializer
 spark.conf().set("spark.kryo.registrationRequired", "false");
 ```
 
-##캐싱과 파티셔닝
+## 캐싱과 파티셔닝
 
 ```java
 // 캐시 전 파티션 조정 권장
@@ -314,7 +314,7 @@ Dataset<Row> optimized = df
 // 파티션이 너무 적으면 병렬성 저하
 ```
 
-##실전 예제: 머신러닝 파이프라인
+## 실전 예제: 머신러닝 파이프라인
 
 ```java
 public class MLPipelineWithCaching {
@@ -369,7 +369,7 @@ public class MLPipelineWithCaching {
 }
 ```
 
-##트러블슈팅
+## 트러블슈팅
 
 **메모리 부족으로 캐시 실패**
 
@@ -406,12 +406,12 @@ Dataset<Row> df = spark.read().parquet("data").cache();
 Dataset<Row> filtered = df.filter(...);  // df가 캐시됨
 ```
 
-##다음 단계
+## 다음 단계
 
 - [Structured Streaming](../structured-streaming/) - 실시간 데이터 처리
 - [성능 튜닝](../tuning/) - 전체 성능 최적화
 
-##관련 문서
+## 관련 문서
 
 - [Transformation과 Action](../transformations-actions/) - 지연 평가와 캐싱의 관계
 - [파티셔닝과 셔플](../partitioning/) - 캐시 전 파티션 최적화

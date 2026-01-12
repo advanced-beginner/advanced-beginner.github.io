@@ -27,7 +27,7 @@ author:
 
 프로덕션 환경에서 사용 가능한 완전한 ETL(Extract-Transform-Load) 파이프라인 예제입니다.
 
-##파이프라인 아키텍처
+## 파이프라인 아키텍처
 
 ```mermaid
 flowchart LR
@@ -61,7 +61,7 @@ flowchart LR
 
 *다이어그램 설명: S3/HDFS, Database, REST API에서 데이터를 추출(Extract)하여 데이터 정제, 보강, 집계 단계를 거친 후(Transform), Data Warehouse, Data Lake, Redis Cache로 적재(Load)하는 ETL 파이프라인 흐름*
 
-##프로젝트 구조
+## 프로젝트 구조
 
 ```
 etl-pipeline/
@@ -86,7 +86,7 @@ etl-pipeline/
 └── build.gradle.kts
 ```
 
-##기본 ETL 구조
+## 기본 ETL 구조
 
 **추상 ETL 작업 클래스**
 
@@ -205,7 +205,7 @@ public record EtlResult(
 - **결과 추적**: `EtlResult` record로 성공/실패, 레코드 수, 소요 시간 기록
 {{% /notice %}}
 
-##매출 데이터 ETL 예제
+## 매출 데이터 ETL 예제
 
 **전체 구현**
 
@@ -421,7 +421,7 @@ public record ValidationResult(
 - **메타데이터**: 처리 시점, 배치 ID 추가로 추적 가능성 확보
 {{% /notice %}}
 
-##데이터 정제 유틸리티
+## 데이터 정제 유틸리티
 
 **범용 데이터 클리너**
 
@@ -541,7 +541,7 @@ public class DataCleaner {
 - **재사용성**: 범용 클래스로 다양한 ETL 작업에서 활용
 {{% /notice %}}
 
-##증분 ETL (Incremental)
+## 증분 ETL (Incremental)
 
 **CDC 기반 증분 처리**
 
@@ -661,7 +661,7 @@ public class IncrementalEtlJob {
 - **멱등성**: 동일 데이터 재처리해도 결과 동일하게 보장
 {{% /notice %}}
 
-##에러 처리 및 재시도
+## 에러 처리 및 재시도
 
 **견고한 ETL 러너**
 
@@ -759,7 +759,7 @@ public class EtlRunner {
 - **실패 시 중단**: 특정 날짜 실패 시 후속 처리 중단으로 데이터 정합성 유지
 {{% /notice %}}
 
-##스케줄링 (Spring)
+## 스케줄링 (Spring)
 
 ```java
 package com.example.etl;
@@ -795,7 +795,7 @@ public class EtlScheduler {
 }
 ```
 
-##관련 문서
+## 관련 문서
 
 - [기본 예제](../basic/) - DataFrame 기본 연산
 - [모니터링](../monitoring/) - 파이프라인 모니터링

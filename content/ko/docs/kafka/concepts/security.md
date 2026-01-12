@@ -40,9 +40,9 @@ flowchart TB
     end
 
     subgraph Security["보안 계층"]
-        TLS["1. SSL/TLS\n암호화"]
-        SASL["2. SASL\n인증"]
-        ACL["3. ACL\n권한"]
+        TLS["1. SSL/TLS<br>암호화"]
+        SASL["2. SASL<br>인증"]
+        ACL["3. ACL<br>권한"]
     end
 
     subgraph Kafka["Kafka Cluster"]

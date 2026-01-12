@@ -25,7 +25,7 @@ author:
 
 Spark 애플리케이션의 성능을 최적화하는 전략과 구체적인 설정 방법을 알아봅니다.
 
-##튜닝 원칙
+## 튜닝 원칙
 
 **튜닝 순서**
 
@@ -47,7 +47,7 @@ Spark 애플리케이션의 성능을 최적화하는 전략과 구체적인 설
 - AQE 활성화로 런타임 자동 최적화 (Spark 3.0+)
 {{< /callout >}}
 
-##코드 수준 최적화
+## 코드 수준 최적화
 
 **1. 셔플 최소화**
 
@@ -123,7 +123,7 @@ process3(processed);
 processed.unpersist();
 ```
 
-##데이터 구조 최적화
+## 데이터 구조 최적화
 
 **1. 파일 포맷**
 
@@ -184,7 +184,7 @@ df.write()
     .parquet("output");
 ```
 
-##리소스 설정
+## 리소스 설정
 
 **메모리 구조**
 
@@ -236,7 +236,7 @@ spark.executor.memory = 컨테이너 메모리 × 0.9 - 오버헤드
 - spark.executor.memory: 약 8GB
 ```
 
-##셔플 최적화
+## 셔플 최적화
 
 **셔플 관련 설정**
 
@@ -273,7 +273,7 @@ spark.conf().set("spark.sql.adaptive.localShuffleReader.enabled", "true");
 spark.conf().set("spark.sql.adaptive.skewJoin.enabled", "true");
 ```
 
-##직렬화 최적화
+## 직렬화 최적화
 
 **Kryo 직렬화**
 
@@ -295,7 +295,7 @@ spark.conf().set("spark.kryo.classesToRegister",
 | Java (기본) | 느림 | 큼 | 없음 |
 | Kryo | 빠름 | 작음 | 권장 |
 
-##GC 최적화
+## GC 최적화
 
 **GC 설정**
 
@@ -315,7 +315,7 @@ spark.conf().set("spark.memory.offHeap.enabled", "true");
 spark.conf().set("spark.memory.offHeap.size", "2g");
 ```
 
-##SQL 최적화
+## SQL 최적화
 
 **조인 전략 힌트**
 
@@ -348,7 +348,7 @@ spark.sql("ANALYZE TABLE my_table COMPUTE STATISTICS");
 spark.sql("ANALYZE TABLE my_table COMPUTE STATISTICS FOR COLUMNS col1, col2");
 ```
 
-##스트리밍 튜닝
+## 스트리밍 튜닝
 
 **처리량 최적화**
 
@@ -364,7 +364,7 @@ spark.conf().set("spark.sql.streaming.stateStore.providerClass",
     "org.apache.spark.sql.execution.streaming.state.RocksDBStateStoreProvider");
 ```
 
-##성능 모니터링
+## 성능 모니터링
 
 **Spark UI 활용**
 
@@ -391,7 +391,7 @@ df.count();  // 캐시 로드
 df.explain(true);
 ```
 
-##체크리스트
+## 체크리스트
 
 **코드 체크리스트**
 
@@ -417,7 +417,7 @@ df.explain(true);
 - [ ] 브로드캐스트 임계값 조정
 - [ ] 메모리/코어 적절 할당
 
-##실무 인사이트
+## 실무 인사이트
 
 **실제 튜닝 시나리오**
 
@@ -475,12 +475,12 @@ df.explain(true);
 5순위: Executor 리소스 튜닝
 ```
 
-##다음 단계
+## 다음 단계
 
 - [배포와 클러스터 관리](../deployment/) - 프로덕션 환경 구성
 - [FAQ](../../appendix/faq/) - 자주 발생하는 성능 문제 해결
 
-##관련 문서
+## 관련 문서
 
 - [아키텍처](../architecture/) - Driver/Executor 메모리 구조
 - [파티셔닝과 셔플](../partitioning/) - 셔플 최적화 상세

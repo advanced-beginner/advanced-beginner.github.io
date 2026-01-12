@@ -71,7 +71,7 @@ flowchart TB
         P3B[P1]
         C3A[Consumer 1]
         C3B[Consumer 2]
-        C3C["Consumer 3\n(Idle)"]
+        C3C["Consumer 3<br>(Idle)"]
         P3A --> C3A
         P3B --> C3B
     end
@@ -137,10 +137,10 @@ Partition 0:
 
 ```mermaid
 flowchart LR
-    START[Earliest\nOffset 0]
-    COMMIT[Committed\nOffset 3]
-    CURRENT[Current\nOffset 5]
-    END[Latest\nOffset 7]
+    START[Earliest<br>Offset 0]
+    COMMIT[Committed<br>Offset 3]
+    CURRENT[Current<br>Offset 5]
+    END[Latest<br>Offset 7]
 
     START --> COMMIT --> CURRENT --> END
 ```
@@ -273,7 +273,7 @@ spring:
 ```mermaid
 flowchart TB
     subgraph ConsumerGroup["Consumer Group"]
-        CG[Consumers sharing\nthe same Group ID]
+        CG[Consumers sharing<br>the same Group ID]
     end
 
     subgraph Rules["Core Rules"]

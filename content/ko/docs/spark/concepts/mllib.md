@@ -25,7 +25,7 @@ author:
 
 MLlib은 Spark의 분산 머신러닝 라이브러리입니다. 대규모 데이터셋에서 머신러닝 모델을 학습하고 예측할 수 있습니다.
 
-##MLlib 개요
+## MLlib 개요
 
 **두 가지 API**
 
@@ -51,7 +51,7 @@ MLlib은 Spark의 분산 머신러닝 라이브러리입니다. 대규모 데이
 - Estimator: fit()으로 학습하여 Transformer 생성
 {{< /callout >}}
 
-##기본 워크플로우
+## 기본 워크플로우
 
 ```java
 import org.apache.spark.ml.classification.LogisticRegression;
@@ -101,7 +101,7 @@ model.write().overwrite().save("models/logistic-regression");
 LogisticRegressionModel loadedModel = LogisticRegressionModel.load("models/logistic-regression");
 ```
 
-##특성 변환 (Feature Transformation)
+## 특성 변환 (Feature Transformation)
 
 **VectorAssembler**
 
@@ -179,7 +179,7 @@ IDF idf = new IDF()
         .setOutputCol("tfidf");
 ```
 
-##Pipeline
+## Pipeline
 
 여러 단계를 하나의 워크플로우로 연결:
 
@@ -225,7 +225,7 @@ model.write().overwrite().save("models/pipeline");
 PipelineModel loadedModel = PipelineModel.load("models/pipeline");
 ```
 
-##분류 (Classification)
+## 분류 (Classification)
 
 **로지스틱 회귀**
 
@@ -285,7 +285,7 @@ GBTClassifier gbt = new GBTClassifier()
 GBTClassificationModel model = gbt.fit(training);
 ```
 
-##회귀 (Regression)
+## 회귀 (Regression)
 
 **선형 회귀**
 
@@ -314,7 +314,7 @@ RandomForestRegressor rf = new RandomForestRegressor()
 RandomForestRegressionModel model = rf.fit(training);
 ```
 
-##클러스터링 (Clustering)
+## 클러스터링 (Clustering)
 
 **K-Means**
 
@@ -352,7 +352,7 @@ Dataset<Row> anomalies = withDistance
     .filter(col("distanceToCenter").gt(threshold));
 ```
 
-##모델 평가
+## 모델 평가
 
 **분류 평가**
 
@@ -393,7 +393,7 @@ double rmse = evaluator.evaluate(predictions);
 System.out.println("RMSE: " + rmse);
 ```
 
-##하이퍼파라미터 튜닝
+## 하이퍼파라미터 튜닝
 
 **CrossValidator**
 
@@ -443,7 +443,7 @@ TrainValidationSplit tvs = new TrainValidationSplit()
 TrainValidationSplitModel tvsModel = tvs.fit(training);
 ```
 
-##실전 예제: 고객 이탈 예측
+## 실전 예제: 고객 이탈 예측
 
 ```java
 public class ChurnPrediction {
@@ -552,7 +552,7 @@ public class ChurnPrediction {
 }
 ```
 
-##다음 단계
+## 다음 단계
 
 - [성능 튜닝](../tuning/) - ML 워크로드 최적화
 - [배포](../deployment/) - 모델 서빙과 배치 예측

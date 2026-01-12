@@ -43,7 +43,7 @@ flowchart LR
         LOGIC[비즈니스 로직]
     end
 
-    BROKER -->|fetch.min.bytes\nfetch.max.wait.ms| FETCH
+    BROKER -->|fetch.min.bytes<br>fetch.max.wait.ms| FETCH
     FETCH -->|max.poll.records| POLL
     POLL --> PROCESS
     PROCESS --> LOGIC

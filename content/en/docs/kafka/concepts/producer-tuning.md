@@ -19,7 +19,7 @@ flowchart LR
     subgraph Producer["Producer Internal"]
         SER[Serializer]
         PART[Partitioner]
-        BATCH[Batch\nbuffer.memory]
+        BATCH[Batch<br>buffer.memory]
         SENDER[Sender Thread]
     end
 
@@ -28,7 +28,7 @@ flowchart LR
     end
 
     SEND --> SER --> PART --> BATCH
-    BATCH -->|batch.size or\nlinger.ms| SENDER
+    BATCH -->|batch.size or<br>linger.ms| SENDER
     SENDER --> BROKER
 ```
 
@@ -124,8 +124,8 @@ spring:
 ```mermaid
 flowchart TB
     MSG[Message arrives]
-    CHECK{batch.size\nreached?}
-    WAIT{linger.ms\nexceeded?}
+    CHECK{batch.size<br>reached?}
+    WAIT{linger.ms<br>exceeded?}
     SEND[Send batch]
 
     MSG --> CHECK
@@ -146,9 +146,9 @@ Total buffer memory available to the Producer.
 ```mermaid
 flowchart TB
     subgraph Buffer["buffer.memory = 32MB"]
-        B1[Partition 0\nBatch]
-        B2[Partition 1\nBatch]
-        B3[Partition 2\nBatch]
+        B1[Partition 0<br>Batch]
+        B2[Partition 1<br>Batch]
+        B3[Partition 2<br>Batch]
         FREE[Free space]
     end
 
@@ -318,11 +318,11 @@ spring:
 ```mermaid
 flowchart LR
     subgraph DeliveryTimeout["delivery.timeout.ms (120s)"]
-        R1[Request 1\n30s]
-        W1[Wait\n100ms]
-        R2[Retry\n30s]
-        W2[Wait\n100ms]
-        R3[Retry\n30s]
+        R1[Request 1<br>30s]
+        W1[Wait<br>100ms]
+        R2[Retry<br>30s]
+        W2[Wait<br>100ms]
+        R3[Retry<br>30s]
     end
 ```
 
@@ -375,12 +375,12 @@ spring:
 
 ```mermaid
 flowchart TB
-    Q1{Throughput vs\nLatency?}
+    Q1{Throughput vs<br>Latency?}
     Q2{Message size?}
     Q3{Order important?}
 
-    Q1 -->|Throughput| TH[batch.size ↑\nlinger.ms ↑\ncompression: lz4]
-    Q1 -->|Latency| LT[batch.size ↓\nlinger.ms=0]
+    Q1 -->|Throughput| TH[batch.size ↑<br>linger.ms ↑<br>compression: lz4]
+    Q1 -->|Latency| LT[batch.size ↓<br>linger.ms=0]
 
     Q2 -->|Large messages| BIG[compression: zstd]
     Q2 -->|Small messages| SMALL[compression: none]

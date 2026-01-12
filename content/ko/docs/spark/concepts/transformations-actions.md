@@ -24,7 +24,7 @@ author:
 
 Spark의 모든 연산은 **Transformation**과 **Action** 두 가지로 분류됩니다. 이 구분을 이해하는 것이 Spark 프로그래밍의 핵심입니다.
 
-##핵심 개념
+## 핵심 개념
 
 **Transformation**
 
@@ -58,7 +58,7 @@ selected.show();                      // Action! → Job 실행
 List<Row> rows = selected.collectAsList();  // Action! → Job 실행
 ```
 
-##왜 지연 평가인가?
+## 왜 지연 평가인가?
 
 **1. 최적화 기회**
 
@@ -103,7 +103,7 @@ Dataset<Row> expensive = df
 Row first = expensive.first();
 ```
 
-##Transformation 종류
+## Transformation 종류
 
 **Narrow Transformation**
 
@@ -172,7 +172,7 @@ JavaPairRDD<String, Integer> reduced = pairRdd.reduceByKey(Integer::sum);
 - Stage 경계가 됨
 - 성능에 가장 큰 영향
 
-##Action 종류
+## Action 종류
 
 **값 반환 Action**
 
@@ -241,7 +241,7 @@ df.foreachPartition(partition -> {
 });
 ```
 
-##실행 흐름 이해
+## 실행 흐름 이해
 
 **DAG 구성과 실행**
 
@@ -287,7 +287,7 @@ Job 1
     └── [Task 1] [Task 2] [Task 3] ...
 ```
 
-##캐싱과 재사용
+## 캐싱과 재사용
 
 같은 DataFrame을 여러 Action에서 사용하면 매번 재계산됩니다. 캐싱으로 이를 방지할 수 있습니다.
 
@@ -321,7 +321,7 @@ processed.unpersist();               // 캐시 해제
 2. **메모리가 부족한 경우**
 3. **원본 데이터가 자주 변경되는 경우**
 
-##주의사항
+## 주의사항
 
 **1. Action 없이 Transformation만으로는 실행 안 됨**
 
@@ -375,7 +375,7 @@ df.filter(...).groupBy(...).agg(...).explain();
 //          +- FileScan parquet(...)
 ```
 
-##실전 팁
+## 실전 팁
 
 **1. Wide Transformation 최소화**
 
@@ -416,7 +416,7 @@ df.select("id", "category", "value")
   .agg(sum("value"));
 ```
 
-##요약
+## 요약
 
 | 구분 | Transformation | Action |
 |------|---------------|--------|
@@ -425,12 +425,12 @@ df.select("id", "category", "value")
 | DAG | 추가 | 트리거 |
 | 예시 | map, filter, groupBy | count, show, collect |
 
-##다음 단계
+## 다음 단계
 
 - [파티셔닝과 셔플](../partitioning/) - Wide Transformation의 내부 동작
 - [캐싱과 영속성](../caching/) - 중간 결과 재사용
 
-##관련 문서
+## 관련 문서
 
 - [아키텍처](../architecture/) - Job, Stage, Task의 실행 구조
 - [RDD 기초](../rdd/) - 저수준 Transformation API

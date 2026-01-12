@@ -27,7 +27,7 @@ author:
 
 Java/Spring 개발자를 위한 Spark와 Spring Boot 통합 패턴입니다.
 
-##아키텍처 패턴
+## 아키텍처 패턴
 
 ```mermaid
 flowchart TB
@@ -61,7 +61,7 @@ flowchart TB
 
 *다이어그램 설명: Spring Boot Application 내 REST Controller가 Service를 통해 Spark Service에 요청하고, SparkSession Bean이 Batch Jobs를 실행하여 HDFS/S3, Database, Kafka 등 스토리지와 연동하는 아키텍처*
 
-##Gradle 설정
+## Gradle 설정
 
 ```kotlin
 // build.gradle.kts
@@ -123,7 +123,7 @@ configurations.all {
 }
 ```
 
-##SparkSession 빈 구성
+## SparkSession 빈 구성
 
 **기본 설정**
 
@@ -279,7 +279,7 @@ spark:
 - **AQE 활성화**: `spark.sql.adaptive.enabled`로 쿼리 최적화 자동화
 {{% /notice %}}
 
-##서비스 레이어 패턴
+## 서비스 레이어 패턴
 
 **기본 Spark 서비스**
 
@@ -504,7 +504,7 @@ public class BatchProcessingService {
 - **CompletableFuture**: 비동기 작업 결과와 상태 추적
 {{% /notice %}}
 
-##REST API 통합
+## REST API 통합
 
 **분석 API 컨트롤러**
 
@@ -593,7 +593,7 @@ public class AnalyticsController {
 - **작업 추적**: 실제 운영에서는 작업 ID로 상태 조회 API 추가 필요
 {{% /notice %}}
 
-##테스트 작성
+## 테스트 작성
 
 **Spark 통합 테스트**
 
@@ -699,7 +699,7 @@ class DataAnalysisServiceTest {
 - **@AfterAll**: 테스트 완료 후 임시 파일 정리
 {{% /notice %}}
 
-##Java vs Scala 비교
+## Java vs Scala 비교
 
 | 구분 | Java | Scala |
 |------|------|-------|
@@ -732,7 +732,7 @@ val result = df
   .orderBy($"avg_salary".desc)
 ```
 
-##관련 문서
+## 관련 문서
 
 - [환경 설정](../setup/) - 기본 프로젝트 구성
 - [모니터링](../monitoring/) - 운영 모니터링 설정

@@ -17,7 +17,7 @@ Spark에서 사용되는 주요 용어와 개념을 정리합니다. 각 용어�
 - **최적화 도구**: Catalyst Optimizer(쿼리 최적화), Tungsten(실행 엔진), AQE(런타임 최적화)
 {{% /notice %}}
 
-##핵심 개념
+## 핵심 개념
 
 **Action**
 
@@ -184,7 +184,7 @@ Spark의 실행 엔진 최적화 프로젝트. 메모리 관리, 코드 생성 �
 | 성능 핵심 | Narrow(셔플X) vs Wide(셔플O) Transformation | Wide일수록 비용 증가 |
 {{% /notice %}}
 
-##스트리밍 용어
+## 스트리밍 용어
 
 **Micro-Batch**
 
@@ -213,7 +213,7 @@ Spark의 실행 엔진 최적화 프로젝트. 메모리 관리, 코드 생성 �
 - **Window**: 시간 기반 그룹화 (Tumbling: 고정, Sliding: 겹침, Session: 활동 기반)
 {{% /notice %}}
 
-##머신러닝 용어
+## 머신러닝 용어
 
 **Estimator**
 
@@ -237,7 +237,7 @@ transform() 메서드로 데이터를 변환하는 컴포넌트.
 - 흐름: `Estimator.fit(data) → Transformer.transform(data)`
 {{% /notice %}}
 
-##설정 관련
+## 설정 관련
 
 **AQE (Adaptive Query Execution)**
 

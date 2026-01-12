@@ -27,7 +27,7 @@ author:
 
 프로덕션 환경에서 Spark 애플리케이션을 안정적으로 운영하기 위한 모니터링 설정 가이드입니다.
 
-##모니터링 아키텍처
+## 모니터링 아키텍처
 
 ```mermaid
 flowchart TB
@@ -61,7 +61,7 @@ flowchart TB
 
 *다이어그램 설명: Spark Cluster(Driver, Executor)에서 Spark UI(:4040), History Server(:18080), Prometheus로 메트릭을 전송하고, Prometheus가 Grafana Dashboard로 데이터를 제공하여 Alert Manager가 알림을 발송하는 모니터링 흐름*
 
-##Spark UI 설정
+## Spark UI 설정
 
 **기본 Spark UI 활성화**
 
@@ -110,7 +110,7 @@ SparkSession spark = SparkSession.builder()
 - **보존 설정**: `retainedJobs`, `retainedStages`로 UI에 표시할 기록 수 조정
 {{% /notice %}}
 
-##Prometheus + Grafana 연동
+## Prometheus + Grafana 연동
 
 **1. Prometheus 메트릭 설정**
 
@@ -188,7 +188,7 @@ rate(spark_executor_completedTasks_total{app_name="$app"}[5m]) * 100
 - **PromQL**: rate(), increase() 함수로 시계열 분석
 {{% /notice %}}
 
-##커스텀 메트릭 구현
+## 커스텀 메트릭 구현
 
 **애플리케이션 레벨 메트릭**
 
@@ -325,7 +325,7 @@ public class MonitoredETLJob {
 - **실시간 로깅**: `logStats()` 메서드로 현재 상태 출력
 {{% /notice %}}
 
-##로깅 설정
+## 로깅 설정
 
 **Log4j2 설정 (권장)**
 
@@ -435,7 +435,7 @@ public class StructuredLoggingExample {
 - **MDC 활용**: 파티션 ID, 작업 ID 등 컨텍스트 정보 추가
 {{% /notice %}}
 
-##알림 설정
+## 알림 설정
 
 **Grafana Alert Rules (YAML)**
 
@@ -490,7 +490,7 @@ groups:
 - **for 조건**: 일시적 스파이크가 아닌 지속적 문제만 알림
 {{% /notice %}}
 
-##모니터링 체크리스트
+## 모니터링 체크리스트
 
 **일일 점검 항목**
 
@@ -538,7 +538,7 @@ public class WeeklyReportGenerator {
 }
 ```
 
-##관련 문서
+## 관련 문서
 
 - [성능 튜닝](../../concepts/tuning/) - 모니터링 결과를 기반으로 최적화
 - [FAQ - 디버깅 가이드](../../appendix/faq/#spark-ui-활용-디버깅-가이드) - 문제 해결

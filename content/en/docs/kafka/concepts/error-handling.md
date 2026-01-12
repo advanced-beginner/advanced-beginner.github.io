@@ -29,9 +29,9 @@ Understanding Kafka Consumer error handling strategies and the Dead Letter Topic
 ```mermaid
 flowchart TB
     subgraph Errors["Error Types"]
-        DESER["Deserialization Error\n(Message format issue)"]
-        TRANS["Transient Error\n(Network, DB connection)"]
-        PERM["Permanent Error\n(Business logic failure)"]
+        DESER["Deserialization Error<br>(Message format issue)"]
+        TRANS["Transient Error<br>(Network, DB connection)"]
+        PERM["Permanent Error<br>(Business logic failure)"]
     end
 
     DESER --> SKIP["Skip/DLT"]
@@ -435,9 +435,9 @@ public void collectDltMetrics() {
 ```mermaid
 flowchart TB
     subgraph Strategy["Error Handling Strategy"]
-        R["@RetryableTopic\nDeclarative retry"]
-        E["DefaultErrorHandler\nProgrammatic"]
-        D["@DltHandler\nDLT handling"]
+        R["@RetryableTopic<br>Declarative retry"]
+        E["DefaultErrorHandler<br>Programmatic"]
+        D["@DltHandler<br>DLT handling"]
     end
 
     subgraph Types["By Error Type"]

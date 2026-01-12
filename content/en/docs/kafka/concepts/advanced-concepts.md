@@ -60,7 +60,7 @@ flowchart TB
         F2[Follower 2]
         L -.->|Sync lag| F1
         L -.->|Sync lag| F2
-        NOTE[acks=all succeeds\nwith only Leader!]
+        NOTE[acks=all succeeds<br>with only Leader!]
     end
 ```
 
@@ -100,10 +100,10 @@ flowchart LR
 
     SPEED <-->|Inverse| SAFE
 
-    A0["acks=0\nFast, Risky"] --> SPEED
-    A1["acks=1\nBalanced"] --> SPEED
+    A0["acks=0<br>Fast, Risky"] --> SPEED
+    A1["acks=1<br>Balanced"] --> SPEED
     A1 --> SAFE
-    AALL["acks=all\nSlow, Safe"] --> SAFE
+    AALL["acks=all<br>Slow, Safe"] --> SAFE
 ```
 
 ## Message Key
@@ -174,9 +174,9 @@ kafkaTemplate.send("logs", null, logMessage);
 ```mermaid
 flowchart TB
     subgraph Problem["When Partition Count Changes"]
-        BEFORE["3 Partitions\nKey 'A' → P0"]
-        AFTER["5 Partitions\nKey 'A' → P2"]
-        WARN[Same Key goes to\ndifferent Partition!]
+        BEFORE["3 Partitions<br>Key 'A' → P0"]
+        AFTER["5 Partitions<br>Key 'A' → P2"]
+        WARN[Same Key goes to<br>different Partition!]
     end
 
     BEFORE -->|Danger| AFTER
@@ -194,9 +194,9 @@ Determines how long messages are kept.
 ```mermaid
 flowchart TB
     subgraph Policies["Retention Policies"]
-        TIME["Time-based\ne.g., 7 days"]
-        SIZE["Size-based\ne.g., 100GB"]
-        COMPACT["Compaction\nKeep latest only"]
+        TIME["Time-based<br>e.g., 7 days"]
+        SIZE["Size-based<br>e.g., 100GB"]
+        COMPACT["Compaction<br>Keep latest only"]
     end
 
     TIME --> DELETE1[Delete old messages]
@@ -372,9 +372,9 @@ retention.ms: 86400000  # 1 day
 ```mermaid
 flowchart TB
     subgraph Concepts["Advanced Concepts"]
-        ACKS["acks\nDelivery guarantee level"]
-        KEY["Message Key\nPartitioning, ordering"]
-        RET["Retention\nStorage policy"]
+        ACKS["acks<br>Delivery guarantee level"]
+        KEY["Message Key<br>Partitioning, ordering"]
+        RET["Retention<br>Storage policy"]
     end
 
     subgraph Usage["Usage Guide"]
