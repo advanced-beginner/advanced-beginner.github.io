@@ -1,0 +1,13 @@
+{{- $group := printf "tabs-%v" .Parent.Ordinal -}}
+{{- $tab := printf "%s-%d" $group .Ordinal -}}
+{{- $title := .Get "title" | default (.Get 0) -}}
+<input type="radio" class="toggle" name="{{ $group }}" id="{{ $tab }}" {{ if not .Ordinal }}checked="checked"{{ end }} />
+{{- /* remove whitespaces */ -}}
+<label for="{{ $tab }}">
+  {{- $title -}}
+</label>
+{{- /* remove whitespaces */ -}}
+<div class="book-tabs-content markdown-inner">
+{{ .Inner | markdownify }}
+</div>
+{{- /* remove whitespaces */ -}}

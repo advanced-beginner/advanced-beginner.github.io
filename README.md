@@ -1,6 +1,6 @@
 # Advanced Beginner
 
-[![Deploy Hugo](https://github.com/advanced-beginner/advanced-beginner.github.io/actions/workflows/hugo.yaml/badge.svg)](https://github.com/advanced-beginner/advanced-beginner.github.io/actions/workflows/hugo.yaml)
+[![Deploy Hugo](https://github.com/advanced-beginner/advanced-beginner.github.io/actions/workflows/deploy.yml/badge.svg)](https://github.com/advanced-beginner/advanced-beginner.github.io/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 > **기초를 넘어 실무로** — 핵심 원리부터 이해하는 기술 가이드
@@ -15,9 +15,13 @@
 
 | 가이드 | 설명 | 상태 |
 |--------|------|------|
-| **[Apache Kafka](https://advanced-beginner.github.io/ko/kafka/)** | 분산 메시징 시스템의 실무 활용. Producer/Consumer부터 트랜잭션, 성능 튜닝까지 | ✅ 완료 |
-| **[Domain-Driven Design](https://advanced-beginner.github.io/ko/ddd/)** | 복잡한 비즈니스 로직을 체계적으로 다루는 설계 방법론 | ✅ 완료 |
-| **[Scala](https://advanced-beginner.github.io/ko/scala/)** | Scala 2.13 & Scala 3 문법 가이드. 함수형 프로그래밍부터 동시성까지 | ✅ 완료 |
+| **[Apache Kafka](https://advanced-beginner.github.io/ko/docs/kafka/)** | 분산 메시징 시스템의 실무 활용. Producer/Consumer부터 트랜잭션, 성능 튜닝까지 | ✅ 완료 |
+| **[Domain-Driven Design](https://advanced-beginner.github.io/ko/docs/ddd/)** | 복잡한 비즈니스 로직을 체계적으로 다루는 설계 방법론 | ✅ 완료 |
+| **[Scala](https://advanced-beginner.github.io/ko/docs/scala/)** | Scala 2.13 & Scala 3 문법 가이드. 함수형 프로그래밍부터 동시성까지 | ✅ 완료 |
+| **[Apache Spark](https://advanced-beginner.github.io/ko/docs/spark/)** | 대규모 데이터 처리 프레임워크. RDD, DataFrame, 스트리밍 처리까지 | ✅ 완료 |
+| **[Kubernetes](https://advanced-beginner.github.io/ko/docs/kubernetes/)** | 컨테이너 오케스트레이션 플랫폼. Pod, Service, Deployment 실습 | ✅ 완료 |
+| **[Elasticsearch](https://advanced-beginner.github.io/ko/docs/elasticsearch/)** | 분산 검색 및 분석 엔진. 인덱싱, 쿼리, 클러스터 운영 가이드 | ✅ 완료 |
+| **[Observability](https://advanced-beginner.github.io/ko/docs/observability/)** | 시스템 관측성 실무 가이드. Prometheus, Grafana, PromQL, 분산 추적까지 | ✅ 완료 |
 
 ---
 
@@ -71,10 +75,14 @@ sbt run
 
 ```
 advanced-beginner/
-├── content/ko/              # 문서 소스 (Markdown)
-│   ├── kafka/               # Kafka 가이드 (12개 문서)
-│   ├── ddd/                 # DDD 가이드 (19개 문서)
-│   └── scala/               # Scala 가이드 (29개 문서)
+├── content/ko/docs/         # 문서 소스 (Markdown)
+│   ├── kafka/               # Kafka 가이드 (28개 문서)
+│   ├── ddd/                 # DDD 가이드 (27개 문서)
+│   ├── scala/               # Scala 가이드 (31개 문서)
+│   ├── spark/               # Spark 가이드 (30개 문서)
+│   ├── kubernetes/          # Kubernetes 가이드 (24개 문서)
+│   ├── elasticsearch/       # Elasticsearch 가이드 (23개 문서)
+│   └── observability/       # Observability 가이드 (36개 문서)
 ├── examples/                # 실행 가능한 예제 프로젝트
 │   ├── quick-start/         # Kafka 최소 설정 예제
 │   ├── order-system/        # Kafka 도메인 이벤트 예제
@@ -92,7 +100,7 @@ advanced-beginner/
 
 | 분류 | 기술 | 버전 |
 |------|------|------|
-| 문서 | Hugo + hugo-theme-relearn | 0.153+ |
+| 문서 | Hugo + hugo-book | 0.153+ |
 | 다이어그램 | Mermaid.js | 11.x |
 | 예제 (Java) | Spring Boot | 3.2.x |
 | 예제 (Scala) | Scala 2.13 / Scala 3 | 2.13.x / 3.x |

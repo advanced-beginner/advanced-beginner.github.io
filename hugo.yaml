@@ -1,12 +1,13 @@
 baseURL: https://advanced-beginner.github.io/
 title: Advanced Beginner
-theme: hugo-theme-relearn
+theme: hugo-book
 
 defaultContentLanguage: ko
 defaultContentLanguageInSubdir: true
 
 enableGitInfo: true
 enableRobotsTXT: true
+disablePathToLower: true
 
 languages:
   ko:
@@ -16,7 +17,7 @@ languages:
     contentDir: content/ko
     title: Advanced Beginner
     params:
-      landingPageName: "<i class='fas fa-home'></i> 홈"
+      BookDateFormat: "2006년 1월 2일"
   en:
     weight: 2
     languageName: English
@@ -24,21 +25,23 @@ languages:
     contentDir: content/en
     title: Advanced Beginner
     params:
-      landingPageName: "<i class='fas fa-home'></i> Home"
       description: "A practical guide to Kafka, DDD, and Scala for developers moving beyond tutorials. Learn the 'why' behind the 'how'."
 
 markup:
   highlight:
     noClasses: false
+    style: monokai
   goldmark:
     renderer:
       unsafe: true
+  tableOfContents:
+    startLevel: 2
+    endLevel: 4
 
 outputs:
   home:
     - html
     - rss
-    - sitemap
   section:
     - html
     - rss
@@ -50,6 +53,13 @@ sitemap:
   priority: 0.5
   filename: sitemap.xml
 
+menu:
+  after:
+    - name: "GitHub"
+      url: "https://github.com/advanced-beginner/advanced-beginner.github.io"
+      weight: 10
+
+googleAnalytics: "GTM-W4X7HKDD"
 params:
   author:
     name: kimbenji
@@ -73,22 +83,12 @@ params:
   images:
     - /images/og-image.png
 
-  # Open Graph 추가 설정
-  ogType: website
-
-  # Twitter Card
-  social:
-    twitter: ""
-
-  hideAuthorEmail: true
-  showVisitedLinks: true
-  disableLandingPageButton: false
-
-  themeVariant:
-    - auto
-    - relearn-light
-    - relearn-dark
-
-  mermaidInitialize: '{ "theme": "default" }'
-
-  LastModFormat: ":date.2006-01-02"
+  # Hugo Book Theme 설정
+  BookTheme: "light"
+  BookToC: true
+  BookSection: docs
+  BookSearch: true
+  BookComments: false
+  BookPortableLinks: "warning"
+  BookDateFormat: "2023-10-15"
+  BookEditLink: "https://github.com/advanced-beginner/advanced-beginner.github.io/edit/main/{{ .Path }}"

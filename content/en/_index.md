@@ -21,7 +21,7 @@ Rather than just "do it this way", we explain **why such design is necessary** f
 
 ## Available Guides
 
-### [Apache Kafka](kafka/)
+### [Apache Kafka](docs/kafka/)
 
 Practical usage of distributed messaging systems. From Producer/Consumer basics to transactions, replication, failure handling, and performance tuning.
 
@@ -31,7 +31,7 @@ Practical usage of distributed messaging systems. From Producer/Consumer basics 
 - Achieving exactly-once delivery with transactions
 - Real-world error handling patterns and monitoring
 
-### [Domain-Driven Design](ddd/)
+### [Domain-Driven Design](docs/ddd/)
 
 A methodology for tackling complex business logic systematically. From strategic design to tactical patterns, CQRS, and event sourcing.
 
@@ -41,7 +41,7 @@ A methodology for tackling complex business logic systematically. From strategic
 - Implementing loose coupling with Domain Events
 - Practical order domain implementation examples
 
-### [Scala](scala/)
+### [Scala](docs/scala/)
 
 A JVM language combining functional and object-oriented programming. From basic syntax to advanced type systems and functional patterns. Covers both Scala 2.13 and Scala 3 syntax.
 
@@ -61,9 +61,9 @@ A JVM language combining functional and object-oriented programming. From basic 
 
 ## Where should I start?
 
-- **New to Kafka** → [Kafka Quick Start](kafka/quick-start/)
-- **Know Kafka basics but want deeper understanding** → [Kafka Core Components](kafka/concepts/core-components/)
-- **Curious about what DDD is** → [DDD Quick Start](ddd/quick-start/)
-- **Want to learn domain model design** → [Tactical Design](ddd/concepts/tactical-design/)
-- **New to Scala** → [Scala Quick Start](scala/quick-start/)
-- **Want deep understanding of Scala's type system** → [Type Classes](scala/concepts/type-classes/)
+- **New to Kafka** → [Kafka Quick Start](docs/kafka/quick-start/)
+- **Know Kafka basics but want deeper understanding** → [Kafka Core Components](docs/kafka/concepts/core-components/)
+- **Curious about what DDD is** → [DDD Quick Start](docs/ddd/quick-start/)
+- **Want to learn domain model design** → [Tactical Design](docs/ddd/concepts/tactical-design/)
+- **New to Scala** → [Scala Quick Start](docs/scala/quick-start/)
+- **Want deep understanding of Scala's type system** → [Type Classes](docs/scala/concepts/type-classes/)
