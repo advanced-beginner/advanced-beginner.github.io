@@ -27,7 +27,7 @@ author:
 
 Java/Spring Boot 프로젝트에서 Spark를 사용하기 위한 환경을 구성합니다.
 
-##순수 Java 프로젝트
+## 순수 Java 프로젝트
 
 가장 간단한 구성입니다.
 
@@ -135,7 +135,7 @@ public class SparkApp {
 - **local[\*]**: 모든 CPU 코어 사용 (로컬 개발 모드)
 {{% /notice %}}
 
-##Spring Boot 통합
+## Spring Boot 통합
 
 Spring Boot와 Spark를 함께 사용하는 구성입니다.
 
@@ -353,7 +353,7 @@ public class DataController {
 - **의존성 주입**: Service 레이어에서 SparkSession 주입받아 사용
 {{% /notice %}}
 
-##로깅 설정
+## 로깅 설정
 
 **log4j2.properties**
 
@@ -383,7 +383,7 @@ logger.app.name = com.example
 logger.app.level = INFO
 ```
 
-##Windows 환경 설정
+## Windows 환경 설정
 
 Windows에서는 Hadoop 바이너리가 필요합니다.
 
@@ -410,7 +410,7 @@ setx PATH "%PATH%;%HADOOP_HOME%\bin"
 System.setProperty("hadoop.home.dir", "C:\\hadoop");
 ```
 
-##트러블슈팅
+## 트러블슈팅
 
 **로깅 충돌**
 
@@ -484,7 +484,7 @@ java -version  # 버전 확인
 - **Java 버전**: Spark 3.5는 Java 8, 11, 17 지원 (21은 미지원)
 {{% /notice %}}
 
-##다음 단계
+## 다음 단계
 
 환경 설정이 완료되었다면:
 

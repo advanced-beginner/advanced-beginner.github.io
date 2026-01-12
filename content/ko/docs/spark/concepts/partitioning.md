@@ -24,7 +24,7 @@ author:
 
 파티셔닝은 Spark 성능의 핵심입니다. 데이터가 어떻게 분산되는지 이해하고 최적화하는 것이 대규모 데이터 처리의 관건입니다.
 
-##파티션이란?
+## 파티션이란?
 
 **파티션(Partition)**은 RDD/DataFrame 데이터의 논리적 분할 단위입니다. 각 파티션은 클러스터의 한 노드에서 처리됩니다.
 
@@ -52,7 +52,7 @@ DataFrame (1억 행)
 - `df.rdd().getNumPartitions()`으로 현재 파티션 수 확인
 {{< /callout >}}
 
-##파티션 수 확인 및 조정
+## 파티션 수 확인 및 조정
 
 **현재 파티션 수 확인**
 
@@ -122,7 +122,7 @@ df.repartition(200, col("key"))
   .agg(sum("value"));
 ```
 
-##셔플(Shuffle)
+## 셔플(Shuffle)
 
 **셔플(Shuffle)**은 파티션 간 데이터 재분배 과정입니다. Wide Transformation에서 발생합니다.
 
@@ -168,7 +168,7 @@ Reduce Phase (셔플 읽기)
 3. **직렬화**: 데이터 직렬화/역직렬화
 4. **정렬**: 키 기준 정렬
 
-##셔플 파티션 설정
+## 셔플 파티션 설정
 
 ```java
 // 셔플 파티션 수 설정 (기본값: 200)
@@ -204,7 +204,7 @@ AQE의 장점:
 - 작은 파티션 자동 병합
 - 데이터 스큐 자동 처리
 
-##파티셔닝 전략
+## 파티셔닝 전략
 
 **Hash Partitioning**
 
@@ -265,7 +265,7 @@ JavaPairRDD<String, Integer> partitioned =
     pairRDD.partitionBy(new RegionPartitioner(4));
 ```
 
-##데이터 스큐(Data Skew)
+## 데이터 스큐(Data Skew)
 
 데이터 스큐는 특정 파티션에 데이터가 집중되는 현상입니다.
 
@@ -355,7 +355,7 @@ Dataset<Row> result = partial
     .agg(sum("partial_sum").alias("total"));
 ```
 
-##조인과 파티셔닝
+## 조인과 파티셔닝
 
 **조인 전략**
 
@@ -394,7 +394,7 @@ Dataset<Row> joined = part1.join(part2, "key");
 // → 이미 같은 키가 같은 파티션에 있으므로 셔플 불필요
 ```
 
-##파일 파티셔닝
+## 파일 파티셔닝
 
 데이터를 저장할 때 파일 시스템 레벨에서도 파티셔닝할 수 있습니다.
 
@@ -438,7 +438,7 @@ Dataset<Row> joined = users.join(events, "user_id");
 // → 셔플 없이 조인 (같은 user_id가 같은 버킷에 있음)
 ```
 
-##모니터링
+## 모니터링
 
 **Spark UI에서 셔플 확인**
 
@@ -454,12 +454,12 @@ Dataset<Row> joined = users.join(events, "user_id");
 - **Shuffle Spill (Memory)**: 메모리 스필 크기
 - **Shuffle Spill (Disk)**: 디스크 스필 크기 (많으면 메모리 부족)
 
-##다음 단계
+## 다음 단계
 
 - [캐싱과 영속성](../caching/) - 중간 결과 저장으로 재계산 방지
 - [성능 튜닝](../tuning/) - 전체적인 성능 최적화 전략
 
-##관련 문서
+## 관련 문서
 
 - [아키텍처](../architecture/) - 분산 처리 구조 이해
 - [Transformation과 Action](../transformations-actions/) - Narrow/Wide Transformation

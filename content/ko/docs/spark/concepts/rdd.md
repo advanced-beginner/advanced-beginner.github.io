@@ -25,7 +25,7 @@ author:
 
 RDD는 Spark의 가장 기본적인 데이터 추상화입니다. DataFrame과 Dataset의 기반이 되는 저수준 API로, Spark의 동작 원리를 이해하는 데 필수적입니다.
 
-##RDD란?
+## RDD란?
 
 **RDD(Resilient Distributed Dataset)**는 여러 노드에 분산된 불변 데이터 컬렉션입니다.
 
@@ -50,7 +50,7 @@ RDD는 Spark의 가장 기본적인 데이터 추상화입니다. DataFrame과 D
 - DataFrame/Dataset의 기반 기술
 {{< /callout >}}
 
-##RDD 생성
+## RDD 생성
 
 **1. 컬렉션에서 생성 (parallelize)**
 
@@ -128,7 +128,7 @@ JavaRDD<Integer> evens = numbers.filter(n -> n % 2 == 0);
 - 파티션 수는 병렬성에 직접적 영향
 {{< /callout >}}
 
-##Transformation
+## Transformation
 
 Transformation은 기존 RDD에서 새 RDD를 생성하는 연산입니다. **지연 평가**되어 즉시 실행되지 않습니다.
 
@@ -282,7 +282,7 @@ JavaPairRDD<String, Tuple2<Integer, Optional<String>>> leftJoined =
 - Pair RDD로 키-값 기반 집계와 조인 가능
 {{< /callout >}}
 
-##Action
+## Action
 
 Action은 RDD를 실제로 계산하고 결과를 반환하는 연산입니다.
 
@@ -336,7 +336,7 @@ numbers.saveAsTextFile("output/numbers");
 - `foreach()`는 Executor에서 실행됨 (Driver 변수 수정 불가)
 {{< /callout >}}
 
-##Lineage (혈통)
+## Lineage (혈통)
 
 RDD는 자신이 어떻게 생성되었는지에 대한 정보(lineage)를 유지합니다. 이를 통해:
 
@@ -374,7 +374,7 @@ System.out.println(filtered.toDebugString());
 - 지연 평가와 최적화의 기반
 {{< /callout >}}
 
-##Narrow vs Wide Dependencies
+## Narrow vs Wide Dependencies
 
 Transformation은 의존성 유형에 따라 성능이 크게 달라집니다.
 
@@ -414,7 +414,7 @@ JavaPairRDD<String, Tuple2<Integer, String>> joined = rdd1.join(rdd2);
 - 셔플 최소화가 Spark 튜닝의 핵심
 {{< /callout >}}
 
-##영속성 (Persistence)
+## 영속성 (Persistence)
 
 자주 사용되는 RDD는 메모리에 캐시하여 재계산을 방지할 수 있습니다.
 
@@ -457,7 +457,7 @@ filtered.unpersist();
 - 사용 후 `unpersist()`로 메모리 해제 권장
 {{< /callout >}}
 
-##RDD vs DataFrame/Dataset
+## RDD vs DataFrame/Dataset
 
 현재 Spark에서는 DataFrame/Dataset API를 권장하지만, RDD가 필요한 경우가 있습니다:
 
@@ -511,7 +511,7 @@ Dataset<Integer> ds = spark.createDataset(numberRdd.rdd(), Encoders.INT());
 - `spark.createDataset()`으로 RDD → Dataset 변환
 {{< /callout >}}
 
-##실전 예제: 로그 분석
+## 실전 예제: 로그 분석
 
 웹 서버 로그에서 에러를 분석하는 예제:
 
@@ -572,7 +572,7 @@ public class LogAnalysis {
 }
 ```
 
-##다음 단계
+## 다음 단계
 
 RDD의 기본을 이해했다면, 더 효율적인 API를 학습하세요:
 
