@@ -17,6 +17,39 @@ author:
 - 둘 다 환경 변수 또는 파일로 Pod에 주입할 수 있습니다
 {{< /callout >}}
 
+## 전체 흐름
+
+ConfigMap과 Secret이 Pod에 주입되는 흐름을 먼저 살펴봅니다.
+
+```mermaid
+flowchart LR
+    subgraph Sources[설정 소스]
+        CM[ConfigMap<br/>일반 설정]
+        SEC[Secret<br/>민감 정보]
+    end
+
+    subgraph Injection[주입 방식]
+        ENV[환경 변수]
+        VOL[볼륨 마운트]
+    end
+
+    subgraph Pod[Pod]
+        APP[애플리케이션]
+    end
+
+    CM --> ENV
+    CM --> VOL
+    SEC --> ENV
+    SEC --> VOL
+    ENV --> APP
+    VOL --> APP
+```
+
+| 주입 방식 | 장점 | 단점 | 사용 시점 |
+|----------|------|------|----------|
+| 환경 변수 | 코드 변경 없이 접근 | Pod 재시작 시에만 반영 | 단순 값, 시작 시 필요한 설정 |
+| 볼륨 마운트 | 파일로 접근, 자동 갱신 | 파일 읽기 로직 필요 | 설정 파일, 인증서, 동적 변경 필요 시 |
+
 ## 왜 설정을 분리해야 하나?
 
 이미지에 설정을 하드코딩하면 여러 문제가 발생합니다.

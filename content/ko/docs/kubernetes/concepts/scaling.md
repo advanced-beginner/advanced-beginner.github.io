@@ -247,9 +247,30 @@ updateMode 옵션을 비교하면 다음과 같습니다.
 | Recreate | 기존 Pod 재시작하여 적용 |
 | Auto | 자동으로 가장 적합한 방식 선택 |
 
-## HPA vs VPA
+## HPA vs VPA 선택 가이드
 
-어떤 스케일링을 선택해야 할까요?
+어떤 스케일링을 선택해야 할까요? 다음 플로차트를 참고하세요.
+
+```mermaid
+flowchart TD
+    START[스케일링 필요] --> Q1{애플리케이션<br/>유형은?}
+
+    Q1 -->|Stateless<br/>웹서버, API| Q2{트래픽 변동이<br/>큰가?}
+    Q1 -->|Stateful<br/>DB, 캐시| VPA_REC[VPA 권장]
+
+    Q2 -->|Yes| HPA_REC[HPA 권장]
+    Q2 -->|No| Q3{리소스 설정이<br/>적절한가?}
+
+    Q3 -->|모르겠다| VPA_OFF[VPA로 권장값 확인<br/>updateMode: Off]
+    Q3 -->|최적화 필요| VPA_REC
+
+    HPA_REC --> Q4{리소스 설정도<br/>최적화 필요?}
+    Q4 -->|Yes| BOTH[HPA + VPA 병행<br/>CPU는 HPA, 메모리는 VPA]
+    Q4 -->|No| HPA_ONLY[HPA만 사용]
+
+    VPA_REC --> VPA_ONLY[VPA 사용]
+    VPA_OFF --> MANUAL[수동으로 설정 조정]
+```
 
 | 기준 | HPA | VPA |
 |------|-----|-----|
@@ -258,6 +279,15 @@ updateMode 옵션을 비교하면 다음과 같습니다.
 | 트래픽 변동 대응 | ✓ | |
 | 리소스 최적화 | | ✓ |
 | 즉시 적용 | ✓ | ✗ (재시작 필요) |
+
+### 실제 선택 예시
+
+| 상황 | 권장 | 이유 |
+|------|------|------|
+| REST API 서버, 트래픽 변동 큼 | HPA | Pod 수로 빠르게 대응 |
+| 배치 작업 서버 | VPA | 리소스 사용량 최적화 |
+| DB 연결이 제한된 서버 | HPA (max 주의) | Pod 수에 따른 연결 수 관리 필요 |
+| 신규 서비스, 적정 리소스 모름 | VPA (Off 모드) | 권장 값 수집 후 설정 |
 
 {{< callout type="info" title="HPA와 VPA 함께 사용" >}}
 HPA와 VPA를 동일한 Deployment에 함께 사용할 때는 주의가 필요합니다. VPA가 메모리만 조정하고 HPA가 CPU 기반으로 스케일링하도록 분리하는 것이 권장됩니다.
