@@ -2,7 +2,23 @@
 title: 검색 관련성
 weight: 4
 lastmod: 2026-01-08
+prerequisites:
+  - title: Query DSL
+    path: /docs/elasticsearch/concepts/query-dsl/
+  - title: 데이터 모델링
+    path: /docs/elasticsearch/concepts/data-modeling/
+related_concepts:
+  - title: 집계
+    path: /docs/elasticsearch/concepts/aggregations/
+  - title: 한글 검색 최적화
+    path: /docs/elasticsearch/concepts/korean-search/
 ---
+
+{{% notice style="info" title="선수 개념" %}}
+이 문서를 읽기 전에 다음 개념을 먼저 이해하세요:
+- [Query DSL](../query-dsl/) - match, bool 쿼리 기본
+- [데이터 모델링](../data-modeling/) - Analyzer 동작 원리
+{{% /notice %}}
 
 검색 결과의 품질을 높이기 위한 Score, BM25, Boosting 등 관련성 튜닝 방법을 배웁니다.
 

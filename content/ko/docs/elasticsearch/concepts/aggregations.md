@@ -2,7 +2,23 @@
 title: 집계
 weight: 5
 lastmod: 2026-01-08
+prerequisites:
+  - title: Query DSL
+    path: /docs/elasticsearch/concepts/query-dsl/
+  - title: 데이터 모델링
+    path: /docs/elasticsearch/concepts/data-modeling/
+related_concepts:
+  - title: 검색 관련성
+    path: /docs/elasticsearch/concepts/search-relevance/
+  - title: 성능 튜닝
+    path: /docs/elasticsearch/concepts/performance-tuning/
 ---
+
+{{% notice style="info" title="선수 개념" %}}
+이 문서를 읽기 전에 다음 개념을 먼저 이해하세요:
+- [Query DSL](../query-dsl/) - 기본 쿼리 구조
+- [데이터 모델링](../data-modeling/) - keyword vs text 타입
+{{% /notice %}}
 
 Elasticsearch의 Aggregations를 사용하여 데이터를 분석하고 통계를 추출하는 방법을 배웁니다.
 

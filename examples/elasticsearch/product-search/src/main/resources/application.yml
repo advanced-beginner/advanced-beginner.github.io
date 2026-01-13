@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: product-search
+
+  elasticsearch:
+    uris: http://localhost:9200
+
+server:
+  port: 8080
+
+logging:
+  level:
+    com.example.productsearch: DEBUG
+    org.springframework.data.elasticsearch: DEBUG

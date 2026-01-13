@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: log-analysis
+
+  elasticsearch:
+    uris: http://localhost:9200
+
+server:
+  port: 8080
+
+logging:
+  level:
+    com.example.loganalysis: DEBUG
+    org.springframework.data.elasticsearch: INFO
