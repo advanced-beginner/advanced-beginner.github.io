@@ -1,21 +1,32 @@
 ---
-lastmod: "2026-01-07"
 title: Tactical Design
 weight: 2
+lastmod: "2026-01-13"
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
-# Tactical Design
+> **Target Audience**: Backend developers who want to implement DDD building blocks in code
+> **Prerequisites**: Read [Strategic Design](../strategic-design/) or understand Bounded Context concept
+> **Time Required**: About 40 minutes
+> **Key Question**: "What patterns should be used to implement domain models?"
 
-Concrete patterns for implementing domain models.
+{{< callout type="tip" title="Summary" >}}
+Tactical Design Building Blocks: **Entity**(distinguished by identity) + **Value Object**(distinguished by value) → **Aggregate**(consistency boundary) + **Repository**(persistence) + **Domain Service**(domain logic) + **Domain Event**(event communication)
+{{< /callout >}}
 
-> **Common Imports for examples in this page:**
+Tactical design consists of patterns for concretely implementing domain models. If strategic design draws the "big picture," tactical design provides "specific implementation methods."
+
+> **Common imports for examples on this page:**
 > ```java
 > import java.util.*;
 > import java.time.LocalDateTime;
 > import java.math.BigDecimal;
 > ```
 
-## Tactical Design Elements Overview
+#### Tactical Design Elements Overview
+
+Tactical design consists of several building blocks. Entity and Value Object are the basic units of domain objects, and Aggregate groups them into consistency boundaries. Domain Service and Application Service orchestrate business logic, while Repository and Factory manage object lifecycles. Domain Event handles communication between Aggregates. These components work together to clearly express complex domain logic.
 
 ```mermaid
 flowchart TB
@@ -49,11 +60,11 @@ flowchart TB
     AGG --> DE
 ```
 
-## Entity
+#### Entity
 
-### Definition
+**Definition**
 
-A domain object distinguished by its **identity**.
+Entity is a domain object distinguished by its identity. Like order numbers or member IDs, it has a unique identifier, and even if attributes change, objects with the same identifier are treated as the same object. The core of Entity consists of three characteristics: Identity, Mutability, and Lifecycle.
 
 ```mermaid
 flowchart LR
@@ -64,15 +75,17 @@ flowchart LR
     end
 ```
 
-### Characteristics
+Let's look at Entity characteristics in detail. **Identity** is the characteristic of being distinguished by a unique identifier. Order numbers and member IDs are typical examples. **Mutability** means the state can change. For example, order status changes from PENDING to CONFIRMED. **Lifecycle** means it has a lifecycle of creation, modification, and deletion. The process of member signup, activity, and withdrawal falls under this.
 
-| Property | Description | Example |
-|----------|-------------|---------|
-| **Identity** | Distinguished by unique identifier | OrderId, MemberId |
+| Characteristic | Description | Example |
+|----------------|-------------|---------|
+| **Identity** | Distinguished by unique identifier | Order number, Member ID |
 | **Mutability** | State can change | Order status: PENDING → CONFIRMED |
-| **Lifecycle** | Has creation, modification, deletion cycle | Member signup → activity → withdrawal |
+| **Lifecycle** | Has creation, modification, deletion lifecycle | Member signup → activity → withdrawal |
 
-### Implementation Example
+**Implementation Example**
+
+Here's an implementation example of the Order Entity. The `id` field is immutable (final), so once set it cannot be changed. On the other hand, `status` and `shippingAddress` are mutable and can change according to business rules. The `equals` and `hashCode` methods compare equality by ID only. Orders with the same ID are treated as the same object even if other attributes differ. Business behaviors like `confirm` and `changeShippingAddress` are expressed as methods. Rather than simply calling setters, they perform validation and domain event publishing together.
 
 ```java
 public class Order {
@@ -119,7 +132,9 @@ public class Order {
 }
 ```
 
-### Identifier Design
+**Identifier Design**
+
+It's better to use domain identifier types rather than simple String or Long for Entity identifiers. The `OrderId` in the example below is implemented as a Java Record to guarantee immutability. Null checks and empty value validation are performed in the constructor to prevent creation of invalid IDs. The `generate` static method creates a new ID, and the `of` static method restores an ID from an existing value.
 
 ```java
 // ✅ Domain Identifier (recommended)
@@ -144,11 +159,11 @@ public record OrderId(String value) {
 Order order = new Order(OrderId.generate(), customerId, orderLines);
 ```
 
-## Value Object
+#### Value Object
 
-### Definition
+**Definition**
 
-An immutable object whose equality is determined by its **attribute values**.
+Value Object is an immutable object whose equality is determined by attribute values. While Entity is distinguished by identifier, Value Object is distinguished by the value itself. 1000 won and another 1000 won of Money are separate objects but are treated as equal because they have the same value.
 
 ```mermaid
 flowchart LR
@@ -159,15 +174,17 @@ flowchart LR
     end
 ```
 
-### Characteristics
+Value Object characteristics are summarized as follows. **Immutability** means it cannot be changed after creation. After creating Money(1000, KRW), you cannot change the amount or currency. **Value Equality** means objects with the same attributes are treated as the same object. 1000 won equals 1000 won. **Self-Contained** means it validates itself. Negative amounts are rejected at creation time.
 
-| Property | Description | Example |
-|----------|-------------|---------|
-| **Immutability** | Cannot change after creation | Money(1000, USD) |
-| **Value Equality** | Equal if all attributes are the same | $1000 == $1000 |
-| **Self-Contained** | Self-validates on creation | Amount cannot be negative |
+| Characteristic | Description | Example |
+|----------------|-------------|---------|
+| **Immutability** | Cannot change after creation | Money(1000, KRW) |
+| **Value Equality** | Same object if all attributes are equal | $1000 == $1000 |
+| **Self-Contained** | Self-validates | Amount cannot be negative |
 
-### Implementation Example
+**Implementation Example**
+
+Let's look at the Money Value Object implementation. Using Java Record automatically guarantees immutability. Validation is performed in the Compact Constructor. An exception is thrown if the amount is null or negative. Factory methods like `won` allow convenient object creation. Operations like `add` and `multiply` return new objects without modifying the original. This is the key to immutable operations.
 
 ```java
 // Money Value Object
@@ -183,11 +200,11 @@ public record Money(BigDecimal amount, Currency currency) {
     }
 
     // Factory method
-    public static Money usd(long amount) {
-        return new Money(BigDecimal.valueOf(amount), Currency.USD);
+    public static Money won(long amount) {
+        return new Money(BigDecimal.valueOf(amount), Currency.KRW);
     }
 
-    public static Money ZERO = new Money(BigDecimal.ZERO, Currency.USD);
+    public static Money ZERO = new Money(BigDecimal.ZERO, Currency.KRW);
 
     // Immutable operations - return new object
     public Money add(Money other) {
@@ -211,6 +228,8 @@ public record Money(BigDecimal amount, Currency currency) {
     }
 }
 ```
+
+The Address Value Object follows a similar pattern. Required fields are validated in the Compact Constructor, and zip code format is also validated. The `fullAddress` method returns the address in a readable format.
 
 ```java
 // Address Value Object
@@ -236,7 +255,9 @@ public record Address(
 }
 ```
 
-### Entity vs Value Object
+**Entity vs Value Object**
+
+How do we distinguish between Entity and Value Object? Order, Member, and Product are Entities. Each has a unique identifier and an independent lifecycle. On the other hand, Money, Address, and DateRange are Value Objects. The value itself has meaning and is used as part of an Entity.
 
 ```mermaid
 flowchart TB
@@ -257,6 +278,8 @@ flowchart TB
     E2 -->|contains| V2
 ```
 
+The differences between the two concepts are summarized as follows. Entity is compared by ID, is mutable, and has an independent lifecycle. Order and Member fall under this. Value Object is compared by all attributes, is immutable, and is dependent on Entity. Money and Address fall under this.
+
 | Aspect | Entity | Value Object |
 |--------|--------|--------------|
 | **Equality** | Compare by ID | Compare by all attributes |
@@ -264,7 +287,9 @@ flowchart TB
 | **Lifecycle** | Independent | Dependent on Entity |
 | **Example** | Order, Member | Money, Address |
 
-### What Should Be Value Objects
+**Things That Should Be Value Objects**
+
+Primitive Obsession is an anti-pattern to avoid. Don't use String or int directly; wrap them in Value Objects. Expressing `orderId` as `OrderId`, `totalAmount` as `Money`, and `customerEmail` as `Email` increases type safety and clarifies business meaning.
 
 ```java
 // ❌ Primitive Obsession
@@ -282,11 +307,11 @@ public class Order {
 }
 ```
 
-## Repository
+#### Repository
 
-### Definition
+**Definition**
 
-An interface that **abstracts persistence** for Aggregates.
+Repository is an interface that abstracts persistence for Aggregates. It hides technical details of the database and allows storing and retrieving domain objects as if handling a collection. The Repository interface is located in the domain layer, and the implementation is located in the infrastructure layer.
 
 ```mermaid
 flowchart LR
@@ -305,7 +330,9 @@ flowchart LR
     REPO_IMPL --> DB
 ```
 
-### Interface Design
+**Interface Design**
+
+The Repository interface is located in the domain layer and written in domain language. `save` stores an Aggregate, and `findById` retrieves by ID. Domain-specific query methods like `findByCustomerId` or `findPendingOrdersOlderThan` are also included. `delete` handles deletion, and soft delete is recommended in practice over hard delete. `existsById` only checks existence.
 
 ```java
 // Located in Domain Layer
@@ -330,7 +357,9 @@ public interface OrderRepository {
 }
 ```
 
-### Implementation
+**Implementation**
+
+The Repository implementation is located in the infrastructure layer and uses technologies like JPA or MyBatis. It handles conversion between domain objects and persistence models (Entity). `save` converts a domain object to Entity and saves it, and `findById` retrieves an Entity and converts it to a domain object. Domain-specific queries like `findPendingOrdersOlderThan` are also implemented.
 
 ```java
 // Located in Infrastructure Layer
@@ -364,9 +393,9 @@ public class JpaOrderRepository implements OrderRepository {
 }
 ```
 
-### Repository Design Principles
+**Repository Design Principles**
 
-1. **Only Aggregate Roots have Repositories**
+There are principles to follow when designing Repositories. First, only Aggregate Roots have Repositories. Order has a Repository, but OrderLine does not. OrderLine is accessed only through Order.
 
 ```java
 // ✅ Only Aggregate Root (Order) has Repository
@@ -378,7 +407,7 @@ interface OrderRepository {
 // interface OrderLineRepository { ... }  // Wrong design
 ```
 
-2. **Acts like a Collection**
+Second, Repositories should behave like collections. `save` is used naturally like adding to a list, and `findById` is used like finding in a list.
 
 ```java
 // Like adding to a collection
@@ -389,11 +418,11 @@ Order order = orderRepository.findById(orderId)
     .orElseThrow(() -> new OrderNotFoundException(orderId));
 ```
 
-## Domain Service
+#### Domain Service
 
-### When to Use?
+**When to Use?**
 
-Contains **domain logic** that doesn't belong to a specific Entity or Value Object.
+Domain Service contains domain logic that doesn't belong to a specific Entity or Value Object. Use it when the operation spans multiple Aggregates, when external services are needed for domain logic, or when the logic doesn't belong to a specific Entity.
 
 ```mermaid
 flowchart TB
@@ -404,7 +433,9 @@ flowchart TB
     end
 ```
 
-### Example 1: Discount Calculation
+**Example 1: Discount Calculation**
+
+Use Domain Service when the discount policy needs to consider multiple factors. `DiscountCalculator` calculates the final discount considering both member grade and promotions. Since Order alone cannot determine this, and both MemberGrade and Promotion information are needed, it's separated into a Domain Service.
 
 ```java
 // When discount policy considers multiple factors
@@ -437,7 +468,9 @@ public class DiscountCalculator {
 }
 ```
 
-### Example 2: Stock Validation
+**Example 2: Stock Validation**
+
+Stock validation is also implemented as a Domain Service. `StockValidator` validates whether there is sufficient stock for all items in the order. Since Order only knows its item information and Stock only knows stock information, the logic connecting these two naturally belongs in a Domain Service.
 
 ```java
 @DomainService
@@ -461,7 +494,9 @@ public class StockValidator {
 }
 ```
 
-### Domain Service vs Application Service
+**Domain Service vs Application Service**
+
+Domain Service and Application Service have different roles. Domain Service contains pure domain logic. It doesn't know about transactions or infrastructure. It only depends on domain objects. On the other hand, Application Service orchestrates use cases. It manages transactions and connects domain with infrastructure. In the example below, `OrderValidator` is a Domain Service containing only validation logic, and `OrderApplicationService` is an Application Service orchestrating the entire flow.
 
 ```java
 // Domain Service: Domain logic
@@ -499,6 +534,8 @@ public class OrderApplicationService {
 }
 ```
 
+The differences between the two services are summarized as follows. Domain Service is located in the domain layer, contains domain logic, doesn't know about transactions, and only depends on domain objects. Application Service is located in the application layer, orchestrates use cases, manages transactions, and depends on both domain and infrastructure.
+
 | Aspect | Domain Service | Application Service |
 |--------|---------------|---------------------|
 | **Location** | Domain Layer | Application Layer |
@@ -506,11 +543,11 @@ public class OrderApplicationService {
 | **Transaction** | Unaware | Manages |
 | **Dependencies** | Domain objects only | Domain + Infrastructure |
 
-## Factory
+#### Factory
 
-### When to Use?
+**When to Use?**
 
-**Encapsulates creation logic** when Aggregate creation is complex.
+Factory encapsulates creation logic when Aggregate creation is complex. For simple cases, a static factory method is sufficient, but for complex cases, a separate Factory class is created. `Order.create` is a static factory method for simple creation. `OrderFactory` is a Factory class containing complex logic like customer validation, product lookup, and order line creation.
 
 ```java
 // Simple case: static factory method
@@ -557,7 +594,9 @@ public class OrderFactory {
 }
 ```
 
-## Layer Structure
+#### Layer Structure
+
+Let's look at the layer structure of tactical design. The Controller in the presentation layer calls the Application Service in the application layer. The Application Service uses Aggregates, Domain Services, and Repository Interfaces in the domain layer. Repository Interfaces connect to Repository implementations in the infrastructure layer. Aggregates publish Domain Events to communicate with other Aggregates.
 
 ```mermaid
 flowchart TB
@@ -591,11 +630,11 @@ flowchart TB
     AGG --> EVT
 ```
 
-## Specification Pattern
+#### Specification Pattern
 
-### Definition
+**Definition**
 
-A pattern that **encapsulates business rules as objects** for reusability.
+Specification is a pattern that encapsulates business rules as objects for reusability. Complex conditions like "Can this order be confirmed?" or "Can this customer receive a VIP discount?" can be made into Specification objects and combined.
 
 ```mermaid
 flowchart LR
@@ -611,7 +650,9 @@ flowchart LR
     NOT --> SPEC
 ```
 
-### Basic Implementation
+**Basic Implementation**
+
+The Specification interface checks conditions with the `isSatisfiedBy` method. Specifications can be combined with `and`, `or`, `not` methods. `AndSpecification` requires both conditions to be satisfied, `OrSpecification` requires only one to be satisfied, and `NotSpecification` reverses the condition.
 
 ```java
 // Specification interface
@@ -676,7 +717,9 @@ public class NotSpecification<T> implements Specification<T> {
 }
 ```
 
-### Order Domain Example
+**Order Domain Example**
+
+Let's see how Specifications are used in the order domain. `hasMinimumAmount` checks the minimum amount condition, and `hasStatus` checks a specific status condition. `isConfirmable` combines "PENDING status and above minimum amount" as a compound condition with and. `isCancellable` combines "PENDING or CONFIRMED status" with or. The `confirm` and `cancel` methods in the Order class use these Specifications to check conditions.
 
 ```java
 // Concrete Order Specifications
@@ -695,7 +738,7 @@ public class OrderSpecifications {
     // Can be confirmed
     public static Specification<Order> isConfirmable() {
         return hasStatus(OrderStatus.PENDING)
-            .and(hasMinimumAmount(Money.usd(100)));
+            .and(hasMinimumAmount(Money.won(10000)));
     }
 
     // Can be cancelled
@@ -734,7 +777,9 @@ public class Order {
 }
 ```
 
-### Using with Repository
+**Using with Repository**
+
+Specifications can also be used for Repository queries. Using Spring Data JPA's Specification allows writing dynamic queries in a type-safe manner. Combining Specifications like `hasStatus`, `hasMinimumAmount`, `createdBetween`, and `belongsToCustomer` creates complex query conditions.
 
 ```java
 // JPA Specification (Spring Data JPA)
@@ -774,7 +819,7 @@ public class JpaOrderRepository implements OrderRepository {
     @Override
     public List<Order> findConfirmableOrders() {
         var spec = OrderJpaSpecifications.hasStatus(OrderStatus.PENDING)
-            .and(OrderJpaSpecifications.hasMinimumAmount(Money.usd(100)));
+            .and(OrderJpaSpecifications.hasMinimumAmount(Money.won(10000)));
 
         return jpaRepository.findAll(spec).stream()
             .map(mapper::toDomain)
@@ -783,7 +828,7 @@ public class JpaOrderRepository implements OrderRepository {
 }
 ```
 
-### Benefits of Specification Pattern
+The benefits of the Specification pattern are summarized as follows. **Reusability** means business rules can be reused in multiple places. **Readability** means complex conditions are expressed clearly. **Testability** means each rule can be tested independently. **Composability** means complex rules can be built with and, or, not.
 
 | Benefit | Description |
 |---------|-------------|
@@ -792,13 +837,11 @@ public class JpaOrderRepository implements OrderRepository {
 | **Testability** | Test each rule independently |
 | **Composability** | Build complex rules with and, or, not |
 
----
+#### Policy Pattern
 
-## Policy Pattern
+**Definition**
 
-### Definition
-
-A pattern that **separates business policies into independent objects** making them replaceable.
+Policy is a pattern that separates business policies into independent objects making them replaceable. While Specification focuses on "condition checking," Policy focuses on "calculation or decision." Discount policies, shipping fee policies, and point accumulation policies are good examples of the Policy pattern.
 
 ```mermaid
 flowchart TB
@@ -814,7 +857,9 @@ flowchart TB
     P3 --> IF
 ```
 
-### Discount Policy Example
+**Discount Policy Example**
+
+Let's implement discount policies with the Policy pattern. The `DiscountPolicy` interface defines `calculateDiscount` and `isApplicable` methods. `VipDiscountPolicy` applies a 10% discount to VIP customers. `FirstOrderDiscountPolicy` applies a 5000 won discount to first-order customers. `BulkOrderDiscountPolicy` applies a 5% discount when purchasing 10 or more items. `DiscountCalculator` combines all these policies to calculate the total discount.
 
 ```java
 // Discount policy interface
@@ -840,7 +885,7 @@ public class VipDiscountPolicy implements DiscountPolicy {
 
 // First order discount policy
 public class FirstOrderDiscountPolicy implements DiscountPolicy {
-    private static final Money DISCOUNT_AMOUNT = Money.usd(50);
+    private static final Money DISCOUNT_AMOUNT = Money.won(5000);
 
     @Override
     public boolean isApplicable(Order order, Customer customer) {
@@ -888,7 +933,9 @@ public class DiscountCalculator {
 }
 ```
 
-### Shipping Fee Policy Example
+**Shipping Fee Policy Example**
+
+Shipping fee policies follow a similar pattern. `StandardShippingPolicy` is the default shipping fee policy that applies free shipping for purchases of 50,000 won or more. `RemoteAreaShippingPolicy` charges additional shipping fees for remote areas. It receives an existing policy as a delegate to calculate the base shipping fee, then adds additional cost if it's a remote area.
 
 ```java
 // Shipping fee policy interface
@@ -898,8 +945,8 @@ public interface ShippingPolicy {
 
 // Standard shipping policy
 public class StandardShippingPolicy implements ShippingPolicy {
-    private static final Money BASE_FEE = Money.usd(5);
-    private static final Money FREE_SHIPPING_THRESHOLD = Money.usd(50);
+    private static final Money BASE_FEE = Money.won(3000);
+    private static final Money FREE_SHIPPING_THRESHOLD = Money.won(50000);
 
     @Override
     public Money calculateShippingFee(Order order, ShippingAddress address) {
@@ -912,7 +959,7 @@ public class StandardShippingPolicy implements ShippingPolicy {
 
 // Remote area shipping policy
 public class RemoteAreaShippingPolicy implements ShippingPolicy {
-    private static final Money REMOTE_SURCHARGE = Money.usd(10);
+    private static final Money REMOTE_SURCHARGE = Money.won(5000);
     private final ShippingPolicy delegate;
     private final RemoteAreaChecker remoteAreaChecker;
 
@@ -928,13 +975,11 @@ public class RemoteAreaShippingPolicy implements ShippingPolicy {
 }
 ```
 
----
+#### Module Organization
 
-## Module Organization
+**Package Structure**
 
-### Package Structure
-
-As domain complexity grows, organize with **modules**.
+As domain complexity increases, organize with modules. The order module, customer module, and product module are each divided into domain, application, and infrastructure layers. The domain package contains Entity, Value Object, Repository Interface, and Domain Event. The application package contains Application Service and DTO. The infrastructure package contains Repository implementation and Event Publisher. The shared module contains common Value Objects like Money and Address.
 
 ```
 src/main/java/com/example/
@@ -989,7 +1034,9 @@ src/main/java/com/example/
             └── DomainEventPublisher.java
 ```
 
-### Inter-Module Dependencies
+**Inter-Module Dependencies**
+
+Inter-module dependencies should be clear. The order module, customer module, and product module all depend on the shared module. The order module does not directly depend on the customer or product module; it only uses ID references.
 
 ```mermaid
 flowchart TB
@@ -1008,7 +1055,9 @@ flowchart TB
     ORDER -.->|ID reference only| PRODUCT
 ```
 
-### Inter-Module Communication
+**Inter-Module Communication**
+
+Inter-module communication uses ID references. You should not directly reference the Customer Aggregate. Only reference CustomerId. Query with CustomerReader in the Application Service when needed. This lowers coupling between modules and allows independent changes.
 
 ```java
 // ❌ Direct dependency (avoid)
@@ -1037,13 +1086,11 @@ public class OrderApplicationService {
 }
 ```
 
----
+#### Builder Pattern (Complex Creation)
 
-## Builder Pattern (Complex Creation)
+**Aggregate Builder**
 
-### Aggregate Builder
-
-Use Builder pattern for complex Aggregate creation.
+Use the Builder pattern for complex Aggregate creation. If you need to set multiple properties when creating an Order, a Builder is useful. An inner Builder class provides a fluent interface, and final validation is performed in the `build` method.
 
 ```java
 public class Order {
@@ -1114,19 +1161,17 @@ public class Order {
 // Usage
 Order order = Order.builder()
     .customerId(CustomerId.of("CUST-001"))
-    .addOrderLine(productId1, "Laptop", Money.usd(1200), 1)
-    .addOrderLine(productId2, "Mouse", Money.usd(50), 2)
-    .shippingAddress(new ShippingAddress("12345", "New York", "5th Ave", "Apt 101"))
+    .addOrderLine(productId1, "Laptop", Money.won(1200000), 1)
+    .addOrderLine(productId2, "Mouse", Money.won(50000), 2)
+    .shippingAddress(new ShippingAddress("12345", "Seoul", "Gangnam-gu", "Unit 101"))
     .build();
 ```
 
----
+#### Null Object Pattern
 
-## Null Object Pattern
+**Definition**
 
-### Definition
-
-Uses a **special 'null' object** to avoid null checks.
+This pattern uses a special 'null' object to avoid null checks. Define a Null Object called NONE in the DiscountPolicy interface. Instead of returning null when there's no discount, return `DiscountPolicy.NONE`. This allows calling `calculateDiscount` without null checks.
 
 ```java
 // Null Object pattern applied
@@ -1155,7 +1200,9 @@ public class Order {
 }
 ```
 
-### Comparison with Optional
+**Comparison with Optional**
+
+Optional is another approach, but Null Object is often more natural in domain logic. Optional requires handling by the caller, but Null Object works transparently.
 
 ```java
 // Using Optional
@@ -1169,11 +1216,11 @@ public Discount getDiscount() {
 }
 ```
 
----
+#### Tactical Design Checklist
 
-## Tactical Design Checklist
+**Entity Checklist**
 
-### Entity Checklist
+Check the following items when designing Entities. Verify that it has a unique identifier, compares equality by identifier, expresses business behaviors as methods, cannot enter an invalid state, and uses behavior methods instead of setters.
 
 ```
 [ ] Has unique identifier?
@@ -1183,7 +1230,9 @@ public Discount getDiscount() {
 [ ] Uses behavior methods instead of setters?
 ```
 
-### Value Object Checklist
+**Value Object Checklist**
+
+When designing Value Objects, check if it's immutable, compares equality by all attributes, self-validates, has no side effects (returns new object), and expresses a meaningful domain concept.
 
 ```
 [ ] Is immutable?
@@ -1193,7 +1242,9 @@ public Discount getDiscount() {
 [ ] Expresses meaningful domain concept?
 ```
 
-### Repository Checklist
+**Repository Checklist**
+
+When designing Repositories, check if only Aggregate Roots have Repositories, the interface is in the Domain Layer, it acts like a collection, and has domain-specific methods.
 
 ```
 [ ] Only Aggregate Roots have Repositories?
@@ -1202,7 +1253,9 @@ public Discount getDiscount() {
 [ ] Has domain-specific methods?
 ```
 
-### Domain Service Checklist
+**Domain Service Checklist**
+
+When designing Domain Services, check if the logic doesn't belong to a specific Entity, spans multiple Aggregates, is stateless, and depends only on the Domain Layer.
 
 ```
 [ ] Logic doesn't belong to specific Entity?
@@ -1211,7 +1264,7 @@ public Discount getDiscount() {
 [ ] Depends only on Domain Layer?
 ```
 
-## Next Steps
+#### Next Steps
 
 - [Aggregate Deep Dive](../aggregate/) - Aggregate design principles and transaction boundaries
 - [Domain Events](../domain-events/) - Event-driven design

@@ -1,10 +1,19 @@
 ---
 title: 전략적 설계
 weight: 1
-lastmod: "2026-01-09"
+lastmod: "2026-01-13"
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
+
+> **대상 독자**: DDD의 큰 그림을 이해하고 싶은 아키텍트 및 시니어 개발자
+> **선수 지식**: [Quick Start](../quick-start/)를 읽었거나 DDD 기본 개념에 대한 이해
+> **소요 시간**: 약 30분
+> **핵심 질문**: "시스템을 어떻게 나누고, 각 부분이 어떻게 협력해야 하는가?"
+
+{{< callout type="tip" title="요약" >}}
+전략적 설계의 4가지 핵심 개념: **Subdomain**(비즈니스 영역 분류) → **Ubiquitous Language**(공통 언어 정의) → **Bounded Context**(모델 경계 설정) → **Context Mapping**(경계 간 협력 방식 정의)
+{{< /callout >}}
 
 복잡한 도메인을 어떻게 나누고 통합할지 결정하는 고수준 설계가 바로 전략적 설계입니다. 이는 DDD의 출발점이자 전체 시스템 아키텍처를 결정하는 핵심 활동입니다.
 

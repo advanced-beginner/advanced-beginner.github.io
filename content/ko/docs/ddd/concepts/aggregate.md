@@ -1,10 +1,19 @@
 ---
-lastmod: "2026-01-07"
+lastmod: "2026-01-13"
 title: Aggregate 심화
 weight: 3
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
+
+> **대상 독자**: Aggregate 기본 개념을 알고 있으며 설계 심화 학습이 필요한 개발자
+> **선수 지식**: [전술적 설계](../tactical-design/)의 Entity, Value Object 개념
+> **소요 시간**: 약 25분
+> **핵심 질문**: "Aggregate 경계를 어떻게 정하고, 크기는 어느 정도가 적당한가?"
+
+{{< callout type="tip" title="요약" >}}
+Aggregate 설계 핵심: **불변식 기반 경계 설정** → **작게 유지** → **ID로 참조** → **결과적 일관성 활용**
+{{< /callout >}}
 
 # Aggregate 심화
 

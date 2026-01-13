@@ -1,12 +1,22 @@
 ---
-lastmod: "2026-01-07"
 title: FAQ
 weight: 3
+lastmod: "2026-01-13"
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # DDD Frequently Asked Questions (FAQ)
 
 Common questions and answers when applying DDD.
+
+> **TL;DR**
+>
+> - DDD is a **methodology, not an architecture**, and provides value when there is complex business logic
+> - Entity is identified by ID, Value Object equality is determined by attribute values
+> - Design Aggregate as the **minimum unit that protects true invariants**
+> - **Ubiquitous Language** is the most important element when applying DDD
+> - Can be applied gradually to legacy systems through ACL (Anti-Corruption Layer)
 
 ## Basic Concepts
 
@@ -58,7 +68,7 @@ flowchart TB
 | Criteria | Entity | Value Object |
 |----------|--------|--------------|
 | **Equality** | Compared by ID | Compared by all attributes |
-| **Lifecycle** | Created→Modified→Deleted | Created→Immutable |
+| **Lifecycle** | Created->Modified->Deleted | Created->Immutable |
 | **Tracking** | Tracking needed | Tracking not needed |
 | **Examples** | Order, Member, Product | Money, Address, Period |
 
@@ -82,7 +92,7 @@ money1.equals(money2);  // true (compared by value)
 
 ```
 Wrong approach:
-"Order → Customer → All customer's orders → ..." (infinite expansion)
+"Order -> Customer -> All customer's orders -> ..." (infinite expansion)
 
 Right approach:
 "What objects must change together to maintain this invariant?"
@@ -95,18 +105,25 @@ Right approach:
 3. **Eventual consistency** - Synchronize between Aggregates via events
 
 ```java
-// ❌ Aggregate too large
+// Bad: Aggregate too large
 public class Order {
     private Customer customer;        // Entire object included
     private List<Product> products;   // Entire objects included
 }
 
-// ✅ Appropriate size
+// Good: Appropriate size
 public class Order {
     private CustomerId customerId;    // ID only
     private List<OrderLine> lines;    // Actual internal entities
 }
 ```
+
+> **Basic Concepts Key Points**
+>
+> - DDD is not an architecture, but a **domain-centric methodology**
+> - It is appropriate for projects with complex business logic
+> - Entity uses **ID for equality**, Value Object uses **attribute values for equality**
+> - Design Aggregate as the **minimum unit that protects invariants**
 
 ---
 
@@ -117,13 +134,13 @@ public class Order {
 **A:** Yes, create **one Repository per Aggregate Root**.
 
 ```java
-// ✅ Repository only for Aggregate Root (Order)
+// Good: Repository only for Aggregate Root (Order)
 public interface OrderRepository {
     Order save(Order order);
     Optional<Order> findById(OrderId id);
 }
 
-// ❌ Internal Entities don't have Repositories
+// Bad: Internal Entities don't have Repositories
 // OrderLineRepository - don't create this
 ```
 
@@ -286,6 +303,14 @@ public class Order {
 **Pros:** Simplicity
 **Cons:** Domain depends on JPA
 
+> **Implementation Related Key Points**
+>
+> - Create **one Repository per Aggregate Root**
+> - Domain Service handles **domain logic**, Application Service handles **use case orchestration**
+> - Publish domain events **after state changes** (after transaction commit)
+> - **Transactions are managed in Application Service**
+> - Separating JPA Entity and domain Entity **depends on the situation**
+
 ---
 
 ## Architecture Related
@@ -324,6 +349,12 @@ When CQRS is overkill:
 - Queries return Entities as-is
 - Eventual consistency unacceptable
 ```
+
+> **Architecture Related Key Points**
+>
+> - Hexagonal and Clean Architecture **explain the same principles from different perspectives**
+> - In practice, **combine both**
+> - **Only consider CQRS when there are complex queries**
 
 ---
 
@@ -403,6 +434,12 @@ public class LegacyOrderAdapter implements OrderReader {
 }
 ```
 
+> **Team/Organization Related Key Points**
+>
+> - If there's no domain expert, **find the person who knows the domain best**
+> - **Start small** when introducing DDD (basic concepts -> glossary -> gradual expansion)
+> - For legacy systems, recommend **isolating with ACL then gradual migration**
+
 ---
 
 ## Practical Tips
@@ -413,10 +450,10 @@ public class LegacyOrderAdapter implements OrderReader {
 
 ```
 When using business terms in code:
-✓ Smooth communication between developers and non-developers
-✓ Code serves as documentation
-✓ Easier onboarding for new team members
-✓ Easier to respond to requirement changes
+- Smooth communication between developers and non-developers
+- Code serves as documentation
+- Easier onboarding for new team members
+- Easier to respond to requirement changes
 ```
 
 **Language unification comes before** technical patterns (Aggregate, Repository, etc.).
@@ -463,6 +500,13 @@ Long-term benefits:
 - Focus DDD only on core domain
 - Keep peripheral features simple
 - Avoid excessive abstraction
+
+> **Practical Tips Key Points**
+>
+> - The most important thing when applying DDD is **Ubiquitous Language**
+> - Learning order: **Quick Start -> Tactical Patterns -> Strategic Patterns -> Architecture -> Practice**
+> - Initial code volume increase is normal, **long-term maintenance costs decrease**
+> - Focus DDD on core domain and **avoid excessive abstraction**
 
 ## Next Steps
 

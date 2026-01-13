@@ -1,24 +1,28 @@
 ---
-lastmod: "2026-01-07"
 title: Layered Architecture
 weight: 6
+lastmod: "2026-01-13"
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
-# Layered Architecture
+> **Target Audience**: Developers learning architecture patterns for the first time
+> **Prerequisites**: Basic understanding of Spring Boot MVC patterns
+> **Estimated Time**: About 15 minutes
 
-The most basic and widely used architecture pattern. **Start here if you're learning architecture for the first time.**
+The most basic and widely used architecture pattern. **Start here if you're learning architecture for the first time.** Layered architecture divides software horizontally so that each layer has a clear role. It follows a simple but powerful rule: each layer can only call from top to bottom.
 
-## One-Line Summary
+#### One-Line Summary
 
-> **Divide code into 4 layers and call only from top to bottom**
+The basic principle is to divide code into 4 layers and call only from top to bottom. This allows each layer to focus on its responsibilities and makes the code structure easier to understand.
 
 ```mermaid
 flowchart TB
     subgraph Layers["4-Layer Structure"]
-        P["🖥️ Presentation Layer<br>(User-facing layer)"]
-        A["⚙️ Application Layer<br>(Flow orchestration layer)"]
-        D["💎 Domain Layer<br>(Business rules layer)"]
-        I["🔧 Infrastructure Layer<br>(Technical details)"]
+        P["Presentation Layer<br>(User-facing layer)"]
+        A["Application Layer<br>(Flow orchestration layer)"]
+        D["Domain Layer<br>(Business rules layer)"]
+        I["Infrastructure Layer<br>(Technical details)"]
     end
 
     P --> A --> D
@@ -27,11 +31,13 @@ flowchart TB
 
 ---
 
-## Why Divide into Layers?
+#### Why Divide into Layers?
 
-### Analogy: Company Organization
+The reason for dividing into layers is to separate complex systems into manageable units. When each layer has its own responsibility, it becomes easier to predict the impact of code changes, and collaboration among team members becomes smoother.
 
-Think about how a company works:
+**Analogy: Company Organization**
+
+Think about how a company works. The customer service team identifies what customers want, the planning team coordinates the order of processing, the development team builds actual features, and the infrastructure team manages servers and databases. Each team focusing on their role makes things efficient, right? Software is the same.
 
 ```mermaid
 flowchart TB
@@ -47,29 +53,19 @@ flowchart TB
     DEV -->|"Use infra"| INFRA
 ```
 
-- **Customer Service** identifies what customers want
-- **Planning Team** coordinates the order of processing
-- **Development Team** does actual feature development
-- **Infrastructure Team** manages servers, DBs, etc.
-
-Each team focusing on their role makes things efficient, right? Software is the same.
+Each team has a clear role, so when problems arise, you immediately know where to look. Software layers work on the same principle.
 
 ---
 
-## Detailed Explanation of 4 Layers
+#### Detailed Explanation of 4 Layers
 
-### 1. Presentation Layer
+Layered architecture consists of 4 main layers. Each layer is clearly separated, and upper layers can only call lower layers.
 
-**Role:** Interface for user communication
+**1. Presentation Layer**
 
-```
-User ←→ [Presentation Layer] ←→ Rest of system
-```
+The Presentation Layer is the interface for communicating with users. It receives user input and displays results. It handles HTTP requests or form inputs, and delivers results as JSON responses or HTML pages. It also validates whether input formats are correct.
 
-What this layer does:
-- Receive user input (HTTP requests, form inputs)
-- Show results to users (JSON responses, HTML pages)
-- Validate input format ("Is this a valid email format?")
+Users interact with the system only through this layer. When a user clicks a button or submits a form, the Presentation Layer receives it, converts it to an appropriate format, and passes it to lower layers.
 
 ```java
 // Presentation Layer example: Controller
@@ -118,6 +114,8 @@ public record OrderResponse(
 }
 ```
 
+In the code above, OrderController receives HTTP requests and passes them to OrderService, then converts the results back to HTTP responses. This layer only knows about HTTP protocol details and contains no business logic.
+
 {{< notice style="warning" >}}
 **Common Mistake: Business logic in Presentation**
 
@@ -126,7 +124,7 @@ public record OrderResponse(
 @PostMapping
 public ResponseEntity<OrderResponse> createOrder(...) {
     // This logic shouldn't be here!
-    if (request.getTotalAmount() > 1000) {
+    if (request.getTotalAmount() > 100000) {
         request.setDiscount(0.1);  // 10% discount
     }
 }
@@ -135,18 +133,11 @@ public ResponseEntity<OrderResponse> createOrder(...) {
 Business logic should be in the Domain Layer.
 {{< /notice >}}
 
----
+**2. Application Layer**
 
-### 2. Application Layer
+The Application Layer is the conductor orchestrating workflow. This layer decides "what" to do, but leaves "how" to the Domain Layer. It decides the order of processing, manages transactions, and combines Domain Layer objects.
 
-**Role:** Conductor orchestrating workflow
-
-What this layer does:
-- Decide what order to process things
-- Manage transactions
-- Combine Domain Layer objects
-
-**Important:** Application Layer decides **"what"** to do, and leaves **"how"** to Domain.
+For example, when creating an order, it orchestrates a series of flows: query customer information, create order object, save, and send notification. The actual business rules are applied by Domain objects, but the Application Layer decides the order of execution.
 
 ```java
 // Application Layer example: Service
@@ -197,6 +188,8 @@ public class OrderService {
 }
 ```
 
+The code above defines the flow of business processes for order creation and confirmation. It executes each step in order, and the actual business rules are handled by Order object's create() or confirm() methods.
+
 {{< notice style="tip" >}}
 **Application vs Domain Difference**
 
@@ -222,18 +215,11 @@ public class Order {
 ```
 {{< /notice >}}
 
----
+**3. Domain Layer**
 
-### 3. Domain Layer
+The Domain Layer is the heart of business rules. It is the most important layer, where "real business logic" lives. It expresses business rules, maintains data consistency, and represents domain concepts.
 
-**Role:** Heart of business rules ❤️
-
-The most important layer. This is where "real business logic" lives.
-
-What this layer does:
-- Express business rules ("VIP customers get 10% discount")
-- Maintain data consistency ("Order amount must be 0 or more")
-- Express domain concepts (Order, Customer, Product)
+For example, rules like "VIP customers get 10% discount", constraints like "order amount must be 0 or more", and invariants like "order can only be modified when status is PENDING" are all in this layer. Domain concepts like Order, Customer, and Product are also expressed as classes in this layer.
 
 ```java
 // Domain Layer example: Entity
@@ -288,8 +274,8 @@ public class Order {
         }
 
         // Rule: Check minimum order amount
-        if (this.totalAmount.isLessThan(Money.of(10))) {
-            throw new IllegalStateException("Minimum order amount is $10");
+        if (this.totalAmount.isLessThan(Money.of(1000))) {
+            throw new IllegalStateException("Minimum order amount is 1,000 won");
         }
 
         this.status = OrderStatus.CONFIRMED;
@@ -319,6 +305,8 @@ public class Order {
     }
 }
 ```
+
+In the code above, the Order class encapsulates all business rules related to orders. External code can only change state through Order's public methods, and each method validates business rules before changing state.
 
 ```java
 // Domain Layer: Value Object
@@ -351,6 +339,8 @@ public record Money(BigDecimal amount) {
 }
 ```
 
+Money is an example of a Value Object. It is immutable, compared by value, and validates its own invariant (amount must be 0 or more).
+
 {{< notice style="warning" >}}
 **Common Mistake: Anemic Domain**
 
@@ -379,17 +369,11 @@ public class OrderService {
 Business logic should be inside the Entity!
 {{< /notice >}}
 
----
+**4. Infrastructure Layer**
 
-### 4. Infrastructure Layer
+The Infrastructure Layer handles technical details. It handles database access, external API calls, message sending, file storage, and all communication with external systems. Technical tools like JPA, MyBatis, REST Client, Kafka, and Email are in this layer.
 
-**Role:** Handle technical details
-
-What this layer does:
-- Database access (JPA, MyBatis)
-- External API calls (REST Client)
-- Message sending (Kafka, Email)
-- File storage
+Implementations in this layer implement Domain Layer interfaces. For example, the OrderRepository interface is defined in the Domain Layer, and the JpaOrderRepository implementation is in the Infrastructure Layer.
 
 ```java
 // Infrastructure Layer: Repository implementation
@@ -401,14 +385,14 @@ public class JpaOrderRepository implements OrderRepository {
 
     @Override
     public void save(Order order) {
-        // Domain → JPA Entity conversion
+        // Domain -> JPA Entity conversion
         OrderEntity entity = mapper.toEntity(order);
         jpaRepository.save(entity);
     }
 
     @Override
     public Optional<Order> findById(OrderId id) {
-        // JPA Entity → Domain conversion
+        // JPA Entity -> Domain conversion
         return jpaRepository.findById(id.getValue())
             .map(mapper::toDomain);
     }
@@ -430,6 +414,8 @@ public class OrderEntity {
     // getter, setter (used only in Infrastructure)
 }
 ```
+
+The code above converts Domain's Order object to JPA Entity for database storage. The Domain Layer knows nothing about database technology and only uses the OrderRepository interface.
 
 ```java
 // Infrastructure Layer: External API integration
@@ -453,11 +439,17 @@ public class PaymentGatewayClient implements PaymentService {
 }
 ```
 
+Communication with external payment APIs is also handled in the Infrastructure Layer. The Domain Layer only knows the PaymentService interface and doesn't know which payment system is actually used.
+
 ---
 
-## Package Structure
+#### Package Structure
 
-### Basic Structure
+When applying layered architecture to a Java project, package structure is important. Separate each layer into its own package so that layers are clearly distinguished physically.
+
+**Basic Structure**
+
+Below is a package structure for an order domain organized in layers. Each layer is separated into independent packages, making it easy for code readers to identify which layer code belongs to.
 
 ```
 com.example.order/
@@ -487,7 +479,11 @@ com.example.order/
         └── PaymentGatewayClient.java
 ```
 
-### Dependency Direction
+The presentation package contains controllers and DTOs, the application package contains services and application DTOs, the domain package contains entities and value objects, and the infrastructure package contains Repository implementations and external integration code.
+
+**Dependency Direction**
+
+Dependency direction always flows from top to bottom. In the diagram below, arrows indicate dependency direction. Presentation depends on application, application depends on domain, and infrastructure also depends on domain. However, domain depends on nothing.
 
 ```mermaid
 flowchart TB
@@ -499,24 +495,19 @@ flowchart TB
     P --> A
     A --> D
     I --> D
-
-    P -.->|"❌ Forbidden"| D
-    P -.->|"❌ Forbidden"| I
-    A -.->|"❌ Forbidden"| I
 ```
 
-**Core Rules:**
-- Depend only from top to bottom
-- Domain depends on nothing
-- Infrastructure implements Domain interfaces
+This way, the domain layer becomes the most stable layer, and technical changes (e.g., changing from JPA to MyBatis) don't affect the domain.
 
 ---
 
-## Dependency Inversion (DIP)
+#### Dependency Inversion (DIP)
 
-"Domain doesn't depend on Infrastructure" might sound strange. How can we use Repository without depending on it?
+"Domain doesn't depend on Infrastructure" might sound strange. How can we use Repository without depending on it? The secret is in interfaces.
 
-### The Secret: Interfaces
+**The Secret: Interfaces**
+
+Define the Repository interface in the Domain Layer and implement it in the Infrastructure Layer. This way, Domain doesn't need to know the concrete implementation, just using the interface.
 
 ```mermaid
 flowchart LR
@@ -532,6 +523,8 @@ flowchart LR
     O -->|"uses"| RI
     JR -->|"implements"| RI
 ```
+
+In the diagram above, Order uses the OrderRepository interface, and JpaOrderRepository implements that interface. The dependency direction is inverted.
 
 ```java
 // Domain Layer: Define interface
@@ -557,37 +550,48 @@ public class JpaOrderRepository implements OrderRepository {
 }
 ```
 
-**This way:**
-- Domain only needs to know `OrderRepository` interface
-- Can swap JPA for MyBatis without changing Domain code
-- Can use fake (Mock) Repository for testing
+This way, Domain only needs to know the OrderRepository interface, and you can swap JPA for MyBatis without changing Domain code. It's also convenient to use fake (Mock) Repositories for testing.
 
 ---
 
-## Pros and Cons of Layered
+#### Pros and Cons of Layered
 
-### Advantages
+Layered architecture is simple and intuitive but has some pros and cons. Depending on project characteristics, advantages may outweigh disadvantages or vice versa.
+
+**Advantages**
+
+The main advantages of layered architecture are that it's easy to understand and apply. The table below summarizes the key advantages.
 
 | Advantage | Description |
 |-----------|-------------|
-| **Easy to understand** | Intuitive top→bottom flow |
+| **Easy to understand** | Intuitive top-to-bottom flow |
 | **Clear roles** | What each layer does is obvious |
 | **Quick start** | Can apply immediately without complex setup |
 | **Team collaboration** | "You do Controller, I do Service" division possible |
 
-### Disadvantages
+The intuitive top-to-bottom flow makes it easy for new developers to understand. Each layer's role is clearly defined, so there's little need to wonder where to write what code. You can apply it immediately without complex setup or additional tools, enabling quick project starts. It's also efficient for team collaboration since members can divide work by layer.
+
+**Disadvantages**
+
+However, layered architecture also has some disadvantages. These disadvantages can become burdensome as projects grow.
 
 | Disadvantage | Description |
 |--------------|-------------|
-| **Forces layer traversal** | Even simple queries go through all layers |
+| **Forces layer traversal** | Even simple queries must go through all layers |
 | **Technology dependency** | Infrastructure changes can affect Domain |
 | **Testing difficulties** | Hard to test without Mocks |
 
+Even simple data queries must go through all layers, which can lead to unnecessary code. If you directly attach JPA annotations to Domain Entities, technology dependencies arise, making future changes difficult. Testing can be cumbersome since all lower layers must be Mocked.
+
 ---
 
-## Common Mistakes
+#### Common Mistakes
 
-### 1. Skipping Layers
+Let's look at common mistakes when applying layered architecture. Avoiding these mistakes leads to cleaner code.
+
+**1. Skipping Layers**
+
+Skipping layers violates the core principle of layered architecture. Each layer should only call the layer directly below it; you shouldn't skip layers.
 
 ```java
 // ❌ Controller directly accesses Repository
@@ -603,6 +607,8 @@ public class OrderController {
 }
 ```
 
+The code above has the Controller directly calling the Repository, skipping the Application Layer. This means there's no opportunity to apply business logic, and responsibilities between layers become ambiguous.
+
 ```java
 // ✅ Correct: Go through Application Layer
 @RestController
@@ -617,7 +623,11 @@ public class OrderController {
 }
 ```
 
-### 2. Technical Code in Domain
+The correct approach is for the Controller to call the Service, and the Service to call the Repository. This allows each layer to perform its role.
+
+**2. Technical Code in Domain**
+
+Attaching framework annotations like JPA or Spring to Domain Entities makes Domain dependent on technology. To maintain a pure Domain model, create separate Entities in Infrastructure.
 
 ```java
 // ❌ JPA annotations in Domain Entity
@@ -633,13 +643,17 @@ public class Order {
 }
 ```
 
-To keep pure Domain model, create separate Entity in Infrastructure.
+The code above has the Domain Entity directly depending on JPA. If you later want to replace JPA with another technology, you'd have to modify all Domain code.
 
-### 3. Circular Dependencies
+To maintain a pure Domain model, keep only plain Java objects in Domain and create separate JPA Entities in Infrastructure. Use Mappers to convert between Domain objects and JPA Entities.
+
+**3. Circular Dependencies**
+
+Circular dependencies occur when two or more Services depend on each other. This can cause compile errors or runtime problems.
 
 ```java
 // ❌ Circular dependency
-// OrderService → PaymentService → OrderService
+// OrderService -> PaymentService -> OrderService
 
 @Service
 public class OrderService {
@@ -651,6 +665,8 @@ public class PaymentService {
     private final OrderService orderService;  // Circular!
 }
 ```
+
+The code above creates a circular structure where OrderService and PaymentService depend on each other. This structure makes code hard to understand and testing difficult.
 
 ```java
 // ✅ Solve with events
@@ -673,13 +689,17 @@ public class PaymentEventHandler {
 }
 ```
 
+A good way to resolve circular dependencies is to use events. OrderService publishes events, and PaymentEventHandler receives and processes them. This way, the two services don't directly depend on each other.
+
 ---
 
-## Testing Strategy
+#### Testing Strategy
 
-### 1. Domain Layer Test (Easiest)
+In layered architecture, you can test each layer independently. Different testing methods are appropriate for different layers.
 
-Test pure logic without external dependencies:
+**1. Domain Layer Test (Easiest)**
+
+The Domain Layer has no external dependencies, so you only need to test pure logic. No Mocks needed, and test execution is fast.
 
 ```java
 class OrderTest {
@@ -688,15 +708,15 @@ class OrderTest {
     void totalAmountIsCalculatedOnCreation() {
         // Given
         List<OrderLine> lines = List.of(
-            new OrderLine(ProductId.of("P1"), 2, Money.of(100)),
-            new OrderLine(ProductId.of("P2"), 1, Money.of(50))
+            new OrderLine(ProductId.of("P1"), 2, Money.of(10000)),
+            new OrderLine(ProductId.of("P2"), 1, Money.of(5000))
         );
 
         // When
         Order order = Order.create(CustomerId.of("C1"), lines);
 
         // Then
-        assertThat(order.getTotalAmount()).isEqualTo(Money.of(250));
+        assertThat(order.getTotalAmount()).isEqualTo(Money.of(25000));
     }
 
     @Test
@@ -717,7 +737,11 @@ class OrderTest {
 }
 ```
 
-### 2. Application Layer Test (Using Mock)
+All the tests above are pure unit tests. They verify Order class logic without databases or external services.
+
+**2. Application Layer Test (Using Mock)**
+
+The Application Layer combines multiple lower layers, so use Mocks for testing. You can test quickly by replacing Repositories and external services with Mocks.
 
 ```java
 @ExtendWith(MockitoExtension.class)
@@ -737,7 +761,7 @@ class OrderServiceTest {
         // Given
         String customerId = "customer-1";
         List<OrderItemDto> items = List.of(
-            new OrderItemDto("product-1", 2, 100)
+            new OrderItemDto("product-1", 2, 10000)
         );
 
         // When
@@ -751,7 +775,11 @@ class OrderServiceTest {
 }
 ```
 
-### 3. Infrastructure Layer Test (Integration Test)
+The test above verifies OrderService's flow orchestration logic. It tests without actual databases or notification services by replacing Repository and NotificationService with Mocks.
+
+**3. Infrastructure Layer Test (Integration Test)**
+
+The Infrastructure Layer communicates with actual databases or external systems, so perform integration tests. Tools like Spring Boot's @DataJpaTest are convenient.
 
 ```java
 @DataJpaTest
@@ -783,28 +811,31 @@ class JpaOrderRepositoryTest {
 }
 ```
 
----
-
-## When to Use Layered?
-
-### Suitable Cases
-
-- ✅ Early project stages
-- ✅ Team with little architecture pattern experience
-- ✅ Simple business logic
-- ✅ Need for rapid development
-
-### Unsuitable Cases
-
-- ❌ Many external system integrations → Consider [Hexagonal](../hexagonal-architecture/)
-- ❌ Complex domain logic → Consider [Onion](../onion-architecture/)
-- ❌ Large team, long-term project → Consider [Clean](../clean-architecture/)
+The test above uses actual JPA and a database (usually an in-memory DB like H2) to verify that the Repository implementation works correctly.
 
 ---
 
-## Evolving to Next Stage
+#### When to Use Layered?
 
-Once familiar with Layered, you can progress to more advanced patterns as needed:
+Layered architecture isn't suitable for all situations. Its suitability varies depending on project characteristics and team circumstances.
+
+**Suitable Cases**
+
+Layered architecture works particularly well in the following situations. In early project stages, a simple layered approach may be more appropriate than complex architecture. When teams have little architecture pattern experience, the easy-to-understand layered approach is good.
+
+If business logic is not complex and the application is simple CRUD, layered is sufficient. It's also suitable for MVPs or prototypes that need rapid development.
+
+**Unsuitable Cases**
+
+On the other hand, layered may be unsuitable in the following situations. For many external system integrations, consider hexagonal architecture. For complex domain logic, onion architecture may be more appropriate.
+
+For large teams or long-term projects, stricter rules like clean architecture may be needed.
+
+---
+
+#### Evolving to Next Stage
+
+Once familiar with layered, you can progress to more advanced patterns as needed. It's good to improve gradually.
 
 ```mermaid
 flowchart LR
@@ -817,6 +848,9 @@ flowchart LR
 ```
 
 **Step 1: Move Repository Interface to Domain**
+
+First, move the Repository interface from Infrastructure to Domain. This way, Domain no longer depends on Infrastructure.
+
 ```java
 // Before: Was in Infrastructure
 // After: Move to Domain
@@ -830,11 +864,11 @@ public interface OrderRepository {
 
 **Step 2: Abstract more external integrations as Interfaces**
 
-Going through this process naturally evolves into Hexagonal Architecture.
+Abstract all external service integrations as interfaces. Going through this process naturally evolves into hexagonal architecture.
 
 ---
 
-## Next Steps
+#### Next Steps
 
 - [Hexagonal Architecture](../hexagonal-architecture/) - Isolate external with Port and Adapter
 - [Clean Architecture](../clean-architecture/) - Strict dependency rules

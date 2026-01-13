@@ -1,10 +1,19 @@
 ---
 title: 아키텍처 패턴
 weight: 5
-lastmod: 2026-01-09
+lastmod: "2026-01-13"
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
+
+> **대상 독자**: 프로젝트 아키텍처 선택이 필요한 개발자 및 아키텍트
+> **선수 지식**: [전술적 설계](../tactical-design/) 빌딩 블록에 대한 이해
+> **소요 시간**: 약 25분
+> **핵심 질문**: "Layered, Hexagonal, Clean Architecture 중 어떤 것을 선택해야 하는가?"
+
+{{< callout type="tip" title="요약" >}}
+아키텍처 선택 기준: **Layered**(단순, 빠른 개발) → **Hexagonal**(테스트 용이, 인프라 교체) → **Clean**(복잡한 도메인, 장기 유지보수)
+{{< /callout >}}
 
 DDD를 효과적으로 구현하기 위한 아키텍처 패턴들을 살펴봅니다. 좋은 아키텍처는 비즈니스 로직을 보호하고, 변경에 유연하며, 테스트하기 쉬운 시스템을 만들 수 있게 해줍니다. 각 패턴의 철학과 실제 적용 방법을 이해하면, 프로젝트에 맞는 최선의 선택을 할 수 있습니다.
 

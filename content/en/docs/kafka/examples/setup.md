@@ -1,23 +1,36 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-10"
 title: Environment Setup
 weight: 1
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
-
-# Environment Setup
 
 Reference guide for setting up Kafka with Spring Boot.
 
-> **Completed Quick Start?**
-> If you completed the [Quick Start](../../quick-start/), you've already set up the basic environment. This document is a **reference guide** for configuration details and production environment setup.
+{{% notice style="tip" title="TL;DR" %}}
+- **Kafka Execution**: Run Kafka 3.6.1 in KRaft mode via Docker Compose
+- **Dependencies**: Add `spring-kafka`, `spring-boot-starter-web`
+- **Basic Settings**: Configure `bootstrap-servers`, Serializer/Deserializer, `group-id`
+- **Production**: Ensure stability with `acks: all`, `enable.idempotence: true`
+{{% /notice %}}
 
----
+#### Target Audience and Prerequisites
 
-## Running Kafka with Docker
+| Item | Description |
+|------|-------------|
+| **Target Audience** | Developers setting up Kafka environment in Spring Boot projects |
+| **Prerequisites** | Basic Docker usage, Gradle or Maven build tools, Spring Boot configuration files (application.yml) |
+| **Required Tools** | Docker Desktop or Docker Engine, JDK 17+, IDE (IntelliJ IDEA recommended) |
+| **Estimated Time** | About 15 minutes |
 
-### docker-compose.yml
+If you completed Quick Start, you've already set up the basic environment. This document is a reference guide for configuration details and production environment setup.
 
-The `docker/docker-compose.yml` file in the project root.
+#### Running Kafka with Docker
+
+**docker-compose.yml**
+
+This is the `docker/docker-compose.yml` file in the project root. This configuration uses KRaft mode where Kafka manages its own metadata without Zookeeper. KRaft is recommended for Kafka 3.3 and above.
 
 ```yaml
 version: '3.8'
@@ -49,9 +62,9 @@ volumes:
   kafka-data:
 ```
 
-> **KRaft Mode**: This configuration uses Kafka's own metadata management without Zookeeper (Kafka 3.3+).
+**Commands**
 
-### Commands
+To start Kafka, use `docker-compose up -d`. To check status, use `docker-compose ps`; to check logs, use `docker-compose logs -f kafka`. To stop, use `docker-compose down`, and to delete all data as well, use `docker-compose down -v`.
 
 ```bash
 # Start
@@ -70,11 +83,18 @@ docker-compose down
 docker-compose down -v
 ```
 
----
+{{% notice style="info" title="Docker Kafka Key Points" %}}
+- **KRaft Mode**: Kafka manages its own metadata without Zookeeper (recommended for 3.3+)
+- **Ports**: 9092 (client), 9093 (controller)
+- **Volume**: Ensure data persistence with `kafka-data`
+- **Full Reset**: Delete volumes with `docker-compose down -v`
+{{% /notice %}}
 
-## Spring Boot Dependencies
+#### Spring Boot Dependencies
 
-### build.gradle.kts
+**build.gradle.kts**
+
+When using Gradle Kotlin DSL, add dependencies as follows.
 
 ```kotlin
 plugins {
@@ -96,7 +116,9 @@ dependencies {
 }
 ```
 
-### Maven (pom.xml)
+**Maven (pom.xml)**
+
+When using Maven, add dependencies as follows.
 
 ```xml
 <dependencies>
@@ -111,13 +133,17 @@ dependencies {
 </dependencies>
 ```
 
----
+{{% notice style="info" title="Dependencies Key Points" %}}
+- **spring-kafka**: Kafka Producer/Consumer abstraction, provides KafkaTemplate
+- **spring-boot-starter-web**: For REST API endpoint implementation (optional)
+- **spring-kafka-test**: Provides EmbeddedKafka for testing
+{{% /notice %}}
 
-## application.yml Configuration
+#### application.yml Configuration
 
-### Quick Start Basic Configuration
+**Quick Start Basic Configuration**
 
-The minimal configuration used in the [Quick Start example](../../quick-start/).
+The minimal configuration used in the Quick Start example.
 
 ```yaml
 spring:
@@ -138,9 +164,9 @@ spring:
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 ```
 
-### Production Recommended Configuration
+**Production Recommended Configuration**
 
-Consider adding these settings for production environments.
+Consider these additional settings for production environments. Setting acks to all provides high data stability by getting confirmation from all replicas. Setting enable.idempotence to true prevents duplicate sends.
 
 ```yaml
 spring:
@@ -167,34 +193,28 @@ spring:
         max.poll.interval.ms: 300000
 ```
 
----
+{{% notice style="info" title="application.yml Key Points" %}}
+- **bootstrap-servers**: Kafka broker connection address (required)
+- **Serializer/Deserializer**: Use StringSerializer for strings, JsonSerializer for objects
+- **group-id**: Consumer Group identifier, service name-based recommended
+- **Production Settings**: `acks: all` for data stability, `enable.idempotence: true` to prevent duplicates
+{{% /notice %}}
 
-## Configuration Details
+#### Configuration Details
 
-### Producer Settings
+**Producer Settings**
 
-| Setting | Description | Default | Recommended |
-|---------|-------------|---------|-------------|
-| `acks` | Confirmation level | `1` | `all` (production) |
-| `retries` | Retry count | `2147483647` | `3` |
-| `batch-size` | Batch size (bytes) | `16384` | `16384` |
-| `linger-ms` | Batch wait time | `0` | `1` |
-| `buffer-memory` | Buffer memory | `33554432` | `33554432` |
+acks is the confirmation level with a default of 1; all is recommended for production. retries is the retry count with a very large default, so you can limit it to around 3. batch-size is the batch size with a default of 16384 bytes which is appropriate. linger-ms is the batch wait time with a default of 0, but setting it to around 1ms improves batch efficiency. buffer-memory is the buffer memory with a default of 33554432 bytes (32MB) which is appropriate.
 
-### Consumer Settings
+**Consumer Settings**
 
-| Setting | Description | Default | Recommended |
-|---------|-------------|---------|-------------|
-| `group-id` | Consumer Group ID | - | Service name |
-| `auto-offset-reset` | Initial Offset | `latest` | `earliest` (dev) |
-| `enable-auto-commit` | Auto commit | `true` | Depends on situation |
-| `max-poll-records` | Max records per poll | `500` | `500` |
+group-id is the Consumer Group ID; using the service name is recommended. auto-offset-reset is the initial Offset; earliest is recommended for development environments. enable-auto-commit is whether to auto-commit; choose based on your situation. max-poll-records is the maximum records to fetch at once with a default of 500 which is appropriate.
 
----
+#### JSON Message Processing
 
-## JSON Message Processing
+**Add Dependency**
 
-### Add Dependency
+Add Jackson dependency for JSON serialization.
 
 ```kotlin
 dependencies {
@@ -202,7 +222,9 @@ dependencies {
 }
 ```
 
-### Configuration
+**Configuration**
+
+Producer uses JsonSerializer, Consumer uses JsonDeserializer. The trusted.packages setting specifies packages of classes to deserialize.
 
 ```yaml
 spring:
@@ -215,7 +237,9 @@ spring:
         spring.json.trusted.packages: "com.example.*"
 ```
 
-### Usage Example
+**Usage Example**
+
+Using Java Record as a domain class allows concise JSON message exchange.
 
 ```java
 // Domain class
@@ -235,11 +259,19 @@ public void consume(OrderEvent event) {
 }
 ```
 
----
+{{% notice style="info" title="JSON Message Processing Key Points" %}}
+- **JsonSerializer/JsonDeserializer**: Auto serialize/deserialize objects to JSON
+- **trusted.packages**: Specify allowed packages for deserialization (security)
+- **Java Record**: Recommended for defining events as immutable data classes
+{{% /notice %}}
 
-## Profile-based Configuration
+#### Profile-based Configuration
 
-### application.yml (common)
+Use profiles to apply different settings per environment.
+
+**application.yml (common)**
+
+Uses the environment variable value if present, otherwise defaults to localhost:9092.
 
 ```yaml
 spring:
@@ -247,7 +279,9 @@ spring:
     bootstrap-servers: ${KAFKA_SERVERS:localhost:9092}
 ```
 
-### application-local.yml
+**application-local.yml**
+
+In local development environment, set to earliest to read all messages from the beginning.
 
 ```yaml
 spring:
@@ -257,7 +291,9 @@ spring:
       auto-offset-reset: earliest
 ```
 
-### application-prod.yml
+**application-prod.yml**
+
+In production environment, specify multiple Brokers and set acks to all for increased stability.
 
 ```yaml
 spring:
@@ -269,32 +305,22 @@ spring:
       auto-offset-reset: latest
 ```
 
----
+{{% notice style="info" title="Profile-based Configuration Key Points" %}}
+- **Environment Variables**: Specify default with `${KAFKA_SERVERS:localhost:9092}` format
+- **Local Development**: Read all messages from beginning with `earliest`
+- **Production**: Specify multiple brokers, read from latest messages with `latest`
+{{% /notice %}}
 
-## Common Errors and Solutions
+#### Common Errors and Solutions
 
-### Connection Error
+**Connection Error**
 
-```
-Connection to node -1 could not be established
-```
+The `Connection to node -1 could not be established` error occurs when unable to connect to the Kafka broker. Check Kafka running status with `docker-compose ps`, verify the port is open with `netstat -an | grep 9092`, and also verify the bootstrap-servers setting is correct.
 
-**Cause:** Cannot connect to Kafka broker
+**Serialization Error**
 
-**Solution:**
-1. Check Kafka is running: `docker-compose ps`
-2. Check port: `netstat -an | grep 9092`
-3. Verify bootstrap-servers setting
+The `Failed to serialize value` error occurs when Serializer settings don't match. Use JsonSerializer when sending JSON objects.
 
-### Serialization Error
-
-```
-Failed to serialize value
-```
-
-**Cause:** Serializer configuration mismatch
-
-**Solution:**
 ```yaml
 spring:
   kafka:
@@ -302,15 +328,10 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 ```
 
-### Deserialization Error
+**Deserialization Error**
 
-```
-Failed to deserialize; nested exception is java.lang.IllegalArgumentException
-```
+The `Failed to deserialize` error occurs when trusted packages are not configured. Specify the packages of classes that JsonDeserializer should deserialize.
 
-**Cause:** Trusted packages not configured
-
-**Solution:**
 ```yaml
 spring:
   kafka:
@@ -319,15 +340,10 @@ spring:
         spring.json.trusted.packages: "*"  # Or specific package
 ```
 
-### Missing Group ID
+**Missing Group ID**
 
-```
-group.id is required
-```
+The `group.id is required` error occurs when Consumer's group-id is not set.
 
-**Cause:** Consumer group-id not set
-
-**Solution:**
 ```yaml
 spring:
   kafka:
@@ -335,21 +351,11 @@ spring:
       group-id: quickstart-group
 ```
 
----
+#### Configuration Verification Checklist
 
-## Configuration Verification Checklist
+Verify the following items to ensure environment setup is complete. Check if Kafka is running via Docker, if spring-kafka dependency is added, if bootstrap-servers is configured, if Producer's serializer is configured, if Consumer's deserializer is configured, and if Consumer's group-id is configured. If using JSON, trusted.packages should also be configured.
 
-- [ ] Kafka running via Docker
-- [ ] spring-kafka dependency added
-- [ ] bootstrap-servers configured
-- [ ] Producer serializer configured
-- [ ] Consumer deserializer configured
-- [ ] Consumer group-id configured
-- [ ] (For JSON) trusted.packages configured
-
----
-
-## Next Steps
+#### Next Steps
 
 - [Basic Examples](../basic/) - Producer/Consumer implementation
 - [Order System](../order-system/) - Real-world example

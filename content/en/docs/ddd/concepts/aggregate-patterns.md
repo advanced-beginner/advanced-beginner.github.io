@@ -1,16 +1,25 @@
 ---
-lastmod: "2026-01-07"
-title: Aggregate Patterns
+lastmod: "2026-01-13"
+title: Aggregate Practical Patterns
 weight: 4
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
+
+> **Target Audience**: Developers who have learned Aggregate basics and want to learn practical patterns
+> **Prerequisites**: Understanding core concepts from [Aggregate Deep Dive](../aggregate/)
+> **Reading Time**: About 30 minutes
+> **Key Question**: "What patterns should I apply when implementing Aggregates?"
+
+{{< callout type="tip" title="Summary" >}}
+Practical patterns: **Factory Method** (creation) + **Domain Event publishing** + **Optimistic Locking** (concurrency) + **Soft Delete** (deletion)
+{{< /callout >}}
 
 # Aggregate Practical Patterns
 
 Implementation patterns and decision guides for Aggregate design.
 
-> **Prerequisite:** Read [Aggregate Deep Dive](../aggregate/) first for core concepts.
-
-> **Common Imports for examples in this page:**
+> **Common imports for examples in this page:**
 > ```java
 > import java.util.*;
 > import java.time.LocalDateTime;

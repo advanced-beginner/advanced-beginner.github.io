@@ -1,12 +1,20 @@
 ---
-lastmod: "2026-01-07"
 title: References
 weight: 2
+lastmod: "2026-01-13"
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # References
 
 Books, articles, and presentations for learning DDD.
+
+> **TL;DR**
+>
+> - **Essential Reading**: Blue Book (original), Red Book (implementation), DDD Distilled (intro)
+> - **Learning Order**: Intro -> Fundamentals -> Advanced -> Practice (progressive learning)
+> - **Practice**: Start with refactoring existing projects or EventStorming
 
 ## Essential Reading
 
@@ -52,6 +60,12 @@ An introductory book that concisely summarizes DDD's core concepts.
 - Those who need to quickly grasp concepts
 - Team training
 
+> **Essential Reading Key Points**
+>
+> - **Blue Book**: DDD original text, essential for understanding philosophy and principles
+> - **Red Book**: Practical implementation methods for Blue Book concepts
+> - **DDD Distilled**: Concise summary for beginners, suitable for team training
+
 ---
 
 ## Recommended Books
@@ -95,6 +109,12 @@ Not DDD, but helps understand architecture principles.
 - Layer separation
 - Domain-centric design
 
+> **Recommended Books Key Points**
+>
+> - **Learning DDD**: Reflects modern practices (microservices, EventStorming)
+> - **Patterns, Principles, and Practices of DDD**: Rich code examples and anti-patterns
+> - **Clean Architecture**: Architecture principles used alongside DDD
+
 ---
 
 ## Online Resources
@@ -127,6 +147,12 @@ Community run by Eric Evans
 
 Collection of DDD-related resources
 
+> **Online Resources Key Points**
+>
+> - **Martin Fowler's Blog**: Excellent for concept clarification (Bounded Context, Aggregate, CQRS)
+> - **DDD Community**: Official community run by Eric Evans
+> - **Awesome DDD**: Comprehensive resource collection maintained on GitHub
+
 ---
 
 ## Presentations
@@ -151,6 +177,11 @@ Workshop technique for domain exploration
 - **Platform:** YouTube, InfoQ
 
 Strategic design pattern lectures
+
+> **Presentations Key Points**
+>
+> - **EventStorming**: Visual workshop technique for domain exploration
+> - **Vaughn Vernon Lectures**: Helpful for understanding strategic design patterns
 
 ---
 
@@ -195,8 +226,8 @@ flowchart TB
 
 ### 1. Refactor Existing Project
 
-- Anemic domain model → Rich domain model
-- Logic scattered in services → Move to Entity/Value Object
+- Anemic domain model -> Rich domain model
+- Logic scattered in services -> Move to Entity/Value Object
 - Redefine Aggregate boundaries
 
 ### 2. Start New Project
@@ -214,6 +245,12 @@ Checklist:
 - [ ] Are Aggregate boundaries appropriate?
 - [ ] Are Value Objects being utilized?
 ```
+
+> **Learning Roadmap and Practice Key Points**
+>
+> - **Learning Order**: Beginner (DDD Distilled) -> Fundamentals (Blue/Red Book) -> Advanced -> Practice
+> - **Practice Recommendations**: Refactor existing project -> Start new project -> Code review
+> - **Key Checks**: Domain term reflection, business logic location, Aggregate boundaries, Value Object usage
 
 ---
 

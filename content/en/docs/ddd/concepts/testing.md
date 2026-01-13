@@ -1,14 +1,25 @@
 ---
-lastmod: "2026-01-07"
 title: Testing Strategy
 weight: 7
+lastmod: "2026-01-13"
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
-# DDD Testing Strategy
+> **Target Audience**: Developers establishing testing strategies for DDD-based projects
+> **Prerequisites**: [Tactical Design](../tactical-design/) building blocks, basic JUnit/Mockito usage
+> **Time Required**: About 25 minutes
+> **Key Question**: "How should tests be organized in DDD architecture?"
 
-Exploring testing strategies suitable for domain models and DDD architectures.
+{{< callout type="tip" title="Summary" >}}
+Testing Strategy Core: **Unit Tests**(domain model focused, most numerous) → **Integration Tests**(Repository, external integrations) → **E2E Tests**(critical scenarios only)
+{{< /callout >}}
 
-## Test Pyramid
+Systems applying Domain-Driven Design require a different testing strategy than typical CRUD applications. Since business logic is concentrated in domain models, tests should also be designed around the domain layer. This document explores testing strategies suitable for DDD architecture and specific implementation methods.
+
+#### Test Pyramid
+
+The core of an effective testing strategy is following the test pyramid principle. The test pyramid is a strategy of writing the most unit tests, a medium amount of integration tests, and the fewest E2E tests. This is a balanced approach considering cost and execution speed.
 
 ```mermaid
 flowchart TB
@@ -21,19 +32,27 @@ flowchart TB
     E2E --> INT --> UNIT
 ```
 
+Looking at each test type, unit tests target domain models and services with fast speed and low cost. Integration tests verify Repository and external system integrations with medium speed and cost. E2E tests target the entire system and are the slowest and most expensive.
+
 | Test Type | Scope | Speed | Cost |
 |-----------|-------|-------|------|
 | **Unit Tests** | Domain models, services | Fast | Low |
 | **Integration Tests** | Repository, external integrations | Medium | Medium |
 | **E2E Tests** | Entire system | Slow | High |
 
-## Domain Model Unit Tests
+Unit tests execute quickly without external dependencies, providing immediate feedback during development. E2E tests verify the entire system but have long execution times and high maintenance costs, so applying them only to critical scenarios is advisable.
 
-### Why Important?
+#### Domain Model Unit Tests
 
-Domain models are the core of business logic. They should be **testable quickly without dependencies**.
+The most important tests in DDD are unit tests of domain models. Since the core of business logic is in domain models, thoroughly verifying them is key to ensuring quality.
 
-### Entity Tests
+**Why Important?**
+
+Domain models are the core of business logic. They should be testable quickly without dependencies like databases or external APIs. If domain models are implemented as pure Java objects, tests can be written very simply and quickly. This is particularly useful when developing with TDD (Test-Driven Development).
+
+**Entity Tests**
+
+The core of Entity tests is verifying business rules and state transitions. The following example shows how to systematically test the creation, confirmation, and cancellation behaviors of the Order Entity. Using JUnit 5's `@Nested` annotation to group related tests greatly improves readability.
 
 ```java
 class OrderTest {
@@ -185,7 +204,11 @@ class OrderTest {
 }
 ```
 
-### Value Object Tests
+The above test code verifies the entire order lifecycle. Order creation confirms validation (item existence, max amount limit), and order confirmation verifies state transitions and domain event publishing. Using `@ParameterizedTest` allows writing tests for multiple states concisely.
+
+**Value Object Tests**
+
+Value Objects have immutability and value-based equality, so these characteristics should be verified through tests. Value Objects like Money and ShippingAddress encapsulate business rules, so validation logic is also tested together.
 
 ```java
 class MoneyTest {
@@ -268,7 +291,11 @@ class ShippingAddressTest {
 }
 ```
 
-### Aggregate Invariant Tests
+The Money tests verify value-based equality, immutability, and currency matching rules. Confirming that the original object is unchanged in the `add()` method test is very important for ensuring immutability. The ShippingAddress test verifies that format validation rules work correctly.
+
+**Aggregate Invariant Tests**
+
+One of the core responsibilities of Aggregates is protecting invariants. Invariants are business rules that must always be true regardless of the Aggregate's state. The following example verifies order amount consistency and minimum item count rules.
 
 ```java
 class OrderInvariantTest {
@@ -313,9 +340,11 @@ class OrderInvariantTest {
 }
 ```
 
-## Application Service Tests
+Invariant tests confirm that business rules are maintained even after Aggregates change state. When order lines are added or removed, the total must be automatically recalculated, and an exception must be thrown if the minimum item count rule is violated. These tests are key safeguards ensuring domain model consistency.
 
-Application Services are tested **separately from domain using mocks**.
+#### Application Service Tests
+
+Application Services manage transaction boundaries and orchestrate domain models. Since domain logic is in Entities, Application Service tests use Mocks to verify collaborator behavior.
 
 ```java
 @ExtendWith(MockitoExtension.class)
@@ -366,9 +395,11 @@ class OrderServiceTest {
 }
 ```
 
-## Repository Integration Tests
+The core of Application Service tests is verifying that collaborators are called in the correct order. In the order confirmation scenario, we verify the flow of retrieving the order from the Repository, calling the domain method, saving the changed order, and publishing an event. Using Mocks allows fast testing without a database.
 
-Tests with actual database.
+#### Repository Integration Tests
+
+Repositories are infrastructure layer components that persist domain models. They should be tested with an actual database to confirm that mapping and queries work correctly. Using Testcontainers allows testing with the same database as production.
 
 ```java
 @DataJpaTest
@@ -431,7 +462,11 @@ class JpaOrderRepositoryTest {
 }
 ```
 
-## API Integration Tests
+In Repository tests, calling `entityManager.flush()` and `clear()` initializes the persistence context. This allows verifying results actually retrieved from the database to confirm that mapping configuration is correct. Testcontainers provides a clean database environment for each test, so there's no interference between tests.
+
+#### API Integration Tests
+
+API integration tests verify the entire stack from HTTP request to database storage. Testing in an environment most similar to actual user scenarios provides high reliability.
 
 ```java
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -497,7 +532,11 @@ class OrderApiIntegrationTest {
 }
 ```
 
-## Event Handler Tests
+API integration tests verify not only HTTP response codes but also actual database state. After creating an order, verify it was saved in the correct state in the database, and after confirming an order, verify the state changed. Such verification ensures all layers are correctly integrated.
+
+#### Event Handler Tests
+
+In systems using domain events, event handlers must be tested to work correctly. Verify that appropriate side effects occur when events are published.
 
 ```java
 @SpringBootTest
@@ -533,9 +572,15 @@ class OrderEventHandlerTest {
 }
 ```
 
-## Test Utilities
+Event handler tests verify the behavior of event-driven architecture. Confirming that the query model is updated when an order confirmed event is published can verify that the CQRS pattern is correctly implemented.
 
-### Test Fixture
+#### Test Utilities
+
+Separating repetitive test data creation code into utilities greatly improves test code readability and maintainability.
+
+**Test Fixture**
+
+Test Fixtures are a collection of static methods that create basic data needed for tests. They provide helper methods to easily create domain objects in various states.
 
 ```java
 public class OrderFixtures {
@@ -581,7 +626,11 @@ public class OrderFixtures {
 }
 ```
 
-### Test Builder
+Using Fixtures removes repetitive object creation code from test code. Methods like `createOrderWithStatus()` are very useful for easily creating orders in various states.
+
+**Test Builder**
+
+The Test Builder pattern uses a Fluent API to create highly readable test data. It provides defaults while allowing customization of only needed properties.
 
 ```java
 public class OrderBuilder {
@@ -637,7 +686,11 @@ Order order = OrderBuilder.anOrder()
     .build();
 ```
 
-## Testing Strategy Summary
+The Builder pattern clearly expresses test intent. "A VIP customer ordered an expensive product and it's in confirmed state" can be expressed in easily readable code, greatly improving test readability.
+
+#### Testing Strategy Summary
+
+The testing strategy for DDD systems organized by layer is as follows. Choosing appropriate testing methods for each layer's characteristics is important.
 
 ```mermaid
 flowchart TB
@@ -661,6 +714,8 @@ flowchart TB
     Unit --> Integration --> E2E
 ```
 
+Choose appropriate test types according to test targets. Entities and Value Objects are quickly verified with unit tests without external dependencies, Repositories perform integration tests with actual databases, and full scenarios are verified from the user perspective with E2E tests.
+
 | Test Target | Type | Characteristics |
 |-------------|------|-----------------|
 | **Entity, VO** | Unit | No mocks, fast |
@@ -669,6 +724,8 @@ flowchart TB
 | **API** | Integration | Full stack |
 | **Scenarios** | E2E | User perspective |
 
-## Next Steps
+Entities and Value Objects are pure domain logic so can be tested quickly without mocks. Application Services are unit tested with collaborators replaced by mocks, and Repositories and APIs are integration tested with real infrastructure. Core user scenarios are verified with E2E tests for the complete flow.
+
+#### Next Steps
 
 - [Anti-Patterns](../anti-patterns/) - Common testing mistakes

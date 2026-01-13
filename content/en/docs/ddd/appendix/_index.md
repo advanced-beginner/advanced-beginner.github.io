@@ -1,12 +1,29 @@
 ---
-lastmod: "2026-01-07"
+bookCollapseSection: true
 title: Appendix
-weight: 4
+weight: 5
+lastmod: "2026-01-13"
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
-Glossary of DDD terminology and reference materials.
+> **Purpose of this section**: Provide quick reference materials for DDD learning and practical application
+> **When to use**: When terminology is confusing, when you need answers to frequently asked questions, when looking for additional learning resources
 
-## Contents
+{{< callout type="tip" title="Quick Reference" >}}
+The appendix is not meant to be read in order, but rather as **reference material to consult when needed**. Use this section when you're uncertain about the meaning of specific terms during learning or when questions arise during practical application.
+{{< /callout >}}
 
-1. [Glossary](glossary/) - DDD core terminology
-2. [References](references/) - Books, articles, presentations
+## Included Materials
+
+| Resource | Description | When to Use |
+|----------|-------------|-------------|
+| [Glossary](glossary/) | 30+ DDD core terminology definitions | Quick reference when terms are confusing |
+| [FAQ](faq/) | Common questions and answers from practice | When judgment is needed during adoption/implementation |
+| [References](references/) | Recommended books, articles, presentations | When you want to learn more deeply |
+
+## What This Section Does NOT Cover
+
+- Detailed explanations of concepts → See [Concepts](../concepts/)
+- Step-by-step problem solving methods → See [How-to Guides](../howto/)
+- Executable code examples → See [Examples](../examples/)
