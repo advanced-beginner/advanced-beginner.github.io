@@ -2,7 +2,21 @@
 title: 상품 검색 시스템
 weight: 3
 lastmod: 2026-01-10
+prerequisites:
+  - title: 한글 검색 최적화
+    path: /docs/elasticsearch/concepts/korean-search/
+  - title: Query DSL
+    path: /docs/elasticsearch/concepts/query-dsl/
+  - title: 집계
+    path: /docs/elasticsearch/concepts/aggregations/
 ---
+
+{{% notice style="warning" title="완전한 예제 프로젝트" %}}
+이 문서의 코드를 바로 실행해보고 싶다면, **완전한 Spring Boot 프로젝트**를 사용하세요:
+- 📁 [examples/elasticsearch/product-search/](https://github.com/advanced-beginner/advanced-beginner.github.io/tree/main/examples/elasticsearch/product-search)
+- docker-compose로 Elasticsearch(Nori 포함) 즉시 실행 가능
+- 샘플 데이터 자동 초기화
+{{% /notice %}}
 
 {{% notice style="tip" title="TL;DR" %}}
 - **Nori 분석기**로 한글 형태소 분석을 적용하여 "삼성전자" → "삼성", "전자" 검색을 구현합니다

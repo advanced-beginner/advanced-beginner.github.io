@@ -2,7 +2,23 @@
 title: 인덱싱 전략
 weight: 6
 lastmod: 2026-01-08
+prerequisites:
+  - title: 핵심 구성요소
+    path: /docs/elasticsearch/concepts/core-components/
+  - title: 데이터 모델링
+    path: /docs/elasticsearch/concepts/data-modeling/
+related_concepts:
+  - title: 성능 튜닝
+    path: /docs/elasticsearch/concepts/performance-tuning/
+  - title: 고가용성
+    path: /docs/elasticsearch/concepts/high-availability/
 ---
+
+{{% notice style="info" title="선수 개념" %}}
+이 문서를 읽기 전에 다음 개념을 먼저 이해하세요:
+- [핵심 구성요소](../core-components/) - Shard, Segment 개념
+- [데이터 모델링](../data-modeling/) - Mapping, Analyzer 기본
+{{% /notice %}}
 
 대용량 데이터를 효율적으로 저장하기 위한 Bulk 인덱싱, Refresh, Index Lifecycle Management를 배웁니다.
 

@@ -2,7 +2,19 @@
 title: 로그 분석 시스템
 weight: 4
 lastmod: 2026-01-10
+prerequisites:
+  - title: 집계
+    path: /docs/elasticsearch/concepts/aggregations/
+  - title: 인덱싱 전략
+    path: /docs/elasticsearch/concepts/indexing/
 ---
+
+{{% notice style="warning" title="완전한 예제 프로젝트" %}}
+이 문서의 코드를 바로 실행해보고 싶다면, **완전한 Spring Boot 프로젝트**를 사용하세요:
+- 📁 [examples/elasticsearch/log-analysis/](https://github.com/advanced-beginner/advanced-beginner.github.io/tree/main/examples/elasticsearch/log-analysis)
+- docker-compose로 Elasticsearch + Kibana 즉시 실행 가능
+- 샘플 로그 생성 API 포함
+{{% /notice %}}
 
 {{% notice style="tip" title="TL;DR" %}}
 - **Logback Appender**로 애플리케이션 로그를 Elasticsearch에 직접 전송합니다

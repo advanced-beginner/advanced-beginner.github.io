@@ -2,7 +2,23 @@
 lastmod: "2026-01-08"
 title: 한글 검색 최적화
 weight: 11
+prerequisites:
+  - title: 데이터 모델링
+    path: /docs/elasticsearch/concepts/data-modeling/
+  - title: Query DSL
+    path: /docs/elasticsearch/concepts/query-dsl/
+related_concepts:
+  - title: 검색 관련성
+    path: /docs/elasticsearch/concepts/search-relevance/
+  - title: 상품 검색 시스템
+    path: /docs/elasticsearch/examples/product-search/
 ---
+
+{{% notice style="info" title="선수 개념" %}}
+이 문서를 읽기 전에 다음 개념을 먼저 이해하세요:
+- [데이터 모델링](../data-modeling/) - Analyzer, text vs keyword 타입
+- [Query DSL](../query-dsl/) - match, multi_match 쿼리
+{{% /notice %}}
 
 Elasticsearch에서 한글 검색을 최적화하는 방법을 다룹니다. Nori 분석기, 자동완성, 초성 검색을 구현합니다.
 
