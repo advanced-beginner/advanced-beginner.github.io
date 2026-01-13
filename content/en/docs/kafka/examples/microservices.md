@@ -1,12 +1,32 @@
 ---
-lastmod: "2026-01-08"
+lastmod: "2026-01-10"
 title: Microservices Integration
 weight: 4
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 Implement event-driven communication using Kafka in a microservices environment.
 
-## Scenario: Order Processing System
+{{% notice style="tip" title="TL;DR" %}}
+- **Event Chaining**: Event propagation in order: Order -> Payment -> Shipment -> Notification
+- **Correlation ID**: Propagate correlation ID for distributed tracing
+- **Saga Pattern**: Handle distributed transactions with compensation transactions
+- **Idempotency**: Safely handle duplicate messages
+{{% /notice %}}
+
+#### Target Audience and Prerequisites
+
+| Item | Description |
+|------|-------------|
+| **Target Audience** | Developers building event-driven communication in microservices architecture |
+| **Prerequisites** | Kafka basics, Spring Boot, understanding of [Order System](../order-system/) example |
+| **Required Environment** | Docker, JDK 17+, environment capable of running multiple services |
+| **Estimated Time** | About 60 minutes |
+
+#### Scenario: Order Processing System
+
+In this example, the Order Service, Payment Service, Shipment Service, and Notification Service exchange events through Kafka. When the Order Service creates an order, it publishes an event to the orders Topic. The Payment Service receives this and processes payment, publishing results to the payments Topic. The Shipment Service receives payment completed events and creates shipments. The Notification Service subscribes to all Topics and sends notifications to customers.
 
 ```mermaid
 flowchart LR
@@ -44,14 +64,15 @@ flowchart LR
     T1 & T2 & T3 --> N1
 ```
 
----
+*[Diagram Description: When the Order Service publishes an event to the orders Topic, the Payment Service receives it. The Payment Service publishes results to the payments Topic, and the Shipment Service receives this to publish to the shipments Topic. The Notification Service subscribes to all Topics.]*
 
-## Common Event Definition
+#### Common Event Definition
 
-### Event Schema
+**Event Schema**
+
+All events inherit from BaseEvent. eventId is the unique event identifier, eventType is the event type, occurredAt is the time of occurrence, and correlationId is the correlation ID for distributed tracing.
 
 ```java
-// common-events/src/main/java/events/BaseEvent.java
 public abstract class BaseEvent {
     private String eventId;
     private String eventType;
@@ -59,7 +80,6 @@ public abstract class BaseEvent {
     private String correlationId;  // Tracing ID
 }
 
-// OrderCreatedEvent.java
 public class OrderCreatedEvent extends BaseEvent {
     private String orderId;
     private String customerId;
@@ -68,7 +88,6 @@ public class OrderCreatedEvent extends BaseEvent {
     private String shippingAddress;
 }
 
-// PaymentCompletedEvent.java
 public class PaymentCompletedEvent extends BaseEvent {
     private String paymentId;
     private String orderId;
@@ -77,7 +96,6 @@ public class PaymentCompletedEvent extends BaseEvent {
     private PaymentStatus status;
 }
 
-// ShipmentCreatedEvent.java
 public class ShipmentCreatedEvent extends BaseEvent {
     private String shipmentId;
     private String orderId;
@@ -87,11 +105,17 @@ public class ShipmentCreatedEvent extends BaseEvent {
 }
 ```
 
----
+{{% notice style="info" title="Common Event Definition Key Points" %}}
+- **BaseEvent Inheritance**: Common fields eventId, eventType, occurredAt, correlationId
+- **correlationId**: Propagated to all events for distributed tracing
+- **Domain Events**: OrderCreatedEvent, PaymentCompletedEvent, ShipmentCreatedEvent, etc.
+{{% /notice %}}
 
-## Order Service
+#### Order Service
 
-### application.yml
+**application.yml**
+
+The Order Service is configured with acks=all and enable.idempotence=true to increase message delivery reliability. spring.json.type.mapping defines event class mappings.
 
 ```yaml
 spring:
@@ -105,13 +129,18 @@ spring:
       acks: all
       properties:
         enable.idempotence: true
+    properties:
+      spring.json.type.mapping: >
+        orderCreated:com.example.events.OrderCreatedEvent
 
 kafka:
   topics:
     orders: orders
 ```
 
-### OrderProducer
+**OrderProducer**
+
+OrderProducer publishes OrderCreatedEvent when an order is created. Using orderId as the Key ensures events for the same order are processed in order.
 
 ```java
 @Service
@@ -136,7 +165,6 @@ public class OrderProducer {
             .shippingAddress(order.getShippingAddress())
             .build();
 
-        // Use orderId as Key so same orders go to same Partition
         return kafkaTemplate.send(ordersTopic, order.getId(), event)
             .whenComplete((result, ex) -> {
                 if (ex != null) {
@@ -152,11 +180,44 @@ public class OrderProducer {
 }
 ```
 
----
+**OrderController**
 
-## Payment Service
+OrderController receives orders via REST API, saves to local DB, publishes events asynchronously, and returns a response immediately.
 
-### PaymentConsumer
+```java
+@RestController
+@RequestMapping("/api/orders")
+@RequiredArgsConstructor
+public class OrderController {
+    private final OrderService orderService;
+    private final OrderProducer orderProducer;
+
+    @PostMapping
+    public ResponseEntity<OrderResponse> createOrder(@RequestBody CreateOrderRequest request) {
+        // 1. Create order (save to local DB)
+        Order order = orderService.createOrder(request);
+
+        // 2. Publish event (async)
+        orderProducer.publishOrderCreated(order);
+
+        // 3. Return response
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(OrderResponse.from(order));
+    }
+}
+```
+
+{{% notice style="info" title="Order Service Key Points" %}}
+- **Reliability Settings**: Ensure message stability with `acks: all`, `enable.idempotence: true`
+- **Async Publishing**: Save to local DB first, then publish event and return response immediately
+- **orderId Key**: Guarantees order of events for the same order
+{{% /notice %}}
+
+#### Payment Service
+
+**PaymentConsumer**
+
+PaymentConsumer subscribes to the orders Topic to receive order events. It prevents duplicate processing with idempotency checks, and publishes PaymentCompletedEvent on success or PaymentFailedEvent on failure.
 
 ```java
 @Service
@@ -208,17 +269,68 @@ public class PaymentConsumer {
 
         } catch (Exception e) {
             log.error("Payment processing error: orderId={}", event.getOrderId(), e);
-            throw e;  // nack - retry
+            throw e;  // Retry
         }
     }
 }
 ```
 
----
+**PaymentProducer**
 
-## Shipment Service
+PaymentProducer publishes PaymentCompletedEvent or PaymentFailedEvent depending on the payment result.
 
-### ShipmentConsumer
+```java
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class PaymentProducer {
+    private final KafkaTemplate<String, Object> kafkaTemplate;
+
+    @Value("${kafka.topics.payments}")
+    private String paymentsTopic;
+
+    public void publishPaymentCompleted(Payment payment, String correlationId) {
+        PaymentCompletedEvent event = PaymentCompletedEvent.builder()
+            .eventId(UUID.randomUUID().toString())
+            .eventType("PAYMENT_COMPLETED")
+            .occurredAt(LocalDateTime.now())
+            .correlationId(correlationId)
+            .paymentId(payment.getId())
+            .orderId(payment.getOrderId())
+            .amount(payment.getAmount())
+            .method(payment.getMethod())
+            .status(PaymentStatus.COMPLETED)
+            .build();
+
+        kafkaTemplate.send(paymentsTopic, payment.getOrderId(), event);
+    }
+
+    public void publishPaymentFailed(String orderId, String reason, String correlationId) {
+        PaymentFailedEvent event = PaymentFailedEvent.builder()
+            .eventId(UUID.randomUUID().toString())
+            .eventType("PAYMENT_FAILED")
+            .occurredAt(LocalDateTime.now())
+            .correlationId(correlationId)
+            .orderId(orderId)
+            .reason(reason)
+            .build();
+
+        kafkaTemplate.send(paymentsTopic, orderId, event);
+    }
+}
+```
+
+{{% notice style="info" title="Payment Service Key Points" %}}
+- **Idempotency Check**: Prevent duplicate processing with `isAlreadyProcessed()`
+- **Success/Failure Branching**: Publish PaymentCompleted or PaymentFailed event based on result
+- **correlationId Propagation**: Include original event's correlationId in new event
+{{% /notice %}}
+
+#### Shipment Service
+
+**ShipmentConsumer**
+
+ShipmentConsumer subscribes to the payments Topic and processes only payment completed events. Payment failed events are ignored.
 
 ```java
 @Service
@@ -265,11 +377,17 @@ public class ShipmentConsumer {
 }
 ```
 
----
+{{% notice style="info" title="Shipment Service Key Points" %}}
+- **Event Filtering**: Process only when PaymentStatus.COMPLETED
+- **Chaining**: Receive payment completed event -> Create shipment -> Publish shipment event
+- **Error Propagation**: Throw exceptions to trigger retry
+{{% /notice %}}
 
-## Notification Service
+#### Notification Service
 
-### NotificationConsumer
+**NotificationConsumer**
+
+The Notification Service subscribes to multiple Topics simultaneously and sends customer notifications for all events. It distinguishes event types using the eventType header.
 
 ```java
 @Service
@@ -278,7 +396,6 @@ public class ShipmentConsumer {
 public class NotificationConsumer {
     private final NotificationService notificationService;
 
-    // Subscribe to multiple topics simultaneously
     @KafkaListener(
         topics = {"${kafka.topics.orders}", "${kafka.topics.payments}", "${kafka.topics.shipments}"},
         groupId = "notification-service-group"
@@ -317,11 +434,19 @@ public class NotificationConsumer {
 }
 ```
 
----
+{{% notice style="info" title="Notification Service Key Points" %}}
+- **Multiple Topic Subscription**: Subscribe to orders, payments, shipments Topics simultaneously
+- **eventType Header**: Branch notification content by event type
+- **Failure Tolerance**: Acknowledge after notification failure without retry (non-critical feature)
+{{% /notice %}}
 
-## Saga Pattern: Distributed Transactions
+#### Saga Pattern: Distributed Transactions
 
-### Compensation Transaction Implementation
+In a microservices environment, you need to handle transactions across multiple services. The Saga pattern maintains consistency by having each service manage its own transaction and executing compensation transactions on failure.
+
+**Compensation Transaction Implementation**
+
+OrderSagaOrchestrator receives payment failed or shipment failed events to cancel orders and request refunds when necessary.
 
 ```java
 @Service
@@ -331,7 +456,6 @@ public class OrderSagaOrchestrator {
     private final OrderRepository orderRepository;
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    // Cancel order on payment failure
     @KafkaListener(topics = "${kafka.topics.payments}", groupId = "order-saga-group")
     public void handlePaymentEvent(@Payload String payload, @Header("eventType") String eventType) {
         if ("PAYMENT_FAILED".equals(eventType)) {
@@ -340,7 +464,6 @@ public class OrderSagaOrchestrator {
         }
     }
 
-    // Cancel order + request refund on shipment failure
     @KafkaListener(topics = "${kafka.topics.shipments}", groupId = "order-saga-group")
     public void handleShipmentEvent(@Payload String payload, @Header("eventType") String eventType) {
         if ("SHIPMENT_FAILED".equals(eventType)) {
@@ -356,7 +479,6 @@ public class OrderSagaOrchestrator {
         order.cancel(reason);
         orderRepository.save(order);
 
-        // Publish order cancelled event
         kafkaTemplate.send("orders", orderId, OrderCancelledEvent.builder()
             .orderId(orderId)
             .reason(reason)
@@ -366,7 +488,6 @@ public class OrderSagaOrchestrator {
     private void compensateOrderAndPayment(String orderId, String reason) {
         compensateOrder(orderId, reason);
 
-        // Publish refund request event
         kafkaTemplate.send("refunds", orderId, RefundRequestedEvent.builder()
             .orderId(orderId)
             .reason(reason)
@@ -375,11 +496,90 @@ public class OrderSagaOrchestrator {
 }
 ```
 
----
+{{% notice style="info" title="Saga Pattern Key Points" %}}
+- **Compensation Transaction**: Cancel previous work on failure event (order cancellation, refund request)
+- **Event Listening**: Subscribe to payment failed, shipment failed events for compensation processing
+- **Data Consistency**: Maintain eventual consistency in distributed environment
+{{% /notice %}}
 
-## Tests
+#### Monitoring: Distributed Tracing
 
-### Integration Tests (Testcontainers)
+**Correlation ID Propagation**
+
+To trace requests in a distributed environment, you must propagate the Correlation ID to all events. Using ProducerInterceptor, you can automatically add tracing headers to all messages.
+
+```java
+public class TracingProducerInterceptor implements ProducerInterceptor<String, Object> {
+
+    @Override
+    public ProducerRecord<String, Object> onSend(ProducerRecord<String, Object> record) {
+        String correlationId = MDC.get("correlationId");
+        if (correlationId == null) {
+            correlationId = UUID.randomUUID().toString();
+        }
+
+        record.headers().add("correlationId", correlationId.getBytes(StandardCharsets.UTF_8));
+        record.headers().add("serviceName", "order-service".getBytes(StandardCharsets.UTF_8));
+        record.headers().add("timestamp", Instant.now().toString().getBytes(StandardCharsets.UTF_8));
+
+        return record;
+    }
+}
+```
+
+**Consumer Lag Monitoring**
+
+Consumer Lag is an important metric for understanding microservice health. When Lag increases, it means Consumers are not processing messages in time.
+
+```java
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class ConsumerLagMonitor {
+    private final KafkaAdmin kafkaAdmin;
+    private final MeterRegistry meterRegistry;
+
+    @Scheduled(fixedRate = 30000)
+    public void checkConsumerLag() {
+        try (AdminClient adminClient = AdminClient.create(kafkaAdmin.getConfigurationProperties())) {
+            ListConsumerGroupOffsetsResult offsetsResult =
+                adminClient.listConsumerGroupOffsets("payment-service-group");
+
+            Map<TopicPartition, OffsetAndMetadata> offsets =
+                offsetsResult.partitionsToOffsetAndMetadata().get();
+
+            offsets.forEach((tp, offset) -> {
+                long currentOffset = offset.offset();
+                long endOffset = getEndOffset(adminClient, tp);
+                long lag = endOffset - currentOffset;
+
+                meterRegistry.gauge("kafka.consumer.lag",
+                    Tags.of("topic", tp.topic(), "partition", String.valueOf(tp.partition())),
+                    lag);
+
+                if (lag > 1000) {
+                    log.warn("Consumer lag warning: topic={}, partition={}, lag={}",
+                        tp.topic(), tp.partition(), lag);
+                }
+            });
+        } catch (Exception e) {
+            log.error("Consumer lag query failed", e);
+        }
+    }
+}
+```
+
+{{% notice style="info" title="Monitoring Key Points" %}}
+- **Correlation ID**: Auto-add tracing ID to all messages with ProducerInterceptor
+- **Consumer Lag**: Processing delay metric, warning when over 1000
+- **Micrometer Integration**: Expose metrics to Prometheus etc. with `meterRegistry.gauge()`
+{{% /notice %}}
+
+#### Testing
+
+**Integration Tests (Testcontainers)**
+
+Using Testcontainers, you can run integration tests with a real Kafka container.
 
 ```java
 @SpringBootTest
@@ -399,22 +599,21 @@ class OrderServiceIntegrationTest {
     @Autowired
     private OrderController orderController;
 
+    @Autowired
+    private KafkaTemplate<String, Object> kafkaTemplate;
+
     @Test
     void order_creation_publishes_event() throws Exception {
-        // Given
         CreateOrderRequest request = new CreateOrderRequest(
             "customer-1",
             List.of(new OrderItem("product-1", 2, BigDecimal.valueOf(10000))),
             "123 Main St"
         );
 
-        // When
         ResponseEntity<OrderResponse> response = orderController.createOrder(request);
 
-        // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
-        // Verify event receipt
         ConsumerRecords<String, String> records = consumeRecords("orders", 5000);
         assertThat(records.count()).isEqualTo(1);
 
@@ -424,22 +623,17 @@ class OrderServiceIntegrationTest {
 }
 ```
 
----
+{{% notice style="info" title="Testing Key Points" %}}
+- **Testcontainers**: Integration testing with real Kafka container
+- **DynamicPropertySource**: Dynamically set test bootstrap-servers
+- **Message Verification**: Consume from Topic to verify Key, Value
+{{% /notice %}}
 
-## Checklist
+#### Checklist
 
-- [ ] All events include correlationId
-- [ ] Idempotency handling in Consumers
-- [ ] Dead Letter Topic configured
-- [ ] Saga compensation transactions implemented
-- [ ] Consumer Lag monitoring
-- [ ] Retry policy configured
-- [ ] Event schema versioning
+Items to verify when integrating Kafka with microservices. Include correlationId in all events for distributed tracing. Implement idempotency handling in Consumers to safely handle duplicate messages. Configure Dead Letter Topics to manage failed messages. Implement compensation transactions with the Saga pattern. Monitor Consumer Lag to detect processing delays. Configure retry policies to handle transient errors. Manage event schema versions to maintain backward compatibility.
 
----
+#### Next Steps
 
-## Next Steps
-
-- [Error Handling]({{< relref "/docs/kafka/concepts/error-handling" >}}) - DLT, retry strategies
-- [Monitoring]({{< relref "/docs/kafka/concepts/monitoring" >}}) - Metrics collection and alerts
-- [DDD Integration]({{< relref "/docs/ddd/concepts/domain-events" >}}) - Domain event design
+- [Error Handling](../../../kafka/concepts/error-handling/) - DLT, retry strategies
+- [Monitoring](../../../kafka/concepts/monitoring/) - Metrics collection and alerts
