@@ -1,126 +1,70 @@
 ---
-lastmod: "2026-01-07"
-title: FAQ
+lastmod: "2026-01-10"
+title: Frequently Asked Questions
 weight: 4
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
-# Kafka Frequently Asked Questions (FAQ)
+This section compiles frequently asked questions and answers about Kafka. Organized by topic from basic concepts to configuration, error handling, performance tuning, operations, and Spring Kafka.
 
-Common questions and answers when using Kafka.
+{{% notice style="tip" title="TL;DR" %}}
+- **Basic Concepts**: Kafka is a distributed event streaming platform, not a message queue; order is guaranteed per Partition
+- **Configuration**: Use `acks=all` for safety, `auto.offset.reset=earliest` recommended, manual commit to prevent message loss
+- **Error Handling**: Use `@RetryableTopic` for retries then move to Dead Letter Topic
+- **Performance**: Producer - batch/compression; Consumer - increase instances and adjust fetch settings
+- **Operations**: Recommend `replication.factor=3`, `min.insync.replicas=2`
+- **Spring Kafka**: Simple implementation with `KafkaTemplate` and `@KafkaListener`
+{{% /notice %}}
 
-## Basic Concepts
+#### Basic Concepts
 
-### Q: Is Kafka a message queue?
+**Q: Is Kafka a message queue?**
 
-**A:** No. Kafka is a **distributed event streaming platform**.
+Kafka is not a message queue but a distributed event streaming platform. Compared to traditional message queues like RabbitMQ, there are several differences.
 
-| Characteristic | Message Queue (RabbitMQ) | Kafka |
-|----------------|--------------------------|-------|
-| **Message Retention** | Deleted after consumption | Retained until retention period |
-| **Reprocessing** | Not possible | Possible (move offset) |
-| **Ordering** | Per queue | Per Partition |
-| **Scalability** | Vertical | Horizontal |
+In terms of message retention, RabbitMQ deletes messages immediately after a Consumer consumes them, while Kafka retains messages until the configured retention period. This characteristic allows Kafka to reprocess already processed messages by moving the Offset, which is impossible with message queues. Order guarantees also differ. Message queues guarantee order across the entire queue, but Kafka only guarantees order within a Partition. In terms of scalability, message queues mainly rely on vertical scaling, while Kafka enables easy horizontal scaling based on Partitions.
 
-**When Kafka is appropriate:**
-- Event sourcing, CQRS
-- Real-time stream processing
-- Log aggregation
-- Message reprocessing needed
+Therefore, Kafka is suitable for event sourcing and CQRS architecture, real-time stream processing, log aggregation from multiple systems, and situations requiring message reprocessing.
 
----
+**Q: What's the right number of Partitions?**
 
-### Q: How many Partitions should I have?
+Partition count is determined considering throughput requirements and Consumer count. A rough formula is "Partition count = max(throughput requirement / single Partition throughput, Consumer count)".
 
-**A:** Decide based on **throughput and number of Consumers**.
+General guidelines are 3-6 for small systems in development or test environments, 6-12 for medium-sized systems in general production environments, and 12-50 for large systems requiring high throughput.
 
-```
-Partition count = max(throughput requirement / single Partition throughput, Consumer count)
-```
+There are points to note. Partitions can be increased but not decreased, so it's safer to start small and increase as needed. More Partitions increase Leader Election time and metadata management overhead. If Partition count is less than Consumer count, some Consumers become idle.
 
-**General Guidelines:**
+**Q: How is message order guaranteed?**
 
-| Scale | Recommended Partitions |
-|-------|------------------------|
-| Small (dev/test) | 3-6 |
-| Medium (general production) | 6-12 |
-| Large (high throughput) | 12-50 |
-
-**Cautions:**
-- Partitions can be increased but **cannot be decreased**
-- More Partitions mean longer leader election time
-- Fewer Partitions than Consumers create idle Consumers
-
----
-
-### Q: How is message ordering guaranteed?
-
-**A:** Ordering is guaranteed **only within the same Partition**.
+In Kafka, message order is guaranteed only within the same Partition. Therefore, messages requiring order must use the same Key to be sent to the same Partition.
 
 ```java
-// Messages with the same key always go to the same Partition
+// Messages with a specific key always go to the same Partition
 kafkaTemplate.send("orders", orderId, orderEvent);
-//                          ↑ Key
+//                          ^ Key
 ```
 
-```mermaid
-flowchart LR
-    subgraph Partition0["Partition 0"]
-        M1["Order-001 Created"]
-        M2["Order-001 Paid"]
-        M3["Order-001 Shipped"]
-    end
+The Key selection criteria is using business entity identifiers. In order systems, use orderId; for user activity logs, use userId; for IoT data, use deviceId as the Key. This ensures order is maintained for events related to the same order, user, or device.
 
-    M1 --> M2 --> M3
+**Q: Why is Consumer Group necessary?**
 
-    Note["Order guaranteed with same Key"]
-```
+Consumer Group is necessary for parallel processing and fault recovery. Consumers with the same Group ID share Topic Partitions for processing. For example, if 3 Consumers process 6 Partitions, each Consumer handles 2.
 
-**Key Selection Criteria:**
-- Order system: `orderId`
-- User activity: `userId`
-- IoT data: `deviceId`
+Benefits include: distributing Partitions to increase throughput; when a Consumer fails, its Partitions are automatically reassigned to other Consumers; independent Consumer Groups can each process the same messages, allowing multiple services to utilize the same events.
 
----
+{{< callout type="info" title="Key Points" >}}
+- Kafka is a **distributed event streaming platform**, not a message queue
+- Message order is guaranteed only **within the same Partition**
+- Start with fewer Partitions and increase as needed (cannot decrease)
+- Consumer Groups implement **parallel processing** and **fault recovery**
+{{< /callout >}}
 
-### Q: Why do I need Consumer Groups?
+#### Configuration
 
-**A:** For **parallel processing and fault recovery**.
+**Q: How should I configure acks?**
 
-```mermaid
-flowchart TB
-    subgraph Topic["orders (6 Partitions)"]
-        P0[P0] & P1[P1] & P2[P2] & P3[P3] & P4[P4] & P5[P5]
-    end
-
-    subgraph Group["order-processor-group"]
-        C1["Consumer 1<br>P0, P1"]
-        C2["Consumer 2<br>P2, P3"]
-        C3["Consumer 3<br>P4, P5"]
-    end
-
-    P0 & P1 --> C1
-    P2 & P3 --> C2
-    P4 & P5 --> C3
-```
-
-**Benefits:**
-- Consumers in the same group share Partition processing
-- Automatic rebalancing on Consumer failure
-- Independent groups each process the same messages
-
----
-
-## Configuration Related
-
-### Q: How should I set the acks configuration?
-
-**A:** Choose based on **data importance**.
-
-| acks | Behavior | Throughput | Durability | Use Case |
-|------|----------|------------|------------|----------|
-| `0` | No confirmation after send | Highest | Low | Logs, metrics |
-| `1` | Leader only confirms | High | Medium | General events |
-| `all` | All ISR confirms | Low | High | Finance, orders |
+The acks setting should be chosen based on data importance. acks=0 sends without confirmation for highest throughput but with potential message loss, suitable for loss-tolerant data like logs or metrics. acks=1 confirms with Leader only, balancing throughput and safety for general events. acks=all requires confirmation from all ISR, increasing latency but safest for critical data like financial or order data.
 
 ```yaml
 # application.yml
@@ -132,17 +76,11 @@ spring:
         min.insync.replicas: 2     # Confirm at least 2 replicas
 ```
 
----
+**Q: What value should I use for auto.offset.reset?**
 
-### Q: What value should I use for auto.offset.reset?
+auto.offset.reset determines where to start reading when a Consumer Group first starts or has no saved Offset. earliest reads from the beginning to prevent data loss and is recommended in most cases. latest reads from the newest for real-time processing only. none throws an exception if no saved Offset exists, for strict Offset management.
 
-**A:** Choose **earliest** or **latest** based on business requirements.
-
-| Value | Behavior | Use Case |
-|-------|----------|----------|
-| `earliest` | Read from beginning | Data loss prevention needed |
-| `latest` | Read from latest | Only real-time processing needed |
-| `none` | Throw exception | Strict offset management |
+Important: this setting only applies when it's a new Consumer Group. Existing groups with committed Offsets use their saved Offset.
 
 ```yaml
 spring:
@@ -151,57 +89,40 @@ spring:
       auto-offset-reset: earliest  # Recommended
 ```
 
-**Note:** Only applies when it's a new Consumer Group. Existing groups use stored offset.
+**Q: Should I enable enable.auto.commit?**
 
----
-
-### Q: Should enable.auto.commit be on?
-
-**A:** **Recommend false with manual commit**.
+Setting enable.auto.commit to false and using manual commit is recommended. Auto commit commits Offset at configured intervals, so it may commit before message processing completes. In this case, the message is lost if processing fails.
 
 ```java
-// ❌ Auto commit: May commit before processing
+// Auto commit: may commit before processing
 @KafkaListener(topics = "orders")
 public void listen(String message) {
     processOrder(message);  // Offset already committed even if this fails
 }
 
-// ✅ Manual commit: Commit after successful processing
+// Manual commit: commit after successful processing
 @KafkaListener(topics = "orders")
 public void listen(String message, Acknowledgment ack) {
     processOrder(message);
-    ack.acknowledge();  // Explicit commit after success
+    ack.acknowledge();  // Explicit commit after successful processing
 }
 ```
 
-```yaml
-spring:
-  kafka:
-    consumer:
-      enable-auto-commit: false
-    listener:
-      ack-mode: manual
-```
+Using manual commit means committing only after successful message processing, enabling reprocessing on failure. Configure enable-auto-commit as false and ack-mode as manual.
 
----
+{{< callout type="info" title="Key Points" >}}
+- **acks=all**: Ensure safety with all ISR confirmation for important data
+- **auto.offset.reset=earliest**: Read from beginning to prevent data loss
+- **enable.auto.commit=false**: Manual commit to save Offset only after processing completes
+{{< /callout >}}
 
-## Error Handling
+#### Error Handling
 
-### Q: What happens when an exception occurs in a Consumer?
+**Q: What happens when an exception occurs in Consumer?**
 
-**A:** By default, **infinite retries** then application stops.
+By default, exceptions cause infinite retries, and if unresolved, the application stops. To prevent this, explicit error handling strategies are needed.
 
-```mermaid
-flowchart TD
-    A[Message Received] --> B{Processing Success?}
-    B -->|Yes| C[Offset Commit]
-    B -->|No| D{Retry Count?}
-    D -->|< Max| A
-    D -->|>= Max| E[Move to DLT]
-    E --> C
-```
-
-**Recommended Configuration:**
+The recommended approach is using @RetryableTopic to retry a specified number of times, then move to Dead Letter Topic if all retries fail.
 
 ```java
 @RetryableTopic(
@@ -215,14 +136,13 @@ public void listen(OrderEvent event) {
 }
 ```
 
----
+With this configuration: first failure retries after 1 second, second failure retries after 2 seconds, third failure moves the message to orders-dlt Topic.
 
-### Q: How do I handle Dead Letter Topic (DLT)?
+**Q: How do I handle Dead Letter Topic (DLT)?**
 
-**A:** **Monitor with separate Consumer and handle manually**.
+Messages arriving at DLT are monitored by a separate Consumer and processed manually. The @DltHandler annotation defines a handler called when DLT messages are received.
 
 ```java
-// DLT message handling
 @DltHandler
 public void handleDlt(OrderEvent event,
                       @Header(KafkaHeaders.ORIGINAL_TOPIC) String topic,
@@ -233,29 +153,15 @@ public void handleDlt(OrderEvent event,
 }
 ```
 
-**DLT Operational Strategy:**
-1. Set up alerts (Slack, Email)
-2. Periodically review DLT messages
-3. Reprocess or discard after fixing issues
+DLT operational strategies include: setting up Slack or email alerts, periodically reviewing DLT messages, republishing to original Topic after problem resolution, or discarding if unresolvable.
 
----
+**Q: Why is idempotency important?**
 
-### Q: Why is idempotency important?
+Because duplicate messages can occur due to network failures. If a Producer sends a message, the Broker stores it and sends an ACK, but the ACK is lost due to network error, the Producer judges it as transmission failure and resends. In this case, the same message is stored twice.
 
-**A:** Because network failures can cause **duplicate messages**.
-
-```
-Scenario:
-1. Producer sends message
-2. Broker saves and sends ack
-3. Ack lost due to network error
-4. Producer retries → Duplicate!
-```
-
-**Solution:**
+For the Producer side, set enable.idempotence to true to prevent duplicate transmission at the Producer level.
 
 ```yaml
-# Enable Producer idempotency
 spring:
   kafka:
     producer:
@@ -263,25 +169,19 @@ spring:
         enable.idempotence: true
 ```
 
-```java
-// Consumer-side idempotency handling
-@KafkaListener(topics = "orders")
-public void listen(OrderEvent event) {
-    if (processedIds.contains(event.orderId())) {
-        return;  // Already processed
-    }
-    processOrder(event);
-    processedIds.add(event.orderId());
-}
-```
+Consumer side must also ensure idempotency. Implement by storing processed message IDs and skipping duplicate messages. Or design business logic itself to be idempotent. For example, instead of "deduct 1000 from balance", implement "set balance to 50000".
 
----
+{{< callout type="info" title="Key Points" >}}
+- **@RetryableTopic**: Configure retry count and backoff strategy
+- **Dead Letter Topic**: Store failed messages in separate Topic for manual processing
+- **Idempotency**: Producer uses `enable.idempotence=true`, Consumer prevents duplicates in business logic
+{{< /callout >}}
 
-## Performance Tuning
+#### Performance Tuning
 
-### Q: How do I increase Producer throughput?
+**Q: How do I increase Producer throughput?**
 
-**A:** Enable **batching and compression**.
+Enable batching and compression to increase throughput.
 
 ```yaml
 spring:
@@ -294,17 +194,13 @@ spring:
         buffer.memory: 67108864 # 64MB buffer
 ```
 
-| Setting | Default | Recommended | Effect |
-|---------|---------|-------------|--------|
-| `batch.size` | 16KB | 32KB+ | Increase batch size |
-| `linger.ms` | 0 | 5-100 | Batch wait time |
-| `compression.type` | none | lz4 | Reduce network load |
+batch.size increased from default 16KB to 32KB or more sends more messages at once. linger.ms set from default 0 to 5-100ms waits for batch to fill, improving efficiency. compression.type using lz4 or snappy reduces network load.
 
----
+Note that longer linger.ms increases latency, so balance throughput and latency.
 
-### Q: How do I increase Consumer throughput?
+**Q: How do I increase Consumer throughput?**
 
-**A:** **Increase Consumer count** and **adjust fetch settings**.
+Increase Consumer instances and adjust fetch settings.
 
 ```yaml
 spring:
@@ -312,60 +208,38 @@ spring:
     consumer:
       properties:
         fetch.min.bytes: 50000      # Minimum 50KB
-        fetch.max.wait.ms: 500      # Max 500ms wait
-        max.poll.records: 500       # Max 500 per poll
+        fetch.max.wait.ms: 500      # Maximum 500ms wait
+        max.poll.records: 500       # Maximum 500 per poll
 ```
 
-**Scaling Strategy:**
+Strategy varies by bottleneck. If Consumer CPU is the bottleneck, add Consumer instances. If Partition count is insufficient, increase Partitions. If network is the bottleneck, adjust fetch settings to retrieve more data at once.
 
-```mermaid
-flowchart TB
-    A[Insufficient Throughput] --> B{Bottleneck?}
-    B -->|Consumer CPU| C[Add Consumer instances]
-    B -->|Not enough Partitions| D[Increase Partition count]
-    B -->|Network| E[Adjust fetch settings]
-```
+**Q: Consumer Lag keeps increasing**
 
----
+Increasing Consumer Lag means message arrival rate exceeds processing rate.
 
-### Q: Consumer Lag keeps increasing
-
-**A:** **Processing speed is slower than message ingestion rate**.
-
-**How to Check:**
+First check current status:
 
 ```bash
 kafka-consumer-groups.sh --bootstrap-server localhost:9092 \
   --group order-processor-group --describe
 ```
 
-**Solutions:**
+Solutions by cause: if Consumer count is insufficient, add instances; if external API calls are slow, switch to async processing and set timeouts; if DB is the bottleneck, apply batch processing and optimize indexes; if business logic is inefficient, profile to find bottlenecks and optimize.
 
-| Cause | Solution |
-|-------|----------|
-| Not enough Consumers | Add instances |
-| Slow external API calls | Async processing, set timeouts |
-| DB bottleneck | Batch processing, index optimization |
-| Inefficient logic | Profile and optimize |
+{{< callout type="info" title="Key Points" >}}
+- **Producer Tuning**: Increase `batch.size`, set `linger.ms`, apply `compression.type=lz4`
+- **Consumer Tuning**: Increase instance count, adjust `fetch.min.bytes` and `max.poll.records`
+- **Consumer Lag**: Occurs when processing rate < arrival rate, identify bottleneck and resolve
+{{< /callout >}}
 
----
+#### Operations
 
-## Operations Related
+**Q: How do I monitor Kafka?**
 
-### Q: How do I monitor Kafka?
+Collect JMX metrics and monitor key indicators. Core metrics: Consumer Lag indicates processing delay, set warning above 1000; Under-replicated Partitions indicates replication delay, warning if above 0; Request Latency indicates request delay, warning if above 100ms; Disk Usage warning above 80%.
 
-**A:** Collect **JMX metrics** and monitor key indicators.
-
-**Key Monitoring Metrics:**
-
-| Metric | Description | Threshold |
-|--------|-------------|-----------|
-| Consumer Lag | Processing delay | > 1000 warning |
-| Under-replicated Partitions | Replication lag | > 0 warning |
-| Request Latency | Request delay | > 100ms warning |
-| Disk Usage | Disk utilization | > 80% warning |
-
-**Alert Configuration Example:**
+Integrating Prometheus and Grafana enables visualization and alerting.
 
 ```yaml
 # Prometheus AlertManager
@@ -376,62 +250,44 @@ kafka-consumer-groups.sh --bootstrap-server localhost:9092 \
     severity: warning
 ```
 
----
+**Q: What happens when a Broker goes down?**
 
-### Q: What happens when a Broker goes down?
+Automatic recovery based on Replication settings. When a Leader Broker fails, one of the Followers in ISR is elected as new Leader, and remaining Followers follow the new Leader.
 
-**A:** **Automatic recovery** based on Replication settings.
+For automatic recovery: replication.factor must be 2 or higher, min.insync.replicas must be 2 or higher, and there must be surviving Brokers in ISR.
 
-```mermaid
-sequenceDiagram
-    participant B1 as Broker 1 (Leader)
-    participant B2 as Broker 2 (Follower)
-    participant B3 as Broker 3 (Follower)
+For production environments, setting replication.factor to 3 and min.insync.replicas to 2 is recommended. This ensures service continuity even if 1 Broker goes down.
 
-    B1->>B1: Failure occurs
-    B2->>B2: Elect new Leader from ISR
-    B3->>B2: Start following
-    Note over B2,B3: Auto recovery complete
-```
+**Q: How do I set message retention period?**
 
-**Recovery Conditions:**
-- `replication.factor >= 2`
-- `min.insync.replicas >= 2`
-- Surviving Broker exists in ISR
-
----
-
-### Q: How do I set message retention period?
-
-**A:** Configure **retention** per Topic.
+Configure retention per Topic.
 
 ```bash
-# 7-day retention
+# 7 days retention
 kafka-configs.sh --bootstrap-server localhost:9092 \
   --alter --entity-type topics --entity-name orders \
   --add-config retention.ms=604800000
 ```
 
-| Setting | Description | Example |
-|---------|-------------|---------|
-| `retention.ms` | Time-based | 7 days = 604800000 |
-| `retention.bytes` | Size-based | 1GB = 1073741824 |
+retention.ms is time-based, 7 days is 604800000ms. retention.bytes is size-based, 1GB is 1073741824bytes.
 
-**Recommendations:**
-- General events: 7 days
-- Audit logs: 90+ days
-- Debugging: 1-3 days
+Recommended periods: general events 7 days, audit logs 90+ days, debugging 1-3 days. Decide based on disk capacity and business requirements.
 
----
+{{< callout type="info" title="Key Points" >}}
+- **Monitoring Metrics**: Consumer Lag, Under-replicated Partitions, Request Latency, Disk Usage
+- **High Availability**: Recommend `replication.factor=3`, `min.insync.replicas=2`
+- **Broker Failure**: Recovery via ISR-based automatic Leader Election
+- **Message Retention**: Configure `retention.ms` and `retention.bytes` based on business needs
+{{< /callout >}}
 
-## Spring Kafka Related
+#### Spring Kafka
 
-### Q: What's the difference between KafkaTemplate and KafkaProducer?
+**Q: What's the difference between KafkaTemplate and KafkaProducer?**
 
-**A:** `KafkaTemplate` is a Spring abstraction that's **more convenient**.
+KafkaTemplate is a Spring abstraction layer that's more convenient. It integrates with Spring Boot auto-configuration requiring only dependency injection, supports transactions, and simplifies callback handling.
 
 ```java
-// ✅ KafkaTemplate (Spring abstraction)
+// KafkaTemplate (Spring abstraction)
 @Autowired
 private KafkaTemplate<String, OrderEvent> template;
 
@@ -439,38 +295,35 @@ public void send(OrderEvent event) {
     template.send("orders", event.orderId(), event);
 }
 
-// ❌ KafkaProducer (low-level API) - Not recommended in Spring
+// KafkaProducer (low-level API) - Not recommended in Spring
 Producer<String, OrderEvent> producer = new KafkaProducer<>(props);
 producer.send(new ProducerRecord<>("orders", event));
 ```
 
-**KafkaTemplate Benefits:**
-- Auto-configuration integration
-- Transaction support
-- Simplified callback handling
+KafkaProducer is Kafka's low-level Java API, used only in non-Spring environments or special cases requiring fine-grained control.
 
----
+**Q: How many threads does @KafkaListener use?**
 
-### Q: How many threads does @KafkaListener run on?
-
-**A:** By default, **as many threads as Partitions**.
+By default, threads are created equal to Partition count. You can specify maximum thread count with concurrency setting.
 
 ```yaml
 spring:
   kafka:
     listener:
-      concurrency: 3  # Max 3 threads
+      concurrency: 3  # Maximum 3 threads
 ```
 
-```
-Rule:
-- concurrency <= Partition count → concurrency threads
-- concurrency > Partition count → Partition count threads (rest idle)
-```
+The rules are: if concurrency is less than or equal to Partition count, threads equal to concurrency are created; if concurrency exceeds Partition count, only threads equal to Partition count are created and the rest are idle.
 
----
+For example: with 6 Partitions and concurrency 3, 3 threads each handle 2 Partitions; with 3 Partitions and concurrency 6, only 3 threads are created, each handling 1 Partition.
 
-## Next Steps
+{{< callout type="info" title="Key Points" >}}
+- **KafkaTemplate**: Spring abstraction layer, auto-configuration and transaction support
+- **@KafkaListener**: Declarative Consumer implementation, adjust thread count with `concurrency`
+- **Thread Rule**: Actual threads = min(concurrency, Partition count)
+{{< /callout >}}
+
+#### Next Steps
 
 - [Glossary](../glossary/) - Kafka terminology
 - [References](../references/) - Learning resources

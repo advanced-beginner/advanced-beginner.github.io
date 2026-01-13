@@ -1,7 +1,9 @@
 ---
-lastmod: "2026-01-07"
 title: Apache Kafka
+description: Apache Kafka practical guide for distributed messaging - Producer/Consumer, transactions, replication, fault handling, and performance tuning
 weight: 1
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 ## What is Kafka?
@@ -46,7 +48,7 @@ Not just "use it this way", but explaining **why it works this way**.
 |-------|-------------------|
 | [Core Components](concepts/core-components/) | Roles and relationships of Broker, Topic, Partition, Producer, Consumer |
 | [Message Flow](concepts/message-flow/) | The complete journey of a message from Producer to Consumer |
-| [Consumer Group & Offset](concepts/consumer-group-offset/) | Core of parallel processing and message position management |
+| [Consumer Group & Offset](concepts/consumer-group/) | Core of parallel processing and message position management |
 | [Replication & Fault Tolerance](concepts/replication/) | How to survive failures without data loss |
 | [Transactions](concepts/transactions/) | How to guarantee exactly-once processing |
 | [Error Handling](concepts/error-handling/) | Real-world error scenarios and resolution patterns |
@@ -72,9 +74,9 @@ Executable example code based on Spring Boot.
 ## Suggested Learning Path
 
 ```
-If you're new:      Quick Start → Core Components → Message Flow → Basic Examples
-For production:     Consumer Group → Error Handling → Transactions → Order System
-For operations:     Replication & Fault Tolerance → Performance Tuning → Monitoring
+If you're new:      Quick Start -> Core Components -> Message Flow -> Basic Examples
+For production:     Consumer Group -> Error Handling -> Transactions -> Order System
+For operations:     Replication & Fault Tolerance -> Performance Tuning -> Monitoring
 ```
 
 Each document can be read independently, but if you're new, we recommend the order above.
