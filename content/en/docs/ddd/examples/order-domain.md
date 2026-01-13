@@ -1,10 +1,29 @@
 ---
 title: Order Domain
 weight: 2
-lastmod: "2026-01-06"
+lastmod: "2026-01-13"
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # Order Domain Implementation
+
+{{% notice style="primary" title="TL;DR" %}}
+- **Order**: Aggregate Root. Manages the order's consistency boundary
+- **OrderLine**: Internal Entity. Can only be created/modified through Order
+- **Money, ShippingAddress, OrderId**: Value Objects. Immutable and compared by value
+- **Invariants**: At least 1 order line, max amount 100M won, quantity 1~999
+- **Domain Events**: OrderCreatedEvent, OrderConfirmedEvent, etc. published on state changes
+{{% /notice %}}
+
+## Target Audience and Prerequisites
+
+| Item | Required Level |
+|------|----------------|
+| **Target Audience** | Developers implementing DDD tactical patterns in code |
+| **DDD Basics** | Understanding of Aggregate, Entity, Value Object, Domain Event concepts |
+| **Java** | Experience with Record, Optional, Stream API |
+| **Prerequisite** | [Project Setup](../setup/) completed |
 
 Implementing the order domain with DDD patterns.
 
@@ -42,6 +61,8 @@ flowchart TD
     Q2 -->|No| ENT["Internal Entity"]
 ```
 
+> **Diagram Description**: This is a flowchart for deciding Entity vs Value Object. If the answer to "Does it need to be tracked over time?" is No, it's a Value Object. If Yes, the next question "Can it exist without Order?" determines whether it's a Separate Aggregate (Yes) or Internal Entity (No).
+
 **Why Money is a Value Object:**
 - "10,000 won" and "10,000 won" are **the same money** (compared by value)
 - We don't "modify" the amount, we **replace it with a new amount**
@@ -56,7 +77,7 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    subgraph Wrong["❌ Wrong Design"]
+    subgraph Wrong["Bad: Wrong Design"]
         O1["Order"]
         C1["Customer<br>(entire object)"]
         P1["Product<br>(entire object)"]
@@ -64,7 +85,7 @@ flowchart LR
         O1 --> P1
     end
 
-    subgraph Right["✅ Correct Design"]
+    subgraph Right["Good: Correct Design"]
         O2["Order"]
         CID["CustomerId"]
         PID["ProductId"]
@@ -73,10 +94,12 @@ flowchart LR
     end
 ```
 
+> **Diagram Description**: On the left (wrong design), Order contains entire Customer and Product objects. On the right (correct design), Order only references CustomerId and ProductId. Other Aggregates should only be referenced by ID.
+
 **Why reference Customer only by ID:**
 - Customer has an **independent lifecycle** from the order
-- If we save entire customer info with order → **data duplication**
-- If customer info changes, all orders with that customer must also change → **consistency problem**
+- If we save entire customer info with order -> **data duplication**
+- If customer info changes, all orders with that customer must also change -> **consistency problem**
 
 **Why reference only ProductId:**
 - Even if product price changes, **price at order time** should be preserved
@@ -96,14 +119,21 @@ Rules that the Order Aggregate **always guarantees**:
 ### Package-Private Constructor: Why Needed?
 
 ```java
-// ❌ public constructor → anyone can create
+// Bad: public constructor -> anyone can create
 public OrderLine(ProductId productId, ...) { }
 
-// ✅ package-private → only Order can create
+// Good: package-private -> only Order can create
 OrderLine(ProductId productId, ...) { }
 ```
 
 **Reason:** OrderLine cannot exist without Order. Making it package-private **prevents incorrect usage at compile time**.
+
+{{% notice style="tip" title="Key Points: Design Decisions" %}}
+- **Aggregate Boundary**: Range where consistency must be guaranteed. Order + OrderLine form one boundary
+- **ID Reference**: Other Aggregates (Customer, Product) referenced only by ID, not objects
+- **Value Object**: Immutable, compared by value, only replaceable (Money, Address)
+- **Internal Entity**: Exists only within Aggregate, accessed only through Root (OrderLine)
+{{% /notice %}}
 
 ---
 
@@ -130,6 +160,8 @@ flowchart TB
     PID["ProductId"] -.->|ID reference| OL1
     PID2["ProductId"] -.->|ID reference| OL2
 ```
+
+> **Diagram Description**: This shows the internal structure of Order Aggregate. Order (Aggregate Root) contains OrderLines, ShippingAddress (VO), and Money (VO). CustomerId and ProductId are shown with dotted lines indicating external references (ID only).
 
 ## Value Object Implementation
 
@@ -298,6 +330,13 @@ public record ShippingAddress(
 }
 ```
 
+{{% notice style="tip" title="Key Points: Value Object" %}}
+- **Java Record usage**: Immutability, auto-generated equals/hashCode
+- **Compact Constructor**: Validation performed in constructor
+- **Factory methods**: Clear creation methods like `Money.won(10000)`, `OrderId.generate()`
+- **Domain operations**: Domain logic encapsulated within VO like `Money.add()`, `Money.multiply()`
+{{% /notice %}}
+
 ## Entity Implementation
 
 ### OrderLine (Internal Entity)
@@ -404,6 +443,13 @@ public record OrderLineId(String value) {
     }
 }
 ```
+
+{{% notice style="tip" title="Key Points: Entity" %}}
+- **Package-private constructor**: Restricts creation only through Aggregate Root
+- **Invariant validation**: `validateQuantity()` enforces quantity constraints (1~999)
+- **reconstitute method**: Separate method for DB restoration that bypasses validation
+- **State change methods**: `changeQuantity()` is also package-private, callable only by Root
+{{% /notice %}}
 
 ## Aggregate Root Implementation
 
@@ -688,6 +734,14 @@ public enum OrderStatus {
 }
 ```
 
+{{% notice style="tip" title="Key Points: Aggregate Root" %}}
+- **Factory methods**: `Order.create()` for creation, `Order.reconstitute()` for restoration
+- **Invariant enforcement**: All business rules (max amount, min line count) validated internally
+- **State transition control**: `confirm()`, `cancel()` restrict allowed actions per status
+- **Event publishing**: `registerEvent()` collects domain events on state changes
+- **Encapsulation**: `getOrderLines()` returns immutable list to prevent external modification
+{{% /notice %}}
+
 ## Domain Event Implementation
 
 ### OrderCreatedEvent
@@ -788,6 +842,13 @@ public class OrderConfirmedEvent extends DomainEvent {
     ) {}
 }
 ```
+
+{{% notice style="tip" title="Key Points: Domain Events" %}}
+- **Immutable snapshots**: Store state snapshot at time of event publication
+- **Auto metadata**: eventId, occurredAt auto-generated in parent class
+- **Aggregate ID**: `getAggregateId()` identifies which Aggregate the event originated from
+- **Inner Record**: Define event-specific data structures like `OrderLineSnapshot`
+{{% /notice %}}
 
 ## Repository Interface
 
@@ -960,6 +1021,159 @@ class OrderTest {
             "12345", "Seoul", "Gangnam-daero 123", "Suite 101",
             "John Doe", "010-1234-5678"
         );
+    }
+}
+```
+
+{{% notice style="tip" title="Key Points: Unit Tests" %}}
+- **@Nested**: Group tests by functionality (Order Creation, Order Confirmation, Order Cancellation)
+- **@DisplayName**: Clearly express test intent
+- **Given-When-Then**: Clear separation of test structure
+- **Event verification**: Verify published events with `getDomainEvents()`
+- **Exception verification**: Test business rule violations with `assertThatThrownBy()`
+{{% /notice %}}
+
+## Troubleshooting
+
+### Problem: "I need to query another Aggregate inside an Entity"
+
+**Symptom**: Need Customer or Product information inside Order
+
+**Cause**: Trying to reference other objects across Aggregate boundary
+
+**Solution**:
+1. Retrieve required information in service layer and pass it in
+2. Store display information as a snapshot
+
+```java
+// Bad: Calling Repository inside Aggregate
+public class Order {
+    public void validate() {
+        Customer customer = customerRepository.findById(customerId); // Don't do this!
+    }
+}
+
+// Good: Retrieve in service and pass in
+@Service
+public class OrderApplicationService {
+    public void createOrder(CreateOrderCommand cmd) {
+        Customer customer = customerRepository.findById(cmd.customerId());
+        Money discount = discountPolicy.calculate(customer.getGrade());
+
+        Order order = Order.create(
+            cmd.customerId(),
+            customer.getName(),  // Snapshot for display
+            discount,
+            cmd.orderLines()
+        );
+    }
+}
+```
+
+---
+
+### Problem: "Validation fails in Record constructor"
+
+**Symptom**: `NullPointerException` or validation error when creating `Money`
+
+**Cause**: Wrong parameter reassignment syntax in Compact Constructor
+
+**Solution**:
+
+```java
+// Bad: Wrong reassignment (using this.)
+public record Money(BigDecimal amount, Currency currency) {
+    public Money {
+        this.amount = amount.setScale(0); // Compile error!
+    }
+}
+
+// Good: Correct reassignment (variable name only)
+public record Money(BigDecimal amount, Currency currency) {
+    public Money {
+        Objects.requireNonNull(amount);
+        amount = amount.setScale(0, RoundingMode.HALF_UP);
+    }
+}
+```
+
+---
+
+### Problem: "OrderLine not saved when saving Aggregate with JPA"
+
+**Symptom**: Order is saved but OrderLine table is empty
+
+**Cause**: Missing JPA cascade configuration or relationship mapping error
+
+**Solution**:
+
+```java
+@Entity
+@Table(name = "orders")
+public class OrderJpaEntity {
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "order_id")
+    private List<OrderLineJpaEntity> orderLines = new ArrayList<>();
+
+    // Map from Order domain model
+    public static OrderJpaEntity fromDomain(Order order) {
+        OrderJpaEntity entity = new OrderJpaEntity();
+        entity.id = order.getId().value();
+        entity.orderLines = order.getOrderLines().stream()
+            .map(OrderLineJpaEntity::fromDomain)
+            .collect(toList());
+        entity.orderLines.forEach(line -> line.setOrder(entity));
+        return entity;
+    }
+}
+```
+
+---
+
+### Problem: "Domain events are not being published"
+
+**Symptom**: `@EventListener` is not being called
+
+**Cause**: Events are registered but not actually published
+
+**Solution**:
+
+```java
+@Service
+@Transactional
+public class OrderApplicationService {
+
+    private final ApplicationEventPublisher eventPublisher;
+
+    public void confirmOrder(OrderId orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow();
+        order.confirm();
+        orderRepository.save(order);
+
+        // Publish collected events
+        order.getDomainEvents().forEach(eventPublisher::publishEvent);
+        order.clearDomainEvents();
+    }
+}
+```
+
+Or use Spring Data JPA's `@DomainEvents` annotation:
+
+```java
+public abstract class AggregateRoot<ID> {
+
+    @Transient
+    private final List<DomainEvent> domainEvents = new ArrayList<>();
+
+    @DomainEvents
+    public Collection<DomainEvent> domainEvents() {
+        return Collections.unmodifiableList(domainEvents);
+    }
+
+    @AfterDomainEventPublication
+    public void clearDomainEvents() {
+        domainEvents.clear();
     }
 }
 ```

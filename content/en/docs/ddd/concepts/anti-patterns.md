@@ -1,26 +1,37 @@
 ---
-lastmod: "2026-01-07"
 title: Anti-Patterns and Pitfalls
 weight: 8
+lastmod: "2026-01-13"
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
-# DDD Anti-Patterns and Pitfalls
+> **Target Audience**: Developers who are applying or considering adopting DDD
+> **Prerequisites**: Basic concepts from [Quick Start](../../quick-start/) and [Tactical Design](../tactical-design/)
+> **Reading Time**: About 20 minutes
+> **Key Question**: "What are the common mistakes when applying DDD, and how can they be avoided?"
 
-Common mistakes made when applying DDD and their solutions.
+{{< callout type="warning" title="Warning" >}}
+The anti-patterns introduced in this document frequently occur in real projects. Check if your codebase exhibits these symptoms.
+{{< /callout >}}
 
-## Strategic Design Anti-Patterns
+DDD (Domain-Driven Design) is a powerful design methodology, but if not applied correctly, it can only increase complexity. This document examines common DDD anti-patterns encountered in practice and their solutions. Understanding the symptoms of each anti-pattern and catching them early to correct is crucial.
 
-### 1. Big Ball of Mud Context
+#### Strategic Design Anti-Patterns
 
-**Problem:** Making everything into one huge Bounded Context
+Strategic design is the phase of drawing the big picture of the system. Wrong choices in this phase of deciding how to divide and integrate Bounded Contexts will negatively affect the entire system structure.
+
+**1. Big Ball of Mud Context**
+
+The most common mistake is making everything into one huge Bounded Context. It seems convenient at first, but as the system grows, it becomes unmanageable. Putting Order, Product, Customer, Payment, Shipping, and Inventory management all into one Context blurs the boundaries of each domain and reduces cohesion.
 
 ```mermaid
 flowchart TB
-    subgraph Bad["❌ Big Ball of Mud"]
+    subgraph Bad["Big Ball of Mud"]
         MEGA["MegaContext<br>━━━━━━━━━<br>Order<br>Product<br>Customer<br>Payment<br>Shipping<br>Inventory<br>..."]
     end
 
-    subgraph Good["✅ Proper Separation"]
+    subgraph Good["Proper Separation"]
         C1["Order"]
         C2["Product"]
         C3["Payment"]
@@ -31,27 +42,17 @@ flowchart TB
     end
 ```
 
-**Symptoms:**
-- All teams modify the same codebase
-- Large deployment needed for small changes
-- Same terms used confusingly
+The main symptoms of this anti-pattern are as follows. All teams modify the same codebase, causing frequent merge conflicts. Even small changes require redeploying the entire application, lengthening deployment cycles. The same terms are used with different meanings, adding to confusion. For example, the term "product" can have different attributes and behaviors in catalog management, inventory management, and order processing.
 
-**Solutions:**
-```
-1. Find linguistic boundaries: Term conflict points = Context boundaries
-2. Consider team boundaries: Different teams = Different Contexts
-3. Gradual separation: Start from the clearest boundaries
-```
+The solution is to find clear boundaries and separate Contexts. First, find linguistic boundaries. Points where domain expert terminology conflicts are good candidates for Context boundaries. Second, consider team boundaries. Areas owned by different teams naturally separate into different Contexts. Third, separate gradually. Don't try to separate everything at once; start from the clearest boundaries and proceed step by step.
 
----
+**2. Context Too Small**
 
-### 2. Context Too Small
-
-**Problem:** Too fine-grained separation increases integration costs
+The opposite extreme of Big Ball of Mud is also a problem. Riding the microservices wave and dividing too finely increases integration costs exponentially. Separating Order, OrderLine, and Address into separate services is a typical example of excessive separation.
 
 ```mermaid
 flowchart LR
-    subgraph Bad["❌ Over-separation"]
+    subgraph Bad["Excessive Separation"]
         O["Order"]
         OL["OrderLine"]
         A["Address"]
@@ -60,26 +61,13 @@ flowchart LR
     end
 ```
 
-**Symptoms:**
-- Multiple service calls for simple features
-- Complex transaction management
-- Network overhead
+The symptoms of this anti-pattern are having to call multiple services to implement a simple feature, complex distributed transaction management, and performance degradation due to network overhead. If retrieving a single order requires calling the Order service, OrderLine service, and Address service separately, it's clearly a wrong design.
 
-**Solutions:**
-```
-Context separation criteria:
-- Can it be deployed independently?
-- Is it owned by a different team?
-- Does it have a different lifecycle?
+Context separation criteria can be judged by these three questions. Can it be deployed independently? Is it owned by a different team? Does it have a different lifecycle? If any answer is "no," keeping them in the same Context is advisable. Order and OrderLine have the same lifecycle and are managed by the same team, so they should be maintained as one Aggregate.
 
-If any answer is No, keep in the same Context
-```
+**3. Ignoring Ubiquitous Language**
 
----
-
-### 3. Ignoring Ubiquitous Language
-
-**Problem:** Writing code with technical terms only, without domain terms
+If code is written only with technical terms without using domain terms, communication with domain experts breaks down. Expressing "order confirmation" as `updateStatus(id, 1)` makes it impossible to understand the business meaning just by looking at the code.
 
 ```java
 // ❌ Technical terms
@@ -97,18 +85,17 @@ public class Order {
 }
 ```
 
-**Solutions:**
-```
-1. Create glossary with domain experts
-2. Use same terms in code, tests, and documentation
-3. Validate terms in code reviews
-```
+The wrong example uses magic numbers. That status code 1 means "confirmed" can only be known by reading comments or referring to documentation. In contrast, the correct example uses clear domain terms like `confirm()`, `ship()`, `cancel()` so the code itself expresses business intent.
 
-## Tactical Design Anti-Patterns
+The solutions are as follows. First, create a glossary with domain experts. Second, use the same terms consistently in code, tests, and documentation. Third, verify domain term usage in code reviews. The team should manage this to prevent developers from arbitrarily changing or abbreviating terms.
 
-### 4. Anemic Domain Model
+#### Tactical Design Anti-Patterns
 
-**Problem:** Entity has only data, no logic
+Tactical design is about implementation patterns at the code level. Misusing building blocks like Entity, Value Object, and Aggregate scatters business logic and makes maintenance difficult.
+
+**4. Anemic Domain Model**
+
+This is the most common and fatal anti-pattern. When an Entity has only data and no logic, you're giving up encapsulation, the core of object-orientation. When all business rules are scattered across the Service layer, duplicate code occurs and multiple places must be modified when rules change.
 
 ```java
 // ❌ Anemic Model
@@ -117,7 +104,7 @@ public class Order {
     private String status;
     private LocalDateTime confirmedAt;
 
-    // Only getter/setter
+    // Only getter/setter exist
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 }
@@ -135,6 +122,8 @@ public class OrderService {
     }
 }
 ```
+
+In the wrong example, the Order object is a simple data container. The business rule of order confirmation is in the Service, so if the order needs to be confirmed elsewhere, the same logic must be duplicated or the Service must be depended upon. State validation logic is also in the Service, so the Order object can have an invalid state at any time.
 
 ```java
 // ✅ Rich Domain Model
@@ -169,18 +158,13 @@ public class OrderService {
 }
 ```
 
-**Diagnostic checklist:**
-```
-[ ] Does Entity have setters? → Replace with behavior methods
-[ ] Does Service validate state with if-else? → Move to Entity
-[ ] Are business rules in Service? → Move to domain
-```
+In the correct example, business rules are encapsulated within the Order object. The `confirm()` method handles all logic including state validation, state change, and event publishing. The Service simply acts as an orchestrator that finds the Order and calls `confirm()`. This way, order confirmation logic is gathered in one place, making maintenance easy.
 
----
+Use a diagnostic checklist to detect Anemic Model early. Does the Entity have setters? If so, replace them with behavior methods. Does the Service validate state with if-else? Move that logic to the Entity. Are business rules in the Service? Move them to the domain model.
 
-### 5. God Aggregate
+**5. God Aggregate**
 
-**Problem:** Massive Aggregate containing too much
+A huge Aggregate containing too much causes performance and scalability problems. Since Aggregate is a transaction consistency boundary, the larger it is, the more frequent concurrency conflicts become.
 
 ```java
 // ❌ God Aggregate
@@ -193,10 +177,7 @@ public class Order {
 }
 ```
 
-**Problems:**
-- Transaction scope too wide
-- Frequent concurrency conflicts
-- Performance degradation
+The problems with this design are that modifying a single order requires loading customer, product, payment, and shipping information, the transaction scope is too wide so concurrent modifications of the same order become frequent, and performance degrades due to loading unnecessary data. For example, loading all product information and the entire customer profile just to change the order status is wasteful.
 
 ```java
 // ✅ Appropriate size
@@ -216,11 +197,11 @@ public class OrderLine {
 }
 ```
 
----
+In the correct design, other Aggregates are referenced only by ID. Customer and Product are each independent Aggregates, so only their IDs are stored. OrderLine is a true part of Order so it's directly included, but only the name and price at the time of order are copied, not the entire Product information. This limits the transaction scope to the Order Aggregate, reducing concurrency conflicts.
 
-### 6. Ignoring Aggregate Boundaries
+**6. Ignoring Aggregate Boundaries**
 
-**Problem:** Modifying multiple Aggregates in one transaction
+Modifying multiple Aggregates in one transaction lengthens the transaction and causes concurrency issues. One of the core rules of DDD is "modify only one Aggregate per transaction."
 
 ```java
 // ❌ Modifying multiple Aggregates simultaneously
@@ -243,6 +224,8 @@ public void confirmOrder(OrderId orderId) {
     orderRepository.save(order);
 }
 ```
+
+This code modifies three Aggregates - Order, Stock, and Customer - in one transaction. The transaction lengthens causing severe lock contention, if stock update fails the order confirmation also rolls back increasing coupling. Also, when many orders are confirmed simultaneously, locks on the Stock Aggregate cause performance degradation.
 
 ```java
 // ✅ Separate with events
@@ -268,11 +251,11 @@ public class StockEventHandler {
 }
 ```
 
----
+The correct approach is to use events to process each Aggregate in separate transactions. Order confirmation only modifies the Order Aggregate and publishes an event. Stock deduction and points accumulation are processed in separate transactions by event handlers. This way, each Aggregate is independently scalable, and stock update failure doesn't affect order confirmation.
 
-### 7. Primitive Obsession
+**7. Primitive Obsession**
 
-**Problem:** Representing domain concepts with primitive types
+Representing domain concepts with primitive types gives up type safety and domain rule protection. Primitive types like String, int, long have no constraints, so invalid values can easily enter.
 
 ```java
 // ❌ Primitive Obsession
@@ -288,6 +271,8 @@ public void createOrder(String customerId, String email, int amount) {
     // Swapping customerId and email causes no compile error!
 }
 ```
+
+The problem with this design is that the compiler cannot verify types. Even if you swap customerId and email like `createOrder("hong@email.com", "CUST-001", 10000)`, no compile error occurs. Also, there's no way to prevent negative amounts, invalid email formats, or invalid status strings.
 
 ```java
 // ✅ Using Value Objects
@@ -314,11 +299,11 @@ public record Email(String value) {
 }
 ```
 
----
+Using Value Objects, the type system protects domain concepts. Swapping argument order like `createOrder(email, customerId, amount)` causes a compile error. The Email Value Object validates format at creation time, so an invalid email cannot exist anywhere in the system. Money prevents negatives, and OrderStatus only represents valid states.
 
-### 8. Smart UI Anti-Pattern
+**8. Smart UI Anti-Pattern**
 
-**Problem:** Business logic in UI/Controller
+When business logic is in the UI or Controller, it's hard to test and impossible to reuse. Controller is just an adapter for handling HTTP requests; it should not be responsible for business rules.
 
 ```java
 // ❌ Business logic in Controller
@@ -347,6 +332,8 @@ public class OrderController {
     }
 }
 ```
+
+The problem with this code is that business rules are scattered in the Controller, so the same logic cannot be reused in other Controllers or batch jobs. Also, business logic cannot be verified without HTTP testing, making tests slow and complex. If order confirmation rules change, the Controller must be modified, so layer responsibilities are unclear.
 
 ```java
 // ✅ Logic in domain
@@ -384,11 +371,15 @@ public class Order {
 }
 ```
 
-## Architecture Anti-Patterns
+In the correct design, the Controller is a thin adapter that simply calls the Use Case. All business rules are in the Order domain model, so they can be reused from any interface - web, CLI, batch, etc. Domain logic can be unit tested without HTTP, making tests fast and simple.
 
-### 9. Domain Dependency Pollution
+#### Architecture Anti-Patterns
 
-**Problem:** Domain depends on infrastructure
+Architecture-level anti-patterns are related to dependencies between layers. Maintaining the purity of the domain layer is particularly important.
+
+**9. Domain Dependency Pollution**
+
+When the domain model depends on infrastructure technologies like JPA or Spring, domain logic becomes hard to test and domain must be modified when technology changes. The domain should only handle business rules and be independent of infrastructure.
 
 ```java
 // ❌ Domain depends on JPA
@@ -405,6 +396,8 @@ public class Order {
     private List<DomainEvent> events;
 }
 ```
+
+This design has the Order domain model polluted with JPA annotations. Domain logic cannot be tested without JPA, and if changing the database to MongoDB, the domain model must be modified. Also, infrastructure concerns like `@Transient` penetrate the domain.
 
 ```java
 // ✅ Pure domain
@@ -434,11 +427,11 @@ public class OrderMapper {
 }
 ```
 
----
+The correct approach is to separate the domain model and persistence model. Order is a pure Java object that doesn't depend on any framework. OrderEntity handles JPA mapping in the infrastructure layer. OrderMapper converts between the two to protect the domain. This way, domain logic can be tested without JPA, and persistence technology can be changed freely.
 
-### 10. Repository Implementation Leakage
+**10. Repository Implementation Leakage**
 
-**Problem:** Repository implementation details exposed to domain
+When JPA-specific methods are exposed in the Repository interface, the domain becomes dependent on infrastructure details. Repository should be a storage abstraction from the domain perspective; implementation technology should not be exposed.
 
 ```java
 // ❌ JPA implementation leakage
@@ -451,6 +444,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 orderRepository.saveAll(orders);
 orderRepository.flush();
 ```
+
+This design inherits `JpaRepository`, exposing all JPA methods. The domain layer directly calls JPA-specific methods like `flush()`, `saveAll()`, depending on JPA. If replacing the Repository with a MongoDB implementation, methods like `flush()` don't exist, causing problems.
 
 ```java
 // ✅ Domain Repository interface
@@ -478,17 +473,21 @@ interface OrderJpaRepository extends JpaRepository<OrderEntity, String> {
 }
 ```
 
-## CQRS Anti-Patterns
+In the correct design, OrderRepository is a domain layer interface that declares only business-perspective methods. JpaOrderRepository implements it in the infrastructure layer, internally using OrderJpaRepository. JPA-specific features are isolated in the infrastructure layer so the domain is unaffected. This allows Repository implementations to be changed freely.
 
-### 11. Excessive CQRS
+#### CQRS Anti-Patterns
 
-**Problem:** Applying CQRS to simple CRUD
+CQRS (Command Query Responsibility Segregation) is a powerful pattern, but it doesn't need to be applied everywhere. It should be used appropriately according to complexity.
+
+**11. Excessive CQRS**
+
+Applying CQRS to simple CRUD operations only increases unnecessary complexity. If the query and command models are almost the same and there are no performance issues, CQRS is over-engineering.
 
 ```java
 // ❌ Complex CQRS for simple queries
 public class UserQueryService {
     public UserView getUser(String userId) {
-        // Building separate Read Model and Projector for simple queries
+        // Building separate Read Model, Projector for simple queries
     }
 }
 
@@ -500,20 +499,13 @@ public class UserService {
 }
 ```
 
-**CQRS application criteria:**
-```
-[ ] Are query and command models significantly different?
-[ ] Is query performance optimization needed?
-[ ] Is complex search/reporting needed?
+Building a separate Read Model, Event Projector, and synchronization mechanism just to query user information is wasteful. CQRS should be applied when query and command requirements differ significantly, when query performance optimization is needed, or when complex search and reporting are required.
 
-If none are Yes, simple model is sufficient
-```
+CQRS application criteria can be judged by these questions. Are the query and command models significantly different? Is query performance optimization needed? Are complex search or reporting needed? If none answer "yes," a simple model is sufficient. For example, order list queries can use the Order Aggregate as-is, but complex sales analysis reports may need a separate Read Model.
 
----
+**12. Ignoring Sync Failures**
 
-### 12. Ignoring Sync Failures
-
-**Problem:** No handling for Read Model sync failures
+When using CQRS, synchronization between Command Model and Read Model is needed. Ignoring event processing failures causes data inconsistency, and users see incorrect information.
 
 ```java
 // ❌ Data inconsistency on failure
@@ -524,6 +516,8 @@ public void on(OrderConfirmedEvent event) {
     viewRepository.save(view);
 }
 ```
+
+When an exception occurs during event processing, the Command Model (Order) is in confirmed state but the Read Model (OrderView) remains in pending state. Users see it as unconfirmed in the order list, but it's actually confirmed, causing confusion.
 
 ```java
 // ✅ Failure handling with retry
@@ -552,36 +546,25 @@ public class OrderViewProjector {
 }
 ```
 
-## Solution Checklist
+The correct approach is to build a retry mechanism and failed event store. When event processing fails, it automatically retries, and if it continues to fail, it's stored in a separate store. A scheduler periodically reprocesses failed events to achieve eventual consistency. Failed events can be tracked in a monitoring dashboard and manually intervened if necessary.
 
-### Before Project Start
+#### Solution Checklist
 
-```
-[ ] Created glossary with domain experts?
-[ ] Classified Core/Supporting/Generic Domains?
-[ ] Defined Bounded Context boundaries?
-[ ] Decided integration approach between Contexts?
-```
+A checklist for early detection of anti-patterns at each stage of a DDD project.
 
-### When Writing Code
+**Before Project Start**
 
-```
-[ ] Does Entity have behavior (methods)?
-[ ] Actively using Value Objects?
-[ ] Are Aggregate boundaries appropriate?
-[ ] Domain not depending on infrastructure?
-```
+Preparing the following items in advance can prevent many anti-patterns. Have you created a glossary with domain experts? This prevents the Ignoring Ubiquitous Language anti-pattern. Have you classified Core/Supporting/Generic Domains? This helps decide where to focus. Have you defined Bounded Context boundaries? This prevents Big Ball of Mud. Have you decided on integration methods between Contexts? This reduces integration problems later.
 
-### During Code Review
+**When Writing Code**
 
-```
-[ ] Using business terminology?
-[ ] Is logic in domain?
-[ ] Modifying only one Aggregate per transaction?
-[ ] Do tests verify domain rules?
-```
+Items to continuously check during development. Does the Entity have behavior (methods)? If it only has setters, it's a sign of Anemic Model. Are you actively using Value Objects? If using only primitive types, it's Primitive Obsession. Are Aggregate boundaries appropriate? If too large, it's God Aggregate; if too small, it's excessive separation. Does the domain not depend on infrastructure? If JPA annotations are in the domain, it's dependency pollution.
 
-## Next Steps
+**During Code Review**
+
+The stage of verifying quality at the team level. Did you use business terminology? Avoid technical terms like `updateStatus(1)`. Is logic in the domain? If Service has many if-else, move the logic to the domain. Is only one Aggregate modified per transaction? If multiple Aggregates are modified, separate with events. Do tests verify domain rules? If there are only Controller tests, domain logic tests are insufficient.
+
+#### Next Steps
 
 - [Examples](../../examples/) - Implementing with correct patterns
 - [Glossary](../../appendix/glossary/) - DDD terminology reference

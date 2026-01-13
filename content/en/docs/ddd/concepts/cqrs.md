@@ -1,16 +1,29 @@
 ---
-lastmod: "2026-01-07"
 title: CQRS
 weight: 6
+lastmod: "2026-01-13"
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
-# CQRS (Command Query Responsibility Segregation)
+> **Target Audience**: Developers designing systems with complex query requirements or performance optimization needs
+> **Prerequisites**: [Domain Events](../domain-events/) or basic understanding of event-driven architecture
+> **Estimated Time**: About 35 minutes
+> **Key Question**: "When should you separate read and write models?"
 
-A pattern that separates command (write) and query (read) responsibilities.
+{{< callout type="tip" title="Summary" >}}
+CQRS Core: **Command** (state changes, uses domain model) vs **Query** (reads, uses optimized read model) separation allows optimization for each requirement
+{{< /callout >}}
 
-## Why CQRS?
+This section explores the pattern that separates command (write) and query (read) responsibilities. CQRS stands for Command Query Responsibility Segregation, a pattern that separates system read and write operations into separate models, allowing each to be optimized independently. It's a powerful architectural pattern for effectively handling complex domain logic and diverse query requirements.
 
-### Limitations of Traditional CRUD
+#### Why CQRS?
+
+Understanding the limitations of traditional CRUD approaches reveals why CQRS is needed. In the traditional approach, a single model is used for both reading and writing, which works well for simple applications but causes various problems as complexity increases.
+
+**Limitations of Traditional CRUD**
+
+Traditional CRUD systems access the database through a single model via a service layer from the UI. Create, update, delete, and read operations all use the same model and the same path. This structure is simple but has several problems.
 
 ```mermaid
 flowchart TB
@@ -27,12 +40,11 @@ flowchart TB
     end
 ```
 
-**Problems:**
-- Domain model gets polluted for complex queries
-- Different optimization requirements for queries vs commands
-- Difficult to scale
+Key problems include polluting the domain model to support complex queries. For example, adding query-only methods to domain entities for reporting data diminishes the purity of the domain model. Also, the optimization requirements for queries and commands are fundamentally different. Queries need fast responses and benefit from denormalized data, while commands need consistency and transactions with normalized data. Finally, read and write workload patterns differ, but using the same database makes independent scaling difficult.
 
-### CQRS Structure
+**Benefits of CQRS Structure**
+
+CQRS completely separates Command and Query. The Command Side uses the write model (domain model) to access the Write DB, while the Query Side uses the read model (DTO/View) to access the Read DB. Synchronization between the two DBs happens through events.
 
 ```mermaid
 flowchart TB
@@ -59,11 +71,15 @@ flowchart TB
     end
 ```
 
-## Implementation Levels
+This structure allows the domain model to focus purely on business logic, while the read model can be freely designed in a UI-optimized form. Each can be scaled and optimized independently, improving both performance and maintainability.
 
-### Level 1: Single DB, Code Separation
+#### Implementation Levels
 
-The simplest form.
+CQRS doesn't need to be implemented perfectly all at once. It can be applied incrementally based on project complexity and requirements. There are three main levels, each with different complexity and benefits.
+
+**Level 1: Single DB, Code Separation**
+
+The simplest form uses a single database but separates commands and queries at the code level. This approach applies CQRS concepts while minimizing infrastructure complexity.
 
 ```mermaid
 flowchart TB
@@ -82,8 +98,10 @@ flowchart TB
     QRY --> DB
 ```
 
+Command Service executes business logic using the domain model and changes state. It manages transactions and validates domain rules. Query Service directly queries DTOs to return data quickly. It uses read-only transactions and writes queries optimized for retrieval.
+
 ```java
-// Command Service - Uses Domain Model
+// Command Service - Uses domain model
 @Service
 @Transactional
 public class OrderCommandService {
@@ -106,7 +124,7 @@ public class OrderCommandService {
     }
 }
 
-// Query Service - Direct DTO Query
+// Query Service - Direct DTO query
 @Service
 @Transactional(readOnly = true)
 public class OrderQueryService {
@@ -152,7 +170,7 @@ public interface OrderQueryRepository {
     );
 }
 
-// Query Result DTOs
+// Query result DTOs
 public record OrderDetailView(
     String orderId,
     String status,
@@ -170,9 +188,11 @@ public record OrderSummaryView(
 ) {}
 ```
 
-### Level 2: Separate Read Model
+In this code, Command Service uses the Order domain model to execute business logic. The confirm method goes through validation logic inside the order entity to change state. Query Service directly queries DTOs like OrderDetailView, returning the needed data directly without going through the domain model.
 
-Uses query-only tables/views.
+**Level 2: Separate Read Model**
+
+At this level, query-only tables or views are created separately. Writes go to normalized tables, reads come from denormalized tables. This greatly improves query performance and allows data retrieval without complex joins.
 
 ```mermaid
 flowchart TB
@@ -201,8 +221,10 @@ flowchart TB
     QRY --> RT
 ```
 
+In this structure, when an order is created or its status changes, a domain event is published. The event handler receives it and updates the read model. The read model is denormalized, allowing fast queries without complex joins.
+
 ```java
-// Write Side: Domain Event Publishing
+// Write Side: Domain Event publishing
 public class Order extends AggregateRoot<OrderId> {
 
     public void confirm() {
@@ -216,7 +238,7 @@ public class Order extends AggregateRoot<OrderId> {
     }
 }
 
-// Read Model Synchronization
+// Read Model synchronization
 @Component
 public class OrderViewProjector {
 
@@ -253,7 +275,7 @@ public class OrderViewProjector {
     }
 }
 
-// Read Model Entity (Denormalized)
+// Read Model Entity (denormalized)
 @Entity
 @Table(name = "order_views")
 public class OrderView {
@@ -287,9 +309,11 @@ public class OrderQueryService {
 }
 ```
 
-### Level 3: Separate Databases
+Looking at the OrderView entity, fields like customerName and customerEmail are denormalized. When querying, you can get all needed information just by querying OrderView without joining the Customer table. Aggregate values like itemCount are pre-calculated and stored, making queries very fast.
 
-Uses completely different databases.
+**Level 3: Separate Databases**
+
+The most advanced form uses completely different databases for writes and reads. For writes, an RDBMS like PostgreSQL that supports transactions well is used, while for reads, a NoSQL like Elasticsearch specialized for search can be used. An event bus like Kafka synchronizes the two DBs.
 
 ```mermaid
 flowchart TB
@@ -319,8 +343,10 @@ flowchart TB
     QRY --> RDB
 ```
 
+In this structure, command processing and queries are completely independent. Each uses different databases, so a problem in one doesn't affect the other. If the read DB goes down, writes continue to work, and you just need to rebuild the read DB.
+
 ```java
-// Event Publishing (Kafka)
+// Event publishing (Kafka)
 @Component
 public class OrderEventPublisher {
 
@@ -369,7 +395,7 @@ public class OrderDocument {
     private BigDecimal totalAmount;
     private LocalDateTime createdAt;
     private LocalDateTime confirmedAt;
-    // Full-text search fields
+    // Full-text search field
     private String searchableText;
 }
 
@@ -395,9 +421,11 @@ public class OrderQueryService {
 }
 ```
 
-## CQRS + Event Sourcing
+Using Elasticsearch enables full-text search, various filtering, and aggregation capabilities. By putting all order-related text in the searchableText field, users can find relevant orders regardless of what keyword they search for.
 
-CQRS is often used together with Event Sourcing.
+#### CQRS + Event Sourcing
+
+CQRS is often used together with Event Sourcing. Event Sourcing is a pattern that stores all state changes as events, and combined with CQRS, it creates a very powerful system.
 
 ```mermaid
 flowchart TB
@@ -419,6 +447,8 @@ flowchart TB
     PROJ -->|Update View| RDB
     QRY --> RDB
 ```
+
+On the Command Side, only events are stored. Current state is derived by replaying events. On the Query Side, the event stream is subscribed to generate read-only views. This provides both complete audit trails and fast query performance.
 
 ```java
 // Event Store
@@ -475,24 +505,15 @@ public class Order {
 }
 ```
 
-## Practical Guide
+The advantage of this approach is that all change history is preserved. You can know exactly how an order reached its current state, and if needed, you can recreate the state at any specific point in time. Also, if you need a new read model, you can create it anytime by replaying the event stream.
 
-### When to Use CQRS?
+#### Practical Guide
 
-```mermaid
-flowchart TB
-    Q1{Different requirements<br>for queries vs commands?}
-    Q2{Query performance<br>critical?}
-    Q3{Complex reporting/<br>search needed?}
+CQRS should be adopted carefully. It's not needed for every project, and misapplying it only adds unnecessary complexity. You must clearly understand when to use CQRS and when to avoid it.
 
-    Q1 -->|Yes| CQRS["Consider CQRS"]
-    Q1 -->|No| SIMPLE["Simple CRUD"]
+**When CQRS is a Good Fit**
 
-    Q2 -->|Yes| CQRS
-    Q3 -->|Yes| CQRS
-```
-
-### Good Fit for CQRS
+CQRS shines in complex domains. When the domain model is complex, you can keep the Write model pure while freely designing the Read model. For systems where query performance is critical, you can optimize the Read model to ensure fast responses. When various query forms are needed, you can create multiple Read models for different purposes. For example, detailed admin queries, user summary queries, and reporting aggregation queries can each be implemented with different models. If you're using event-driven architecture, CQRS naturally combines with Event Sourcing.
 
 | Situation | Reason |
 |-----------|--------|
@@ -501,7 +522,9 @@ flowchart TB
 | **Various query patterns** | Create purpose-specific Read models |
 | **Event-driven architecture** | Natural fit with Event Sourcing |
 
-### CQRS is Overkill When
+**When CQRS is Overkill**
+
+Conversely, CQRS can be a hindrance for simple CRUD applications. When create, update, delete, and query are all simple, it only adds complexity. Systems that require immediate consistency are also not suitable for CQRS. CQRS typically uses eventual consistency, which is problematic if read results must immediately reflect writes. For small projects, it can be over-engineering. Consider the team's size and experience.
 
 | Situation | Reason |
 |-----------|--------|
@@ -509,9 +532,13 @@ flowchart TB
 | **Immediate consistency required** | Eventual consistency delay issues |
 | **Small projects** | Over-engineering |
 
-### Cautions
+**Cautions**
 
-**1. Eventual Consistency**
+There are things you must consider when applying CQRS. The most important is eventual consistency. If you query immediately after executing a Command, synchronization may not be complete yet, showing old data.
+
+**1. Handling Eventual Consistency**
+
+If you Query immediately after executing a Command, the Read Model may not be updated yet, returning old data. This is a fundamental characteristic of CQRS, so it must be handled at the application level.
 
 ```java
 // Query immediately after Command may return stale data
@@ -521,12 +548,11 @@ OrderView view = orderQueryService.getOrder(orderId);
 // view.status might still be PENDING
 ```
 
-**Solutions:**
-- Optimistic updates in UI
-- Include result in Command response
-- Real-time sync via WebSocket
+There are several ways to solve this problem. Using optimistic updates in the UI, the user sees the change immediately, and it updates when actual data arrives. Including results in the Command response allows display without a Query. Using WebSocket, you can notify clients in real-time when the Read Model is updated.
 
-**2. Sync Failures**
+**2. Handling Sync Failures**
+
+If an exception occurs in the Event Handler, the Read Model won't be updated. You need a mechanism to track and reprocess such failures.
 
 ```java
 @Component
@@ -548,7 +574,11 @@ public class OrderViewProjector {
 }
 ```
 
-## Controller Design
+Saving failed events in a separate table allows manual or automatic reprocessing later. You can implement retry mechanisms or utilize Dead Letter Queues.
+
+#### Controller Design
+
+In CQRS systems, it's good to separate Controllers into Command and Query as well. This clarifies responsibilities and allows each to be versioned or scaled independently.
 
 ```java
 // Command Controller
@@ -595,7 +625,9 @@ public class OrderQueryController {
 }
 ```
 
-## Next Steps
+Command Controller handles write operations like POST, PUT, DELETE, usually returning just success status or created resource IDs. Query Controller handles only GET requests, returning various query results. This separation clarifies API documentation and simplifies authorization management.
+
+#### Next Steps
 
 - [Testing Strategy](../testing/) - Testing CQRS systems
 - [Anti-Patterns](../anti-patterns/) - Common CQRS mistakes
