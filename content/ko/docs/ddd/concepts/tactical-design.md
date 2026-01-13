@@ -1,10 +1,19 @@
 ---
 title: 전술적 설계
 weight: 2
-lastmod: "2026-01-09"
+lastmod: "2026-01-13"
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
+
+> **대상 독자**: DDD 빌딩 블록을 코드로 구현하고 싶은 백엔드 개발자
+> **선수 지식**: [전략적 설계](../strategic-design/)를 읽었거나 Bounded Context 개념에 대한 이해
+> **소요 시간**: 약 40분
+> **핵심 질문**: "도메인 모델을 어떤 패턴으로 구현해야 하는가?"
+
+{{< callout type="tip" title="요약" >}}
+전술적 설계 빌딩 블록: **Entity**(식별자로 구분) + **Value Object**(값으로 구분) → **Aggregate**(일관성 경계) + **Repository**(영속화) + **Domain Service**(도메인 로직) + **Domain Event**(이벤트 통신)
+{{< /callout >}}
 
 도메인 모델을 구체적으로 구현하기 위한 패턴들이 바로 전술적 설계입니다. 전략적 설계가 "큰 그림"을 그리는 것이라면, 전술적 설계는 "구체적인 구현 방법"을 제시합니다.
 

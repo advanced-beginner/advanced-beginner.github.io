@@ -1,10 +1,14 @@
 ---
 title: 클린 아키텍처
 weight: 8
-lastmod: 2026-01-09
+lastmod: "2026-01-13"
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
+
+> **대상 독자**: 엄격한 의존성 관리가 필요한 대규모 프로젝트 개발자
+> **선수 지식**: [헥사고날 아키텍처](../hexagonal-architecture/)의 Port/Adapter 개념
+> **소요 시간**: 약 25분
 
 # 클린 아키텍처 (Clean Architecture)
 
