@@ -1,16 +1,23 @@
 ---
-lastmod: "2026-01-07"
+lastmod: "2026-01-13"
 title: Aggregate 실전 패턴
 weight: 4
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
 
+> **대상 독자**: Aggregate 기본 개념을 익히고 실전 패턴을 학습하려는 개발자
+> **선수 지식**: [Aggregate 심화](../aggregate/)에서 핵심 개념 이해
+> **소요 시간**: 약 30분
+> **핵심 질문**: "Aggregate 구현 시 어떤 패턴을 적용해야 하는가?"
+
+{{< callout type="tip" title="요약" >}}
+실전 패턴: **Factory Method**(생성) + **Domain Event 발행** + **Optimistic Locking**(동시성) + **Soft Delete**(삭제)
+{{< /callout >}}
+
 # Aggregate 실전 패턴
 
 Aggregate 설계를 위한 구현 패턴과 의사결정 가이드입니다.
-
-> **선수 지식:** 먼저 [Aggregate 심화](../aggregate/)에서 핵심 개념을 읽어주세요.
 
 > **이 페이지 예제의 공통 import:**
 > ```java

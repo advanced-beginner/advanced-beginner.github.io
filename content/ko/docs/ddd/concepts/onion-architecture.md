@@ -1,10 +1,14 @@
 ---
 title: 어니언 아키텍처
 weight: 9
-lastmod: 2026-01-09
+lastmod: "2026-01-13"
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
+
+> **대상 독자**: DDD와 잘 어울리는 아키텍처를 찾는 개발자
+> **선수 지식**: [헥사고날 아키텍처](../hexagonal-architecture/)와 의존성 역전 원칙
+> **소요 시간**: 약 20분
 
 # 어니언 아키텍처 (Onion Architecture)
 

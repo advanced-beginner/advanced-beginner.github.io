@@ -2,14 +2,19 @@
 bookCollapseSection: true
 title: Quick Start
 weight: 1
-lastmod: "2026-01-10"
+lastmod: "2026-01-13"
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
 
 > **대상 독자**: 기존 방식의 서비스 개발에 익숙하지만 DDD를 처음 접하는 백엔드 개발자
 > **선수 지식**: Java/Spring 기본, 객체지향 프로그래밍, 서비스 레이어 패턴
+> **소요 시간**: 약 15분
 > **이 문서를 읽으면**: DDD의 핵심 개념과 기존 방식과의 차이점을 이해하고, 프로젝트에 DDD 적용 여부를 판단할 수 있습니다
+
+{{< callout type="info" title="이 문서의 목적" >}}
+이 문서는 **튜토리얼이 아닌 개요 문서**입니다. DDD의 핵심 개념을 빠르게 훑어보고 전체 그림을 파악하는 것이 목적입니다. 실제 코드를 작성하는 단계별 실습은 [실습 예제](../examples/) 섹션을 참고하세요.
+{{< /callout >}}
 
 {{< callout type="tip" title="TL;DR" >}}
 - DDD는 비즈니스 로직을 도메인 객체 안에 응집시켜 코드와 비즈니스 언어를 일치시킵니다
