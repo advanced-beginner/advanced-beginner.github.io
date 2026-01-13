@@ -1,10 +1,29 @@
 ---
-lastmod: "2026-01-07"
 title: Project Setup
 weight: 1
+lastmod: "2026-01-13"
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
 # Project Setup
+
+{{% notice style="primary" title="TL;DR" %}}
+- DDD layered architecture (Domain, Application, Infrastructure, Interfaces) package structure
+- Spring Boot 3.2.x + Spring Kafka + JPA based dependencies
+- AggregateRoot, DomainEvent, Entity base class implementations
+- Docker Compose for Kafka + PostgreSQL development environment
+{{% /notice %}}
+
+## Target Audience and Prerequisites
+
+| Item | Required Level |
+|------|----------------|
+| **Target Audience** | Backend developers looking to apply DDD patterns with Spring Boot |
+| **Java** | Java 17+ syntax, Record, Stream API |
+| **Spring Boot** | Spring Boot basics, DI, @Service, @Repository |
+| **Gradle** | Kotlin DSL basic syntax |
+| **Docker** | Experience running docker-compose up/down |
 
 Setting up the structure and dependencies for the DDD example project.
 
@@ -136,6 +155,8 @@ flowchart TB
     EVT -.->|publish| KAFKA
 ```
 
+> **Diagram Description**: The Controller in the Interfaces layer calls the Service in the Application layer. The Service uses Aggregate/Entity and Repository Interface from the Domain layer. The Infrastructure layer provides Repository implementation, JPA Entity, and Kafka Publisher. Domain Events are published through Infrastructure.
+
 ### Dependency Rules
 
 ```mermaid
@@ -145,11 +166,20 @@ flowchart LR
     INF[Infrastructure] --> D
 ```
 
+> **Diagram Description**: Dependencies always point inward (toward Domain). Interfaces depends on Application, Application depends on Domain, and Infrastructure implements Domain interfaces.
+
 | Rule | Description |
 |------|-------------|
 | **Domain is independent** | Does not depend on other layers |
-| **Dependencies flow inward** | Interfaces → Application → Domain |
+| **Dependencies flow inward** | Interfaces -> Application -> Domain |
 | **Infrastructure implements Domain** | Provides Repository Interface implementations |
+
+{{% notice style="tip" title="Key Points: Layer Responsibilities" %}}
+- **Domain Layer**: Core of business logic. Implemented in pure Java without external dependencies
+- **Application Layer**: Use Case orchestration. Handles transaction boundaries and event publishing
+- **Infrastructure Layer**: Technical implementation. Depends on external technologies like JPA, Kafka
+- **Interfaces Layer**: External integration. REST API, message handlers, etc.
+{{% /notice %}}
 
 ## application.yml
 
@@ -271,6 +301,12 @@ public abstract class Entity<ID> {
 }
 ```
 
+{{% notice style="tip" title="Key Points: Base Classes" %}}
+- **AggregateRoot**: Collects and manages domain events. Parent class for all Aggregates
+- **DomainEvent**: Auto-generates event ID and occurrence time. Designed as immutable object
+- **Entity**: ID-based equality comparison. equals/hashCode only use ID
+{{% /notice %}}
+
 ## Docker Compose (Development Environment)
 
 ```yaml
@@ -314,14 +350,14 @@ volumes:
 ### 1. Domain-Centric Packages
 
 ```
-// ❌ Technology-centric
+// Bad: Technology-centric
 com.example.order
 ├── controller
 ├── service
 ├── repository
 └── entity
 
-// ✅ Domain-centric
+// Good: Domain-centric
 com.example.order
 ├── domain           # Core business logic
 ├── application      # Use cases
@@ -344,6 +380,12 @@ com.example
     ├── domain
     └── ...
 ```
+
+{{% notice style="tip" title="Key Points: Package Structure" %}}
+- **Domain-centric, not technology-centric**: Use domain/application/infrastructure structure instead of controller/service/repository
+- **Subdomain separation**: Separate by domain (order/, inventory/, shipping/) as the system grows
+- **Bounded Context reflection**: Each subdomain has its own independent layer structure
+{{% /notice %}}
 
 ## Next Steps
 

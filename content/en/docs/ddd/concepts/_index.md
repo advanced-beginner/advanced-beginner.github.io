@@ -1,31 +1,37 @@
 ---
-lastmod: "2026-01-07"
+bookCollapseSection: true
 title: Core Concepts
 weight: 2
+lastmod: "2026-01-13"
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
-A deep dive into DDD's strategic and tactical design patterns.
+> **Target Audience**: Developers new to DDD or wanting to systematically organize their understanding
+> **Prerequisites**: Object-oriented programming, basic Spring Boot knowledge
+> **Section Purpose**: Explain the "why" and "what" of DDD's core concepts and patterns
 
-## Table of Contents
+{{< callout type="info" title="What is an Explanation Document?" >}}
+This section focuses on **conceptual understanding**. We emphasize "why design this way" rather than "how to implement." For actual implementation, refer to [Practice Examples](../examples/), and for solving specific problems, see [How-To Guides](../howto/).
+{{< /callout >}}
 
-### Design Patterns
+DDD's core consists of two levels of patterns: strategic design and tactical design. Strategic design draws the big picture of the system, defining how to divide the business domain and how each part interacts. Tactical design covers patterns for concretely implementing domain models within each boundary.
 
-1. [Strategic Design](strategic-design/) - Subdomain, Bounded Context, Context Mapping, Ubiquitous Language
-2. [Tactical Design](tactical-design/) - Entity, Value Object, Repository, Domain Service, Specification
-3. [Aggregate Deep Dive](aggregate/) - Aggregate Design Principles, Transaction Boundaries, Size Decisions
-4. [Domain Events](domain-events/) - Event-Driven Architecture, Event Sourcing
+#### Design Patterns
 
-### Architecture
+Starting from strategic design patterns and progressively moving to tactical design patterns is an effective learning sequence. [Strategic Design](strategic-design/) covers Subdomain, Bounded Context, Context Mapping, and Ubiquitous Language, while [Tactical Design](tactical-design/) teaches Entity, Value Object, Repository, Domain Service, and Specification patterns. [Aggregate Deep Dive](aggregate/) covers Aggregate design principles, transaction boundaries, and how to determine appropriate size, and [Domain Events](domain-events/) explores event-driven architecture and Event Sourcing.
 
-5. [Architecture Patterns](architecture/) - Hexagonal, Clean Architecture, Onion Architecture
-6. [CQRS](cqrs/) - Command Query Responsibility Segregation
+#### Architecture
 
-### Quality
+There are architecture patterns for effectively protecting domain models and separating them from external dependencies. [Architecture Patterns](architecture/) compares and analyzes Hexagonal, Clean Architecture, and Onion Architecture, while [CQRS](cqrs/) covers how to separate commands and queries to use models optimized for each.
 
-7. [Testing Strategy](testing/) - Domain Model Testing, Integration Testing, E2E
-8. [Anti-Patterns and Pitfalls](anti-patterns/) - Common Mistakes and Solutions
+#### Quality
 
-## Concept Relationships
+Testing and continuous improvement are essential to maintain domain model quality. [Testing Strategy](testing/) covers how to write domain model tests, integration tests, and E2E tests, while [Anti-Patterns and Pitfalls](anti-patterns/) examines common mistakes made when applying DDD and their solutions.
+
+#### Concept Relationships
+
+The diagram below shows how DDD's major concepts are connected. Subdomains defined in strategic design form Bounded Contexts, and within each Context, Ubiquitous Language is used to define Entities and Value Objects from tactical design. These are grouped into Aggregates, persisted through Repositories, and communicate with other Contexts through Domain Events. This structure is implemented on top of architecture patterns like Hexagonal or Clean Architecture.
 
 ```mermaid
 flowchart TB
