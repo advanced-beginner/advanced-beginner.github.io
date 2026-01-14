@@ -103,6 +103,12 @@ sbt 기반의 실행 가능한 예제 프로젝트입니다. 배운 개념을 �
 - [기본 예제](examples/basic/) - 핵심 개념 활용 예제
 - [Scala 2 vs 3 비교](examples/scala2-vs-scala3/) - 버전별 코드 비교
 
+**[하우투 가이드](howto/)**
+
+특정 문제를 해결하기 위한 단계별 가이드입니다:
+- [Implicit/Given 디버깅](howto/implicit-debugging/) - 암시적 값을 찾지 못할 때 진단
+- [Future 에러 처리](howto/future-error-handling/) - 비동기 코드에서 예외 처리
+
 **[부록](appendix/)**
 
 용어 사전, 버전 비교, FAQ 등 학습에 도움이 되는 참고 자료입니다.
