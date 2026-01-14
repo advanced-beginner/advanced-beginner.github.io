@@ -1,4 +1,5 @@
 ---
+bookCollapseSection: true
 title: Concepts
 weight: 2
 lastmod: 2026-01-08

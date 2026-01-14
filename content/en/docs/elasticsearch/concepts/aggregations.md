@@ -2,9 +2,29 @@
 title: Aggregations
 weight: 5
 lastmod: 2026-01-08
+prerequisites:
+  - title: Query DSL
+    path: /docs/elasticsearch/concepts/query-dsl/
+  - title: Data Modeling
+    path: /docs/elasticsearch/concepts/data-modeling/
+related_concepts:
+  - title: Search Relevance
+    path: /docs/elasticsearch/concepts/search-relevance/
+  - title: Performance Tuning
+    path: /docs/elasticsearch/concepts/performance-tuning/
 ---
 
+{{% notice style="info" title="Prerequisites" %}}
+Before reading this document, understand these concepts first:
+- [Query DSL](../query-dsl/) - Basic query structure
+- [Data Modeling](../data-modeling/) - keyword vs text types
+{{% /notice %}}
+
 Learn how to analyze data and extract statistics using Elasticsearch Aggregations.
+
+While Elasticsearch is a search engine, it's also a powerful **real-time analytics engine**. When you search for "laptop" on an e-commerce site, the brand filters, price range filters, and rating distributions that appear on the left side are all results of Aggregations. Implementing these features with RDBMS would require complex subqueries and GROUP BY combinations, and performance issues would be severe with large datasets.
+
+Aggregations can group data and calculate statistics simultaneously with search queries, allowing you to **get both search results and filter facets in a single request**. This improves both user experience and server efficiency. Aggregations play a core role in various areas such as dashboard building, business intelligence, and log analysis.
 
 ## What is Aggregation?
 
@@ -69,6 +89,18 @@ Response:
 }
 ```
 
+#### Sorting Options
+
+```json
+{
+  "terms": {
+    "field": "category",
+    "order": { "_count": "asc" }     // Ascending by document count
+    // "order": { "_key": "desc" }   // Descending by key name
+  }
+}
+```
+
 ### range
 
 Group by numeric ranges:
@@ -82,11 +114,52 @@ GET /products/_search
       "range": {
         "field": "price",
         "ranges": [
-          { "to": 500, "key": "Under $500" },
-          { "from": 500, "to": 1000, "key": "$500-$1000" },
-          { "from": 1000, "to": 2000, "key": "$1000-$2000" },
-          { "from": 2000, "key": "Over $2000" }
+          { "to": 500000, "key": "Under $5,000" },
+          { "from": 500000, "to": 1000000, "key": "$5,000-$10,000" },
+          { "from": 1000000, "to": 2000000, "key": "$10,000-$20,000" },
+          { "from": 2000000, "key": "Over $20,000" }
         ]
+      }
+    }
+  }
+}
+```
+
+### date_range
+
+Group by date ranges:
+
+```json
+{
+  "aggs": {
+    "sales_periods": {
+      "date_range": {
+        "field": "created_at",
+        "format": "yyyy-MM-dd",
+        "ranges": [
+          { "from": "2024-01-01", "to": "2024-04-01", "key": "Q1" },
+          { "from": "2024-04-01", "to": "2024-07-01", "key": "Q2" }
+        ]
+      }
+    }
+  }
+}
+```
+
+### histogram
+
+Group by fixed intervals:
+
+```json
+GET /products/_search
+{
+  "size": 0,
+  "aggs": {
+    "price_histogram": {
+      "histogram": {
+        "field": "price",
+        "interval": 500000,      // $5,000 intervals
+        "min_doc_count": 1       // Only buckets with at least 1 doc
       }
     }
   }
@@ -107,6 +180,34 @@ GET /orders/_search
         "field": "order_date",
         "calendar_interval": "month",  // day, week, month, year
         "format": "yyyy-MM"
+      }
+    }
+  }
+}
+```
+
+#### interval Options
+
+| Type | Option | Example |
+|------|--------|---------|
+| `calendar_interval` | day, week, month, quarter, year | Calendar-based |
+| `fixed_interval` | 1d, 12h, 30m | Fixed time |
+
+### filter / filters
+
+Group by conditions:
+
+```json
+GET /products/_search
+{
+  "size": 0,
+  "aggs": {
+    "stock_status": {
+      "filters": {
+        "filters": {
+          "in_stock": { "term": { "in_stock": true } },
+          "out_of_stock": { "term": { "in_stock": false } }
+        }
       }
     }
   }
@@ -157,14 +258,30 @@ Response:
   "aggregations": {
     "price_stats": {
       "count": 100,
-      "min": 100,
-      "max": 5000,
-      "avg": 1500,
-      "sum": 150000
+      "min": 100000,
+      "max": 5000000,
+      "avg": 1500000,
+      "sum": 150000000
     }
   }
 }
 ```
+
+### extended_stats
+
+Additional statistics including standard deviation:
+
+```json
+{
+  "aggs": {
+    "price_extended": {
+      "extended_stats": { "field": "price" }
+    }
+  }
+}
+```
+
+Additional fields: `variance`, `std_deviation`, `std_deviation_bounds`
 
 ### cardinality
 
@@ -238,6 +355,32 @@ FROM products
 GROUP BY category
 ```
 
+### Multi-level Nesting
+
+Category > Brand > Statistics:
+
+```json
+GET /products/_search
+{
+  "size": 0,
+  "aggs": {
+    "by_category": {
+      "terms": { "field": "category" },
+      "aggs": {
+        "by_brand": {
+          "terms": { "field": "brand" },
+          "aggs": {
+            "price_stats": {
+              "stats": { "field": "price" }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
 ---
 
 ## Pipeline Aggregations
@@ -296,6 +439,31 @@ Calculate change:
 }
 ```
 
+### cumulative_sum
+
+Cumulative sum:
+
+```json
+{
+  "aggs": {
+    "daily_sales": {
+      "date_histogram": {
+        "field": "order_date",
+        "calendar_interval": "day"
+      },
+      "aggs": {
+        "sales": { "sum": { "field": "amount" } },
+        "cumulative_sales": {
+          "cumulative_sum": {
+            "buckets_path": "sales"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
 ---
 
 ## Combining Search and Aggregations
@@ -317,6 +485,32 @@ GET /products/_search
   "aggs": {
     "categories": {
       "terms": { "field": "category" }
+    }
+  }
+}
+```
+
+### global Aggregation
+
+Ignore query and aggregate on all data:
+
+```json
+GET /products/_search
+{
+  "query": {
+    "match": { "name": "MacBook" }
+  },
+  "aggs": {
+    "filtered_count": {
+      "value_count": { "field": "_id" }
+    },
+    "all_products": {
+      "global": {},
+      "aggs": {
+        "total_count": {
+          "value_count": { "field": "_id" }
+        }
+      }
     }
   }
 }
@@ -384,9 +578,9 @@ GET /products/_search
       "range": {
         "field": "price",
         "ranges": [
-          { "to": 1000, "key": "Under $1000" },
-          { "from": 1000, "to": 2000, "key": "$1000-$2000" },
-          { "from": 2000, "key": "Over $2000" }
+          { "to": 1000000, "key": "Under $10,000" },
+          { "from": 1000000, "to": 2000000, "key": "$10,000-$20,000" },
+          { "from": 2000000, "key": "Over $20,000" }
         ]
       }
     },

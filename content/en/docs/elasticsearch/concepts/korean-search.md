@@ -2,9 +2,29 @@
 lastmod: "2026-01-08"
 title: Korean Search Optimization
 weight: 11
+prerequisites:
+  - title: Data Modeling
+    path: /docs/elasticsearch/concepts/data-modeling/
+  - title: Query DSL
+    path: /docs/elasticsearch/concepts/query-dsl/
+related_concepts:
+  - title: Search Relevance
+    path: /docs/elasticsearch/concepts/search-relevance/
+  - title: Product Search System
+    path: /docs/elasticsearch/examples/product-search/
 ---
 
+{{% notice style="info" title="Prerequisites" %}}
+Before reading this document, understand these concepts first:
+- [Data Modeling](../data-modeling/) - Analyzer, text vs keyword types
+- [Query DSL](../query-dsl/) - match, multi_match queries
+{{% /notice %}}
+
 This document covers how to optimize Korean language search in Elasticsearch. We'll implement the Nori analyzer, autocomplete, and initial consonant (chosung) search.
+
+Korean has fundamentally different linguistic characteristics from English, making proper search impossible with the default English analyzer. Searching "Samsung Electronics" (삼성전자) won't find "Samsung Electronics Inc." (삼성전자가) or "Samsung Electronics Co." (삼성전자를), and it can't extract "purchase" (구매) from "purchased" (구매했습니다). When users can't find results they expect to find, they lose trust in the search service.
+
+The core of Korean search is **morphological analysis**. You must separate particles, properly decompose compound nouns, and extract stems. Elasticsearch provides the **Nori analyzer** as an official plugin for this purpose. By implementing autocomplete, initial consonant search, and synonym handling on top of this, you can provide the search experience Korean users expect. This document covers step-by-step implementation methods for Korean search that can be used in production services.
 
 ## Challenges of Korean Search
 
@@ -13,12 +33,12 @@ This document covers how to optimize Korean language search in Elasticsearch. We
 | Characteristic | English | Korean |
 |----------------|---------|--------|
 | **Word Separation** | Space-separated | Particles attached |
-| **Stem Changes** | running → run | 먹었다 → 먹다 |
-| **Synonyms** | car, automobile | 자동차, 차, 차량 |
-| **Typos** | helo → hello | ㅎㅏㄴ글 → 한글 |
+| **Stem Changes** | running → run | 먹었다 (ate) → 먹다 (eat) |
+| **Synonyms** | car, automobile | 자동차, 차, 차량 (car, vehicle) |
+| **Typos** | helo → hello | ㅎㅏㄴ글 → 한글 (Korean) |
 
 ```
-Example: "삼성전자 갤럭시를 구매했습니다" (Samsung Electronics Galaxy purchase)
+Example: "삼성전자 갤럭시를 구매했습니다" (Purchased Samsung Electronics Galaxy)
 
 English analyzer: ["삼성전자", "갤럭시를", "구매했습니다"]  ❌ Not searchable
 Korean analyzer: ["삼성", "전자", "갤럭시", "구매"]  ✅ Individual terms searchable
@@ -139,8 +159,8 @@ PUT /products
 }
 ```
 
-| decompound_mode | Description | "삼성전자" Result |
-|-----------------|-------------|-------------------|
+| decompound_mode | Description | "삼성전자" (Samsung Electronics) Result |
+|-----------------|-------------|----------------------------------------|
 | `none` | No decomposition | ["삼성전자"] |
 | `discard` | Remove original | ["삼성", "전자"] |
 | `mixed` | Keep both | ["삼성전자", "삼성", "전자"] |
@@ -214,20 +234,20 @@ PUT /products
 // Indexing
 POST /products/_doc
 {
-  "name": "Samsung Galaxy S24 Ultra"
+  "name": "삼성 갤럭시 S24 울트라"
 }
 
-// Search with "Galax"
+// Search with "갤럭" (Galax)
 GET /products/_search
 {
   "query": {
     "match": {
-      "name": "Galax"
+      "name": "갤럭"
     }
   }
 }
 
-// Result: "Samsung Galaxy S24 Ultra" matched
+// Result: "삼성 갤럭시 S24 울트라" matched
 ```
 
 ### Completion Suggester (Faster Approach)
@@ -258,11 +278,11 @@ PUT /products
 // Indexing
 POST /products/_doc
 {
-  "name": "Samsung Galaxy S24 Ultra",
+  "name": "삼성 갤럭시 S24 울트라",
   "name_suggest": {
-    "input": ["Samsung", "Galaxy", "S24", "Ultra", "Samsung Galaxy"],
+    "input": ["삼성", "갤럭시", "S24", "울트라", "삼성 갤럭시"],
     "contexts": {
-      "category": "smartphone"
+      "category": "스마트폰"
     }
   }
 }
@@ -272,12 +292,12 @@ POST /products/_search
 {
   "suggest": {
     "product-suggest": {
-      "prefix": "Galax",
+      "prefix": "갤럭",
       "completion": {
         "field": "name_suggest",
         "size": 5,
         "contexts": {
-          "category": "smartphone"
+          "category": "스마트폰"
         }
       }
     }
@@ -406,11 +426,11 @@ PUT /products
         "korean_synonym": {
           "type": "synonym",
           "synonyms": [
-            "car, automobile, vehicle",
-            "laptop, notebook, portable computer",
-            "cellphone, mobile phone, smartphone, phone",
-            "air conditioner, AC, cooling",
-            "tv, television"
+            "자동차, 차, 차량, 카",
+            "노트북, 랩탑, 휴대용컴퓨터",
+            "핸드폰, 휴대폰, 스마트폰, 폰",
+            "에어컨, 에어콘, 냉방기",
+            "tv, 티비, 텔레비전"
           ]
         }
       },
@@ -434,8 +454,8 @@ PUT /products
 
 ```text
 # config/synonyms_ko.txt
-car, automobile, vehicle
-laptop, notebook, portable computer
+자동차, 차, 차량, 카
+노트북, 랩탑, 휴대용컴퓨터
 ```
 
 ```json
@@ -569,7 +589,7 @@ GET /products/_search
       "must": [
         {
           "multi_match": {
-            "query": "Samsung Galaxy",
+            "query": "삼성 갤럭시",
             "fields": [
               "name^3",
               "name.autocomplete^2",
@@ -583,8 +603,8 @@ GET /products/_search
         }
       ],
       "filter": [
-        { "term": { "category": "smartphone" } },
-        { "range": { "price": { "gte": 500, "lte": 1500 } } }
+        { "term": { "category": "스마트폰" } },
+        { "range": { "price": { "gte": 500000, "lte": 1500000 } } }
       ]
     }
   },

@@ -2,9 +2,29 @@
 title: Search Relevance
 weight: 4
 lastmod: 2026-01-08
+prerequisites:
+  - title: Query DSL
+    path: /docs/elasticsearch/concepts/query-dsl/
+  - title: Data Modeling
+    path: /docs/elasticsearch/concepts/data-modeling/
+related_concepts:
+  - title: Aggregations
+    path: /docs/elasticsearch/concepts/aggregations/
+  - title: Korean Search Optimization
+    path: /docs/elasticsearch/concepts/korean-search/
 ---
 
+{{% notice style="info" title="Prerequisites" %}}
+Before reading this document, understand these concepts first:
+- [Query DSL](../query-dsl/) - match, bool query basics
+- [Data Modeling](../data-modeling/) - Analyzer operation principles
+{{% /notice %}}
+
 Learn relevance tuning methods including Score, BM25, and Boosting to improve search result quality.
+
+The core value of a search engine is enabling users to find what they want **on the first page**. No matter how quickly results are returned, if what users want is on page 10, it's meaningless. Search Relevance is the key concept for solving this problem.
+
+Elasticsearch uses the BM25 algorithm by default to assign a relevance score to each document. However, default scores alone often cannot meet business requirements. Requirements like "prioritize promotional products," "give bonus points to recent products," or "deprioritize out-of-stock items" are implemented through Boosting and Function Score. This document covers various tuning techniques to improve search quality.
 
 ## What is Score?
 
@@ -91,6 +111,26 @@ GET /products/_search
   "explain": true,
   "query": {
     "match": { "name": "MacBook" }
+  }
+}
+```
+
+Response (simplified):
+```json
+{
+  "_explanation": {
+    "value": 1.234,
+    "description": "weight(name:MacBook)",
+    "details": [
+      {
+        "value": 0.876,
+        "description": "idf, computed as..."
+      },
+      {
+        "value": 1.41,
+        "description": "tf, computed as freq=1.0..."
+      }
+    ]
   }
 }
 ```
@@ -212,6 +252,28 @@ GET /products/_search
 }
 ```
 
+### score_mode Options
+
+| Value | Description |
+|-------|-------------|
+| `multiply` | Multiply function results |
+| `sum` | Sum function results |
+| `avg` | Average of function results |
+| `max` | Maximum of function results |
+| `min` | Minimum of function results |
+| `first` | Use only first function result |
+
+### boost_mode Options
+
+| Value | Description |
+|-------|-------------|
+| `multiply` | Original score × function result |
+| `replace` | Replace with function result |
+| `sum` | Original score + function result |
+| `avg` | Average |
+| `max` | Maximum of both |
+| `min` | Minimum of both |
+
 ### Practical Example: Product Search Ranking
 
 ```json
@@ -274,6 +336,12 @@ GET /products/_search
 
 Decrease scores based on distance or time.
 
+```mermaid
+graph LR
+    A[origin<br>Reference point] --> B[scale<br>Decay range]
+    B --> C[decay<br>Decay rate]
+```
+
 | Function | Decay Shape |
 |----------|-------------|
 | `linear` | Linear decay |
@@ -299,6 +367,9 @@ Decrease scores based on distance or time.
 ## Search Quality Improvement Techniques
 
 ### 1. Synonym Handling
+
+Configure custom Analyzer for synonym handling.
+→ [Analyzer basics](../data-modeling/#analyzer)
 
 ```json
 PUT /products

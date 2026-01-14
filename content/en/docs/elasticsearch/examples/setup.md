@@ -1,8 +1,15 @@
 ---
 title: Environment Setup
 weight: 1
-lastmod: 2026-01-08
+lastmod: 2026-01-10
 ---
+
+{{% notice style="tip" title="TL;DR" %}}
+- Quickly set up Elasticsearch 8.11 + Kibana environment with **Docker Compose**
+- Complete integration setup with **Spring Boot 3.2** + Spring Data Elasticsearch
+- Install **Nori analyzer** for Korean search
+- Total time required: approximately 15 minutes
+{{% /notice %}}
 
 {{% notice style="info" title="Version Information" %}}
 - **Elasticsearch / Kibana**: 8.11.0
@@ -111,6 +118,12 @@ docker-compose down
 docker-compose down -v
 ```
 
+{{% notice style="note" title="Key Points" %}}
+- `single-node` mode is for development environments only
+- `xpack.security.enabled=false` is for development; always enable it in production
+- Ensure ports 9200 (REST API) and 5601 (Kibana) are open
+{{% /notice %}}
+
 ---
 
 ## Spring Boot Project Setup
@@ -184,6 +197,12 @@ public class ElasticsearchConfig extends ElasticsearchConfiguration {
 }
 ```
 
+{{% notice style="note" title="Key Points" %}}
+- Complete integration setup with a single `spring-boot-starter-data-elasticsearch` dependency
+- The `uris` setting in `application.yml` must match the Docker environment
+- Setting the log level to DEBUG allows you to see ES queries
+{{% /notice %}}
+
 ---
 
 ## Korean Analyzer (Nori) Setup
@@ -201,14 +220,68 @@ FROM docker.elastic.co/elasticsearch/elasticsearch:8.11.0
 RUN bin/elasticsearch-plugin install analysis-nori
 ```
 
+### Modify docker-compose.yml
+
+```yaml
+services:
+  elasticsearch:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # ... rest of the configuration remains the same
+```
+
 ### Verify Nori Operation
 
 ```json
 GET /_analyze
 {
   "tokenizer": "nori_tokenizer",
-  "text": "Samsung Electronics released a new smartphone"
+  "text": "삼성전자가 새로운 스마트폰을 출시했다"
 }
+```
+
+Response:
+```json
+{
+  "tokens": [
+    { "token": "삼성", "position": 0 },
+    { "token": "전자", "position": 1 },
+    { "token": "새롭", "position": 3 },
+    { "token": "스마트폰", "position": 5 },
+    { "token": "출시", "position": 7 }
+  ]
+}
+```
+
+{{% notice style="note" title="Key Points" %}}
+- Nori installation uses the `elasticsearch-plugin install analysis-nori` command in the Dockerfile
+- Verify analyzer operation by checking tokenization results with the `_analyze` API
+- Use `decompound_mode: mixed` to decompose compound words (e.g., `삼성전자` → `삼성`, `전자`)
+{{% /notice %}}
+
+---
+
+## Project Structure
+
+```
+examples/elasticsearch-quick-start/
+├── build.gradle.kts
+├── docker/
+│   ├── Dockerfile
+│   └── docker-compose.yml
+├── src/main/java/com/example/
+│   ├── ElasticsearchApplication.java
+│   ├── config/
+│   │   └── ElasticsearchConfig.java
+│   ├── domain/
+│   │   └── Product.java
+│   ├── repository/
+│   │   └── ProductRepository.java
+│   └── controller/
+│       └── ProductController.java
+└── src/main/resources/
+    └── application.yml
 ```
 
 ---
@@ -242,6 +315,23 @@ echo "vm.max_map_count=262144" | sudo tee -a /etc/sysctl.conf
 
 **Docker Desktop (Mac/Windows):**
 Set Resources → Memory to 4GB or higher in Docker Desktop settings
+
+### Spring Boot Connection Failure
+
+```
+Elasticsearch cluster not available: connect timed out
+```
+
+**Solution:**
+1. Verify the `uris` address in `application.yml`
+2. Wait for Elasticsearch to fully start (check healthcheck passes)
+3. Verify Docker network settings (check if on same network)
+
+{{% notice style="note" title="Key Points" %}}
+- Most connection issues occur when attempting to connect before Elasticsearch is fully started
+- Check status with `docker-compose ps`, verify response with `curl localhost:9200`
+- On Linux, the `vm.max_map_count` setting is mandatory
+{{% /notice %}}
 
 ---
 

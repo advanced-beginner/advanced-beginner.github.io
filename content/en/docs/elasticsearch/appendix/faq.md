@@ -1,8 +1,16 @@
 ---
 title: FAQ
 weight: 2
-lastmod: 2026-01-08
+lastmod: 2026-01-10
 ---
+
+{{% notice style="tip" title="TL;DR" %}}
+- **ES vs RDB**: Use ES for full-text search/log analysis, RDB for transactions/JOINs
+- **text vs keyword**: text is for search (analyzed), keyword is for filter/sort (not analyzed)
+- **Performance issues**: Use Filter Context, return only needed fields, `search_after` pagination
+- **Korean search**: Nori analyzer installation required
+- **Common errors**: Most caused by disk shortage, memory shortage, or type mismatch
+{{% /notice %}}
 
 Frequently asked questions and answers.
 
@@ -177,18 +185,37 @@ Use **Fuzzy search**:
 
 ### 1. "index read-only / allow delete" error
 
+**Symptoms:**
+```
+ClusterBlockException: index [products] blocked by: [FORBIDDEN/12/index read-only / allow delete (api)]
+```
+
 **Cause:** Index automatically converted to read-only when disk usage exceeds 95%
 
 **Solution:**
 ```json
-// After freeing disk space
+// 1. After freeing disk space
+// 2. Release read-only
 PUT /products/_settings
+{
+  "index.blocks.read_only_allow_delete": null
+}
+
+// Release all indices at once
+PUT /_all/_settings
 {
   "index.blocks.read_only_allow_delete": null
 }
 ```
 
+**Prevention:** Set alerts at 80% disk usage
+
 ### 2. "Result window is too large" error
+
+**Symptoms:**
+```
+IllegalArgumentException: Result window is too large, from + size must be less than or equal to: [10000]
+```
 
 **Cause:** By default, `from + size` total cannot exceed 10,000
 
@@ -201,22 +228,43 @@ GET /products/_search
   "sort": [{ "created_at": "desc" }, { "_id": "asc" }],
   "search_after": ["2024-01-15T10:00:00", "abc123"]
 }
+
+// Method 2: Scroll API (for bulk export)
+POST /products/_search?scroll=1m
+{ "size": 1000, "query": { "match_all": {} } }
+
+// Method 3: Relax limit (not recommended - memory burden)
+PUT /products/_settings
+{ "index.max_result_window": 50000 }
 ```
 
 ### 3. "mapper_parsing_exception" error
+
+**Symptoms:**
+```
+MapperParsingException: failed to parse field [price] of type [integer]
+```
 
 **Cause:** Data that doesn't match field type
 
 **Solution:**
 ```json
-// Wrong
+// Wrong examples
 { "price": "one thousand" }     // String in integer field
+{ "price": 1000.5 }     // Decimal in integer field
 
-// Correct
+// Correct example
 { "price": 1000 }
 ```
 
+**Prevention:** Use `dynamic: strict` setting to prevent unexpected fields
+
 ### 4. "circuit_breaking_exception" error
+
+**Symptoms:**
+```
+CircuitBreakingException: [parent] Data too large, data for [<http_request>] would be [xxx/xxxgb]
+```
 
 **Cause:** Query trying to use too much memory
 
@@ -233,16 +281,222 @@ GET /products/_search
     }
   }
 }
+
+// 2. Increase Heap memory (jvm.options)
+-Xms4g
+-Xmx4g
 ```
 
 ### 5. "rejected execution" error
+
+**Symptoms:**
+```
+EsRejectedExecutionException: rejected execution of search on EsThreadPoolExecutor
+```
 
 **Cause:** Search/indexing requests exceeded thread pool queue capacity
 
 **Solution:**
 ```json
+// 1. Add nodes to distribute load
+// 2. Implement client-side retry logic
+// 3. Adjust Bulk request size
+
 // Check thread pool status
 GET /_cat/thread_pool?v&h=node_name,name,active,queue,rejected
+```
+
+---
+
+### 6. "ClusterBlockException: no master" error
+
+**Symptoms:**
+```
+MasterNotDiscoveredException: null
+ClusterBlockException: blocked by: [SERVICE_UNAVAILABLE/2/no master]
+```
+
+**Cause:** Master node election failure (network partition, node failure)
+
+**Solution:**
+```bash
+# 1. Check node status
+GET /_cat/nodes?v
+
+# 2. Check cluster status
+GET /_cluster/health
+
+# 3. Verify master eligible nodes are majority
+# Recommended: 3 or more Master eligible nodes
+```
+
+---
+
+### 7. "shard failed" / "all shards failed" error
+
+**Symptoms:**
+```
+SearchPhaseExecutionException: all shards failed
+```
+
+**Cause:** All search target shards failed (node down, shard corruption)
+
+**Solution:**
+```json
+// 1. Check cluster status
+GET /_cluster/health?level=shards
+
+// 2. Check unassigned shard reasons
+GET /_cluster/allocation/explain
+
+// 3. Check specific index shard status
+GET /_cat/shards/products?v&h=index,shard,prirep,state,node,unassigned.reason
+```
+
+---
+
+### 8. "version conflict" error
+
+**Symptoms:**
+```
+VersionConflictEngineException: [1]: version conflict, current version [5] is different than the one provided [4]
+```
+
+**Cause:** Optimistic Locking conflict - concurrent modification attempts
+
+**Solution:**
+```json
+// Method 1: Use retry_on_conflict
+POST /products/_update/1?retry_on_conflict=3
+{
+  "doc": { "price": 2000000 }
+}
+
+// Method 2: Use if_seq_no instead of explicit version
+PUT /products/_doc/1?if_seq_no=10&if_primary_term=1
+{
+  "name": "MacBook Pro",
+  "price": 2000000
+}
+```
+
+---
+
+### 9. "connection refused" / "connection timeout" error
+
+**Symptoms:**
+```
+ConnectException: Connection refused: localhost:9200
+java.net.SocketTimeoutException: connect timed out
+```
+
+**Cause:** Elasticsearch not running / network issues
+
+**Solution:**
+```bash
+# 1. Check ES process
+ps aux | grep elasticsearch
+docker ps | grep elasticsearch
+
+# 2. Check port listening
+lsof -i :9200
+netstat -tlnp | grep 9200
+
+# 3. Check firewall
+sudo iptables -L -n | grep 9200
+
+# 4. Check ES logs
+tail -f /var/log/elasticsearch/elasticsearch.log
+docker logs elasticsearch
+```
+
+---
+
+### 10. "OOM (OutOfMemoryError)" error
+
+**Symptoms:**
+```
+java.lang.OutOfMemoryError: Java heap space
+```
+
+**Cause:** JVM Heap memory shortage
+
+**Solution:**
+```bash
+# 1. Increase Heap size (jvm.options)
+-Xms8g
+-Xmx8g
+
+# Note: Keep below 50% of system memory, max 30-31GB
+
+# 2. Check memory usage
+GET /_nodes/stats/jvm
+
+# 3. Check fielddata cache (issues when aggregating text fields)
+GET /_nodes/stats/indices/fielddata
+
+# 4. Limit fielddata cache
+PUT /_cluster/settings
+{
+  "persistent": {
+    "indices.fielddata.cache.size": "20%"
+  }
+}
+```
+
+---
+
+### 11. "no such index" error
+
+**Symptoms:**
+```
+IndexNotFoundException: no such index [products]
+```
+
+**Cause:** Accessing non-existent index
+
+**Solution:**
+```json
+// 1. Check index existence
+HEAD /products
+
+// 2. Check index list
+GET /_cat/indices?v
+
+// 3. Check Alias (when accessing via Alias)
+GET /_cat/aliases?v
+```
+
+---
+
+### 12. "illegal_argument_exception: Text fields are not optimised for operations" error
+
+**Symptoms:**
+```
+IllegalArgumentException: Text fields are not optimised for operations that require per-document field data like aggregations and sorting
+```
+
+**Cause:** Attempting to sort/aggregate on text type field
+
+**Solution:**
+```json
+// Method 1: Use keyword subfield
+GET /products/_search
+{
+  "sort": [{ "name.keyword": "asc" }],
+  "aggs": {
+    "names": { "terms": { "field": "name.keyword" } }
+  }
+}
+
+// Method 2: Define as keyword type from the start
+{
+  "mappings": {
+    "properties": {
+      "category": { "type": "keyword" }
+    }
+  }
+}
 ```
 
 ---

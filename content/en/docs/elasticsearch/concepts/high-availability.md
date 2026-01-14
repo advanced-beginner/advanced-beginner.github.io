@@ -110,7 +110,7 @@ PUT /_snapshot/my_s3_backup
   "type": "s3",
   "settings": {
     "bucket": "my-elasticsearch-backups",
-    "region": "us-east-1",
+    "region": "ap-northeast-2",
     "base_path": "snapshots"
   }
 }
@@ -208,10 +208,10 @@ Replicate data to a remote cluster in real-time.
 
 ```mermaid
 flowchart LR
-    subgraph Leader["Leader Cluster (Primary)"]
+    subgraph Leader["Leader Cluster (Seoul)"]
         L[products]
     end
-    subgraph Follower["Follower Cluster (DR)"]
+    subgraph Follower["Follower Cluster (Busan)"]
         F[products-replica]
     end
 
@@ -353,16 +353,16 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-    subgraph RegionA["Region A Cluster"]
+    subgraph Seoul["Seoul Cluster"]
         S[products]
     end
-    subgraph RegionB["Region B Cluster"]
+    subgraph Busan["Busan Cluster"]
         B[products]
     end
 
-    RegionAClient --> RegionA
-    RegionBClient --> RegionB
-    RegionA <-->|Bidirectional CCR| RegionB
+    SeoulClient --> Seoul
+    BusanClient --> Busan
+    Seoul <-->|Bidirectional CCR| Busan
 ```
 
 - Read/write in each region

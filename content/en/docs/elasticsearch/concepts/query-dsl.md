@@ -1,8 +1,19 @@
 ---
 title: Query DSL
 weight: 3
-lastmod: 2026-01-08
+lastmod: 2026-01-10
 ---
+
+{{< callout type="tip" title="TL;DR" >}}
+- **Query Context**: Full-text search that calculates relevance score
+- **Filter Context**: Only checks conditions without score, cached for speed
+- **match/match_phrase**: Used for full-text search (text fields)
+- **term/terms/range**: Used for exact value search (keyword fields)
+- **bool**: Combines queries with must/should/must_not/filter
+{{< /callout >}}
+
+**Target Audience**: Developers who understand Elasticsearch basics
+**Prerequisites**: [Core Components](../core-components/), JSON basics
 
 Learn how to write various search queries using Elasticsearch's Query DSL (Domain Specific Language).
 
@@ -46,7 +57,7 @@ GET /products/_search
       ],
       "filter": [
         { "term": { "category": "Laptop" } },   // Filter context (cached)
-        { "range": { "price": { "lte": 2000 } } }
+        { "range": { "price": { "lte": 2000000 } } }
       ]
     }
   }
@@ -54,6 +65,12 @@ GET /products/_search
 ```
 
 > **Performance Tip:** Put exact value comparisons in `filter` to benefit from caching.
+
+{{< callout type="info" title="Key Points" >}}
+- Query Context calculates "how well does it match" and assigns a score
+- Filter Context only determines "does it match or not" and is cached
+- Put exact value filtering (category, status, etc.) in filter to improve performance
+{{< /callout >}}
 
 ---
 
@@ -160,6 +177,12 @@ GET /products/_search
 | `cross_fields` | Treat multiple fields as one |
 | `phrase` | Search as match_phrase |
 
+{{< callout type="info" title="Key Points" >}}
+- `match`: Basic full-text search, OR condition (change to AND with operator)
+- `match_phrase`: Word order must also match, adjust allowed gap with slop
+- `multi_match`: Search multiple fields simultaneously, set field weights with ^
+{{< /callout >}}
+
 ---
 
 ## Term Level Queries
@@ -218,8 +241,8 @@ GET /products/_search
   "query": {
     "range": {
       "price": {
-        "gte": 1000,   // >=
-        "lte": 2000    // <=
+        "gte": 1000000,   // >=
+        "lte": 2000000    // <=
       }
     }
   }
@@ -331,6 +354,13 @@ GET /products/_search
 | `2` | Allow 2 character differences |
 | `AUTO` | Auto based on length (recommended) |
 
+{{< callout type="info" title="Key Points" >}}
+- `term`: Don't use on text fields! Use on keyword fields or `.keyword` subfields
+- `range`: Range search with gte/gt/lte/lt, use relative expressions like `now-7d` for dates
+- `wildcard`: Very slow when `*` comes first, avoid if possible
+- `fuzzy`: Typo-tolerant search with fuzziness=AUTO
+{{< /callout >}}
+
 ---
 
 ## Bool Query
@@ -353,7 +383,7 @@ GET /products/_search
 
 ### Practical Example: Product Search
 
-"Category is Laptop, price $1000-$2000, 'MacBook' keyword, exclude out of stock"
+"Category is Laptop, price $1,000,000-$2,000,000, 'MacBook' keyword, exclude out of stock"
 
 ```json
 GET /products/_search
@@ -365,7 +395,7 @@ GET /products/_search
       ],
       "filter": [
         { "term": { "category": "Laptop" } },
-        { "range": { "price": { "gte": 1000, "lte": 2000 } } }
+        { "range": { "price": { "gte": 1000000, "lte": 2000000 } } }
       ],
       "must_not": [
         { "term": { "status": "sold_out" } }
@@ -421,7 +451,7 @@ GET /products/_search
           "bool": {
             "must": [
               { "term": { "brand": "apple" } },
-              { "range": { "price": { "gte": 2000 } } }
+              { "range": { "price": { "gte": 2000000 } } }
             ]
           }
         },
@@ -429,7 +459,7 @@ GET /products/_search
           "bool": {
             "must": [
               { "term": { "brand": "samsung" } },
-              { "range": { "price": { "gte": 1500 } } }
+              { "range": { "price": { "gte": 1500000 } } }
             ]
           }
         }
@@ -438,6 +468,14 @@ GET /products/_search
   }
 }
 ```
+
+{{< callout type="info" title="Key Points" >}}
+- `must`: AND condition, affects score
+- `filter`: AND condition, ignores score, cached (excellent performance)
+- `should`: OR condition, optional if must/filter exists (used for score boosting)
+- `must_not`: NOT condition, excludes matches
+- Bool queries can be nested to express complex conditions
+{{< /callout >}}
 
 ---
 
@@ -518,6 +556,12 @@ Response:
 }
 ```
 
+{{< callout type="info" title="Key Points" >}}
+- `from + size` is limited to 10,000 by default, use `search_after` for large pagination
+- Sort with `sort`, limit returned fields with `_source`
+- Highlight search terms with `highlight` (customize with pre_tags/post_tags)
+{{< /callout >}}
+
 ---
 
 ## SQL Comparison
@@ -581,6 +625,12 @@ Response:
   "search_after": ["2024-01-15T10:00:00", "abc123"]
 }
 ```
+
+{{< callout type="info" title="Key Points" >}}
+- Don't use term query on text fields → use match or `.keyword`
+- Put exact value filtering inside filter to benefit from caching
+- Use `search_after` for pagination exceeding 10,000 items
+{{< /callout >}}
 
 ---
 

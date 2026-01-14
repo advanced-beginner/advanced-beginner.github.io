@@ -1,15 +1,35 @@
 ---
 title: Log Analysis System
 weight: 4
-lastmod: 2026-01-08
+lastmod: 2026-01-10
+prerequisites:
+  - title: Aggregations
+    path: /docs/elasticsearch/concepts/aggregations/
+  - title: Indexing Strategy
+    path: /docs/elasticsearch/concepts/indexing/
 ---
+
+{{% notice style="warning" title="Complete Example Project" %}}
+If you want to run this code immediately, use the **complete Spring Boot project**:
+- 📁 [examples/elasticsearch/log-analysis/](https://github.com/advanced-beginner/advanced-beginner.github.io/tree/main/examples/elasticsearch/log-analysis)
+- Instant Elasticsearch + Kibana execution with docker-compose
+- Includes sample log generation API
+{{% /notice %}}
+
+{{% notice style="tip" title="TL;DR" %}}
+- Send application logs directly to Elasticsearch using **Logback Appender**
+- Ensure traceability by automatically including request ID and user ID in logs with **MDC**
+- Analyze error rates and response time percentiles with **Aggregations**
+- Automatically manage log lifecycle (Hot→Warm→Cold→Delete) with **ILM**
+- Total time required: approximately 40 minutes
+{{% /notice %}}
 
 Implement a system to collect, store, and analyze application logs using Elasticsearch.
 
 {{% notice style="info" title="Version Information" %}}
 - **Elasticsearch**: 8.11.x
 - **Spring Boot**: 3.2.x
-- **Logback**: Included in Spring Boot
+- **Logback**: Included in Spring Boot by default
 {{% /notice %}}
 
 ## Implementation Goals
@@ -22,7 +42,7 @@ flowchart LR
 ```
 
 - **Log Collection**: Store application logs directly in Elasticsearch
-- **Real-time Search**: Error logs, specific user request tracing
+- **Real-time Search**: Error log search, specific user request tracing
 - **Dashboards**: Visualize error rates, response time distribution
 - **Alerts**: Notify on error spikes
 
@@ -114,6 +134,12 @@ logs-2024.01.17
 ```
 
 > **Advantage**: Easy to delete old logs (delete by index)
+
+{{% notice style="note" title="Key Points" %}}
+- `@timestamp` is a Date type, the core field for time-series analysis
+- `level` and `logger` are Keyword types for exact filtering
+- Daily index pattern (`logs-*`) makes it easy to delete old data
+{{% /notice %}}
 
 ---
 
@@ -228,6 +254,12 @@ public class RequestTrackingFilter extends OncePerRequestFilter {
     }
 }
 ```
+
+{{% notice style="note" title="Key Points" %}}
+- Prevent logging from affecting application performance with `AsyncAppender`
+- Automatically include context information like requestId and userId in logs with `MDC`
+- Prevent application blocking even when the queue is full with `neverBlock=true`
+{{% /notice %}}
 
 ---
 
@@ -351,6 +383,12 @@ public class LogSearchService {
     }
 }
 ```
+
+{{% notice style="note" title="Key Points" %}}
+- Search all daily indices at once with `IndexCoordinates.of("logs-*")`
+- Trace all logs for a specific request with `request_id`
+- Implement time range filtering with `range` query
+{{% /notice %}}
 
 ---
 
@@ -512,6 +550,12 @@ public class LogAnalyticsService {
 }
 ```
 
+{{% notice style="note" title="Key Points" %}}
+- Analyze error trends by time period with `dateHistogram`
+- Calculate response time p50, p90, p95, p99 with `percentiles`
+- Get only aggregation results without documents using `withMaxResults(0)`
+{{% /notice %}}
+
 ---
 
 ## 5. Index Lifecycle Management (ILM)
@@ -583,6 +627,13 @@ PUT /_index_template/logs
 }
 ```
 
+{{% notice style="note" title="Key Points" %}}
+- **Hot**: Latest data, fast search on SSD
+- **Warm**: Data after 7 days, save resources with shard shrinking
+- **Cold**: Data after 30 days, low-cost storage
+- **Delete**: Automatic deletion after 90 days for storage management
+{{% /notice %}}
+
 ---
 
 ## 6. Kibana Dashboard Setup
@@ -642,6 +693,12 @@ if (log.isDebugEnabled()) {
   }
 }
 ```
+
+{{% notice style="note" title="Key Points" %}}
+- **Logging performance**: Use `log.debug("{}", value)` format to avoid unnecessary string concatenation
+- **refresh_interval**: Increasing the value improves indexing performance but causes search delays
+- **High-volume logs**: Use `translog.durability: async` to improve write performance
+{{% /notice %}}
 
 ---
 
