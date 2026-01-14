@@ -1,8 +1,19 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-14"
 title: Advanced Type System
 weight: 14
 ---
+
+{{< callout type="info" title="TL;DR" >}}
+- **Union Types (`|`)**: One of several types, `Int | String`
+- **Intersection Types (`&`)**: Satisfies all types, `A & B`
+- **Opaque Types**: Type safety without runtime overhead
+- **Match Types**: Type-level pattern matching
+- Scala 3-only features for more powerful type expression
+{{< /callout >}}
+
+**Target Audience:** Scala developers who understand generics and variance
+**Prerequisites:** Type parameters, type bounds, variance
 
 Scala 3 provides an even more powerful and expressive type system. This document covers Scala 3's new type features.
 
@@ -11,11 +22,11 @@ Scala 3 provides an even more powerful and expressive type system. This document
 > - [Variance](../variance/) - Variance concepts
 > - [Pattern Matching](../pattern-matching/) - Basic pattern matching
 >
-> **Difficulty**: Advanced - Includes Scala 3-only features
+> **Difficulty**: ⭐⭐⭐⭐ (Advanced) - Includes Scala 3-only features
 
-## Union Types (|)
+#### Union Types (|)
 
-Represents one of several types.
+Union Types represent one of several types. You can work directly with values without wrappers, making them more concise than Either.
 
 ```scala
 // Scala 3 only
@@ -35,7 +46,7 @@ def toJson(value: JsonValue): String = value match
   case null       => "null"
 ```
 
-### Comparison with Either
+**Comparison with Either**
 
 ```scala
 // Either: Requires explicit Left/Right wrapper
@@ -47,9 +58,15 @@ def divideUnion(a: Int, b: Int): Int | String =
   if b == 0 then "Cannot divide by zero" else a / b
 ```
 
-## Intersection Types (&)
+{{< callout type="info" title="Key Points" >}}
+- Union Type represents one of several types in form `A | B`
+- Unlike Either, works directly with values without wrappers
+- Use pattern matching to distinguish and handle types
+{{< /callout >}}
 
-A type that satisfies multiple types.
+#### Intersection Types (&)
+
+Intersection Types satisfy multiple types simultaneously. Useful when an object must implement multiple traits at once.
 
 ```scala
 trait Printable:
@@ -58,7 +75,7 @@ trait Printable:
 trait Serializable:
   def serialize(): Array[Byte]
 
-// A type that is both Printable and Serializable
+// Type that is both Printable and Serializable
 def process(obj: Printable & Serializable): Unit =
   println(obj.print())
   val bytes = obj.serialize()
@@ -71,7 +88,7 @@ class Document(content: String) extends Printable, Serializable:
 process(Document("Hello"))
 ```
 
-### Structural Type Combination
+**Structural Type Combination**
 
 ```scala
 type Named = { def name: String }
@@ -81,9 +98,15 @@ def describe(obj: Named & Aged): String =
   s"${obj.name}, ${obj.age} years old"
 ```
 
-## Opaque Types
+{{< callout type="info" title="Key Points" >}}
+- Intersection Type satisfies all types in form `A & B`
+- Used when an object must implement multiple traits simultaneously
+- Can be combined with structural types for flexible type definitions
+{{< /callout >}}
 
-Type aliases that are treated as different types externally.
+#### Opaque Types
+
+Opaque Types are type aliases that are treated as different types externally. They provide type safety without runtime overhead, very useful for domain modeling.
 
 ```scala
 object UserId:
@@ -104,10 +127,10 @@ id.isValid     // true
 // val x: Long = id  // Compile error! UserId != Long
 ```
 
-### Benefits
+**Benefits**
 
 - No runtime overhead (no boxing)
-- Type safety
+- Provides type safety
 - Useful for domain modeling
 
 ```scala
@@ -131,9 +154,15 @@ val total = dollars + more  // OK: USD + USD
 // val mixed = dollars + eur(50)  // Compile error! USD + EUR
 ```
 
-## Match Types
+{{< callout type="info" title="Key Points" >}}
+- Opaque Type is a type alias treated as different type externally
+- Provides type safety without runtime overhead (no boxing)
+- Useful for preventing type confusion in domain modeling
+{{< /callout >}}
 
-Perform pattern matching at the type level.
+#### Match Types
+
+Match Types perform pattern matching at the type level. They can compute different result types based on input types.
 
 ```scala
 type Elem[X] = X match
@@ -146,7 +175,7 @@ val b: Elem[Array[Int]] = 1      // Int
 val c: Elem[List[String]] = "hi" // String
 ```
 
-### Recursive Match Types
+**Recursive Match Types**
 
 ```scala
 type Flatten[X] = X match
@@ -157,9 +186,15 @@ type Flatten[X] = X match
 val x: Flatten[List[List[List[Int]]]] = List(1, 2, 3)
 ```
 
-## Type Lambdas
+{{< callout type="info" title="Key Points" >}}
+- Match Type performs pattern matching at type level
+- Computes different result types based on input types
+- Complex type transformations possible with recursive Match Types
+{{< /callout >}}
 
-Pass type constructors as type parameters.
+#### Type Lambdas
+
+Type Lambdas allow you to pass type constructors as type parameters. Useful when working with higher-kinded types.
 
 ```scala
 // Type lambda: [X] =>> F[X, Y]
@@ -175,9 +210,15 @@ val ok: Result[Int] = Right(42)
 val err: Result[Int] = Left("Error")
 ```
 
-## Dependent Function Types
+{{< callout type="info" title="Key Points" >}}
+- Type Lambda expresses type constructors in form `[X] =>> F[X]`
+- Useful for partial application of type parameters when working with higher-kinded types
+- Provides a concise alternative to Scala 2's complex syntax
+{{< /callout >}}
 
-Return type depends on parameter value.
+#### Dependent Function Types
+
+Dependent Function Types are function types where the return type depends on the parameter value.
 
 ```scala
 trait Key:
@@ -193,9 +234,9 @@ def get(key: Key): key.Value = ???
 val getter: (key: Key) => key.Value = (key: Key) => ???
 ```
 
-## Polymorphic Function Types
+#### Polymorphic Function Types
 
-Function types with type parameters.
+Polymorphic Function Types are function types with type parameters. Function values themselves can be generic.
 
 ```scala
 // Polymorphic function type
@@ -210,7 +251,9 @@ val head: [A] => List[A] => A = [A] => (list: List[A]) => list.head
 head(List(1, 2, 3))  // 1
 ```
 
-## Comparison with Scala 2
+#### Comparison with Scala 2
+
+The table below summarizes differences in advanced type features between Scala 2 and Scala 3.
 
 | Feature | Scala 2 | Scala 3 |
 |---------|---------|---------|
@@ -220,9 +263,9 @@ head(List(1, 2, 3))  // 1
 | Match Types | Not possible | Supported |
 | Type Lambdas | Complex syntax | `[X] =>> F[X]` |
 
-## Exercises
+#### Exercises
 
-### 1. Implement Opaque Type
+**1. Implement Opaque Type ⭐⭐**
 
 Implement an `Email` opaque type. Include validation.
 
@@ -253,7 +296,7 @@ valid.foreach(e => println(e.domain))   // "example.com"
 
 </details>
 
-## Next Steps
+#### Next Steps
 
 - [Macros](../macros-metaprogramming/) — Compile-time code generation
 - [Functional Patterns](../functional-patterns/) — Functor, Monad

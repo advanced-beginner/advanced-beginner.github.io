@@ -1,12 +1,24 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-14"
 title: Pattern Matching
 weight: 6
 ---
 
-Pattern matching is one of Scala's most powerful features. It elegantly handles analyzing value structures, extracting data, and branching based on conditions.
+{{< callout type="info" title="TL;DR" >}}
+- Pattern matching is a powerful feature for analyzing value structures and extracting data
+- Supports various patterns: literals, variables, types, tuples, case classes, sequences, and more
+- Guards (`if`) add conditions, `@` binds the entire value
+- Compiler checks exhaustiveness for `sealed` types
+{{< /callout >}}
 
-## Basic match Expression
+**Target Audience:** Developers familiar with basic Scala syntax
+**Prerequisites:** Case classes, basic type system
+
+Pattern matching is one of Scala's most powerful features. It elegantly handles value structure analysis, data extraction, and conditional branching. Unlike Java's switch statement, Scala's match is an expression that returns a value and provides much richer functionality including type matching, destructuring, guard conditions, and more.
+
+#### Basic match Expression
+
+A match expression compares a value against multiple patterns in order and returns the result of the first matching case. The wildcard pattern (`_`) matches any value, so it's used as a default.
 
 ```scala
 val x = 3
@@ -15,14 +27,18 @@ val result = x match {
   case 1 => "one"
   case 2 => "two"
   case 3 => "three"
-  case _ => "other"  // Wildcard (default)
+  case _ => "other"  // wildcard (default)
 }
 println(result)  // three
 ```
 
-## Types of Patterns
+#### Pattern Types
 
-### 1. Literal Pattern
+Scala supports various types of patterns. You can match literal values, variable bindings, type checks, tuples, case classes, sequences, and more.
+
+**1. Literal Pattern**
+
+Matches directly against literal values like integers, strings, and booleans.
 
 ```scala
 def describe(x: Any): String = x match {
@@ -34,51 +50,57 @@ def describe(x: Any): String = x match {
 }
 ```
 
-### 2. Variable Pattern
+**2. Variable Pattern**
+
+Names starting with lowercase are variable patterns that bind the matched value. Names starting with uppercase are interpreted as constant references.
 
 ```scala
 val x = 42
 
 x match {
-  case n => println(s"Value is $n")  // n binds to x
+  case n => println(s"value is $n")  // n is bound to x
 }
 
 // Note: lowercase names are variable patterns
-// Uppercase names are constant references
+// uppercase names are constant references
 val One = 1
 val two = 2
 
 x match {
-  case One => "Matches constant One"
-  case two => "Matches any value (variable pattern)"
-  // case `two` => "Backticks treat as constant"
+  case One => "matches constant One"
+  case two => "matches any value (variable pattern)"
+  // case `two` => "treats as constant with backticks"
 }
 ```
 
-### 3. Type Pattern
+**3. Type Pattern**
+
+Checks the runtime type of a value and casts it to that type. Safer than isInstanceOf/asInstanceOf.
 
 ```scala
 def describe(x: Any): String = x match {
-  case i: Int       => s"Integer: $i"
-  case s: String    => s"String: $s (length: ${s.length})"
-  case d: Double    => s"Double: $d"
-  case l: List[_]   => s"List (length: ${l.length})"
-  case _            => "Unknown type"
+  case i: Int       => s"integer: $i"
+  case s: String    => s"string: $s (length: ${s.length})"
+  case d: Double    => s"double: $d"
+  case l: List[_]   => s"list (length: ${l.length})"
+  case _            => "unknown type"
 }
 
-println(describe(42))          // Integer: 42
-println(describe("hello"))     // String: hello (length: 5)
-println(describe(List(1,2,3))) // List (length: 3)
+println(describe(42))          // integer: 42
+println(describe("hello"))     // string: hello (length: 5)
+println(describe(List(1,2,3))) // list (length: 3)
 ```
 
-### 4. Tuple Pattern
+**4. Tuple Pattern**
+
+Deconstructs each element of a tuple. Nested tuples are also supported.
 
 ```scala
 val pair = (1, "one")
 
 pair match {
-  case (1, s)    => s"One: $s"
-  case (2, s)    => s"Two: $s"
+  case (1, s)    => s"one: $s"
+  case (2, s)    => s"two: $s"
   case (n, s)    => s"$n: $s"
 }
 
@@ -89,14 +111,16 @@ nested match {
 }
 ```
 
-### 5. Case Class Pattern
+**5. Case Class Pattern**
+
+Deconstructs fields of case classes. Nested case classes can also be deeply deconstructed.
 
 ```scala
 case class Person(name: String, age: Int)
 case class Address(city: String, zipCode: String)
 case class Employee(person: Person, address: Address)
 
-val emp = Employee(Person("John", 30), Address("Seoul", "12345"))
+val emp = Employee(Person("Kim", 30), Address("Seoul", "12345"))
 
 emp match {
   case Employee(Person(name, age), Address(city, _)) =>
@@ -104,21 +128,24 @@ emp match {
 }
 ```
 
-### 6. Sequence Pattern
+**6. Sequence Pattern**
+
+Matches the structure of sequences like lists or arrays. Use `::` to separate head and tail, or `_*` to ignore remaining elements.
 
 ```scala
 val list = List(1, 2, 3, 4, 5)
 
 list match {
-  case Nil            => "Empty list"
-  case head :: Nil    => s"Single element: $head"
-  case head :: tail   => s"First: $head, rest: $tail"
+  case Nil            => "empty list"
+  case head :: Nil    => s"one element: $head"
+  case head :: tail   => s"first: $head, rest: $tail"
 }
 
 // Specific patterns
 list match {
-  case List(1, 2, _*) => "Starts with 1, 2"  // Scala 3
-  case _              => "Other pattern"
+  case List(1, 2, _*) => "starts with 1, 2"  // Scala 3
+  // case List(1, 2, _*) => "starts with 1, 2"  // Scala 2 same
+  case _              => "other pattern"
 }
 
 // Length check
@@ -127,56 +154,67 @@ list match {
   case List(a, b)       => s"2 elements: $a, $b"
   case List(a, b, c)    => s"3 elements: $a, $b, $c"
   case _ :: _ :: _ :: _ => "4 or more elements"
-  case _                => "Empty list"
+  case _                => "empty list"
 }
 ```
 
-### 7. OR Pattern
+**7. OR Pattern**
+
+The `|` operator combines multiple patterns into a single case. Useful when multiple values should perform the same action.
 
 ```scala
 val day = "Monday"
 
 day match {
-  case "Saturday" | "Sunday" => "Weekend"
-  case _                     => "Weekday"
+  case "Saturday" | "Sunday" => "weekend"
+  case _                     => "weekday"
 }
 
 // Numbers
 val n = 5
 n match {
-  case 1 | 2 | 3 => "Small"
-  case 4 | 5 | 6 => "Medium"
-  case _         => "Large"
+  case 1 | 2 | 3 => "small number"
+  case 4 | 5 | 6 => "medium number"
+  case _         => "large number"
 }
 ```
 
-## Guards
+{{< callout type="info" title="Key Points" >}}
+- **Literal patterns**: Match exact values
+- **Variable patterns**: Start with lowercase, bind values
+- **Type patterns**: Runtime type check with safe casting
+- **Tuple/Case class patterns**: Destructure to extract fields
+- **Sequence patterns**: Deconstruct lists with `::`, `_*`
+- **OR patterns**: Combine multiple patterns with `|`
+{{< /callout >}}
 
-Use `if` conditions to further restrict patterns.
+#### Guard
+
+`if` conditions can further restrict patterns. The guard condition is evaluated after the pattern matches. If the guard is false, it moves to the next case.
 
 ```scala
 def classify(n: Int): String = n match {
-  case x if x < 0   => "Negative"
-  case x if x == 0  => "Zero"
-  case x if x < 10  => "Single digit positive"
-  case x if x < 100 => "Two digit positive"
-  case _            => "Three or more digits"
+  case x if x < 0   => "negative"
+  case x if x == 0  => "zero"
+  case x if x < 10  => "single digit positive"
+  case x if x < 100 => "double digit positive"
+  case _            => "three or more digits"
 }
 
 // With case classes
 case class Person(name: String, age: Int)
 
 def describe(p: Person): String = p match {
-  case Person(_, age) if age < 0   => "Invalid age"
-  case Person(name, _) if name.isEmpty => "No name"
+  case Person(_, age) if age < 0   => "invalid age"
+  case Person(name, _) if name.isEmpty => "no name"
   case Person(name, age) if age < 18 => s"$name is a minor"
   case Person(name, age)             => s"$name is an adult"
 }
 ```
 
-## Pattern Binding (@)
+#### Pattern Binding (@)
 
-Bind the entire value to a variable while also destructuring.
+The `@` operator binds the entire value to a variable while simultaneously deconstructing its internal structure. Useful when you need the original object after pattern matching.
 
 ```scala
 case class Person(name: String, age: Int)
@@ -185,23 +223,23 @@ val person = Person("Alice", 30)
 
 person match {
   case p @ Person(_, age) if age >= 18 =>
-    println(s"Adult: $p")  // Use entire Person object
+    println(s"adult: $p")  // use entire Person object
   case _ =>
-    println("Minor")
+    println("minor")
 }
 
-// With lists
+// Use with lists
 List(1, 2, 3) match {
   case all @ (first :: rest) =>
-    println(s"All: $all, First: $first, Rest: $rest")
+    println(s"all: $all, first: $first, rest: $rest")
   case _ =>
-    println("Empty list")
+    println("empty list")
 }
 ```
 
-## Extractors
+#### Extractor
 
-Define custom patterns with `unapply` methods.
+Custom patterns can be created by defining the `unapply` method. To support pattern matching for non-case class types, define an extractor directly.
 
 ```scala
 object Even {
@@ -213,8 +251,8 @@ object Odd {
 }
 
 42 match {
-  case Even() => "Even"
-  case Odd()  => "Odd"
+  case Even() => "even"
+  case Odd()  => "odd"
 }
 
 // Extractor that extracts values
@@ -227,25 +265,35 @@ object Email {
 }
 
 "user@example.com" match {
-  case Email(user, domain) => s"User: $user, Domain: $domain"
-  case _ => "Invalid email"
+  case Email(user, domain) => s"user: $user, domain: $domain"
+  case _ => "invalid email"
 }
 ```
 
-## Scala 3 New Features
+{{< callout type="info" title="Key Points" >}}
+- **Guard (`if`)**: Additional condition check after pattern matching
+- **Pattern binding (`@`)**: Bind entire value to variable while deconstructing internal structure
+- **Extractor (`unapply`)**: Define custom patterns to extend pattern matching
+{{< /callout >}}
 
-### Indentation-Based Syntax
+#### Scala 3 New Features
+
+Scala 3 added several new features to pattern matching.
+
+**Indentation-based Syntax**
+
+Match blocks can be defined with indentation instead of braces.
 
 {{< tabs groupid="scala-version" >}}
 {{% tab title="Scala 3" %}}
 ```scala
-// Block defined by indentation without braces
+// Define blocks with indentation without braces
 val x: Any = "hello"
 
 x match
-  case s: String => s"String: $s"
-  case i: Int    => s"Integer: $i"
-  case _         => "Other"
+  case s: String => s"string: $s"
+  case i: Int    => s"integer: $i"
+  case _         => "other"
 ```
 {{% /tab %}}
 {{% tab title="Scala 2" %}}
@@ -253,20 +301,22 @@ x match
 val x: Any = "hello"
 
 x match {
-  case s: String => s"String: $s"
-  case i: Int    => s"Integer: $i"
-  case _         => "Other"
+  case s: String => s"string: $s"
+  case i: Int    => s"integer: $i"
+  case _         => "other"
 }
 ```
 {{% /tab %}}
 {{< /tabs >}}
 
-### @switch Annotation
+**@switch Annotation**
+
+The `@switch` annotation ensures the compiler generates a jump table. If a jump table cannot be generated, a compile error occurs.
 
 ```scala
 import scala.annotation.switch
 
-// Compiler guarantees jump table generation
+// Ensures compiler generates jump table
 def dayOfWeek(n: Int): String = (n: @switch) match
   case 1 => "Mon"
   case 2 => "Tue"
@@ -278,12 +328,12 @@ def dayOfWeek(n: Int): String = (n: @switch) match
   case _ => "?"
 ```
 
-### Match Types (Scala 3 Only)
+**Match Types (Scala 3 only)**
 
-Pattern matching at the type level:
+Match Types are a powerful Scala 3 feature that performs pattern matching at the type level. You can define different output types based on input types.
 
 ```scala
-// Return type determined by input type
+// Return type determined by type
 type Elem[X] = X match
   case String      => Char
   case Array[t]    => t
@@ -295,11 +345,15 @@ val int: Elem[Array[Int]] = 1       // Int
 val str: Elem[List[String]] = "hi"  // String
 ```
 
-> Match Types are an advanced feature used for type-level programming. See [Advanced Types](../type-system-advanced/) for details.
+> 💡 Match Types are an advanced feature used for type-level programming. For details, see [Advanced Type System](../type-system-advanced/).
 
-## Where Pattern Matching is Used
+#### Where Pattern Matching is Used
 
-### 1. val Definition
+Pattern matching is used in various places beyond match expressions.
+
+**1. val Definition**
+
+Values can be deconstructed with patterns during variable declaration.
 
 ```scala
 val (a, b) = (1, 2)
@@ -307,7 +361,9 @@ val Person(name, age) = Person("Alice", 30)
 val head :: tail = List(1, 2, 3)
 ```
 
-### 2. for Expression
+**2. for Expression**
+
+Using patterns in for comprehensions allows destructuring while iterating. Elements that don't match the pattern are automatically filtered out.
 
 ```scala
 val pairs = List((1, "one"), (2, "two"), (3, "three"))
@@ -319,23 +375,27 @@ for ((num, str) <- pairs) {
 // Option filtering
 val maybeValues = List(Some(1), None, Some(3))
 for (Some(x) <- maybeValues) {
-  println(x)  // 1, 3 (skips None)
+  println(x)  // 1, 3 (None is skipped)
 }
 ```
 
-### 3. catch Clause
+**3. catch Clause**
+
+Exceptions are matched with patterns in try-catch.
 
 ```scala
 try {
-  // Dangerous code
+  // risky code
 } catch {
-  case e: NumberFormatException => "Number format error"
-  case e: IllegalArgumentException => "Invalid argument"
-  case e: Exception => s"Other error: ${e.getMessage}"
+  case e: NumberFormatException => "number format error"
+  case e: IllegalArgumentException => "invalid argument"
+  case e: Exception => s"other error: ${e.getMessage}"
 }
 ```
 
-### 4. Partial Functions
+**4. Partial Function**
+
+PartialFunction is a function defined only for some inputs. Combined with pattern matching, it can process only values that meet certain conditions.
 
 ```scala
 val divide: PartialFunction[(Int, Int), Int] = {
@@ -346,7 +406,7 @@ println(divide.isDefinedAt((10, 2)))  // true
 println(divide.isDefinedAt((10, 0)))  // false
 println(divide((10, 2)))              // 5
 
-// With collect
+// Use with collect
 val pairs = List((10, 2), (20, 0), (30, 3))
 val results = pairs.collect {
   case (a, b) if b != 0 => a / b
@@ -354,9 +414,15 @@ val results = pairs.collect {
 println(results)  // List(5, 10)
 ```
 
-## Exhaustiveness Checking
+{{< callout type="info" title="Key Points" >}}
+- Pattern matching is used in val, for, catch, and PartialFunction beyond match
+- PartialFunction performs filtering+transformation with `collect`
+- Elements that don't match in for expressions are automatically filtered
+{{< /callout >}}
 
-`sealed` types allow the compiler to check all cases.
+#### Exhaustiveness Check
+
+For `sealed` types, the compiler checks that all cases are covered. If a case is missing, it issues a warning to prevent runtime errors.
 
 ```scala
 sealed trait Color
@@ -366,20 +432,22 @@ case object Blue extends Color
 
 // Warning: match may not be exhaustive
 def describe(c: Color): String = c match {
-  case Red   => "Red"
-  case Green => "Green"
+  case Red   => "red"
+  case Green => "green"
   // Blue missing - warning!
 }
 
-// Suppress warning with @unchecked (not recommended)
+// @unchecked suppresses warning (not recommended)
 def describe2(c: Color): String = (c: @unchecked) match {
-  case Red => "Red"
+  case Red => "red"
 }
 ```
 
-## Common Mistakes and Anti-patterns
+#### Common Mistakes and Anti-patterns
 
-### What to Avoid
+Here are common mistakes when using pattern matching and proper solutions.
+
+**❌ What to Avoid**
 
 ```scala
 // 1. Using isInstanceOf/asInstanceOf instead of match
@@ -389,7 +457,7 @@ def process(x: Any): String = {
   else "unknown"
 }  // Not type safe!
 
-// 2. Wildcard pattern first
+// 2. Wildcard pattern comes first
 x match {
   case _ => "default"     // Always matches!
   case n: Int => n.toString  // Unreachable code
@@ -399,7 +467,7 @@ x match {
 val opt: Option[Int] = Some(5)
 opt.get  // NoSuchElementException if None!
 
-// 4. Incomplete pattern matching (sealed types)
+// 4. Incomplete pattern matching (sealed type)
 sealed trait Color
 case object Red extends Color
 case object Blue extends Color
@@ -410,7 +478,7 @@ def name(c: Color) = c match {
 }
 ```
 
-### The Right Way
+**✅ Correct Approach**
 
 ```scala
 // 1. Use pattern matching
@@ -431,7 +499,7 @@ opt match {
   case Some(n) => n.toString
   case None => "default"
 }
-// or
+// Or
 opt.getOrElse(0)
 opt.fold("default")(_.toString)
 
@@ -442,11 +510,13 @@ def name(c: Color) = c match {
 }
 ```
 
-## Exercises
+#### Practice Problems
 
-### 1. List Sum
+Review pattern matching concepts with these practice problems.
 
-Write a recursive function to sum a list using pattern matching.
+**1. List Sum ⭐**
+
+Write a recursive function that calculates the sum of a list using pattern matching.
 
 <details>
 <summary>Show Answer</summary>
@@ -462,9 +532,9 @@ println(sum(List(1, 2, 3, 4, 5)))  // 15
 
 </details>
 
-### 2. JSON Parser
+**2. JSON Parser ⭐⭐**
 
-Write an ADT representing simple JSON values and a stringify function.
+Create an ADT representing simple JSON values and a stringify function.
 
 <details>
 <summary>Show Answer</summary>
@@ -501,9 +571,9 @@ println(stringify(json))
 
 </details>
 
-### 3. Create an Extractor
+**3. Creating an Extractor ⭐⭐⭐**
 
-Write an extractor that decomposes a URL into protocol, host, and path.
+Write an extractor that deconstructs URLs into protocol, host, and path.
 
 <details>
 <summary>Show Answer</summary>
@@ -522,16 +592,16 @@ object URL {
 
 "https://example.com/path/to/page" match {
   case URL(protocol, host, path) =>
-    println(s"Protocol: $protocol, Host: $host, Path: $path")
+    println(s"protocol: $protocol, host: $host, path: $path")
   case _ =>
-    println("Invalid URL")
+    println("invalid URL")
 }
-// Protocol: https, Host: example.com, Path: /path/to/page
+// protocol: https, host: example.com, path: /path/to/page
 ```
 
 </details>
 
-## Next Steps
+#### Next Steps
 
 - [Collections](../collections/) — Scala collection library
 - [Higher-Order Functions](../higher-order-functions/) — Advanced functional programming

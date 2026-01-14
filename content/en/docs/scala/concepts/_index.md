@@ -1,86 +1,95 @@
 ---
-lastmod: "2026-01-06"
-title: Concepts
+bookCollapseSection: true
+lastmod: "2026-01-14"
+title: Understanding Concepts
 weight: 2
 ---
 
-Learn Scala's core concepts systematically. From basics to advanced, each concept covers both Scala 2 and Scala 3 syntax.
+Learn Scala's core concepts systematically. From basics to advanced, each concept covers both Scala 2 and Scala 3 syntax. Progressing in an appropriate order based on your level and goals is effective.
 
-## Basics
+#### Basics
 
-Learn the fundamental building blocks of programming in Scala.
+Learn the fundamental building blocks of programming in Scala. From variable declaration to pattern matching, these are the concepts that form the foundation of Scala programming.
 
-| Topic | Content | Key Keywords |
-|-------|---------|--------------|
+| Topic | Content | Key keywords |
+|------|------|-------------|
 | [Basic Syntax](basics/) | Variables, constants, basic types | `val`, `var`, type inference |
 | [Control Structures](control-structures/) | Conditionals, loops | `if`, `for`, `while`, `match` |
-| [Functions and Methods](functions-methods/) | Function definition, lambdas | `def`, `=>`, default values |
+| [Functions and Methods](functions-methods/) | Function definition, lambda | `def`, `=>`, default values |
 | [Classes and Objects](classes-objects/) | OOP basics | `class`, `object`, `trait` |
 | [Case Classes](case-classes/) | Immutable data models | `case class`, `copy` |
 | [Pattern Matching](pattern-matching/) | Powerful branching | `match`, `case`, guards |
 
-## Intermediate
+It's best to learn basic concepts in order. In particular, understanding variable declaration and the type system first will make subsequent concepts easier to learn.
 
-Learn functional programming and Scala's distinctive features.
+#### Intermediate
 
-| Topic | Content | Key Keywords |
-|-------|---------|--------------|
+Learn functional programming and Scala's characteristic features. Mastering the Collections API enables you to express most data processing tasks concisely.
+
+| Topic | Content | Key keywords |
+|------|------|-------------|
 | [Collections](collections/) | Data structures | `List`, `Map`, `Set`, `Seq` |
 | [Higher-Order Functions](higher-order-functions/) | Functional programming | `map`, `filter`, `fold` |
 | [Generics](generics/) | Type parameters | `[T]`, type bounds |
 | [For Comprehension](for-comprehensions/) | Monadic operations | `for-yield`, `flatMap` |
 | [Implicit/Given](implicits/) | Contextual abstraction | `implicit`, `given`, `using` |
 
-## Advanced
+Intermediate topics are crucial for building Scala's functional programming capabilities. Master collections and higher-order functions first, then build on them with For Comprehension and Implicit.
 
-Advanced topics for professional Scala development.
+#### Advanced
 
-| Topic | Content | Key Keywords |
-|-------|---------|--------------|
+Advanced topics for professional Scala development. Covers advanced features of the type system, concurrent programming, and functional design patterns.
+
+| Topic | Content | Key keywords |
+|------|------|-------------|
 | [Type Classes](type-classes/) | Ad-hoc polymorphism | Type class pattern |
-| [Variance](variance/) | Generic type variance | `+T`, `-T`, invariant |
+| [Variance](variance/) | Generic type variance | `+T`, `-T`, invariance |
 | [Advanced Types](type-system-advanced/) | Scala 3 type features | Union, Intersection, Match Types |
 | [Macros](macros-metaprogramming/) | Compile-time code generation | `inline`, macros |
 | [Concurrency](concurrency/) | Asynchronous programming | `Future`, `Promise` |
 | [Functional Patterns](functional-patterns/) | FP design patterns | Functor, Monad |
 
-## Learning Guide
+It's best to study advanced topics after fully understanding intermediate level content. In particular, type classes are essential for understanding and extending libraries.
 
-### If You're Just Starting
+#### Learning guide
+
+We recommend different paths depending on your learning goals.
+
+**If you're starting out**
+
+Start with basic syntax and proceed in order through control structures, functions and methods, and classes and objects. Building a solid foundation is important. In particular, understand the difference between `val` and `var`, and expression-based syntax.
 
 ```
 Basic Syntax → Control Structures → Functions and Methods → Classes and Objects
 ```
 
-Building a solid foundation is important. Especially understand the difference between `val` and `var`, and expression-based syntax.
+**If you want to learn functional programming**
 
-### If You Want to Learn Functional Programming
+Start with collections and proceed through higher-order functions, For Comprehension, and functional patterns. Mastering Scala's Collections API will naturally develop functional thinking.
 
 ```
 Collections → Higher-Order Functions → For Comprehension → Functional Patterns
 ```
 
-Mastering Scala's collection API will naturally develop your functional thinking.
+**If you're transitioning to Scala 3**
 
-### If You're Transitioning to Scala 3
+Start with Implicit/Given and proceed through advanced types and macros. The biggest change in Scala 3 is the implicit system. Learn the given/using syntax first.
 
 ```
 Implicit/Given → Advanced Types → Macros
 ```
 
-The biggest change in Scala 3 is the implicit system. Learn the given/using syntax first.
+#### Scala 2 vs Scala 3 comparison
 
-## Scala 2 vs Scala 3 Comparison
-
-All documents in this guide cover both versions. Key differences:
+All documents in this guide cover both versions. The table below summarizes the main differences.
 
 | Feature | Scala 2 | Scala 3 |
-|---------|---------|---------|
-| Syntax style | Braces required | Indentation optional |
+|------|---------|---------|
+| Syntax style | Braces required | Indentation option |
 | Implicit values | `implicit val` | `given` |
 | Implicit parameters | `implicit` | `using` |
 | Enums | `sealed trait` + `case object` | `enum` |
 | Extension methods | `implicit class` | `extension` |
 | Type features | Limited | Union, Intersection, Match Types |
 
-> Each document marks version differences with {{< badge >}}Scala 2{{< /badge >}} {{< badge >}}Scala 3{{< /badge >}} badges.
+> Each document uses {{< badge >}}Scala 2{{< /badge >}} {{< badge >}}Scala 3{{< /badge >}} badges to indicate version-specific differences.

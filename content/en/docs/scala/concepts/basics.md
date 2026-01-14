@@ -1,18 +1,61 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-14"
 title: Basic Syntax
 weight: 1
+author: "@advanced-beginner"
+author_url: "https://github.com/advanced-beginner"
 ---
 
-Learn Scala's basic syntax including variable declaration, basic types, and type inference.
+> **Target Audience**: Developers with experience in Java or other statically typed languages
+> **Prerequisites**: Basic concepts of variables, functions, and classes
+> **What you'll learn**: Understand the difference between val/var, leverage the type system, and write clean code with string interpolation
 
-## Variables and Constants
+{{< callout type="tip" title="TL;DR" >}}
+- Use **val** (immutable) by default, **var** (mutable) only when necessary
+- Scala has powerful **type inference** so you can omit type declarations most of the time
+- **String interpolation** (`s"Hello, $name"`) makes string composition simple
+- Every value is an object — you can call methods like `1.toString`
+{{< /callout >}}
 
-In Scala, values are declared using `val` (immutable) or `var` (mutable).
+#### Why Learn Scala's Basic Syntax?
 
-### val - Immutable (Recommended)
+Scala is 100% compatible with Java while enabling you to write more concise and expressive code. You can write the same logic with less code than Java, and catch more errors at compile time.
 
-Values declared with `val` cannot be reassigned. This is the recommended approach in functional programming.
+```java
+// Java: 15 lines
+public class Person {
+    private final String name;
+    private final int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() { return name; }
+    public int getAge() { return age; }
+    // equals, hashCode, toString omitted...
+}
+```
+
+```scala
+// Scala: 1 line
+case class Person(name: String, age: Int)
+```
+
+This conciseness is based on Scala's fundamental syntax.
+
+---
+
+#### Variables and Constants
+
+Scala has two ways to declare values: `val` (immutable) and `var` (mutable).
+
+**Understanding with analogy**: `val` is like **a name tag written in permanent marker**. Once attached, it can't be changed. `var` is like **a note on a whiteboard**. You can erase and rewrite it anytime, but it's hard to track who changed it when.
+
+**val - Immutable (Recommended)**
+
+Values declared with `val` cannot be reassigned. This is a core principle of functional programming.
 
 ```scala
 val name = "Scala"
@@ -20,17 +63,21 @@ val year = 2024
 val pi = 3.14159
 
 // Cannot reassign
-// name = "Java"  // Compile error!
+// name = "Java"  // Compilation error!
 ```
 
-> **Why is immutability good?**
-> - Code is easier to predict (values don't change)
-> - Safe in concurrent programming
-> - Reduces bug potential
+**Why is immutability good?**
 
-### var - Mutable
+| Benefit | Description |
+|---------|-------------|
+| **Predictability** | Since values don't change, code flow is easier to trace |
+| **Thread safety** | Multiple threads can read simultaneously without issues |
+| **Easier debugging** | No need to wonder "when did this value change?" |
+| **Compiler optimization** | Knowing values are immutable allows the compiler to generate more efficient code |
 
-Values declared with `var` can be reassigned. Use only when necessary.
+**var - Mutable**
+
+Values declared with `var` can be reassigned. Use **only when absolutely necessary**.
 
 ```scala
 var count = 0
@@ -41,9 +88,19 @@ var message = "Hello"
 message = "World"  // OK
 ```
 
-### Lazy Initialization (lazy val)
+**When to use var?**
 
-`lazy val` delays initialization until first access.
+- When accumulating calculations inside performance-critical loops
+- When external libraries require mutable state
+- When gradually collecting values (Builder pattern)
+
+> ⚠️ **Warning**: Prefer `val` with functional operations (`map`, `fold`, etc.) over `var` when possible.
+
+**Lazy initialization (lazy val)**
+
+`lazy val` is initialized **on first access**. You can defer expensive computations or resource loading until needed.
+
+**Understanding with analogy**: `lazy val` is like **food prepared after ordering**. It's not prepared in advance; cooking starts when a customer orders. Once prepared, the cached food is served for the same order.
 
 ```scala
 lazy val expensiveValue = {
@@ -52,37 +109,64 @@ lazy val expensiveValue = {
   42
 }
 
-println("Declared")
-println(expensiveValue)  // "Computing..." prints here
-println(expensiveValue)  // Uses cached value, no recomputation
+println("Declared")          // Immediately printed
+println(expensiveValue)      // "Computing..." printed here, 1 second wait
+println(expensiveValue)      // Cached 42 returned immediately, no recomputation
 ```
 
-## Type System
+{{< callout type="info" title="Key Points: Variable Declaration" >}}
+- **val**: Immutable, use by default → `val name = "Scala"`
+- **var**: Mutable, use only when necessary → `var count = 0`
+- **lazy val**: Lazy initialization, for expensive computations → `lazy val config = loadConfig()`
+{{< /callout >}}
 
-### Basic Types
+---
 
-Every value in Scala is an object. Java's primitive types are also treated as objects in Scala.
+#### Type System
+
+Scala is a statically typed language, but thanks to powerful **type inference**, you don't have to specify types explicitly like in Java.
+
+**Why static typing?**
+
+| Dynamic Types (Python, JS) | Static Types (Scala, Java) |
+|----------------------------|----------------------------|
+| Type errors found at runtime | Type errors found at compile time |
+| Fast prototyping | Safe for large-scale refactoring |
+| Limited IDE autocomplete | Powerful IDE support |
+
+Scala provides both the safety of static types and the conciseness of dynamic types.
+
+**Basic Types**
+
+All values in Scala are objects. Even Java's primitive types are treated as objects in Scala.
+
+```scala
+val n = 42
+n.toString      // "42" - Int is also an object, so methods can be called
+n.to(50)        // Range(42, 43, 44, ..., 50)
+1.+(2)          // 3 - operators are methods too!
+```
 
 | Type | Description | Example |
 |------|-------------|---------|
-| `Byte` | 8-bit integer | `val b: Byte = 127` |
-| `Short` | 16-bit integer | `val s: Short = 32767` |
-| `Int` | 32-bit integer | `val i: Int = 42` |
-| `Long` | 64-bit integer | `val l: Long = 1234567890L` |
-| `Float` | 32-bit floating point | `val f: Float = 3.14f` |
-| `Double` | 64-bit floating point | `val d: Double = 3.14159` |
-| `Char` | 16-bit Unicode character | `val c: Char = 'A'` |
-| `Boolean` | true/false | `val flag: Boolean = true` |
-| `String` | String | `val s: String = "Hello"` |
-| `Unit` | No value (similar to void) | `val u: Unit = ()` |
+| `Int` | 32-bit integer | `val i = 42` |
+| `Long` | 64-bit integer | `val l = 1234567890L` |
+| `Double` | 64-bit floating point | `val d = 3.14159` |
+| `Boolean` | True/false | `val flag = true` |
+| `String` | String | `val s = "Hello"` |
+| `Unit` | No value (Java's void) | `val u = ()` |
 
-### Type Hierarchy
+This table summarizes the most commonly used basic types in Scala. Unlike Java, all types are objects, so you can call methods on them.
+
+**Type Hierarchy**
+
+Scala types have a clear hierarchy.
 
 ```mermaid
 graph TB
-    Any["Any<br>(top type)"]
-    AnyVal["AnyVal<br>(value types)"]
-    AnyRef["AnyRef<br>(reference types)"]
+    Any["Any<br>(Top)"]
+    AnyVal["AnyVal<br>(Value types)"]
+    AnyRef["AnyRef<br>(Reference types)"]
 
     Any --> AnyVal
     Any --> AnyRef
@@ -98,7 +182,7 @@ graph TB
     AnyVal --> Unit
 
     String["String"]
-    List["List#91;T#93;"]
+    List["List&#91;T&#93;"]
     UserClass["User classes"]
 
     AnyRef --> String
@@ -106,7 +190,7 @@ graph TB
     AnyRef --> UserClass
 
     Null["Null"]
-    Nothing["Nothing<br>(bottom type)"]
+    Nothing["Nothing<br>(Bottom)"]
 
     String --> Null
     List --> Null
@@ -119,38 +203,66 @@ graph TB
     Unit --> Nothing
 ```
 
-- **Any**: Top type of all types
-- **AnyVal**: Parent of value types (Int, Double, etc.)
-- **AnyRef**: Parent of reference types (String, List, user classes, etc.)
-- **Null**: Subtype of all reference types (type of `null`)
-- **Nothing**: Subtype of all types
+*This diagram shows Scala's type hierarchy. Any is the top of all types, and Nothing is the bottom of all types. AnyVal is the parent of value types (Int, Double, etc.), and AnyRef is the parent of reference types (String, List, user classes).*
 
-#### When is Nothing Used?
+**Understanding with analogy**: The type hierarchy is like **a family tree**. `Any` is the ancestor of all types, and `Nothing` is the descendant of all types. You can put descendants in ancestor positions (polymorphism).
 
-`Nothing` is used when a function doesn't return normally:
+| Type | Role | When do you encounter it? |
+|------|------|---------------------------|
+| `Any` | Ancestor of all types | When treating multiple types as one |
+| `AnyVal` | Parent of value types | Common ancestor of Int, Double, etc. |
+| `AnyRef` | Parent of reference types | Same as Java's Object |
+| `Null` | Type of null | (Avoid using if possible) |
+| `Nothing` | Descendant of all types | Exceptions, empty collections, Option.None |
+
+**When is Nothing used?**
+
+`Nothing` is used for cases that **don't return a value normally**.
 
 ```scala
-// 1. Functions that throw exceptions
+// 1. Function that throws an exception
 def fail(message: String): Nothing =
   throw new RuntimeException(message)
 
 // Nothing is a subtype of all types, so it can be used anywhere
 val result: Int = if (true) 42 else fail("error")
 
-// 2. Type of empty collections
+// 2. Type of empty collection
 val empty: List[Nothing] = Nil  // Can be assigned to List[Int], List[String], etc.
 
 // 3. Type of Option.None
 val none: Option[Nothing] = None  // Can be assigned to Option[Int], Option[String], etc.
 ```
 
-> **Why is this useful?** Because `Nothing` is a subtype of all types, `Nil` or `None` can be used with any type of List or Option.
+**Why is it useful?** Since `Nothing` is a subtype of all types, `Nil` or `None` can be used for any type of list or Option.
 
-## Type Inference
+{{< callout type="info" title="Key Points: Type System" >}}
+- All values are objects — `1.toString`, `true.&&(false)` are possible
+- `Any` → `AnyVal`(values) / `AnyRef`(references) → concrete types → `Nothing`
+- `Nothing` provides type compatibility for empty collections, None, exceptions, etc.
+{{< /callout >}}
+
+---
+
+#### Type Inference
 
 The Scala compiler automatically infers types in most cases.
 
-### When Inferred
+**Java vs Scala Comparison**
+
+```java
+// Java: Type specification required
+Map<String, List<Integer>> map = new HashMap<String, List<Integer>>();
+List<String> names = Arrays.asList("Alice", "Bob");
+```
+
+```scala
+// Scala: Type inference
+val map = Map("a" -> List(1, 2), "b" -> List(3, 4))  // Map[String, List[Int]]
+val names = List("Alice", "Bob")                      // List[String]
+```
+
+**When types are inferred**
 
 ```scala
 val name = "Scala"     // Inferred as String
@@ -160,7 +272,15 @@ val flag = true        // Inferred as Boolean
 val numbers = List(1, 2, 3)  // Inferred as List[Int]
 ```
 
-### When Explicit Type Declaration is Needed
+**When explicit type declaration is needed**
+
+| Situation | Example | Reason |
+|-----------|---------|--------|
+| When you want a specific type | `val n: Long = 42` | Need Long instead of Int |
+| Empty collections | `val list: List[Int] = List()` | Can't infer without elements |
+| Function parameters | `def greet(name: String)` | Always required |
+| Recursive function return | `def fact(n: Int): Int = ...` | Can't infer due to self-reference |
+| API documentation | `def process(data: Data): Result` | Improves readability |
 
 ```scala
 // 1. When you want a specific type
@@ -177,48 +297,75 @@ def greet(name: String): String = s"Hello, $name"
 // 4. Return type of recursive functions
 def factorial(n: Int): Int =
   if (n <= 1) 1 else n * factorial(n - 1)
-
-// 5. Complex expressions
-val result: Either[String, Int] = Right(42)
 ```
 
-## Strings
+{{< callout type="info" title="Key Points: Type Inference" >}}
+- Types can be omitted in most cases — the compiler infers them
+- Explicit specification is needed for empty collections, function parameters, recursive functions
+- For public APIs, explicit specification is good for readability
+{{< /callout >}}
 
-### String Interpolation
+---
 
-Scala provides powerful string interpolation features.
+#### Strings
 
-**s-interpolation (basic):**
+Scala provides powerful **String Interpolation** features.
+
+**Java vs Scala Comparison**
+
+```java
+// Java: String concatenation
+String msg = "Hello, " + name + "! You are " + age + " years old.";
+String formatted = String.format("Pi is %.2f", pi);
+```
+
+```scala
+// Scala: String interpolation
+val msg = s"Hello, $name! You are $age years old."
+val formatted = f"Pi is $pi%.2f"
+```
+
+**s-interpolator: Variable insertion**
+
+The most basic form, inserting variables with the `$` symbol.
 
 ```scala
 val name = "Scala"
 val version = 3
 
 println(s"$name $version")           // Scala 3
-println(s"${name.toUpperCase}")      // SCALA
+println(s"${name.toUpperCase}")      // SCALA (use ${} for expressions)
 println(s"1 + 1 = ${1 + 1}")         // 1 + 1 = 2
 ```
 
-**f-interpolation (formatting):**
+**f-interpolator: Formatting**
+
+Supports printf-style formatting.
 
 ```scala
 val pi = 3.14159
 val count = 42
 
-println(f"pi = $pi%.2f")          // pi = 3.14
-println(f"count = $count%05d")    // count = 00042
-println(f"hex = $count%x")        // hex = 2a
+println(f"pi = $pi%.2f")          // pi = 3.14 (2 decimal places)
+println(f"count = $count%05d")    // count = 00042 (5 digits, zero-padded)
+println(f"hex = $count%x")        // hex = 2a (hexadecimal)
 ```
 
-**raw-interpolation (ignore escapes):**
+**raw-interpolator: Ignore escapes**
+
+Useful for regular expressions or file paths.
 
 ```scala
 println(raw"Hello\nWorld")  // Hello\nWorld (no newline)
 println(s"Hello\nWorld")    // Hello
-                            // World
+                            // World (newline applied)
+
+val regex = raw"\d+\.\d+"   // Write regex without escapes
 ```
 
-### Multi-line Strings
+**Multiline Strings**
+
+Use triple quotes (`"""`) for multiline strings.
 
 ```scala
 val sql = """
@@ -227,7 +374,7 @@ val sql = """
   WHERE age > 18
 """
 
-// Remove leading whitespace with stripMargin
+// stripMargin removes leading whitespace
 val formatted = """
   |SELECT *
   |FROM users
@@ -235,11 +382,30 @@ val formatted = """
   """.stripMargin
 ```
 
-## Scala 2 vs Scala 3 Differences
+The `stripMargin` method removes everything up to and including the `|` character at the start of each line. This allows you to maintain code indentation while creating clean strings.
 
-### Basic Syntax
+{{< callout type="info" title="Key Points: Strings" >}}
+- **s-interpolator**: Variable insertion → `s"Hello, $name"`
+- **f-interpolator**: Formatting → `f"$price%.2f dollars"`
+- **raw-interpolator**: Ignore escapes → `raw"\d+"`
+- **Triple quotes**: Multiline → `"""...""".stripMargin`
+{{< /callout >}}
 
-Most basic syntax is the same. Key differences:
+---
+
+#### Scala 2 vs Scala 3 Differences
+
+Most basic syntax is the same. The biggest differences are indentation-based syntax and entry point definition.
+
+| Feature | Scala 2 | Scala 3 |
+|---------|---------|---------|
+| Entry point | `object Main { def main(...) }` | `@main def hello()` |
+| Block delimiters | Braces required | Indentation-based (optional) |
+| Wildcard import | `import pkg._` | `import pkg.*` |
+| Type intersection | `with` | `&` |
+| Type union | None | `A | B` |
+
+**Basic Syntax**
 
 {{< tabs groupid="scala-version" >}}
 {{% tab title="Scala 3" %}}
@@ -269,7 +435,7 @@ object Main {
 {{% /tab %}}
 {{< /tabs >}}
 
-### Wildcard Import
+**Wildcard import**
 
 {{< tabs groupid="scala-version" >}}
 {{% tab title="Scala 3" %}}
@@ -284,48 +450,69 @@ import scala.collection.mutable._
 {{% /tab %}}
 {{< /tabs >}}
 
-## Common Mistakes and Anti-patterns
+---
 
-### What to Avoid
+#### Common Mistakes and Solutions
+
+Common mistakes made by Scala beginners and the correct solutions.
+
+| Mistake | Problem | Solution |
+|---------|---------|----------|
+| Overusing `var` | Hard to track state | Use `val` + functional operations |
+| Using `null` | NPE risk | Use `Option` |
+| Over-relying on type inference | Inferred as `Any` | Specify types for complex expressions |
+| Ignoring `Unit` | Unintended bugs | Check return values |
+
+**What to avoid**
 
 ```scala
-// 1. Excessive var usage
+// 1. Indiscriminate use of var
 var list = List(1, 2, 3)
 list = list :+ 4  // Creates new list each time - inefficient!
 
 // 2. Using null
 val name: String = null  // NullPointerException risk!
 
-// 3. Over-reliance on type inference
-val x = if (condition) 1 else "error"  // Inferred as Any
+// 3. Over-relying on type inference
+val x = if (condition) 1 else "error"  // Inferred as Any - type safety lost
 
-// 4. Ignoring Unit-returning expressions
-val result = list.foreach(println)  // result is Unit
+// 4. Ignoring expressions returning Unit
+val result = list.foreach(println)  // result is Unit - is this intended?
 ```
 
-### The Right Way
+**Correct way**
 
 ```scala
-// 1. Use val and immutable operations
+// 1. Use val with immutable operations
 val list = List(1, 2, 3)
 val newList = list :+ 4  // Assign new list to new val
 
 // 2. Use Option
 val name: Option[String] = None
+name.foreach(n => println(s"Hello, $n"))  // Safe access
 
 // 3. Specify types for complex expressions
-val x: Int | String = if (condition) 1 else "error"  // Scala 3
 val x: Either[String, Int] = if (condition) Right(1) else Left("error")
 
-// 4. Clearly mark Unit-returning functions
+// 4. Clearly mark functions returning Unit
 def printAll(list: List[Int]): Unit = list.foreach(println)
 ```
 
-## Exercises
+{{< callout type="warning" title="Anti-Pattern Summary" >}}
+- ❌ `var` → ✅ `val` + functional operations
+- ❌ `null` → ✅ `Option[T]`
+- ❌ `Any` inference → ✅ `Either[L, R]` or explicit types
+{{< /callout >}}
 
-### 1. Variable Declaration
+---
 
-Predict the output of this code:
+#### Exercises
+
+Practice basic syntax with these exercises.
+
+**1. Variable Declaration**
+
+Predict the output of the following code.
 
 ```scala
 val x = 10
@@ -341,13 +528,13 @@ println(s"x = $x, y = $y")
 x = 10, y = 30
 ```
 
-`x` is `val` so it stays at 10, `y` is `var` so it changes to 20 + 10 = 30.
+`x` is `val` so it stays 10, `y` is `var` so it changes to 20 + 10 = 30.
 
 </details>
 
-### 2. Type Inference
+**2. Type Inference**
 
-Infer the types of these variables:
+Infer the types of the following variables.
 
 ```scala
 val a = 42
@@ -368,9 +555,9 @@ val e = Map("a" -> 1, "b" -> 2)
 
 </details>
 
-### 3. String Interpolation
+**3. String Interpolation**
 
-Write code that prints "John is 25 years old." using name and age variables.
+Write code that takes a name and age and prints "John is 25 years old."
 
 <details>
 <summary>Show Answer</summary>
@@ -383,7 +570,11 @@ println(s"$name is $age years old.")
 
 </details>
 
-## Next Steps
+---
+
+#### Next Steps
+
+Once you've learned basic syntax, proceed to the next topics.
 
 - [Control Structures](../control-structures/) — if, for, while, match expressions
 - [Functions and Methods](../functions-methods/) — Function definition and advanced features

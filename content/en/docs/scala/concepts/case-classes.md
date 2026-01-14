@@ -1,12 +1,24 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-14"
 title: Case Classes
 weight: 5
 ---
 
-Case classes are special classes for **immutable data modeling**. They let you define data classes without boilerplate code.
+{{< callout type="info" title="TL;DR" >}}
+- Case classes are special classes for **immutable data modeling**
+- `apply`, `unapply`, `copy`, `equals`, `hashCode`, and `toString` are automatically generated
+- Define ADTs (Algebraic Data Types) with `sealed trait` + case classes
+- Show their true value when used with pattern matching
+{{< /callout >}}
 
-## Basic Syntax
+**Target Audience:** Developers who have learned Scala basic syntax
+**Prerequisites:** Classes and objects, basic understanding of type system
+
+Case classes are special classes for **immutable data modeling**. You can define data classes without boilerplate code. The compiler automatically generates useful methods like equals, hashCode, toString, and copy, so you can define data-centric classes very concisely. They show their true value especially when used with pattern matching.
+
+#### Basic Syntax
+
+Case classes are defined with the `case class` keyword. You can create instances without the new keyword, because the compiler automatically generates an apply factory method.
 
 ```scala
 case class Person(name: String, age: Int)
@@ -16,23 +28,25 @@ val alice = Person("Alice", 30)
 val bob = Person("Bob", 25)
 ```
 
-## Auto-Generated Features
+#### Auto-Generated Features
 
-When you declare a case class, the compiler automatically generates:
+When you declare a case class, the compiler automatically generates several useful methods. This eliminates the need to write boilerplate code when defining data classes.
 
-### 1. apply Method (Factory)
+**1. apply Method (Factory)**
+
+The apply method is automatically generated, allowing instance creation without the new keyword.
 
 ```scala
-// Create without new
+// Can create without new
 val person = Person("Alice", 30)
 
 // Actually works like this
 val person = Person.apply("Alice", 30)
 ```
 
-### 2. unapply Method (Extractor)
+**2. unapply Method (Extractor)**
 
-Used in pattern matching.
+The unapply method is automatically generated, allowing field extraction in pattern matching.
 
 ```scala
 val Person(name, age) = Person("Alice", 30)
@@ -40,9 +54,9 @@ println(name)  // Alice
 println(age)   // 30
 ```
 
-### 3. Field Accessors
+**3. Field Accessors**
 
-All constructor parameters are declared as `val`.
+All constructor parameters are automatically declared as `val` and accessible from outside. Case classes are immutable by default.
 
 ```scala
 val person = Person("Alice", 30)
@@ -53,9 +67,9 @@ println(person.age)   // 30
 // person.age = 31  // Compile error!
 ```
 
-### 4. copy Method
+**4. copy Method**
 
-Creates a new instance with some fields changed.
+Creates a new instance with some fields of an immutable object changed. The original object doesn't change.
 
 ```scala
 val alice = Person("Alice", 30)
@@ -73,9 +87,9 @@ val carol = alice.copy(name = "Carol", age = 25)
 println(carol)  // Person(Carol,25)
 ```
 
-### 5. equals and hashCode
+**5. equals and hashCode**
 
-Provides structural equality.
+Provides structural equality. Unlike regular classes, compares field values rather than references.
 
 ```scala
 val person1 = Person("Alice", 30)
@@ -90,9 +104,9 @@ val set = Set(person1, person2)
 println(set.size)  // 1 (duplicates removed)
 ```
 
-### 6. toString
+**6. toString**
 
-Provides readable string representation.
+Provides readable string representation. Useful for debugging and logging.
 
 ```scala
 val person = Person("Alice", 30)
@@ -100,7 +114,17 @@ println(person.toString)  // Person(Alice,30)
 println(person)           // Person(Alice,30)
 ```
 
-## Nested Case Classes
+{{< callout type="info" title="Key Points" >}}
+- `apply`: Create instances without new
+- `unapply`: Extract fields in pattern matching
+- `copy`: Create new instance with some fields changed
+- `equals/hashCode`: Structural equality (compare field values)
+- `toString`: Readable string representation
+{{< /callout >}}
+
+#### Nested Case Classes
+
+Case classes can have other case classes as fields. Using nested copy, you can easily update even deeply structured immutable objects.
 
 ```scala
 case class Address(city: String, zipCode: String)
@@ -113,9 +137,14 @@ val empInBusan = emp.copy(address = emp.address.copy(city = "Busan"))
 println(empInBusan)  // Employee(John,Address(Busan,12345))
 ```
 
-## With Pattern Matching
+{{< callout type="info" title="Key Points" >}}
+- Update nested case classes by chaining `copy`
+- Can easily modify even deeply structured immutable objects
+{{< /callout >}}
 
-Case classes shine when used with pattern matching.
+#### With Pattern Matching
+
+Case classes show their true value when used with pattern matching. Thanks to the automatically generated unapply method, you can easily extract fields and apply guard conditions.
 
 ```scala
 case class Order(id: Int, product: String, quantity: Int)
@@ -131,11 +160,19 @@ println(processOrder(Order(2, "Mouse", 150)))   // Bulk order
 println(processOrder(Order(3, "Keyboard", -1))) // Invalid quantity
 ```
 
-## ADT (Algebraic Data Types)
+{{< callout type="info" title="Key Points" >}}
+- Easily extract fields with case class `unapply`
+- Additional filtering possible with guard conditions (`if`)
+- Ignore unnecessary fields with wildcard `_`
+{{< /callout >}}
 
-Combine case classes with `sealed trait` to define ADTs.
+#### ADT (Algebraic Data Types)
 
-### Scala 3
+You can define ADTs (Algebraic Data Types) by combining case classes with `sealed trait`. ADTs are a powerful way to express domain models in functional programming. Declaring as sealed requires all subtypes to be defined in the same file, so the compiler can check pattern matching completeness.
+
+**Scala 3**
+
+In Scala 3, you can define ADTs more concisely with the enum keyword.
 
 ```scala
 enum Shape:
@@ -154,7 +191,9 @@ println(area(Circle(5)))         // 78.539...
 println(area(Rectangle(3, 4)))   // 12.0
 ```
 
-### Scala 2
+**Scala 2**
+
+In Scala 2, implement ADTs with sealed trait and case class combinations.
 
 ```scala
 sealed trait Shape
@@ -169,12 +208,12 @@ def area(shape: Shape): Double = shape match {
 }
 ```
 
-### Importance of sealed
+**Importance of sealed**
 
-`sealed` restricts inheritance to the same file. This enables:
+`sealed` restricts inheritance to the same file only. This provides the following benefits:
 
 1. **Exhaustive pattern matching**: Compiler knows all cases
-2. **Warnings**: Warns about missing cases
+2. **Provides warnings**: Warns about missing cases
 
 ```scala
 // Warning if cases are missing
@@ -184,13 +223,22 @@ def describe(shape: Shape): String = shape match {
 }
 ```
 
-## Option, Either, Try
+{{< callout type="info" title="Key Points" >}}
+- Define ADTs with `sealed trait` + case classes
+- `sealed` allows inheritance only in the same file
+- Compiler checks pattern matching completeness and warns about missing cases
+- In Scala 3, can define more concisely with `enum`
+{{< /callout >}}
 
-Representative case class usages from Scala's standard library.
+#### Option, Either, Try
 
-> The examples below show **conceptual structure**. Actual standard library implementations are more complex with various optimizations.
+Representative case class usage examples from Scala's standard library. These are all ADTs defined with sealed trait and case classes, expressing operations that can fail in a type-safe way instead of null or exceptions.
 
-### Option
+> 💡 The examples below show **conceptual structure**. Actual standard library implementations are more complex with various optimizations applied.
+
+**Option**
+
+Option expresses cases where a value may or may not be present. Using Option instead of null can prevent NullPointerException.
 
 ```scala
 // Conceptual structure (differs from actual implementation)
@@ -208,7 +256,9 @@ divide(10, 2) match {
 }
 ```
 
-### Either
+**Either**
+
+Either holds one of two possible types of values. By convention, Left holds failure (error messages, etc.), and Right holds success values.
 
 ```scala
 sealed trait Either[+L, +R]
@@ -224,19 +274,37 @@ def parseAge(input: String): Either[String, Int] =
   }
 ```
 
-## Case Class vs Regular Class
+{{< callout type="info" title="Key Points" >}}
+- **Option**: Expresses value present (`Some`) or absent (`None`)
+- **Either**: One of two possible results (`Left`=failure, `Right`=success)
+- Expresses failure in type-safe way instead of null or exceptions
+{{< /callout >}}
+
+#### Case Class vs Regular Class
+
+The table below summarizes the main differences between case classes and regular classes. Case classes are optimized for immutable data modeling, and regular classes are suitable when mutable state or complex behavior is needed.
 
 | Feature | Case Class | Regular Class |
 |---------|-----------|---------------|
 | Immutability | Immutable by default (val) | Optional |
 | equals/hashCode | Auto structural comparison | Reference comparison (default) |
-| copy method | Auto-generated | Must implement |
-| Pattern matching | unapply auto-generated | Must implement |
+| copy method | Auto-generated | Must implement manually |
+| Pattern matching | unapply auto-generated | Must implement manually |
 | new keyword | Not needed | Needed |
 
-## Best Practices
+{{< callout type="info" title="Key Points" >}}
+- Case classes are optimized for immutable data
+- Automatically support structural comparison, copy, and pattern matching
+- Use regular classes when mutable state is needed
+{{< /callout >}}
 
-### 1. Use for Immutable Data
+#### Best Practices
+
+Recommendations for effectively using case classes.
+
+**1. Use for Immutable Data**
+
+Case classes are designed for immutable data. Using var can break the immutability assumption of equals/hashCode.
 
 ```scala
 // Good: Immutable data
@@ -246,7 +314,9 @@ case class Config(host: String, port: Int)
 // case class Counter(var count: Int)  // Anti-pattern
 ```
 
-### 2. Good for Small Domain Models
+**2. Good for Small Domain Models**
+
+Case classes are ideal for defining concise domain models.
 
 ```scala
 case class Money(amount: BigDecimal, currency: String)
@@ -254,14 +324,18 @@ case class OrderLine(product: String, quantity: Int, unitPrice: Money)
 case class Order(id: String, lines: List[OrderLine])
 ```
 
-### 3. DTO (Data Transfer Object)
+**3. DTO (Data Transfer Object)**
+
+Case classes are also suitable for API request/response objects. JSON serialization libraries also support case classes well.
 
 ```scala
 case class CreateUserRequest(name: String, email: String)
 case class UserResponse(id: Long, name: String, email: String)
 ```
 
-### 4. Composition Over Inheritance
+**4. Composition Over Inheritance**
+
+Case class inheritance is not recommended as it can cause issues with equals/hashCode implementation. Use composition instead.
 
 ```scala
 // Avoid: Case class inheritance
@@ -274,9 +348,17 @@ case class Badge(id: String, level: String)
 case class Employee(person: Person, badge: Badge)
 ```
 
-## Exercises
+{{< callout type="info" title="Key Points" >}}
+- Use case classes for immutable data, domain models, DTOs
+- Avoid using `var` and maintain immutability
+- Use composition instead of case class inheritance
+{{< /callout >}}
 
-### 1. Result Type Implementation
+#### Exercises
+
+Practice case class and ADT concepts with these exercises.
+
+**1. Result Type Implementation**
 
 Implement a `Result[T]` type: `Success(value)` or `Failure(message)`
 
@@ -300,7 +382,7 @@ divide(10, 2) match {
 
 </details>
 
-### 2. Expression Tree
+**2. Expression Tree**
 
 Define an ADT for mathematical expressions and write an evaluation function.
 
@@ -326,7 +408,7 @@ println(eval(expr))  // 9.0
 
 </details>
 
-## Next Steps
+#### Next Steps
 
 - [Pattern Matching](../pattern-matching/) — Advanced match expressions
 - [Collections](../collections/) — Scala collection library

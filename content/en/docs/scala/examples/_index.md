@@ -1,20 +1,27 @@
 ---
-lastmod: "2026-01-06"
-title: Hands-on Examples
+bookCollapseSection: true
+lastmod: "2026-01-14"
+title: Practical Examples
 weight: 3
 ---
 
-Example projects to practice concepts learned in theory.
+These are example projects where you can directly execute concepts learned in theory. Writing and running Scala's core concepts in actual code will deepen your understanding of the language. Each example is organized by difficulty level and designed to enable step-by-step learning from beginners to advanced users.
 
-## Example Projects
+#### Example projects
+
+The following table lists the example projects provided. We recommend progressing sequentially from environment setup to basic examples, version comparison, Spark integration, and practical projects. Each example builds on concepts learned in previous examples, so learning in order is more effective.
 
 | Example | Description | Difficulty |
-|---------|-------------|------------|
-| [Environment Setup](setup/) | Detailed sbt and IDE setup guide | Beginner |
-| [Basic Examples](basic/) | Comprehensive examples using core concepts | Elementary |
+|------|------|--------|
+| [Environment Setup](setup/) | Detailed guide for sbt, IDE setup | Beginner |
+| [Basic Examples](basic/) | Comprehensive examples applying core concepts | Beginner |
 | [Scala 2 vs 3 Comparison](scala2-vs-scala3/) | Code comparison by version | Intermediate |
+| [Spark Integration](spark-integration/) | Using Apache Spark with Scala | Intermediate |
+| [Practical Project](practical-project/) | REST API, data pipelines | Advanced |
 
-## Example Project Structure
+#### Example project structure
+
+Example projects are separated into Scala 2 and Scala 3 versions. Each version is organized as an independent sbt project, so you can selectively run examples from your desired version. Below is the complete directory structure.
 
 ```
 examples/scala/
@@ -32,66 +39,65 @@ examples/scala/
         └── ...
 ```
 
-## How to Run Examples
+Both projects follow the standard sbt directory structure. `build.sbt` defines project settings and dependencies, `project/build.properties` specifies the sbt version to use, and source code is located in the `src/main/scala/` directory.
 
-### 1. Clone Project
+#### How to run examples
+
+To run examples, first clone the repository, navigate to the desired example directory, and then execute sbt commands. Each step is explained in detail below.
+
+**Clone project**
+
+First, clone the project from GitHub. If you've already cloned it, you can skip this step.
 
 ```bash
 git clone https://github.com/advanced-beginner/advanced-beginner.github.io.git
 cd advanced-beginner/examples/scala
 ```
 
-### 2. Run Scala 3 Examples
+**Run Scala 3 examples**
+
+To run Scala 3 examples, navigate to the `scala3-basics` directory and run the sbt run command. The first run may take time due to dependency downloads.
 
 ```bash
 cd scala3-basics
 sbt run
 ```
 
-### 3. Run Scala 2 Examples
+**Run Scala 2 examples**
+
+To run Scala 2.13 examples, similarly run sbt run in the `scala2-basics` directory. Scala 2 version is required for projects using Spark.
 
 ```bash
 cd scala2-basics
 sbt run
 ```
 
-## Learning Points by Example
+#### Learning points by example
 
-### Environment Setup
-- sbt project configuration
-- IDE setup (IntelliJ, VS Code)
-- Commonly used sbt commands
+We've summarized the core concepts you can learn from each example. Understanding what each example covers before running it will enhance your learning effectiveness.
 
-### Basic Examples
-- Data modeling with case classes
-- Pattern matching usage
-- Collection operations (map, filter, fold)
-- Writing higher-order functions
+**Environment Setup** covers the foundational environment configuration for Scala development. You'll learn how to configure sbt projects, set up IDEs like IntelliJ IDEA or VS Code, and commonly used sbt commands in daily work.
 
-### Scala 2 vs 3 Comparison
-- Syntax differences (braces vs indentation)
-- implicit → given/using migration
-- New enum syntax
-- Extension Methods
+**Basic Examples** practice Scala's core features. You'll learn data modeling with case classes, branching with pattern matching, collection operations like map, filter, fold, and how to write higher-order functions.
 
-## Hands-on Practice
+**Scala 2 vs 3 Comparison** directly compares code differences between the two versions. You'll cover braces vs indentation syntax, migration from implicit to given/using, new enum syntax, Extension Methods, etc.
 
-Modify and run the example code yourself:
+#### Hands-on practice
 
-1. Edit files under `src/main/scala/`
-2. Run with `sbt run` or `sbt ~run` (auto-reload)
-3. Check the results
+It's important not just to run example code, but to modify and experiment with it yourself. Follow these steps to modify code and check the results:
 
-### Recommended Exercises
+1. Modify files under `src/main/scala/`
+2. Run with `sbt run` or `sbt ~run` (auto re-run)
+3. Check results
 
-**Beginner:**
-- Filter even numbers from a list and output their squares
-- Define `Person(name, age)` case class and sort by age
+Using the `sbt ~run` command automatically recompiles and runs whenever files change. This is convenient for practice as you can immediately see results while modifying code.
 
-**Intermediate:**
-- Implement safe division function using Option
-- Generate combinations of two lists with For Comprehension
+**Recommended practice assignments**
 
-**Advanced:**
-- Implement JSON serialization with type classes
-- Process asynchronous data with Future
+Try implementing these assignments to improve your Scala skills.
+
+For beginner assignments, write a program that filters only even numbers from a list and prints the squared results. Also define a `Person(name, age)` case class and implement code to sort by age.
+
+For intermediate assignments, implement a safe division function using Option. Return None when dividing by zero. Also write code to generate all combinations of two lists using For Comprehension.
+
+For advanced assignments, implement JSON serialization using type classes. Create extensible encoders for various types. Also write asynchronous data processing code using Future.

@@ -1,84 +1,93 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-14"
 title: Scala
+description: Scala guide combining functional and object-oriented programming - from basic syntax to type system, higher-order functions, and type classes
 weight: 3
 ---
 
-## What is Scala?
+#### What is Scala?
 
-Scala is a JVM-based language that combines **functional programming** and **object-oriented programming**. Short for "Scalable Language", it's designed to scale from small scripts to large distributed systems.
+Scala is a JVM-based language that combines **functional programming** and **object-oriented programming**. It's an abbreviation for "Scalable Language," designed to scale from small scripts to large distributed systems.
 
-### Why Scala?
+**Why Scala?**
+
+This table summarizes the benefits Java developers gain when transitioning to Scala. Scala overcomes Java's limitations while maintaining perfect compatibility with the existing Java ecosystem.
 
 | Java's Limitations | Scala's Solutions |
-|-------------------|-------------------|
+|-------------|---------------|
 | Verbose code | Concise and expressive syntax |
 | Limited type system | Powerful type inference and advanced type features |
 | Lack of functional programming support | First-class functions, immutability, pattern matching |
-| Null reference problems | Safe null handling with Option type |
+| Null reference problem | Safe null handling with Option type |
 
 Scala is 100% compatible with Java while enabling safer and more expressive code.
 
-### When Should You Use Scala?
+**When should you use Scala?**
 
-**Suitable cases:**
+Decide whether to adopt Scala based on your project characteristics.
+
+**Suitable for:**
 - Large-scale data processing (Apache Spark)
-- Distributed system development (Akka, Akka HTTP)
+- Distributed systems development (Akka, Akka HTTP)
 - When you want to apply functional programming
 - Projects where type safety is important
-- Systems requiring concurrency/parallelism
+- Systems requiring concurrency/parallel processing
 
-**May be overkill:**
+**May be overkill for:**
 - Simple CRUD web applications
 - When the team has no Scala experience and deadlines are tight
-- When Java ecosystem is sufficient
+- When the Java ecosystem alone is sufficient
 
-### Scala 2 vs Scala 3
+**Scala 2 vs Scala 3**
 
-This guide covers both **Scala 2.13** and **Scala 3**.
+This guide covers both **Scala 2.13** and **Scala 3**. The core concepts of both versions are the same, but there are differences in syntax and some features.
 
-| Aspect | Scala 2.13 | Scala 3 |
-|--------|-----------|---------|
+| Category | Scala 2.13 | Scala 3 |
+|------|-----------|---------|
 | Status | Currently most widely used | Latest version, gradually spreading |
 | Syntax | Brace-based | Indentation-based option |
 | implicit | implicit keyword | Improved with given/using |
 | Enums | sealed trait + case object | enum keyword |
-| Type System | Powerful | Union, Intersection types added |
+| Type system | Powerful | Union, Intersection, etc. added |
 
 > **Recommendation:** Choose Scala 3 for new projects, Scala 2.13 for existing projects or when using Spark.
 
-## What This Guide Covers
+#### What this guide covers
 
-### [Quick Start](quick-start/)
+This guide is structured to help you learn Scala step by step from basics to advanced.
+
+**[Quick Start](quick-start/)**
 Install Scala and run your first program in 5 minutes.
 
-### [Concepts](concepts/)
+**[Understanding Concepts](concepts/)**
 
-**Fundamentals:**
+Learn Scala's core concepts categorized into basic, intermediate, and advanced levels.
 
-| Topic | What You'll Learn |
-|-------|-------------------|
+**Basics:**
+
+| Topic | What you'll learn |
+|------|----------|
 | [Basic Syntax](concepts/basics/) | Variables, constants, basic types, type inference |
 | [Control Structures](concepts/control-structures/) | if, for, while, match expressions |
-| [Functions & Methods](concepts/functions-methods/) | def, lambdas, default values, varargs |
-| [Classes & Objects](concepts/classes-objects/) | class, object, trait, enum |
+| [Functions and Methods](concepts/functions-methods/) | def, lambda, default values, varargs |
+| [Classes and Objects](concepts/classes-objects/) | class, object, trait, enum |
 | [Case Classes](concepts/case-classes/) | Immutable data modeling |
 | [Pattern Matching](concepts/pattern-matching/) | Powerful use of match expressions |
 
 **Intermediate:**
 
-| Topic | What You'll Learn |
-|-------|-------------------|
+| Topic | What you'll learn |
+|------|----------|
 | [Collections](concepts/collections/) | List, Set, Map, Seq, Vector |
 | [Higher-Order Functions](concepts/higher-order-functions/) | map, filter, fold, currying |
 | [Generics](concepts/generics/) | Type parameters, type bounds |
 | [For Comprehension](concepts/for-comprehensions/) | Elegant expression of monadic operations |
-| [Implicit/Given](concepts/implicits/) | Implicit conversions and contextual abstraction |
+| [Implicit/Given](concepts/implicits/) | Implicit conversions and contextual abstractions |
 
 **Advanced:**
 
-| Topic | What You'll Learn |
-|-------|-------------------|
+| Topic | What you'll learn |
+|------|----------|
 | [Type Classes](concepts/type-classes/) | Ad-hoc polymorphism pattern |
 | [Variance](concepts/variance/) | Covariance/contravariance of generic types |
 | [Advanced Types](concepts/type-system-advanced/) | Union, Intersection, Match Types |
@@ -86,22 +95,25 @@ Install Scala and run your first program in 5 minutes.
 | [Concurrency](concepts/concurrency/) | Future, Promise, ExecutionContext |
 | [Functional Patterns](concepts/functional-patterns/) | Functor, Monad, referential transparency |
 
-### [Hands-on Examples](examples/)
-Executable example projects based on sbt.
+**[Practical Examples](examples/)**
+
+Executable example projects based on sbt. Verify concepts you've learned with actual code.
 
 - [Environment Setup](examples/setup/) - sbt, IDE configuration
-- [Basic Examples](examples/basic/) - Core concept examples
-- [Scala 2 vs 3 Comparison](examples/scala2-vs-scala3/) - Version-specific code comparison
+- [Basic Examples](examples/basic/) - Examples applying core concepts
+- [Scala 2 vs 3 Comparison](examples/scala2-vs-scala3/) - Code comparison by version
 
-### [Appendix](appendix/)
+**[Appendix](appendix/)**
+
+Reference materials to help with learning, including glossary, version comparison, FAQ, etc.
 - [Glossary](appendix/glossary/) - Quick reference for Scala terms
-- [Version Comparison](appendix/version-comparison/) - Scala 2 vs 3 differences summary
+- [Version Comparison](appendix/version-comparison/) - Summary of Scala 2 vs 3 differences
 - [FAQ](appendix/faq/) - Frequently asked questions
-- [References](appendix/references/) - Official docs and additional learning resources
+- [References](appendix/references/) - Official documentation and additional learning resources
 
-## Try It Now
+#### Get started now
 
-> 🚀 **No installation needed:** Try Scala directly in your browser at [Scastie](https://scastie.scala-lang.org/)!
+> 🚀 **Try without installation:** You can run Scala directly in your browser at [Scastie](https://scastie.scala-lang.org/)!
 
 ```scala
 // Try running this code in Scastie
@@ -110,24 +122,28 @@ Executable example projects based on sbt.
   println(s"Hello, $name!")
 ```
 
-## Prerequisites
+#### Prerequisites
 
 - **Required**: Programming basics (variables, functions, conditionals, loops)
-- **Helpful**: Java experience, OOP concepts, functional programming basics
+- **Helpful**: Java experience, object-oriented concepts, functional programming basics
 
-## Suggested Learning Path
+#### Learning path suggestions
+
+Recommended learning paths based on your goals.
 
 ```
-If you're new:      Quick Start → Basic Syntax → Control Structures → Functions → Classes
-Data processing:    Collections → Higher-Order Functions → For Comprehension → Basic Examples
-Advanced:           Type Classes → Variance → Functional Patterns → Concurrency
-Scala 3 migration:  Implicit/Given → Version Comparison → Advanced Types
+If you're new:        Quick Start → Basic Syntax → Control Structures → Functions → Classes
+For data processing:  Collections → Higher-Order Functions → For Comprehension → Basic Examples
+Advanced usage:       Type Classes → Variance → Functional Patterns → Concurrency
+Scala 3 transition:   Implicit/Given → Version Comparison → Advanced Types
 ```
 
-## Common Misconceptions
+#### Common misconceptions
 
-**"Scala is too difficult"** — Basic syntax is more concise than Java. Learn advanced features gradually as needed.
+Let's correct some common misconceptions about Scala.
 
-**"Scala is a dying language"** — Still critically used in major projects like Apache Spark, Kafka, and Akka. Scala 3 is actively evolving.
+**"Scala is too difficult"** — Basic syntax is more concise than Java. You can learn advanced features gradually as needed.
 
-**"You must use only functional style"** — Scala is a multi-paradigm language. Mix OOP and FP as appropriate for the situation.
+**"Scala is a dying language"** — It's still used critically in large-scale projects like Apache Spark, Kafka, and Akka. Scala 3 is actively evolving.
+
+**"You must use only functional programming"** — Scala is a multi-paradigm language. Mix object-oriented and functional programming as appropriate for the situation.

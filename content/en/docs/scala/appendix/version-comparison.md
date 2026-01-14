@@ -1,24 +1,38 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-14"
 title: Scala 2 vs Scala 3 Version Comparison
 weight: 2
 ---
 
-Summary of major differences between Scala 2 and Scala 3 at a glance.
+An overview of the main differences between Scala 2 and Scala 3. Scala 3, released in 2020, provides more concise syntax, a more powerful type system, and improved implicit features.
 
-## New Features (Scala 3)
+{{% notice style="tip" title="TL;DR" %}}
+- **New Projects**: Scala 3 recommended (more concise syntax, improved type system)
+- **Using Spark**: Maintain Scala 2.12/2.13 (Spark doesn't support Scala 3 yet)
+- **Key Changes**: `implicit` → `given`/`using`, indentation-based syntax, `enum` added
+- **Compatibility**: Scala 3 can use Scala 2.13 libraries
+- **Migration**: Gradual transition with `-source:3.0-migration` option
+{{% /notice %}}
 
-### Syntax Improvements
+#### New Features (Scala 3)
+
+Major features added in Scala 3, organized by category.
+
+**Syntax Improvements**
+
+Scala 3 allows optional indentation-based syntax instead of braces, making code more concise. The table below shows the main syntax differences.
 
 | Feature | Scala 2 | Scala 3 |
 |---------|---------|---------|
-| Block syntax | Braces required | Indentation-based optional |
+| Block syntax | Braces required | Indentation-based option |
 | if condition | `if (cond)` | `if cond then` |
 | for loop | `for (x <- list)` | `for x <- list do` |
 | match | Braces required | Indentation-based |
 | Wildcard import | `import pkg._` | `import pkg.*` |
 
-### Enumerations
+**Enumerations**
+
+Scala 3's `enum` allows concise definition of enumerations. Scala 2 required a combination of sealed trait and case objects.
 
 ```scala
 // Scala 3
@@ -37,37 +51,54 @@ object Color {
 }
 ```
 
-### Type System
+**Type System**
+
+Scala 3 added powerful type features such as Union Types, Intersection Types, and Match Types. The table below shows the main differences in the type system.
 
 | Feature | Scala 2 | Scala 3 |
 |---------|---------|---------|
 | Union Types | Use Either | `A \| B` |
 | Intersection Types | `A with B` | `A & B` |
 | Opaque Types | Value Class | `opaque type` |
-| Match Types | Not possible | Supported |
+| Match Types | Not available | Supported |
 | Type Lambdas | Complex syntax | `[X] =>> F[X]` |
 
-### Implicit Features
+**Implicit Features**
+
+Scala 3 redesigned implicit features with `given`/`using`, making intent clearer. The table below shows syntax changes in implicit features.
 
 | Feature | Scala 2 | Scala 3 |
 |---------|---------|---------|
-| Implicit value | `implicit val` | `given` |
-| Implicit parameter | `(implicit x: T)` | `(using x: T)` |
+| Implicit values | `implicit val` | `given` |
+| Implicit parameters | `(implicit x: T)` | `(using x: T)` |
 | Implicit lookup | `implicitly[T]` | `summon[T]` |
-| Extension method | `implicit class` | `extension` |
-| Implicit conversion | `implicit def` | `given Conversion` |
+| Extension methods | `implicit class` | `extension` |
+| Implicit conversions | `implicit def` | `given Conversion` |
 
-### Metaprogramming
+**Metaprogramming**
+
+Scala 3's macro system was completely redesigned. The `inline` keyword guarantees compile-time inlining, and quotes API enables type-safe macros.
 
 | Feature | Scala 2 | Scala 3 |
 |---------|---------|---------|
 | Inlining | `@inline` (hint) | `inline` (guaranteed) |
 | Macro API | scala.reflect | scala.quoted |
-| Compile-time ops | Limited | compiletime package |
+| Compile-time operations | Limited | compiletime package |
 
-## Changed Features
+{{% notice style="note" title="Key Points" %}}
+- **Syntax**: Indentation-based option, `if cond then`, `for x <- list do`
+- **enum**: Concise replacement for `sealed trait` + `case object` combination
+- **Types**: Union (`|`), Intersection (`&`), Opaque Types added
+- **Implicits**: `implicit` → `given`/`using` for clearer intent
+{{% /notice %}}
 
-### Trait Parameters
+#### Changed Features
+
+Existing features with changed syntax or behavior.
+
+**Trait Parameters**
+
+Traits in Scala 3 can have parameters. Patterns that previously required abstract classes can now be implemented with traits.
 
 ```scala
 // Scala 3: traits can have parameters
@@ -76,10 +107,12 @@ trait Greeting(val name: String):
 
 class Person extends Greeting("World")
 
-// Not possible in Scala 2 - needs abstract class
+// Scala 2: not possible - abstract class required
 ```
 
-### Entry Point
+**Entry Points**
+
+Entry points can be defined simply with the `@main` annotation. Command-line arguments are also parsed in a type-safe manner.
 
 ```scala
 // Scala 3
@@ -93,35 +126,53 @@ object Hello {
 }
 ```
 
-### Creator Applications
+**Creator Applications**
+
+Scala 3 allows creating class instances without the `new` keyword. Even non-case classes can be directly called without an apply method.
 
 ```scala
-// Scala 3: create class instances without new
+// Scala 3: create class instance without new
 class Person(name: String)
-val p = Person("Alice")  // No new needed!
+val p = Person("Alice")  // without new!
 
 // Scala 2: new required (unless case class)
 val p = new Person("Alice")
 ```
 
-## Dropped Features
+{{% notice style="note" title="Key Points" %}}
+- **Trait Parameters**: Traits can have constructor parameters in Scala 3
+- **@main**: Entry point definition simplified with automatic argument parsing
+- **Creator Applications**: Regular classes can create instances without `new`
+{{% /notice %}}
 
-The following features have been removed in Scala 3:
+#### Removed Features
 
-| Dropped Feature | Alternative |
+The following features were removed in Scala 3. Most have better alternatives, and those alternatives should be used during migration.
+
+| Removed Feature | Alternative |
 |-----------------|-------------|
-| Procedural syntax (`def f() { }`) | `def f(): Unit = { }` |
-| `do-while` | `while` + condition variable |
-| XML literals | Use libraries |
-| Symbol literals (`'symbol`) | Strings |
-| `DelayedInit` | Regular constructors |
-| Auto-apply `()` | Explicit calls |
+| Procedure syntax (`def f() { }`) | `def f(): Unit = { }` |
+| `do-while` | `while` + conditional variable |
+| XML literals | Use library |
+| Symbol literals (`'symbol`) | String |
+| `DelayedInit` | Regular constructor |
+| Auto-application of `()` | Explicit call |
 | `private[this]` | `private` |
 | `protected[this]` | `protected` |
 
-## Compatibility
+{{% notice style="note" title="Key Points" %}}
+- **Procedure syntax** (`def f() { }`): Explicitly use `: Unit =`
+- **XML literals**: Replaced with separate library
+- **Symbol literals** (`'symbol`): Use strings
+{{% /notice %}}
 
-### Using Scala 2 Libraries
+#### Compatibility
+
+Scala 3 provides binary compatibility with Scala 2.13. Existing libraries can be used as-is, reducing migration burden.
+
+**Using Scala 2 Libraries**
+
+Scala 2.13 libraries can be directly added as dependencies in Scala 3 projects.
 
 Scala 2.13 libraries can be used in Scala 3 projects:
 
@@ -129,7 +180,9 @@ Scala 2.13 libraries can be used in Scala 3 projects:
 libraryDependencies += "org.typelevel" % "cats-core_2.13" % "2.10.0"
 ```
 
-### Cross-building
+**Cross-building**
+
+When developing libraries, multiple Scala versions can be supported simultaneously.
 
 ```scala
 // build.sbt
@@ -137,7 +190,9 @@ scalaVersion := "3.3.1"
 crossScalaVersions := Seq("2.13.12", "3.3.1")
 ```
 
-### Migration Mode
+**Migration Mode**
+
+Using the `-source:3.0-migration` option allows gradual migration of Scala 2 code. When used with the `-rewrite` option, some transformations are applied automatically.
 
 ```scala
 // build.sbt
@@ -147,23 +202,43 @@ scalacOptions ++= Seq(
 )
 ```
 
-## Recommendations
+{{% notice style="note" title="Key Points" %}}
+- **Binary Compatibility**: Scala 2.13 libraries can be used directly in Scala 3
+- **Cross-building**: Support multiple versions simultaneously with `crossScalaVersions`
+- **Migration Mode**: Automatic conversion with `-source:3.0-migration -rewrite`
+{{% /notice %}}
 
-### New Projects
+#### Recommendations
 
-- **Scala 3 recommended**: New features, better error messages, improved type inference
+Guidelines for version selection.
 
-### Existing Projects
+**New Projects**
 
-- **Gradual migration**: Use `-source:3.0-migration` option
-- **Check dependencies**: Verify Scala 3 support for major libraries
-- **Maintain tests**: Ensure tests pass before and after migration
+- **Scala 3 Recommended**: New features, better error messages, improved type inference
 
-### Using Spark
+**Existing Projects**
 
-- **Keep Scala 2.12/2.13**: Spark doesn't support Scala 3 yet (as of 2024)
+Migration strategy for existing Scala 2 projects.
 
-## References
+- **Gradual Migration**: Use `-source:3.0-migration` option
+- **Check Dependencies**: Verify Scala 3 support of major libraries
+- **Maintain Tests**: Ensure tests pass before and after migration
+
+**Using Spark**
+
+Projects using Apache Spark must maintain Scala 2.
+
+- **Maintain Scala 2.12/2.13**: Spark doesn't support Scala 3 yet (as of 2024)
+
+{{% notice style="note" title="Key Points" %}}
+- **New Projects**: Choose Scala 3 (better syntax, error messages, type inference)
+- **Existing Projects**: Gradual migration, verify dependency Scala 3 support
+- **Spark**: Must maintain Scala 2, waiting for Scala 3 support
+{{% /notice %}}
+
+#### References
+
+Official migration guide and reference documentation.
 
 - [Scala 3 Migration Guide](https://docs.scala-lang.org/scala3/guides/migration/compatibility-intro.html)
 - [Scala 3 Reference](https://docs.scala-lang.org/scala3/reference/)

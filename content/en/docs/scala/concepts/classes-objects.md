@@ -1,14 +1,26 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-14"
 title: Classes and Objects
 weight: 4
 ---
 
-Scala supports both object-oriented and functional programming. This document covers OOP features like classes, objects, and traits.
+{{< callout type="info" title="TL;DR" >}}
+- **Classes**: Write constructor parameters directly in the declaration to reduce boilerplate
+- **object**: Singleton instances are supported at the language level
+- **Companion objects**: Replace static members with same-named objects as classes
+- **Traits**: Enjoy the benefits of multiple inheritance while avoiding the diamond problem
+{{< /callout >}}
 
-## Classes
+**Target Audience:** Developers with Java/OOP experience
+**Prerequisites:** Scala basic syntax, functions and methods
 
-### Basic Class Definition
+Scala supports both object-oriented and functional programming. Classes, objects, traits, and other OOP features can be used harmoniously with the functional paradigm. In particular, Scala's object supports the singleton pattern at the language level, and traits maximize code reuse while solving multiple inheritance problems.
+
+#### Classes
+
+Classes are the basic unit that encapsulates data and behavior. Scala classes write constructor parameters directly in the class declaration to reduce boilerplate code.
+
+**Basic Class Definition**
 
 ```scala
 // Basic class
@@ -20,7 +32,7 @@ val person = new Person("John", 30)
 println(person.greet())  // Hello, I'm John.
 ```
 
-### Constructor Parameters
+**Constructor Parameters**
 
 Adding `val` or `var` to constructor parameters automatically creates fields.
 
@@ -40,7 +52,9 @@ mp.age = 31
 println(mp.age)  // 31
 ```
 
-### Auxiliary Constructors
+**Auxiliary Constructors**
+
+Auxiliary constructors are defined with the `this` keyword and must first call the primary constructor or another auxiliary constructor.
 
 ```scala
 class Person(val name: String, val age: Int) {
@@ -54,7 +68,9 @@ val p2 = new Person("Jane")      // age = 0
 val p3 = new Person()            // name = "Unknown", age = 0
 ```
 
-### Using Default Values (Recommended)
+**Using Default Values (Recommended)**
+
+Using default parameter values is cleaner and easier to maintain than auxiliary constructors.
 
 ```scala
 // Default values are cleaner than auxiliary constructors
@@ -65,7 +81,9 @@ val p2 = new Person("Jane")
 val p3 = new Person()
 ```
 
-### Scala 3 Syntax
+**Scala 3 Syntax**
+
+In Scala 3, you can define the class body with a colon and indentation. You can write cleanly without braces.
 
 {{< tabs groupid="scala-version" >}}
 {{% tab title="Scala 3" %}}
@@ -91,11 +109,19 @@ class Person(val name: String, val age: Int) {
 {{% /tab %}}
 {{< /tabs >}}
 
-## Object
+{{< callout type="info" title="Key Points" >}}
+- Adding `val`/`var` to constructor parameters automatically creates fields
+- Using default parameter values is cleaner than auxiliary constructors
+- In Scala 3, define class body with colon and indentation
+{{< /callout >}}
 
-`object` defines a singleton instance.
+#### Object
 
-### Singleton Object
+`object` defines a singleton instance. Implementing the singleton pattern in Java requires complex code like private constructors, static fields, and synchronization, but Scala solves it with just the `object` keyword. Objects are lazily initialized on first access and are thread-safe.
+
+**Singleton Object**
+
+An object has only one instance throughout the program. Suitable for global state, utility methods, factories, etc.
 
 ```scala
 object DatabaseConnection {
@@ -114,7 +140,9 @@ DatabaseConnection.connect("jdbc:mysql://localhost/db")
 println(DatabaseConnection.getConnection)
 ```
 
-### Utility Methods
+**Utility Methods**
+
+Using object for a collection of pure functions without state is similar to Java's static methods.
 
 ```scala
 object MathUtils {
@@ -127,9 +155,15 @@ println(MathUtils.square(5))  // 25
 println(MathUtils.PI)         // 3.14159
 ```
 
-## Companion Object
+{{< callout type="info" title="Key Points" >}}
+- `object` defines a singleton instance (use without new)
+- Lazily initialized and thread-safe
+- Suitable for utility methods, global state, factories
+{{< /callout >}}
 
-An object with the same name as a class is called a **companion object**.
+#### Companion Object
+
+An object with the same name as a class is called a **companion object**. Companion objects must be defined in the same file and can access each other's private members with the class. Replaces Java's static members and is mainly used to define factory methods or constants.
 
 ```scala
 class Circle(val radius: Double) {
@@ -155,7 +189,7 @@ val c2 = Circle.fromDiameter(10)
 println(c1.area)  // 78.53975
 ```
 
-### Private Member Access
+**Private Member Access**
 
 Companion objects and classes can access each other's `private` members.
 
@@ -172,11 +206,19 @@ val person = Person.create("John", 30)  // Some(Person)
 val invalid = Person.create("Error", -5)  // None
 ```
 
-## Trait
+{{< callout type="info" title="Key Points" >}}
+- Companion objects are defined with the same name as a class in the same file
+- Can access each other's `private` members
+- `apply` method allows creating instances without new
+{{< /callout >}}
 
-Traits are similar to Java interfaces but can include implementations.
+#### Trait
 
-### Basic Trait
+Traits are similar to Java interfaces but can include implementations. Classes can mixin multiple traits to enjoy the benefits of multiple inheritance while avoiding the diamond problem. Traits play a key role in code reuse, separation of concerns, and modularization.
+
+**Basic Trait**
+
+Defining only abstract methods can be used like a Java interface.
 
 ```scala
 trait Greeter {
@@ -192,7 +234,9 @@ class CasualGreeter extends Greeter {
 }
 ```
 
-### Trait with Implementation
+**Trait with Implementation**
+
+Providing default implementations in traits allows implementing classes to use them without redefinition.
 
 ```scala
 trait Logger {
@@ -211,7 +255,9 @@ class MyService extends Logger {
 }
 ```
 
-### Multiple Traits (Mixin)
+**Multiple Traits (Mixin)**
+
+You can combine multiple traits with the `with` keyword. The first supertype uses `extends`, the rest use `with`.
 
 ```scala
 trait Swimmer {
@@ -233,7 +279,9 @@ println(duck.fly())    // Flying...
 println(duck.quack())  // Quack!
 ```
 
-### Trait Stacking
+**Trait Stacking**
+
+When multiple traits override the same method, they're called according to linearization order. `super.process` calls the next trait's method in linearization order. This is called the stackable modification pattern.
 
 ```scala
 trait Base {
@@ -255,7 +303,15 @@ val processor = new TextProcessor
 println(processor.process("  hello world  "))  // HELLO WORLD
 ```
 
-## Abstract Class
+{{< callout type="info" title="Key Points" >}}
+- Traits are interfaces that can include implementations
+- Can mixin multiple traits with `with` keyword
+- Trait stacking can combine behaviors (linearization order)
+{{< /callout >}}
+
+#### Abstract Class
+
+Abstract classes cannot be instantiated and can define abstract members that must be implemented by subclasses. Unlike traits, they can have constructor parameters.
 
 ```scala
 abstract class Animal(val name: String) {
@@ -278,7 +334,9 @@ val dog = new Dog("Buddy")
 println(dog.describe())  // Buddy says Woof
 ```
 
-### Abstract Class vs Trait
+**Abstract Class vs Trait**
+
+The table below summarizes the main differences between abstract classes and traits. Generally, traits are preferred, but abstract classes are used when constructor parameters are needed or Java compatibility is important.
 
 | Feature | Abstract Class | Trait |
 |---------|---------------|-------|
@@ -288,7 +346,15 @@ println(dog.describe())  // Buddy says Woof
 
 > **Recommendation:** Use traits unless there's a specific reason.
 
-## Access Modifiers
+{{< callout type="info" title="Key Points" >}}
+- Abstract classes can have constructor parameters
+- Traits allow multiple inheritance, but abstract classes only single inheritance
+- Generally prefer traits; use abstract classes when constructors are needed
+{{< /callout >}}
+
+#### Access Modifiers
+
+Scala's access modifiers are more granular than Java's. The default is public, and private and protected can be used with scope specifiers for precise access control.
 
 ```scala
 class MyClass {
@@ -305,7 +371,15 @@ class PackageAccess {
 }
 ```
 
-## Enum (Scala 3)
+{{< callout type="info" title="Key Points" >}}
+- Default is public; use `private` and `protected`
+- `private[this]` only accessible from same instance
+- `private[packagename]` controls package-level access
+{{< /callout >}}
+
+#### Enum (Scala 3)
+
+In Scala 3, you can define enumerations with the `enum` keyword. Supports various forms from simple enumerations to enumerations with parameters and ADT (Algebraic Data Type) style. In Scala 2, enumerations were implemented with sealed trait and case object combinations.
 
 {{< tabs groupid="scala-version" >}}
 {{% tab title="Scala 3" %}}
@@ -358,9 +432,17 @@ val shapes: List[Shape] = List(Circle(5), Rectangle(3, 4), Triangle(6, 4))
 {{% /tab %}}
 {{< /tabs >}}
 
-## Exercises
+{{< callout type="info" title="Key Points" >}}
+- Scala 3: Concisely define enumerations and ADTs with `enum`
+- Scala 2: Use `sealed trait` + `case object/class` combination
+- Supports both enumerations with parameters and ADT style
+{{< /callout >}}
 
-### 1. Bank Account Class
+#### Exercises
+
+Practice class and object concepts with these exercises.
+
+**1. Bank Account Class**
 
 Implement a `BankAccount` class that manages balance.
 - `deposit(amount)`: Deposit
@@ -396,7 +478,7 @@ println(account.withdraw(2000)) // false
 
 </details>
 
-### 2. Trait Mixin
+**2. Trait Mixin**
 
 Define `Printable` and `Comparable` traits, and mixin into a `Product` class.
 
@@ -429,7 +511,7 @@ println(p1.compare(p2))     // 1 (p1 is more expensive)
 
 </details>
 
-## Next Steps
+#### Next Steps
 
 - [Case Classes](../case-classes/) — Immutable data modeling
 - [Pattern Matching](../pattern-matching/) — Advanced match expressions
