@@ -16,8 +16,8 @@ related_concepts:
 
 {{% notice style="info" title="Prerequisites" %}}
 Before reading this document, understand these concepts first:
-- [Query DSL](../query-dsl/) - Basic query structure
-- [Data Modeling](../data-modeling/) - keyword vs text types
+- [Query DSL](query-dsl/) - Basic query structure
+- [Data Modeling](data-modeling/) - keyword vs text types
 {{% /notice %}}
 
 Learn how to analyze data and extract statistics using Elasticsearch Aggregations.
@@ -657,6 +657,6 @@ Pagination for large data:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Indexing optimization | [Indexing Strategy](../indexing/) |
-| Practical implementation | [Product Search System](../../examples/product-search/) |
-| Performance optimization | [Performance Tuning](../performance-tuning/) |
+| Indexing optimization | [Indexing Strategy](indexing/) |
+| Practical implementation | [Product Search System](../examples/product-search/) |
+| Performance optimization | [Performance Tuning](performance-tuning/) |

@@ -16,8 +16,8 @@ related_concepts:
 
 {{% notice style="info" title="Prerequisites" %}}
 Before reading this document, understand these concepts first:
-- [Data Modeling](../data-modeling/) - Analyzer, text vs keyword types
-- [Query DSL](../query-dsl/) - match, multi_match queries
+- [Data Modeling](data-modeling/) - Analyzer, text vs keyword types
+- [Query DSL](query-dsl/) - match, multi_match queries
 {{% /notice %}}
 
 This document covers how to optimize Korean language search in Elasticsearch. We'll implement the Nori analyzer, autocomplete, and initial consonant (chosung) search.
@@ -700,6 +700,6 @@ public interface ProductRepository extends ElasticsearchRepository<Product, Stri
 
 ## Next Steps
 
-- [Query DSL](../query-dsl/) - Various search queries
-- [Search Relevance](../search-relevance/) - Score adjustment
-- [Performance Tuning](../performance-tuning/) - High-volume processing
+- [Query DSL](query-dsl/) - Various search queries
+- [Search Relevance](search-relevance/) - Score adjustment
+- [Performance Tuning](performance-tuning/) - High-volume processing

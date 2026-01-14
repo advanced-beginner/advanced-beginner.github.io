@@ -396,6 +396,6 @@ Once you understand the architecture, proceed to the next steps:
 
 | Goal | Recommended Doc |
 |------|----------------|
-| Understand Pod concept | [Pod](../pod/) |
-| Try actual deployment | [Quick Start](../../quick-start/) |
-| Understand network configuration | [Networking](../networking/) |
+| Understand Pod concept | [Pod](pod/) |
+| Try actual deployment | [Quick Start](../quick-start/) |
+| Understand network configuration | [Networking](networking/) |

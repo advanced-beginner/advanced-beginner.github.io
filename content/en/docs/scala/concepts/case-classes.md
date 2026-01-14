@@ -410,5 +410,5 @@ println(eval(expr))  // 9.0
 
 #### Next Steps
 
-- [Pattern Matching](../pattern-matching/) — Advanced match expressions
-- [Collections](../collections/) — Scala collection library
+- [Pattern Matching](pattern-matching/) — Advanced match expressions
+- [Collections](collections/) — Scala collection library

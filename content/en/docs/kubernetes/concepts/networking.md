@@ -381,6 +381,6 @@ Once you understand networking, proceed to the next steps:
 
 | Goal | Recommended Doc |
 |------|----------------|
-| Resource configuration | [Resource Management](../resources/) |
-| Auto-scaling | [Scaling](../scaling/) |
-| Actual deployment practice | [Spring Boot Deployment](../../examples/spring-boot/) |
+| Resource configuration | [Resource Management](resources/) |
+| Auto-scaling | [Scaling](scaling/) |
+| Actual deployment practice | [Spring Boot Deployment](../examples/spring-boot/) |

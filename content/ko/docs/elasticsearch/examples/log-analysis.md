@@ -706,6 +706,6 @@ if (log.isDebugEnabled()) {
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 집계 심화 | [집계](../../concepts/aggregations/) |
-| 성능 최적화 | [성능 튜닝](../../concepts/performance-tuning/) |
-| 클러스터 관리 | [고가용성](../../concepts/high-availability/) |
+| 집계 심화 | [집계](../concepts/aggregations/) |
+| 성능 최적화 | [성능 튜닝](../concepts/performance-tuning/) |
+| 클러스터 관리 | [고가용성](../concepts/high-availability/) |

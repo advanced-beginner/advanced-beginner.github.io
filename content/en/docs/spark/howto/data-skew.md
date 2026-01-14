@@ -259,5 +259,5 @@ result.groupBy(spark_partition_id())
 
 ## Next Steps
 
-- [Optimizing Shuffle](../shuffle-optimization/) - Minimize shuffle I/O
-- [Performance Tuning](../../concepts/tuning/) - Overall performance optimization
+- [Optimizing Shuffle](shuffle-optimization/) - Minimize shuffle I/O
+- [Performance Tuning](../concepts/tuning/) - Overall performance optimization

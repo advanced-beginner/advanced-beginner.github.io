@@ -576,5 +576,5 @@ println(s"$name is $age years old.")
 
 Once you've learned basic syntax, proceed to the next topics.
 
-- [Control Structures](../control-structures/) — if, for, while, match expressions
-- [Functions and Methods](../functions-methods/) — Function definition and advanced features
+- [Control Structures](control-structures/) — if, for, while, match expressions
+- [Functions and Methods](functions-methods/) — Function definition and advanced features

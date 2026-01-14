@@ -524,6 +524,6 @@ flowchart TB
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Schema design | [Data Modeling](../data-modeling/) |
-| Write search queries | [Query DSL](../query-dsl/) |
-| Hands-on practice | [Basic Examples](../../examples/basic/) |
+| Schema design | [Data Modeling](data-modeling/) |
+| Write search queries | [Query DSL](query-dsl/) |
+| Hands-on practice | [Basic Examples](../examples/basic/) |

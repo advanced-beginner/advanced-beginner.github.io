@@ -13,7 +13,7 @@ lastmod: 2026-01-10
 {{< /callout >}}
 
 **Target Audience**: Developers who understand Elasticsearch basics
-**Prerequisites**: [Core Components](../core-components/), JSON basics
+**Prerequisites**: [Core Components](core-components/), JSON basics
 
 Learn how to write various search queries using Elasticsearch's Query DSL (Domain Specific Language).
 
@@ -638,6 +638,6 @@ Response:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Improve search quality | [Search Relevance](../search-relevance/) |
-| Data analysis | [Aggregations](../aggregations/) |
-| Hands-on practice | [Basic Examples](../../examples/basic/) |
+| Improve search quality | [Search Relevance](search-relevance/) |
+| Data analysis | [Aggregations](aggregations/) |
+| Hands-on practice | [Basic Examples](../examples/basic/) |

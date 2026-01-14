@@ -375,7 +375,7 @@ GET /products/_explain/1
 ## 인덱싱 성능
 
 인덱싱 성능 최적화의 상세 내용은 인덱싱 전략 문서를 참고하세요.
-→ [인덱싱 전략 상세](../indexing/)
+→ [인덱싱 전략 상세](indexing/)
 
 ### Refresh Interval 조정
 
@@ -454,6 +454,6 @@ PUT /products/_settings
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 장애 대응 | [고가용성](../high-availability/) |
-| 클러스터 구성 | [클러스터 관리](../cluster-management/) |
-| 실전 구현 | [상품 검색 시스템](../../examples/product-search/) |
+| 장애 대응 | [고가용성](high-availability/) |
+| 클러스터 구성 | [클러스터 관리](cluster-management/) |
+| 실전 구현 | [상품 검색 시스템](../examples/product-search/) |

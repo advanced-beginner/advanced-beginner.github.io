@@ -7,7 +7,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **대상 독자**: Aggregate 기본 개념을 익히고 실전 패턴을 학습하려는 개발자
-> **선수 지식**: [Aggregate 심화](../aggregate/)에서 핵심 개념 이해
+> **선수 지식**: [Aggregate 심화](aggregate/)에서 핵심 개념 이해
 > **소요 시간**: 약 30분
 > **핵심 질문**: "Aggregate 구현 시 어떤 패턴을 적용해야 하는가?"
 
@@ -352,5 +352,5 @@ public class Order {
 
 ## 다음 단계
 
-- [도메인 이벤트](../domain-events/) - 이벤트 기반 통합
-- [안티패턴](../anti-patterns/) - 피해야 할 실수들
+- [도메인 이벤트](domain-events/) - 이벤트 기반 통합
+- [안티패턴](anti-patterns/) - 피해야 할 실수들

@@ -327,6 +327,6 @@ kubectl get pod <pod-name> -o jsonpath='{.status.qosClass}'
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 자동 스케일링 | [스케일링](../scaling/) |
-| 헬스 체크 설정 | [헬스 체크](../health-checks/) |
-| 리소스 최적화 | [리소스 최적화](../../howto/resource-optimization/) |
+| 자동 스케일링 | [스케일링](scaling/) |
+| 헬스 체크 설정 | [헬스 체크](health-checks/) |
+| 리소스 최적화 | [리소스 최적화](../howto/resource-optimization/) |

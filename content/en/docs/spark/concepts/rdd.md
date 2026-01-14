@@ -19,7 +19,7 @@ author:
 **Prerequisites**:
 - Java Collections API (List, Map, etc.)
 - Lambda expressions and functional programming basics
-- Understanding of [Architecture](../architecture/) document
+- Understanding of [Architecture](architecture/) document
 
 ---
 
@@ -518,5 +518,5 @@ public class LogAnalysis {
 
 After understanding RDD basics, learn more efficient APIs:
 
-- [DataFrame and Dataset](../dataframe-dataset/) - High-level APIs and Catalyst optimization
-- [Transformations and Actions](../transformations-actions/) - Deep dive into lazy evaluation
+- [DataFrame and Dataset](dataframe-dataset/) - High-level APIs and Catalyst optimization
+- [Transformations and Actions](transformations-actions/) - Deep dive into lazy evaluation

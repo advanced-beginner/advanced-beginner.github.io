@@ -23,7 +23,7 @@ author_url: "http://github.com/kimbenji"
 | **대상 독자** | Application Service와 Infrastructure 계층 구현을 배우려는 개발자 |
 | **Spring** | @Service, @Transactional, @Repository 애노테이션 사용 경험 |
 | **JPA** | Entity, @Embedded, CascadeType 이해 |
-| **선수 문서** | [프로젝트 설정](../setup/), [주문 도메인](../order-domain/) 완료 |
+| **선수 문서** | [프로젝트 설정](setup/), [주문 도메인](order-domain/) 완료 |
 
 Use Case를 조율하는 Application Service와 인프라 계층을 구현합니다.
 
@@ -911,4 +911,4 @@ flowchart TB
 
 ## 다음 단계
 
-- [부록](../../appendix/) - 용어 사전, 참고 자료
+- [부록](../appendix/) - 용어 사전, 참고 자료

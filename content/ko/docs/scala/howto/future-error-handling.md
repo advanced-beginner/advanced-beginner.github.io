@@ -274,6 +274,6 @@ Future 에러 처리 시 확인사항:
 
 ## 관련 문서
 
-- [동시성](../../concepts/concurrency/) - Future와 Promise 기초
-- [Implicit/Given 디버깅](../implicit-debugging/) - ExecutionContext 문제 해결
-- [함수형 패턴](../../concepts/functional-patterns/) - 모나딕 에러 처리
+- [동시성](../concepts/concurrency/) - Future와 Promise 기초
+- [Implicit/Given 디버깅](implicit-debugging/) - ExecutionContext 문제 해결
+- [함수형 패턴](../concepts/functional-patterns/) - 모나딕 에러 처리

@@ -7,7 +7,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **Target Audience**: Developers designing systems with complex query requirements or performance optimization needs
-> **Prerequisites**: [Domain Events](../domain-events/) or basic understanding of event-driven architecture
+> **Prerequisites**: [Domain Events](domain-events/) or basic understanding of event-driven architecture
 > **Estimated Time**: About 35 minutes
 > **Key Question**: "When should you separate read and write models?"
 
@@ -629,5 +629,5 @@ Command Controller handles write operations like POST, PUT, DELETE, usually retu
 
 #### Next Steps
 
-- [Testing Strategy](../testing/) - Testing CQRS systems
-- [Anti-Patterns](../anti-patterns/) - Common CQRS mistakes
+- [Testing Strategy](testing/) - Testing CQRS systems
+- [Anti-Patterns](anti-patterns/) - Common CQRS mistakes

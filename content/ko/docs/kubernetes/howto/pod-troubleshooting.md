@@ -268,6 +268,6 @@ Pod 문제 해결을 위한 체크리스트입니다.
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 리소스 최적화 | [리소스 최적화](../resource-optimization/) |
-| 헬스 체크 설정 | [헬스 체크](../../concepts/health-checks/) |
-| 배포 실습 | [Spring Boot 배포](../../examples/spring-boot/) |
+| 리소스 최적화 | [리소스 최적화](resource-optimization/) |
+| 헬스 체크 설정 | [헬스 체크](../concepts/health-checks/) |
+| 배포 실습 | [Spring Boot 배포](../examples/spring-boot/) |

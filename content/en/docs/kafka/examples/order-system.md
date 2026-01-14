@@ -20,7 +20,7 @@ Implement an event-driven order system closer to real-world applications. In thi
 | Item | Description |
 |------|-------------|
 | **Target Audience** | Backend developers looking to build event-driven systems |
-| **Prerequisites** | Spring Boot fundamentals, Kafka basic concepts, [Basic Examples](../basic/) completed |
+| **Prerequisites** | Spring Boot fundamentals, Kafka basic concepts, [Basic Examples](basic/) completed |
 | **Required Environment** | Kafka running via Docker, JDK 17+, Gradle |
 | **Estimated Time** | About 45 minutes |
 
@@ -368,8 +368,8 @@ In this example, we used KafkaTemplate with JSON Serializer for event publishing
 
 The complete source code for this example is available at the link below. Check out the full implementation of Producer, Consumer, Controller, and domain objects.
 
-- [**`examples/order-system`**](../../../../examples/order-system/)
+- [**`examples/order-system`**](https://github.com/advanced-beginner/advanced-beginner.github.io/tree/main/examples/order-system)
 
 #### Next Steps
 
-- [Appendix](../../appendix/) - Glossary and references
+- [Appendix](../appendix/) - Glossary and references

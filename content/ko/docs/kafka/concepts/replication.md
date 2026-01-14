@@ -16,7 +16,7 @@ author_url: "http://github.com/kimbenji"
 
 **대상 독자**: Kafka 클러스터를 운영하거나 고가용성 시스템을 설계하는 개발자 및 운영자
 
-**선수 지식**: [핵심 구성요소](../core-components/)의 Broker, Partition 개념
+**선수 지식**: [핵심 구성요소](core-components/)의 Broker, Partition 개념
 
 ---
 
@@ -220,4 +220,4 @@ kafka-topics.sh --describe --unavailable-partitions \
 
 이 문서에서는 Kafka의 복제 메커니즘을 상세히 살펴보았습니다. 다음으로 acks, Message Key, Retention 등 실무에서 자주 마주치는 심화 개념을 학습할 수 있습니다.
 
-- [심화 개념](../advanced-concepts/) - acks, Message Key, Retention, Idempotent Producer
+- [심화 개념](advanced-concepts/) - acks, Message Key, Retention, Idempotent Producer

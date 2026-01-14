@@ -13,7 +13,7 @@ lastmod: 2026-01-10
 {{< /callout >}}
 
 **대상 독자**: Elasticsearch 기본 개념을 이해한 개발자
-**선수 지식**: [핵심 구성요소](../core-components/), JSON 기본 문법
+**선수 지식**: [핵심 구성요소](core-components/), JSON 기본 문법
 
 Elasticsearch의 Query DSL(Domain Specific Language)을 사용하여 다양한 검색 쿼리를 작성하는 방법을 배웁니다.
 
@@ -638,6 +638,6 @@ GET /products/_search
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 검색 품질 개선 | [검색 관련성](../search-relevance/) |
-| 데이터 분석 | [집계](../aggregations/) |
-| 실습 | [기본 예제](../../examples/basic/) |
+| 검색 품질 개선 | [검색 관련성](search-relevance/) |
+| 데이터 분석 | [집계](aggregations/) |
+| 실습 | [기본 예제](../examples/basic/) |

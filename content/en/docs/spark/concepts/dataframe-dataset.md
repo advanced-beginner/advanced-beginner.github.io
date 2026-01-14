@@ -661,5 +661,5 @@ val names = ds.map(_.name)
 
 After understanding DataFrame and Dataset:
 
-- [Spark SQL](../spark-sql/) - Query DataFrames with SQL
-- [Transformations and Actions](../transformations-actions/) - Understanding when operations execute
+- [Spark SQL](spark-sql/) - Query DataFrames with SQL
+- [Transformations and Actions](transformations-actions/) - Understanding when operations execute

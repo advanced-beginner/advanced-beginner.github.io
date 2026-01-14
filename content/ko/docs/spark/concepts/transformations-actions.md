@@ -17,7 +17,7 @@ author:
 **대상 독자**: Spark 연산의 실행 시점을 이해하고자 하는 개발자
 
 **선수 지식**:
-- [아키텍처](../architecture/) 문서의 Job, Stage, Task 개념
+- [아키텍처](architecture/) 문서의 Job, Stage, Task 개념
 - Java Stream API의 지연 평가 개념
 
 ---
@@ -427,13 +427,13 @@ df.select("id", "category", "value")
 
 ## 다음 단계
 
-- [파티셔닝과 셔플](../partitioning/) - Wide Transformation의 내부 동작
-- [캐싱과 영속성](../caching/) - 중간 결과 재사용
+- [파티셔닝과 셔플](partitioning/) - Wide Transformation의 내부 동작
+- [캐싱과 영속성](caching/) - 중간 결과 재사용
 
 ## 관련 문서
 
-- [아키텍처](../architecture/) - Job, Stage, Task의 실행 구조
-- [RDD 기초](../rdd/) - 저수준 Transformation API
-- [DataFrame과 Dataset](../dataframe-dataset/) - 고수준 데이터 처리 API
-- [성능 튜닝](../tuning/) - 실행 계획 최적화
-- [용어 사전](../../appendix/glossary/) - Transformation, Action 용어 정의
+- [아키텍처](architecture/) - Job, Stage, Task의 실행 구조
+- [RDD 기초](rdd/) - 저수준 Transformation API
+- [DataFrame과 Dataset](dataframe-dataset/) - 고수준 데이터 처리 API
+- [성능 튜닝](tuning/) - 실행 계획 최적화
+- [용어 사전](../appendix/glossary/) - Transformation, Action 용어 정의

@@ -393,5 +393,5 @@ find(List("a", "bb", "ccc"))(_.length > 2)  // Some("ccc")
 
 #### 다음 단계
 
-- [공변성/반공변성](../variance/) — 제네릭 타입의 변성
-- [타입 클래스](../type-classes/) — Ad-hoc 다형성
+- [공변성/반공변성](variance/) — 제네릭 타입의 변성
+- [타입 클래스](type-classes/) — Ad-hoc 다형성

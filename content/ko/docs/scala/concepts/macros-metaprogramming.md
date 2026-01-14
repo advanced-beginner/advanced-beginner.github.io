@@ -18,9 +18,9 @@ weight: 15
 메타프로그래밍을 통해 컴파일 타임에 코드를 생성하거나 검증할 수 있습니다. Scala 3에서는 `inline`과 새로운 매크로 시스템을 제공합니다. 이 기능들을 활용하면 보일러플레이트 코드를 줄이고, 컴파일 시점에 최적화를 수행하며, 타입 안전한 코드 생성이 가능합니다.
 
 > 📚 **사전 지식**: 이 문서는 고급 주제입니다. 다음 개념에 익숙해야 합니다:
-> - [제네릭](../generics/) - 타입 매개변수
-> - [타입 클래스](../type-classes/) - 타입 수준 추상화
-> - [고급 타입](../type-system-advanced/) - Match Types, Type Lambdas
+> - [제네릭](generics/) - 타입 매개변수
+> - [타입 클래스](type-classes/) - 타입 수준 추상화
+> - [고급 타입](type-system-advanced/) - Match Types, Type Lambdas
 >
 > **난이도**: ⭐⭐⭐⭐⭐ (매우 고급)
 
@@ -330,5 +330,5 @@ val f10 = fib(10)  // 컴파일 시 55로 대체
 
 #### 다음 단계
 
-- [동시성](../concurrency/) — Future, Promise
-- [함수형 패턴](../functional-patterns/) — Functor, Monad
+- [동시성](concurrency/) — Future, Promise
+- [함수형 패턴](functional-patterns/) — Functor, Monad

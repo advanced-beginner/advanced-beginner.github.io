@@ -21,7 +21,7 @@ This document provides a step-by-step guide to sending and receiving messages us
 |------|-------------|
 | **Target Audience** | Backend developers who want to use Kafka in Spring Boot applications |
 | **Prerequisites** | Basic Java syntax, Spring Boot fundamentals, Kafka basic concepts |
-| **Prior Completion** | [Quick Start](../../quick-start/) example completed, [Environment Setup](../setup/) configuration done |
+| **Prior Completion** | [Quick Start](../quick-start/) example completed, [Environment Setup](setup/) configuration done |
 | **Estimated Time** | About 30 minutes |
 
 {{% notice style="warning" title="Platform-specific Notes" %}}
@@ -635,6 +635,6 @@ spring:
 
 ## Next Steps
 
-- [Order System](../order-system/) - Real-world example applying domain-driven design
-- [Consumer Advanced Settings](../../concepts/consumer-tuning/) - Performance optimization methods
-- [Error Handling Patterns](../../concepts/error-handling/) - Production error handling strategies
+- [Order System](order-system/) - Real-world example applying domain-driven design
+- [Consumer Advanced Settings](../concepts/consumer-tuning/) - Performance optimization methods
+- [Error Handling Patterns](../concepts/error-handling/) - Production error handling strategies

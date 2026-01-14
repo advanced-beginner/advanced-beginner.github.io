@@ -489,5 +489,5 @@ val flat2 = nested.flatMap(identity)
 
 #### Next Steps
 
-- [Higher-Order Functions](../higher-order-functions/) — Advanced map, filter, fold
-- [For Comprehension](../for-comprehensions/) — Monadic operations
+- [Higher-Order Functions](higher-order-functions/) — Advanced map, filter, fold
+- [For Comprehension](for-comprehensions/) — Monadic operations

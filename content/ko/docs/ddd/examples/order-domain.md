@@ -23,7 +23,7 @@ author_url: "http://github.com/kimbenji"
 | **대상 독자** | DDD 전술적 패턴을 코드로 구현하려는 개발자 |
 | **DDD 기초** | Aggregate, Entity, Value Object, Domain Event 개념 이해 |
 | **Java** | Record, Optional, Stream API 사용 경험 |
-| **선수 문서** | [프로젝트 설정](../setup/) 완료 |
+| **선수 문서** | [프로젝트 설정](setup/) 완료 |
 
 DDD 패턴을 적용하여 주문 도메인을 구현합니다.
 
@@ -1180,4 +1180,4 @@ public abstract class AggregateRoot<ID> {
 
 ## 다음 단계
 
-- [애플리케이션 계층](../application-layer/) - Use Case와 서비스 구현
+- [애플리케이션 계층](application-layer/) - Use Case와 서비스 구현

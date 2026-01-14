@@ -16,13 +16,13 @@ author_url: "http://github.com/kimbenji"
 
 **대상 독자**: Kafka의 심화 개념을 이해하고 프로덕션 설정을 최적화하려는 개발자
 
-**선수 지식**: [메시지 흐름](../message-flow/)의 Topic, Partition, Broker 개념, [Replication](../replication/)의 ISR, Leader, Follower 개념
+**선수 지식**: [메시지 흐름](message-flow/)의 Topic, Partition, Broker 개념, [Replication](replication/)의 ISR, Leader, Follower 개념
 
 ---
 
 acks, Message Key, Retention 정책을 이해합니다. 이 문서는 Kafka 3.6.x 기준으로 작성되었으며, Spring Boot 3.2.x와 Spring Kafka 3.1.x, Java 17 환경에서 코드 예제가 검증되었습니다.
 
-이 문서를 읽기 전에 [메시지 흐름](../message-flow/)에서 Topic, Partition, Broker 개념을, [Replication](../replication/)에서 ISR, Leader, Follower 개념을 먼저 이해하고 있어야 합니다.
+이 문서를 읽기 전에 [메시지 흐름](message-flow/)에서 Topic, Partition, Broker 개념을, [Replication](replication/)에서 ISR, Leader, Follower 개념을 먼저 이해하고 있어야 합니다.
 
 #### acks (Acknowledgment)
 
@@ -385,5 +385,5 @@ Kafka 3.0+에서는 기본값이 true입니다. 특별한 이유가 없다면 �
 
 #### 다음 단계
 
-- [트랜잭션과 Exactly-Once](../transactions/) - 메시지 전달 보장과 트랜잭션 API
-- [Producer 튜닝](../producer-tuning/) - Producer 성능 최적화
+- [트랜잭션과 Exactly-Once](transactions/) - 메시지 전달 보장과 트랜잭션 API
+- [Producer 튜닝](producer-tuning/) - Producer 성능 최적화

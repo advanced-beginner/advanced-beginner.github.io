@@ -770,5 +770,5 @@ println(fibonacci(50))  // 12586269025
 
 #### 다음 단계
 
-- [클래스와 객체](../classes-objects/) — OOP 기초
-- [고차 함수](../higher-order-functions/) — 함수형 프로그래밍 심화
+- [클래스와 객체](classes-objects/) — OOP 기초
+- [고차 함수](higher-order-functions/) — 함수형 프로그래밍 심화

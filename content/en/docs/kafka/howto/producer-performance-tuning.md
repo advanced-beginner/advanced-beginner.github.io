@@ -400,6 +400,6 @@ Follow this order when optimizing performance:
 
 ## Related Documentation
 
-- [Core Components - Producer](../../concepts/core-components/#producer의-역할과-동작-원리) - Producer operation principles
-- [Consumer Lag Troubleshooting](../consumer-lag-troubleshooting/) - Consumer-side optimization
-- [Error Handling Patterns](../../concepts/error-handling/) - Production error handling strategies
+- [Core Components - Producer](../concepts/core-components/#producer의-역할과-동작-원리) - Producer operation principles
+- [Consumer Lag Troubleshooting](consumer-lag-troubleshooting/) - Consumer-side optimization
+- [Error Handling Patterns](../concepts/error-handling/) - Production error handling strategies

@@ -13,7 +13,7 @@ lastmod: 2026-01-10
 {{< /callout >}}
 
 **Target Audience**: Developers implementing semantic search or recommendation systems
-**Prerequisites**: [Core Components](../core-components/), [Query DSL](../query-dsl/), Basic ML concepts
+**Prerequisites**: [Core Components](core-components/), [Query DSL](query-dsl/), Basic ML concepts
 
 Learn how to implement semantic search and similar image search using Elasticsearch's vector search (kNN).
 
@@ -498,6 +498,6 @@ Question embedding → Return most similar FAQ answer
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Improve search quality | [Search Relevance](../search-relevance/) |
-| Basic search | [Query DSL](../query-dsl/) |
-| Performance optimization | [Performance Tuning](../performance-tuning/) |
+| Improve search quality | [Search Relevance](search-relevance/) |
+| Basic search | [Query DSL](query-dsl/) |
+| Performance optimization | [Performance Tuning](performance-tuning/) |

@@ -399,6 +399,6 @@ kubectl get hpa php-apache --watch
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 헬스 체크 설정 | [헬스 체크](../health-checks/) |
-| 리소스 최적화 | [리소스 최적화](../../howto/resource-optimization/) |
-| 실제 배포 실습 | [Spring Boot 배포](../../examples/spring-boot/) |
+| 헬스 체크 설정 | [헬스 체크](health-checks/) |
+| 리소스 최적화 | [리소스 최적화](../howto/resource-optimization/) |
+| 실제 배포 실습 | [Spring Boot 배포](../examples/spring-boot/) |

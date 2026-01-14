@@ -16,7 +16,7 @@ author_url: "http://github.com/kimbenji"
 
 **대상 독자**: Kafka 생태계를 활용한 데이터 파이프라인을 구축하려는 개발자 및 데이터 엔지니어
 
-**선수 지식**: [핵심 구성요소](../core-components/)의 Topic, Producer, Consumer 개념, [메시지 흐름](../message-flow/)의 전체 데이터 흐름
+**선수 지식**: [핵심 구성요소](core-components/)의 Topic, Producer, Consumer 개념, [메시지 흐름](message-flow/)의 전체 데이터 흐름
 
 ---
 
@@ -507,6 +507,6 @@ Kafka 생태계의 각 컴포넌트는 서로 다른 문제를 해결합니다. 
 
 이 문서에서는 Kafka 생태계의 핵심 컴포넌트들을 살펴보았습니다. 각 컴포넌트의 역할과 사용 방법을 이해했다면, 실제 예제를 통해 직접 구축해볼 수 있습니다.
 
-- [실습 예제](../../examples/) - Kafka Connect, Schema Registry, Kafka Streams 실습
-- [보안](../security/) - 생태계 컴포넌트의 보안 설정
-- [모니터링](../monitoring/) - Connect와 Streams 메트릭 모니터링
+- [실습 예제](../examples/) - Kafka Connect, Schema Registry, Kafka Streams 실습
+- [보안](security/) - 생태계 컴포넌트의 보안 설정
+- [모니터링](monitoring/) - Connect와 Streams 메트릭 모니터링

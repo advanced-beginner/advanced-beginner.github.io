@@ -16,7 +16,7 @@ author_url: "http://github.com/kimbenji"
 
 **Target Audience**: Operators and developers managing and monitoring Kafka clusters
 
-**Prerequisites**: Offset and Lag concepts from [Consumer Group & Offset](../consumer-group/)
+**Prerequisites**: Offset and Lag concepts from [Consumer Group & Offset](consumer-group/)
 
 ---
 
@@ -348,4 +348,4 @@ For monitoring tools, use kafka-consumer-groups CLI, Spring Actuator, Prometheus
 
 #### Next Steps
 
-- [Hands-on Examples](../../examples/) - Apply what you've learned in practice
+- [Hands-on Examples](../examples/) - Apply what you've learned in practice

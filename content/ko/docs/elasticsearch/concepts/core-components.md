@@ -524,6 +524,6 @@ flowchart TB
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 스키마 설계 | [데이터 모델링](../data-modeling/) |
-| 검색 쿼리 작성 | [Query DSL](../query-dsl/) |
-| 실습 | [기본 예제](../../examples/basic/) |
+| 스키마 설계 | [데이터 모델링](data-modeling/) |
+| 검색 쿼리 작성 | [Query DSL](query-dsl/) |
+| 실습 | [기본 예제](../examples/basic/) |

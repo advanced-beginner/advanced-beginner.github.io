@@ -341,6 +341,6 @@ Once setup is complete:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Implement basic CRUD | [Basic Examples](../basic/) |
-| Understand Elasticsearch structure | [Core Components](../../concepts/core-components/) |
-| Write search queries | [Query DSL](../../concepts/query-dsl/) |
+| Implement basic CRUD | [Basic Examples](basic/) |
+| Understand Elasticsearch structure | [Core Components](../concepts/core-components/) |
+| Write search queries | [Query DSL](../concepts/query-dsl/) |

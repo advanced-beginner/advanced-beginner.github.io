@@ -19,7 +19,7 @@ author:
 **선수 지식**:
 - Java Generics 및 함수형 인터페이스 (Function, Consumer 등)
 - SQL 기본 문법 (SELECT, WHERE, GROUP BY)
-- [RDD 기초](../rdd/) 문서 이해 권장
+- [RDD 기초](rdd/) 문서 이해 권장
 
 ---
 
@@ -776,5 +776,5 @@ val names = ds.map(_.name)
 
 DataFrame과 Dataset을 이해했다면:
 
-- [Spark SQL](../spark-sql/) - SQL로 DataFrame 쿼리하기
-- [Transformation과 Action](../transformations-actions/) - 연산의 실행 시점 이해
+- [Spark SQL](spark-sql/) - SQL로 DataFrame 쿼리하기
+- [Transformation과 Action](transformations-actions/) - 연산의 실행 시점 이해

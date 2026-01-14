@@ -16,13 +16,13 @@ author_url: "http://github.com/kimbenji"
 
 **Target Audience**: Developers who want to understand Kafka's advanced concepts and optimize production settings
 
-**Prerequisites**: Topic, Partition, Broker concepts from [Message Flow](../message-flow/), ISR, Leader, Follower concepts from [Replication](../replication/)
+**Prerequisites**: Topic, Partition, Broker concepts from [Message Flow](message-flow/), ISR, Leader, Follower concepts from [Replication](replication/)
 
 ---
 
 Understand acks, Message Key, and Retention policies. This document is written for Kafka 3.6.x, with code examples verified on Spring Boot 3.2.x, Spring Kafka 3.1.x, and Java 17 environments.
 
-Before reading this document, you should understand Topic, Partition, and Broker concepts from [Message Flow](../message-flow/) and ISR, Leader, and Follower concepts from [Replication](../replication/).
+Before reading this document, you should understand Topic, Partition, and Broker concepts from [Message Flow](message-flow/) and ISR, Leader, and Follower concepts from [Replication](replication/).
 
 #### acks (Acknowledgment)
 
@@ -385,5 +385,5 @@ If even 1 fails, writes are blocked (NotEnoughReplicasException). At least 3 Bro
 
 #### Next Steps
 
-- [Transactions and Exactly-Once](../transactions/) - Message delivery guarantees and Transaction API
-- [Producer Tuning](../producer-tuning/) - Producer performance optimization
+- [Transactions and Exactly-Once](transactions/) - Message delivery guarantees and Transaction API
+- [Producer Tuning](producer-tuning/) - Producer performance optimization

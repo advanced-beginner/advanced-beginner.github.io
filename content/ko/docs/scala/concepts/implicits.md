@@ -641,5 +641,5 @@ extension (n: Int)
 
 #### 다음 단계
 
-- [타입 클래스](../type-classes/) — 타입 클래스 패턴 심화
-- [함수형 패턴](../functional-patterns/) — Functor, Monad
+- [타입 클래스](type-classes/) — 타입 클래스 패턴 심화
+- [함수형 패턴](functional-patterns/) — Functor, Monad

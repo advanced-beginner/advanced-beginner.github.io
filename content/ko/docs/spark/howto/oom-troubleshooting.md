@@ -266,5 +266,5 @@ grep -i "outofmemory\|oom\|killed" spark-logs/*.log
 
 ## 다음 단계
 
-- [데이터 스큐 해결하기](../data-skew/) - 특정 파티션에 데이터 집중 문제
-- [FAQ](../../appendix/faq/) - 기타 오류 해결
+- [데이터 스큐 해결하기](data-skew/) - 특정 파티션에 데이터 집중 문제
+- [FAQ](../appendix/faq/) - 기타 오류 해결

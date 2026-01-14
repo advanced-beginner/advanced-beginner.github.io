@@ -870,6 +870,6 @@ Abstract all external service integrations as interfaces. Going through this pro
 
 #### Next Steps
 
-- [Hexagonal Architecture](../hexagonal-architecture/) - Isolate external with Port and Adapter
-- [Clean Architecture](../clean-architecture/) - Strict dependency rules
-- [Onion Architecture](../onion-architecture/) - Domain model centric
+- [Hexagonal Architecture](hexagonal-architecture/) - Isolate external with Port and Adapter
+- [Clean Architecture](clean-architecture/) - Strict dependency rules
+- [Onion Architecture](onion-architecture/) - Domain model centric

@@ -13,7 +13,7 @@ lastmod: 2026-01-10
 {{< /callout >}}
 
 **대상 독자**: Elasticsearch 검색 기능을 사용하려는 개발자
-**선수 지식**: [핵심 구성요소](../core-components/), JSON 기본 문법
+**선수 지식**: [핵심 구성요소](core-components/), JSON 기본 문법
 
 Elasticsearch에서 데이터를 효과적으로 저장하고 검색하기 위한 Mapping, Field Type, Analyzer 설계를 다룹니다.
 
@@ -595,6 +595,6 @@ PUT /_index_template/logs
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 검색 쿼리 작성 | [Query DSL](../query-dsl/) |
-| 검색 품질 개선 | [검색 관련성](../search-relevance/) |
-| 실습 | [기본 예제](../../examples/basic/) |
+| 검색 쿼리 작성 | [Query DSL](query-dsl/) |
+| 검색 품질 개선 | [검색 관련성](search-relevance/) |
+| 실습 | [기본 예제](../examples/basic/) |

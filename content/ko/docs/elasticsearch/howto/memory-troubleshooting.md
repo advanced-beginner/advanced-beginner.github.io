@@ -308,6 +308,6 @@ curl -X POST "localhost:9200/products/_search?scroll=1m" -H 'Content-Type: appli
 
 ## 관련 문서
 
-- [클러스터 관리](../../concepts/cluster-management/) - 노드 구성 및 모니터링
-- [성능 튜닝](../../concepts/performance-tuning/) - 전체적인 성능 최적화
-- [느린 쿼리 최적화](../slow-query-optimization/) - 쿼리 수준 최적화
+- [클러스터 관리](../concepts/cluster-management/) - 노드 구성 및 모니터링
+- [성능 튜닝](../concepts/performance-tuning/) - 전체적인 성능 최적화
+- [느린 쿼리 최적화](slow-query-optimization/) - 쿼리 수준 최적화

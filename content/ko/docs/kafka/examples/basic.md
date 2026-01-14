@@ -21,7 +21,7 @@ author_url: "http://github.com/kimbenji"
 |------|---------|
 | **대상 독자** | Spring Boot 애플리케이션에서 Kafka를 사용하려는 백엔드 개발자 |
 | **선수 지식** | Java 기본 문법, Spring Boot 기초, Kafka 기본 개념 |
-| **사전 완료** | [Quick Start](../../quick-start/) 예제 완료, [환경 구성](../setup/) 설정 완료 |
+| **사전 완료** | [Quick Start](../quick-start/) 예제 완료, [환경 구성](setup/) 설정 완료 |
 | **예상 소요 시간** | 약 30분 |
 
 {{% notice style="warning" title="환경별 주의사항" %}}
@@ -635,6 +635,6 @@ spring:
 
 ## 다음 단계
 
-- [주문 시스템](../order-system/) - 도메인 주도 설계를 적용한 실전 예제
-- [Consumer 고급 설정](../../concepts/consumer-tuning/) - 성능 최적화 방법
-- [에러 처리 패턴](../../concepts/error-handling/) - 프로덕션 에러 처리 전략
+- [주문 시스템](order-system/) - 도메인 주도 설계를 적용한 실전 예제
+- [Consumer 고급 설정](../concepts/consumer-tuning/) - 성능 최적화 방법
+- [에러 처리 패턴](../concepts/error-handling/) - 프로덕션 에러 처리 전략

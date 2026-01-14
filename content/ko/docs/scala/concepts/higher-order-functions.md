@@ -802,5 +802,5 @@ fastFib(100)  // 빠르게 계산됨
 
 #### 다음 단계
 
-- [For Comprehension](../for-comprehensions/) — 모나딕 연산의 우아한 표현
-- [Implicit/Given](../implicits/) — 문맥적 추상화
+- [For Comprehension](for-comprehensions/) — 모나딕 연산의 우아한 표현
+- [Implicit/Given](implicits/) — 문맥적 추상화

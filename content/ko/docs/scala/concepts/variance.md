@@ -337,5 +337,5 @@ trait Transformer[-A, +B] {
 
 #### 다음 단계
 
-- [고급 타입](../type-system-advanced/) — Union, Intersection, Match Types
-- [타입 클래스](../type-classes/) — Ad-hoc 다형성 심화
+- [고급 타입](type-system-advanced/) — Union, Intersection, Match Types
+- [타입 클래스](type-classes/) — Ad-hoc 다형성 심화

@@ -212,6 +212,6 @@ import Implicits._
 
 ## 관련 문서
 
-- [Implicit/Given](../../concepts/implicits/) - 암시적 변환의 원리
-- [타입 클래스](../../concepts/type-classes/) - 타입 클래스 패턴
-- [Future 에러 처리](../future-error-handling/) - 비동기 코드 디버깅
+- [Implicit/Given](../concepts/implicits/) - 암시적 변환의 원리
+- [타입 클래스](../concepts/type-classes/) - 타입 클래스 패턴
+- [Future 에러 처리](future-error-handling/) - 비동기 코드 디버깅

@@ -385,13 +385,13 @@ Dataset<Row> filtered = df.filter(...);  // df is cached
 
 ## Next Steps
 
-- [Structured Streaming](../structured-streaming/) - Real-time data processing
-- [Performance Tuning](../tuning/) - Overall performance optimization
+- [Structured Streaming](structured-streaming/) - Real-time data processing
+- [Performance Tuning](tuning/) - Overall performance optimization
 
 ## Related Documents
 
-- [Transformations and Actions](../transformations-actions/) - Relationship between lazy evaluation and caching
-- [Partitioning and Shuffle](../partitioning/) - Partition optimization before caching
-- [RDD Basics](../rdd/) - RDD-level persist/cache
-- [MLlib](../mllib/) - Caching in machine learning
-- [Glossary](../../appendix/glossary/) - Persist, Storage Level term definitions
+- [Transformations and Actions](transformations-actions/) - Relationship between lazy evaluation and caching
+- [Partitioning and Shuffle](partitioning/) - Partition optimization before caching
+- [RDD Basics](rdd/) - RDD-level persist/cache
+- [MLlib](mllib/) - Caching in machine learning
+- [Glossary](../appendix/glossary/) - Persist, Storage Level term definitions

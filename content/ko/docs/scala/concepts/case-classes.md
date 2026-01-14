@@ -410,5 +410,5 @@ println(eval(expr))  // 9.0
 
 #### 다음 단계
 
-- [패턴 매칭](../pattern-matching/) — match 표현식 심화
-- [컬렉션](../collections/) — Scala 컬렉션 라이브러리
+- [패턴 매칭](pattern-matching/) — match 표현식 심화
+- [컬렉션](collections/) — Scala 컬렉션 라이브러리

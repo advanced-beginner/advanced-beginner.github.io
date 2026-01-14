@@ -399,5 +399,5 @@ result  // None
 
 #### Next Steps
 
-- [Implicit/Given](../implicits/) — Contextual abstraction
-- [Functional Patterns](../functional-patterns/) — Advanced Monad, Functor
+- [Implicit/Given](implicits/) — Contextual abstraction
+- [Functional Patterns](functional-patterns/) — Advanced Monad, Functor

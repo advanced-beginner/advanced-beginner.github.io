@@ -845,5 +845,5 @@ EventStorming을 하고 나면 Order Context와 Inventory Context 같은 경계�
 
 #### 다음 단계
 
-- [전술적 설계](../tactical-design/) - Entity, Value Object, Aggregate 패턴
-- [아키텍처](../architecture/) - Hexagonal, Clean Architecture
+- [전술적 설계](tactical-design/) - Entity, Value Object, Aggregate 패턴
+- [아키텍처](architecture/) - Hexagonal, Clean Architecture

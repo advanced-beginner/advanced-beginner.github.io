@@ -489,5 +489,5 @@ val flat2 = nested.flatMap(identity)
 
 #### 다음 단계
 
-- [고차 함수](../higher-order-functions/) — map, filter, fold 심화
-- [For Comprehension](../for-comprehensions/) — 모나딕 연산
+- [고차 함수](higher-order-functions/) — map, filter, fold 심화
+- [For Comprehension](for-comprehensions/) — 모나딕 연산

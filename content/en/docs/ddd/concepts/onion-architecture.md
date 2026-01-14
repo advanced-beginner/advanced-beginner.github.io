@@ -7,7 +7,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **Target Audience**: Developers looking for architecture that pairs well with DDD
-> **Prerequisites**: [Hexagonal Architecture](../hexagonal-architecture/) and Dependency Inversion Principle
+> **Prerequisites**: [Hexagonal Architecture](hexagonal-architecture/) and Dependency Inversion Principle
 > **Estimated Time**: About 20 minutes
 
 # Onion Architecture
@@ -1023,8 +1023,8 @@ flowchart LR
 
 - Simple CRUD applications
 - Small, short-term projects
-- Teams without DDD experience -> Start with [Layered](../layered-architecture/)
-- Many external integrations with simple domain -> [Hexagonal](../hexagonal-architecture/)
+- Teams without DDD experience -> Start with [Layered](layered-architecture/)
+- Many external integrations with simple domain -> [Hexagonal](hexagonal-architecture/)
 
 ---
 
@@ -1091,7 +1091,7 @@ public class JpaOrderRepository implements OrderRepository {
 
 ## Next Steps
 
-- [Layered Architecture](../layered-architecture/) - Start from basics
-- [Hexagonal Architecture](../hexagonal-architecture/) - External integration focus
-- [Clean Architecture](../clean-architecture/) - Strict rules
-- [CQRS](../cqrs/) - Read/Write separation
+- [Layered Architecture](layered-architecture/) - Start from basics
+- [Hexagonal Architecture](hexagonal-architecture/) - External integration focus
+- [Clean Architecture](clean-architecture/) - Strict rules
+- [CQRS](cqrs/) - Read/Write separation

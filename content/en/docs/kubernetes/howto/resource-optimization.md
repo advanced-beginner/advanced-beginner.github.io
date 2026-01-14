@@ -230,6 +230,6 @@ env:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Auto-scaling | [Scaling](../../concepts/scaling/) |
-| Resolve Pod issues | [Pod Troubleshooting](../pod-troubleshooting/) |
-| Resource management concepts | [Resource Management](../../concepts/resources/) |
+| Auto-scaling | [Scaling](../concepts/scaling/) |
+| Resolve Pod issues | [Pod Troubleshooting](pod-troubleshooting/) |
+| Resource management concepts | [Resource Management](../concepts/resources/) |

@@ -18,9 +18,9 @@ weight: 17
 이 문서에서는 Scala에서 사용되는 핵심 함수형 프로그래밍 패턴을 다룹니다. 함수형 프로그래밍은 부수 효과를 최소화하고 순수 함수와 불변 데이터를 활용하여 예측 가능하고 테스트하기 쉬운 코드를 작성하는 패러다임입니다.
 
 > 📚 **사전 지식**: 이 문서를 이해하려면 다음 개념에 익숙해야 합니다:
-> - [고차 함수](../higher-order-functions/) - map, flatMap, filter
-> - [For Comprehension](../for-comprehensions/) - 모나딕 연산의 문법적 설탕
-> - [제네릭](../generics/) - 타입 매개변수
+> - [고차 함수](higher-order-functions/) - map, flatMap, filter
+> - [For Comprehension](for-comprehensions/) - 모나딕 연산의 문법적 설탕
+> - [제네릭](generics/) - 타입 매개변수
 >
 > **난이도**: ⭐⭐⭐⭐ (고급)
 

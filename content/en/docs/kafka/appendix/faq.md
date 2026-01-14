@@ -325,5 +325,5 @@ For example: with 6 Partitions and concurrency 3, 3 threads each handle 2 Partit
 
 #### Next Steps
 
-- [Glossary](../glossary/) - Kafka terminology
-- [References](../references/) - Learning resources
+- [Glossary](glossary/) - Kafka terminology
+- [References](references/) - Learning resources

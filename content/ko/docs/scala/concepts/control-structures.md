@@ -531,6 +531,6 @@ println(grade(55))  // F
 
 제어 구조를 익혔다면 다음 주제로 진행하세요.
 
-- [함수와 메서드](../functions-methods/) — 함수 정의와 고급 기능
-- [패턴 매칭](../pattern-matching/) — match 표현식 심화
+- [함수와 메서드](functions-methods/) — 함수 정의와 고급 기능
+- [패턴 매칭](pattern-matching/) — match 표현식 심화
 

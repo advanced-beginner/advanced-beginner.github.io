@@ -357,5 +357,5 @@ Verify the following items to ensure environment setup is complete. Check if Kaf
 
 #### Next Steps
 
-- [Basic Examples](../basic/) - Producer/Consumer implementation
-- [Order System](../order-system/) - Real-world example
+- [Basic Examples](basic/) - Producer/Consumer implementation
+- [Order System](order-system/) - Real-world example

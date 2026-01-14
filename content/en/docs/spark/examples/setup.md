@@ -448,4 +448,4 @@ java -version  # Check version
 
 After environment setup is complete:
 
-- [Basic Examples](../basic/) - Data processing examples
+- [Basic Examples](basic/) - Data processing examples

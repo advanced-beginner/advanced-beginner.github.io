@@ -23,7 +23,7 @@ author_url: "http://github.com/kimbenji"
 | **Target Audience** | Developers implementing DDD tactical patterns in code |
 | **DDD Basics** | Understanding of Aggregate, Entity, Value Object, Domain Event concepts |
 | **Java** | Experience with Record, Optional, Stream API |
-| **Prerequisite** | [Project Setup](../setup/) completed |
+| **Prerequisite** | [Project Setup](setup/) completed |
 
 Implementing the order domain with DDD patterns.
 
@@ -1180,4 +1180,4 @@ public abstract class AggregateRoot<ID> {
 
 ## Next Steps
 
-- [Application Layer](../application-layer/) - Use Case and service implementation
+- [Application Layer](application-layer/) - Use Case and service implementation

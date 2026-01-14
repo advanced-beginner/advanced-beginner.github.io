@@ -230,6 +230,6 @@ env:
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 자동 스케일링 | [스케일링](../../concepts/scaling/) |
-| Pod 문제 해결 | [Pod 트러블슈팅](../pod-troubleshooting/) |
-| 리소스 관리 개념 | [리소스 관리](../../concepts/resources/) |
+| 자동 스케일링 | [스케일링](../concepts/scaling/) |
+| Pod 문제 해결 | [Pod 트러블슈팅](pod-troubleshooting/) |
+| 리소스 관리 개념 | [리소스 관리](../concepts/resources/) |

@@ -16,7 +16,7 @@ author_url: "http://github.com/kimbenji"
 
 **Target Audience**: Developers implementing Consumer error handling strategies
 
-**Prerequisites**: Consumer operation principles from [Consumer Group & Offset](../consumer-group/), Spring Kafka basics
+**Prerequisites**: Consumer operation principles from [Consumer Group & Offset](consumer-group/), Spring Kafka basics
 
 ---
 
@@ -386,4 +386,4 @@ By error type, retry transient errors with exponential backoff, move permanent e
 
 #### Next Steps
 
-- [Monitoring Basics](../monitoring/) - Kafka monitoring and metrics
+- [Monitoring Basics](monitoring/) - Kafka monitoring and metrics

@@ -7,7 +7,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **대상 독자**: DDD 빌딩 블록을 코드로 구현하고 싶은 백엔드 개발자
-> **선수 지식**: [전략적 설계](../strategic-design/)를 읽었거나 Bounded Context 개념에 대한 이해
+> **선수 지식**: [전략적 설계](strategic-design/)를 읽었거나 Bounded Context 개념에 대한 이해
 > **소요 시간**: 약 40분
 > **핵심 질문**: "도메인 모델을 어떤 패턴으로 구현해야 하는가?"
 
@@ -1266,5 +1266,5 @@ Domain Service를 설계할 때는 특정 Entity에 속하지 않는 로직인�
 
 #### 다음 단계
 
-- [Aggregate 심화](../aggregate/) - Aggregate 설계 원칙과 트랜잭션 경계
-- [도메인 이벤트](../domain-events/) - 이벤트 기반 설계
+- [Aggregate 심화](aggregate/) - Aggregate 설계 원칙과 트랜잭션 경계
+- [도메인 이벤트](domain-events/) - 이벤트 기반 설계

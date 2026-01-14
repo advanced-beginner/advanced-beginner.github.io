@@ -305,5 +305,5 @@ System.out.println("Execution time: " + duration + "ms");
 
 ## Next Steps
 
-- [Resolving Data Skew](../data-skew/) - Fix partition imbalance
-- [Performance Tuning](../../concepts/tuning/) - Overall performance optimization
+- [Resolving Data Skew](data-skew/) - Fix partition imbalance
+- [Performance Tuning](../concepts/tuning/) - Overall performance optimization

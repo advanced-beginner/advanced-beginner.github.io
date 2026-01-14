@@ -276,6 +276,6 @@ curl -X POST "localhost:9200/products/_refresh"
 
 ## 관련 문서
 
-- [Query DSL](../../concepts/query-dsl/) - 쿼리 유형별 특징
-- [성능 튜닝](../../concepts/performance-tuning/) - 클러스터 수준 튜닝
-- [메모리 문제 해결](../memory-troubleshooting/) - OOM 발생 시 대응
+- [Query DSL](../concepts/query-dsl/) - 쿼리 유형별 특징
+- [성능 튜닝](../concepts/performance-tuning/) - 클러스터 수준 튜닝
+- [메모리 문제 해결](memory-troubleshooting/) - OOM 발생 시 대응

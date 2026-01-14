@@ -7,7 +7,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **Target Audience**: Developers of large-scale projects requiring strict dependency management
-> **Prerequisites**: Port/Adapter concept from [Hexagonal Architecture](../hexagonal-architecture/)
+> **Prerequisites**: Port/Adapter concept from [Hexagonal Architecture](hexagonal-architecture/)
 > **Reading Time**: About 25 minutes
 
 # Clean Architecture
@@ -775,7 +775,7 @@ class OrderControllerTest {
 
 - Small, short-term projects → over-engineering
 - Simple CRUD applications
-- When team is unfamiliar with architecture → start with [Layered](../layered-architecture/)
+- When team is unfamiliar with architecture → start with [Layered](layered-architecture/)
 - MVP, prototype development
 
 ---
@@ -888,6 +888,6 @@ public interface OrderRepository {
 
 ## Next Steps
 
-- [Onion Architecture](../onion-architecture/) - Domain model centric
-- [Hexagonal Architecture](../hexagonal-architecture/) - Port and Adapter perspective
-- [CQRS](../cqrs/) - Read/Write separation
+- [Onion Architecture](onion-architecture/) - Domain model centric
+- [Hexagonal Architecture](hexagonal-architecture/) - Port and Adapter perspective
+- [CQRS](cqrs/) - Read/Write separation

@@ -462,6 +462,6 @@ for (i <- 1 to 5) { println(i) }
 
 더 자세한 버전 비교와 마이그레이션 정보는 다음 자료를 참고하세요.
 
-- [버전 비교](../../appendix/version-comparison/) — 전체 차이점 요약
+- [버전 비교](../appendix/version-comparison/) — 전체 차이점 요약
 - [마이그레이션 가이드](https://docs.scala-lang.org/scala3/guides/migration/compatibility-intro.html)
 

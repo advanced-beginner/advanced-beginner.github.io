@@ -298,4 +298,4 @@ flowchart TB
 
 ## Next Steps
 
-- [Replication](../replication/) - Data replication and high availability
+- [Replication](replication/) - Data replication and high availability

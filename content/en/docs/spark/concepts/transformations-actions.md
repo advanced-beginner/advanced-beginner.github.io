@@ -411,13 +411,13 @@ df.select("id", "category", "value")
 
 ## Next Steps
 
-- [Partitioning and Shuffle](../partitioning/) - Internal workings of Wide Transformations
-- [Caching and Persistence](../caching/) - Reusing intermediate results
+- [Partitioning and Shuffle](partitioning/) - Internal workings of Wide Transformations
+- [Caching and Persistence](caching/) - Reusing intermediate results
 
 ## Related Documents
 
-- [Architecture](../architecture/) - Execution structure of Job, Stage, Task
-- [RDD Basics](../rdd/) - Low-level Transformation API
-- [DataFrame and Dataset](../dataframe-dataset/) - High-level data processing API
-- [Performance Tuning](../tuning/) - Execution plan optimization
-- [Glossary](../../appendix/glossary/) - Transformation, Action term definitions
+- [Architecture](architecture/) - Execution structure of Job, Stage, Task
+- [RDD Basics](rdd/) - Low-level Transformation API
+- [DataFrame and Dataset](dataframe-dataset/) - High-level data processing API
+- [Performance Tuning](tuning/) - Execution plan optimization
+- [Glossary](../appendix/glossary/) - Transformation, Action term definitions

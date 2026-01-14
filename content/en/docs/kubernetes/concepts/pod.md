@@ -378,6 +378,6 @@ Once you understand Pods, proceed to the next steps:
 
 | Goal | Recommended Doc |
 |------|----------------|
-| Automatic Pod management | [Deployment](../deployment/) |
-| How to access Pods | [Service](../service/) |
-| Configure health checks | [Health Checks](../health-checks/) |
+| Automatic Pod management | [Deployment](deployment/) |
+| How to access Pods | [Service](service/) |
+| Configure health checks | [Health Checks](health-checks/) |
