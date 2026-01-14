@@ -1,5 +1,6 @@
 ---
 title: Kubernetes
+bookCollapseSection: true
 description: A practical guide to the container orchestration platform Kubernetes - from Pod, Deployment, Service to scaling and monitoring
 weight: 5
 lastmod: "2026-01-11"

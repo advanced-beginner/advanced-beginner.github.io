@@ -1,5 +1,6 @@
 ---
 title: Apache Spark
+bookCollapseSection: true
 description: Apache Spark Guide for Java/Spring Developers - DataFrame API, SQL, Streaming, Cluster Deployment
 weight: 4
 lastmod: "2026-01-09"

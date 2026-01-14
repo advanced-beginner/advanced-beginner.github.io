@@ -1,5 +1,6 @@
 ---
 title: Elasticsearch
+bookCollapseSection: true
 description: Practical guide to distributed search engine Elasticsearch - Search, Aggregations, Data Modeling, and Performance Tuning
 weight: 5
 lastmod: 2026-01-08

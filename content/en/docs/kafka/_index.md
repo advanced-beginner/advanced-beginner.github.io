@@ -1,5 +1,6 @@
 ---
 title: Apache Kafka
+bookCollapseSection: true
 description: Apache Kafka practical guide for distributed messaging - Producer/Consumer, transactions, replication, fault handling, and performance tuning
 weight: 1
 author: "@kimbenji"

@@ -1,5 +1,6 @@
 ---
 title: Domain-Driven Design
+bookCollapseSection: true
 description: A comprehensive DDD guide for systematically handling complex business logic - Strategic/Tactical Design, Aggregate, CQRS, Event Sourcing
 weight: 2
 lastmod: 2026-01-09
