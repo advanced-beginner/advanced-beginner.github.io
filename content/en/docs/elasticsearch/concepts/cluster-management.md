@@ -6,6 +6,10 @@ lastmod: 2026-01-08
 
 Learn how to configure nodes, allocate shards, and monitor status in an Elasticsearch cluster.
 
+Elasticsearch was designed from the ground up as a **distributed system**. Even when starting with a single node, it operates internally as a cluster. Thanks to this distributed architecture, you can scale horizontally by simply adding nodes as data grows, and the service can continue even when some nodes experience failures.
+
+However, distributed systems introduce different complexities than single servers. You need to understand role distribution among nodes, physical shard placement, master election processes, and behavior during network partitions to operate stably. In particular, **incorrect Master node configuration can bring down the entire cluster**, and **unbalanced shard placement can concentrate load on specific nodes**. This document covers core concepts and practical know-how for stable cluster operation.
+
 ## Cluster Architecture
 
 ### Basic Architecture
@@ -289,7 +293,7 @@ GET /_cat/shards?v
 # Thread pool
 GET /_cat/thread_pool?v
 
-# Index overview
+# Slow logs
 GET /_cat/indices?v&h=index,health,pri,rep,docs.count,store.size
 ```
 

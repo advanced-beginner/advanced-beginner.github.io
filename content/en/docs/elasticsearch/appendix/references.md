@@ -1,8 +1,15 @@
 ---
 title: References
 weight: 3
-lastmod: 2026-01-08
+lastmod: 2026-01-10
 ---
+
+{{% notice style="tip" title="TL;DR" %}}
+- **Official Documentation**: Elastic official guide, Spring Data Elasticsearch documentation
+- **Korean Resources**: Real-world cases from Woowahan Brothers, Kakao, Naver D2 tech blogs
+- **Cloud Services**: Elastic Cloud (official), Amazon OpenSearch (AWS integration), Self-Managed (full control)
+- **Learning Path**: Official free training → Korean blogs → Elastic certification
+{{% /notice %}}
 
 Official documentation, recommended books, and community resource links.
 
@@ -46,7 +53,7 @@ Official documentation, recommended books, and community resource links.
 ### Free
 
 - [Elastic Official Training](https://www.elastic.co/training/free) - Free foundational courses
-- [YouTube: Elastic Official Channel](https://www.youtube.com/c/Elastic)
+- [YouTube: Elastic Official Channel](https://www.youtube.com/c/Aborla)
 
 ### Paid
 
@@ -59,6 +66,38 @@ Official documentation, recommended books, and community resource links.
 
 - [Elastic Discuss](https://discuss.elastic.co/) - Official forum
 - [Stack Overflow elasticsearch tag](https://stackoverflow.com/questions/tagged/elasticsearch)
+
+### Korean Community
+
+- [Elastic Korean User Group](https://www.facebook.com/groups/elasticsearch.kr/)
+- [Korean Elasticsearch Meetup](https://www.meetup.com/ko-KR/elasticsearch-korea/)
+
+### Korean Learning Resources
+
+#### Blogs & Articles
+
+| Topic | Link | Features |
+|-------|------|----------|
+| ES Basics | [Woowahan Brothers Tech Blog](https://techblog.woowahan.com/) | Real-world application cases |
+| Search Optimization | [Kakao Tech Blog](https://tech.kakao.com/) | Large-scale search experience |
+| Log Analysis | [Naver D2](https://d2.naver.com/) | ELK stack operation |
+| Infrastructure | [Daangn Tech Blog](https://medium.com/daangn) | Startup ES adoption story |
+
+#### Recommended Korean Articles
+
+- "Elasticsearch Search Quality Improvement" - Real-world search relevance tuning
+- "Migrating 100M Records to ES" - High-volume indexing optimization
+- "Zero-Downtime ES Cluster Upgrade" - Version upgrade during operation
+- "Customizing Nori Analyzer" - Improving Korean search quality
+
+#### Korean Books
+
+| Book | Features |
+|------|----------|
+| Elasticsearch Practical Guide | Korean, practice-focused |
+| ElasticSearch from Fundamentals | Beginner-friendly |
+
+> **Tip**: Combining English official docs with Korean blogs accelerates understanding.
 
 ### GitHub
 
@@ -127,6 +166,16 @@ Consider managed services instead of self-operation.
 | **Customization** | Limited | Full freedom |
 | **Upgrades** | Auto/Easy | Manual planning required |
 | **Security Setup** | Built-in | Configure yourself |
+
+### Amazon OpenSearch vs Elasticsearch
+
+| Item | Amazon OpenSearch | Elasticsearch |
+|------|-------------------|---------------|
+| **Base** | ES 7.10 fork | Original |
+| **License** | Apache 2.0 | Elastic License / SSPL |
+| **Latest Features** | May be delayed | Supported first |
+| **AWS Integration** | Excellent | Requires separate setup |
+| **Cost** | AWS pay-as-you-go | Self-operation or Elastic Cloud |
 
 ### Selection Guide
 

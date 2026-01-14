@@ -1,4 +1,5 @@
 ---
+bookCollapseSection: true
 title: Hands-on Examples
 weight: 3
 lastmod: 2026-01-08

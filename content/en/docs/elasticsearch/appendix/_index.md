@@ -1,4 +1,5 @@
 ---
+bookCollapseSection: true
 title: Appendix
 weight: 4
 lastmod: 2026-01-08
@@ -12,7 +13,7 @@ Elasticsearch reference materials.
 Quick lookup for Elasticsearch core terms.
 
 ### [FAQ](faq/)
-Frequently asked questions and answers.
+Collection of frequently asked questions and answers.
 
 ### [References](references/)
 Official documentation, recommended books, and community resource links.

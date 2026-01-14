@@ -6,6 +6,10 @@ lastmod: 2026-01-08
 
 Learn how to optimize Elasticsearch search and indexing performance.
 
+While Elasticsearch provides fast search with default settings, production environments require tuning based on data scale and usage patterns. Default values are "generally acceptable," not "optimal for all situations."
+
+Performance tuning can be divided into four areas: **Index Design**, **Query Optimization**, **Caching**, and **System Settings**. Each area affects the others. For example, poor shard design cannot be solved by query optimization, and caching strategy depends on query patterns. Therefore, it's effective to **first identify where bottlenecks occur**, then focus on improving that specific area. This document covers key tuning points and practical considerations for each area.
+
 ## Performance Optimization Areas
 
 ```mermaid

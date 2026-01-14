@@ -1,12 +1,29 @@
 ---
+bookCollapseSection: true
 title: Quick Start
 weight: 1
-lastmod: 2026-01-08
+lastmod: 2026-01-10
 ---
+
+{{< callout type="tip" title="TL;DR" >}}
+Run Elasticsearch with Docker and try storing/searching documents directly in Kibana Dev Tools.
+- **Duration**: Approximately 10-15 minutes
+- **Outcome**: Store product data and execute search queries
+{{< /callout >}}
+
+## Learning Objectives
+
+After completing this tutorial, you will be able to:
+- Run Elasticsearch and Kibana with Docker
+- Execute REST APIs in Kibana Dev Tools
+- Store (PUT) and retrieve (GET) documents
+- Understand the basic structure of conditional searches (bool query)
+
+**4 steps total, approximately 10-15 minutes**
 
 Store and search data in Elasticsearch in 5 minutes.
 
-## Overview
+## Overall Flow
 
 ```mermaid
 flowchart LR
@@ -15,12 +32,32 @@ flowchart LR
     C --> D[Return Results]
 ```
 
+*Diagram: The basic flow where stored documents are indexed in Elasticsearch, and results are returned upon search requests.*
+
 ## Prerequisites
 
 - **Docker Desktop** or Docker Engine
 - **curl** or web browser
 
-## Step 1: Start Elasticsearch
+### Prerequisite Verification
+
+Verify Docker is installed with the following commands:
+
+```bash
+docker --version
+# Expected output: Docker version 24.x.x or higher
+
+docker-compose --version
+# Expected output: Docker Compose version v2.x.x or higher
+```
+
+{{% notice style="warning" title="Don't have Docker?" %}}
+Install from the [Docker Desktop official site](https://www.docker.com/products/docker-desktop/).
+{{% /notice %}}
+
+## Step 1/4: Start Elasticsearch
+
+**Estimated time: 3-5 minutes** (includes image download on first run)
 
 Run Elasticsearch and Kibana with Docker Compose.
 
@@ -62,7 +99,9 @@ curl -s http://localhost:9200/_cluster/health | jq
 }
 ```
 
-## Step 2: Access Kibana Dev Tools
+## Step 2/4: Access Kibana Dev Tools
+
+**Estimated time: 1 minute**
 
 Open Kibana in your browser:
 
@@ -74,7 +113,9 @@ Select **Management → Dev Tools** from the left menu.
 
 > **Dev Tools**: A console where you can directly execute Elasticsearch APIs.
 
-## Step 3: Store Your First Document
+## Step 3/4: Store Your First Document
+
+**Estimated time: 3 minutes**
 
 Store product data in the Dev Tools console:
 
@@ -83,7 +124,7 @@ PUT /products/_doc/1
 {
   "name": "MacBook Pro 14-inch",
   "category": "Laptop",
-  "price": 2399,
+  "price": 2390000,
   "description": "M3 Pro chip, 18GB memory, Space Black"
 }
 ```
@@ -104,7 +145,7 @@ PUT /products/_doc/2
 {
   "name": "MacBook Air 13-inch",
   "category": "Laptop",
-  "price": 1299,
+  "price": 1390000,
   "description": "M3 chip, 8GB memory, Midnight"
 }
 
@@ -112,7 +153,7 @@ PUT /products/_doc/3
 {
   "name": "iPad Pro 11-inch",
   "category": "Tablet",
-  "price": 999,
+  "price": 1499000,
   "description": "M4 chip, 256GB, Space Black"
 }
 
@@ -120,12 +161,14 @@ PUT /products/_doc/4
 {
   "name": "Galaxy Book4 Pro",
   "category": "Laptop",
-  "price": 1499,
+  "price": 1890000,
   "description": "Intel Core Ultra, 16GB memory"
 }
 ```
 
-## Step 4: Search
+## Step 4/4: Search
+
+**Estimated time: 3 minutes**
 
 ### Search All
 
@@ -170,7 +213,7 @@ Response:
 
 ### Conditional Search
 
-Laptops under $1500:
+Laptops under 1,500,000:
 
 ```json
 GET /products/_search
@@ -181,7 +224,7 @@ GET /products/_search
         { "match": { "category": "Laptop" } }
       ],
       "filter": [
-        { "range": { "price": { "lte": 1500 } } }
+        { "range": { "price": { "lte": 1500000 } } }
       ]
     }
   }
@@ -189,6 +232,13 @@ GET /products/_search
 ```
 
 **Congratulations!** You've verified Elasticsearch's basic operations.
+
+{{< callout type="info" title="Quick Start Complete!" >}}
+You can now:
+- Store JSON documents in Elasticsearch (PUT /index/_doc/id)
+- Perform full search (match_all) and keyword search (match)
+- Execute conditional searches (bool query's must, filter)
+{{< /callout >}}
 
 ## Shutdown
 
@@ -221,6 +271,8 @@ sequenceDiagram
     Index-->>ES: Matching documents
     ES-->>Client: Return search results
 ```
+
+*Diagram: The flow where the client stores a document, Elasticsearch indexes it (creates inverted index), and quickly returns results via the inverted index upon search requests.*
 
 1. **Document Storage**: You stored JSON documents in an index
 2. **Indexing**: Elasticsearch automatically created an Inverted Index

@@ -1,8 +1,30 @@
 ---
 title: Product Search System
 weight: 3
-lastmod: 2026-01-08
+lastmod: 2026-01-10
+prerequisites:
+  - title: Korean Search Optimization
+    path: /docs/elasticsearch/concepts/korean-search/
+  - title: Query DSL
+    path: /docs/elasticsearch/concepts/query-dsl/
+  - title: Aggregations
+    path: /docs/elasticsearch/concepts/aggregations/
 ---
+
+{{% notice style="warning" title="Complete Example Project" %}}
+If you want to run this code immediately, use the **complete Spring Boot project**:
+- 📁 [examples/elasticsearch/product-search/](https://github.com/advanced-beginner/advanced-beginner.github.io/tree/main/examples/elasticsearch/product-search)
+- Instant Elasticsearch execution with docker-compose (including Nori)
+- Automatic sample data initialization
+{{% /notice %}}
+
+{{% notice style="tip" title="TL;DR" %}}
+- Apply Korean morphological analysis with **Nori analyzer** to enable search for "삼성" and "전자" from "삼성전자"
+- Implement autocomplete functionality with **Edge N-gram**
+- Provide filtering and facets with **Bool Query + Aggregation**
+- Highlight search terms with **highlighting**
+- Total time required: approximately 30 minutes
+{{% /notice %}}
 
 Implement a production-level product search system with Korean morphological analysis, autocomplete, and filtering.
 
@@ -17,8 +39,8 @@ flowchart LR
     E --> F[Highlighting]
 ```
 
-- **Korean Search**: Searching "Samsung Electronics" matches both "Samsung" and "Electronics"
-- **Autocomplete**: Typing "MacBook P" suggests "MacBook Pro"
+- **Korean Search**: Searching "삼성전자" matches both "삼성" and "전자"
+- **Autocomplete**: Typing "맥북 프" suggests "맥북 프로"
 - **Filtering**: Category, price range, brand filters
 - **Highlighting**: Highlight search terms
 
@@ -138,18 +160,24 @@ PUT /products
 GET /products/_analyze
 {
   "analyzer": "korean_analyzer",
-  "text": "Samsung GalaxyBook Pro"
+  "text": "삼성전자 갤럭시북 프로"
 }
-// Result: ["samsung", "galaxybook", "galaxy", "book", "pro"]
+// Result: ["삼성", "전자", "갤럭시북", "갤럭시", "북", "프로"]
 
 // Autocomplete analysis
 GET /products/_analyze
 {
   "analyzer": "autocomplete_analyzer",
-  "text": "MacBook"
+  "text": "맥북"
 }
-// Result: ["m", "ma", "mac", "macb", "macbo", "macboo", "macbook"]
+// Result: ["맥", "맥북"]
 ```
+
+{{% notice style="note" title="Key Points" %}}
+- `nori_tokenizer`'s `decompound_mode: mixed` decomposes compound words
+- `edge_ngram` is for prefix matching; use `standard` analyzer for search
+- Use `Multi-field` to utilize the same field for multiple purposes (search, sorting, autocomplete)
+{{% /notice %}}
 
 ---
 
@@ -158,15 +186,15 @@ GET /products/_analyze
 ```json
 POST /_bulk
 {"index": {"_index": "products", "_id": "1"}}
-{"name": "MacBook Pro 14-inch M3 Pro", "description": "Apple M3 Pro chip, 18GB unified memory, 512GB SSD", "category": "Laptop", "brand": "Apple", "price": 2390, "discount_price": 2290, "rating": 4.8, "review_count": 1250, "in_stock": true, "tags": ["premium", "new-arrival"], "created_at": "2024-01-10"}
+{"name": "맥북 프로 14인치 M3 Pro", "description": "Apple M3 Pro 칩, 18GB 통합 메모리, 512GB SSD", "category": "노트북", "brand": "Apple", "price": 2390000, "discount_price": 2290000, "rating": 4.8, "review_count": 1250, "in_stock": true, "tags": ["프리미엄", "신상품"], "created_at": "2024-01-10"}
 {"index": {"_index": "products", "_id": "2"}}
-{"name": "MacBook Air 13-inch M3", "description": "Apple M3 chip, 8GB unified memory, 256GB SSD, Midnight", "category": "Laptop", "brand": "Apple", "price": 1390, "rating": 4.7, "review_count": 890, "in_stock": true, "tags": ["bestseller"], "created_at": "2024-01-15"}
+{"name": "맥북 에어 13인치 M3", "description": "Apple M3 칩, 8GB 통합 메모리, 256GB SSD, 미드나이트", "category": "노트북", "brand": "Apple", "price": 1390000, "rating": 4.7, "review_count": 890, "in_stock": true, "tags": ["베스트셀러"], "created_at": "2024-01-15"}
 {"index": {"_index": "products", "_id": "3"}}
-{"name": "Galaxy Book4 Pro 16-inch", "description": "Intel Core Ultra 7, 16GB RAM, 512GB SSD", "category": "Laptop", "brand": "Samsung", "price": 1890, "rating": 4.5, "review_count": 456, "in_stock": true, "tags": ["new-arrival"], "created_at": "2024-01-20"}
+{"name": "갤럭시북4 프로 16인치", "description": "인텔 코어 울트라 7, 16GB RAM, 512GB SSD", "category": "노트북", "brand": "Samsung", "price": 1890000, "rating": 4.5, "review_count": 456, "in_stock": true, "tags": ["신상품"], "created_at": "2024-01-20"}
 {"index": {"_index": "products", "_id": "4"}}
-{"name": "iPad Pro 11-inch M4", "description": "Apple M4 chip, 256GB, Space Black", "category": "Tablet", "brand": "Apple", "price": 1499, "rating": 4.9, "review_count": 2100, "in_stock": true, "tags": ["premium", "new-arrival"], "created_at": "2024-01-05"}
+{"name": "아이패드 프로 11인치 M4", "description": "Apple M4 칩, 256GB, 스페이스 블랙", "category": "태블릿", "brand": "Apple", "price": 1499000, "rating": 4.9, "review_count": 2100, "in_stock": true, "tags": ["프리미엄", "신상품"], "created_at": "2024-01-05"}
 {"index": {"_index": "products", "_id": "5"}}
-{"name": "Galaxy Tab S9 Ultra", "description": "Snapdragon 8 Gen 2, 12GB RAM, 256GB", "category": "Tablet", "brand": "Samsung", "price": 1599, "rating": 4.6, "review_count": 780, "in_stock": false, "tags": ["large-screen"], "created_at": "2024-01-08"}
+{"name": "갤럭시 탭 S9 Ultra", "description": "스냅드래곤 8 Gen 2, 12GB RAM, 256GB", "category": "태블릿", "brand": "Samsung", "price": 1599000, "rating": 4.6, "review_count": 780, "in_stock": false, "tags": ["대화면"], "created_at": "2024-01-08"}
 ```
 
 ---
@@ -183,7 +211,7 @@ GET /products/_search
       "must": [
         {
           "multi_match": {
-            "query": "MacBook Pro",
+            "query": "맥북 프로",
             "fields": ["name^3", "description"],
             "type": "best_fields"
           }
@@ -207,7 +235,7 @@ GET /products/_search
   "query": {
     "match": {
       "name.autocomplete": {
-        "query": "MacBook P",
+        "query": "맥북 프",
         "operator": "and"
       }
     }
@@ -225,15 +253,15 @@ GET /products/_search
       "must": [
         {
           "multi_match": {
-            "query": "Pro",
+            "query": "프로",
             "fields": ["name^3", "description"]
           }
         }
       ],
       "filter": [
-        { "term": { "category": "Laptop" } },
+        { "term": { "category": "노트북" } },
         { "terms": { "brand": ["Apple", "Samsung"] } },
-        { "range": { "price": { "gte": 1000, "lte": 2500 } } },
+        { "range": { "price": { "gte": 1000000, "lte": 2500000 } } },
         { "term": { "in_stock": true } }
       ]
     }
@@ -254,7 +282,7 @@ GET /products/_search
   "query": {
     "bool": {
       "must": [
-        { "match": { "name": "laptop" } }
+        { "match": { "name": "노트북" } }
       ],
       "filter": [
         { "term": { "in_stock": true } }
@@ -272,10 +300,10 @@ GET /products/_search
       "range": {
         "field": "price",
         "ranges": [
-          { "key": "Under $1000", "to": 1000 },
-          { "key": "$1000-$1500", "from": 1000, "to": 1500 },
-          { "key": "$1500-$2000", "from": 1500, "to": 2000 },
-          { "key": "$2000+", "from": 2000 }
+          { "key": "Under 1M KRW", "to": 1000000 },
+          { "key": "1M-1.5M KRW", "from": 1000000, "to": 1500000 },
+          { "key": "1.5M-2M KRW", "from": 1500000, "to": 2000000 },
+          { "key": "Over 2M KRW", "from": 2000000 }
         ]
       }
     },
@@ -292,7 +320,7 @@ GET /products/_search
 GET /products/_search
 {
   "query": {
-    "match": { "description": "M3 chip" }
+    "match": { "description": "M3 칩" }
   },
   "highlight": {
     "fields": {
@@ -310,6 +338,12 @@ GET /products/_search
   }
 }
 ```
+
+{{% notice style="note" title="Key Points" %}}
+- Search multiple fields simultaneously with `multi_match`, adjust importance with field weights (`^3`)
+- `must` affects scoring, `filter` is cached for better performance
+- Provide filter facets with `aggs` to allow users to narrow results
+{{% /notice %}}
 
 ---
 
@@ -454,10 +488,10 @@ public class ProductSearchService {
                 .range(r -> r
                     .field("price")
                     .ranges(
-                        AggregationRange.of(ar -> ar.to("1000").key("Under $1000")),
-                        AggregationRange.of(ar -> ar.from("1000").to("1500").key("$1000-$1500")),
-                        AggregationRange.of(ar -> ar.from("1500").to("2000").key("$1500-$2000")),
-                        AggregationRange.of(ar -> ar.from("2000").key("$2000+"))
+                        AggregationRange.of(ar -> ar.to("1000000").key("Under 1M KRW")),
+                        AggregationRange.of(ar -> ar.from("1000000").to("1500000").key("1M-1.5M KRW")),
+                        AggregationRange.of(ar -> ar.from("1500000").to("2000000").key("1.5M-2M KRW")),
+                        AggregationRange.of(ar -> ar.from("2000000").key("Over 2M KRW"))
                     )
                 )
             ))
@@ -579,6 +613,12 @@ public class ProductController {
 }
 ```
 
+{{% notice style="note" title="Key Points" %}}
+- Index the same field with multiple analyzers using `@MultiField`
+- Construct complex Bool Query and Aggregation with `ElasticsearchOperations`
+- Get highlighted text from `SearchHit`'s `getHighlightFields()`
+{{% /notice %}}
+
 ---
 
 ## 5. API Testing
@@ -586,25 +626,25 @@ public class ProductController {
 ### Basic Search
 
 ```bash
-curl "http://localhost:8080/api/products/search?keyword=MacBook"
+curl "http://localhost:8080/api/products/search?keyword=맥북"
 ```
 
 ### With Filters
 
 ```bash
-curl "http://localhost:8080/api/products/search?keyword=Pro&category=Laptop&brands=Apple&minPrice=1000&maxPrice=3000"
+curl "http://localhost:8080/api/products/search?keyword=프로&category=노트북&brands=Apple&minPrice=1000000&maxPrice=3000000"
 ```
 
 ### Sorting
 
 ```bash
-curl "http://localhost:8080/api/products/search?keyword=laptop&sortBy=price_asc"
+curl "http://localhost:8080/api/products/search?keyword=노트북&sortBy=price_asc"
 ```
 
 ### Autocomplete
 
 ```bash
-curl "http://localhost:8080/api/products/autocomplete?q=MacBook"
+curl "http://localhost:8080/api/products/autocomplete?q=맥북"
 ```
 
 ---
@@ -619,8 +659,8 @@ curl "http://localhost:8080/api/products/autocomplete?q=MacBook"
   "synonym_filter": {
     "type": "synonym",
     "synonyms": [
-      "notebook, laptop",
-      "cellphone, smartphone, mobile phone"
+      "노트북, 랩탑, laptop",
+      "핸드폰, 스마트폰, 휴대폰"
     ]
   }
 }
@@ -634,7 +674,7 @@ curl "http://localhost:8080/api/products/autocomplete?q=MacBook"
     "query": { ... },
     "functions": [
       {
-        "filter": { "term": { "tags": "bestseller" } },
+        "filter": { "term": { "tags": "베스트셀러" } },
         "weight": 1.5
       },
       {
@@ -648,6 +688,12 @@ curl "http://localhost:8080/api/products/autocomplete?q=MacBook"
   }
 }
 ```
+
+{{% notice style="note" title="Key Points" %}}
+- **Synonyms** enable searches for similar terms like "노트북" and "랩탑"
+- **function_score** applies weights based on bestseller tags or review counts
+- Improving search quality requires continuous testing and user feedback
+{{% /notice %}}
 
 ---
 

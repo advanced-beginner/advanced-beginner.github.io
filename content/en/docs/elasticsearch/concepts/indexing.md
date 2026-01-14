@@ -2,9 +2,27 @@
 title: Indexing Strategy
 weight: 6
 lastmod: 2026-01-08
+prerequisites:
+  - title: Core Components
+    path: /docs/elasticsearch/concepts/core-components/
+  - title: Data Modeling
+    path: /docs/elasticsearch/concepts/data-modeling/
+related_concepts:
+  - title: Performance Tuning
+    path: /docs/elasticsearch/concepts/performance-tuning/
+  - title: High Availability
+    path: /docs/elasticsearch/concepts/high-availability/
 ---
 
+{{% notice style="info" title="Prerequisites" %}}
+Before reading this document, understand these concepts first:
+- [Core Components](../core-components/) - Shard, Segment concepts
+- [Data Modeling](../data-modeling/) - Mapping, Analyzer basics
+{{% /notice %}}
+
 Learn Bulk indexing, Refresh, and Index Lifecycle Management for efficiently storing large volumes of data.
+
+Elasticsearch indexing goes beyond simply storing data. When a document is indexed, it goes through a complex process including text analysis, inverted index creation, and segment management. Understanding this process reveals **why Bulk indexing is 10x faster than single-document indexing**, **why documents aren't immediately searchable after indexing**, and **why Refresh should be disabled during bulk indexing**. The right indexing strategy directly impacts system performance and operational costs.
 
 ## Indexing Basics
 
@@ -39,7 +57,7 @@ flowchart LR
 PUT /products/_doc/1
 {
   "name": "MacBook Pro",
-  "price": 2399
+  "price": 2390000
 }
 ```
 
@@ -50,11 +68,11 @@ Process multiple documents at once:
 ```json
 POST /_bulk
 {"index": {"_index": "products", "_id": "1"}}
-{"name": "MacBook Pro", "price": 2399}
+{"name": "MacBook Pro", "price": 2390000}
 {"index": {"_index": "products", "_id": "2"}}
-{"name": "MacBook Air", "price": 1299}
+{"name": "MacBook Air", "price": 1390000}
 {"index": {"_index": "products", "_id": "3"}}
-{"name": "iPad", "price": 999}
+{"name": "iPad", "price": 1499000}
 ```
 
 > **NDJSON format**: Each line separated by newline (`\n`), including the last line
@@ -74,6 +92,27 @@ POST /_bulk
 // Recommended doc count: 1,000-5,000
 ```
 
+### Bulk Indexing in Spring
+
+```java
+@Service
+public class ProductBulkService {
+
+    private final ElasticsearchOperations operations;
+
+    public void bulkIndex(List<Product> products) {
+        List<IndexQuery> queries = products.stream()
+            .map(product -> new IndexQueryBuilder()
+                .withId(product.getId())
+                .withObject(product)
+                .build())
+            .toList();
+
+        operations.bulkIndex(queries, Product.class);
+    }
+}
+```
+
 ---
 
 ## Refresh
@@ -81,6 +120,11 @@ POST /_bulk
 ### What is Refresh?
 
 Operation that makes Memory Buffer data **searchable**.
+
+```mermaid
+flowchart LR
+    A[Memory Buffer] -->|Refresh| B[Segment<br>Searchable]
+```
 
 ### Refresh Interval
 
@@ -120,6 +164,48 @@ PUT /products/_settings
 
 ---
 
+## Flush and Translog
+
+### Translog
+
+Write-Ahead Log to prevent data loss. Plays an important role in Lucene internals.
+→ [Lucene Internals Details](../core-components/#lucene-internals-advanced)
+
+```mermaid
+flowchart LR
+    A[Document] --> B[Translog]
+    A --> C[Memory Buffer]
+    B -->|Crash Recovery| D[Data Restore]
+    C -->|Flush| E[Disk Segment]
+```
+
+### Flush
+
+Persist Memory Buffer + Translog → Disk Segment:
+
+```json
+POST /products/_flush
+```
+
+> **Note:** Manual Flush is usually unnecessary. Elasticsearch manages it automatically.
+
+### Flush Settings
+
+```json
+PUT /products/_settings
+{
+  "index": {
+    "translog": {
+      "durability": "async",        // async: performance, request: stability
+      "sync_interval": "5s",
+      "flush_threshold_size": "512mb"
+    }
+  }
+}
+```
+
+---
+
 ## Index Template
 
 Settings automatically applied when creating new indices:
@@ -152,7 +238,8 @@ Now automatically applied when creating `products-2024`, `products-2025`, etc.
 
 ## Index Lifecycle Management (ILM)
 
-Automatically manage the lifecycle of time-series data.
+Automatically manage the lifecycle of time-series data. Especially useful for managing log data.
+→ [ILM Practical Example](../../examples/log-analysis/#ilm-policy)
 
 ### Lifecycle Phases
 
@@ -206,6 +293,21 @@ PUT /_ilm/policy/logs_policy
 }
 ```
 
+### Applying ILM Policy
+
+```json
+PUT /_index_template/logs_template
+{
+  "index_patterns": ["logs-*"],
+  "template": {
+    "settings": {
+      "index.lifecycle.name": "logs_policy",
+      "index.lifecycle.rollover_alias": "logs"
+    }
+  }
+}
+```
+
 ---
 
 ## Reindex
@@ -234,6 +336,19 @@ POST /_reindex
     }
   },
   "dest": { "index": "products-active" }
+}
+```
+
+### Field Transformation
+
+```json
+POST /_reindex
+{
+  "source": { "index": "products-old" },
+  "dest": { "index": "products-new" },
+  "script": {
+    "source": "ctx._source.price_krw = ctx._source.price * 1000"
+  }
 }
 ```
 
@@ -329,6 +444,26 @@ PUT /products/_settings
 | Request size | 5-15 MB |
 | Document count | 1,000-5,000 |
 | Concurrent requests | 2-3 (per node) |
+
+### Indexing Threads
+
+```json
+PUT /products/_settings
+{
+  "index": {
+    "indexing": {
+      "slowlog": {
+        "threshold": {
+          "index": {
+            "warn": "10s",
+            "info": "5s"
+          }
+        }
+      }
+    }
+  }
+}
+```
 
 ---
 

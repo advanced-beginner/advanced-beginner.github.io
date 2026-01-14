@@ -1,10 +1,21 @@
 ---
 title: Data Modeling
 weight: 2
-lastmod: 2026-01-08
+lastmod: 2026-01-10
 ---
 
-Learn Mapping, Field Type, and Analyzer design for effectively storing and searching data in Elasticsearch.
+{{< callout type="tip" title="TL;DR" >}}
+- **Mapping**: Schema defining document structure (similar to RDB table definitions)
+- **text**: For full-text search, tokenized by Analyzer
+- **keyword**: For exact value matching, sorting/aggregation
+- **Analyzer**: Converts text into searchable tokens (use Nori for Korean)
+- **Denormalization**: Include related data in one document since there's no JOIN
+{{< /callout >}}
+
+**Target Audience**: Developers looking to use Elasticsearch search features
+**Prerequisites**: [Core Components](../core-components/), basic JSON syntax
+
+This document covers Mapping, Field Type, and Analyzer design for effectively storing and searching data in Elasticsearch.
 
 ## What is Mapping?
 
@@ -46,6 +57,12 @@ PUT /products
   }
 }
 ```
+
+{{< callout type="info" title="Key Points" >}}
+- Mapping is defined when creating an index, and field type changes are limited afterward
+- Dynamic Mapping allows automatic type inference, but explicit definition is recommended for production
+- Schema changes require reindexing
+{{< /callout >}}
 
 ---
 
@@ -98,7 +115,7 @@ Index a single field in multiple ways:
 ```bash
 # Full-text search
 GET /products/_search
-{ "query": { "match": { "name": "macbook" } } }
+{ "query": { "match": { "name": "MacBook" } } }
 
 # Exact value aggregation
 GET /products/_search
@@ -126,7 +143,7 @@ GET /products/_search
   "properties": {
     "price": {
       "type": "scaled_float",
-      "scaling_factor": 100    // 2399.00 → 239900 stored
+      "scaling_factor": 100    // 23900.00 → 2390000 stored
     },
     "quantity": {
       "type": "integer"
@@ -261,6 +278,13 @@ GET /products/_search
 }
 ```
 
+{{< callout type="info" title="Key Points" >}}
+- **text**: For full-text search, use match query
+- **keyword**: For exact values, sorting/aggregation, use term query
+- **Multi-field**: Can index a single field as both text and keyword (name.keyword)
+- **Nested**: Use when relationships between objects in an array need to be preserved (Object type flattens)
+{{< /callout >}}
+
 ---
 
 ## Analyzer
@@ -275,8 +299,10 @@ flowchart LR
     --> B["Character Filter<br>(HTML removal, etc.)"]
     --> C["Tokenizer<br>(word separation)"]
     --> D["Token Filter<br>(lowercase, etc.)"]
-    --> E["Tokens<br>#91;the, quick, brown, fox#93;"]
+    --> E["Tokens<br>&#91;the, quick, brown, fox&#93;"]
 ```
+
+*Diagram: The process of converting input text into final tokens through Character Filter, Tokenizer, and Token Filter.*
 
 ### Built-in Analyzers
 
@@ -314,10 +340,10 @@ Korean text cannot be properly tokenized by whitespace alone.
 
 ```json
 // Standard Analyzer
-"Samsung Electronics released a smartphone"
-→ ["Samsung", "Electronics", "released", "a", "smartphone"]
+"삼성전자가 스마트폰을 출시했다"
+→ ["삼성전자가", "스마트폰을", "출시했다"]
 
-// Nori Analyzer (for Korean)
+// Nori Analyzer
 "삼성전자가 스마트폰을 출시했다"
 → ["삼성", "전자", "스마트폰", "출시"]
 ```
@@ -384,8 +410,8 @@ PUT /products
         "my_synonym": {
           "type": "synonym",
           "synonyms": [
-            "laptop, notebook",
-            "phone, smartphone, mobile"
+            "노트북, 랩탑",
+            "핸드폰, 스마트폰, 휴대폰"
           ]
         }
       }
@@ -393,6 +419,13 @@ PUT /products
   }
 }
 ```
+
+{{< callout type="info" title="Key Points" >}}
+- Analyzer = Character Filter + Tokenizer + Token Filter
+- Nori Analyzer is recommended for Korean (decompound_mode: mixed)
+- Use `/_analyze` API to test analysis results
+- Synonym handling is configured with Custom Analyzer
+{{< /callout >}}
 
 ---
 
@@ -432,6 +465,12 @@ PUT /products
 | `strict` | Error on new fields |
 
 > **Production recommendation:** `strict` or explicit Mapping definition
+
+{{< callout type="info" title="Key Points" >}}
+- Dynamic Mapping is convenient during development, but risks unexpected type inference in production
+- Setting `dynamic: strict` will throw an error when undefined fields are input
+- `dynamic: false` stores new fields but doesn't index them (not searchable)
+{{< /callout >}}
 
 ---
 
@@ -483,6 +522,12 @@ products.forEach(p -> p.setStock(stocks.get(p.getId())));
 | Update | Re-index entire document | Update child only |
 | Query Complexity | Low | High |
 | Recommended For | Rarely changing relations | Frequently changing 1:N |
+
+{{< callout type="info" title="Key Points" >}}
+- Denormalization is the default strategy since Elasticsearch doesn't support JOIN
+- Consider Application-Side Join for frequently changing data
+- Nested has good performance but requires full document re-indexing; Parent-Child allows individual updates
+{{< /callout >}}
 
 ---
 
@@ -536,6 +581,13 @@ PUT /_index_template/logs
   }
 }
 ```
+
+{{< callout type="info" title="Key Points" >}}
+- Configure search fields as text + keyword Multi-field
+- Numeric IDs are more efficient as keyword if no range queries
+- Exclude fields from indexing with `enabled: false` if not searching
+- Apply consistent Mapping with index templates
+{{< /callout >}}
 
 ---
 
