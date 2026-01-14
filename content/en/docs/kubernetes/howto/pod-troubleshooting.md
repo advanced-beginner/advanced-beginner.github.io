@@ -268,6 +268,6 @@ Checklist for resolving Pod issues:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Optimize resources | [Resource Optimization](../resource-optimization/) |
-| Configure health checks | [Health Checks](../../concepts/health-checks/) |
-| Practice deployment | [Spring Boot Deployment](../../examples/spring-boot/) |
+| Optimize resources | [Resource Optimization](resource-optimization/) |
+| Configure health checks | [Health Checks](../concepts/health-checks/) |
+| Practice deployment | [Spring Boot Deployment](../examples/spring-boot/) |

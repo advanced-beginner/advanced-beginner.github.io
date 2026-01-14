@@ -395,14 +395,14 @@ df.explain(true);
 
 ## Next Steps
 
-- [Deployment and Cluster Management](../deployment/) - Production environment configuration
-- [FAQ](../../appendix/faq/) - Solving common performance issues
+- [Deployment and Cluster Management](deployment/) - Production environment configuration
+- [FAQ](../appendix/faq/) - Solving common performance issues
 
 ## Related Documents
 
-- [Architecture](../architecture/) - Driver/Executor memory structure
-- [Partitioning and Shuffle](../partitioning/) - Detailed shuffle optimization
-- [Caching and Persistence](../caching/) - Cache memory management
-- [Spark SQL](../spark-sql/) - SQL query optimization
-- [Basic Examples](../../examples/basic/) - Optimization application examples
-- [Glossary](../../appendix/glossary/) - AQE, Tungsten term definitions
+- [Architecture](architecture/) - Driver/Executor memory structure
+- [Partitioning and Shuffle](partitioning/) - Detailed shuffle optimization
+- [Caching and Persistence](caching/) - Cache memory management
+- [Spark SQL](spark-sql/) - SQL query optimization
+- [Basic Examples](../examples/basic/) - Optimization application examples
+- [Glossary](../appendix/glossary/) - AQE, Tungsten term definitions

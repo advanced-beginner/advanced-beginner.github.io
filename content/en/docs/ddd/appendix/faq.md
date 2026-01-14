@@ -510,5 +510,5 @@ Long-term benefits:
 
 ## Next Steps
 
-- [Glossary](../glossary/) - DDD terminology
-- [References](../references/) - Learning resources
+- [Glossary](glossary/) - DDD terminology
+- [References](references/) - Learning resources

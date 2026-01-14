@@ -16,13 +16,13 @@ author_url: "http://github.com/kimbenji"
 
 **대상 독자**: Producer 성능을 최적화하려는 개발자, 대용량 메시지 처리가 필요한 운영자
 
-**선수 지식**: [심화 개념](../advanced-concepts/)의 acks, Idempotent Producer, [메시지 흐름](../message-flow/)의 Topic, Partition 개념
+**선수 지식**: [심화 개념](advanced-concepts/)의 acks, Idempotent Producer, [메시지 흐름](message-flow/)의 Topic, Partition 개념
 
 ---
 
 Producer 성능을 최적화하는 핵심 설정들을 이해합니다. 이 문서는 Kafka 3.6.x 기준으로 작성되었으며, Spring Boot 3.2.x와 Spring Kafka 3.1.x, Java 17 환경에서 코드 예제가 검증되었습니다.
 
-이 문서를 읽기 전에 [심화 개념](../advanced-concepts/)에서 acks, Message Key, Idempotent Producer를, [메시지 흐름](../message-flow/)에서 Topic, Partition, Broker 개념을 먼저 이해하고 있어야 합니다.
+이 문서를 읽기 전에 [심화 개념](advanced-concepts/)에서 acks, Message Key, Idempotent Producer를, [메시지 흐름](message-flow/)에서 Topic, Partition, Broker 개념을 먼저 이해하고 있어야 합니다.
 
 #### Producer 내부 구조
 
@@ -387,5 +387,5 @@ Kafka 3.0 이상에서는 기본 활성화이며, 성능 영향은 미미합니�
 
 #### 다음 단계
 
-- [Consumer 심화 운영](../consumer-advanced/) - Consumer 성능 최적화
-- [트랜잭션](../transactions/) - Exactly-Once 처리
+- [Consumer 심화 운영](consumer-advanced/) - Consumer 성능 최적화
+- [트랜잭션](transactions/) - Exactly-Once 처리

@@ -396,6 +396,6 @@ kubectl api-resources
 
 | 목표 | 추천 문서 |
 |------|----------|
-| Pod 개념 이해하기 | [Pod](../pod/) |
-| 실제 배포해보기 | [Quick Start](../../quick-start/) |
-| 네트워크 구성 이해하기 | [네트워킹](../networking/) |
+| Pod 개념 이해하기 | [Pod](pod/) |
+| 실제 배포해보기 | [Quick Start](../quick-start/) |
+| 네트워크 구성 이해하기 | [네트워킹](networking/) |

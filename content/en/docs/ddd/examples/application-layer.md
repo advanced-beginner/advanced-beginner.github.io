@@ -23,7 +23,7 @@ author_url: "http://github.com/kimbenji"
 | **Target Audience** | Developers learning Application Service and Infrastructure layer implementation |
 | **Spring** | Experience with @Service, @Transactional, @Repository annotations |
 | **JPA** | Understanding of Entity, @Embedded, CascadeType |
-| **Prerequisites** | [Project Setup](../setup/), [Order Domain](../order-domain/) completed |
+| **Prerequisites** | [Project Setup](setup/), [Order Domain](order-domain/) completed |
 
 Implementing Application Services that orchestrate use cases and the infrastructure layer.
 
@@ -910,4 +910,4 @@ flowchart TB
 
 ## Next Steps
 
-- [Event Sourcing Practice](../event-sourcing/) - Event storage, snapshots, time travel
+- [Event Sourcing Practice](event-sourcing/) - Event storage, snapshots, time travel

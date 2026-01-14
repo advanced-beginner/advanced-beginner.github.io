@@ -266,5 +266,5 @@ grep -i "outofmemory\|oom\|killed" spark-logs/*.log
 
 ## Next Steps
 
-- [Resolving Data Skew](../data-skew/) - Data concentration in specific partitions
-- [FAQ](../../appendix/faq/) - Other error resolutions
+- [Resolving Data Skew](data-skew/) - Data concentration in specific partitions
+- [FAQ](../appendix/faq/) - Other error resolutions

@@ -16,8 +16,8 @@ related_concepts:
 
 {{% notice style="info" title="선수 개념" %}}
 이 문서를 읽기 전에 다음 개념을 먼저 이해하세요:
-- [핵심 구성요소](../core-components/) - Shard, Segment 개념
-- [데이터 모델링](../data-modeling/) - Mapping, Analyzer 기본
+- [핵심 구성요소](core-components/) - Shard, Segment 개념
+- [데이터 모델링](data-modeling/) - Mapping, Analyzer 기본
 {{% /notice %}}
 
 대용량 데이터를 효율적으로 저장하기 위한 Bulk 인덱싱, Refresh, Index Lifecycle Management를 배웁니다.
@@ -169,7 +169,7 @@ PUT /products/_settings
 ### Translog
 
 데이터 유실 방지를 위한 Write-Ahead Log입니다. Lucene 내부 구조에서 중요한 역할을 합니다.
-→ [Lucene 내부 구조 상세](../core-components/#lucene-내부-구조)
+→ [Lucene 내부 구조 상세](core-components/#lucene-내부-구조)
 
 ```mermaid
 flowchart LR
@@ -239,7 +239,7 @@ PUT /_index_template/products_template
 ## Index Lifecycle Management (ILM)
 
 시계열 데이터의 수명주기를 자동 관리합니다. 로그 데이터 관리에 특히 유용합니다.
-→ [ILM 실전 적용 예제](../../examples/log-analysis/#ilm-정책)
+→ [ILM 실전 적용 예제](../examples/log-analysis/#ilm-정책)
 
 ### 수명주기 단계
 
@@ -471,6 +471,6 @@ PUT /products/_settings
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 클러스터 구성 | [클러스터 관리](../cluster-management/) |
-| 검색 최적화 | [성능 튜닝](../performance-tuning/) |
-| 장애 대응 | [고가용성](../high-availability/) |
+| 클러스터 구성 | [클러스터 관리](cluster-management/) |
+| 검색 최적화 | [성능 튜닝](performance-tuning/) |
+| 장애 대응 | [고가용성](high-availability/) |

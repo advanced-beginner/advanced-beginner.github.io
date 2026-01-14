@@ -16,8 +16,8 @@ related_concepts:
 
 {{% notice style="info" title="선수 개념" %}}
 이 문서를 읽기 전에 다음 개념을 먼저 이해하세요:
-- [데이터 모델링](../data-modeling/) - Analyzer, text vs keyword 타입
-- [Query DSL](../query-dsl/) - match, multi_match 쿼리
+- [데이터 모델링](data-modeling/) - Analyzer, text vs keyword 타입
+- [Query DSL](query-dsl/) - match, multi_match 쿼리
 {{% /notice %}}
 
 Elasticsearch에서 한글 검색을 최적화하는 방법을 다룹니다. Nori 분석기, 자동완성, 초성 검색을 구현합니다.
@@ -698,6 +698,6 @@ public interface ProductRepository extends ElasticsearchRepository<Product, Stri
 
 ## 다음 단계
 
-- [Query DSL](../query-dsl/) - 다양한 검색 쿼리
-- [검색 관련성](../search-relevance/) - 점수 조정
-- [성능 튜닝](../performance-tuning/) - 대용량 처리
+- [Query DSL](query-dsl/) - 다양한 검색 쿼리
+- [검색 관련성](search-relevance/) - 점수 조정
+- [성능 튜닝](performance-tuning/) - 대용량 처리

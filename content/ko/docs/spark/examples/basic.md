@@ -19,7 +19,7 @@ author:
 | 구분 | 내용 |
 |------|------|
 | **대상 독자** | Spark DataFrame API를 처음 사용하는 Java 개발자 |
-| **선수 지식** | Java 기본 문법, SQL 기초, [환경 설정](../setup/) 완료 |
+| **선수 지식** | Java 기본 문법, SQL 기초, [환경 설정](setup/) 완료 |
 | **학습 목표** | 데이터 로딩, 변환, 집계, 조인, 저장을 수행할 수 있다 |
 | **예상 소요 시간** | 약 30분 |
 
@@ -810,5 +810,5 @@ public class FraudDetectionAnalysis {
 
 예제를 완료했다면:
 
-- [성능 튜닝](../../concepts/tuning/) - 코드 최적화
-- [부록](../../appendix/) - 용어 사전, FAQ
+- [성능 튜닝](../concepts/tuning/) - 코드 최적화
+- [부록](../appendix/) - 용어 사전, FAQ

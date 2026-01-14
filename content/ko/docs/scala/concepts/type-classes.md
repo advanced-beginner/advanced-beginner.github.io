@@ -394,5 +394,5 @@ None.toJson                // "null"
 
 #### 다음 단계
 
-- [공변성/반공변성](../variance/) — 제네릭 타입의 변성
-- [고급 타입](../type-system-advanced/) — Scala 3의 고급 타입 기능
+- [공변성/반공변성](variance/) — 제네릭 타입의 변성
+- [고급 타입](type-system-advanced/) — Scala 3의 고급 타입 기능

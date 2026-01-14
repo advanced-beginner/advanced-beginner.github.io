@@ -576,5 +576,5 @@ println(s"${name}님은 ${age}세입니다.")
 
 기본 문법을 익혔다면 다음 주제로 진행하세요.
 
-- [제어 구조](../control-structures/) — if, for, while, match 표현식
-- [함수와 메서드](../functions-methods/) — 함수 정의와 고급 기능
+- [제어 구조](control-structures/) — if, for, while, match 표현식
+- [함수와 메서드](functions-methods/) — 함수 정의와 고급 기능

@@ -16,7 +16,7 @@ author_url: "http://github.com/kimbenji"
 
 **Target Audience**: Developers building systems where message delivery guarantees are critical
 
-**Prerequisites**: acks and Idempotent Producer concepts from [Advanced Concepts](../advanced-concepts/)
+**Prerequisites**: acks and Idempotent Producer concepts from [Advanced Concepts](advanced-concepts/)
 
 ---
 
@@ -92,7 +92,7 @@ Idempotent Producer prevents duplicates from Producer to Broker. Transactional A
 
 #### Idempotent Producer Review
 
-Covered in [Advanced Concepts](../advanced-concepts/#idempotent-producer-멱등성-프로듀서), but reviewed here as the foundation of EOS.
+Covered in [Advanced Concepts](advanced-concepts/#idempotent-producer-멱등성-프로듀서), but reviewed here as the foundation of EOS.
 
 ```java
 // Producer settings
@@ -389,4 +389,4 @@ Idempotent Producer prevents duplicates for single Partition, enabled by default
 
 #### Next Steps
 
-- [Producer Tuning](../producer-tuning/) - Performance optimization settings
+- [Producer Tuning](producer-tuning/) - Performance optimization settings

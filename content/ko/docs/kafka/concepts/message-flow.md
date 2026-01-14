@@ -16,7 +16,7 @@ author_url: "http://github.com/kimbenji"
 
 **대상 독자**: Kafka의 기본 구성요소를 이해한 개발자, 메시지 전달 과정의 상세 동작을 학습하려는 분
 
-**선수 지식**: [핵심 구성요소](../core-components/)의 Producer, Consumer, Broker, Topic, Partition 개념
+**선수 지식**: [핵심 구성요소](core-components/)의 Producer, Consumer, Broker, Topic, Partition 개념
 
 ---
 
@@ -278,4 +278,4 @@ Pull 방식은 Consumer가 자신의 속도에 맞게 메시지를 가져갈 수
 
 이 문서에서는 메시지가 Producer에서 Consumer까지 전달되는 전체 과정을 살펴보았습니다. 다음 단계로 Consumer Group과 Offset 관리에 대해 더 자세히 학습할 수 있습니다.
 
-- [Consumer Group과 Offset](../consumer-group/) - 병렬 처리와 상태 관리의 세부 사항
+- [Consumer Group과 Offset](consumer-group/) - 병렬 처리와 상태 관리의 세부 사항

@@ -357,5 +357,5 @@ spring:
 
 #### 다음 단계
 
-- [기본 예제](../basic/) - Producer/Consumer 구현
-- [주문 시스템](../order-system/) - 실전 예제
+- [기본 예제](basic/) - Producer/Consumer 구현
+- [주문 시스템](order-system/) - 실전 예제

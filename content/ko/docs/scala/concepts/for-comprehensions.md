@@ -399,5 +399,5 @@ result  // None
 
 #### 다음 단계
 
-- [Implicit/Given](../implicits/) — 문맥적 추상화
-- [함수형 패턴](../functional-patterns/) — Monad, Functor 심화
+- [Implicit/Given](implicits/) — 문맥적 추상화
+- [함수형 패턴](functional-patterns/) — Monad, Functor 심화

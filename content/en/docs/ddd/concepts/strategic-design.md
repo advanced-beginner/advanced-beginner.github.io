@@ -847,5 +847,5 @@ Such results become a design blueprint that can be directly converted to code.
 
 #### Next Steps
 
-- [Tactical Design](../tactical-design/) - Entity, Value Object, Aggregate patterns
-- [Architecture](../architecture/) - Hexagonal, Clean Architecture
+- [Tactical Design](tactical-design/) - Entity, Value Object, Aggregate patterns
+- [Architecture](architecture/) - Hexagonal, Clean Architecture

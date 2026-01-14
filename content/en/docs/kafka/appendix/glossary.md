@@ -183,8 +183,8 @@ An external service that managed Kafka cluster metadata. Handled Broker lists, T
 
 #### Next Steps
 
-- [Concepts](../../concepts/) - Kafka core concepts
-- [Quick Start](../../quick-start/) - Quick start guide
-- [Microservices Example](../../examples/microservices/) - Multi-service event flow
-- [References](../references/) - Official documentation, blogs
-- [FAQ](../faq/) - Frequently asked questions
+- [Concepts](../concepts/) - Kafka core concepts
+- [Quick Start](../quick-start/) - Quick start guide
+- [Microservices Example](../examples/microservices/) - Multi-service event flow
+- [References](references/) - Official documentation, blogs
+- [FAQ](faq/) - Frequently asked questions

@@ -464,5 +464,5 @@ Create clusters through each platform's management console or CLI.
 
 ## Next Steps
 
-- [FAQ](../../appendix/faq/) - Common operational issues
-- [References](../../appendix/references/) - Additional learning resources
+- [FAQ](../appendix/faq/) - Common operational issues
+- [References](../appendix/references/) - Additional learning resources

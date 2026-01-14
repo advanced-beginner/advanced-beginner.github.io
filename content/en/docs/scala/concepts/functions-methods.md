@@ -770,5 +770,5 @@ println(fibonacci(50))  // 12586269025
 
 #### Next Steps
 
-- [Classes and Objects](../classes-objects/) — OOP basics
-- [Higher-Order Functions](../higher-order-functions/) — Advanced functional programming
+- [Classes and Objects](classes-objects/) — OOP basics
+- [Higher-Order Functions](higher-order-functions/) — Advanced functional programming

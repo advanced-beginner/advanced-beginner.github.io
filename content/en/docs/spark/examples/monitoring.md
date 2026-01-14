@@ -484,6 +484,6 @@ public class WeeklyReportGenerator {
 
 ## Related Documents
 
-- [Performance Tuning](../../concepts/tuning/) - Optimization based on monitoring results
-- [FAQ - Debugging Guide](../../appendix/faq/#spark-ui-debugging-guide) - Troubleshooting
-- [Architecture](../../concepts/architecture/) - Understanding memory model
+- [Performance Tuning](../concepts/tuning/) - Optimization based on monitoring results
+- [FAQ - Debugging Guide](../appendix/faq/#spark-ui-debugging-guide) - Troubleshooting
+- [Architecture](../concepts/architecture/) - Understanding memory model

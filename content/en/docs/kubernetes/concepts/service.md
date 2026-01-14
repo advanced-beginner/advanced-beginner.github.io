@@ -404,6 +404,6 @@ Once you understand Services, proceed to the next steps:
 
 | Goal | Recommended Doc |
 |------|----------------|
-| External HTTP routing | [Networking](../networking/) |
-| Separate configuration | [ConfigMap and Secret](../configmap-secret/) |
-| Actual deployment practice | [Spring Boot Deployment](../../examples/spring-boot/) |
+| External HTTP routing | [Networking](networking/) |
+| Separate configuration | [ConfigMap and Secret](configmap-secret/) |
+| Actual deployment practice | [Spring Boot Deployment](../examples/spring-boot/) |

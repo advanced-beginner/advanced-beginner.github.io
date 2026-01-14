@@ -504,6 +504,6 @@ However, Scala 3 style is recommended for new projects to fully leverage new fea
 
 Once you understand Scala 2 and 3 differences, proceed with practical project development.
 
-- [Version Comparison](../../appendix/version-comparison/) — Full difference summary
+- [Version Comparison](../appendix/version-comparison/) — Full difference summary
 - [Migration Guide](https://docs.scala-lang.org/scala3/guides/migration/compatibility-intro.html)
-- [Practical Projects](../practical-project/) — Real service implementation
+- [Practical Projects](practical-project/) — Real service implementation

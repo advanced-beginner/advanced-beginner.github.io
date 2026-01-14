@@ -123,7 +123,7 @@ public class Product {
 |--------|-------------|-----------|
 | `String id` | `Long id` | ES document IDs are strings, UUID compatible |
 | Explicit `@Field` | Auto mapping | Explicit types ensure predictable behavior |
-| `standard` analyzer | `nori` | Basic example kept simple, see [Product Search](../product-search/) for Korean search |
+| `standard` analyzer | `nori` | Basic example kept simple, see [Product Search](product-search/) for Korean search |
 
 {{% notice style="note" title="Key Points" %}}
 - Specify index name with `@Document`, document ID field with `@Id`
@@ -566,7 +566,7 @@ curl -X DELETE http://localhost:9200/products
 ### Korean Search Not Working
 
 The default `standard` analyzer doesn't perform Korean morphological analysis.
-Check Nori settings in [Product Search System](../product-search/) example.
+Check Nori settings in [Product Search System](product-search/) example.
 
 {{% notice style="note" title="Key Points" %}}
 - If auto index creation fails, verify `@Document(createIndex = true)`
@@ -580,6 +580,6 @@ Check Nori settings in [Product Search System](../product-search/) example.
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Implement Korean search | [Product Search System](../product-search/) |
-| Improve search quality | [Search Relevance](../../concepts/search-relevance/) |
-| Data analysis | [Aggregations](../../concepts/aggregations/) |
+| Implement Korean search | [Product Search System](product-search/) |
+| Improve search quality | [Search Relevance](../concepts/search-relevance/) |
+| Data analysis | [Aggregations](../concepts/aggregations/) |

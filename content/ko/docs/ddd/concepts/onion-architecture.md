@@ -7,7 +7,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **대상 독자**: DDD와 잘 어울리는 아키텍처를 찾는 개발자
-> **선수 지식**: [헥사고날 아키텍처](../hexagonal-architecture/)와 의존성 역전 원칙
+> **선수 지식**: [헥사고날 아키텍처](hexagonal-architecture/)와 의존성 역전 원칙
 > **소요 시간**: 약 20분
 
 # 어니언 아키텍처 (Onion Architecture)
@@ -1023,8 +1023,8 @@ flowchart LR
 
 - ❌ 단순 CRUD 애플리케이션
 - ❌ 소규모, 단기 프로젝트
-- ❌ DDD 경험이 없는 팀 → [계층형](../layered-architecture/)으로 시작
-- ❌ 외부 연동이 많고 도메인이 단순한 경우 → [헥사고날](../hexagonal-architecture/)
+- ❌ DDD 경험이 없는 팀 → [계층형](layered-architecture/)으로 시작
+- ❌ 외부 연동이 많고 도메인이 단순한 경우 → [헥사고날](hexagonal-architecture/)
 
 ---
 
@@ -1091,7 +1091,7 @@ public class JpaOrderRepository implements OrderRepository {
 
 ## 다음 단계
 
-- [계층형 아키텍처](../layered-architecture/) - 기본부터 시작
-- [헥사고날 아키텍처](../hexagonal-architecture/) - 외부 연동 중심
-- [클린 아키텍처](../clean-architecture/) - 엄격한 규칙
-- [CQRS](../cqrs/) - 읽기/쓰기 분리
+- [계층형 아키텍처](layered-architecture/) - 기본부터 시작
+- [헥사고날 아키텍처](hexagonal-architecture/) - 외부 연동 중심
+- [클린 아키텍처](clean-architecture/) - 엄격한 규칙
+- [CQRS](cqrs/) - 읽기/쓰기 분리

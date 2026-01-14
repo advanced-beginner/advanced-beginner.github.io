@@ -750,5 +750,5 @@ public class FraudDetectionAnalysis {
 
 After completing the examples:
 
-- [Performance Tuning](../../concepts/tuning/) - Code optimization
-- [Appendix](../../appendix/) - Glossary, FAQ
+- [Performance Tuning](../concepts/tuning/) - Code optimization
+- [Appendix](../appendix/) - Glossary, FAQ

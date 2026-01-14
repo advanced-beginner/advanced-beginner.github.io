@@ -426,6 +426,6 @@ After completing the basic example, proceed to:
 
 | Goal | Recommended Document |
 |------|----------|
-| Deploy real app | [Spring Boot Deployment](../spring-boot/) |
-| Troubleshooting | [Pod Troubleshooting](../../howto/pod-troubleshooting/) |
-| Deepen concepts | [Resource Management](../../concepts/resources/) |
+| Deploy real app | [Spring Boot Deployment](spring-boot/) |
+| Troubleshooting | [Pod Troubleshooting](../howto/pod-troubleshooting/) |
+| Deepen concepts | [Resource Management](../concepts/resources/) |

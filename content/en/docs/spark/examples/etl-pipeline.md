@@ -741,6 +741,6 @@ public class EtlScheduler {
 
 ## Related Documents
 
-- [Basic Examples](../basic/) - DataFrame basic operations
-- [Monitoring](../monitoring/) - Pipeline monitoring
-- [Performance Tuning](../../concepts/tuning/) - Large-scale processing optimization
+- [Basic Examples](basic/) - DataFrame basic operations
+- [Monitoring](monitoring/) - Pipeline monitoring
+- [Performance Tuning](../concepts/tuning/) - Large-scale processing optimization

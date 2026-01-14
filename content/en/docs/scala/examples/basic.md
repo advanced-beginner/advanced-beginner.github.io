@@ -15,7 +15,7 @@ weight: 2
 **Target Audience**: Developers who have completed Scala environment setup and want to learn Scala through practical code
 
 **Prerequisites**:
-- Completed Scala development environment setup (see [Environment Setup](../setup/))
+- Completed Scala development environment setup (see [Environment Setup](setup/))
 - Basic object-oriented programming concepts
 - Functional programming basics (recommended)
 
@@ -480,4 +480,4 @@ Improve your Scala skills by implementing the following exercises yourself.
 
 After learning basic examples, compare Scala 2 and 3 syntax differences.
 
-- [Scala 2 vs 3 Comparison](../scala2-vs-scala3/) — Version-specific code comparison
+- [Scala 2 vs 3 Comparison](scala2-vs-scala3/) — Version-specific code comparison

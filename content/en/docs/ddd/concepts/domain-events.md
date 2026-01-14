@@ -7,7 +7,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **Target Audience**: Developers who understand domain modeling and transaction concepts
-> **Prerequisites**: [Aggregate Deep Dive](../aggregate/) or understanding of Aggregate boundaries
+> **Prerequisites**: [Aggregate Deep Dive](aggregate/) or understanding of Aggregate boundaries
 > **Estimated Time**: About 30 minutes
 > **Key Question**: "When and why should you use domain events?"
 
@@ -958,4 +958,4 @@ Domain events are business-meaningful occurrences expressed in code. Event patte
 
 #### Next Steps
 
-- [Hands-on Examples](../../examples/) - Building an order domain with Spring Boot
+- [Hands-on Examples](../examples/) - Building an order domain with Spring Boot

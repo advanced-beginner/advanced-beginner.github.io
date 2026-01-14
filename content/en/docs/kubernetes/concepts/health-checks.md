@@ -360,6 +360,6 @@ Once you understand health checks, proceed to the next steps:
 
 | Goal | Recommended Doc |
 |------|----------------|
-| Troubleshoot Pods | [Pod Troubleshooting](../../howto/pod-troubleshooting/) |
-| Actual deployment practice | [Spring Boot Deployment](../../examples/spring-boot/) |
-| Auto-scaling | [Scaling](../scaling/) |
+| Troubleshoot Pods | [Pod Troubleshooting](../howto/pod-troubleshooting/) |
+| Actual deployment practice | [Spring Boot Deployment](../examples/spring-boot/) |
+| Auto-scaling | [Scaling](scaling/) |

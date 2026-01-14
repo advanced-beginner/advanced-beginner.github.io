@@ -489,5 +489,5 @@ public class RealTimeSalesAggregation {
 
 ## Next Steps
 
-- [MLlib](../mllib/) - Machine learning with Spark
-- [Performance Tuning](../tuning/) - Streaming performance optimization
+- [MLlib](mllib/) - Machine learning with Spark
+- [Performance Tuning](tuning/) - Streaming performance optimization

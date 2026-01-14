@@ -424,5 +424,5 @@ rm -rf .metals .bloop .bsp
 
 Once environment setup is complete, practice Scala's core concepts through basic examples.
 
-- [Basic Examples](../basic/) — Examples using core concepts
-- [Scala 2 vs 3 Comparison](../scala2-vs-scala3/) — Version-specific code comparison
+- [Basic Examples](basic/) — Examples using core concepts
+- [Scala 2 vs 3 Comparison](scala2-vs-scala3/) — Version-specific code comparison

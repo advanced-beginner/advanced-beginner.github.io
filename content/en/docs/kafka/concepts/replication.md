@@ -16,7 +16,7 @@ author_url: "http://github.com/kimbenji"
 
 **Target Audience**: Developers and operators managing Kafka clusters or designing high-availability systems
 
-**Prerequisites**: Understanding of Broker and Partition concepts from [Core Components](../core-components/)
+**Prerequisites**: Understanding of Broker and Partition concepts from [Core Components](core-components/)
 
 ---
 
@@ -220,4 +220,4 @@ kafka-topics.sh --describe --unavailable-partitions \
 
 This document covered Kafka's replication mechanism in detail. Next, you can learn about advanced concepts frequently encountered in practice, such as acks, Message Key, Retention, and Idempotent Producer.
 
-- [Advanced Concepts](../advanced-concepts/) - acks, Message Key, Retention, Idempotent Producer
+- [Advanced Concepts](advanced-concepts/) - acks, Message Key, Retention, Idempotent Producer

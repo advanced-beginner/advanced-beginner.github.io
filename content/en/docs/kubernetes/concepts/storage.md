@@ -462,6 +462,6 @@ Once you understand Volumes and storage, proceed to the next steps:
 
 | Goal | Recommended Doc |
 |------|----------------|
-| Network configuration | [Networking](../networking/) |
-| Resource management | [Resource Management](../resources/) |
-| Actual deployment practice | [Spring Boot Deployment](../../examples/spring-boot/) |
+| Network configuration | [Networking](networking/) |
+| Resource management | [Resource Management](resources/) |
+| Actual deployment practice | [Spring Boot Deployment](../examples/spring-boot/) |

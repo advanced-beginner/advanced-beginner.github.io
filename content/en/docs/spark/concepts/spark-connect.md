@@ -370,6 +370,6 @@ Dataset<Row> df = spark.read().parquet("data.parquet");
 
 ## Related Documents
 
-- [Architecture](../architecture/) - Spark cluster structure
-- [Spring Boot Integration](../../examples/spring-boot/) - Spring integration
-- [Deployment](../deployment/) - Cluster deployment methods
+- [Architecture](architecture/) - Spark cluster structure
+- [Spring Boot Integration](../examples/spring-boot/) - Spring integration
+- [Deployment](deployment/) - Cluster deployment methods

@@ -409,6 +409,6 @@ After completing Spring Boot deployment, proceed to:
 
 | Goal | Recommended Document |
 |------|----------|
-| Troubleshooting | [Pod Troubleshooting](../../howto/pod-troubleshooting/) |
-| Auto-scaling | [Scaling](../../concepts/scaling/) |
-| Resource optimization | [Resource Optimization](../../howto/resource-optimization/) |
+| Troubleshooting | [Pod Troubleshooting](../howto/pod-troubleshooting/) |
+| Auto-scaling | [Scaling](../concepts/scaling/) |
+| Resource optimization | [Resource Optimization](../howto/resource-optimization/) |

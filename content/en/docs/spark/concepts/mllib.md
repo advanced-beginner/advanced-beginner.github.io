@@ -530,5 +530,5 @@ public class ChurnPrediction {
 
 ## Next Steps
 
-- [Performance Tuning](../tuning/) - ML workload optimization
-- [Deployment](../deployment/) - Model serving and batch prediction
+- [Performance Tuning](tuning/) - ML workload optimization
+- [Deployment](deployment/) - Model serving and batch prediction

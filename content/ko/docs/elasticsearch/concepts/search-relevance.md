@@ -16,8 +16,8 @@ related_concepts:
 
 {{% notice style="info" title="선수 개념" %}}
 이 문서를 읽기 전에 다음 개념을 먼저 이해하세요:
-- [Query DSL](../query-dsl/) - match, bool 쿼리 기본
-- [데이터 모델링](../data-modeling/) - Analyzer 동작 원리
+- [Query DSL](query-dsl/) - match, bool 쿼리 기본
+- [데이터 모델링](data-modeling/) - Analyzer 동작 원리
 {{% /notice %}}
 
 검색 결과의 품질을 높이기 위한 Score, BM25, Boosting 등 관련성 튜닝 방법을 배웁니다.
@@ -369,7 +369,7 @@ graph LR
 ### 1. 동의어 처리
 
 동의어 처리를 위해 커스텀 Analyzer를 설정합니다.
-→ [Analyzer 기본 개념](../data-modeling/#분석기-analyzer-설정)
+→ [Analyzer 기본 개념](data-modeling/#분석기-analyzer-설정)
 
 ```json
 PUT /products
@@ -519,6 +519,6 @@ function_score에서 `max_boost` 사용:
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 데이터 분석 | [집계](../aggregations/) |
-| 실전 구현 | [상품 검색 시스템](../../examples/product-search/) |
-| 성능 최적화 | [성능 튜닝](../performance-tuning/) |
+| 데이터 분석 | [집계](aggregations/) |
+| 실전 구현 | [상품 검색 시스템](../examples/product-search/) |
+| 성능 최적화 | [성능 튜닝](performance-tuning/) |

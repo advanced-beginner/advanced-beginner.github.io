@@ -641,5 +641,5 @@ extension (n: Int)
 
 #### Next Steps
 
-- [Type Classes](../type-classes/) — Advanced type class patterns
-- [Functional Patterns](../functional-patterns/) — Functor, Monad
+- [Type Classes](type-classes/) — Advanced type class patterns
+- [Functional Patterns](functional-patterns/) — Functor, Monad

@@ -7,7 +7,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **대상 독자**: 프로젝트 아키텍처 선택이 필요한 개발자 및 아키텍트
-> **선수 지식**: [전술적 설계](../tactical-design/) 빌딩 블록에 대한 이해
+> **선수 지식**: [전술적 설계](tactical-design/) 빌딩 블록에 대한 이해
 > **소요 시간**: 약 25분
 > **핵심 질문**: "Layered, Hexagonal, Clean Architecture 중 어떤 것을 선택해야 하는가?"
 
@@ -225,6 +225,6 @@ flowchart LR
 
 #### 다음 단계
 
-- [CQRS](../cqrs/) - 읽기와 쓰기를 분리하는 패턴
-- [이벤트 소싱](../event-sourcing/) - 상태 대신 이벤트를 저장
-- [안티패턴](../anti-patterns/) - 피해야 할 흔한 실수들
+- [CQRS](cqrs/) - 읽기와 쓰기를 분리하는 패턴
+- [이벤트 소싱](../examples/event-sourcing/) - 상태 대신 이벤트를 저장
+- [안티패턴](anti-patterns/) - 피해야 할 흔한 실수들

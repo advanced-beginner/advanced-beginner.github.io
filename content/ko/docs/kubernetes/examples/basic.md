@@ -426,6 +426,6 @@ kubectl delete -f complete-example.yaml
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 실제 앱 배포 | [Spring Boot 배포](../spring-boot/) |
-| 문제 해결 | [Pod 트러블슈팅](../../howto/pod-troubleshooting/) |
-| 개념 심화 | [리소스 관리](../../concepts/resources/) |
+| 실제 앱 배포 | [Spring Boot 배포](spring-boot/) |
+| 문제 해결 | [Pod 트러블슈팅](../howto/pod-troubleshooting/) |
+| 개념 심화 | [리소스 관리](../concepts/resources/) |

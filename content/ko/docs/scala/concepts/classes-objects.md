@@ -513,5 +513,5 @@ println(p1.compare(p2))     // 1 (p1이 더 비쌈)
 
 #### 다음 단계
 
-- [케이스 클래스](../case-classes/) — 불변 데이터 모델링
-- [패턴 매칭](../pattern-matching/) — match 표현식 심화
+- [케이스 클래스](case-classes/) — 불변 데이터 모델링
+- [패턴 매칭](pattern-matching/) — match 표현식 심화

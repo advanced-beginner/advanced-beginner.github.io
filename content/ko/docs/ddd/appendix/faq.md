@@ -510,5 +510,5 @@ flowchart LR
 
 ## 다음 단계
 
-- [용어 사전](../glossary/) - DDD 용어 정리
-- [참고 자료](../references/) - 학습 자료
+- [용어 사전](glossary/) - DDD 용어 정리
+- [참고 자료](references/) - 학습 자료

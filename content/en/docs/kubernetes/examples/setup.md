@@ -316,6 +316,6 @@ After completing environment setup, proceed to:
 
 | Goal | Recommended Document |
 |------|----------|
-| Getting started with Kubernetes | [Quick Start](../../quick-start/) |
-| Practice basic resources | [Basic Example](../basic/) |
-| Deploy real app | [Spring Boot Deployment](../spring-boot/) |
+| Getting started with Kubernetes | [Quick Start](../quick-start/) |
+| Practice basic resources | [Basic Example](basic/) |
+| Deploy real app | [Spring Boot Deployment](spring-boot/) |

@@ -16,7 +16,7 @@ author_url: "http://github.com/kimbenji"
 
 **Target Audience**: Operators and security administrators configuring Kafka cluster security
 
-**Prerequisites**: Understanding of Broker, Producer, Consumer concepts from [Core Components](../core-components/), basic security concepts (encryption, authentication, authorization)
+**Prerequisites**: Understanding of Broker, Producer, Consumer concepts from [Core Components](core-components/), basic security concepts (encryption, authentication, authorization)
 
 ---
 
@@ -518,5 +518,5 @@ Applying the same security configuration as production is recommended. Applying 
 
 #### Next Steps
 
-- [Monitoring](../monitoring/) - Monitoring security events
-- [Ecosystem](../ecosystem/) - Schema Registry security configuration
+- [Monitoring](monitoring/) - Monitoring security events
+- [Ecosystem](ecosystem/) - Schema Registry security configuration

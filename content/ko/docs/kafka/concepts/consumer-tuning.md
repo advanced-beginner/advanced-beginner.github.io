@@ -16,7 +16,7 @@ author_url: "http://github.com/kimbenji"
 
 **대상 독자**: Consumer 성능을 최적화하려는 개발자, 운영 안정성을 높이려는 운영자
 
-**선수 지식**: [Consumer Group & Offset](../consumer-group/)의 Consumer 동작 원리
+**선수 지식**: [Consumer Group & Offset](consumer-group/)의 Consumer 동작 원리
 
 ---
 
@@ -316,4 +316,4 @@ Fetch 설정(fetch.min.bytes, fetch.max.wait.ms)은 Broker에서 데이터를 �
 
 #### 다음 단계
 
-- [에러 처리 심화](../error-handling/) - 에러 처리 패턴과 Dead Letter Topic
+- [에러 처리 심화](error-handling/) - 에러 처리 패턴과 Dead Letter Topic

@@ -381,6 +381,6 @@ curl http://test.local/api
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 리소스 설정 | [리소스 관리](../resources/) |
-| 자동 스케일링 | [스케일링](../scaling/) |
-| 실제 배포 실습 | [Spring Boot 배포](../../examples/spring-boot/) |
+| 리소스 설정 | [리소스 관리](resources/) |
+| 자동 스케일링 | [스케일링](scaling/) |
+| 실제 배포 실습 | [Spring Boot 배포](../examples/spring-boot/) |

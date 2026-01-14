@@ -7,7 +7,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **대상 독자**: 도메인 모델링과 트랜잭션 개념을 이해한 개발자
-> **선수 지식**: [Aggregate 심화](../aggregate/) 또는 Aggregate 경계 개념에 대한 이해
+> **선수 지식**: [Aggregate 심화](aggregate/) 또는 Aggregate 경계 개념에 대한 이해
 > **소요 시간**: 약 30분
 > **핵심 질문**: "도메인 이벤트를 언제, 왜 사용해야 하는가?"
 
@@ -958,4 +958,4 @@ public void handle(ConsumerRecord<String, JsonNode> record) {
 
 #### 다음 단계
 
-- [실습 예제](../../examples/) - Spring Boot로 구현하는 주문 도메인
+- [실습 예제](../examples/) - Spring Boot로 구현하는 주문 도메인

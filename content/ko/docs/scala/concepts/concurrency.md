@@ -505,6 +505,6 @@ val result2 = Future.sequence(List(fetchA(), fetchB(), fetchC()))
 
 #### 다음 단계
 
-- [함수형 패턴](../functional-patterns/) — Functor, Monad 심화
+- [함수형 패턴](functional-patterns/) — Functor, Monad 심화
 - [Akka 공식 문서](https://akka.io/)
 - [ZIO 공식 문서](https://zio.dev/)

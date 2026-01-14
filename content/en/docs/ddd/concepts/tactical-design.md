@@ -7,7 +7,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **Target Audience**: Backend developers who want to implement DDD building blocks in code
-> **Prerequisites**: Read [Strategic Design](../strategic-design/) or understand Bounded Context concept
+> **Prerequisites**: Read [Strategic Design](strategic-design/) or understand Bounded Context concept
 > **Time Required**: About 40 minutes
 > **Key Question**: "What patterns should be used to implement domain models?"
 
@@ -1266,5 +1266,5 @@ When designing Domain Services, check if the logic doesn't belong to a specific 
 
 #### Next Steps
 
-- [Aggregate Deep Dive](../aggregate/) - Aggregate design principles and transaction boundaries
-- [Domain Events](../domain-events/) - Event-driven design
+- [Aggregate Deep Dive](aggregate/) - Aggregate design principles and transaction boundaries
+- [Domain Events](domain-events/) - Event-driven design

@@ -16,13 +16,13 @@ author_url: "http://github.com/kimbenji"
 
 **대상 독자**: Kafka Consumer를 프로덕션에서 운영하는 개발자 및 운영자
 
-**선수 지식**: [Consumer Group & Offset](../consumer-group/)의 기본 개념, [Replication](../replication/)의 ISR과 Leader 개념
+**선수 지식**: [Consumer Group & Offset](consumer-group/)의 기본 개념, [Replication](replication/)의 ISR과 Leader 개념
 
 ---
 
 리밸런싱 최적화, Consumer Lag 모니터링, 트러블슈팅을 다룹니다. 이 문서는 Kafka 3.6.x 기준으로 작성되었으며, Spring Boot 3.2.x와 Spring Kafka 3.1.x, Micrometer 1.12.x, Java 17 환경에서 코드 예제가 검증되었습니다.
 
-이 문서를 읽기 전에 [Consumer Group & Offset](../consumer-group/)에서 기본 개념을, [Replication](../replication/)에서 ISR과 Leader 개념을 먼저 이해하고 있어야 합니다.
+이 문서를 읽기 전에 [Consumer Group & Offset](consumer-group/)에서 기본 개념을, [Replication](replication/)에서 ISR과 Leader 개념을 먼저 이해하고 있어야 합니다.
 
 #### Consumer Group 핵심 설정
 
@@ -358,5 +358,5 @@ session.timeout.ms를 증가시키거나, CooperativeStickyAssignor를 사용하
 
 #### 다음 단계
 
-- [Producer 튜닝](../producer-tuning/) - Producer 성능 최적화
-- [트랜잭션](../transactions/) - Exactly-Once 처리
+- [Producer 튜닝](producer-tuning/) - Producer 성능 최적화
+- [트랜잭션](transactions/) - Exactly-Once 처리

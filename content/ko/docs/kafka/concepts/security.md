@@ -16,7 +16,7 @@ author_url: "http://github.com/kimbenji"
 
 **대상 독자**: Kafka 클러스터 보안을 구성하려는 운영자 및 보안 담당자
 
-**선수 지식**: [핵심 구성요소](../core-components/)의 Broker, Producer, Consumer 개념, 기본적인 보안 개념(암호화, 인증, 인가)
+**선수 지식**: [핵심 구성요소](core-components/)의 Broker, Producer, Consumer 개념, 기본적인 보안 개념(암호화, 인증, 인가)
 
 ---
 
@@ -518,5 +518,5 @@ kafka-acls.sh --add --allow-principal User:order-service \
 
 #### 다음 단계
 
-- [모니터링](../monitoring/) - 보안 이벤트 모니터링
-- [생태계](../ecosystem/) - Schema Registry 보안 설정
+- [모니터링](monitoring/) - 보안 이벤트 모니터링
+- [생태계](ecosystem/) - Schema Registry 보안 설정

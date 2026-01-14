@@ -8,7 +8,7 @@ author_url: "http://github.com/kimbenji"
 
 # DDD 용어 사전
 
-Domain-Driven Design의 핵심 용어를 정리합니다. 상세 설명은 [개념 이해](../../concepts/) 섹션을 참고하세요.
+Domain-Driven Design의 핵심 용어를 정리합니다. 상세 설명은 [개념 이해](../concepts/) 섹션을 참고하세요.
 
 > **TL;DR**
 >
@@ -18,7 +18,7 @@ Domain-Driven Design의 핵심 용어를 정리합니다. 상세 설명은 [개�
 
 ## 전략적 설계 (Strategic Design)
 
-> 📖 자세한 내용: [전략적 설계](../../concepts/strategic-design/)
+> 📖 자세한 내용: [전략적 설계](../concepts/strategic-design/)
 
 ### Bounded Context (경계된 컨텍스트)
 
@@ -34,7 +34,7 @@ Domain-Driven Design의 핵심 용어를 정리합니다. 상세 설명은 [개�
 - 판매 Context의 "Product" = 가격, 프로모션
 - 재고 Context의 "Product" = 수량, 창고 위치
 
-📖 [전략적 설계 상세](../../concepts/strategic-design/#bounded-context)
+📖 [전략적 설계 상세](../concepts/strategic-design/#bounded-context)
 
 ---
 
@@ -53,7 +53,7 @@ Domain-Driven Design의 핵심 용어를 정리합니다. 상세 설명은 [개�
 | **Open Host Service** | 표준 API 공개 | 다수 소비자 |
 | **Published Language** | 표준 데이터 형식 사용 | [Domain Event](#domain-event-도메인-이벤트) 통합 |
 
-📖 [전략적 설계 상세](../../concepts/strategic-design/#context-mapping)
+📖 [전략적 설계 상세](../concepts/strategic-design/#context-mapping)
 
 ---
 
@@ -73,7 +73,7 @@ Domain-Driven Design의 핵심 용어를 정리합니다. 상세 설명은 [개�
 테스트: @Test void 주문_확정_시_상태가_CONFIRMED로_변경된다()
 ```
 
-📖 [전략적 설계 상세](../../concepts/strategic-design/#ubiquitous-language)
+📖 [전략적 설계 상세](../concepts/strategic-design/#ubiquitous-language)
 
 ---
 
@@ -87,7 +87,7 @@ Domain-Driven Design의 핵심 용어를 정리합니다. 상세 설명은 [개�
 - 외부에 위임하면 안 됨
 - [Aggregate](#aggregate-집합체)로 모델링하여 복잡성 관리
 
-📖 [전략적 설계 상세](../../concepts/strategic-design/#domain-types)
+📖 [전략적 설계 상세](../concepts/strategic-design/#domain-types)
 
 ---
 
@@ -121,7 +121,7 @@ Domain-Driven Design의 핵심 용어를 정리합니다. 상세 설명은 [개�
 
 ## 전술적 설계 (Tactical Design)
 
-> 📖 자세한 내용: [전술적 설계](../../concepts/tactical-design/)
+> 📖 자세한 내용: [전술적 설계](../concepts/tactical-design/)
 
 ### Entity (엔티티)
 
@@ -144,7 +144,7 @@ public boolean equals(Object o) {
 }
 ```
 
-📖 [전술적 설계 상세](../../concepts/tactical-design/#entity) | [주문 도메인 예제](../../examples/order-domain/)
+📖 [전술적 설계 상세](../concepts/tactical-design/#entity) | [주문 도메인 예제](../examples/order-domain/)
 
 ---
 
@@ -168,7 +168,7 @@ public record Money(BigDecimal amount, Currency currency) {
 }
 ```
 
-📖 [전술적 설계 상세](../../concepts/tactical-design/#value-object) | [주문 도메인 예제](../../examples/order-domain/#value-object)
+📖 [전술적 설계 상세](../concepts/tactical-design/#value-object) | [주문 도메인 예제](../examples/order-domain/#value-object)
 
 ---
 
@@ -188,7 +188,7 @@ public record Money(BigDecimal amount, Currency currency) {
 
 **관련 용어:** [Entity](#entity-엔티티), [Value Object](#value-object-값-객체), [Repository](#repository-리포지토리)
 
-📖 [Aggregate 상세](../../concepts/aggregate/) | [Aggregate 패턴](../../concepts/aggregate-patterns/)
+📖 [Aggregate 상세](../concepts/aggregate/) | [Aggregate 패턴](../concepts/aggregate-patterns/)
 
 ---
 
@@ -214,7 +214,7 @@ public class Order extends AggregateRoot<OrderId> {
 }
 ```
 
-📖 [Aggregate 상세](../../concepts/aggregate/#aggregate-root) | [주문 도메인 예제](../../examples/order-domain/)
+📖 [Aggregate 상세](../concepts/aggregate/#aggregate-root) | [주문 도메인 예제](../examples/order-domain/)
 
 ---
 
@@ -239,7 +239,7 @@ public interface OrderRepository {
 public class JpaOrderRepository implements OrderRepository { }
 ```
 
-📖 [전술적 설계 상세](../../concepts/tactical-design/#repository)
+📖 [전술적 설계 상세](../concepts/tactical-design/#repository)
 
 ---
 
@@ -263,7 +263,7 @@ public class DiscountCalculator {
 }
 ```
 
-📖 [전술적 설계 상세](../../concepts/tactical-design/#domain-service)
+📖 [전술적 설계 상세](../concepts/tactical-design/#domain-service)
 
 ---
 
@@ -289,7 +289,7 @@ public class OrderConfirmedEvent extends DomainEvent {
 }
 ```
 
-📖 [도메인 이벤트 상세](../../concepts/domain-events/) | [Event Sourcing 실습](../../examples/event-sourcing/)
+📖 [도메인 이벤트 상세](../concepts/domain-events/) | [Event Sourcing 실습](../examples/event-sourcing/)
 
 ---
 
@@ -302,7 +302,7 @@ public class OrderConfirmedEvent extends DomainEvent {
 - 다른 서비스 조회가 필요할 때
 - 여러 생성 방식이 있을 때
 
-📖 [전술적 설계 상세](../../concepts/tactical-design/#factory)
+📖 [전술적 설계 상세](../concepts/tactical-design/#factory)
 
 ---
 
@@ -328,7 +328,7 @@ public class OrderService {
 }
 ```
 
-📖 [애플리케이션 계층 실습](../../examples/application-layer/)
+📖 [애플리케이션 계층 실습](../examples/application-layer/)
 
 > **전술적 설계 핵심 포인트**
 >
@@ -343,7 +343,7 @@ public class OrderService {
 
 ## 아키텍처 패턴
 
-> 📖 자세한 내용: [아키텍처 개요](../../concepts/architecture/)
+> 📖 자세한 내용: [아키텍처 개요](../concepts/architecture/)
 
 ### Layered Architecture (계층형 아키텍처)
 
@@ -363,7 +363,7 @@ public class OrderService {
 
 **관련 용어:** [Application Service](#application-service-애플리케이션-서비스), [Repository](#repository-리포지토리)
 
-📖 [계층형 아키텍처 상세](../../concepts/layered-architecture/)
+📖 [계층형 아키텍처 상세](../concepts/layered-architecture/)
 
 ---
 
@@ -391,7 +391,7 @@ public class OrderService {
 
 **관련 패턴:** [Layered Architecture](#layered-architecture-계층형-아키텍처), Clean Architecture, Onion Architecture
 
-📖 [헥사고날 아키텍처 상세](../../concepts/hexagonal-architecture/) | [Clean Architecture](../../concepts/clean-architecture/)
+📖 [헥사고날 아키텍처 상세](../concepts/hexagonal-architecture/) | [Clean Architecture](../concepts/clean-architecture/)
 
 ---
 
@@ -414,7 +414,7 @@ flowchart LR
 
 **관련 패턴:** [Event Sourcing](#event-sourcing-이벤트-소싱)과 함께 사용하면 Read Model을 [Domain Event](#domain-event-도메인-이벤트)로 동기화
 
-📖 [CQRS 상세](../../concepts/cqrs/)
+📖 [CQRS 상세](../concepts/cqrs/)
 
 ---
 
@@ -436,7 +436,7 @@ flowchart LR
 
 **관련 패턴:** [CQRS](#cqrs-command-query-responsibility-segregation), [Domain Event](#domain-event-도메인-이벤트)
 
-📖 [Event Sourcing 실습](../../examples/event-sourcing/) - EventStore, 스냅샷, 시간 여행 구현
+📖 [Event Sourcing 실습](../examples/event-sourcing/) - EventStore, 스냅샷, 시간 여행 구현
 
 > **아키텍처 패턴 핵심 포인트**
 >
@@ -449,7 +449,7 @@ flowchart LR
 
 ## 다음 단계
 
-- [개념 이해](../../concepts/) - 전략적/전술적 설계, 아키텍처
-- [실습 예제](../../examples/) - Spring Boot 기반 구현
-- [참고 자료](../references/) - 도서, 아티클, 발표 자료
-- [FAQ](../faq/) - 자주 묻는 질문
+- [개념 이해](../concepts/) - 전략적/전술적 설계, 아키텍처
+- [실습 예제](../examples/) - Spring Boot 기반 구현
+- [참고 자료](references/) - 도서, 아티클, 발표 자료
+- [FAQ](faq/) - 자주 묻는 질문

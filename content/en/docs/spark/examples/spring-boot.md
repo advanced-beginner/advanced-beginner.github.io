@@ -685,6 +685,6 @@ val result = df
 
 ## Related Documents
 
-- [Environment Setup](../setup/) - Basic project configuration
-- [Monitoring](../monitoring/) - Operational monitoring setup
-- [Performance Tuning](../../concepts/tuning/) - Optimization strategies
+- [Environment Setup](setup/) - Basic project configuration
+- [Monitoring](monitoring/) - Operational monitoring setup
+- [Performance Tuning](../concepts/tuning/) - Optimization strategies

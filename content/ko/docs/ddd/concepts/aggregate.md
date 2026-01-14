@@ -7,7 +7,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **대상 독자**: Aggregate 기본 개념을 알고 있으며 설계 심화 학습이 필요한 개발자
-> **선수 지식**: [전술적 설계](../tactical-design/)의 Entity, Value Object 개념
+> **선수 지식**: [전술적 설계](tactical-design/)의 Entity, Value Object 개념
 > **소요 시간**: 약 25분
 > **핵심 질문**: "Aggregate 경계를 어떻게 정하고, 크기는 어느 정도가 적당한가?"
 
@@ -649,5 +649,5 @@ public class OrderAntiCorruptionLayer {
 
 ## 다음 단계
 
-- [Aggregate 실전 패턴](../aggregate-patterns/) - 구현 패턴, 안티패턴, 의사결정 가이드
-- [도메인 이벤트](../domain-events/) - 이벤트 기반 통합
+- [Aggregate 실전 패턴](aggregate-patterns/) - 구현 패턴, 안티패턴, 의사결정 가이드
+- [도메인 이벤트](domain-events/) - 이벤트 기반 통합

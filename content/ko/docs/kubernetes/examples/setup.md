@@ -316,6 +316,6 @@ CoreDNS is running at https://127.0.0.1:xxxxx/api/v1/namespaces/kube-system/serv
 
 | 목표 | 추천 문서 |
 |------|----------|
-| Kubernetes 시작하기 | [Quick Start](../../quick-start/) |
-| 기본 리소스 실습 | [기본 예제](../basic/) |
-| 실제 앱 배포 | [Spring Boot 배포](../spring-boot/) |
+| Kubernetes 시작하기 | [Quick Start](../quick-start/) |
+| 기본 리소스 실습 | [기본 예제](basic/) |
+| 실제 앱 배포 | [Spring Boot 배포](spring-boot/) |

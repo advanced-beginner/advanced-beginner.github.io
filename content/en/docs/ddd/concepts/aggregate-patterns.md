@@ -7,7 +7,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **Target Audience**: Developers who have learned Aggregate basics and want to learn practical patterns
-> **Prerequisites**: Understanding core concepts from [Aggregate Deep Dive](../aggregate/)
+> **Prerequisites**: Understanding core concepts from [Aggregate Deep Dive](aggregate/)
 > **Reading Time**: About 30 minutes
 > **Key Question**: "What patterns should I apply when implementing Aggregates?"
 
@@ -352,5 +352,5 @@ public class Order {
 
 ## Next Steps
 
-- [Domain Events](../domain-events/) - Event-based integration
-- [Anti-Patterns](../anti-patterns/) - Common mistakes to avoid
+- [Domain Events](domain-events/) - Event-based integration
+- [Anti-Patterns](anti-patterns/) - Common mistakes to avoid

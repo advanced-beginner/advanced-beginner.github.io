@@ -706,6 +706,6 @@ if (log.isDebugEnabled()) {
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Advanced aggregations | [Aggregations](../../concepts/aggregations/) |
-| Performance optimization | [Performance Tuning](../../concepts/performance-tuning/) |
-| Cluster management | [High Availability](../../concepts/high-availability/) |
+| Advanced aggregations | [Aggregations](../concepts/aggregations/) |
+| Performance optimization | [Performance Tuning](../concepts/performance-tuning/) |
+| Cluster management | [High Availability](../concepts/high-availability/) |

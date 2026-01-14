@@ -13,7 +13,7 @@ lastmod: 2026-01-10
 {{< /callout >}}
 
 **Target Audience**: Developers looking to use Elasticsearch search features
-**Prerequisites**: [Core Components](../core-components/), basic JSON syntax
+**Prerequisites**: [Core Components](core-components/), basic JSON syntax
 
 This document covers Mapping, Field Type, and Analyzer design for effectively storing and searching data in Elasticsearch.
 
@@ -595,6 +595,6 @@ PUT /_index_template/logs
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Write search queries | [Query DSL](../query-dsl/) |
-| Improve search quality | [Search Relevance](../search-relevance/) |
-| Hands-on practice | [Basic Examples](../../examples/basic/) |
+| Write search queries | [Query DSL](query-dsl/) |
+| Improve search quality | [Search Relevance](search-relevance/) |
+| Hands-on practice | [Basic Examples](../examples/basic/) |

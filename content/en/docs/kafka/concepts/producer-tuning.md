@@ -16,13 +16,13 @@ author_url: "http://github.com/kimbenji"
 
 **Target Audience**: Developers optimizing Producer performance, operators needing high-volume message processing
 
-**Prerequisites**: acks, Idempotent Producer concepts from [Advanced Concepts](../advanced-concepts/), Topic, Partition concepts from [Message Flow](../message-flow/)
+**Prerequisites**: acks, Idempotent Producer concepts from [Advanced Concepts](advanced-concepts/), Topic, Partition concepts from [Message Flow](message-flow/)
 
 ---
 
 Understanding the core settings to optimize Producer performance. This document is written for Kafka 3.6.x and code examples are validated in Spring Boot 3.2.x, Spring Kafka 3.1.x, and Java 17 environments.
 
-Before reading this document, you should first understand acks, Message Key, and Idempotent Producer from [Advanced Concepts](../advanced-concepts/), and Topic, Partition, Broker concepts from [Message Flow](../message-flow/).
+Before reading this document, you should first understand acks, Message Key, and Idempotent Producer from [Advanced Concepts](advanced-concepts/), and Topic, Partition, Broker concepts from [Message Flow](message-flow/).
 
 #### Producer Internal Structure
 
@@ -387,5 +387,5 @@ In Kafka 3.0+, it's default enabled and performance impact is minimal (within 1~
 
 #### Next Steps
 
-- [Consumer Advanced Operations](../consumer-advanced/) - Consumer performance optimization
-- [Transactions](../transactions/) - Exactly-Once processing
+- [Consumer Advanced Operations](consumer-advanced/) - Consumer performance optimization
+- [Transactions](transactions/) - Exactly-Once processing

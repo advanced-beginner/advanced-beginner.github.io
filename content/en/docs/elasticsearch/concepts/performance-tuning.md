@@ -375,7 +375,7 @@ GET /products/_explain/1
 ## Indexing Performance
 
 For detailed indexing performance optimization, see the Indexing Strategy document.
-→ [Indexing Strategy Details](../indexing/)
+→ [Indexing Strategy Details](indexing/)
 
 ### Adjust Refresh Interval
 
@@ -454,6 +454,6 @@ PUT /products/_settings
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Failure response | [High Availability](../high-availability/) |
-| Cluster configuration | [Cluster Management](../cluster-management/) |
-| Practical implementation | [Product Search System](../../examples/product-search/) |
+| Failure response | [High Availability](high-availability/) |
+| Cluster configuration | [Cluster Management](cluster-management/) |
+| Practical implementation | [Product Search System](../examples/product-search/) |

@@ -7,7 +7,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **대상 독자**: 테스트 용이성과 외부 의존성 교체를 고려하는 개발자
-> **선수 지식**: [계층형 아키텍처](../layered-architecture/)의 한계 이해
+> **선수 지식**: [계층형 아키텍처](layered-architecture/)의 한계 이해
 > **소요 시간**: 약 20분
 
 **Ports and Adapters** 패턴이라고도 불립니다. 애플리케이션의 핵심을 외부 세계로부터 완전히 격리시키는 아키텍처입니다. 헥사고날 아키텍처의 핵심 아이디어는 비즈니스 로직을 중심에 두고, 외부와의 모든 상호작용을 Port와 Adapter를 통해 처리한다는 것입니다. 이렇게 하면 외부 기술이 바뀌어도 핵심 비즈니스 로직은 영향을 받지 않습니다.
@@ -1116,6 +1116,6 @@ com.example.order/
 
 #### 다음 단계
 
-- [클린 아키텍처](../clean-architecture/) - 더 엄격한 의존성 규칙
-- [어니언 아키텍처](../onion-architecture/) - 도메인 모델 중심
-- [CQRS](../cqrs/) - 읽기/쓰기 분리
+- [클린 아키텍처](clean-architecture/) - 더 엄격한 의존성 규칙
+- [어니언 아키텍처](onion-architecture/) - 도메인 모델 중심
+- [CQRS](cqrs/) - 읽기/쓰기 분리

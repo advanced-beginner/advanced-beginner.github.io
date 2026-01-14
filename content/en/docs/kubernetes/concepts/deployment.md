@@ -430,6 +430,6 @@ Once you understand Deployments, proceed to the next steps:
 
 | Goal | Recommended Doc |
 |------|----------------|
-| Access Pods | [Service](../service/) |
-| Auto-scaling | [Scaling](../scaling/) |
-| Configure health checks | [Health Checks](../health-checks/) |
+| Access Pods | [Service](service/) |
+| Auto-scaling | [Scaling](scaling/) |
+| Configure health checks | [Health Checks](health-checks/) |

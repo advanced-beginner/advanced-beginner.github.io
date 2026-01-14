@@ -401,6 +401,6 @@ PUT /_cluster/settings
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Search optimization | [Performance Tuning](../performance-tuning/) |
-| Failure response | [High Availability](../high-availability/) |
-| Practical implementation | [Product Search System](../../examples/product-search/) |
+| Search optimization | [Performance Tuning](performance-tuning/) |
+| Failure response | [High Availability](high-availability/) |
+| Practical implementation | [Product Search System](../examples/product-search/) |

@@ -8,7 +8,7 @@ author_url: "http://github.com/kimbenji"
 
 > **해결하는 문제**: Aggregate를 너무 크게 만들어 성능 이슈가 발생하거나, 너무 작게 만들어 일관성이 깨지는 상황
 > **소요 시간**: 약 30분
-> **전제 조건**: [Aggregate 심화](../../concepts/aggregate/) 문서를 읽었다고 가정
+> **전제 조건**: [Aggregate 심화](../concepts/aggregate/) 문서를 읽었다고 가정
 
 {{< callout type="warning" title="성공 기준" >}}
 이 가이드를 완료하면 다음을 할 수 있습니다:
@@ -325,6 +325,6 @@ public void confirmOrder(OrderId orderId) {
 
 ## 다음 단계
 
-- [Aggregate 심화](../../concepts/aggregate/) - 더 자세한 설계 원칙과 패턴
-- [도메인 이벤트](../../concepts/domain-events/) - Aggregate 간 통신 방법
-- [주문 도메인 예제](../../examples/order-domain/) - 실제 구현 예시
+- [Aggregate 심화](../concepts/aggregate/) - 더 자세한 설계 원칙과 패턴
+- [도메인 이벤트](../concepts/domain-events/) - Aggregate 간 통신 방법
+- [주문 도메인 예제](../examples/order-domain/) - 실제 구현 예시

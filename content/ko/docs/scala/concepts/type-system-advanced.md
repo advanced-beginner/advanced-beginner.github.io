@@ -18,9 +18,9 @@ weight: 14
 Scala 3는 더욱 강력하고 표현력 있는 타입 시스템을 제공합니다. 이 문서에서는 Scala 3의 새로운 타입 기능을 다룹니다.
 
 > 📚 **사전 지식**: 이 문서를 이해하려면 다음 개념에 익숙해야 합니다:
-> - [제네릭](../generics/) - 타입 매개변수, 타입 경계
-> - [공변성/반공변성](../variance/) - 변성 개념
-> - [패턴 매칭](../pattern-matching/) - 기본 패턴 매칭
+> - [제네릭](generics/) - 타입 매개변수, 타입 경계
+> - [공변성/반공변성](variance/) - 변성 개념
+> - [패턴 매칭](pattern-matching/) - 기본 패턴 매칭
 >
 > **난이도**: ⭐⭐⭐⭐ (고급) - Scala 3 전용 기능 포함
 
@@ -298,5 +298,5 @@ valid.foreach(e => println(e.domain))   // "example.com"
 
 #### 다음 단계
 
-- [매크로](../macros-metaprogramming/) — 컴파일 타임 코드 생성
-- [함수형 패턴](../functional-patterns/) — Functor, Monad
+- [매크로](macros-metaprogramming/) — 컴파일 타임 코드 생성
+- [함수형 패턴](functional-patterns/) — Functor, Monad

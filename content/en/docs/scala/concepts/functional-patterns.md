@@ -18,9 +18,9 @@ weight: 17
 This document covers core functional programming patterns used in Scala. Functional programming is a paradigm that minimizes side effects and uses pure functions and immutable data to write predictable and easily testable code.
 
 > **Prerequisites**: To understand this document, you should be familiar with:
-> - [Higher-Order Functions](../higher-order-functions/) - map, flatMap, filter
-> - [For Comprehension](../for-comprehensions/) - Syntactic sugar for monadic operations
-> - [Generics](../generics/) - Type parameters
+> - [Higher-Order Functions](higher-order-functions/) - map, flatMap, filter
+> - [For Comprehension](for-comprehensions/) - Syntactic sugar for monadic operations
+> - [Generics](generics/) - Type parameters
 >
 > **Difficulty**: ⭐⭐⭐⭐ (Advanced)
 

@@ -17,9 +17,9 @@ author:
 **대상 독자**: 마이크로서비스 환경에서 Spark를 사용하려는 개발자
 
 **선수 지식**:
-- [아키텍처](../architecture/) 문서의 Driver/Executor 개념
+- [아키텍처](architecture/) 문서의 Driver/Executor 개념
 - gRPC 기본 개념 (선택 사항)
-- [DataFrame과 Dataset](../dataframe-dataset/) API
+- [DataFrame과 Dataset](dataframe-dataset/) API
 
 ---
 
@@ -450,6 +450,6 @@ Dataset<Row> df = spark.read().parquet("data.parquet");
 
 ## 관련 문서
 
-- [아키텍처](../architecture/) - Spark 클러스터 구조
-- [Spring Boot 통합](../../examples/spring-boot/) - Spring 연동
-- [배포](../deployment/) - 클러스터 배포 방법
+- [아키텍처](architecture/) - Spark 클러스터 구조
+- [Spring Boot 통합](../examples/spring-boot/) - Spring 연동
+- [배포](deployment/) - 클러스터 배포 방법

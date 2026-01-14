@@ -7,7 +7,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **Target Audience**: Developers and architects who need to choose project architecture
-> **Prerequisites**: Understanding of [Tactical Design](../tactical-design/) building blocks
+> **Prerequisites**: Understanding of [Tactical Design](tactical-design/) building blocks
 > **Reading Time**: About 25 minutes
 > **Key Question**: "Which should I choose among Layered, Hexagonal, and Clean Architecture?"
 
@@ -225,6 +225,6 @@ Detailed explanations for each architecture pattern are available on separate pa
 
 #### Next Steps
 
-- [CQRS](../cqrs/) - Pattern for separating read and write
-- [Event Sourcing](../event-sourcing/) - Storing events instead of state
-- [Anti-Patterns](../anti-patterns/) - Common mistakes to avoid
+- [CQRS](cqrs/) - Pattern for separating read and write
+- [Event Sourcing](../examples/event-sourcing/) - Storing events instead of state
+- [Anti-Patterns](anti-patterns/) - Common mistakes to avoid

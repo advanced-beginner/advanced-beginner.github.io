@@ -404,6 +404,6 @@ Service를 이해했다면 다음 단계로 진행하세요:
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 외부 HTTP 라우팅 | [네트워킹](../networking/) |
-| 설정 분리 | [ConfigMap과 Secret](../configmap-secret/) |
-| 실제 배포 실습 | [Spring Boot 배포](../../examples/spring-boot/) |
+| 외부 HTTP 라우팅 | [네트워킹](networking/) |
+| 설정 분리 | [ConfigMap과 Secret](configmap-secret/) |
+| 실제 배포 실습 | [Spring Boot 배포](../examples/spring-boot/) |

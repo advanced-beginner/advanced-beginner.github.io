@@ -802,5 +802,5 @@ fastFib(100)  // Computed quickly
 
 #### Next Steps
 
-- [For Comprehension](../for-comprehensions/) — Elegant expression of monadic operations
-- [Implicit/Given](../implicits/) — Contextual abstraction
+- [For Comprehension](for-comprehensions/) — Elegant expression of monadic operations
+- [Implicit/Given](implicits/) — Contextual abstraction

@@ -8,7 +8,7 @@ author_url: "http://github.com/kimbenji"
 
 > **Problem It Solves**: Performance issues from making Aggregates too large, or consistency violations from making them too small
 > **Time Required**: ~30 minutes
-> **Prerequisites**: Assumes you have read the [Aggregate Deep Dive](../../concepts/aggregate/) document
+> **Prerequisites**: Assumes you have read the [Aggregate Deep Dive](../concepts/aggregate/) document
 
 {{< callout type="warning" title="Success Criteria" >}}
 After completing this guide, you will be able to:
@@ -325,6 +325,6 @@ public void confirmOrder(OrderId orderId) {
 
 ## Next Steps
 
-- [Aggregate Deep Dive](../../concepts/aggregate/) - More detailed design principles and patterns
-- [Domain Events](../../concepts/domain-events/) - Communication methods between Aggregates
-- [Order Domain Example](../../examples/order-domain/) - Actual implementation examples
+- [Aggregate Deep Dive](../concepts/aggregate/) - More detailed design principles and patterns
+- [Domain Events](../concepts/domain-events/) - Communication methods between Aggregates
+- [Order Domain Example](../examples/order-domain/) - Actual implementation examples

@@ -337,5 +337,5 @@ trait Transformer[-A, +B] {
 
 #### Next Steps
 
-- [Advanced Types](../type-system-advanced/) — Union, Intersection, Match Types
-- [Type Classes](../type-classes/) — Advanced ad-hoc polymorphism
+- [Advanced Types](type-system-advanced/) — Union, Intersection, Match Types
+- [Type Classes](type-classes/) — Advanced ad-hoc polymorphism

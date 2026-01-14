@@ -16,8 +16,8 @@ related_concepts:
 
 {{% notice style="info" title="선수 개념" %}}
 이 문서를 읽기 전에 다음 개념을 먼저 이해하세요:
-- [Query DSL](../query-dsl/) - 기본 쿼리 구조
-- [데이터 모델링](../data-modeling/) - keyword vs text 타입
+- [Query DSL](query-dsl/) - 기본 쿼리 구조
+- [데이터 모델링](data-modeling/) - keyword vs text 타입
 {{% /notice %}}
 
 Elasticsearch의 Aggregations를 사용하여 데이터를 분석하고 통계를 추출하는 방법을 배웁니다.
@@ -657,6 +657,6 @@ GET /products/_search
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 인덱싱 최적화 | [인덱싱 전략](../indexing/) |
-| 실전 구현 | [상품 검색 시스템](../../examples/product-search/) |
-| 성능 최적화 | [성능 튜닝](../performance-tuning/) |
+| 인덱싱 최적화 | [인덱싱 전략](indexing/) |
+| 실전 구현 | [상품 검색 시스템](../examples/product-search/) |
+| 성능 최적화 | [성능 튜닝](performance-tuning/) |

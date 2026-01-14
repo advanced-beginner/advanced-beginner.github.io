@@ -16,13 +16,13 @@ author_url: "http://github.com/kimbenji"
 
 **대상 독자**: Kafka Consumer를 개발하거나 운영하는 개발자, 병렬 처리와 상태 관리를 학습하려는 분
 
-**선수 지식**: [메시지 흐름](../message-flow/)의 Topic과 Partition 개념, [Replication](../replication/)의 Leader/Follower 개념
+**선수 지식**: [메시지 흐름](message-flow/)의 Topic과 Partition 개념, [Replication](replication/)의 Leader/Follower 개념
 
 ---
 
 병렬 처리와 진행 상태 관리의 핵심 개념을 이해합니다. 이 문서는 Kafka 3.6.x 기준으로 작성되었으며, Spring Boot 3.2.x와 Spring Kafka 3.1.x, Java 17 환경에서 코드 예제가 검증되었습니다.
 
-이 문서를 읽기 전에 [메시지 흐름](../message-flow/)에서 Topic과 Partition 개념을, [Replication](../replication/)에서 Leader와 Follower 개념을 먼저 이해하고 있어야 합니다.
+이 문서를 읽기 전에 [메시지 흐름](message-flow/)에서 Topic과 Partition 개념을, [Replication](replication/)에서 Leader와 Follower 개념을 먼저 이해하고 있어야 합니다.
 
 #### Consumer Group이란?
 
@@ -302,7 +302,7 @@ kafka-consumer-groups.sh --describe --group order-service \
 # order-service   orders   0          1523            1523            0
 ```
 
-위 출력에서 CURRENT-OFFSET이 표시되면 이미 Offset이 커밋된 상태입니다. 이 경우 earliest로 설정해도 처음부터 읽지 않습니다. Offset을 수동으로 리셋해야 하며, 자세한 방법은 [Consumer 심화 운영](../consumer-advanced/)에서 확인할 수 있습니다.
+위 출력에서 CURRENT-OFFSET이 표시되면 이미 Offset이 커밋된 상태입니다. 이 경우 earliest로 설정해도 처음부터 읽지 않습니다. Offset을 수동으로 리셋해야 하며, 자세한 방법은 [Consumer 심화 운영](consumer-advanced/)에서 확인할 수 있습니다.
 
 {{< callout type="info" title="핵심 포인트" >}}
 - 자동 커밋은 간편하지만 데이터 유실 위험, 수동 커밋은 정확한 제어 가능
@@ -336,7 +336,7 @@ sequenceDiagram
 
 Consumer 1이 장애로 중단되면 Kafka는 이를 감지하고 리밸런싱을 시작합니다. Consumer 1이 담당하던 Partition 0과 1이 Consumer 2에게 재할당됩니다. Consumer 2는 각 Partition의 Committed Offset부터 메시지 처리를 재개합니다.
 
-리밸런싱 중에는 해당 Consumer Group의 모든 Consumer가 일시적으로 메시지 처리를 중단합니다. 이 중단 시간을 최소화하는 것이 운영에서 중요한 포인트이며, 리밸런싱 최적화와 Lag 모니터링에 대한 자세한 내용은 [Consumer 심화 운영](../consumer-advanced/)에서 다룹니다.
+리밸런싱 중에는 해당 Consumer Group의 모든 Consumer가 일시적으로 메시지 처리를 중단합니다. 이 중단 시간을 최소화하는 것이 운영에서 중요한 포인트이며, 리밸런싱 최적화와 Lag 모니터링에 대한 자세한 내용은 [Consumer 심화 운영](consumer-advanced/)에서 다룹니다.
 
 {{< callout type="info" title="핵심 포인트" >}}
 - Consumer 장애 시 Kafka가 자동으로 리밸런싱 수행
@@ -424,5 +424,5 @@ kafka-consumer-groups.sh --describe --group order-service \
 
 #### 다음 단계
 
-- [Consumer 심화 운영](../consumer-advanced/) - 리밸런싱 최적화, Lag 모니터링
-- [Replication](../replication/) - 데이터 복제와 고가용성
+- [Consumer 심화 운영](consumer-advanced/) - 리밸런싱 최적화, Lag 모니터링
+- [Replication](replication/) - 데이터 복제와 고가용성
