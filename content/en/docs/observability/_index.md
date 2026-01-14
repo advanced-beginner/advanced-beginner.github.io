@@ -1,0 +1,148 @@
+---
+title: Observability
+description: Practical guide to system observability - From the three pillars of Metrics, Logs, and Traces to advanced Prometheus, Grafana, and PromQL
+weight: 5
+author: "@advanced-beginner"
+lastmod: "2026-01-12"
+---
+
+## What is Observability?
+
+Observability is **the ability to understand internal system states from external outputs**. It's not just about installing monitoring tools, but building a system that can answer the question "Why did this problem occur?"
+
+### Why is Observability Necessary?
+
+As microservices and distributed systems become prevalent, the limitations of traditional monitoring have become clear.
+
+| Limitations of Traditional Monitoring | After Adopting Observability |
+|---------------------|----------------------|
+| Only know "server CPU is high" | Can trace which requests are causing high CPU |
+| Can only check pre-defined metrics | Can analyze unexpected problems with data |
+| Difficult to understand service connections | Visualize entire flow with distributed tracing |
+| Hours to trace root cause after failure | Immediately identify root cause with trace ID |
+| Logs, metrics, traces are separated | Integrated analysis by connecting all three pillars |
+
+### The Three Pillars of Observability
+
+```mermaid
+graph LR
+    subgraph "Three Pillars of Observability"
+        M["Metrics<br>Numeric Data"]
+        L["Logs<br>Event Records"]
+        T["Traces<br>Request Flow"]
+    end
+
+    M --> |"Anomaly Detection"| A["Alert"]
+    A --> |"Detail Check"| L
+    L --> |"Flow Tracking"| T
+    T --> |"Performance Analysis"| M
+```
+
+| Pillar | Role | Representative Tools | Examples |
+|------|------|----------|------|
+| **Metrics** | Numeric-based state measurement | Prometheus, Micrometer | CPU 80%, Response time 200ms |
+| **Logs** | Detailed event records | Loki, Elasticsearch | "Order creation failed: Out of stock" |
+| **Traces** | Track entire request path | Jaeger, Tempo | Order → Payment → Shipping service flow |
+
+### When Should You Adopt Observability?
+
+**Suitable cases:**
+- Operating microservices architecture
+- When identifying failure causes takes too long
+- When SLA/SLO-based operations are needed
+- When you want to systematically analyze performance bottlenecks
+
+**May be overkill:**
+- Single monolithic applications
+- Internal tools with very low traffic
+- Small teams with insufficient operational staff
+
+## What This Guide Covers
+
+### [Quick Start](quick-start/)
+Build a Prometheus + Grafana environment in 10 minutes and verify your first metrics.
+
+### [Concepts](concepts/)
+Explains not just "how to use" but **"why it was designed this way"**.
+
+| Topic | What You'll Learn |
+|------|----------|
+| [Three Pillars of Observability](concepts/three-pillars/) | Roles of Metrics, Logs, Traces and their interconnections |
+| [Metrics Fundamentals](concepts/metrics-fundamentals/) | Understanding Counter, Gauge, Histogram, Summary types |
+| [Prometheus Architecture](concepts/prometheus-architecture/) | Pull model, time series DB, service discovery |
+| [PromQL](concepts/promql/) | Query language from basics to advanced (7 documents) |
+| [SRE Golden Signals](concepts/golden-signals/) | Deep dive into Latency, Traffic, Errors, Saturation (6 documents) |
+| [Log Aggregation](concepts/log-aggregation/) | Loki vs ELK comparison, log design patterns |
+| [Distributed Tracing](concepts/distributed-tracing/) | Span, Trace ID, Context Propagation |
+| [OpenTelemetry](concepts/opentelemetry/) | Observability standards and integration methods |
+| [Dashboard Design](concepts/dashboard-design/) | Effective visualization principles |
+
+### [Examples](examples/)
+Hands-on experience with executable code.
+
+- [Environment Setup](examples/setup/) - Full stack configuration with Docker Compose
+- [Spring Boot Metrics](examples/spring-boot-metrics/) - Actuator + Micrometer setup
+- [Kafka Monitoring](examples/kafka-monitoring/) - Building Kafka cluster observability
+- [Full-Stack Observability](examples/full-stack/) - Metrics + Logs + Traces integration
+
+### [How-To Guides](howto/)
+Common problem scenarios and solutions in practice.
+
+- [Debugging High Latency](howto/debug-high-latency/) - Tracking P99 latency causes
+- [Metrics Cardinality Optimization](howto/reduce-cardinality/) - Cost reduction strategies
+
+### [Appendix](appendix/)
+- [Glossary](appendix/glossary/) - Quick reference for Observability terms
+- [FAQ](appendix/faq/) - Frequently asked questions
+- [Alerting Actions Guide](appendix/alerting-actions/) - Response strategies after PromQL detection
+- [References](appendix/references/) - Official documentation and additional learning resources
+
+## Prerequisites
+
+- **Required**: Basic Docker usage, HTTP/REST API understanding
+- **Helpful**: Spring Boot experience, Kubernetes basics, time series data concepts
+
+## Tech Stack
+
+Tools used in this guide.
+
+| Component | Tool | Version |
+|---------|------|------|
+| Metrics Collection | Prometheus | 2.50+ |
+| Metrics Exposure | Micrometer | 1.12+ |
+| Visualization | Grafana | 10.x |
+| Log Collection | Loki | 2.9+ |
+| Distributed Tracing | Tempo | 2.x |
+| Standardization | OpenTelemetry | 1.x |
+
+## Suggested Learning Path
+
+```mermaid
+graph TD
+    START["Start"] --> Q1{"Experience Level?"}
+
+    Q1 --> |"Beginner"| P1["Quick Start<br>→ Three Pillars<br>→ Metrics Fundamentals<br>→ Spring Boot Example"]
+    Q1 --> |"Intermediate"| P2["PromQL Advanced<br>→ Golden Signals<br>→ Full-Stack Example"]
+    Q1 --> |"Operations"| P3["Distributed Tracing<br>→ Alerting Actions<br>→ Cardinality Optimization"]
+
+    P1 --> NEXT["Next Steps"]
+    P2 --> NEXT
+    P3 --> NEXT
+```
+
+**If you're new:**
+```
+Quick Start → Three Pillars → Metrics Fundamentals → Prometheus Architecture → Spring Boot Example
+```
+
+**If you want to learn PromQL deeply:**
+```
+PromQL Basics → Aggregation Operators → rate vs increase → histogram_quantile → Recording Rules → Alerting Rules
+```
+
+**From an SRE/Operations perspective:**
+```
+Golden Signals Overview → Latency/Errors/Saturation → Application by Service Type → Alerting Actions Guide
+```
+
+Each document can be read independently, but if you're new, we recommend following the order above.
