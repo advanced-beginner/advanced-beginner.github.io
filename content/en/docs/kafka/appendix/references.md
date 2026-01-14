@@ -11,8 +11,8 @@ This section compiles additional resources for learning Kafka. From official doc
 {{% notice style="tip" title="TL;DR" %}}
 - **Official Documentation**: Apache Kafka, Spring Kafka, Confluent docs are essential
 - **Beginner Books**: "Kafka: The Definitive Guide", "Kafka in Action" recommended
-- **Online Courses**: Confluent Developer (free), Udemy
-- **Communities**: Stack Overflow, Confluent Forum
+- **Online Courses**: Confluent Developer (free), Udemy, Inflearn
+- **Communities**: Stack Overflow, Confluent Forum, OKKY
 - **Tools**: Kafka UI (management), Prometheus+Grafana (monitoring)
 {{% /notice %}}
 
@@ -66,14 +66,15 @@ For advanced learning after mastering the basics, these books are recommended. "
 
 #### Online Courses
 
-For systematic learning, online courses are available. Confluent Developer's Apache Kafka 101 is a free official course covering basic concepts through hands-on practice. Conducted in English with subtitles. Udemy's Apache Kafka Series offers paid courses with various levels available.
+For systematic learning, online courses are available. Confluent Developer's Apache Kafka 101 is a free official course covering basic concepts through hands-on practice. Conducted in English with subtitles. Udemy's Apache Kafka Series offers paid courses with Korean subtitles and various levels available. Inflearn offers several Kafka courses produced in Korean.
 
 - [Confluent Developer](https://developer.confluent.io/)
 - [Udemy](https://www.udemy.com/)
+- [Inflearn](https://www.inflearn.com/)
 
 {{< callout type="info" title="Key Points" >}}
 - **Free**: Confluent Developer's Apache Kafka 101 (English, subtitles available)
-- **Paid**: Udemy (various levels)
+- **Paid**: Udemy (Korean subtitles), Inflearn (Korean courses)
 {{< /callout >}}
 
 #### Communities
@@ -86,8 +87,16 @@ Communities where you can ask questions or find solutions from others when probl
 - [Confluent Community](https://forum.confluent.io/)
 - [Reddit r/apachekafka](https://www.reddit.com/r/apachekafka/)
 
+**Korean Communities**
+
+Korean communities where you can ask questions and receive answers in Korean. OKKY is a Korean developer community where you can post Kafka-related questions or share experiences. Search for "Kafka KR" in KakaoTalk open chat to find Kafka-related open chat rooms.
+
+- [OKKY](https://okky.kr/)
+- [Kafka KR (KakaoTalk)](https://open.kakao.com/)
+
 {{< callout type="info" title="Key Points" >}}
 - **English**: Stack Overflow (Q&A), Confluent Forum (official), Reddit r/apachekafka
+- **Korean**: OKKY, KakaoTalk Kafka KR open chat rooms
 {{< /callout >}}
 
 #### Blogs and Articles
@@ -100,8 +109,17 @@ Confluent Blog is the official technical blog for Kafka, publishing in-depth art
 - [Martin Kleppmann's Blog](https://martin.kleppmann.com/)
 - [Jay Kreps' LinkedIn](https://www.linkedin.com/in/jaykreps/)
 
+**Korean Blogs**
+
+Woowahan Brothers Tech Blog is the technical blog of Woowahan Brothers, which operates the Baedal Minjok service, sharing Kafka use cases and operational experiences. Kakao Tech Blog covers Kakao's operational experience with Kafka handling large-scale traffic. Naver D2 is Naver's technical blog, publishing articles on distributed systems and messaging.
+
+- [Woowahan Brothers Tech Blog](https://techblog.woowahan.com/)
+- [Kakao Tech Blog](https://tech.kakao.com/)
+- [Naver D2](https://d2.naver.com/)
+
 {{< callout type="info" title="Key Points" >}}
-- **Official**: Confluent Blog (official), Martin Kleppmann (distributed systems), Jay Kreps (creator)
+- **English**: Confluent Blog (official), Martin Kleppmann (distributed systems), Jay Kreps (creator)
+- **Korean**: Check practical cases on Woowahan Brothers, Kakao, Naver D2 tech blogs
 {{< /callout >}}
 
 #### Tools

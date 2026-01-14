@@ -1,89 +1,76 @@
 ---
-lastmod: "2026-01-06"
-title: Transactions & Exactly-Once
+lastmod: "2026-01-10"
+title: Transactions and Exactly-Once
 weight: 6
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
-# Transactions & Exactly-Once Semantics
+{{< callout type="info" title="TL;DR" >}}
+- At-Most-Once: may lose/no duplicates, At-Least-Once: no loss/may duplicate
+- Exactly-Once: requires Idempotent Producer + Transactional API + read_committed
+- Idempotent Producer is enabled by default in Kafka 3.0+, prevents duplicates for single Partition
+- Kafka transactions guarantee atomic writes across multiple Partitions
+- Use Outbox pattern when DB + Kafka atomic processing is needed
+{{< /callout >}}
 
-Understanding message delivery guarantees and Kafka transactions.
+**Target Audience**: Developers building systems where message delivery guarantees are critical
 
-## Message Delivery Guarantee Levels
+**Prerequisites**: acks and Idempotent Producer concepts from [Advanced Concepts](../advanced-concepts/)
+
+---
+
+Understand message delivery guarantee levels and Kafka transactions. This document is written for Kafka 3.6.x, with code examples verified on Spring Boot 3.2.x, Spring Kafka 3.1.x, and Java 17 environments.
+
+#### Why Message Guarantee Levels Matter
+
+In distributed systems, message delivery is not simple due to network failures, process crashes, and timing issues.
+
+Here are problems that actually occur. First, payment event loss. During delivery from order service through Kafka to payment service, momentary network disconnection causes message loss: "Payment didn't happen but the order went through?" Second, duplicate point accumulation. When order completion event is delivered to point service, ACK loss causes retransmission: "It should be 1000 points, why did 2000 come in?" Third, inventory inconsistency. When order event is delivered to inventory service, duplicate processing deducts inventory twice: "Inventory is -10?"
+
+The practical meaning of each guarantee level: At-Most-Once means "it's okay to miss" and is used for log collection or click analytics. At-Least-Once means "can't miss but duplicates are handleable" and is used for most events. Exactly-Once means "both missing and duplicates are critical" and is used for financial transactions, points, and inventory.
+
+#### Message Delivery Guarantee Levels
 
 ```mermaid
 flowchart LR
     subgraph Levels["Delivery Guarantee Levels"]
-        AMO["At-Most-Once<br>Max 1 time"]
-        ALO["At-Least-Once<br>Min 1 time"]
-        EOS["Exactly-Once<br>Exactly 1 time"]
+        AMO["At-Most-Once<br>At most once"]
+        ALO["At-Least-Once<br>At least once"]
+        EOS["Exactly-Once<br>Exactly once"]
     end
 
     AMO -->|"May lose"| ALO
     ALO -->|"May duplicate"| EOS
 ```
 
-### Comparison
+*Diagram: Message delivery guarantee levels - Safety increases from At-Most-Once (may lose) → At-Least-Once (may duplicate) → Exactly-Once (exactly once).*
 
-| Level | Loss | Duplication | Performance | Implementation Complexity |
-|-------|------|-------------|-------------|--------------------------|
-| **At-Most-Once** | O | X | Highest | Low |
-| **At-Least-Once** | X | O | High | Medium |
-| **Exactly-Once** | X | X | Medium | High |
+At-Most-Once may lose but no duplicates, with highest performance and low implementation complexity. At-Least-Once has no loss but may duplicate, with high performance and medium complexity. Exactly-Once has no loss or duplicates, with medium performance and high complexity.
 
-## At-Most-Once
+{{< callout type="info" title="Key Points" >}}
+- At-Most-Once: may lose/no duplicates (logs, metrics)
+- At-Least-Once: no loss/may duplicate (most events)
+- Exactly-Once: no loss or duplicates (financial, points, inventory)
+{{< /callout >}}
 
-Delivers message **at most once**. May be lost.
+#### At-Most-Once
 
-```mermaid
-sequenceDiagram
-    participant P as Producer
-    participant K as Kafka
-    participant C as Consumer
-
-    P->>K: Send message
-    K--xP: ACK lost
-
-    Note over P: No ACK received
-    Note over P: Don't retry
-    Note over K: Message stored
-
-    K->>C: Deliver message
-    C->>C: Commit
-    C->>C: Error during processing
-    Note over C: Already committed → Can't reprocess
-```
-
-### Implementation
+Delivers messages at most once. May lose. ACK loss doesn't trigger retransmission, so messages may not arrive. Consumer commits before processing, so failures during processing don't trigger reprocessing.
 
 ```yaml
 spring:
   kafka:
     producer:
-      acks: 0  # No response wait
+      acks: 0  # Don't wait for response
       retries: 0  # No retries
 ```
 
-**Use Case:** Logs, metrics - data that's okay to lose
+Use cases: Logs, metrics, and data where loss is acceptable.
 
-## At-Least-Once
+#### At-Least-Once
 
-Delivers message **at least once**. May duplicate.
-
-```mermaid
-sequenceDiagram
-    participant P as Producer
-    participant K as Kafka
-
-    P->>K: Send message (seq=1)
-    K->>K: Stored
-    K--xP: ACK lost
-
-    Note over P: No ACK → Retry
-    P->>K: Retransmit same message
-    K->>K: Duplicate stored!
-```
-
-### Implementation
+Delivers messages at least once. May duplicate. ACK loss triggers retransmission, so the same message may be stored twice.
 
 ```yaml
 spring:
@@ -95,53 +82,33 @@ spring:
       enable-auto-commit: false  # Manual commit
 ```
 
-**Use Case:** General event processing (requires idempotent handling)
+Use cases: General event processing. Application idempotency handling required.
 
-## Exactly-Once Semantics (EOS)
+#### Exactly-Once Semantics (EOS)
 
-Delivers message **exactly once**. No loss or duplication.
+Delivers messages exactly once. No loss or duplicates. To achieve EOS, Idempotent Producer, Transactional API, and read_committed isolation level are all required.
 
-### EOS Requirements
+Idempotent Producer prevents duplicates from Producer to Broker. Transactional API processes multiple messages atomically. read_committed reads only committed messages.
 
-```mermaid
-flowchart TB
-    subgraph Requirements["Exactly-Once Requirements"]
-        IP[Idempotent Producer]
-        TX[Transactional API]
-        ISO[read_committed isolation]
-    end
+#### Idempotent Producer Review
 
-    IP --> TX
-    TX --> ISO
-```
-
-| Component | Role |
-|-----------|------|
-| **Idempotent Producer** | Prevent duplicates from Producer → Broker |
-| **Transactional API** | Process multiple messages atomically |
-| **read_committed** | Read only committed messages |
-
-## Idempotent Producer Review
-
-> Already covered in [Advanced Concepts](../advanced-concepts/#idempotent-producer), but revisited as the foundation of EOS.
+Covered in [Advanced Concepts](../advanced-concepts/#idempotent-producer-멱등성-프로듀서), but reviewed here as the foundation of EOS.
 
 ```java
-// Producer configuration
+// Producer settings
 enable.idempotence = true  // Kafka 3.0+ default
 
-// Automatically configured
+// Automatically set
 acks = all
 retries = Integer.MAX_VALUE
 max.in.flight.requests.per.connection = 5
 ```
 
-**Scope:** Duplicate prevention for single Producer → single Partition
+Scope: Prevents duplicates for single Producer to single Partition.
 
-## Kafka Transactions
+#### Kafka Transactions
 
-Guarantees **atomic writes** across multiple Partitions.
-
-### Transaction Flow
+Guarantees atomic writes across multiple Partitions. All messages succeed or all fail.
 
 ```mermaid
 sequenceDiagram
@@ -150,7 +117,7 @@ sequenceDiagram
     participant K as Kafka Partitions
 
     P->>TC: initTransactions()
-    TC-->>P: Assign PID
+    TC-->>P: PID assigned
 
     P->>TC: beginTransaction()
 
@@ -159,35 +126,25 @@ sequenceDiagram
     P->>K: send(topic-C, msg3)
 
     P->>TC: commitTransaction()
-    TC->>K: Write transaction marker
+    TC->>K: Record transaction marker
     TC-->>P: Commit complete
 
     Note over K: All messages atomically visible
 ```
 
-### On Transaction Failure
+*Diagram: Kafka transaction flow - initTransactions() → beginTransaction() → send() to multiple Partitions → commitTransaction() or abortTransaction().*
 
-```mermaid
-sequenceDiagram
-    participant P as Producer
-    participant TC as Transaction Coordinator
-    participant K as Kafka Partitions
+If an error occurs during transaction, call abortTransaction() to invalidate all messages.
 
-    P->>TC: beginTransaction()
+{{< callout type="info" title="Key Points" >}}
+- Kafka transactions: Guarantee atomic writes across multiple Partitions
+- All messages succeed or all fail (All or Nothing)
+- Transaction Coordinator manages transaction state
+{{< /callout >}}
 
-    P->>K: send(topic-A, msg1)
-    P->>K: send(topic-B, msg2)
-    Note over P: Error occurred!
+#### Spring Kafka Transactions
 
-    P->>TC: abortTransaction()
-    TC->>K: Write abort marker
-
-    Note over K: msg1, msg2 both invalidated
-```
-
-## Spring Kafka Transactions
-
-### Configuration
+**Configuration**
 
 ```yaml
 spring:
@@ -199,7 +156,7 @@ spring:
         enable.idempotence: true
 ```
 
-### Implementation Method 1: @Transactional
+**Implementation Method 1: @Transactional**
 
 ```java
 @Service
@@ -219,12 +176,12 @@ public class OrderService {
         kafkaTemplate.send("notification-events", order.getId(),
             new NotificationEvent(order.getCustomerId(), "ORDER_RECEIVED"));
 
-        // All rolled back if any fails
+        // All rollback if any fails
     }
 }
 ```
 
-### Implementation Method 2: executeInTransaction
+**Implementation Method 2: executeInTransaction**
 
 ```java
 @Service
@@ -251,9 +208,9 @@ public class OrderService {
 }
 ```
 
-## Consumer Exactly-Once
+#### Consumer's Exactly-Once
 
-### read_committed Isolation Level
+**read_committed Isolation Level**
 
 ```yaml
 spring:
@@ -262,27 +219,11 @@ spring:
       isolation-level: read_committed  # Default: read_uncommitted
 ```
 
-```mermaid
-flowchart TB
-    subgraph Partition["Partition"]
-        M1["msg1 (committed)"]
-        M2["msg2 (committed)"]
-        M3["msg3 (uncommitted)"]
-        M4["msg4 (committed)"]
-    end
+read_uncommitted reads all messages (including uncommitted). read_committed reads only committed messages. It skips and waits on uncommitted messages.
 
-    subgraph ReadUncommitted["read_uncommitted"]
-        RU["msg1, msg2, msg3, msg4<br>Reads all"]
-    end
+**Consume-Transform-Produce Pattern**
 
-    subgraph ReadCommitted["read_committed"]
-        RC["Reads only msg1, msg2<br>(waits for msg3)"]
-    end
-```
-
-### Consume-Transform-Produce Pattern
-
-Applying EOS in patterns that read input, transform, and output.
+Applies EOS to patterns that read input, transform, and output.
 
 ```java
 @Component
@@ -313,55 +254,24 @@ public class OrderProcessor {
 }
 ```
 
-## Transaction vs Idempotence
+#### Transactions vs Idempotency
 
-```mermaid
-flowchart TB
-    subgraph Idempotent["Idempotent Producer"]
-        IP1["Single partition duplicate prevention"]
-        IP2["Auto-enabled (Kafka 3.0+)"]
-        IP3["No extra config needed"]
-    end
+Idempotent Producer prevents duplicates for single Partition, auto-enabled (Kafka 3.0+), no additional settings needed. Does not guarantee atomicity and provides no Consumer isolation. Performance impact is negligible.
 
-    subgraph Transaction["Transactional API"]
-        TX1["Atomic writes across partitions"]
-        TX2["transaction-id-prefix required"]
-        TX3["Has performance overhead"]
-    end
-```
+Transactional API guarantees atomic writes across multiple Partitions, requires transaction-id-prefix setting. Provides Consumer isolation with read_committed. Has some performance overhead.
 
-| Feature | Idempotent | Transactional |
-|---------|------------|---------------|
-| **Scope** | Single Partition | Multiple Partitions |
-| **Duplicate Prevention** | O | O |
-| **Atomicity** | X | O |
-| **Consumer Isolation** | X | O (read_committed) |
-| **Performance Impact** | Almost none | Some overhead |
+{{< callout type="info" title="Key Points" >}}
+- Idempotent Producer: Single Partition duplicate prevention, default enabled in Kafka 3.0+
+- Transactional API: Atomic writes across multiple Partitions, needs transaction-id-prefix
+- read_committed: Reads only committed messages for transaction isolation
+{{< /callout >}}
 
-## Usage Guide
+#### Usage Guide
 
-### When to Use What?
-
-```mermaid
-flowchart TB
-    Q1{Message loss<br>acceptable?}
-    Q2{Duplication<br>acceptable?}
-    Q3{Atomic processing<br>across Topics/Partitions?}
-
-    Q1 -->|Yes| AMO[At-Most-Once]
-    Q1 -->|No| Q2
-
-    Q2 -->|Yes| ALO[At-Least-Once<br>+ Idempotent handling]
-    Q2 -->|No| Q3
-
-    Q3 -->|No| IDP[Idempotent Producer]
-    Q3 -->|Yes| TXN[Transactions]
-```
-
-### Recommended Configuration
+Use At-Most-Once (acks=0) when message loss is acceptable. Use At-Least-Once with idempotency handling when loss is not acceptable but duplicates are. Use Transactions when duplicates are also not acceptable and atomic writes across multiple Topics/Partitions are needed. Idempotent Producer (default) is sufficient when only single Partition duplicate prevention is needed.
 
 ```yaml
-# Recommended for most cases (At-Least-Once + Idempotence)
+# Recommended for most cases (At-Least-Once + idempotency)
 spring:
   kafka:
     producer:
@@ -379,9 +289,9 @@ spring:
       isolation-level: read_committed
 ```
 
-## Cautions
+#### Cautions
 
-### Transaction Timeout
+**Transaction Timeout**
 
 ```yaml
 spring:
@@ -391,52 +301,92 @@ spring:
         transaction.timeout.ms: 60000  # Default 60 seconds
 ```
 
-Transactions are automatically aborted on timeout.
+Transaction is automatically aborted on timeout.
 
-### Performance Considerations
+**Performance Considerations**
 
-Transactions have additional overhead:
-- Communication with Transaction Coordinator
-- Writing transaction markers
-- Consumer filtering
+Transactions have additional overhead. Communication with Transaction Coordinator, recording transaction markers, Consumer filtering processing are required. Expect about 20-30% throughput reduction compared to acks=all.
 
-**Alternative:** Guarantee idempotence in business logic
+#### Comparing Distributed Transaction Approaches
+
+Kafka transactions are not the only option. 2PC (Two-Phase Commit) provides strong consistency across multiple DBs but is slow and depends on coordinator. Kafka Transactions provide strong consistency within Kafka with auto-recovery but can't handle outside Kafka. Saga provides eventual consistency across multiple services with high scalability but requires compensation transactions.
+
+**Limitations of Kafka Transactions**
+
+What Kafka transactions can do: atomic writes across multiple Kafka Topics, Consume-Transform-Produce atomicity, Exactly-Once within Kafka. What they can't do: DB + Kafka atomic processing, external API + Kafka atomic processing, distributed transactions across services.
+
+{{< callout type="info" title="Key Points" >}}
+- Kafka transaction limitations: Only handles within Kafka, can't integrate external systems
+- For DB + Kafka atomic processing: Use Outbox pattern
+- Saga pattern: Eventual consistency across multiple services (requires compensation transactions)
+{{< /callout >}}
+
+**When You Need to Handle DB + Kafka Together**
+
+To process DB and Kafka atomically, use the Outbox pattern. Within a DB transaction, save data and events to the Outbox table together, then a separate process sends from Outbox to Kafka.
 
 ```java
-// Idempotence via DB unique constraint
+// Outbox pattern
+@Transactional  // DB transaction only
+public void process(OrderEvent event) {
+    orderRepository.save(order);
+    outboxRepository.save(new OutboxEvent("results", result));
+    // Atomicity guaranteed by DB transaction
+}
+// Separate process sends from Outbox to Kafka
+```
+
+#### Transaction Debugging Guide
+
+**ProducerFencedException**
+
+Another Producer with the same transactional.id has started. Each instance needs a unique transactional.id.
+
+```yaml
+spring:
+  kafka:
+    producer:
+      transaction-id-prefix: tx-${spring.application.name}-${random.uuid}-
+```
+
+**InvalidTxnStateException**
+
+Transaction state inconsistency (timeout, abnormal termination, etc.). Producer needs to be recreated.
+
+**Debugging Checklist**
+
+Verify transaction.id is unique per instance, Broker version supports transactions (0.11+), all Consumers have isolation.level=read_committed, transaction timeout exceeds processing time, and network latency is not abnormal.
+
+#### Practical Decision Guide
+
+**Recommended approach for most cases: At-Least-Once + Business Idempotency**
+
+```java
+// Idempotency handling in Consumer
+@KafkaListener(topics = "orders")
 @Transactional
 public void handleOrder(OrderEvent event) {
-    if (orderRepository.existsByEventId(event.getEventId())) {
-        log.info("Already processed event: {}", event.getEventId());
+    // 1. Check if already processed
+    if (processedEventRepository.existsById(event.getEventId())) {
         return;
     }
-    // Processing logic
-    orderRepository.save(order);
+
+    // 2. Business logic
+    orderService.process(event);
+
+    // 3. Record processing completion (same DB transaction)
+    processedEventRepository.save(new ProcessedEvent(event.getEventId()));
 }
 ```
 
-## Summary
+**When Kafka Transactions Are Truly Needed**
 
-```mermaid
-flowchart TB
-    subgraph Summary["Message Delivery Guarantees"]
-        AMO["At-Most-Once<br>acks=0, no retries"]
-        ALO["At-Least-Once<br>acks=all, with retries"]
-        IDP["+ Idempotent<br>enable.idempotence"]
-        TXN["+ Transactions<br>transaction-id-prefix"]
-    end
+Use Kafka transactions only when all conditions are met: must write atomically to multiple Topics (all succeed or all fail), using Kafka Streams or Consume-Transform-Produce pattern, and can accept performance overhead.
 
-    AMO --> ALO
-    ALO --> IDP
-    IDP --> TXN
-```
+#### Summary
 
-| Concept | Key Point |
-|---------|-----------|
-| **Idempotent Producer** | Single Partition duplicate prevention |
-| **Transactions** | Atomic writes across Partitions |
-| **read_committed** | Read only committed messages |
+Idempotent Producer prevents duplicates for single Partition, enabled by default since Kafka 3.0. Transactions write atomically to multiple Partitions, require transaction-id-prefix. read_committed reads only committed messages for transaction isolation.
 
-## Next Steps
+#### Next Steps
 
 - [Producer Tuning](../producer-tuning/) - Performance optimization settings
