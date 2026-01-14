@@ -1,10 +1,27 @@
 ---
 title: RDD Basics
 weight: 2
-lastmod: "2026-01-07"
+lastmod: "2026-01-10"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
-# RDD (Resilient Distributed Dataset)
+{{< callout type="info" title="TL;DR" >}}
+- RDD (Resilient Distributed Dataset) is a distributed immutable data collection, Spark's basic data abstraction
+- Data processing through Transformation (lazy evaluation) and Action (immediate execution)
+- Automatic recovery on failure through Lineage
+- DataFrame/Dataset recommended now, but RDD useful when low-level control needed
+{{< /callout >}}
+
+**Target Audience**: Java/Spring developers, beginners learning Spark basics
+
+**Prerequisites**:
+- Java Collections API (List, Map, etc.)
+- Lambda expressions and functional programming basics
+- Understanding of [Architecture](../architecture/) document
+
+---
 
 RDD is Spark's most fundamental data abstraction. As the low-level API underlying DataFrame and Dataset, it's essential for understanding how Spark works.
 

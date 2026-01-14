@@ -1,14 +1,28 @@
 ---
+bookCollapseSection: true
 title: Quick Start
 weight: 1
-lastmod: "2026-01-07"
+lastmod: "2026-01-10"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
-# Quick Start
+> **Target Audience**: Java developers interested in big data processing
+> **Prerequisites**: Basic Java syntax, SQL fundamentals, Gradle/Maven experience
+> **After reading**: You'll be able to create a Spark project locally and query/aggregate CSV data with DataFrame
 
-Run a Spark application and process data in 5 minutes.
+{{< callout type="tip" title="TL;DR" >}}
+- SparkSession is Spark's unified entry point, created with `SparkSession.builder().getOrCreate()`
+- DataFrame API allows filtering, aggregation, and SQL queries
+- `local[*]` mode enables testing in local development environment
+{{< /callout >}}
+
+Run a Spark application and process data in 5 minutes. Following this guide, you'll experience the entire process from project creation to data querying.
 
 ## Overview
+
+The diagram below shows the Quick Start flow:
 
 ```mermaid
 flowchart LR
@@ -20,11 +34,21 @@ flowchart LR
 
 ## Prerequisites
 
+Prepare the following environment before starting:
+
 - **Java 17+** (Java 8, 11 also supported, but 17 recommended)
 - **Gradle** or **Maven**
 - **IDE** (IntelliJ IDEA, VS Code, etc.)
 
-## Step 1: Create Project
+**Pre-start Verification**
+
+| Item | Command | Expected Result |
+|------|---------|-----------------|
+| Java | `java -version` | `openjdk version "17.x.x"` or higher |
+| Gradle | `gradle --version` | `Gradle 8.x` or higher |
+| Maven (alternative) | `mvn --version` | `Apache Maven 3.x.x` |
+
+## Step 1/5: Create Project (~1 min)
 
 Create a Java project using Spring Initializr or your IDE. This example starts with a plain Java project.
 
@@ -33,7 +57,7 @@ mkdir spark-quickstart
 cd spark-quickstart
 ```
 
-## Step 2: Gradle Setup
+## Step 2/5: Gradle Setup (~2 min)
 
 Create a `build.gradle` file:
 
@@ -76,7 +100,9 @@ configurations.all {
 
 > **Version note:** The `2.13` in `spark-core_2.13` is the Scala version. Even when using Java, the Scala runtime is required, so it must be specified.
 
-### Using Maven
+**Using Maven**
+
+If you prefer Maven, use the following `pom.xml`:
 
 `pom.xml` file:
 
@@ -138,7 +164,7 @@ Run:
 mvn compile exec:java
 ```
 
-## Step 3: Create Sample Data
+## Step 3/5: Create Sample Data (~1 min)
 
 Create `src/main/resources/employees.csv` file:
 
@@ -154,7 +180,7 @@ id,name,department,salary
 8,Fiona Chen,Engineering,5200
 ```
 
-## Step 4: Write Spark Application
+## Step 4/5: Write Spark Application (~3 min)
 
 `src/main/java/com/example/SparkQuickStart.java`:
 
@@ -227,7 +253,7 @@ public class SparkQuickStart {
 }
 ```
 
-## Step 5: Run
+## Step 5/5: Run (~1 min)
 
 ```bash
 ./gradlew run
@@ -239,6 +265,8 @@ gradlew.bat run
 ```
 
 ## Expected Output
+
+When run successfully, you should see output like this:
 
 ```
 === Spark Quick Start ===
@@ -387,6 +415,8 @@ public class SparkQuickStartProduction {
 
 **Key Points for Production Code:**
 
+The table below summarizes essential code patterns for production environments:
+
 | Item | Description |
 |------|-------------|
 | `try-finally` | Ensures SparkSession is always cleaned up |
@@ -395,11 +425,15 @@ public class SparkQuickStartProduction {
 | `exitCode` | Exit code for script/CI integration |
 | `validateSchema` | Runtime schema validation |
 
+Each item helps prevent or debug issues that can occur in production environments.
+
 ---
 
 ## What Just Happened?
 
-### 1. SparkSession Creation
+Let's examine how each step works in the code above.
+
+**1. SparkSession Creation**
 
 ```java
 SparkSession spark = SparkSession.builder()
@@ -416,7 +450,7 @@ SparkSession spark = SparkSession.builder()
   - `local[*]`: All cores
   - In cluster environments, use `spark://master:7077`, `yarn`, etc.
 
-### 2. Reading Data
+**2. Reading Data**
 
 ```java
 Dataset<Row> employees = spark.read()
@@ -429,7 +463,7 @@ Dataset<Row> employees = spark.read()
 - `option("inferSchema", "true")`: Samples data to auto-infer column types
 - Spark supports various data sources: CSV, JSON, Parquet, JDBC, etc.
 
-### 3. DataFrame Operations
+**3. DataFrame Operations**
 
 ```java
 employees.filter(col("salary").geq(5000))
@@ -439,7 +473,7 @@ employees.filter(col("salary").geq(5000))
 - `filter`, `select`, `groupBy`, etc. are **Transformations** — lazily evaluated
 - `show`, `collect`, `count`, etc. are **Actions** — execute actual computation
 
-### 4. Using SQL
+**4. Using SQL**
 
 ```java
 employees.createOrReplaceTempView("employees");
@@ -454,7 +488,9 @@ spark.sql("SELECT * FROM employees WHERE ...");
 
 ## Java Developer Comparison
 
-### Java Stream vs Spark DataFrame
+Comparing existing Java code with Spark code makes similarities and differences easy to understand.
+
+**Java Stream vs Spark DataFrame**
 
 ```java
 // Java Stream (single JVM)
@@ -475,7 +511,9 @@ The two code snippets are very similar, but:
 
 ## Troubleshooting
 
-### Too Many Logs
+Common problems and solutions when running Spark.
+
+**Too Many Logs**
 
 Spark outputs many logs by default. Add a `log4j2.properties` file to `src/main/resources` or:
 
@@ -483,7 +521,7 @@ Spark outputs many logs by default. Add a `log4j2.properties` file to `src/main/
 spark.sparkContext().setLogLevel("WARN");  // or "ERROR"
 ```
 
-### Java Version Error
+**Java Version Error**
 
 Spark 3.5 supports Java 8, 11, and 17. Java 21 is not yet officially supported.
 
@@ -493,7 +531,7 @@ Error: A JNI error has occurred
 
 → Check Java version: `java -version`
 
-### OutOfMemoryError
+**OutOfMemoryError**
 
 Default memory may be insufficient for local execution:
 
@@ -509,7 +547,7 @@ application {
 }
 ```
 
-### Hadoop-related Errors on Windows
+**Hadoop-related Errors on Windows**
 
 When running on Windows, you may see warnings related to `winutils.exe`. This doesn't affect functionality, but to resolve:
 
@@ -534,7 +572,7 @@ While the Spark application is running, access `http://localhost:4040` to view t
 
 ## Next Steps
 
-After completing Quick Start, proceed to:
+After completing Quick Start, choose your next document based on your learning goals:
 
 | Goal | Recommended Document |
 |------|---------------------|
@@ -542,3 +580,5 @@ After completing Quick Start, proceed to:
 | Learn RDD basics | [RDD Basics](../concepts/rdd/) |
 | Deep dive into DataFrame | [DataFrame and Dataset](../concepts/dataframe-dataset/) |
 | Spring Boot integration | [Environment Setup](../examples/setup/) |
+
+To understand Spark's overall operation, read the Architecture document first. For a practice-focused approach, start with the Environment Setup document.
