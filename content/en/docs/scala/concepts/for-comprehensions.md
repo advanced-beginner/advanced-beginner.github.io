@@ -1,14 +1,28 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-14"
 title: For Comprehension
 weight: 10
 ---
 
-For Comprehension is syntactic sugar that elegantly expresses `flatMap`, `map`, and `withFilter`.
+{{< callout type="info" title="TL;DR" >}}
+- For comprehension is syntactic sugar for `flatMap`, `map`, and `withFilter`
+- Allows writing nested flatMap calls in a readable, declarative form
+- Works with various monadic types including Option, Either, Future, and List
+- Without yield, it only executes side effects (converted to foreach)
+{{< /callout >}}
 
-## Basic Syntax
+**Target Audience:** Developers who understand higher-order functions
+**Prerequisites:** map, flatMap, and filter higher-order functions
 
-### Transformation Rules Visualization
+For Comprehension is syntactic sugar that elegantly expresses `flatMap`, `map`, and `withFilter`. It allows you to write nested flatMap and map calls in a readable, declarative form, and works with various monadic types such as Option, Either, Future, and List.
+
+#### Basic Syntax
+
+Understanding the basic structure of for comprehension and how it converts to method calls is crucial.
+
+**Transformation Rules Visualization**
+
+The diagram below shows how for comprehension is transformed into map, flatMap, and withFilter calls.
 
 ```mermaid
 flowchart LR
@@ -18,7 +32,7 @@ flowchart LR
         FC3["for { x <- list; if cond } yield f(x)"]
     end
 
-    subgraph "Transformed Result"
+    subgraph "Transformation Result"
         R1["list.map(x → f(x))"]
         R2["list.flatMap(x => list2.map(y → f(x,y)))"]
         R3["list.withFilter(cond).map(x → f(x))"]
@@ -28,6 +42,10 @@ flowchart LR
     FC2 --> R2
     FC3 --> R3
 ```
+
+*Diagram: Shows the process of transforming for comprehension into map, flatMap, and withFilter calls. A single generator converts to map, multiple generators convert to flatMap+map, and guards convert to withFilter.*
+
+The basic for comprehension syntax is as follows:
 
 ```scala
 // Basic form
@@ -42,21 +60,27 @@ for {
 } yield (x, y)
 ```
 
-## Transformation to map/flatMap
+#### Transformation to map/flatMap
 
-### Single Generator → map
+The compiler transforms for comprehension into map, flatMap, and withFilter calls. Understanding these transformation rules helps clarify how for comprehension works.
+
+**Single Generator → map**
+
+When there's only a single generator, it simply converts to map.
 
 ```scala
 // for comprehension
 for (x <- List(1, 2, 3)) yield x * 2
 
-// Transforms to
+// Transformed to
 List(1, 2, 3).map(x => x * 2)
 
 // Result: List(2, 4, 6)
 ```
 
-### Multiple Generators → flatMap + map
+**Multiple Generators → flatMap + map**
+
+With multiple generators, all except the last convert to flatMap, and the last one converts to map.
 
 ```scala
 // for comprehension
@@ -65,7 +89,7 @@ for {
   y <- List("a", "b")
 } yield (x, y)
 
-// Transforms to
+// Transformed to
 List(1, 2, 3).flatMap { x =>
   List("a", "b").map { y =>
     (x, y)
@@ -75,7 +99,9 @@ List(1, 2, 3).flatMap { x =>
 // Result: List((1,a), (1,b), (2,a), (2,b), (3,a), (3,b))
 ```
 
-### Guard → withFilter
+**Guard → withFilter**
+
+if conditions (guards) are transformed to withFilter calls. The reason for using withFilter instead of filter is to avoid creating intermediate collections.
 
 ```scala
 // for comprehension
@@ -84,7 +110,7 @@ for {
   if x % 2 == 0
 } yield x * 2
 
-// Transforms to
+// Transformed to
 List(1, 2, 3, 4, 5)
   .withFilter(x => x % 2 == 0)
   .map(x => x * 2)
@@ -92,7 +118,9 @@ List(1, 2, 3, 4, 5)
 // Result: List(4, 8)
 ```
 
-## Value Definition (=)
+#### Value Definitions (=)
+
+You can define intermediate values within for comprehension using `=`. This is useful for reusing computation results or improving readability.
 
 ```scala
 for {
@@ -101,7 +129,7 @@ for {
   squared = doubled * doubled
 } yield squared
 
-// Transforms to
+// Transformed to
 List(1, 2, 3).map { x =>
   val doubled = x * 2
   val squared = doubled * doubled
@@ -111,9 +139,9 @@ List(1, 2, 3).map { x =>
 // Result: List(4, 16, 36)
 ```
 
-## With Option
+#### With Option
 
-Option is frequently used with for comprehension.
+Option is one of the most frequently used types with for comprehension. When performing consecutive Option operations, you can use clean for syntax instead of nested flatMap. If None occurs at any point, the entire result becomes None.
 
 ```scala
 case class User(name: String)
@@ -125,7 +153,7 @@ def findUser(id: Int): Option[User] =
 def findAddress(user: User): Option[Address] =
   if (user.name.nonEmpty) Some(Address("Seoul")) else None
 
-// If any is None, entire result is None
+// If any None exists, the entire result is None
 val result = for {
   user <- findUser(1)
   address <- findAddress(user)
@@ -142,7 +170,9 @@ val failed = for {
 failed  // None
 ```
 
-## With Either
+#### With Either
+
+Either can also be used with for comprehension. It continues as long as all operations are Right, and stops immediately upon encountering Left, returning that Left.
 
 ```scala
 def parseInt(s: String): Either[String, Int] =
@@ -152,7 +182,7 @@ def divide(a: Int, b: Int): Either[String, Int] =
   if (b == 0) Left("Cannot divide by zero")
   else Right(a / b)
 
-// Continues if all Right, stops at Left
+// Continues if all operations are Right, stops on Left
 val result = for {
   a <- parseInt("10")
   b <- parseInt("2")
@@ -170,9 +200,9 @@ val failed = for {
 failed  // Left("'zero' is not a number")
 ```
 
-## With Future
+#### With Future
 
-Combines asynchronous operations sequentially.
+Composing Futures with for comprehension allows sequential execution of asynchronous operations. Each step executes after the previous Future completes.
 
 ```scala
 import scala.concurrent.{Future, ExecutionContext}
@@ -193,7 +223,9 @@ val result = for {
 // result: Future((User1, List(Order1 for User1, Order2 for User1)))
 ```
 
-## List Combination
+#### List Combinations
+
+Using for comprehension with List makes it easy to generate Cartesian products (all combinations). You can also add guards to select specific combinations.
 
 ```scala
 // Cartesian product
@@ -212,32 +244,34 @@ val evenPairs = for {
 // List((2,a), (2,b), (4,a), (4,b))
 
 // Multiplication table
-val table = for {
+val gugudan = for {
   i <- 2 to 9
   j <- 1 to 9
 } yield s"$i x $j = ${i * j}"
 ```
 
-## Side Effects (without yield)
+#### Side Effects (Without yield)
 
-Without `yield`, only side effects are executed.
+Omitting yield executes only side effects without returning a value. In this case, it converts to foreach.
 
 ```scala
-// Transforms to foreach
+// Converted to foreach
 for (x <- List(1, 2, 3)) {
   println(x)
 }
 
-// Equivalent
+// Equivalent to
 List(1, 2, 3).foreach(x => println(x))
 ```
 
-## Pattern Matching
+#### Pattern Matching
+
+You can use pattern matching in for comprehension generators. This is useful for tuple decomposition or case class extraction. Elements that don't match are automatically filtered out.
 
 ```scala
 val pairs = List((1, "one"), (2, "two"), (3, "three"))
 
-// Tuple destructuring
+// Tuple decomposition
 for ((num, str) <- pairs) {
   println(s"$num = $str")
 }
@@ -250,7 +284,9 @@ for (Some(x) <- maybes) {
 }
 ```
 
-## Scala 3 Syntax
+#### Scala 3 Syntax
+
+In Scala 3, the syntax for for comprehension has become more concise. The do keyword and indentation-based syntax have been added.
 
 {{< tabs groupid="scala-version" >}}
 {{% tab title="Scala 3" %}}
@@ -281,9 +317,9 @@ for {
 {{% /tab %}}
 {{< /tabs >}}
 
-## Using with Custom Types
+#### Using with Custom Types
 
-Implement `map`, `flatMap`, and `withFilter` to enable for comprehension.
+For comprehension can be used with any type that has map, flatMap, and withFilter methods. By implementing these methods on your own types, you can leverage for comprehension.
 
 ```scala
 case class Box[A](value: A) {
@@ -299,14 +335,16 @@ val result = for {
 result  // Box(3)
 ```
 
-## Exercises
+#### Practice Problems
 
-### 1. Safe Calculator
+Review the for comprehension concepts through the following exercises.
 
-Implement safe arithmetic operations with for comprehension.
+**1. Safe Calculator ⭐⭐**
+
+Implement safe arithmetic operations using for comprehension.
 
 <details>
-<summary>Show Answer</summary>
+<summary>View Answer</summary>
 
 ```scala
 def safeAdd(a: Int, b: Int): Option[Int] = Some(a + b)
@@ -327,27 +365,27 @@ result  // Some(10)
 
 </details>
 
-### 2. Flatten Nested Option
+**2. Flattening Nested Option ⭐**
 
-Handle nested Options with for comprehension.
+Handle nested Option using for comprehension.
 
 <details>
-<summary>Show Answer</summary>
+<summary>View Answer</summary>
 
 ```scala
 case class Company(address: Option[Address])
 case class Address(street: Option[String])
 
-val company = Company(Some(Address(Some("123 Main St"))))
+val company = Company(Some(Address(Some("Gangnam-daero 123"))))
 
 val street = for {
   address <- company.address
   street <- address.street
 } yield street
 
-street  // Some("123 Main St")
+street  // Some("Gangnam-daero 123")
 
-// With None in the middle
+// If there's a None in the middle
 val noStreet = Company(Some(Address(None)))
 val result = for {
   address <- noStreet.address
@@ -359,7 +397,7 @@ result  // None
 
 </details>
 
-## Next Steps
+#### Next Steps
 
 - [Implicit/Given](../implicits/) — Contextual abstraction
-- [Functional Patterns](../functional-patterns/) — Monad, Functor advanced
+- [Functional Patterns](../functional-patterns/) — Advanced Monad, Functor

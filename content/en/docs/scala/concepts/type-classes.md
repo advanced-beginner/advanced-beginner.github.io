@@ -1,36 +1,48 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-14"
 title: Type Classes
 weight: 12
 ---
 
-Type classes are a pattern for adding new functionality to existing types. They enable polymorphism without inheritance.
+{{< callout type="info" title="TL;DR" >}}
+- Type classes are a pattern for adding new functionality **without modifying existing types**
+- Three components: **type class** (trait), **instances** (given), **API** (extension)
+- You can define multiple instances for the same type and choose based on context
+- Show, Eq, Ordering, and Monoid are representative type classes
+{{< /callout >}}
 
-## Why Type Classes?
+**Target Audience:** Developers who understand Implicit/Given
+**Prerequisites:** Implicit features, generics
 
-### Limitations of Inheritance
+Type classes are a pattern for adding new functionality to existing types. They enable polymorphism without inheritance and allow you to define new behavior without modifying existing types. Originating from Haskell, this pattern combines with Scala's implicit features to provide powerful abstractions.
 
-There are problems that Java/Scala's traditional inheritance cannot easily solve:
+#### Why Type Classes?
+
+**Limitations of Inheritance**
+
+There are problems that are difficult to solve with traditional object-oriented inheritance.
 
 ```scala
-// Problem: What if you want to add new methods to Int, String, etc.?
-// → You can't extend Int!
+// Problem: What if you want to add new methods to existing types like Int, String?
+// → You can't inherit from Int!
 
-// Problem: What if you want to add functionality to external library classes?
+// Problem: What if you want to add functionality to classes from external libraries?
 // → You can't modify the source code!
 
-// Problem: What if you need different behavior for the same type depending on context?
-// → Want to sort Person by name, by age, etc.
+// Problem: What if you need different behaviors for the same type depending on context?
+// → You want to sort Person by name, age, etc. in various ways
 ```
 
-### Type Classes to the Rescue
+**Type Class Solution**
+
+The type class pattern elegantly solves these problems.
 
 ```scala
 // 1. Can add new functionality to existing types (Int)
 given Show[Int] with
   def show(i: Int): String = i.toString
 
-// 2. Can apply to external library types
+// 2. Can also apply to external library types
 given Show[java.time.LocalDate] with
   def show(d: java.time.LocalDate): String = d.toString
 
@@ -40,22 +52,24 @@ val byAge: Ordering[Person] = Ordering.by(_.age)
 people.sorted(using byAge)  // Choose based on context!
 ```
 
-## What is a Type Class?
+#### What is a Type Class?
 
-### Type Class Structure
+**Type Class Structure**
+
+A type class consists of three components. The diagram below visualizes this structure.
 
 ```mermaid
 graph TB
     subgraph "Type Class Pattern"
-        TC["1. Type Class<br>(trait Show#91;A#93;)"]
-        TI["2. Instance<br>(given Show#91;Int#93;)"]
-        API["3. API<br>(def show#91;A: Show#93;(a))"]
+        TC["1. Type Class<br>(trait Show&#91;A&#93;)"]
+        TI["2. Instance<br>(given Show&#91;Int&#93;)"]
+        API["3. API<br>(def show&#91;A: Show&#93;(a))"]
     end
 
     subgraph "Usage Flow"
         Code["Code: 42.show"]
-        Compiler["Compiler searches for Show#91;Int#93;"]
-        Instance["Instance injected"]
+        Compiler["Compiler searches for Show&#91;Int&#93;"]
+        Instance["Instance injection"]
         Result["Result: \"42\""]
     end
 
@@ -66,17 +80,19 @@ graph TB
     Instance --> Result
 ```
 
+*The diagram above shows the three components of a type class and the usage flow.*
+
 A type class consists of three parts:
 
-1. **The type class itself** - An interface defined as a trait
+1. **Type class itself** - An interface defined as a trait
 2. **Type class instances** - Implementations for specific types
 3. **Interface methods** - API that uses the type class
 
-## Basic Example: Show
+#### Basic Example: Show
 
-A `Show` type class that converts values to strings:
+Let's examine the `Show` type class that converts values to strings.
 
-### Definition
+**Definition**
 
 {{< tabs groupid="scala-version" >}}
 {{% tab title="Scala 3" %}}
@@ -85,7 +101,7 @@ A `Show` type class that converts values to strings:
 trait Show[A]:
   def show(a: A): String
 
-// 2. Instance definitions
+// 2. Instance definition
 object Show:
   given Show[Int] with
     def show(a: Int): String = a.toString
@@ -111,7 +127,7 @@ trait Show[A] {
   def show(a: A): String
 }
 
-// 2. Instance definitions
+// 2. Instance definition
 object Show {
   implicit val intShow: Show[Int] = new Show[Int] {
     def show(a: Int): String = a.toString
@@ -129,7 +145,7 @@ object Show {
 // 3. Interface method
 def show[A](a: A)(implicit s: Show[A]): String = s.show(a)
 
-// Extension via implicit class
+// Extension with implicit class
 implicit class ShowOps[A](a: A)(implicit s: Show[A]) {
   def show: String = s.show(a)
 }
@@ -137,7 +153,9 @@ implicit class ShowOps[A](a: A)(implicit s: Show[A]) {
 {{% /tab %}}
 {{< /tabs >}}
 
-### Usage
+**Usage**
+
+Importing type class instances enables their functionality.
 
 ```scala
 import Show.given  // Scala 3
@@ -152,12 +170,12 @@ show(true)         // "yes"
 "hello".show       // "\"hello\""
 ```
 
-## Derived Instances
+#### Derived Instances
 
-Derive new instances from existing ones.
+You can automatically derive new instances from existing ones. For example, if you have Show for type A, you can automatically create Show for List[A].
 
 ```scala
-// Show instance for List[A] (when A has Show)
+// Show instance for List[A] (given Show for A)
 given [A](using s: Show[A]): Show[List[A]] with
   def show(list: List[A]): String =
     list.map(s.show).mkString("[", ", ", "]")
@@ -174,9 +192,9 @@ Some("hello").show        // "Some(\"hello\")"
 List(Some(1), None).show  // "[Some(1), None]"
 ```
 
-## Eq Type Class
+#### Eq Type Class
 
-Type class for equality comparison:
+A type class for equality comparison. While Scala's basic `==` allows comparison between any types, Eq ensures only same types can be compared, increasing type safety.
 
 ```scala
 trait Eq[A]:
@@ -203,9 +221,9 @@ extension [A](a: A)(using eq: Eq[A])
 // 1 === "1"  // Compile error!
 ```
 
-## Ordering Type Class
+#### Ordering Type Class
 
-Standard library type class for sorting:
+A standard library type class for sorting. You can define multiple Ordering instances for the same type and choose based on context.
 
 ```scala
 case class Person(name: String, age: Int)
@@ -227,9 +245,15 @@ people.sorted(using Ordering.by(_.name))
 // List(Person(Alice,30), Person(Bob,25), Person(Carol,35))
 ```
 
-## Monoid Type Class
+{{< callout type="info" title="Key Points" >}}
+- Ordering is the standard library type class for sorting
+- Use `Ordering.by` to sort by specific fields
+- Use `using` to explicitly select a specific instance
+{{< /callout >}}
 
-Defines associative operation and identity element:
+#### Monoid Type Class
+
+An algebraic structure that defines a combine operation and an identity element. Useful for parallel processing and folding operations.
 
 ```scala
 trait Monoid[A]:
@@ -258,24 +282,40 @@ combineAll(List("a", "b", "c"))            // "abc"
 combineAll(List(List(1, 2), List(3, 4)))   // List(1, 2, 3, 4)
 ```
 
-## Type Classes vs Inheritance
+{{< callout type="info" title="Key Points" >}}
+- Monoid: Defines identity element (empty) and combine operation
+- Useful algebraic structure for folding and parallel processing
+- Applicable to various types like Int, String, List
+{{< /callout >}}
 
-| Feature | Type Classes | Inheritance |
-|---------|-------------|-------------|
+#### Type Classes vs Inheritance
+
+Comparing the differences between type classes and traditional inheritance approaches.
+
+| Characteristic | Type Class | Inheritance |
+|------|-----------|------|
 | Type modification | Not required | Required |
 | Multiple implementations | Possible | Not possible |
-| Extend existing types | Possible | Limited |
+| Extending existing types | Possible | Limited |
 | Performance | Slight overhead | Direct call |
 
-## Best Practices
+{{< callout type="info" title="Key Points" >}}
+- Type class: Add functionality without modifying existing types
+- Inheritance: Functionality determined at type definition time
+- Multiple implementations possible for same type (type class)
+{{< /callout >}}
 
-### Define Instances in Companion Objects
+#### Best Practices
+
+**Define Instances in Companion Object**
+
+Defining instances in a type's companion object automatically includes them in the implicit scope.
 
 ```scala
 case class Email(value: String)
 
 object Email:
-  // Define instance in companion object
+  // Define instances in companion object
   given Show[Email] with
     def show(e: Email): String = e.value
 
@@ -283,7 +323,9 @@ object Email:
     def eqv(a: Email, b: Email): Boolean = a.value == b.value
 ```
 
-### Instance Priority
+**Instance Priority**
+
+How to specify priority when multiple instances conflict.
 
 ```scala
 trait LowPriorityInstances:
@@ -291,15 +333,23 @@ trait LowPriorityInstances:
     def show(list: List[A]): String = list.toString
 
 object Show extends LowPriorityInstances:
-  // More specific instance takes priority
+  // More specific instances take priority
   given (using s: Show[Int]): Show[List[Int]] with
     def show(list: List[Int]): String =
       list.map(s.show).mkString("[", ", ", "]")
 ```
 
-## Exercises
+{{< callout type="info" title="Key Points" >}}
+- Instances defined in companion objects are automatically included in implicit scope
+- Priority can be specified through inheritance
+- More specific instances are selected first
+{{< /callout >}}
 
-### 1. JsonEncoder Type Class
+#### Exercises
+
+Practice type class concepts with the following exercises.
+
+**1. JsonEncoder Type Class**
 
 Implement a type class for JSON encoding.
 
@@ -342,7 +392,7 @@ None.toJson                // "null"
 
 </details>
 
-## Next Steps
+#### Next Steps
 
-- [Variance](../variance/) — Generic type variance
+- [Variance](../variance/) — Covariance and contravariance in generic types
 - [Advanced Types](../type-system-advanced/) — Advanced type features in Scala 3

@@ -1,12 +1,24 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-14"
 title: Collections
 weight: 7
 ---
 
-Scala's collection library provides rich data structures optimized for functional programming.
+{{< callout type="info" title="TL;DR" >}}
+- Scala uses **immutable collections** by default (thread-safe, predictable)
+- **List** is fast for prepending, **Vector** is fast for random access
+- Built-in support for **higher-order functions** like map, filter, fold
+- **Option** handles missing values type-safely instead of null
+{{< /callout >}}
 
-## Collection Hierarchy
+**Target Audience:** Developers familiar with Java collections
+**Prerequisites:** Basic Scala syntax, functions and methods
+
+Scala's collection library provides rich data structures optimized for functional programming. Immutable collections are the default, and a consistent API allows working with various data structures. Unlike Java collections, Scala collections have built-in support for higher-order functions like map, filter, and fold.
+
+#### Collection Hierarchy
+
+Scala collections have a well-designed hierarchy. At the top is Iterable, with ordered Seq, duplicate-free Set, and key-value Map underneath.
 
 ```
                   Iterable
@@ -23,9 +35,9 @@ Vector    List    TreeSet
 Array   LazyList
 ```
 
-## Immutable vs Mutable
+#### Immutable vs Mutable
 
-Scala uses **immutable collections** by default.
+Scala uses **immutable collections** by default. Immutable collections are thread-safe and guarantee predictable behavior. Mutable collections must be explicitly imported when needed.
 
 ```scala
 // Immutable (default)
@@ -41,11 +53,13 @@ val mutableSet = mutable.Set(1, 2, 3)
 val mutableMap = mutable.Map("a" -> 1)
 ```
 
-## Seq (Sequence)
+#### Seq (Sequence)
 
-Ordered collections.
+Seq is an ordered collection. Elements have a defined order and can be accessed by index. List and Vector are most commonly used.
 
-### List (Linked List)
+**List (Linked List)**
+
+List is an immutable linked list. Prepending/removing from the front is O(1) fast, but index access is O(n).
 
 ```scala
 val list = List(1, 2, 3, 4, 5)
@@ -61,19 +75,19 @@ val concat = list :+ 6     // List(1, 2, 3, 4, 5, 6) - O(n)
 
 // List concatenation
 val combined = List(1, 2) ::: List(3, 4)  // List(1, 2, 3, 4)
-// or
+// Or
 val combined2 = List(1, 2) ++ List(3, 4)
 
 // Pattern matching
 list match {
-  case Nil          => "Empty list"
-  case head :: tail => s"First: $head, rest: $tail"
+  case Nil          => "empty list"
+  case head :: tail => s"first: $head, rest: $tail"
 }
 ```
 
-### Vector (Indexed Sequence)
+**Vector (Indexed Sequence)**
 
-Immutable sequence with fast random access.
+Vector is an immutable sequence with fast random access. Implemented as a 32-way tree structure, most operations are effectively constant time.
 
 ```scala
 val vector = Vector(1, 2, 3, 4, 5)
@@ -89,21 +103,21 @@ val appended = vector :+ 6
 val prepended = 0 +: vector
 ```
 
-### Range
+**Range**
 
-Represents a range of numbers.
+Range is a special sequence representing a numeric range. It computes elements on demand without storing all in memory.
 
 ```scala
 val r1 = 1 to 10      // 1 to 10 (inclusive)
-val r2 = 1 until 10   // 1 to 9 (excludes 10)
+val r2 = 1 until 10   // 1 to 9 (10 excluded)
 val r3 = 1 to 10 by 2 // 1, 3, 5, 7, 9
 
 r1.toList  // List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 ```
 
-## Set
+#### Set
 
-Collection without duplicates.
+Set is a collection without duplicates. It can quickly check element membership and supports mathematical set operations (union, intersection, difference).
 
 ```scala
 val set = Set(1, 2, 3, 2, 1)  // Set(1, 2, 3)
@@ -130,9 +144,9 @@ a diff b       // Set(1)
 a -- b         // Same as above
 ```
 
-### SortedSet
+**SortedSet**
 
-Sorted set.
+SortedSet is a set that keeps elements always sorted. Useful when min/max values or range queries are needed.
 
 ```scala
 import scala.collection.immutable.SortedSet
@@ -145,9 +159,9 @@ sorted.lastKey   // 9
 sorted.range(2, 6)  // SortedSet(2, 3, 4, 5)
 ```
 
-## Map
+#### Map
 
-Collection of key-value pairs.
+Map is a collection of key-value pairs. It can quickly search values by key and is widely used for configurations, caches, and indexes.
 
 ```scala
 val map = Map("a" -> 1, "b" -> 2, "c" -> 3)
@@ -175,9 +189,13 @@ map.keys    // Iterable("a", "b", "c")
 map.values  // Iterable(1, 2, 3)
 ```
 
-## Collection Operations
+#### Collection Operations
 
-### Transform Operations
+The core of Scala collections is rich higher-order functions. Combining these operations allows expressing complex data processing declaratively.
+
+**Transform Operations**
+
+Transform collections with map, flatMap, filter, etc. The original doesn't change; a new collection is returned.
 
 ```scala
 val numbers = List(1, 2, 3, 4, 5)
@@ -202,7 +220,9 @@ numbers.collect {
 }  // List(20, 40)
 ```
 
-### Reduce Operations
+**Reduce Operations**
+
+Reduce and fold reduce all elements in a collection to a single value.
 
 ```scala
 val numbers = List(1, 2, 3, 4, 5)
@@ -217,10 +237,12 @@ numbers.foldLeft(10)(_ + _)  // 25
 
 // foldLeft vs foldRight
 List("a", "b", "c").foldLeft("")(_ + _)   // "abc"
-List("a", "b", "c").foldRight("")(_ + _)  // "abc" (same result, different direction)
+List("a", "b", "c").foldRight("")(_ + _)  // "abc" (same order, different calculation direction)
 ```
 
-### Partition Operations
+**Partition Operations**
+
+Split collections into multiple parts with partition, groupBy, span, splitAt.
 
 ```scala
 val numbers = List(1, 2, 3, 4, 5, 6)
@@ -242,7 +264,9 @@ val (first, second) = numbers.splitAt(3)
 // first = List(1, 2, 3), second = List(4, 5, 6)
 ```
 
-### Search Operations
+**Search Operations**
+
+Search for elements or check conditions in collections with find, exists, forall, contains, count.
 
 ```scala
 val numbers = List(1, 2, 3, 4, 5)
@@ -264,7 +288,9 @@ numbers.contains(3)    // true
 numbers.count(_ % 2 == 0)  // 2
 ```
 
-### Sort Operations
+**Sort Operations**
+
+Sort collections with sorted, sortBy, sortWith.
 
 ```scala
 val numbers = List(3, 1, 4, 1, 5, 9, 2, 6)
@@ -280,7 +306,9 @@ people.sortBy(_.name)       // By name
 people.sortWith(_.age > _.age)  // Age descending
 ```
 
-## Working with Option
+#### Working with Option
+
+Option is a collection representing a value that may or may not exist. Using Option instead of null prevents NullPointerException and handles missing values type-safely.
 
 ```scala
 val maybeValue: Option[Int] = Some(42)
@@ -311,21 +339,25 @@ for {
 } yield a + b  // Some(30)
 ```
 
-## Performance Characteristics
+#### Performance Characteristics
 
-| Collection | head | tail | Index | Update | Prepend | Append |
-|------------|------|------|-------|--------|---------|--------|
+Each collection has different performance characteristics, so choose appropriately. The table below summarizes time complexity for major operations.
+
+| Collection | head | tail | Index Access | Update | Prepend | Append |
+|------------|------|------|--------------|--------|---------|--------|
 | List | O(1) | O(1) | O(n) | O(n) | O(1) | O(n) |
 | Vector | O(1) | O(1) | O(log₃₂n)* | O(log₃₂n)* | O(log₃₂n)* | O(log₃₂n)* |
 | Array | O(1) | O(n) | O(1) | O(1) | - | - |
 | Set | - | - | O(log n)** | O(log n)** | O(log n)** | - |
 | Map | - | - | O(log n)** | O(log n)** | O(log n)** | - |
 
-> **Notes:**
+> **Note:**
 > - `*` Vector's O(log₃₂n) is about 6 steps even for n=1 billion, **effectively constant time**.
 > - `**` HashSet/HashMap are average O(1), TreeSet/TreeMap are O(log n)
 
-### Which Collection to Choose?
+**Which Collection to Choose?**
+
+Choose the appropriate collection based on use case.
 
 ```scala
 // Frequent add/remove from front → List
@@ -344,9 +376,11 @@ val lookup = Map("a" -> 1, "b" -> 2)
 lookup.get("a")  // Fast!
 ```
 
-## Common Mistakes and Anti-patterns
+#### Common Mistakes and Anti-patterns
 
-### What to Avoid
+Here are common mistakes when using collections and proper solutions.
+
+**❌ What to Avoid**
 
 ```scala
 // 1. Index-based access abuse (on List)
@@ -368,7 +402,7 @@ list.map(x => List(x, x * 2)).flatten  // Inefficient
 List.empty[Int].head  // NoSuchElementException!
 ```
 
-### The Right Way
+**✅ Correct Approach**
 
 ```scala
 // 1. Use foreach or iterator
@@ -388,7 +422,9 @@ List.empty[Int].headOption  // None
 List(1, 2, 3).headOption    // Some(1)
 ```
 
-### Collection Selection Guide
+**Collection Selection Guide**
+
+The diagram below shows how to select the appropriate collection based on requirements.
 
 ```mermaid
 flowchart TD
@@ -406,9 +442,13 @@ flowchart TD
     Q3 -->|No| Set["Set"]
 ```
 
-## Exercises
+*Diagram: Data structure selection flowchart. If order matters, choose Vector/List based on random access needs. If order doesn't matter, choose List/Set based on duplicate allowance.*
 
-### 1. Word Frequency
+#### Practice Problems
+
+Review collection usage with these practice problems.
+
+**1. Word Frequency**
 
 Calculate the frequency of each word in a list of strings.
 
@@ -429,7 +469,7 @@ val frequency2 = words.groupMapReduce(identity)(_ => 1)(_ + _)
 
 </details>
 
-### 2. Flatten Nested List
+**2. Flatten Nested List**
 
 Flatten a nested list to one dimension.
 
@@ -447,7 +487,7 @@ val flat2 = nested.flatMap(identity)
 
 </details>
 
-## Next Steps
+#### Next Steps
 
-- [Higher-Order Functions](../higher-order-functions/) — map, filter, fold advanced
+- [Higher-Order Functions](../higher-order-functions/) — Advanced map, filter, fold
 - [For Comprehension](../for-comprehensions/) — Monadic operations

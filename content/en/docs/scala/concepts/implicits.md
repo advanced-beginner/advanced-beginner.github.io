@@ -1,14 +1,217 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-14"
 title: Implicit / Given
 weight: 11
 ---
 
-Implicit features are one of Scala's powerful capabilities. This covers both Scala 2's `implicit` and Scala 3's `given`/`using`.
+{{< callout type="info" title="TL;DR" >}}
+- Implicit features allow the compiler to automatically pass values or convert types
+- Scala 2: `implicit` / Scala 3: `given`/`using`/`extension`
+- Primarily used for **type classes**, **extension methods**, and **context passing**
+- Avoid implicit definitions for overly generic types (`String`, `Int`)
+{{< /callout >}}
 
-## Scala 2: Implicit
+**Target Audience:** Developers familiar with higher-order functions and generics
+**Prerequisites:** For comprehensions, type parameters
 
-### Implicit Values
+Implicit features are one of Scala's most powerful capabilities. They allow the compiler to automatically pass values or convert types, reducing boilerplate code and increasing expressiveness. This covers both Scala 2's `implicit` and Scala 3's `given`/`using`.
+
+#### Why Do We Need Implicits?
+
+Let's examine three main problems that implicit features solve.
+
+**Problem 1: Boilerplate Parameters**
+
+Passing context in Java style requires repetitively passing parameters to every method:
+
+```java
+// Java: Passing ExecutionContext every time
+public class OrderService {
+    public CompletableFuture<Order> createOrder(OrderRequest req, ExecutionContext ec) {
+        return validateOrder(req, ec)
+            .thenCompose(valid -> saveOrder(valid, ec))
+            .thenCompose(saved -> notifyUser(saved, ec));
+    }
+
+    private CompletableFuture<Order> validateOrder(OrderRequest req, ExecutionContext ec) { ... }
+    private CompletableFuture<Order> saveOrder(Order order, ExecutionContext ec) { ... }
+    private CompletableFuture<Void> notifyUser(Order order, ExecutionContext ec) { ... }
+}
+```
+
+**Scala's Solution:** Use `implicit`/`using` to pass context automatically:
+
+```scala
+// Scala: ExecutionContext passed implicitly
+class OrderService(using ec: ExecutionContext):
+  def createOrder(req: OrderRequest): Future[Order] =
+    validateOrder(req)
+      .flatMap(saveOrder)
+      .flatMap(notifyUser)
+
+  private def validateOrder(req: OrderRequest): Future[Order] = ...
+  private def saveOrder(order: Order): Future[Order] = ...
+  private def notifyUser(order: Order): Future[Unit] = ...
+
+// Provide once at usage site
+given ExecutionContext = ExecutionContext.global
+val service = OrderService()
+service.createOrder(request)  // ec automatically injected
+```
+
+**Problem 2: Cannot Extend External Library Types**
+
+In Java, adding methods to `String` requires a wrapper class:
+
+```java
+// Java: If you want to add a toSlug method to String
+public class StringUtils {
+    public static String toSlug(String s) {
+        return s.toLowerCase().replaceAll(" ", "-");
+    }
+}
+// Usage: StringUtils.toSlug(title) — awkward
+
+// Or use a wrapper class
+public class RichString {
+    private final String value;
+    public RichString(String value) { this.value = value; }
+    public String toSlug() { return value.toLowerCase().replaceAll(" ", "-"); }
+}
+// Usage: new RichString(title).toSlug() — even more awkward
+```
+
+**Scala's Solution:** Extend existing types with extension methods:
+
+```scala
+// Scala 3: Add methods directly to String
+extension (s: String)
+  def toSlug: String = s.toLowerCase.replace(" ", "-")
+  def words: List[String] = s.split("\\s+").toList
+
+// Usage: as if they were original methods of String
+"Hello World".toSlug   // "hello-world"
+"Hello World".words    // List("Hello", "World")
+```
+
+**Problem 3: Difficulty Implementing Type-Specific Behavior**
+
+In Java, handling various types in the same way requires complex conditionals:
+
+```java
+// Java: Type-specific serialization logic
+public class JsonSerializer {
+    public String toJson(Object obj) {
+        if (obj instanceof String) {
+            return "\"" + obj + "\"";
+        } else if (obj instanceof Integer) {
+            return obj.toString();
+        } else if (obj instanceof List) {
+            List<?> list = (List<?>) obj;
+            return list.stream()
+                .map(this::toJson)
+                .collect(Collectors.joining(",", "[", "]"));
+        }
+        throw new IllegalArgumentException("Unsupported type");
+    }
+}
+// Problem: Must modify this method when adding new types (violates Open-Closed Principle)
+```
+
+**Scala's Solution:** Design with type classes for extensibility:
+
+```scala
+// Scala: Type class pattern
+trait JsonEncoder[A]:
+  def encode(a: A): String
+
+given JsonEncoder[String] with
+  def encode(a: String): String = s"\"$a\""
+
+given JsonEncoder[Int] with
+  def encode(a: Int): String = a.toString
+
+given [A](using enc: JsonEncoder[A]): JsonEncoder[List[A]] with
+  def encode(list: List[A]): String =
+    list.map(enc.encode).mkString("[", ",", "]")
+
+def toJson[A](a: A)(using enc: JsonEncoder[A]): String = enc.encode(a)
+
+// Add new type - extend without modifying existing code
+case class User(name: String, age: Int)
+given JsonEncoder[User] with
+  def encode(u: User): String = s"""{"name":"${u.name}","age":${u.age}}"""
+
+toJson(List("a", "b"))  // ["a","b"]
+toJson(User("Kim", 30)) // {"name":"Kim","age":30}
+```
+
+#### Implicit/Given Usage Guide
+
+Implicit features are powerful but can harm code readability if misused. Let's explore when to use them and when to avoid them.
+
+**When Should You Use Them?**
+
+The table below summarizes the suitability of implicit usage by situation.
+
+| Situation | Suitability | Reason |
+|-----------|-------------|--------|
+| Passing `ExecutionContext` | ✅ Suitable | Standard pattern, clear context |
+| Type class instances (`Ordering`, `Show`, etc.) | ✅ Suitable | Compile-time safety |
+| JSON/DB codecs | ✅ Suitable | Library standard pattern |
+| Loggers, configuration objects | ⚠️ Caution | Explicit DI might be better |
+| Business logic parameters | ❌ Unsuitable | Reduces readability, difficult debugging |
+| Default/fallback values | ❌ Unsuitable | Causes unexpected behavior |
+
+**Usage Decision Flowchart**
+
+A flowchart to help decide whether to use implicits.
+
+```mermaid
+flowchart TD
+    A[Make parameter implicit?] --> B{Does caller need to<br>know the value?}
+    B -->|Yes| C[❌ Explicit parameter]
+    B -->|No| D{Is it a standard library or<br>framework pattern?}
+    D -->|Yes| E[✅ Use implicit]
+    D -->|No| F{Is the type specific?}
+    F -->|String, Int, etc.| G[❌ Too generic]
+    F -->|AppConfig, DbContext, etc.| H[⚠️ Use with caution]
+```
+
+**Anti-Patterns to Avoid**
+
+```scala
+// ❌ Anti-pattern 1: Too generic type
+given String = "default"  // Injected to all String parameters!
+given Int = 0             // Dangerous!
+
+// ✅ Correct way: Use wrapper types
+case class ApiKey(value: String)
+given ApiKey = ApiKey("default-key")
+
+// ❌ Anti-pattern 2: Hiding business logic
+def processOrder(orderId: String)(using discount: Double): Order = ...
+// Difficult to track where discount comes from
+
+// ✅ Correct way: Explicit parameters
+def processOrder(orderId: String, discount: Double): Order = ...
+
+// ❌ Anti-pattern 3: Overusing implicit conversions
+given Conversion[String, Int] = _.toInt
+val x: Int = "123"  // Compiles but dangerous
+
+// ✅ Correct way: Explicit conversion or extension
+extension (s: String)
+  def toIntSafe: Option[Int] = s.toIntOption
+```
+
+#### Scala 2: Implicit
+
+In Scala 2, the implicit keyword was used to express multiple features.
+
+**Implicit Values**
+
+The basic way to define and use implicit values.
 
 ```scala
 // Define implicit value
@@ -21,7 +224,9 @@ greet              // "Hello, Guest!" (implicitly passed)
 greet("Alice")     // "Hello, Alice!" (explicitly passed)
 ```
 
-### Implicit Parameters
+**Implicit Parameters**
+
+Pattern for passing classes or configuration objects implicitly.
 
 ```scala
 case class Config(url: String, timeout: Int)
@@ -34,7 +239,9 @@ def connect(implicit config: Config): Unit =
 connect  // Uses implicit Config
 ```
 
-### Implicit Conversions
+**Implicit Conversions**
+
+Defines automatic type conversions. Powerful but use with caution as it can make code harder to understand when overused.
 
 ```scala
 // Implicit conversion from Int to String
@@ -45,7 +252,9 @@ val s: String = 42  // Automatically converted to "42"
 // Use with caution - can be dangerous!
 ```
 
-### Implicit Classes (Extension Methods)
+**Implicit Classes (Extension Methods)**
+
+Pattern for adding new methods to existing types.
 
 ```scala
 implicit class RichString(s: String) {
@@ -57,11 +266,13 @@ implicit class RichString(s: String) {
 "Hello World".words      // List("Hello", "World")
 ```
 
-## Scala 3: Given / Using
+#### Scala 3: Given / Using
 
-In Scala 3, `implicit` is separated into clearer keywords.
+In Scala 3, `implicit` is separated into clearer keywords. given provides values, using requests values, and extension adds methods.
 
-### Given Instances
+**Given Instances**
+
+Define implicit instances with given.
 
 {{< tabs groupid="scala-version" >}}
 {{% tab title="Scala 3" %}}
@@ -88,7 +299,9 @@ greet("Alice")     // "Hello, Alice!"
 {{% /tab %}}
 {{< /tabs >}}
 
-### Anonymous Given
+**Anonymous Given**
+
+You can also define given without a name.
 
 ```scala
 // Unnamed given
@@ -98,7 +311,9 @@ given String = "Guest"
 summon[String]  // "Guest"
 ```
 
-### Using Clause
+**Using Clause**
+
+Declare implicit parameters with using clause.
 
 ```scala
 case class Config(url: String, timeout: Int)
@@ -111,7 +326,9 @@ def connect(using config: Config): Unit =
 connect  // Implicitly uses Config
 ```
 
-### Extension Methods (Scala 3)
+**Extension Methods (Scala 3)**
+
+Add methods to existing types with the extension keyword.
 
 {{< tabs groupid="scala-version" >}}
 {{% tab title="Scala 3" %}}
@@ -139,9 +356,11 @@ implicit class StringOps(s: String) {
 {{% /tab %}}
 {{< /tabs >}}
 
-## Type Class Pattern
+#### Type Class Pattern
 
-### Definition
+Type classes are the most important use case for implicit features. They add new functionality to existing types while maintaining type safety.
+
+**Definition**
 
 {{< tabs groupid="scala-version" >}}
 {{% tab title="Scala 3" %}}
@@ -191,7 +410,9 @@ print("hello")  // "\"hello\""
 {{% /tab %}}
 {{< /tabs >}}
 
-### Context Bounds
+**Context Bounds**
+
+Context bounds are concise syntax for requiring type class instances.
 
 ```scala
 // Context bound syntax
@@ -202,7 +423,7 @@ def print[A: Show](a: A): Unit = {
 }
 ```
 
-## Implicit Scope
+#### Implicit Scope
 
 Implicit values are searched in this order:
 
@@ -223,7 +444,9 @@ List(User("Bob"), User("Alice")).sorted
 // List(User("Alice"), User("Bob"))
 ```
 
-## Given Import (Scala 3)
+#### Given Import (Scala 3)
+
+In Scala 3, you must explicitly import given.
 
 ```scala
 object Givens:
@@ -245,9 +468,11 @@ import Givens.given   // Only given Int, given String
 import Givens.{*, given}
 ```
 
-> **Difference from Scala 2:** In Scala 2, `import Givens._` also imported implicits, but Scala 3 requires explicit `given` import.
+> 💡 **Difference from Scala 2:** In Scala 2, `import Givens._` also imported implicits, but Scala 3 requires explicit `given` import.
 
-## Migration Guide
+#### Migration Guide
+
+Keyword mapping reference when migrating from Scala 2 to Scala 3.
 
 | Scala 2 | Scala 3 |
 |---------|---------|
@@ -257,7 +482,7 @@ import Givens.{*, given}
 | `implicitly[T]` | `summon[T]` |
 | `implicit class` | `extension` |
 
-### Gradual Migration
+**Gradual Migration**
 
 Scala 3 still supports `implicit`:
 
@@ -267,9 +492,9 @@ implicit val x: Int = 42
 def f(implicit n: Int): Int = n * 2
 ```
 
-## Best Practices
+#### Best Practices
 
-### DO
+**DO**
 
 ```scala
 // Use for type classes
@@ -283,7 +508,7 @@ extension (s: String)
   def toSlug: String = s.toLowerCase.replace(" ", "-")
 ```
 
-### DON'T
+**DON'T**
 
 ```scala
 // Avoid indiscriminate implicit conversions
@@ -293,9 +518,9 @@ given Conversion[Int, String] = _.toString
 given String = "default"  // Used anywhere String is needed
 ```
 
-## Common Mistakes and Anti-patterns
+#### Common Mistakes and Anti-patterns
 
-### What to Avoid
+**❌ What to Avoid**
 
 ```scala
 // 1. Implicit with too generic type
@@ -316,7 +541,7 @@ import library2._  // Both define implicit for same type
 // If A → B → C → D conversion needed, compile time increases dramatically
 ```
 
-### The Right Way
+**✅ The Right Way**
 
 ```scala
 // 1. Use specific wrapper types
@@ -341,7 +566,9 @@ trait Show[A]:
 given [A: Show]: Show[List[A]] = ...
 ```
 
-### Debugging Tips
+**Debugging Tips**
+
+How to check which implicit value was selected.
 
 ```scala
 // Check which implicit was selected
@@ -353,9 +580,11 @@ val ord = summon[Ordering[Int]]
 println(ord)  // scala.math.Ordering$Int$@...
 ```
 
-## Exercises
+#### Exercises
 
-### 1. Printable Type Class
+Practice implicit features with the following exercises.
+
+**1. Printable Type Class**
 
 Define a `Printable` type class and implement instances for `Int`, `String`, and `List[A]`.
 
@@ -388,7 +617,7 @@ print(List("a", "b", "c"))   // ["a", "b", "c"]
 
 </details>
 
-### 2. Extension Method Implementation
+**2. Extension Method Implementation**
 
 Add a `times` method to `Int`: `3.times { println("Hello") }`
 
@@ -410,7 +639,7 @@ extension (n: Int)
 
 </details>
 
-## Next Steps
+#### Next Steps
 
 - [Type Classes](../type-classes/) — Advanced type class patterns
 - [Functional Patterns](../functional-patterns/) — Functor, Monad

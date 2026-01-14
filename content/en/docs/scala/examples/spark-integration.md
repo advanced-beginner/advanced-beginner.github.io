@@ -1,14 +1,33 @@
 ---
-lastmod: "2026-01-08"
+lastmod: "2026-01-14"
 title: Spark Integration
 weight: 4
 ---
 
-Learn how to use Apache Spark with Scala. Scala is Spark's native language, providing the richest API.
+{{% notice style="primary" title="TL;DR" %}}
+- **Scala is Spark's native language**: Latest features supported first, most concise API
+- **DataFrame**: SQL-style data processing, `$"column"` syntax for column references
+- **Dataset[T]**: Type-safe data processing with Case Classes, compile-time error detection
+- **Performance optimization**: Utilize broadcast joins, caching, Predicate Pushdown
+- **Note**: Spark 3.5 only supports Scala 2.12/2.13 (Scala 3 not supported)
+{{% /notice %}}
 
-## Why Use Spark with Scala?
+**Target Audience**: Scala developers learning large-scale data processing, Spark beginners
 
-### Java vs Scala Comparison
+**Prerequisites**:
+- Scala basic syntax and functional programming concepts
+- sbt build tool usage
+- SQL basics (recommended)
+
+---
+
+Learn how to use Apache Spark with Scala. Scala is Spark's native language, providing the richest API. Since Spark itself is written in Scala, new features are added to the Scala API first, and you can maximize the benefits of type safety and functional programming.
+
+#### Why Use Spark with Scala?
+
+Comparing implementation of the same Spark task in Java and Scala clearly shows Scala's advantages. Java code is verbose with much boilerplate, while Scala code is concise with clear intent.
+
+**Java vs Scala Comparison**
 
 ```java
 // Java: Verbose code
@@ -30,7 +49,9 @@ val result = spark.read
   .agg(avg($"salary").as("avg_salary"))
 ```
 
-### Advantages of Scala + Spark
+**Advantages of Scala + Spark**
+
+Key benefits of using Scala and Spark together. You can access the latest features first through the native API and enable type-safe data processing using Case Classes.
 
 | Advantage | Description |
 |-----------|-------------|
@@ -40,11 +61,17 @@ val result = spark.read
 | **Functional Style** | Natural use of map, filter, reduce, etc. |
 | **REPL Support** | Interactive development with spark-shell |
 
----
+{{% notice style="tip" title="Key Points" %}}
+- Scala is Spark's native language with latest features supported first
+- Much more concise code than Java (`$"column"` syntax, etc.)
+- Leverage type-safe Dataset API with Case Classes
+{{% /notice %}}
 
-## Environment Setup
+#### Environment Setup
 
-### build.sbt
+To start a Spark project, first add Spark dependencies to build.sbt. Currently Spark 3.5 supports Scala 2.12 and 2.13, with Scala 3 not yet supported.
+
+**build.sbt**
 
 ```scala
 ThisBuild / scalaVersion := "2.13.12"
@@ -61,11 +88,25 @@ lazy val root = (project in file("."))
 
 > **Note:** Spark 3.5 only supports Scala 2.12/2.13. Scala 3 is not yet supported.
 
----
+**project/build.properties**
 
-## Basic Example: DataFrame Processing
+```properties
+sbt.version=1.10.6
+```
 
-### Creating SparkSession
+{{% notice style="tip" title="Key Points" %}}
+- Spark 3.5 **only supports Scala 2.12/2.13** (Scala 3 not supported)
+- Must add `spark-core` and `spark-sql` dependencies
+- Specify sbt version in `project/build.properties`
+{{% /notice %}}
+
+#### Basic Example: DataFrame Processing
+
+Spark's core entry point is SparkSession. Through SparkSession, you can read data, create DataFrames, and execute SQL queries.
+
+**Creating SparkSession**
+
+When creating SparkSession, specify application name and execution mode. For local development, use `local[*]` to utilize all CPU cores.
 
 ```scala
 import org.apache.spark.sql.SparkSession
@@ -100,6 +141,15 @@ object SparkBasics extends App {
 
     val df = data.toDF("name", "department", "salary")
     df.show()
+    // +-------+-----------+------+
+    // |   name| department|salary|
+    // +-------+-----------+------+
+    // |  Alice|Engineering| 75000|
+    // |    Bob|Engineering| 80000|
+    // |Charlie|      Sales| 65000|
+    // |  Diana|      Sales| 70000|
+    // |    Eve|  Marketing| 60000|
+    // +-------+-----------+------+
 
     // 2. Filtering and Selection
     df.filter($"salary" > 65000)
@@ -119,13 +169,22 @@ object SparkBasics extends App {
 }
 ```
 
----
+In this example, importing `spark.implicits._` enables referencing columns with `$"column_name"` syntax. This leverages Scala's string interpolation and implicit conversions.
 
-## Case Class and Dataset
+{{% notice style="tip" title="Key Points" %}}
+- **SparkSession**: Spark's entry point, created with `builder()` pattern
+- **spark.implicits._**: Enables `$"column"` syntax and `toDF()`
+- **local[\*]**: Use all CPU cores in local mode
+- Process data with `filter`, `select`, `groupBy`, `agg`, `orderBy`
+{{% /notice %}}
 
-### Type-Safe Data Processing
+#### Case Class and Dataset
 
-Using Scala Case Classes, you can **catch type errors at compile time**.
+Leveraging Scala Case Classes, you can **catch type errors at compile time**. DataFrames discover column name errors at runtime, but Datasets discover field name errors at compile time.
+
+**Type-Safe Data Processing**
+
+Defining schema with Case Class allows Spark to automatically infer the schema, enabling type-safe operations.
 
 ```scala
 import org.apache.spark.sql.{Dataset, SparkSession}
@@ -166,6 +225,12 @@ object TypeSafeExample extends App {
     .filter(_.salary > 70000)  // Compile-time check!
 
   highEarners.show()
+  // +-----+-----------+------+----------+
+  // | name| department|salary|  joinDate|
+  // +-----+-----------+------+----------+
+  // |Alice|Engineering| 75000|2020-01-15|
+  // |  Bob|Engineering| 80000|2019-03-20|
+  // +-----+-----------+------+----------+
 
   // 4. Transform with map (type-safe)
   val names: Dataset[String] = employees.map(_.name)
@@ -189,7 +254,9 @@ object TypeSafeExample extends App {
 }
 ```
 
-### DataFrame vs Dataset Comparison
+**DataFrame vs Dataset Comparison**
+
+In DataFrames, column name typos are only discovered at runtime, but in Datasets, they're caught immediately at compile time.
 
 ```scala
 // DataFrame: Runtime error possible
@@ -202,15 +269,114 @@ ds.filter(_.salry > 70000)   // Compile error! Immediately caught
 //            ^^^^^ value salry is not a member of Employee
 ```
 
----
+{{% notice style="tip" title="Key Points" %}}
+- **Dataset[T]**: Type-safe data processing with Case Classes
+- **DataFrame**: Runtime errors possible, **Dataset**: Compile-time error detection
+- **toDS()**: Convert Seq to Dataset
+- **groupByKey + mapGroups**: Type-safe grouping and aggregation
+{{% /notice %}}
 
-## Practical Example: ETL Pipeline
+#### Leveraging Functional Style
 
-### Read, Transform, Save
+Scala's functional programming features work well with Spark. Concepts like higher-order functions, pattern matching, and immutable data naturally apply to distributed data processing.
+
+**Data Transformation with Higher-Order Functions**
+
+```scala
+import org.apache.spark.sql.functions._
+
+object FunctionalSparkExample extends App {
+  val spark = SparkSession.builder()
+    .appName("Functional Spark")
+    .master("local[*]")
+    .getOrCreate()
+
+  import spark.implicits._
+
+  case class Order(
+    orderId: String,
+    customerId: String,
+    amount: Double,
+    status: String
+  )
+
+  val orders = Seq(
+    Order("O001", "C1", 150.0, "COMPLETED"),
+    Order("O002", "C2", 200.0, "PENDING"),
+    Order("O003", "C1", 75.0, "COMPLETED"),
+    Order("O004", "C3", 300.0, "CANCELLED"),
+    Order("O005", "C2", 180.0, "COMPLETED")
+  ).toDS()
+
+  // 1. Functional chaining
+  val result = orders
+    .filter(_.status == "COMPLETED")
+    .map(o => (o.customerId, o.amount))
+    .groupByKey(_._1)
+    .mapValues(_._2)
+    .reduceGroups(_ + _)
+    .map { case (customerId, totalAmount) =>
+      (customerId, totalAmount)
+    }
+    .toDF("customer_id", "total_amount")
+
+  result.show()
+  // +-----------+------------+
+  // |customer_id|total_amount|
+  // +-----------+------------+
+  // |         C1|       225.0|
+  // |         C2|       180.0|
+  // +-----------+------------+
+
+  // 2. Define UDF (User Defined Function)
+  val categorizeAmount = udf((amount: Double) => amount match {
+    case a if a >= 200 => "HIGH"
+    case a if a >= 100 => "MEDIUM"
+    case _ => "LOW"
+  })
+
+  orders.toDF()
+    .withColumn("category", categorizeAmount($"amount"))
+    .show()
+
+  // 3. Leverage pattern matching
+  val statusCounts = orders
+    .map { order =>
+      order.status match {
+        case "COMPLETED" => ("completed", 1)
+        case "PENDING"   => ("pending", 1)
+        case "CANCELLED" => ("cancelled", 1)
+        case _           => ("unknown", 1)
+      }
+    }
+    .groupByKey(_._1)
+    .mapValues(_._2)
+    .reduceGroups(_ + _)
+
+  statusCounts.show()
+
+  spark.stop()
+}
+```
+
+UDF (User Defined Function) allows using Scala functions in Spark SQL. Leveraging pattern matching enables clear expression of data classification logic.
+
+{{% notice style="tip" title="Key Points" %}}
+- **Functional chaining**: Connect `filter` → `map` → `groupByKey` → `reduceGroups`
+- **UDF**: Convert Scala functions to be usable in Spark SQL
+- **Pattern matching**: Clearly express data classification logic
+{{% /notice %}}
+
+#### Practical Example: ETL Pipeline
+
+Implement ETL (Extract, Transform, Load) pipeline commonly used in actual data engineering. Cover the entire process of reading log data, transforming it, and storing analysis results.
+
+**Read, Transform, Save Data**
 
 ```scala
 import org.apache.spark.sql.{SaveMode, SparkSession}
 import org.apache.spark.sql.functions._
+import org.apache.spark.sql.types._
 
 object ETLPipeline extends App {
   val spark = SparkSession.builder()
@@ -240,7 +406,7 @@ object ETLPipeline extends App {
     sessionType: String
   )
 
-  // 2. Sample data (normally read from file)
+  // 2. Generate sample data (normally read from file)
   val rawLogs = Seq(
     RawLog("2024-01-15T10:30:00", "U001", "VIEW", "/home", Some(30)),
     RawLog("2024-01-15T10:31:00", "U001", "CLICK", "/products", Some(5)),
@@ -307,11 +473,96 @@ object ETLPipeline extends App {
 }
 ```
 
----
+In this ETL pipeline, use Option type to safely handle nullable fields and classify session types with pattern matching. Final results are saved in Parquet format for use in subsequent analysis.
 
-## Performance Optimization Tips
+{{% notice style="tip" title="Key Points" %}}
+- **Option[T]**: Type-safe handling of nullable fields
+- **getOrElse**: Apply default value to missing values
+- **partitionBy**: Date-based partitioning improves query performance
+- **Parquet**: Column-based format optimized for analysis
+{{% /notice %}}
 
-### 1. Partitioning Optimization
+#### Spark SQL and Scala
+
+Using Spark SQL, you can freely mix SQL queries and Scala API. Write complex joins or aggregations in SQL, then further process results with Scala.
+
+**Mixing SQL and Scala API**
+
+```scala
+object SparkSQLExample extends App {
+  val spark = SparkSession.builder()
+    .appName("Spark SQL")
+    .master("local[*]")
+    .getOrCreate()
+
+  import spark.implicits._
+
+  case class Product(id: Int, name: String, category: String, price: Double)
+  case class Sale(productId: Int, quantity: Int, date: String)
+
+  val products = Seq(
+    Product(1, "Laptop", "Electronics", 1200.0),
+    Product(2, "Phone", "Electronics", 800.0),
+    Product(3, "Desk", "Furniture", 350.0),
+    Product(4, "Chair", "Furniture", 150.0)
+  ).toDS()
+
+  val sales = Seq(
+    Sale(1, 5, "2024-01-15"),
+    Sale(2, 10, "2024-01-15"),
+    Sale(1, 3, "2024-01-16"),
+    Sale(3, 7, "2024-01-16"),
+    Sale(4, 15, "2024-01-16")
+  ).toDS()
+
+  // 1. Register temporary views
+  products.createOrReplaceTempView("products")
+  sales.createOrReplaceTempView("sales")
+
+  // 2. Execute SQL query
+  val revenueByCategory = spark.sql("""
+    SELECT
+      p.category,
+      SUM(p.price * s.quantity) as total_revenue,
+      SUM(s.quantity) as total_quantity
+    FROM products p
+    JOIN sales s ON p.id = s.productId
+    GROUP BY p.category
+    ORDER BY total_revenue DESC
+  """)
+
+  revenueByCategory.show()
+  // +-----------+-------------+--------------+
+  // |   category|total_revenue|total_quantity|
+  // +-----------+-------------+--------------+
+  // |Electronics|      17600.0|            18|
+  // |  Furniture|       4700.0|            22|
+  // +-----------+-------------+--------------+
+
+  // 3. Further process SQL results with Scala
+  val topCategory = revenueByCategory
+    .as[(String, Double, Long)]
+    .head()
+
+  println(s"Top revenue category: ${topCategory._1} (${topCategory._2})")
+
+  spark.stop()
+}
+```
+
+{{% notice style="tip" title="Key Points" %}}
+- **createOrReplaceTempView**: Reference DataFrame as table in SQL
+- **spark.sql()**: Execute SQL query and return DataFrame
+- **Mix SQL + Scala API**: Complex joins in SQL, additional processing in Scala
+{{% /notice %}}
+
+#### Performance Optimization Tips
+
+Major techniques for optimizing Spark application performance. Properly utilizing partitioning, broadcast joins, caching, and Predicate Pushdown can significantly improve performance.
+
+**1. Partitioning Optimization**
+
+Adjusting shuffle partition count to match data size improves performance.
 
 ```scala
 // Adjust shuffle partitions
@@ -322,7 +573,9 @@ val optimized = largeDataset
   .repartition(100, $"key_column")  // Key-based partitioning
 ```
 
-### 2. Broadcast Join
+**2. Broadcast Join**
+
+Broadcasting small tables avoids shuffles.
 
 ```scala
 import org.apache.spark.sql.functions.broadcast
@@ -334,7 +587,9 @@ val result = largeDf.join(
 )
 ```
 
-### 3. Caching Strategy
+**3. Caching Strategy**
+
+Cache repeatedly used datasets to avoid recomputation.
 
 ```scala
 // Cache repeatedly used datasets
@@ -348,19 +603,41 @@ expensiveComputation.persist(StorageLevel.MEMORY_AND_DISK)
 cachedDf.unpersist()
 ```
 
----
+**4. Predicate Pushdown**
 
-## Troubleshooting
+Push filter conditions down to data source level to prevent reading unnecessary data.
 
-### Common Errors and Solutions
+```scala
+// Filter pushdown when reading files
+val filtered = spark.read
+  .parquet("/data/logs")
+  .filter($"date" === "2024-01-15")  // Partition pruning occurs
+  .filter($"status" === "ERROR")     // Filter pushdown
+```
+
+{{% notice style="tip" title="Key Points" %}}
+- **Partitioning**: Optimize shuffles with `repartition(n, $"key")`
+- **Broadcast join**: Replicate small tables to all nodes to prevent shuffles
+- **Caching**: Keep repeatedly used data in memory with `cache()` or `persist()`
+- **Predicate Pushdown**: Push filter conditions down to data source level
+{{% /notice %}}
+
+#### Troubleshooting
+
+Common errors and solutions during Spark development.
+
+**Common Errors and Solutions**
 
 | Error | Cause | Solution |
 |-------|-------|----------|
 | `Task not serializable` | Non-serializable object in closure | Create object inside closure or use `@transient` |
 | `OutOfMemoryError` | Insufficient driver/executor memory | Increase `spark.driver.memory`, `spark.executor.memory` |
 | `Container killed by YARN` | Memory exceeded | Increase `spark.yarn.executor.memoryOverhead` |
+| `shuffle read/write timeout` | Network issues | Increase `spark.network.timeout` |
 
-### Task not serializable Solution
+**Task not serializable Solution**
+
+This error occurs when closure references non-serializable objects. Two solutions exist.
 
 ```scala
 // ❌ Error
@@ -392,9 +669,15 @@ class MyProcessor extends Serializable {
 }
 ```
 
----
+{{% notice style="tip" title="Key Points" %}}
+- **Task not serializable**: Capture only primitives in closure or use `@transient`
+- **OutOfMemoryError**: Increase `spark.driver.memory`, `spark.executor.memory`
+- **Memory issues**: Allow disk spill with `StorageLevel.MEMORY_AND_DISK`
+{{% /notice %}}
 
-## How to Run
+#### How to Run
+
+Various methods for running Spark applications.
 
 ```bash
 # 1. Run with sbt
@@ -411,10 +694,18 @@ spark-submit \
 spark-shell --master local[*]
 ```
 
----
+For local development, use sbt run or spark-shell. For cluster deployment, use spark-submit.
 
-## Next Steps
+{{% notice style="tip" title="Key Points" %}}
+- **sbt run**: Quick execution for local development
+- **spark-shell**: Interactive development and exploratory analysis
+- **spark-submit**: Use for cluster deployment, requires JAR packaging
+{{% /notice %}}
+
+#### Next Steps
+
+After learning basic Spark usage, continue learning with these topics.
 
 - [Spark Guide]({{< relref "/docs/spark" >}}) - Deep dive into Spark
 - [Kafka Integration]({{< relref "/docs/kafka" >}}) - Structured Streaming + Kafka
-- [Functional Patterns](../concepts/functional-patterns/) - FP in Spark
+- [Functional Patterns](../concepts/functional-patterns/) - Functional programming in Spark

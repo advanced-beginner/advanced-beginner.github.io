@@ -1,35 +1,44 @@
 ---
-lastmod: "2026-01-06"
+bookCollapseSection: true
+lastmod: "2026-01-14"
 title: Appendix
 weight: 4
 ---
 
-Reference materials to help with Scala learning.
+Reference materials to help with Scala learning. We've collected auxiliary materials needed during the learning process, including glossary, version comparison, FAQ, and reference links.
 
-## Appendix Contents
+#### Appendix list
+
+The table below lists the documents provided in the appendix. Each document is useful as a reference during learning or when you need quick information on specific topics.
 
 | Document | Description |
-|----------|-------------|
-| [Glossary](glossary/) | Core Scala terminology definitions |
-| [Version Comparison](version-comparison/) | Scala 2 vs Scala 3 differences summary |
+|------|------|
+| [Glossary](glossary/) | Scala core term definitions |
+| [Version Comparison](version-comparison/) | Summary of Scala 2 vs Scala 3 differences |
 | [FAQ](faq/) | Frequently asked questions and answers |
-| [References](references/) | Official docs, books, and course links |
+| [References](references/) | Official documentation, books, course links |
 
-## Quick Reference
+#### Quick reference
 
-### Common sbt Commands
+We've collected commonly used commands and code patterns in everyday Scala development.
+
+**Commonly used sbt commands**
+
+sbt is Scala's standard build tool. The table below shows the most frequently used commands.
 
 | Command | Description |
-|---------|-------------|
+|--------|------|
 | `sbt run` | Run application |
 | `sbt compile` | Compile |
 | `sbt test` | Run tests |
-| `sbt console` | Start REPL |
-| `sbt clean` | Delete build output |
+| `sbt console` | Run REPL |
+| `sbt clean` | Delete build artifacts |
 | `sbt ~compile` | Auto-compile on file changes |
 | `sbt update` | Update dependencies |
 
-### Common Type Conversions
+**Common type conversions**
+
+These are frequently used type conversion patterns in Scala. Using methods that return Option like `toIntOption` allows safe handling by receiving None instead of exceptions on failure.
 
 ```scala
 // String → Int
@@ -45,7 +54,9 @@ List(1, 2, 3).toSet  // Set(1, 2, 3)
 Set(1, 2, 3).toList  // List(1, 2, 3)
 ```
 
-### Working with Option
+**Working with Option**
+
+Option is a type-safe way to use instead of null. Various methods allow elegant handling of value presence.
 
 ```scala
 val maybeValue: Option[Int] = Some(42)
@@ -54,7 +65,7 @@ val maybeValue: Option[Int] = Some(42)
 maybeValue.getOrElse(0)      // 42
 maybeValue.map(_ * 2)        // Some(84)
 maybeValue.filter(_ > 50)    // None
-maybeValue.foreach(println)  // Prints 42
+maybeValue.foreach(println)  // prints 42
 
 // Pattern matching
 maybeValue match
@@ -62,7 +73,9 @@ maybeValue match
   case None    => "No value"
 ```
 
-### Common Collection Operations
+**Key collection operations**
+
+These are core operations on Scala collections. You can transform, filter, and aggregate data in functional programming style.
 
 ```scala
 val nums = List(1, 2, 3, 4, 5)

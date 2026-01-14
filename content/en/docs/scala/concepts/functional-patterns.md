@@ -1,21 +1,32 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-14"
 title: Functional Programming Patterns
 weight: 17
 ---
 
-This document covers core functional programming patterns used in Scala.
+{{< callout type="info" title="TL;DR" >}}
+- **Referential Transparency**: No change in program meaning when replacing function calls with results
+- **Functor**: `map` operation, transforms values while preserving structure
+- **Monad**: `flatMap` operation, chains sequential effects
+- **Option/Either/Try**: Type-safe representation of operations that may fail
+- More powerful abstractions possible with functional libraries like Cats and ZIO
+{{< /callout >}}
+
+**Target Audience:** Developers who understand higher-order functions and For Comprehension
+**Prerequisites:** map, flatMap, filter, generics
+
+This document covers core functional programming patterns used in Scala. Functional programming is a paradigm that minimizes side effects and uses pure functions and immutable data to write predictable and easily testable code.
 
 > **Prerequisites**: To understand this document, you should be familiar with:
 > - [Higher-Order Functions](../higher-order-functions/) - map, flatMap, filter
 > - [For Comprehension](../for-comprehensions/) - Syntactic sugar for monadic operations
 > - [Generics](../generics/) - Type parameters
 >
-> **Difficulty**: Advanced
+> **Difficulty**: ⭐⭐⭐⭐ (Advanced)
 
-## Referential Transparency
+#### Referential Transparency
 
-The property where a function call can be replaced with its result without changing program meaning.
+The property where a function call can be replaced with its result without changing program meaning. Referentially transparent functions always return the same output for the same input and don't depend on or modify external state.
 
 ```scala
 // Referentially transparent
@@ -35,9 +46,15 @@ val a = increment()  // 1
 val b = increment()  // 2 (different result!)
 ```
 
-## Immutability
+{{< callout type="info" title="Key Points" >}}
+- Referentially transparent functions guarantee same output for same input
+- Don't depend on or modify external state
+- Makes code reasoning and testing easier
+{{< /callout >}}
 
-Create new data instead of modifying existing data.
+#### Immutability
+
+Immutability is a core principle of functional programming. Create new data instead of modifying existing data to prevent side effects. Immutable data is thread-safe, easy to reason about, and allows free caching and sharing.
 
 ```scala
 // Immutable list
@@ -50,11 +67,19 @@ val alice = Person("Alice", 30)
 val olderAlice = alice.copy(age = 31)  // alice is not modified
 ```
 
-## Functor
+{{< callout type="info" title="Key Points" >}}
+- Immutable data is thread-safe and easy to reason about
+- Create modified copies with `copy` method
+- Free caching and sharing
+{{< /callout >}}
 
-A type that has a `map` operation.
+#### Functor
 
-### Functor Laws
+A Functor is a type that has a `map` operation. It transforms values inside a container while preserving the structure. Most collections and container types like List, Option, and Future are Functors.
+
+**Functor Laws**
+
+Functors must satisfy two laws. The identity law means mapping with the identity function equals the original, and the composition law means mapping twice is the same as mapping once with the composed function.
 
 ```scala
 // 1. Identity law: fa.map(identity) == fa
@@ -67,7 +92,9 @@ val g = (x: Int) => x * 2
 List(1, 2, 3).map(f).map(g) == List(1, 2, 3).map(f andThen g)
 ```
 
-### Custom Functor
+**Custom Functor**
+
+You can define custom Functors using the type class pattern. `F[_]` is a higher-kinded type representing a type that takes a type parameter.
 
 ```scala
 trait Functor[F[_]]:
@@ -82,9 +109,15 @@ given Functor[List] with
   def map[A, B](fa: List[A])(f: A => B): List[B] = fa.map(f)
 ```
 
-## Applicative
+{{< callout type="info" title="Key Points" >}}
+- Functor is a type with `map` operation
+- Must satisfy identity law and composition law
+- Most containers like List, Option, Future are Functors
+{{< /callout >}}
 
-Combines independent effects.
+#### Applicative
+
+Applicative combines independent effects. More powerful than Functor, it can combine values from multiple independent contexts. `pure` puts a value in a context, and `ap` applies a function in a context to a value in a context.
 
 ```scala
 trait Applicative[F[_]] extends Functor[F]:
@@ -101,17 +134,25 @@ val sum: Option[Int] = (some1, some2) match
   case _ => None
 ```
 
-## Monad
+{{< callout type="info" title="Key Points" >}}
+- Applicative combines independent effects
+- `pure` puts value in context
+- `ap` applies function in context to value
+{{< /callout >}}
 
-Chains sequential effects.
+#### Monad
 
-### Monad Flow Visualization
+Monad chains sequential effects. Through `flatMap`, you can perform the next operation that depends on the previous operation's result. Option, Either, and Future are representative Monads.
+
+**Monad Flow Visualization**
+
+The diagram below shows how flatMap operations work. The first operation's result becomes the input for the next operation.
 
 ```mermaid
 flowchart LR
     subgraph "flatMap operation"
-        A["Option#91;A#93;"] -->|"flatMap"| F["A => Option#91;B#93;"]
-        F --> B["Option#91;B#93;"]
+        A["Option&#91;A&#93;"] -->|"flatMap"| F["A => Option&#91;B&#93;"]
+        F --> B["Option&#91;B&#93;"]
     end
 
     subgraph "Example: Safe division"
@@ -126,7 +167,11 @@ flowchart LR
     end
 ```
 
-### Monad Laws
+*The diagram above shows the flow of flatMap operations and For Comprehension.*
+
+**Monad Laws**
+
+Monads must satisfy three laws. Left identity, right identity, and associativity. These laws guarantee intuitive behavior of for comprehension.
 
 ```scala
 trait Monad[F[_]] extends Applicative[F]:
@@ -137,7 +182,9 @@ trait Monad[F[_]] extends Applicative[F]:
   // m.flatMap(f).flatMap(g) == m.flatMap(a => f(a).flatMap(g))  // Associativity
 ```
 
-### Standard Library Monads
+**Standard Library Monads**
+
+Scala standard library's Option, Either, and Future are all Monads. You can conveniently compose them through for comprehension.
 
 ```scala
 // Option
@@ -166,7 +213,15 @@ yield orders
 // Future(List("Order1-User1"))
 ```
 
-## Option - null Alternative
+{{< callout type="info" title="Key Points" >}}
+- Monad chains sequential effects with `flatMap`
+- Must satisfy left/right identity and associativity laws
+- Option, Either, Future are representative Monads
+{{< /callout >}}
+
+#### Option - null Alternative
+
+Option type-safely represents cases where a value may or may not be present. Using Option instead of null prevents NullPointerException at compile time.
 
 ```scala
 // Safe division
@@ -186,7 +241,15 @@ divide(10, 0).getOrElse(0)  // 0
 divide(10, 2).fold(0)(_ * 2)  // 10
 ```
 
-## Either - Error Handling
+{{< callout type="info" title="Key Points" >}}
+- Option represents presence/absence with Some/None
+- Use instead of null to prevent NullPointerException
+- Safely handle with `getOrElse`, `fold`, `map`, `flatMap`
+{{< /callout >}}
+
+#### Either - Error Handling
+
+Either represents one of two possible results. By convention, Left holds failure (error), and Right holds success. Error information can be specified by type, making it more type-safe than exceptions.
 
 ```scala
 sealed trait ValidationError
@@ -213,7 +276,15 @@ createPerson("Alice", 30)  // Right(Person("Alice", 30))
 createPerson("", 30)       // Left(EmptyName("name"))
 ```
 
-## Try - Exception Handling
+{{< callout type="info" title="Key Points" >}}
+- Either represents result as Left (failure) or Right (success)
+- Error types can be explicitly defined
+- Validation chaining possible with for comprehension
+{{< /callout >}}
+
+#### Try - Exception Handling
+
+Try encapsulates operations that may throw exceptions. Represents results as Success or Failure, allowing exceptions to be treated as values.
 
 ```scala
 import scala.util.{Try, Success, Failure}
@@ -235,7 +306,15 @@ parseInt("abc").getOrElse(0)  // 0
 parseInt("abc").recover { case _: NumberFormatException => 0 }
 ```
 
-## Function Composition
+{{< callout type="info" title="Key Points" >}}
+- Try encapsulates exceptions as Success/Failure
+- Treats exceptions as values instead of throwing
+- Failure recovery possible with `recover`, `recoverWith`
+{{< /callout >}}
+
+#### Function Composition
+
+Function composition is a technique for combining small functions to create larger functions. `andThen` connects functions left-to-right, while `compose` connects right-to-left.
 
 ```scala
 val addOne = (x: Int) => x + 1
@@ -251,7 +330,15 @@ val composed = square compose double compose addOne
 composed(3)  // ((3 + 1) * 2)^2 = 64
 ```
 
-## Currying and Partial Application
+{{< callout type="info" title="Key Points" >}}
+- `andThen`: Connect functions left-to-right
+- `compose`: Connect functions right-to-left
+- Combine small functions to construct complex transformations
+{{< /callout >}}
+
+#### Currying and Partial Application
+
+Currying is a technique for transforming a function that takes multiple arguments into a chain of functions that each take one argument. Partial application creates a new function by providing some arguments.
 
 ```scala
 // Currying
@@ -271,9 +358,13 @@ error("Something went wrong")
 info("Application started")
 ```
 
-## Cats/ZIO Libraries
+#### Cats/ZIO Libraries
 
-### Cats
+The Scala ecosystem has powerful libraries for functional programming. Cats and ZIO are representative.
+
+**Cats**
+
+Cats is a library providing functional programming abstractions. Provides type classes like Functor and Monad, and data types like Validated and Either.
 
 ```scala
 import cats.*
@@ -293,13 +384,15 @@ val invalid: ValidationResult[Int] = Validated.invalid(List("Error"))
 // Invalid(List("Error", "Error"))
 ```
 
-### ZIO
+**ZIO**
+
+ZIO is a library combining effect systems with dependency injection. `ZIO[R, E, A]` represents an effect that requires environment R, may fail with error type E, and returns value of type A.
 
 ```scala
 import zio.*
 import java.io.IOException
 
-// Console operations can throw IOException
+// Console operations may throw IOException
 val program: ZIO[Any, IOException, Int] = for
   _ <- Console.printLine("Enter a number:")
   input <- Console.readLine
@@ -308,9 +401,11 @@ val program: ZIO[Any, IOException, Int] = for
 yield num * 2
 ```
 
-## Exercises
+#### Exercises
 
-### 1. Custom Monad
+Practice functional patterns with the following exercises.
+
+**1. Custom Monad ⭐⭐**
 
 Implement `flatMap` for `Box[A]` type.
 
@@ -330,7 +425,7 @@ val result = for {
 
 </details>
 
-### 2. Error Accumulation
+**2. Error Accumulation ⭐⭐⭐**
 
 Perform multiple validations and collect all errors.
 
@@ -358,13 +453,15 @@ validateAll(results)  // Left(List("Error1", "Error2"))
 
 </details>
 
-## References
+#### References
+
+Resources for deeper learning.
 
 - [Cats Documentation](https://typelevel.org/cats/)
 - [ZIO Documentation](https://zio.dev/)
 - [Functional Programming in Scala](https://www.manning.com/books/functional-programming-in-scala)
 
-## Next Steps
+#### Next Steps
 
 - [Cats Library](https://typelevel.org/cats/)
 - [ZIO Library](https://zio.dev/)

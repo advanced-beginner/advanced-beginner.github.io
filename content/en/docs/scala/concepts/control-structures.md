@@ -1,16 +1,26 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-14"
 title: Control Structures
 weight: 2
 ---
 
-Scala's control structures are **expressions**. That is, all control structures return values.
+{{< callout type="info" title="TL;DR" >}}
+- Scala's if, for, and match are all **expressions** that return values
+- for comprehensions concisely express collection transformations and monadic operations
+- match is more powerful than Java's switch, supporting type matching and guard conditions
+- while is a statement, so avoid it in functional code
+{{< /callout >}}
 
-## if Expression
+**Target Audience:** Developers with experience in other languages like Java/Python
+**Prerequisites:** Scala basic syntax (variables, types)
 
-### Basic Usage
+Scala's control structures are **expressions**. That is, all control structures return values. This is fundamentally different from statement-based control structures in languages like Java or C. The expression-based approach makes code more concise and functional.
 
-Scala's `if` is an expression, not a statement.
+#### if Expression
+
+Scala's `if` is an expression, not a statement. Therefore, there's no need for a ternary operator—if itself returns a value.
+
+**Basic Usage**
 
 ```scala
 val x = 10
@@ -19,13 +29,13 @@ val x = 10
 val result = if (x > 5) "large" else "small or equal"
 println(result)  // large
 
-// No need for ternary operator (if itself returns a value)
+// No ternary operator needed (if itself returns a value)
 val max = if (a > b) a else b
 ```
 
-### Scala 3 Syntax
+**Scala 3 Syntax**
 
-Scala 3 allows using the `then` keyword.
+In Scala 3, you can use the `then` keyword for more natural conditional syntax. Omitting parentheses and using indentation-based syntax makes code more readable.
 
 {{< tabs groupid="scala-version" >}}
 {{% tab title="Scala 3" %}}
@@ -66,9 +76,9 @@ val message = {
 {{% /tab %}}
 {{< /tabs >}}
 
-### Unit Return
+**Unit Return**
 
-Without `else`, the result can be `Unit`.
+Without `else`, the type can be inferred as `Unit`. In this case, if is used for side effects.
 
 ```scala
 val x = 10
@@ -80,11 +90,19 @@ if (x > 5) println("large")
 val result: Unit = if (x > 5) println("large")
 ```
 
-## for Expression
+{{< callout type="info" title="Key Points" >}}
+- if is an **expression** that returns a value, eliminating the need for a ternary operator
+- Scala 3 allows more natural syntax with the `then` keyword
+- Without else, it can return `Unit`
+{{< /callout >}}
 
-Scala's `for` is very powerful. It's used for everything from simple iteration to collection transformation.
+#### for Expression
 
-### Basic Iteration
+Scala's `for` is very powerful. It's used for everything from simple iteration to collection transformation. Also called for comprehensions, it can concisely express monadic operations.
+
+**Basic Iteration**
+
+You can iterate over Range or collection elements. `to` includes the end value, while `until` excludes it.
 
 ```scala
 // Iteration with Range
@@ -104,7 +122,9 @@ for (fruit <- fruits) {
 }
 ```
 
-### Guards (Condition Filters)
+**Guards (Condition Filters)**
+
+Using `if` guards allows processing only elements that meet specific conditions. You can also combine multiple conditions.
 
 ```scala
 // Execute only when condition is true
@@ -120,7 +140,9 @@ for {
 } println(i)  // 15, 30, 45, 60, 75, 90
 ```
 
-### Nested Iteration
+**Nested Iteration**
+
+Using multiple generators allows concise expression of nested iteration. Useful for multiplication tables or coordinate generation.
 
 ```scala
 // Multiplication table
@@ -138,9 +160,9 @@ for {
 } println(s"($x, $y)")
 ```
 
-### yield - Create New Collection
+**yield - Create New Collection**
 
-Using `yield` makes the for expression return a new collection.
+Using `yield` makes the for expression return a new collection. This is equivalent to a combination of map, flatMap, and filter.
 
 ```scala
 // Transform each element to create new list
@@ -163,7 +185,9 @@ val pairs = for {
 // Vector((1,1), (1,2), (1,3), (2,1), (2,2), (2,3), (3,1), (3,2), (3,3))
 ```
 
-### With Pattern Matching
+**With Pattern Matching**
+
+You can use pattern matching in for expressions. Useful for decomposing tuples, case classes, or Option values.
 
 ```scala
 val pairs = List((1, "one"), (2, "two"), (3, "three"))
@@ -179,7 +203,9 @@ for (Some(value) <- maybeValues) {
 }
 ```
 
-### Scala 3 Syntax
+**Scala 3 Syntax**
+
+In Scala 3, you can write match with indentation-based syntax using the `do` keyword.
 
 {{< tabs groupid="scala-version" >}}
 {{% tab title="Scala 3" %}}
@@ -226,9 +252,16 @@ val result = for {
 {{% /tab %}}
 {{< /tabs >}}
 
-## while Loop
+{{< callout type="info" title="Key Points" >}}
+- for is an **expression** that creates new collections with `yield`
+- Guards (`if`) filter conditions, nested generators enable multiple iterations
+- Can be used with pattern matching to decompose tuples or Option values
+- for comprehension is syntactic sugar for map, flatMap, and filter
+{{< /callout >}}
 
-`while` is a statement, not an expression. It doesn't return a value and returns `Unit`.
+#### while Loop
+
+`while` is a statement, not an expression. It doesn't return a value and returns `Unit`. Since it requires mutable state, it's avoided in functional programming.
 
 ```scala
 var i = 0
@@ -238,9 +271,11 @@ while (i < 5) {
 }
 ```
 
-### do-while (Scala 2 Only)
+**do-while (Scala 2 Only)**
 
-> **Note:** `do-while` was **removed in Scala 3**. Use `while` loop instead.
+`do-while` was removed in Scala 3. In Scala 3, you should replace it with another approach.
+
+> ⚠️ **Warning**: `do-while` was **removed in Scala 3**. Use `while` loop instead in Scala 3.
 
 {{< tabs groupid="scala-version" >}}
 {{% tab title="Scala 3" %}}
@@ -277,11 +312,19 @@ do {
 > **In functional programming, prefer `for` or recursion over `while`.**
 > `while` requires mutable state (`var`).
 
-## match Expression
+{{< callout type="info" title="Key Points" >}}
+- while is a **statement** that doesn't return a value (returns `Unit`)
+- Since it requires mutable state (`var`), it's avoided in functional code
+- `do-while` was removed in Scala 3
+{{< /callout >}}
 
-Scala's `match` is much more powerful than Java's `switch`.
+#### match Expression
 
-### Basic Matching
+Scala's `match` is much more powerful than Java's `switch`. It supports value matching, type matching, pattern matching, and guard conditions.
+
+**Basic Matching**
+
+Returns different results based on values. `_` is a wildcard that matches any value.
 
 ```scala
 val day = 3
@@ -299,7 +342,9 @@ val dayName = day match {
 println(dayName)  // Wednesday
 ```
 
-### Type Matching
+**Type Matching**
+
+Can branch based on value types. Safely performs type checking and casting.
 
 ```scala
 def describe(x: Any): String = x match {
@@ -314,7 +359,9 @@ println(describe("hello")) // String: hello
 println(describe(3.14))    // Double: 3.14
 ```
 
-### Guard Conditions
+**Guard Conditions**
+
+Using `if` guards allows specifying additional conditions. Guard conditions are evaluated after pattern matching.
 
 ```scala
 val x = 15
@@ -329,7 +376,9 @@ val result = x match {
 println(result)  // two digit positive
 ```
 
-### OR Pattern
+**OR Pattern**
+
+Using `|` allows grouping multiple patterns into one case.
 
 ```scala
 val char = 'a'
@@ -340,7 +389,9 @@ val result = char match {
 }
 ```
 
-### Scala 3 Syntax
+**Scala 3 Syntax**
+
+In Scala 3, you can write match with indentation-based syntax.
 
 {{< tabs groupid="scala-version" >}}
 {{% tab title="Scala 3" %}}
@@ -370,9 +421,16 @@ val dayName = day match {
 {{% /tab %}}
 {{< /tabs >}}
 
-## Expression vs Statement
+{{< callout type="info" title="Key Points" >}}
+- match is an **expression** that returns a value
+- Supports value matching, type matching, guard conditions (`if`), and OR patterns (`|`)
+- `_` is a wildcard that matches all values
+- More powerful than Java's switch and the foundation of pattern matching
+{{< /callout >}}
 
-Almost everything in Scala is an expression.
+#### Expression vs Statement
+
+Almost everything in Scala is an expression. Blocks, try-catch, and even throw return values.
 
 ```scala
 // Blocks are also expressions - last value is the result
@@ -392,19 +450,24 @@ val parsed: Int = try {
 
 // throw is also an expression (Nothing type)
 def divide(a: Int, b: Int): Int =
-  if (b == 0) throw new ArithmeticException("Cannot divide by 0")
+  if (b == 0) throw new ArithmeticException("Cannot divide by zero")
   else a / b
 ```
 
-## Exercises
+{{< callout type="info" title="Key Points" >}}
+- Almost everything in Scala is an **expression**
+- The last value of a block becomes the result value
+- try-catch is also an expression that returns a value
+- throw is an expression of type `Nothing`
+{{< /callout >}}
 
-### 1. FizzBuzz
+#### Exercises
 
-For numbers 1 to 100:
-- Multiple of 3: "Fizz"
-- Multiple of 5: "Buzz"
-- Multiple of both 3 and 5: "FizzBuzz"
-- Otherwise: print the number
+Practice control structures with these exercises.
+
+**1. FizzBuzz**
+
+For numbers 1 to 100, print "Fizz" for multiples of 3, "Buzz" for multiples of 5, "FizzBuzz" for multiples of both 3 and 5, and the number otherwise.
 
 <details>
 <summary>Show Answer</summary>
@@ -423,7 +486,7 @@ for (i <- 1 to 100) {
 
 </details>
 
-### 2. Multiplication Table
+**2. Multiplication Table**
 
 Generate a multiplication table from 2 to 9 using `for` + `yield`.
 
@@ -441,14 +504,9 @@ table.foreach(println)
 
 </details>
 
-### 3. Grade Calculator
+**3. Grade Calculator**
 
-Write a function that takes a score (0-100) and returns a letter grade.
-- 90 and above: A
-- 80 and above: B
-- 70 and above: C
-- 60 and above: D
-- Below 60: F
+Write a function that takes a score (0-100) and returns a letter grade: A for 90 and above, B for 80 and above, C for 70 and above, D for 60 and above, and F for below 60.
 
 <details>
 <summary>Show Answer</summary>
@@ -469,7 +527,9 @@ println(grade(55))  // F
 
 </details>
 
-## Next Steps
+#### Next Steps
+
+Once you've learned control structures, proceed to the next topics.
 
 - [Functions and Methods](../functions-methods/) — Function definition and advanced features
 - [Pattern Matching](../pattern-matching/) — Advanced match expressions

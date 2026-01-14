@@ -1,14 +1,28 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-14"
 title: Generics
 weight: 9
 ---
 
-Generics allow you to write type-safe and reusable code.
+{{< callout type="info" title="TL;DR" >}}
+- Generics allow you to write **type-safe and reusable code**
+- Upper bound (`A <: B`): A is a subtype of B
+- Lower bound (`A >: B`): A is a supertype of B
+- Context bound (`A : Ordering`): Requires a type class instance
+{{< /callout >}}
 
-## Type Parameters
+**Target Audience:** Developers familiar with Java generics
+**Prerequisites:** Classes, traits, basic type system
 
-### In Classes
+Generics allow you to write type-safe and reusable code. Through type parameters, you can define classes and methods that work with various types, while ensuring type safety at compile time.
+
+#### Type Parameters
+
+Type parameters can be used in classes, traits, and methods. They are declared within brackets `[]`, and by convention use single capital letters like A, B, T.
+
+**In Classes**
+
+Declaring type parameters in a class creates a generalized class for that type.
 
 ```scala
 // Single type parameter
@@ -23,7 +37,11 @@ val strBox = new Box("hello")
 intBox.get        // 42
 strBox.get        // "hello"
 intBox.map(_ * 2) // Box(84)
+```
 
+You can also use multiple type parameters simultaneously.
+
+```scala
 // Multiple type parameters
 class Pair[A, B](val first: A, val second: B) {
   def swap: Pair[B, A] = new Pair(second, first)
@@ -35,7 +53,9 @@ pair.second  // "one"
 pair.swap    // Pair("one", 1)
 ```
 
-### In Methods
+**In Methods**
+
+Methods can also declare independent type parameters. The compiler infers types from argument types when the method is called.
 
 ```scala
 def identity[A](x: A): A = x
@@ -48,7 +68,9 @@ def swap[A, B](pair: (A, B)): (B, A) = (pair._2, pair._1)
 swap((1, "one"))  // ("one", 1)
 ```
 
-### In Traits
+**In Traits**
+
+Traits can also have type parameters, and classes implementing them specify concrete types.
 
 ```scala
 trait Container[A] {
@@ -62,9 +84,19 @@ class Box[A](value: A) extends Container[A] {
 }
 ```
 
-## Type Bounds
+{{< callout type="info" title="Key Points" >}}
+- Type parameters can be declared in classes, methods, and traits
+- By convention, use single capital letters like A, B, T
+- The compiler automatically infers types in most cases
+{{< /callout >}}
 
-### Type Bounds Visualization
+#### Type Bounds
+
+Type bounds restrict the range of types that a type parameter can have. You can specify the allowed range in the type hierarchy through upper and lower bounds.
+
+**Type Bounds Visualization**
+
+The diagram below visualizes the concepts of upper and lower bounds.
 
 ```mermaid
 graph TB
@@ -89,7 +121,11 @@ graph TB
     end
 ```
 
-### Upper Bound
+*The diagram above shows how upper and lower bounds work in the type hierarchy.*
+
+**Upper Bound**
+
+An upper bound specifies that a type parameter must be a subtype of a specific type.
 
 `A <: B` means A must be a subtype of B.
 
@@ -109,7 +145,15 @@ printNames(List(Dog("Buddy"), Dog("Max")))
 // printNames(List("not an animal"))  // Compile error
 ```
 
-### Lower Bound
+{{< callout type="info" title="Key Points" >}}
+- `A <: B`: A must be a subtype of B
+- Ensures the type parameter has specific methods
+- Secures type safety by allowing only limited range of types
+{{< /callout >}}
+
+**Lower Bound**
+
+A lower bound specifies that a type parameter must be a supertype of a specific type. Frequently used when handling method parameters in covariant types.
 
 `A >: B` means A must be a supertype of B.
 
@@ -130,7 +174,15 @@ addFruit(fruits, new RedApple)  // OK - RedApple upcasts to Apple
 
 > **Key insight:** `B >: Apple` means "B is Apple or a supertype of Apple". Subtypes (RedApple) can also be used as they upcast to Apple.
 
-### Context Bound
+{{< callout type="info" title="Key Points" >}}
+- `A >: B`: A must be a supertype of B
+- Used when handling method parameters in covariant types
+- Subtypes can also be used through upcasting
+{{< /callout >}}
+
+**Context Bound**
+
+A context bound declares that an implicit instance of a specific type class must exist. Written as `A : Ordering`, it means an implicit value of type `Ordering[A]` must be in scope.
 
 `A : Ordering` means an implicit instance of `Ordering[A]` is required.
 
@@ -149,7 +201,15 @@ def max2[A](a: A, b: A)(implicit ord: Ordering[A]): A =
   if (ord.gt(a, b)) a else b
 ```
 
-## Type Inference
+{{< callout type="info" title="Key Points" >}}
+- `A : Ordering`: Requires implicit instance of Ordering[A]
+- Frequently used with type class pattern
+- Access implicit values with `implicitly`
+{{< /callout >}}
+
+#### Type Inference
+
+The Scala compiler automatically infers type parameters in most cases. Explicit type specification is needed when there isn't enough information to infer, such as when creating empty collections or using None.
 
 ```scala
 // Types are inferred
@@ -161,9 +221,19 @@ val empty = List.empty[Int]        // List[Int]
 val none: Option[Int] = None       // Option[Int]
 ```
 
-## Common Generic Types
+{{< callout type="info" title="Key Points" >}}
+- Type parameters are automatically inferred in most cases
+- Empty collections or None require explicit types
+- Specify types when there's insufficient inference information
+{{< /callout >}}
 
-### Option[A]
+#### Common Generic Types
+
+The Scala standard library has widely used generic types. Option, Either, and Try are representative types for type-safe representation of operations that may fail.
+
+**Option[A]**
+
+Option represents cases where a value may or may not be present. Used instead of null to prevent NullPointerException.
 
 ```scala
 val some: Option[Int] = Some(42)
@@ -175,7 +245,9 @@ some.getOrElse(0)      // 42
 none.getOrElse(0)      // 0
 ```
 
-### Either[A, B]
+**Either[A, B]**
+
+Either holds one of two possible types. By convention, Left holds failure (error info), and Right holds success value.
 
 ```scala
 val right: Either[String, Int] = Right(42)
@@ -191,7 +263,9 @@ right match {
 }
 ```
 
-### Try[A]
+**Try[A]**
+
+Try encapsulates operations that may throw exceptions. Represents results as Success or Failure, treating exceptions as values instead of throwing them.
 
 ```scala
 import scala.util.{Try, Success, Failure}
@@ -206,7 +280,15 @@ success.getOrElse(0)   // 42
 failure.getOrElse(0)   // 0
 ```
 
-## Generic ADT
+{{< callout type="info" title="Key Points" >}}
+- Option: Represents presence/absence of value (Some/None)
+- Either: One of two results (Left/Right)
+- Try: Encapsulates exception handling (Success/Failure)
+{{< /callout >}}
+
+#### Generic ADT
+
+You can define Algebraic Data Types (ADT) using generics. Through type parameters, you can create versatile structures that express various result types.
 
 ```scala
 // Generic result type
@@ -224,7 +306,15 @@ divide(10, 2) match {
 }
 ```
 
-## Comparison with Java Generics
+{{< callout type="info" title="Key Points" >}}
+- Define generic ADT with sealed trait + case class
+- Handle unused type parameters with Nothing type
+- Use pattern matching for type-safe branching
+{{< /callout >}}
+
+#### Comparison with Java Generics
+
+Scala and Java generic syntax are similar but have some differences. The table below summarizes the main differences.
 
 | Feature | Scala | Java |
 |---------|-------|------|
@@ -244,9 +334,11 @@ def process[A <: Comparable[A]](a: A): Unit = ???
 // void process<A extends Comparable<A>>(A a) { ... }
 ```
 
-## Exercises
+#### Exercises
 
-### 1. Generic Stack Implementation
+Practice generic concepts with the following exercises.
+
+**1. Generic Stack Implementation ⭐⭐⭐**
 
 Implement an immutable Stack with generics.
 
@@ -278,9 +370,9 @@ val (top, rest) = stack.pop  // (3, Stack(2, 1))
 
 </details>
 
-### 2. Generic find Function
+**2. Generic find Function ⭐⭐**
 
-Implement a generic function to find the first element matching a condition.
+Implement a generic function to find the first element matching a condition in a list.
 
 <details>
 <summary>Show Answer</summary>
@@ -299,7 +391,7 @@ find(List("a", "bb", "ccc"))(_.length > 2)  // Some("ccc")
 
 </details>
 
-## Next Steps
+#### Next Steps
 
-- [Variance](../variance/) — Generic type variance
+- [Variance](../variance/) — Variance in generic types
 - [Type Classes](../type-classes/) — Ad-hoc polymorphism
