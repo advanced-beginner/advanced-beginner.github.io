@@ -1,5 +1,6 @@
 ---
 title: Observability
+bookCollapseSection: true
 description: 시스템 관측성 실무 가이드 - Metrics, Logs, Traces 3요소부터 Prometheus, Grafana, PromQL 심화까지
 weight: 5
 author: "@advanced-beginner"

@@ -1,5 +1,6 @@
 ---
 title: Observability
+bookCollapseSection: true
 description: Practical guide to system observability - From the three pillars of Metrics, Logs, and Traces to advanced Prometheus, Grafana, and PromQL
 weight: 5
 author: "@advanced-beginner"

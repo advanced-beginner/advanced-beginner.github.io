@@ -1,5 +1,6 @@
 ---
 title: Domain-Driven Design
+bookCollapseSection: true
 description: 복잡한 비즈니스 로직을 체계적으로 다루는 DDD 가이드 - 전략적/전술적 설계, Aggregate, CQRS, 이벤트 소싱
 weight: 2
 lastmod: 2026-01-09

@@ -1,8 +1,9 @@
 ---
-lastmod: "2026-01-14"
 title: Scala
+bookCollapseSection: true
 description: Scala guide combining functional and object-oriented programming - from basic syntax to type system, higher-order functions, and type classes
 weight: 3
+lastmod: "2026-01-14"
 ---
 
 #### What is Scala?

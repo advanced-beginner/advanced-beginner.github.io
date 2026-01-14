@@ -1,5 +1,6 @@
 ---
 title: Kubernetes
+bookCollapseSection: true
 description: 컨테이너 오케스트레이션 플랫폼 Kubernetes 실무 가이드 - Pod, Deployment, Service부터 스케일링, 모니터링까지
 weight: 5
 lastmod: "2026-01-11"

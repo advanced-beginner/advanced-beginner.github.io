@@ -1,5 +1,6 @@
 ---
 title: Elasticsearch
+bookCollapseSection: true
 description: 분산 검색 엔진 Elasticsearch 실무 가이드 - 검색, 집계, 데이터 모델링, 성능 튜닝까지
 weight: 5
 lastmod: 2026-01-08
