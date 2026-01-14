@@ -2,16 +2,17 @@
 title: Apache Spark
 description: Apache Spark Guide for Java/Spring Developers - DataFrame API, SQL, Streaming, Cluster Deployment
 weight: 4
-lastmod: "2026-01-07"
+lastmod: "2026-01-09"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
-
-## What is Apache Spark?
 
 Apache Spark is a **unified analytics engine for large-scale data processing**. It provides processing speeds up to 100x faster in memory and 10x faster on disk compared to Hadoop MapReduce, supporting multiple languages including Java, Scala, Python, and R.
 
 Spark is called a "unified" engine because it handles batch processing, real-time streaming, machine learning, and graph analysis all on a single platform.
 
-### Why Do You Need Spark?
+**Why Do You Need Spark?**
 
 Let's consider common situations Java/Spring developers face when dealing with large-scale data:
 
@@ -23,7 +24,11 @@ Let's consider common situations Java/Spring developers face when dealing with l
 | Batch and real-time processing require separate systems | Same API for both batch and streaming |
 | Different tools needed for each data pipeline | SQL, DataFrame, ML all unified in one API |
 
-### Key Features of Spark
+As shown above, Spark effectively solves problems like memory shortage, DB load, and system fragmentation through distributed processing and unified APIs.
+
+**Key Features of Spark**
+
+Spark provides four key capabilities:
 
 **1. In-Memory Computing**
 Intermediate results are stored in memory rather than disk, providing dramatic performance improvements for iterative operations. This is especially effective for machine learning algorithms that repeatedly process the same data.
@@ -40,7 +45,9 @@ Through RDD lineage information, data loss triggers automatic recomputation. Rel
 - **MLlib**: Distributed machine learning
 - **GraphX**: Graph analysis
 
-### When Should You Use Spark?
+**When Should You Use Spark?**
+
+When considering Spark adoption, evaluate based on data scale and processing complexity.
 
 **Suitable cases:**
 - When processing large-scale data (tens of GBs or more)
@@ -57,11 +64,14 @@ Through RDD lineage information, data loss triggers automatic recomputation. Rel
 
 ## What This Guide Covers
 
-### [Quick Start](quick-start/)
+This guide is structured step-by-step so Java/Spring developers can apply Spark in practice.
+
+**[Quick Start](quick-start/)**
 Run a Spark application in 5 minutes. See working code before concepts.
 
-### [Concepts](concepts/)
-Explains Spark's core principles from a **Java/Spring developer's perspective**.
+**[Concepts](concepts/)**
+
+Explains Spark's core principles from a **Java/Spring developer's perspective**. The table below summarizes topics covered in each concept document:
 
 | Topic | What You'll Learn |
 |-------|-------------------|
@@ -77,13 +87,25 @@ Explains Spark's core principles from a **Java/Spring developer's perspective**.
 | [Performance Tuning](concepts/tuning/) | Memory, partition, shuffle optimization |
 | [Deployment and Cluster Management](concepts/deployment/) | Standalone, YARN, Kubernetes configuration |
 
-### [Hands-on Examples](examples/)
-Executable example code based on Spring Boot.
+Learning these concepts in order will give you a systematic understanding of Spark's internals.
+
+**[Hands-on Examples](examples/)**
+
+Executable example code based on Spring Boot. Learn through practice from environment setup to basic data processing:
 
 - [Environment Setup](examples/setup/) - Java/Spring Boot and Spark integration setup
 - [Basic Examples](examples/basic/) - Fundamentals of data loading, transformation, aggregation
 
-### [Appendix](appendix/)
+**[How-To Guides](howto/)**
+
+Step-by-step guides for solving specific problems:
+- [Troubleshooting OutOfMemoryError](howto/oom-troubleshooting/) - Diagnosing and resolving memory errors
+- [Resolving Data Skew](howto/data-skew/) - Fixing partition imbalance
+- [Optimizing Shuffle](howto/shuffle-optimization/) - Minimizing network I/O
+
+**[Appendix](appendix/)**
+
+Reference materials for use during learning:
 - [Glossary](appendix/glossary/) - Quick reference for Spark terms
 - [FAQ](appendix/faq/) - Frequently asked questions
 - [References](appendix/references/) - Official docs and additional learning resources
@@ -102,16 +124,22 @@ Comparing Spark with Hadoop MapReduce helps understand Spark's position:
 | Language Support | Mainly Java | Java, Scala, Python, R |
 | Learning Curve | Steep | Relatively gentle |
 
+As shown in the table above, Spark provides significant performance improvements and development convenience over MapReduce through memory-based processing and high-level APIs.
+
 > **Note:** Spark doesn't replace Hadoop but can run on top of the Hadoop ecosystem (HDFS, YARN). Many companies use HDFS for storage and Spark as the processing engine.
 
 ## Prerequisites
+
+The following knowledge is required to effectively learn from this guide:
 
 - **Required**: Java basics, Collections API (Stream, Lambda)
 - **Helpful**: SQL basics, Spring Boot experience, basic distributed systems concepts
 
 ## Learning Path Guide
 
-### Learning Paths by Role
+Efficient learning order varies by role and goals. The diagram below shows recommended learning paths by role:
+
+**Learning Paths by Role**
 
 ```mermaid
 flowchart TD
@@ -137,7 +165,9 @@ flowchart TD
     DA3 --> DA4[MLlib]
 ```
 
-### Documents by Difficulty
+**Documents by Difficulty**
+
+Each document has different difficulty levels and estimated learning times. Use the table below to start with documents matching your current level:
 
 | Document | Difficulty | Est. Time | Prerequisites |
 |----------|------------|-----------|---------------|
@@ -159,7 +189,9 @@ flowchart TD
 | **Deployment** | ⭐⭐⭐⭐ Advanced | 60 min | Architecture, Performance Tuning |
 | **Spark Connect** | ⭐⭐⭐⭐⭐ Expert | 45 min | Deployment |
 
-### Recommended Paths by Goal
+**Recommended Paths by Goal**
+
+If you need a concrete learning schedule, refer to the weekly plan below:
 
 **Week 1 - Building Foundations (Beginners)**
 ```
@@ -185,6 +217,8 @@ Day 5:   Deployment → Spark Connect
 Each document can be read independently, but we recommend the order above if you're new.
 
 ## Common Misconceptions
+
+Here are common misconceptions about Spark:
 
 **"Spark requires Hadoop"** — No. Spark can run in Standalone mode, Kubernetes, YARN, and various other environments. For local development, you can run it directly without Hadoop.
 

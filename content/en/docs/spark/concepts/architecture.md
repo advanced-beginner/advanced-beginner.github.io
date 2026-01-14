@@ -1,10 +1,27 @@
 ---
 title: Architecture
 weight: 1
-lastmod: "2026-01-07"
+lastmod: "2026-01-10"
+author:
+  name: Advanced Beginner
+  github: advanced-beginner
 ---
 
-# Spark Architecture
+{{< callout type="info" title="TL;DR" >}}
+- Spark consists of Driver (coordinator) + Executor (workers) + Cluster Manager (resource management)
+- All Transformations are represented as DAG, split into Job → Stage → Task on Action call
+- Memory uses Unified Memory model where Execution (computation) and Storage (cache) dynamically share
+- For Java/Spring developers, SparkSession is like Spring Container, Executor is like Thread Pool Worker
+{{< /callout >}}
+
+**Target Audience**: Developers with Java/Spring backend development experience
+
+**Prerequisites**:
+- Java basic syntax and JVM memory structure understanding
+- Basic multithreading concepts (Thread, ExecutorService)
+- Basic distributed systems concepts (optional)
+
+---
 
 Understand how Spark applications run in a distributed environment. We'll explain using concepts familiar to Java/Spring developers.
 
