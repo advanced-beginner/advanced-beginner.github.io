@@ -20,6 +20,18 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 
 ## 제공하는 가이드
 
+| 기술 | 문서 | How-to | 설명 |
+|------|:----:|:------:|------|
+| [Apache Kafka](docs/kafka/) | 22 | 2 | 분산 메시징 시스템 |
+| [Domain-Driven Design](docs/ddd/) | 21 | 1 | 복잡한 비즈니스 로직 설계 |
+| [Scala](docs/scala/) | 28 | 2 | 함수형 + 객체지향 JVM 언어 |
+| [Apache Spark](docs/spark/) | 24 | 3 | 대규모 데이터 분산 처리 |
+| [Kubernetes](docs/kubernetes/) | 18 | 2 | 컨테이너 오케스트레이션 |
+| [Elasticsearch](docs/elasticsearch/) | 20 | 2 | 분산 검색 엔진 |
+| [Observability](docs/observability/) | 28 | 2 | 시스템 관측성 (Metrics, Logs, Traces) |
+
+---
+
 ### [Apache Kafka](docs/kafka/)
 
 분산 메시징 시스템의 실무 활용법. Producer/Consumer 기본부터 트랜잭션, 복제, 장애 처리, 성능 튜닝까지.
@@ -60,6 +72,16 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 - Structured Streaming으로 실시간 데이터 처리
 - 메모리 튜닝과 성능 최적화 전략
 
+### [Kubernetes](docs/kubernetes/)
+
+컨테이너 오케스트레이션 플랫폼 실무 가이드. Pod, Deployment, Service부터 스케일링, 네트워킹, 모니터링까지.
+
+**배우는 것:**
+- Kubernetes 아키텍처와 핵심 리소스 (Pod, Deployment, Service)
+- ConfigMap/Secret으로 설정 관리
+- HPA를 통한 자동 스케일링
+- 헬스 체크와 무중단 배포 전략
+
 ### [Elasticsearch](docs/elasticsearch/)
 
 대용량 검색과 실시간 분석을 위한 분산 검색 엔진. RDB의 한계를 넘는 전문 검색과 현실적인 운영 노하우를 다룹니다.
@@ -98,6 +120,8 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 - **Scala 타입 시스템을 깊이 이해하고 싶다면** → [Type Classes](docs/scala/concepts/type-classes/)
 - **Spark로 대용량 데이터를 처리하고 싶다면** → [Spark Quick Start](docs/spark/quick-start/)
 - **Spark 내부 구조를 이해하고 싶다면** → [Spark 아키텍처](docs/spark/concepts/architecture/)
+- **Kubernetes를 처음 접한다면** → [Kubernetes Quick Start](docs/kubernetes/quick-start/)
+- **Kubernetes 리소스 설정을 최적화하고 싶다면** → [리소스 관리](docs/kubernetes/concepts/resources/)
 - **검색 엔진을 도입하고 싶다면** → [Elasticsearch Quick Start](docs/elasticsearch/quick-start/)
 - **한글 검색을 최적화하고 싶다면** → [한글 검색 최적화](docs/elasticsearch/concepts/korean-search/)
 - **시스템 모니터링을 시작하고 싶다면** → [Observability Quick Start](docs/observability/quick-start/)

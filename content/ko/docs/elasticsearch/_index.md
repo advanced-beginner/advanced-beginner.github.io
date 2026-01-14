@@ -121,6 +121,11 @@ Spring Boot 기반의 실행 가능한 예제 코드입니다.
 - [기본 예제](examples/basic/) - Document CRUD와 기본 검색 구현
 - [상품 검색 시스템](examples/product-search/) - 한글 검색, 자동완성, 필터링 구현
 
+### [하우투 가이드](howto/)
+특정 문제를 해결하기 위한 단계별 가이드입니다:
+- [느린 쿼리 최적화](howto/slow-query-optimization/) - 검색 응답 시간이 느릴 때 대응
+- [메모리 문제 해결](howto/memory-troubleshooting/) - OOM, GC 문제 진단 및 해결
+
 ### [부록](appendix/)
 - [용어 사전](appendix/glossary/) - Elasticsearch 용어 빠른 참조
 - [FAQ](appendix/faq/) - 자주 묻는 질문
