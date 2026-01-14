@@ -1,37 +1,37 @@
 ---
-lastmod: "2026-01-07"
+lastmod: "2026-01-10"
 title: Advanced Error Handling
 weight: 9
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
-# Advanced Error Handling
+{{< callout type="info" title="TL;DR" >}}
+- Error types: Deserialization errors (skip), Transient errors (retry), Permanent errors (DLT)
+- Use @RetryableTopic for declarative retry and DLT handling (Spring Kafka 2.7+)
+- DefaultErrorHandler + DeadLetterPublishingRecoverer for DLT publishing
+- Handle deserialization errors with ErrorHandlingDeserializer
+- Set up alerts when DLT messages arrive for quick response
+{{< /callout >}}
 
-Understanding Kafka Consumer error handling strategies and the Dead Letter Topic pattern.
+**Target Audience**: Developers implementing Consumer error handling strategies
 
-> **Common Imports for examples in this page:**
-> ```java
-> import org.springframework.kafka.annotation.KafkaListener;
-> import org.springframework.kafka.annotation.RetryableTopic;
-> import org.springframework.kafka.annotation.DltHandler;
-> import org.springframework.kafka.retrytopic.TopicSuffixingStrategy;
-> import org.springframework.kafka.retrytopic.DltStrategy;
-> import org.springframework.kafka.listener.DefaultErrorHandler;
-> import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
-> import org.springframework.util.backoff.FixedBackOff;
-> import org.springframework.util.backoff.ExponentialBackOff;
-> import org.springframework.retry.annotation.Backoff;
-> import org.springframework.kafka.support.KafkaHeaders;
-> import org.apache.kafka.clients.consumer.ConsumerRecord;
-> ```
+**Prerequisites**: Consumer operation principles from [Consumer Group & Offset](../consumer-group/), Spring Kafka basics
 
-## Error Types
+---
+
+Understand Kafka Consumer error handling strategies and Dead Letter Topic patterns.
+
+#### Error Types
+
+Errors occurring in Kafka Consumer are broadly classified into three types.
 
 ```mermaid
 flowchart TB
     subgraph Errors["Error Types"]
-        DESER["Deserialization Error<br>(Message format issue)"]
-        TRANS["Transient Error<br>(Network, DB connection)"]
-        PERM["Permanent Error<br>(Business logic failure)"]
+        DESER["Deserialization Errors<br>(Message format issues)"]
+        TRANS["Transient Errors<br>(Network, DB connection)"]
+        PERM["Permanent Errors<br>(Business logic failure)"]
     end
 
     DESER --> SKIP["Skip/DLT"]
@@ -39,15 +39,25 @@ flowchart TB
     PERM --> DLT["Dead Letter Topic"]
 ```
 
-| Type | Example | Handling |
-|------|---------|----------|
-| **Deserialization** | JSON parsing failure | Skip or DLT |
-| **Transient** | DB connection failure, timeout | Retry |
-| **Permanent** | Validation failure | DLT |
+*Diagram: Handling strategy by error type - Deserialization errors are skipped/DLT, transient errors are retried, permanent errors are sent to DLT.*
 
-## Basic Error Handling
+Deserialization errors are message format issues like JSON parsing failure.
 
-### DefaultErrorHandler (Spring Kafka 2.8+)
+{{< callout type="info" title="Key Points" >}}
+- Deserialization errors: Message format issues, retry is pointless → skip/DLT
+- Transient errors: DB connection, timeout, etc. → can be resolved with retry
+- Permanent errors: Business logic failure → send to DLT for separate handling
+{{< /callout >}} Since the message itself is wrong, retrying won't solve it. Skip or send to Dead Letter Topic.
+
+Transient errors are temporary issues like DB connection failures or timeouts. Since retrying after a short wait has high success probability, apply retry strategy.
+
+Permanent errors are business logic issues like validation failures. Since retrying produces the same result, send to Dead Letter Topic for separate handling.
+
+#### Basic Error Handling
+
+**DefaultErrorHandler (Spring Kafka 2.8+)**
+
+The default error handler provided since Spring Kafka 2.8. Retries at configured intervals and count, and skips the record after maximum retry count is exceeded.
 
 ```java
 @Configuration
@@ -63,28 +73,11 @@ public class KafkaConfig {
 }
 ```
 
-### Retry Strategies
+**Retry Strategies**
 
-#### FixedBackOff
+FixedBackOff retries at fixed intervals. The example above retries 3 times at 1 second intervals.
 
-```mermaid
-sequenceDiagram
-    participant C as Consumer
-    participant H as Handler
-
-    C->>H: Attempt 1
-    H--xC: Failure
-    Note over C: Wait 1 second
-    C->>H: Attempt 2
-    H--xC: Failure
-    Note over C: Wait 1 second
-    C->>H: Attempt 3
-    H--xC: Failure
-    Note over C: Max retries exceeded
-    C->>C: Skip record
-```
-
-#### ExponentialBackOff
+ExponentialBackOff increases wait time exponentially. First retry after 1 second, second after 2 seconds, third after 4 seconds, and so on.
 
 ```java
 @Bean
@@ -95,20 +88,9 @@ public DefaultErrorHandler errorHandler() {
 }
 ```
 
-```
-Attempt 1: Immediately
-Attempt 2: After 1 second
-Attempt 3: After 2 seconds
-Attempt 4: After 4 seconds
-Attempt 5: After 8 seconds
-...
-```
+#### Dead Letter Topic (DLT)
 
-## Dead Letter Topic (DLT)
-
-A separate Topic to store messages that cannot be processed even after retries.
-
-### Basic Flow
+Dead Letter Topic is a separate Topic that stores messages that cannot be processed after retries. By not discarding failed messages but keeping them, you can analyze or manually process them later.
 
 ```mermaid
 flowchart LR
@@ -126,12 +108,22 @@ flowchart LR
     end
 
     MSG --> PROC
-    PROC -->|Failure| RETRY
+    PROC -->|Fail| RETRY
     RETRY -->|Max retries exceeded| DEAD
     RETRY -->|Success| DONE[Done]
 ```
 
-### DeadLetterPublishingRecoverer
+*Diagram: DLT processing flow - On message processing failure, retry, send to Dead Letter Topic when max retries exceeded.*
+
+{{< callout type="info" title="Key Points" >}}
+- Dead Letter Topic: Storage space for messages that failed after retries
+- Failed messages are kept (not discarded) for analysis/manual processing
+- Default DLT Topic name: original-topic.DLT (e.g., orders.DLT)
+{{< /callout >}}
+
+**DeadLetterPublishingRecoverer**
+
+DLT publishing feature provided by Spring Kafka. Sends messages to DLT when they fail after maximum retries. Default DLT Topic name is `original-topic.DLT` (e.g., `orders.DLT`).
 
 ```java
 @Configuration
@@ -152,9 +144,9 @@ public class KafkaConfig {
 }
 ```
 
-DLT Topic naming convention: `original-topic.DLT` (e.g., `orders.DLT`)
+**DLT Customization**
 
-### DLT Customization
+You can change the DLT Topic name or configure certain exceptions to not retry.
 
 ```java
 @Bean
@@ -170,7 +162,7 @@ public DefaultErrorHandler errorHandler(
                     record.partition()
                 ));
 
-    // Don't retry specific exceptions
+    // Don't retry certain exceptions
     DefaultErrorHandler handler = new DefaultErrorHandler(
         recoverer,
         new FixedBackOff(1000L, 3L)
@@ -185,11 +177,13 @@ public DefaultErrorHandler errorHandler(
 }
 ```
 
-## @RetryableTopic (Recommended)
+ValidationException or NullPointerException produce the same result on retry, so send immediately to DLT.
 
-Declarative retry and DLT handling provided in Spring Kafka 2.7+.
+#### @RetryableTopic (Recommended)
 
-### Basic Usage
+Declarative retry and DLT handling provided in Spring Kafka 2.7+. Define retry policy with annotations for cleaner code.
+
+**Basic Usage**
 
 ```java
 @Component
@@ -210,27 +204,37 @@ public class OrderConsumer {
                           @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                           @Header(KafkaHeaders.EXCEPTION_MESSAGE) String error) {
         log.error("DLT received - Topic: {}, Error: {}", topic, error);
-        // DLT message handling (alerts, logging, etc.)
+        // DLT message processing (alerts, logging, etc.)
         alertService.sendAlert(event, error);
     }
 }
 ```
 
-### Retry Topic Structure
+**Retry Topic Structure**
+
+@RetryableTopic automatically creates retry Topics. On failure from original orders, it goes through orders-retry-0, orders-retry-1, orders-retry-2, and finally to orders-dlt.
 
 ```mermaid
 flowchart LR
-    ORIG["orders"] -->|Failure| R0["orders-retry-0"]
-    R0 -->|Failure| R1["orders-retry-1"]
-    R1 -->|Failure| R2["orders-retry-2"]
-    R2 -->|Failure| DLT["orders-dlt"]
+    ORIG["orders"] -->|Fail| R0["orders-retry-0"]
+    R0 -->|Fail| R1["orders-retry-1"]
+    R1 -->|Fail| R2["orders-retry-2"]
+    R2 -->|Fail| DLT["orders-dlt"]
 
     R0 -->|Success| DONE1[Done]
     R1 -->|Success| DONE2[Done]
     R2 -->|Success| DONE3[Done]
 ```
 
-### Advanced Configuration
+*Diagram: @RetryableTopic retry flow - On failure from orders, goes through orders-retry-0, retry-1, retry-2, and finally to orders-dlt.*
+
+{{< callout type="info" title="Key Points" >}}
+- @RetryableTopic: Declarative retry and DLT handling (Spring Kafka 2.7+)
+- Auto-creates retry Topics: topic-retry-0, retry-1, ..., topic-dlt
+- Implement DLT message handling logic with @DltHandler
+{{< /callout >}}
+
+**Advanced Settings**
 
 ```java
 @RetryableTopic(
@@ -248,22 +252,11 @@ public void consume(OrderEvent event) {
 }
 ```
 
-### Configuration Options
+attempts is total attempt count (default 3). backoff.delay is base wait time (default 1000ms), backoff.multiplier is wait time increase rate (default 0 for fixed), backoff.maxDelay is maximum wait time. include specifies exceptions to retry, exclude specifies exceptions not to retry.
 
-| Option | Description | Default |
-|--------|-------------|---------|
-| `attempts` | Total attempts | 3 |
-| `backoff.delay` | Base wait time | 1000ms |
-| `backoff.multiplier` | Wait time multiplier | 0 (fixed) |
-| `backoff.maxDelay` | Max wait time | - |
-| `include` | Exceptions to retry | All exceptions |
-| `exclude` | Exceptions not to retry | - |
+#### Deserialization Error Handling
 
-## Deserialization Error Handling
-
-### ErrorHandlingDeserializer
-
-Handles message deserialization failures.
+When message deserialization fails, Consumer cannot process that message. Using ErrorHandlingDeserializer allows handling deserialization failures in the application.
 
 ```yaml
 spring:
@@ -276,6 +269,8 @@ spring:
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
         spring.json.trusted.packages: "com.example.*"
 ```
+
+On deserialization failure, value is passed as null, and exception information is included in headers.
 
 ```java
 @KafkaListener(topics = "orders")
@@ -290,11 +285,11 @@ public void consume(ConsumerRecord<String, OrderEvent> record) {
 }
 ```
 
-## Error Handling Patterns
+#### Error Handling Patterns
 
-### Pattern 1: Retry + DLT
+**Pattern 1: Retry + DLT**
 
-The most common pattern.
+The most common pattern. Retry a certain number of times, then send to DLT on failure.
 
 ```java
 @RetryableTopic(attempts = "4")
@@ -310,7 +305,9 @@ public void handleDlt(OrderEvent event) {
 }
 ```
 
-### Pattern 2: Conditional Retry
+**Pattern 2: Conditional Retry**
+
+Decide whether to retry based on exception type. Retry transient errors, log and skip permanent errors.
 
 ```java
 @KafkaListener(topics = "orders")
@@ -318,17 +315,19 @@ public void consume(OrderEvent event) {
     try {
         processOrder(event);
     } catch (TemporaryException e) {
-        // Retryable → throw exception
+        // Can retry → throw exception
         throw e;
     } catch (PermanentException e) {
-        // Not retryable → log and skip
+        // Can't retry → log and skip
         log.error("Cannot process: {}", event, e);
         saveToFailedOrders(event, e);
     }
 }
 ```
 
-### Pattern 3: Manual Reprocessing
+**Pattern 3: Manual Reprocessing**
+
+Read messages from DLT, manually review, and reprocess.
 
 ```java
 @KafkaListener(topics = "orders-dlt")
@@ -349,44 +348,9 @@ public void processDlt(
 }
 ```
 
-## Reprocessing with Seek
+#### Monitoring and Alerts
 
-### Move to Specific Offset
-
-```java
-@KafkaListener(topics = "orders", id = "orderListener")
-public void consume(OrderEvent event) {
-    processOrder(event);
-}
-
-// Reset offset when needed
-public void reprocessFrom(long offset) {
-    Consumer<?, ?> consumer = kafkaListenerEndpointRegistry
-        .getListenerContainer("orderListener")
-        .getConsumerFactory()
-        .createConsumer();
-
-    consumer.seek(new TopicPartition("orders", 0), offset);
-}
-```
-
-### SeekToCurrentErrorHandler Behavior
-
-```mermaid
-sequenceDiagram
-    participant C as Consumer
-    participant K as Kafka
-
-    C->>K: poll() → offset 10
-    Note over C: Processing failed
-    C->>C: seek(offset 10)
-    Note over C: Retry...
-    C->>K: poll() → offset 10 (again)
-```
-
-## Monitoring and Alerting
-
-### DLT Message Alerting
+Send alerts immediately when messages arrive in DLT for quick response.
 
 ```java
 @DltHandler
@@ -405,7 +369,7 @@ public void handleDlt(
         .timestamp(Instant.now())
         .build();
 
-    // Slack/Email alert
+    // Slack/email alert
     alertService.sendDltAlert(dltMessage);
 
     // Record metrics
@@ -414,46 +378,12 @@ public void handleDlt(
 }
 ```
 
-### DLT Dashboard Data
+#### Summary
 
-```java
-@Scheduled(fixedRate = 60000)
-public void collectDltMetrics() {
-    // Aggregate message counts from DLT Topics
-    Map<String, Long> dltCounts = dltTopics.stream()
-        .collect(Collectors.toMap(
-            topic -> topic,
-            this::getMessageCount
-        ));
+For error handling strategies, @RetryableTopic provides declarative retry, DefaultErrorHandler provides programmatic handling, @DltHandler provides DLT handling.
 
-    metricsService.recordDltCounts(dltCounts);
-}
-```
+By error type, retry transient errors with exponential backoff, move permanent errors immediately to DLT, log and skip deserialization errors. Send alerts and manually review messages stored in DLT.
 
-## Summary
-
-```mermaid
-flowchart TB
-    subgraph Strategy["Error Handling Strategy"]
-        R["@RetryableTopic<br>Declarative retry"]
-        E["DefaultErrorHandler<br>Programmatic"]
-        D["@DltHandler<br>DLT handling"]
-    end
-
-    subgraph Types["By Error Type"]
-        T1["Transient → Retry"]
-        T2["Permanent → DLT"]
-        T3["Deserialization → Skip/DLT"]
-    end
-```
-
-| Situation | Recommended Handling |
-|-----------|---------------------|
-| **Transient error** | Retry with exponential backoff |
-| **Permanent error** | Move to DLT immediately |
-| **Deserialization error** | Log and skip |
-| **DLT accumulation** | Alert + manual review |
-
-## Next Steps
+#### Next Steps
 
 - [Monitoring Basics](../monitoring/) - Kafka monitoring and metrics

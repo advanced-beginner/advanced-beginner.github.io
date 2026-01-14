@@ -1,14 +1,32 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-10"
 title: Producer Tuning
 weight: 7
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
-# Producer Tuning
+{{< callout type="info" title="TL;DR" >}}
+- Adjust batch efficiency with batch.size and linger.ms (operates as OR condition)
+- Just linger.ms=5 can increase throughput by ~2.7x
+- compression.type: recommend snappy (general), lz4 (high performance), zstd (high compression)
+- Idempotent Producer (Kafka 3.0+ default) prevents duplicates and guarantees order
+- BufferExhaustedException occurs when buffer.memory is insufficient
+{{< /callout >}}
 
-Understanding key settings for optimizing Producer performance.
+**Target Audience**: Developers optimizing Producer performance, operators needing high-volume message processing
 
-## Producer Internal Structure
+**Prerequisites**: acks, Idempotent Producer concepts from [Advanced Concepts](../advanced-concepts/), Topic, Partition concepts from [Message Flow](../message-flow/)
+
+---
+
+Understanding the core settings to optimize Producer performance. This document is written for Kafka 3.6.x and code examples are validated in Spring Boot 3.2.x, Spring Kafka 3.1.x, and Java 17 environments.
+
+Before reading this document, you should first understand acks, Message Key, and Idempotent Producer from [Advanced Concepts](../advanced-concepts/), and Topic, Partition, Broker concepts from [Message Flow](../message-flow/).
+
+#### Producer Internal Structure
+
+When an application calls send(), the Producer's Serializer serializes the message, and the Partitioner decides which Partition to send it to. Messages are then batched, and the Sender Thread sends them to the Broker.
 
 ```mermaid
 flowchart LR
@@ -32,58 +50,40 @@ flowchart LR
     SENDER --> BROKER
 ```
 
-## Key Settings Overview
+*Diagram: Producer internal structure - Processing flow after send() call: Serializer → Partitioner → Batch → Sender Thread → Broker. Sent when batch.size or linger.ms condition is met.*
 
-| Setting | Default | Impact |
-|---------|---------|--------|
-| `batch.size` | 16KB | Batch size |
-| `linger.ms` | 0ms | Batch wait time |
-| `buffer.memory` | 32MB | Total buffer size |
-| `compression.type` | none | Compression method |
-| `max.in.flight.requests.per.connection` | 5 | Concurrent requests |
+Core settings include batch.size for batch size (default 16KB), linger.ms for batch wait time (default 0ms), buffer.memory for total buffer size (default 32MB), compression.type for compression method (default none), and max.in.flight.requests.per.connection for concurrent requests (default 5).
 
-## batch.size
+{{< callout type="info" title="Key Points" >}}
+- Producer flow: send() → Serializer → Partitioner → Batch → Sender → Broker
+- batch.size and linger.ms operate as OR condition (sent when either is met)
+- Core tuning points: batch.size, linger.ms, compression.type
+{{< /callout >}}
 
-Maximum size of a message batch to send at once.
+#### batch.size
 
-### How It Works
-
-```mermaid
-flowchart TB
-    subgraph SmallBatch["batch.size = 1KB"]
-        S1[1 message]
-        S2[1 message]
-        S3[1 message]
-        SN["3 network requests"]
-    end
-
-    subgraph LargeBatch["batch.size = 16KB"]
-        L1[Multiple messages]
-        LN["1 network request"]
-    end
-```
-
-### Configuration Guide
+The maximum size of a batch to send at once. Small values cause one network request per message, increasing network overhead. Large values allow multiple messages in one network request, improving efficiency.
 
 ```yaml
 spring:
   kafka:
     producer:
       batch-size: 16384  # 16KB (default)
-      # batch-size: 65536  # 64KB (throughput focus)
-      # batch-size: 1024   # 1KB (latency focus)
+      # batch-size: 65536  # 64KB (throughput priority)
+      # batch-size: 1024   # 1KB (latency priority)
 ```
 
-| Value | Effect | Suitable For |
-|-------|--------|--------------|
-| **Small** | Low latency, low throughput | Real-time requirements |
-| **Large** | High throughput, high latency | Batch processing |
+Small values provide low latency and low throughput, suitable for real-time requirements. Large values provide high throughput and high latency, suitable for batch processing.
 
-## linger.ms
+{{< callout type="info" title="Key Points" >}}
+- batch.size: Maximum batch size per send (default 16KB)
+- Small value: low latency + low throughput (real-time use)
+- Large value: high throughput + high latency (batch processing use)
+{{< /callout >}}
 
-Time to wait before sending even if batch isn't full.
+#### linger.ms
 
-### How It Works
+Time to wait before sending even if batch isn't full. Default 0 sends messages immediately upon arrival. Setting to 5ms waits 5ms for additional messages before sending together.
 
 ```mermaid
 sequenceDiagram
@@ -103,7 +103,7 @@ sequenceDiagram
     P->>K: Batch send (3 messages)
 ```
 
-### Configuration Guide
+*Diagram: linger.ms=0 sends immediately upon message arrival. linger.ms=5 waits 5ms to collect additional messages for batch send.*
 
 ```yaml
 spring:
@@ -113,70 +113,21 @@ spring:
         linger.ms: 5  # Wait 5ms
 ```
 
-| Value | Effect | Suitable For |
-|-------|--------|--------------|
-| **0 (default)** | Send immediately | Minimize latency |
-| **5-10ms** | Moderate batching | General recommendation |
-| **100ms+** | Maximum batching | High-volume batch processing |
+Default 0 sends immediately to minimize latency. 5~10ms provides moderate batching and is generally recommended. 100ms or more provides maximum batching, suitable for high-volume batch processing.
 
-### batch.size + linger.ms Combination
+batch.size and linger.ms operate as an OR condition. Sent when batch.size is reached OR linger.ms is exceeded.
 
-```mermaid
-flowchart TB
-    MSG[Message arrives]
-    CHECK{batch.size<br>reached?}
-    WAIT{linger.ms<br>exceeded?}
-    SEND[Send batch]
+{{< callout type="info" title="Key Points" >}}
+- linger.ms=0: Send immediately, minimize latency
+- linger.ms=5~20ms: Moderate batching, generally recommended
+- OR condition with batch.size: Sent when either condition is met
+{{< /callout >}}
 
-    MSG --> CHECK
-    CHECK -->|Yes| SEND
-    CHECK -->|No| WAIT
-    WAIT -->|Yes| SEND
-    WAIT -->|No| MSG
-```
+#### buffer.memory
 
-Sends when either condition is met.
+Total buffer memory available to the Producer. Batches are created per Partition and stored in this buffer, then sent to Broker by Sender Thread.
 
-## buffer.memory
-
-Total buffer memory available to the Producer.
-
-### How It Works
-
-```mermaid
-flowchart TB
-    subgraph Buffer["buffer.memory = 32MB"]
-        B1[Partition 0<br>Batch]
-        B2[Partition 1<br>Batch]
-        B3[Partition 2<br>Batch]
-        FREE[Free space]
-    end
-
-    SEND[send] -->|Add to buffer| Buffer
-    Buffer -->|Sender Thread| KAFKA[Kafka]
-```
-
-### When Buffer Is Full
-
-```mermaid
-sequenceDiagram
-    participant A as Application
-    participant P as Producer
-    participant K as Kafka
-
-    A->>P: send()
-    Note over P: Buffer full!
-    Note over P: Wait max.block.ms
-
-    alt Space available
-        K-->>P: ACK - buffer freed
-        P->>K: Send new message
-    else Timeout
-        P-->>A: TimeoutException
-    end
-```
-
-### Configuration Guide
+When buffer is full, wait for max.block.ms. If space becomes available within that time, add new message; otherwise TimeoutException occurs.
 
 ```yaml
 spring:
@@ -187,22 +138,16 @@ spring:
         max.block.ms: 60000  # Max buffer wait time
 ```
 
-**Recommendation:** `buffer.memory` > `batch.size` × Partition count
+Recommended rule: buffer.memory > batch.size × Partition count
 
-## compression.type
+#### compression.type
 
-Sets message compression method.
-
-### Compression Methods Comparison
+Sets message compression method. Using compression reduces network transmission and Broker storage space but increases CPU usage.
 
 ```mermaid
 flowchart LR
-    subgraph NoComp["No compression"]
+    subgraph NoComp["No Compression"]
         NC1["100KB"] --> NC2["100KB"]
-    end
-
-    subgraph GZIP["gzip"]
-        G1["100KB"] --> G2["~30KB"]
     end
 
     subgraph Snappy["snappy"]
@@ -218,15 +163,15 @@ flowchart LR
     end
 ```
 
-| Method | Ratio | CPU Usage | Speed | Recommendation |
-|--------|-------|-----------|-------|----------------|
-| **none** | 0% | Lowest | Fastest | Small messages |
-| **gzip** | Highest | Highest | Slowest | Storage priority |
-| **snappy** | Medium | Low | Fast | **General recommendation** |
-| **lz4** | Medium | Low | Fastest | High performance |
-| **zstd** | High | Medium | Fast | Kafka 2.1+ |
+*Diagram: Example of 100KB original data compressed to ~50KB with snappy, ~45KB with lz4, ~25KB with zstd.*
 
-### Configuration
+none has 0% compression ratio, lowest CPU, highest speed, suitable for small messages. gzip has highest compression ratio but highest CPU and lowest speed, used when storage space is priority. snappy has medium compression ratio, low CPU, high speed, generally recommended. lz4 has medium compression ratio, low CPU, highest speed, recommended when high performance is needed. zstd has high compression ratio, medium CPU, high speed, available from Kafka 2.1+.
+
+{{< callout type="info" title="Key Points" >}}
+- Compression recommended: snappy (general), lz4 (high performance), zstd (high compression)
+- Compression can reduce network/storage space by 50% or more
+- gzip has high CPU usage, use lz4/snappy when CPU is bottleneck
+{{< /callout >}}
 
 ```yaml
 spring:
@@ -237,25 +182,11 @@ spring:
       # compression-type: zstd  # High compression
 ```
 
-### Benefits of Compression
+With compression, original 100MB data becomes 50MB with snappy, saving 50% in network transmission, Broker storage, and replication transmission.
 
-```
-Original data: 100MB
-├── Network transfer: 100MB
-├── Broker storage: 100MB
-└── Replication: 200MB (RF=3)
+#### max.in.flight.requests.per.connection
 
-snappy compressed: 50MB
-├── Network transfer: 50MB (-50%)
-├── Broker storage: 50MB (-50%)
-└── Replication: 100MB (-50%)
-```
-
-## max.in.flight.requests.per.connection
-
-Maximum requests waiting for ACK on a single connection.
-
-### Ordering Problem
+Maximum requests waiting for ACK on a single connection. When this value is greater than 1, request 1 can fail while requests 2 and 3 succeed, then request 1 is retransmitted, causing order scrambling.
 
 ```mermaid
 sequenceDiagram
@@ -271,13 +202,21 @@ sequenceDiagram
     K-->>P: Request 2 success
     K-->>P: Request 3 success
 
-    P->>K: Retry Request 1
+    P->>K: Retransmit Request 1
     K-->>P: Request 1 success
 
     Note over K: Order: 2, 3, 1 (scrambled!)
 ```
 
-### Solution
+*Diagram: With max.in.flight=5, when request 1 fails and requests 2, 3 succeed first, then request 1 is retransmitted, causing order to be scrambled to 2, 3, 1.*
+
+With Idempotent Producer (Kafka 3.0+ default enabled), order is guaranteed by sequence numbers, allowing safe use of max.in.flight up to 5.
+
+{{< callout type="info" title="Key Points" >}}
+- max.in.flight > 1: Possible order scrambling during retransmission
+- Idempotent Producer: Guarantees order with sequence numbers (Kafka 3.0+ default enabled)
+- Recommended combination: Idempotent + max.in.flight=5
+{{< /callout >}}
 
 ```yaml
 # Method 1: Idempotent Producer (recommended)
@@ -296,11 +235,7 @@ spring:
         max.in.flight.requests.per.connection: 1
 ```
 
-Idempotent Producer guarantees order through sequence numbers.
-
-## Retry Settings
-
-### Key Settings
+#### Retry Settings
 
 ```yaml
 spring:
@@ -313,24 +248,11 @@ spring:
         request.timeout.ms: 30000  # Single request timeout
 ```
 
-### Timeout Relationship
+delivery.timeout.ms is the total timeout for message delivery. Within this time, requests, waits, and retries are repeated. Rule: delivery.timeout.ms >= request.timeout.ms + linger.ms
 
-```mermaid
-flowchart LR
-    subgraph DeliveryTimeout["delivery.timeout.ms (120s)"]
-        R1[Request 1<br>30s]
-        W1[Wait<br>100ms]
-        R2[Retry<br>30s]
-        W2[Wait<br>100ms]
-        R3[Retry<br>30s]
-    end
-```
+#### Profile-based Configuration Examples
 
-**Rule:** `delivery.timeout.ms` >= `request.timeout.ms` + `linger.ms`
-
-## Profile-based Configuration Examples
-
-### Throughput Optimization
+**Throughput Optimization**
 
 ```yaml
 spring:
@@ -344,7 +266,7 @@ spring:
         buffer.memory: 67108864  # 64MB
 ```
 
-### Latency Optimization
+**Latency Optimization**
 
 ```yaml
 spring:
@@ -357,7 +279,7 @@ spring:
         linger.ms: 0
 ```
 
-### Balanced Configuration
+**Balanced Configuration**
 
 ```yaml
 spring:
@@ -371,32 +293,99 @@ spring:
         enable.idempotence: true
 ```
 
-## Tuning Guide
+#### Performance Reference Data
 
-```mermaid
-flowchart TB
-    Q1{Throughput vs<br>Latency?}
-    Q2{Message size?}
-    Q3{Order important?}
+The numbers below are for reference only. Actual performance varies greatly depending on environment (hardware, network, message size, serialization method). Direct measurement is recommended.
 
-    Q1 -->|Throughput| TH[batch.size ↑<br>linger.ms ↑<br>compression: lz4]
-    Q1 -->|Latency| LT[batch.size ↓<br>linger.ms=0]
-
-    Q2 -->|Large messages| BIG[compression: zstd]
-    Q2 -->|Small messages| SMALL[compression: none]
-
-    Q3 -->|Yes| ORD[enable.idempotence=true]
+```bash
+# Kafka built-in performance testing tool
+kafka-producer-perf-test.sh --topic test-topic \
+    --num-records 1000000 \
+    --record-size 1024 \
+    --throughput -1 \
+    --producer-props bootstrap.servers=localhost:9092 \
+        linger.ms=5 batch.size=16384
 ```
 
-## Summary
+Just linger.ms=5 alone can increase throughput by about 2.7x. In most cases, 5~20ms is optimal. For batch.size, throughput increase beyond 64KB is minimal, and 64KB is optimal for memory efficiency.
 
-| Setting | Throughput ↑ | Latency ↓ |
-|---------|--------------|-----------|
-| `batch.size` | ↑ Larger | ↓ Smaller |
-| `linger.ms` | ↑ Larger | = 0 |
-| `compression.type` | lz4/snappy | none |
-| `buffer.memory` | ↑ Larger | No impact |
+Comparing compression methods, snappy and lz4 are generally recommended. gzip has high compression ratio but high CPU usage, resulting in lower throughput.
 
-## Next Steps
+#### Production Troubleshooting
 
-- [Consumer Tuning](../consumer-tuning/) - Consumer performance optimization
+**BufferExhaustedException**
+
+Occurs when buffer.memory is full and fails to free space within max.block.ms time. Increase buffer.memory, extend max.block.ms, or adjust linger.ms to facilitate batch sending.
+
+```yaml
+spring:
+  kafka:
+    producer:
+      buffer-memory: 67108864  # 32MB → 64MB increase
+      properties:
+        max.block.ms: 120000   # 60s → 120s increase
+        linger.ms: 5           # Facilitate batch sending
+```
+
+**RecordTooLargeException**
+
+Message exceeds max.request.size. Must adjust maximum size settings in Producer, Broker, and Topic. For messages exceeding 1MB, consider using reference pattern. Store actual data in S3 or MinIO and send only URL to Kafka.
+
+**TimeoutException (Delivery Timeout)**
+
+Delivery not completed within delivery.timeout.ms. Check Broker status, network latency, ISR status, and adjust timeout settings.
+
+```yaml
+spring:
+  kafka:
+    producer:
+      retries: 2147483647
+      properties:
+        delivery.timeout.ms: 180000  # 3 minutes
+        request.timeout.ms: 60000    # 1 minute
+        retry.backoff.ms: 500
+```
+
+#### Memory Optimization Guide
+
+Producer memory calculation: buffer.memory + (batch.size × Partition count) + overhead. For example, buffer.memory 32MB, batch.size 64KB × 30 Partitions = 1.9MB, Serialization buffer ~10MB, total expected ~45MB per Producer.
+
+For low message volume (~1K/s), recommend Heap 512MB and buffer.memory 32MB. For medium (~10K/s), recommend Heap 1GB and buffer.memory 64MB. For high (~100K/s), recommend Heap 2GB+ and buffer.memory 128MB+.
+
+#### Summary
+
+To increase throughput, increase batch.size and linger.ms and use lz4 or snappy compression. To reduce latency, decrease batch.size and set linger.ms to 0. buffer.memory affects throughput but doesn't directly affect latency.
+
+#### FAQ
+
+**Q: Does increasing linger.ms risk message loss?**
+
+No. linger.ms is the wait time in buffer, and if Producer dies during this time, messages in buffer are lost. However, this is unrelated to acks setting. For critical data, use with acks=all.
+
+**Q: Should I tune batch.size or linger.ms first?**
+
+Tune linger.ms first. Just changing from default 0 to 5~20ms can significantly improve throughput. Adjust batch.size afterwards.
+
+**Q: Can compression bottleneck Producer CPU?**
+
+Yes. gzip has high CPU usage. If CPU bottleneck is a concern, use lz4 or snappy. They have lower compression ratios but are faster.
+
+**Q: What happens when buffer.memory is insufficient?**
+
+After waiting max.block.ms, BufferExhaustedException occurs. Increase buffer.memory or check Broker response speed.
+
+**Q: Does Idempotent Producer reduce performance?**
+
+In Kafka 3.0+, it's default enabled and performance impact is minimal (within 1~2%). Benefits of order guarantee and duplicate prevention are greater.
+
+#### References
+
+- [Kafka Producer Configs - Apache Documentation](https://kafka.apache.org/documentation/#producerconfigs)
+- [Kafka Performance Tuning - Confluent Blog](https://www.confluent.io/blog/configure-kafka-to-minimize-latency/)
+- [Producer Compression - Confluent Documentation](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#compression-type)
+- [kafka-producer-perf-test - Kafka Tools](https://kafka.apache.org/documentation/#basic_ops_producer_perf)
+
+#### Next Steps
+
+- [Consumer Advanced Operations](../consumer-advanced/) - Consumer performance optimization
+- [Transactions](../transactions/) - Exactly-Once processing

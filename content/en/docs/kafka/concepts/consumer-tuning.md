@@ -1,14 +1,30 @@
 ---
-lastmod: "2026-01-06"
+lastmod: "2026-01-10"
 title: Consumer Tuning
 weight: 8
+author: "@kimbenji"
+author_url: "http://github.com/kimbenji"
 ---
 
-# Consumer Tuning
+{{< callout type="info" title="TL;DR" >}}
+- Use fetch.min.bytes/fetch.max.wait.ms to balance batch efficiency and latency
+- max.poll.records and max.poll.interval.ms are key to preventing rebalancing
+- session.timeout.ms should be at least 3x heartbeat.interval.ms
+- Throughput optimization: increase fetch.min.size, increase max.poll.records
+- Latency optimization: decrease fetch.min.size, decrease fetch.max.wait
+{{< /callout >}}
 
-Understanding settings for optimizing Consumer performance and stable operation.
+**Target Audience**: Developers optimizing Consumer performance, operators seeking operational stability
 
-## Consumer Internal Structure
+**Prerequisites**: Consumer operation principles from [Consumer Group & Offset](../consumer-group/)
+
+---
+
+Understand Consumer performance optimization and stable operation settings.
+
+#### Consumer Internal Structure
+
+Consumer operates by fetching messages from Broker, delivering to the application, and committing Offset after processing. When Fetcher retrieves data from Broker, it's delivered to the application through poll(), and Offset is committed after processing.
 
 ```mermaid
 flowchart LR
@@ -16,7 +32,7 @@ flowchart LR
         BROKER[Broker]
     end
 
-    subgraph Consumer["Consumer Internal"]
+    subgraph Consumer["Consumer Internals"]
         FETCH[Fetcher]
         POLL[poll()]
         PROCESS[Message Processing]
@@ -34,83 +50,51 @@ flowchart LR
     PROCESS --> COMMIT
 ```
 
-## Key Settings Overview
+*Diagram: Consumer internal structure - Fetcher retrieves data from Broker, delivers to application through poll(), commits Offset after processing. Related settings apply at each stage.*
 
-| Setting | Default | Impact |
-|---------|---------|--------|
-| `fetch.min.bytes` | 1 | Minimum fetch size |
-| `fetch.max.wait.ms` | 500ms | Fetch wait time |
-| `max.poll.records` | 500 | Max records per poll |
-| `max.poll.interval.ms` | 5 min | Max poll interval |
-| `session.timeout.ms` | 45 sec | Session timeout |
-| `heartbeat.interval.ms` | 3 sec | Heartbeat interval |
+Key settings include `fetch.min.bytes` for minimum fetch size (default 1), `fetch.max.wait.ms` for fetch wait time (default 500ms), `max.poll.records` for maximum records per poll (default 500), `max.poll.interval.ms` for maximum poll interval (default 5 minutes), `session.timeout.ms` for session timeout (default 45 seconds), and `heartbeat.interval.ms` for heartbeat interval (default 3 seconds).
 
-## Fetch Settings
+{{< callout type="info" title="Key Points" >}}
+- Consumer operation: Fetcher → poll() → Message Processing → Offset Commit
+- Key settings: fetch.min.bytes, max.poll.records, max.poll.interval.ms
+- Balance throughput and latency through setting combinations
+{{< /callout >}}
 
-### fetch.min.bytes
+#### Fetch Settings
 
-Minimum data size for Broker to respond.
+**fetch.min.bytes**
 
-```mermaid
-sequenceDiagram
-    participant C as Consumer
-    participant B as Broker
+The minimum data size for Broker to respond. With default 1, it responds immediately if there's even 1 byte of data. Increasing to 1KB waits until 1KB accumulates or fetch.max.wait.ms is reached.
 
-    Note over C,B: fetch.min.bytes = 1 (default)
-    C->>B: fetch request
-    B-->>C: Response if any data exists
+**fetch.max.wait.ms**
 
-    Note over C,B: fetch.min.bytes = 1KB
-    C->>B: fetch request
-    Note over B: Data < 1KB
-    Note over B: Wait until fetch.max.wait.ms
-    B-->>C: Response when 1KB collected
-```
-
-### fetch.max.wait.ms
-
-Maximum wait time to respond even if `fetch.min.bytes` isn't met.
+The maximum wait time to respond even if fetch.min.bytes is not met. Together with fetch.min.bytes, it balances batch efficiency and latency.
 
 ```yaml
 spring:
   kafka:
     consumer:
-      fetch-min-size: 1  # default
+      fetch-min-size: 1  # Default
       fetch-max-wait: 500  # 500ms (default)
 ```
 
-| Setting Combination | Effect | Use Case |
-|---------------------|--------|----------|
-| min=1, wait=500 | Immediate response | Minimize latency |
-| min=1KB, wait=500 | Batch priority | Increase throughput |
-| min=1KB, wait=100 | Fast response | Balance |
+min=1, wait=500 combination responds immediately to minimize latency. min=1KB, wait=500 prioritizes batching to increase throughput. min=1KB, wait=100 balances fast response with batching.
 
-## Poll Settings
+{{< callout type="info" title="Key Points" >}}
+- fetch.min.bytes: Minimum data size before response (1=immediate, 1KB+=batch efficiency)
+- fetch.max.wait.ms: Maximum wait time to respond even without meeting min
+- Balance batch efficiency and latency with these two settings
+{{< /callout >}}
 
-### max.poll.records
+#### Poll Settings
 
-Maximum records fetched in one `poll()` call.
+**max.poll.records**
 
-```mermaid
-flowchart TB
-    subgraph Small["max.poll.records = 10"]
-        S1["poll() → 10 records"]
-        S2["Fast processing"]
-        S3["Frequent polls"]
-    end
+The maximum number of records retrieved in a single poll() call. Small values process quickly with frequent poll() calls. Large values provide higher efficiency through batch processing but increase processing time.
 
-    subgraph Large["max.poll.records = 500"]
-        L1["poll() → 500 records"]
-        L2["Batch processing"]
-        L3["Less frequent polls"]
-    end
-```
+**max.poll.interval.ms**
 
-### max.poll.interval.ms
-
-**One of the most important settings.**
-
-Maximum allowed time between two `poll()` calls.
+One of the most important settings. The maximum allowed time between two poll() calls. Exceeding this time removes the Consumer from the group and triggers rebalancing.
 
 ```mermaid
 sequenceDiagram
@@ -121,53 +105,35 @@ sequenceDiagram
     K-->>C: 500 records
 
     Note over C: Processing records...
-    Note over C: 6 minutes passed!
+    Note over C: 6 minutes elapsed!
 
     Note over K: max.poll.interval.ms=5min exceeded
     K->>K: Remove Consumer from group
     K->>K: Start rebalancing!
 ```
 
-### Configuration Guide
+*Diagram: When 6 minutes pass during record processing after poll(), max.poll.interval.ms (5 minutes) is exceeded, removing Consumer from group and starting rebalancing.*
+
+The rule is `max.poll.interval.ms` > (processing time per record × `max.poll.records`). For example, with 100ms processing time per record and max.poll.records=500, required time is 50 seconds, so max.poll.interval.ms should be at least 60 seconds.
+
+{{< callout type="info" title="Key Points" >}}
+- max.poll.records: Number of records per fetch (small=fast processing, large=batch efficiency)
+- max.poll.interval.ms: Rebalancing occurs when poll() interval exceeds this
+- Rule: max.poll.interval.ms > (processing time × max.poll.records)
+{{< /callout >}}
 
 ```yaml
 spring:
   kafka:
     consumer:
       properties:
-        max.poll.records: 500  # default
-        max.poll.interval.ms: 300000  # 5 min (default)
+        max.poll.records: 500  # Default
+        max.poll.interval.ms: 300000  # 5 minutes (default)
 ```
 
-**Rule:** `max.poll.interval.ms` > (processing time per record × `max.poll.records`)
+#### Session and Heartbeat Settings
 
-```java
-// Example: 100ms processing time per record
-// max.poll.records = 500
-// Required time: 100ms × 500 = 50 seconds
-// max.poll.interval.ms should be at least 60 seconds
-```
-
-## Session and Heartbeat Settings
-
-### Understanding the Relationship
-
-```mermaid
-sequenceDiagram
-    participant C as Consumer
-    participant GC as Group Coordinator
-
-    loop Every heartbeat.interval.ms
-        C->>GC: Heartbeat
-        GC-->>C: OK
-    end
-
-    Note over C: Consumer failure!
-    Note over GC: No heartbeat for<br>session.timeout.ms
-    GC->>GC: Remove Consumer<br>Start rebalancing
-```
-
-### Setting Relationship
+Consumer sends Heartbeat every heartbeat.interval.ms to indicate it's alive. If no Heartbeat is received for session.timeout.ms, Consumer is considered failed, removed from the group, and rebalancing starts.
 
 ```yaml
 spring:
@@ -178,49 +144,23 @@ spring:
         heartbeat.interval.ms: 3000  # Heartbeat interval
 ```
 
-**Recommended Rules:**
-- `session.timeout.ms` >= 3 × `heartbeat.interval.ms`
-- Generally `heartbeat.interval.ms` is 1/3 of `session.timeout.ms`
+The recommended rule is session.timeout.ms >= 3 × heartbeat.interval.ms. Generally, heartbeat.interval.ms is set to 1/3 of session.timeout.ms. For fast detection, set session.timeout=10 seconds, heartbeat=3 seconds, but this may cause frequent false positives. For stable operation, session.timeout=45 seconds, heartbeat=15 seconds is appropriate. In environments with GC issues, set session.timeout=60 seconds or more, heartbeat=20 seconds to accommodate GC pauses.
 
-### Setting Scenarios
+#### Offset Commit Strategies
 
-| Environment | session.timeout | heartbeat.interval | Effect |
-|-------------|-----------------|-------------------|--------|
-| **Fast detection** | 10s | 3s | Fast rebalancing, frequent false positives |
-| **Stable** | 45s | 15s | Slow detection, stable |
-| **GC issues** | 60s+ | 20s | Tolerates GC pauses |
-
-## Offset Commit Strategy
-
-### Auto Commit
+**Auto Commit**
 
 ```yaml
 spring:
   kafka:
     consumer:
-      enable-auto-commit: true  # default
-      auto-commit-interval: 5000  # Commit every 5s
+      enable-auto-commit: true  # Default
+      auto-commit-interval: 5000  # Commit every 5 seconds
 ```
 
-```mermaid
-sequenceDiagram
-    participant C as Consumer
-    participant K as Kafka
+Auto commit automatically commits Offset at configured intervals. Simple, but if a failure occurs during processing, messages after the already committed Offset may be lost.
 
-    C->>K: poll()
-    K-->>C: offset 0-9
-    C->>C: Processing...
-
-    Note over C: 5 seconds passed (auto.commit.interval)
-    C->>K: commit(offset 9)
-
-    Note over C: Failure during processing!
-    Note over C: Only processed up to offset 5
-    Note over K: But committed up to offset 9
-    Note over C: Restart from offset 10<br>→ 5-9 lost!
-```
-
-### Manual Commit
+**Manual Commit**
 
 ```yaml
 spring:
@@ -228,39 +168,10 @@ spring:
     consumer:
       enable-auto-commit: false
     listener:
-      ack-mode: manual  # or manual_immediate
+      ack-mode: manual  # Or manual_immediate
 ```
 
-#### commitSync vs commitAsync
-
-```java
-@KafkaListener(topics = "my-topic")
-public void listen(ConsumerRecord<String, String> record,
-                   Consumer<?, ?> consumer) {
-    try {
-        process(record);
-
-        // Sync commit: blocks until commit completes
-        consumer.commitSync();
-
-        // Async commit: returns immediately, result via callback
-        consumer.commitAsync((offsets, exception) -> {
-            if (exception != null) {
-                log.error("Commit failed", exception);
-            }
-        });
-    } catch (Exception e) {
-        // Don't commit → will be reprocessed
-    }
-}
-```
-
-| Method | Pros | Cons |
-|--------|------|------|
-| **commitSync** | Guaranteed commit | Performance impact |
-| **commitAsync** | High performance | Complex failure handling |
-
-#### Spring Kafka Acknowledgment
+commitSync blocks until commit completes, guaranteeing reliable commits but reducing performance. commitAsync returns immediately for high performance but handling failures is complex.
 
 ```java
 @KafkaListener(topics = "my-topic")
@@ -270,41 +181,15 @@ public void listen(String message, Acknowledgment ack) {
 }
 ```
 
-### AckMode Options
+Spring Kafka AckMode options include RECORD for committing per record, BATCH for committing after all records in poll() are processed, MANUAL for committing on acknowledge() call, and MANUAL_IMMEDIATE for immediate commit on acknowledge().
 
-```yaml
-spring:
-  kafka:
-    listener:
-      ack-mode: manual  # Select option
-```
+#### Rebalancing Optimization
 
-| AckMode | Behavior |
-|---------|----------|
-| `RECORD` | Commit per record |
-| `BATCH` | Commit after all records from poll() |
-| `MANUAL` | Commit when acknowledge() called |
-| `MANUAL_IMMEDIATE` | Commit immediately on acknowledge() |
+When rebalancing occurs, all Consumers pause, Partitions are revoked and reassigned, and Consumers resume. Processing is interrupted during this process, so minimizing rebalancing is important.
 
-## Rebalancing Optimization
+**Cooperative Rebalancing (Recommended)**
 
-### Rebalancing Cost
-
-```mermaid
-flowchart TB
-    subgraph Problem["During Rebalancing"]
-        STOP["All Consumers<br>paused"]
-        REVOKE["Partitions revoked"]
-        ASSIGN["Partitions reassigned"]
-        RESUME["Consumers resumed"]
-    end
-
-    STOP --> REVOKE --> ASSIGN --> RESUME
-```
-
-### Cooperative Rebalancing (Recommended)
-
-Incremental rebalancing supported in Kafka 2.4+.
+Incremental rebalancing supported in Kafka 2.4+. The existing Eager approach stops all, reassigns all, then resumes all. The Cooperative approach revokes only what's needed, reassigns only what's needed, and resumes only affected Consumers.
 
 ```yaml
 spring:
@@ -314,24 +199,9 @@ spring:
         partition.assignment.strategy: org.apache.kafka.clients.consumer.CooperativeStickyAssignor
 ```
 
-```mermaid
-flowchart TB
-    subgraph Eager["Legacy (Eager)"]
-        E1["Stop all"]
-        E2["Reassign all"]
-        E3["Resume all"]
-    end
+**Static Membership**
 
-    subgraph Coop["Cooperative"]
-        C1["Revoke only what's needed"]
-        C2["Reassign only what's needed"]
-        C3["Resume only affected Consumers"]
-    end
-```
-
-### Static Membership
-
-Prevents rebalancing on Consumer restart.
+Prevents rebalancing on Consumer restart. With a fixed ID, if Consumer restarts within 5 minutes, it keeps the same Partitions.
 
 ```yaml
 spring:
@@ -339,14 +209,14 @@ spring:
     consumer:
       properties:
         group.instance.id: consumer-${HOSTNAME}  # Fixed ID
-        session.timeout.ms: 300000  # 5 min
+        session.timeout.ms: 300000  # 5 minutes
 ```
 
-If Consumer restarts within 5 minutes, it keeps the same Partitions.
+#### Throughput vs Latency
 
-## Throughput vs Latency
+**Throughput Optimization**
 
-### Throughput Optimization
+To increase throughput, increase batch size and allow wait time.
 
 ```yaml
 spring:
@@ -359,7 +229,9 @@ spring:
         fetch.max.bytes: 52428800  # 50MB
 ```
 
-### Latency Optimization
+**Latency Optimization**
+
+To reduce latency, decrease batch size and configure for fast response.
 
 ```yaml
 spring:
@@ -371,7 +243,7 @@ spring:
         max.poll.records: 100
 ```
 
-### Balanced Configuration
+**Balanced Settings**
 
 ```yaml
 spring:
@@ -386,9 +258,9 @@ spring:
         heartbeat.interval.ms: 3000
 ```
 
-## Parallel Processing
+#### Parallel Processing
 
-### Concurrency Setting
+The concurrency setting controls the number of Consumer threads. With 6 Partitions and concurrency=3, each thread handles 2 Partitions.
 
 ```yaml
 spring:
@@ -422,56 +294,26 @@ flowchart TB
     P5 --> C3
 ```
 
-**Rule:** concurrency <= Partition count
+*Diagram: With a Topic having 6 Partitions and concurrency=3, each thread handles 2 Partitions.*
 
-## Consumer Lag Management
+The rule is concurrency <= Partition count. If concurrency exceeds Partition count, some threads become idle.
 
-### What is Lag?
+{{< callout type="info" title="Key Points" >}}
+- concurrency setting controls Consumer thread count
+- Rule: concurrency <= Partition count (idle threads if exceeded)
+- 6 Partitions + concurrency=3 = 2 Partitions per thread
+{{< /callout >}}
 
-```
-Partition 0:
-├── Latest Offset: 1000
-├── Consumer Offset: 800
-└── Lag: 200
-```
+#### Consumer Lag Management
 
-### Lag Causes and Solutions
+Lag is Latest Offset minus Consumer Offset. Causes and solutions for Lag: if processing speed is slow, increase concurrency or optimize processing logic. If Partitions are insufficient, increase Partition count. If there are network issues, optimize fetch settings. If reprocessing is needed, adjust position using seek.
 
-| Cause | Solution |
-|-------|----------|
-| Slow processing | Increase concurrency, optimize logic |
-| Not enough Partitions | Increase Partition count |
-| Network issues | Optimize fetch settings |
-| Reprocessing | Adjust position via seek |
+#### Summary
 
-## Summary
+Fetch settings (fetch.min.bytes, fetch.max.wait.ms) control how data is retrieved from Broker. Poll settings (max.poll.records, max.poll.interval.ms) control how data is delivered to the application. Session settings (session.timeout.ms, heartbeat.interval.ms) control Consumer state detection. Commit strategy (auto vs manual, commitSync vs Async) determines how processing completion is recorded.
 
-```mermaid
-flowchart TB
-    subgraph Fetch["Fetch Settings"]
-        F1["fetch.min.bytes<br>fetch.max.wait.ms"]
-    end
+To increase throughput, increase fetch.min.bytes and max.poll.records. To reduce latency, decrease fetch.max.wait and max.poll.records. For stability, set appropriate session/heartbeat. For accuracy, use manual commit.
 
-    subgraph Poll["Poll Settings"]
-        P1["max.poll.records<br>max.poll.interval.ms"]
-    end
-
-    subgraph Session["Session Settings"]
-        S1["session.timeout.ms<br>heartbeat.interval.ms"]
-    end
-
-    subgraph Commit["Commit Strategy"]
-        C1["auto vs manual<br>commitSync vs Async"]
-    end
-```
-
-| Goal | Key Settings |
-|------|--------------|
-| **Throughput ↑** | fetch.min.bytes ↑, max.poll.records ↑ |
-| **Latency ↓** | fetch.max.wait ↓, max.poll.records ↓ |
-| **Stability** | Proper session/heartbeat settings |
-| **Accuracy** | Manual commit |
-
-## Next Steps
+#### Next Steps
 
 - [Advanced Error Handling](../error-handling/) - Error handling patterns and Dead Letter Topic
