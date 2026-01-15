@@ -46,7 +46,6 @@ DDD는 **전략적 설계**와 **전술적 설계**라는 두 가지 수준으�
 | [전략적 설계](strategic-design/) | "시스템을 어떻게 나눌 것인가?" | Subdomain, Bounded Context, Context Mapping, Ubiquitous Language |
 | [전술적 설계](tactical-design/) | "경계 안에서 무엇을 만들 것인가?" | Entity, Value Object, Repository, Domain Service, Specification |
 | [Aggregate 심화](aggregate/) | "일관성 경계를 어떻게 정할 것인가?" | Aggregate Root, 트랜잭션 경계, 크기 결정 원칙 |
-| [도메인 이벤트](domain-events/) | "경계 간 통신을 어떻게 할 것인가?" | Event 발행/구독, Event Sourcing, 최종 일관성 |
 
 ### 2단계: 아키텍처
 
@@ -55,7 +54,8 @@ DDD는 **전략적 설계**와 **전술적 설계**라는 두 가지 수준으�
 | 문서 | 핵심 질문 | 트레이드오프 |
 |------|----------|------------|
 | [아키텍처 패턴](architecture/) | "어떤 구조로 코드를 배치할 것인가?" | 복잡도 vs 유연성 비교 분석 |
-| [CQRS](cqrs/) | "읽기와 쓰기를 분리할 것인가?" | 단순함 vs 확장성 |
+| [이벤트 기반 아키텍처](architecture/event-driven/) | "경계 간 통신을 어떻게 할 것인가?" | 결합도 vs 추적 가능성 |
+| [CQRS](architecture/cqrs/) | "읽기와 쓰기를 분리할 것인가?" | 단순함 vs 확장성 |
 
 ### 3단계: 품질
 
