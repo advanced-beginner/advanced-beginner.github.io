@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 title: Replication
 weight: 4
 author: "@kimbenji"
@@ -20,7 +20,16 @@ author_url: "http://github.com/kimbenji"
 
 ---
 
-데이터 복제는 Kafka의 고가용성과 내결함성의 핵심입니다. 복제가 없으면 단일 Broker 장애로 인해 데이터가 영구적으로 유실될 수 있습니다. 이 문서에서는 Kafka의 복제 메커니즘이 어떻게 동작하는지, 그리고 프로덕션 환경에서 어떻게 설정해야 하는지 상세히 설명합니다.
+데이터 복제는 Kafka의 고가용성과 내결함성의 핵심입니다. 이를 **은행 금고 시스템**에 비유하면 이해하기 쉽습니다:
+
+| 은행 금고 비유 | Kafka Replication |
+|---------------|-------------------|
+| 중요 서류 원본 | Leader Partition |
+| 다른 지점의 복사본 | Follower Partition |
+| 본점 금고 사고 시 지점 금고 사용 | Leader 장애 시 Follower 승격 |
+| 최소 2개 지점에 복사 후 보관 확인 | min.insync.replicas=2 + acks=all |
+
+복제가 없으면 단일 Broker 장애로 인해 데이터가 영구적으로 유실될 수 있습니다. 이 문서에서는 Kafka의 복제 메커니즘이 어떻게 동작하는지, 그리고 프로덕션 환경에서 어떻게 설정해야 하는지 상세히 설명합니다.
 
 Kafka는 각 Partition을 여러 Broker에 복제하여 저장합니다. 하나의 Broker가 장애를 일으켜도 다른 Broker에 동일한 데이터가 있으므로 서비스가 계속될 수 있습니다. 복제본 중 하나는 Leader 역할을 하고 나머지는 Follower 역할을 합니다. 모든 읽기와 쓰기는 Leader를 통해 이루어지고, Follower는 Leader의 데이터를 지속적으로 복제합니다.
 
@@ -96,7 +105,9 @@ RF=3이면 Broker A를 내려도 Broker B와 C가 남아 복제본 2개가 유�
 
 #### ISR (In-Sync Replicas) 이해하기
 
-ISR은 Leader와 동기화된 복제본의 집합입니다. Follower가 Leader의 데이터를 제때 복제하지 못하면 ISR에서 제외됩니다. ISR에 포함되려면 replica.lag.time.max.ms(기본 30초) 이내에 Leader와 동기화되어야 합니다.
+ISR은 Leader와 동기화된 복제본의 집합입니다. 이를 비유하면 **"신뢰할 수 있는 백업 팀"**입니다. 은행 금고의 복사본이 있어도, 최신 상태가 아니라면 비상시에 사용할 수 없습니다. 마찬가지로 Follower가 Leader의 데이터를 제때 복제하지 못하면 ISR에서 제외되어 Leader 후보에서 탈락합니다.
+
+ISR에 포함되려면 replica.lag.time.max.ms(기본 30초) 이내에 Leader와 동기화되어야 합니다.
 
 ISR 개념이 중요한 이유는 Leader 선출과 관련이 있습니다. Leader 장애 시 새로운 Leader는 ISR 내에서만 선출됩니다. ISR에 포함된 Follower만이 Leader와 동기화된 최신 데이터를 가지고 있기 때문입니다. ISR에 없는 Follower가 Leader가 되면 동기화되지 않은 오래된 데이터로 서비스하게 되어 데이터 유실이 발생합니다.
 

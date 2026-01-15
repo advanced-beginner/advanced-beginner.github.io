@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 title: Consumer 튜닝
 weight: 8
 author: "@kimbenji"
@@ -21,6 +21,21 @@ author_url: "http://github.com/kimbenji"
 ---
 
 Consumer 성능 최적화와 안정적인 운영을 위한 설정을 이해합니다.
+
+#### 전체 비유: 택배 수거 및 배송
+
+Consumer 튜닝을 **택배 기사의 물품 수거**에 비유하면 이해하기 쉽습니다:
+
+| 택배 수거 비유 | Consumer 설정 | 설명 |
+|---------------|---------------|------|
+| 최소 몇 kg 모이면 출발 | fetch.min.bytes | 작으면 자주 왕복, 크면 한번에 많이 |
+| 최대 대기 시간 후 출발 | fetch.max.wait.ms | 물량 부족해도 시간되면 출발 |
+| 한 번에 처리할 물건 수 | max.poll.records | 많으면 효율적, 처리 시간 증가 |
+| 물건 처리 제한 시간 | max.poll.interval.ms | 초과 시 "기사 교체" (리밸런싱) |
+| 생존 확인 체크인 | heartbeat.interval.ms | 주기적으로 "아직 일하고 있음" 신호 |
+| 연락두절 허용 시간 | session.timeout.ms | 신호 없으면 "기사 이탈" 간주 |
+
+이처럼 **처리량(한 번에 많이)**과 **지연시간(빨리빨리)**은 트레이드오프 관계입니다.
 
 #### Consumer 내부 구조
 
