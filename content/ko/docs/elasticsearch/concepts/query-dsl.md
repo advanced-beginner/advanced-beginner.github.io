@@ -1,7 +1,7 @@
 ---
 title: Query DSL
 weight: 3
-lastmod: 2026-01-10
+lastmod: 2026-01-15
 ---
 
 {{< callout type="tip" title="TL;DR" >}}
@@ -14,6 +14,24 @@ lastmod: 2026-01-10
 
 **대상 독자**: Elasticsearch 기본 개념을 이해한 개발자
 **선수 지식**: [핵심 구성요소](core-components/), JSON 기본 문법
+
+## 전체 비유: 도서관에서 책 찾기
+
+Query DSL을 **도서관에서 책을 찾는 방법**에 비유하면 이해하기 쉽습니다:
+
+| 도서관 비유 | Query DSL | 역할 |
+|------------|-----------|------|
+| "인공지능 관련 책 찾아주세요" | Query Context (match) | 내용 관련성으로 추천, 관련도 순 정렬 |
+| "005.133 분류 책만 보여주세요" | Filter Context (term) | 조건 일치 여부만 확인, 빠름 |
+| "머신러닝 입문" 내용 검색 | match | 단어 포함 여부로 검색 (순서 무관) |
+| "머신러닝 입문" 정확히 | match_phrase | 정확한 문구 순서로 검색 |
+| 청구기호 "005.133" 정확히 | term | 값이 정확히 일치하는 것만 |
+| 2020~2024년 출판 도서 | range | 범위 내 값 검색 |
+| 컴퓨터 분야 AND 2024년 출판 | bool (must) | 모든 조건 만족 |
+| 프로그래밍 OR 데이터분석 | bool (should) | 하나 이상 만족 |
+| 번역서 제외 | bool (must_not) | 해당 조건 제외 |
+
+이처럼 Query DSL은 도서관 사서에게 "어떤 조건으로 책을 찾아달라"고 요청하는 것과 같습니다.
 
 Elasticsearch의 Query DSL(Domain Specific Language)을 사용하여 다양한 검색 쿼리를 작성하는 방법을 배웁니다.
 

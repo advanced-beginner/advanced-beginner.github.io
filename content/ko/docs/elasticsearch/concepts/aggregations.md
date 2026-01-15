@@ -1,7 +1,7 @@
 ---
 title: 집계
 weight: 5
-lastmod: 2026-01-08
+lastmod: 2026-01-15
 prerequisites:
   - title: Query DSL
     path: /docs/elasticsearch/concepts/query-dsl/
@@ -19,6 +19,22 @@ related_concepts:
 - [Query DSL](query-dsl/) - 기본 쿼리 구조
 - [데이터 모델링](data-modeling/) - keyword vs text 타입
 {{% /notice %}}
+
+## 전체 비유: 도서관 통계 분석
+
+Aggregation을 **도서관의 장서 통계 분석**에 비유하면 이해하기 쉽습니다:
+
+| 도서관 비유 | Elasticsearch | 역할 |
+|------------|---------------|------|
+| "분야별로 몇 권씩 있나요?" | Bucket (terms) | 값별로 그룹화 |
+| "가격대별 도서 수는?" | Bucket (range) | 범위별로 그룹화 |
+| "월별 대출 추이는?" | Bucket (date_histogram) | 시간별로 그룹화 |
+| "평균 도서 가격은?" | Metric (avg) | 숫자 통계 계산 |
+| "분야별 평균 가격은?" | 중첩 집계 | 그룹 내 통계 |
+| "월별 대출 증감률은?" | Pipeline | 집계 결과 재가공 |
+| "전체 장서 대비 검색 결과 비율?" | Global | 필터 무시한 전체 통계 |
+
+이처럼 Aggregation은 사서에게 "장서 현황 보고서를 만들어 주세요"라고 요청하는 것과 같습니다.
 
 Elasticsearch의 Aggregations를 사용하여 데이터를 분석하고 통계를 추출하는 방법을 배웁니다.
 

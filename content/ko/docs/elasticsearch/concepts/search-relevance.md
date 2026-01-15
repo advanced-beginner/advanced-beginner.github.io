@@ -1,7 +1,7 @@
 ---
 title: 검색 관련성
 weight: 4
-lastmod: 2026-01-08
+lastmod: 2026-01-15
 prerequisites:
   - title: Query DSL
     path: /docs/elasticsearch/concepts/query-dsl/
@@ -19,6 +19,23 @@ related_concepts:
 - [Query DSL](query-dsl/) - match, bool 쿼리 기본
 - [데이터 모델링](data-modeling/) - Analyzer 동작 원리
 {{% /notice %}}
+
+## 전체 비유: 도서관 사서의 책 추천
+
+검색 관련성을 **도서관 사서가 책을 추천하는 방식**에 비유하면 이해하기 쉽습니다:
+
+| 도서관 비유 | Elasticsearch | 역할 |
+|------------|---------------|------|
+| 추천 우선순위 점수 | Score | 얼마나 관련 있는지 수치화 |
+| "이 책에서 해당 주제를 많이 다뤄요" | TF (Term Frequency) | 검색어가 문서에 많이 등장할수록 점수 상승 |
+| "이 주제를 다루는 책이 드물어요" | IDF (Inverse Doc Frequency) | 희귀한 단어일수록 점수 상승 |
+| "제목에서 바로 찾았어요" | Field Length | 짧은 필드에서 일치하면 점수 상승 |
+| "제목 일치는 가산점" | 필드 부스팅 | 중요 필드에 가중치 부여 (name^3) |
+| "신간이라 추천해요" | Decay Function | 시간/거리에 따라 점수 조정 |
+| "베스트셀러는 우선 추천" | Function Score | 인기도, 평점 등 비즈니스 로직 반영 |
+| "절판 도서는 후순위" | Negative Boosting | 특정 조건의 점수 감소 |
+
+이처럼 Score는 사서가 "이 책이 당신 질문에 가장 적합합니다"라고 판단하는 기준과 같습니다.
 
 검색 결과의 품질을 높이기 위한 Score, BM25, Boosting 등 관련성 튜닝 방법을 배웁니다.
 
