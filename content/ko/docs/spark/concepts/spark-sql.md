@@ -1,7 +1,7 @@
 ---
 title: Spark SQL
 weight: 4
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 author:
   name: Advanced Beginner
   github: advanced-beginner
@@ -23,6 +23,46 @@ author:
 ---
 
 Spark SQL은 구조화된 데이터 처리를 위한 Spark 모듈입니다. SQL 쿼리와 DataFrame API를 모두 지원하며, 동일한 실행 엔진(Catalyst Optimizer)을 사용합니다.
+
+## 비유로 이해하는 Spark SQL
+
+| 개념 | 비유 | 핵심 아이디어 |
+|------|------|---------------|
+| **Spark SQL** | 다국어 통역사 | SQL이든 DataFrame이든 같은 의미로 이해하고 실행 |
+| **Catalyst Optimizer** | 내비게이션 경로 최적화 | "서울→부산" 목적지만 알려주면 가장 빠른 길 자동 계산 |
+| **Predicate Pushdown** | 필요한 책만 서가에서 꺼내기 | 전체 도서관을 뒤지지 않고 해당 섹션만 검색 |
+| **Column Pruning** | 주문한 반찬만 담기 | 뷔페 전체를 접시에 담지 않고 먹을 것만 선택 |
+| **AQE** | 운전 중 실시간 경로 변경 | 정체 상황 보고 더 빠른 길로 우회 |
+| **Temporary View** | 가상 테이블 별명 | DataFrame에 이름표 붙여서 SQL에서 테이블처럼 사용 |
+
+> **핵심 원리**: Spark SQL은 **"What"(무엇을 원하는가)**만 표현하면 **"How"(어떻게 할 것인가)**는 Catalyst가 최적화합니다. SQL과 DataFrame은 동일한 실행 엔진을 사용하므로 성능 차이가 없습니다.
+
+## 왜 Catalyst Optimizer가 중요한가? (설계 철학)
+
+**질문: 사용자가 쓴 코드를 그대로 실행하면 안 되나요?**
+
+**비효율적인 코드도 빠르게 만들기 위해서입니다.**
+
+```java
+// 사용자가 작성한 (비효율적인) 코드
+df.join(other, "id")                    // 1. 먼저 조인
+  .filter(col("status").equalTo("A"))   // 2. 그 다음 필터
+  .select("name", "value");             // 3. 마지막에 컬럼 선택
+
+// Catalyst가 변환한 (효율적인) 코드
+df.select("id", "name", "value", "status")  // 1. 필요한 컬럼만 먼저
+  .filter(col("status").equalTo("A"))        // 2. 필터를 조인 전으로
+  .join(other.select("id"), "id");           // 3. 줄어든 데이터로 조인
+```
+
+**최적화 단계별 역할**
+
+| 단계 | 역할 | 비유 |
+|------|------|------|
+| Analysis | 컬럼/테이블 존재 확인 | "서울역이 실제로 있는지 확인" |
+| Logical Optimization | 불필요한 연산 제거 | "지름길 발견" |
+| Physical Planning | 실행 방법 선택 | "KTX vs 비행기 vs 자동차 선택" |
+| Code Generation | 최적화된 바이트코드 생성 | "실제 이동 시작" |
 
 ## Spark SQL의 장점
 

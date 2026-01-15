@@ -1,7 +1,7 @@
 ---
 title: DataFrame과 Dataset
 weight: 3
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 author:
   name: Advanced Beginner
   github: advanced-beginner
@@ -24,6 +24,60 @@ author:
 ---
 
 DataFrame과 Dataset은 Spark의 현대적인 고수준 API입니다. RDD보다 사용하기 쉽고, Catalyst Optimizer를 통한 자동 최적화를 제공합니다.
+
+## 비유로 이해하는 DataFrame과 Dataset
+
+| 개념 | 비유 | 핵심 아이디어 |
+|------|------|---------------|
+| **DataFrame** | 엑셀 스프레드시트 | 행과 열이 있는 표 형태. 열 이름으로 데이터 접근, 정렬/필터/집계 가능 |
+| **Dataset** | 타입이 정해진 양식 | 각 필드 타입이 미리 정의된 양식. "이름은 문자, 나이는 숫자"처럼 형식 검증 |
+| **Row** | 스프레드시트 한 행 | 여러 컬럼 값을 담은 하나의 레코드 |
+| **Schema** | 표의 헤더와 열 타입 정의 | "이름(문자), 나이(정수), 급여(실수)" 같은 구조 정의 |
+| **Catalyst Optimizer** | 엑셀의 쿼리 최적화 | 사용자가 원하는 결과를 가장 효율적인 방법으로 계산 |
+| **Encoder** | 번역기 | Java 객체 ↔ Spark 내부 표현 간 변환 담당 |
+
+> **핵심 원리**: DataFrame은 "무엇을(What)" 원하는지만 표현하고, "어떻게(How)" 계산할지는 Spark가 알아서 최적화합니다.
+
+## 왜 RDD 위에 DataFrame을 만들었나? (설계 철학)
+
+**질문: RDD가 있는데 왜 DataFrame을 별도로 만들었을까요?**
+
+**1. 선언적 API의 필요성**
+
+```java
+// RDD: "어떻게" 처리할지 직접 지시 (명령형)
+rdd.filter(row -> row.getInt(2) > 30)
+   .mapToPair(row -> new Tuple2<>(row.getString(1), row.getInt(3)))
+   .reduceByKey(Integer::sum);
+
+// DataFrame: "무엇을" 원하는지만 표현 (선언적)
+df.filter(col("age").gt(30))
+  .groupBy("department")
+  .agg(sum("salary"));
+```
+
+선언적 API는 사용자 의도만 전달하고, 실행 최적화는 엔진에 맡깁니다. SQL과 같은 철학입니다.
+
+**2. 스키마 정보의 힘**
+
+| RDD | DataFrame |
+|-----|-----------|
+| 타입 정보만 있음 (Row) | 컬럼 이름 + 타입 정보 |
+| 최적화 정보 없음 | Predicate Pushdown, Column Pruning 가능 |
+| 바이트 단위 직렬화 | 컬럼 기반 효율적 저장 |
+
+스키마를 알면 **필요한 컬럼만 읽고(Column Pruning)**, **필터를 데이터 소스에 밀어넣어(Predicate Pushdown)** I/O를 줄일 수 있습니다.
+
+**3. DataFrame vs Dataset 트레이드오프**
+
+| 특성 | DataFrame | Dataset |
+|------|-----------|---------|
+| 타입 안전성 | 런타임 에러 | 컴파일 타임 에러 |
+| 성능 | 최고 (Tungsten 최적화) | 직렬화 오버헤드 있음 |
+| 사용 편의성 | SQL 스타일, 간결 | 타입 명시 필요 |
+| 적합한 경우 | ETL, 동적 스키마 | 도메인 로직, 타입 검증 |
+
+**핵심**: 대부분의 경우 DataFrame으로 충분하고, 컴파일 타임 타입 체크가 필요할 때만 Dataset 사용을 권장합니다.
 
 ## 개념 정리
 

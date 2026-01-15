@@ -1,7 +1,7 @@
 ---
 title: Transformation과 Action
 weight: 5
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 author:
   name: Advanced Beginner
   github: advanced-beginner
@@ -23,6 +23,82 @@ author:
 ---
 
 Spark의 모든 연산은 **Transformation**과 **Action** 두 가지로 분류됩니다. 이 구분을 이해하는 것이 Spark 프로그래밍의 핵심입니다.
+
+## 비유로 이해하는 Transformation과 Action
+
+| 개념 | 비유 | 핵심 아이디어 |
+|------|------|---------------|
+| **Transformation** | 요리 레시피 작성 | "양파 썰기 → 볶기 → 간 맞추기" 적어두기만 함 |
+| **Action** | "요리 시작!" | 레시피대로 실제 조리 시작 |
+| **Lazy Evaluation** | 쇼핑 목록 | 목록만 적고, 마트 가서 한 번에 구매 |
+| **DAG** | 공정 흐름도 | 어떤 순서로 작업할지 미리 설계 |
+| **Narrow Transformation** | 각자 자기 책상 정리 | 옆 사람 안 건드리고 혼자 완료 |
+| **Wide Transformation** | 부서 전체 회의 | 모든 팀원이 한자리에 모여야 진행 (셔플) |
+| **캐싱** | 중간 결과물 냉장 보관 | 같은 재료 다시 손질 안 해도 됨 |
+
+## 왜 지연 평가(Lazy Evaluation)인가? (설계 철학)
+
+Spark가 즉시 실행하지 않고 **미루는 이유**가 있습니다.
+
+**즉시 실행의 문제점**
+
+```
+Python/Java 일반 코드:
+filtered = df.filter(...)      # 즉시 실행
+selected = filtered.select(...) # 즉시 실행
+result = selected.groupBy(...)  # 즉시 실행
+
+문제:
+├── 각 단계마다 전체 데이터 순회
+├── 중간 결과물 저장에 메모리 낭비
+├── 최적화 기회 없음 (이미 실행됨)
+└── 분산 환경에서 불필요한 네트워크 통신
+```
+
+**지연 평가의 해결책**
+
+| 즉시 실행 | 지연 평가 |
+|-----------|-----------|
+| 각 연산마다 실행 | Action 호출 시 한 번에 실행 |
+| 중간 결과 모두 저장 | 파이프라이닝으로 메모리 절약 |
+| 최적화 불가 | 전체 DAG 분석 후 최적화 |
+| 비효율적 실행 계획 | Catalyst가 최적 경로 선택 |
+
+**Narrow vs Wide 구분의 이유**
+
+```
+핵심 질문: "이 연산에 다른 파티션 데이터가 필요한가?"
+
+Narrow (필요 없음):
+├── filter: 각 레코드 독립 판단
+├── map: 각 레코드 독립 변환
+├── 네트워크 통신 불필요
+└── 같은 Stage에서 파이프라이닝
+
+Wide (필요함):
+├── groupBy: 같은 키끼리 모아야 함
+├── join: 양쪽 테이블 매칭 필요
+├── 셔플(네트워크 통신) 발생
+└── Stage 경계 생성
+```
+
+{{< callout type="info" title="설계 원칙" >}}
+**"셔플은 분산 시스템의 가장 비싼 연산"** — Spark는 Narrow/Wide를 명확히 구분하여 Stage를 나누고, 불필요한 셔플을 최소화하도록 설계되었습니다. Wide Transformation이 많을수록 성능이 저하됩니다.
+{{< /callout >}}
+
+**Action이 Job을 생성하는 이유**
+
+```
+// 같은 DataFrame에서 여러 Action 호출
+df.count();    // Job 1: 전체 DAG 실행
+df.show();     // Job 2: 전체 DAG 다시 실행!
+
+왜 매번 다시 실행할까?
+├── RDD/DataFrame은 불변(immutable)
+├── 이전 결과를 기억하지 않음
+├── 메모리 효율성 (기본적으로 중간 결과 저장 안 함)
+└── 필요하면 명시적으로 cache() 호출
+```
 
 ## 핵심 개념
 
