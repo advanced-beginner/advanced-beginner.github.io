@@ -1,7 +1,7 @@
 ---
 title: 용어 사전
 weight: 1
-lastmod: 2026-01-10
+lastmod: "2026-01-15"
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
@@ -306,6 +306,84 @@ public class OrderConfirmedEvent extends DomainEvent {
 
 ---
 
+### Invariant (불변식)
+
+**정의:** [Aggregate](#aggregate-집합체)가 항상 만족해야 하는 비즈니스 규칙
+
+**특징:**
+- 트랜잭션 내에서 항상 참이어야 함
+- Aggregate 경계를 결정하는 핵심 기준
+- 상태 변경 시마다 검증
+
+**예시:**
+```java
+public class Order {
+    private static final int MAX_ORDER_LINES = 100;
+
+    public void addOrderLine(OrderLine line) {
+        // 불변식: 주문 항목은 100개를 초과할 수 없다
+        if (orderLines.size() >= MAX_ORDER_LINES) {
+            throw new TooManyOrderLinesException();
+        }
+        orderLines.add(line);
+    }
+}
+```
+
+📖 [Aggregate 상세](../../concepts/aggregate/#invariant)
+
+---
+
+### Optimistic Locking (낙관적 락)
+
+**정의:** 동시 수정 충돌을 감지하기 위해 버전 번호를 사용하는 방식
+
+**특징:**
+- 읽을 때 잠금 없이 버전 번호 확인
+- 저장 시 버전이 변경되었으면 예외 발생
+- 충돌 빈도가 낮을 때 효율적
+
+**구현:**
+```java
+@Entity
+public class OrderEntity {
+    @Version
+    private Long version;
+}
+```
+
+📖 [Aggregate 실전 패턴](../../concepts/aggregate-patterns/#optimistic-locking)
+
+---
+
+### Reconstitute (복원)
+
+**정의:** 저장된 데이터로부터 [Aggregate](#aggregate-집합체)를 재구성하는 것
+
+**특징:**
+- Factory 패턴의 일종
+- 새로 생성(create)과 복원(reconstitute) 분리
+- 복원 시에는 유효성 검증 생략 가능
+
+**예시:**
+```java
+public class Order {
+    // 새로 생성 - 이벤트 발행, 검증 수행
+    public static Order create(CustomerId customerId, List<OrderLine> lines) {
+        // 검증 및 이벤트 발행
+    }
+
+    // 저장된 상태에서 복원 - 검증 없이 상태만 복원
+    public static Order reconstitute(OrderId id, OrderStatus status, ...) {
+        // 상태만 복원
+    }
+}
+```
+
+📖 [Aggregate 실전 패턴](../../concepts/aggregate-patterns/#reconstitute)
+
+---
+
 ### Application Service (애플리케이션 서비스)
 
 **정의:** 유스케이스를 조율하는 서비스
@@ -395,6 +473,104 @@ public class OrderService {
 
 ---
 
+### Port (포트)
+
+**정의:** [Hexagonal Architecture](#hexagonal-architecture-헥사고날-아키텍처)에서 도메인이 외부와 통신하기 위해 정의하는 인터페이스
+
+**종류:**
+- **Inbound Port (Driving Port)**: 외부에서 도메인을 호출하는 인터페이스 (예: Use Case)
+- **Outbound Port (Driven Port)**: 도메인이 외부를 호출하는 인터페이스 (예: [Repository](#repository-리포지토리))
+
+**관련 용어:** [Adapter](#adapter-어댑터), [Hexagonal Architecture](#hexagonal-architecture-헥사고날-아키텍처)
+
+📖 [헥사고날 아키텍처 상세](../../concepts/hexagonal-architecture/#port)
+
+---
+
+### Adapter (어댑터)
+
+**정의:** [Port](#port-포트)의 구현체로 실제 외부 시스템과 통신
+
+**종류:**
+- **Driving Adapter (Primary)**: Controller, CLI, 메시지 리스너 등 (도메인을 호출)
+- **Driven Adapter (Secondary)**: DB Repository, 외부 API 클라이언트 등 (도메인에 의해 호출)
+
+**예시:**
+```java
+// Driven Adapter - Repository 구현
+@Repository
+public class JpaOrderRepository implements OrderRepository {
+    // Port 구현
+}
+
+// Driving Adapter - Controller
+@RestController
+public class OrderController {
+    private final OrderService orderService; // Inbound Port
+}
+```
+
+📖 [헥사고날 아키텍처 상세](../../concepts/hexagonal-architecture/#adapter)
+
+---
+
+### Clean Architecture (클린 아키텍처)
+
+**정의:** Robert C. Martin이 제안한 의존성 규칙 기반 아키텍처
+
+**구조 (동심원):**
+- **Entity**: 비즈니스 규칙
+- **Use Case**: 애플리케이션 비즈니스 규칙
+- **Interface Adapter**: Controller, Gateway, Presenter
+- **Framework & Driver**: 프레임워크, 데이터베이스
+
+**핵심 규칙:** 의존성은 항상 바깥에서 안쪽으로만 향함
+
+**관련 패턴:** [Hexagonal Architecture](#hexagonal-architecture-헥사고날-아키텍처), [Onion Architecture](#onion-architecture-어니언-아키텍처)
+
+📖 [클린 아키텍처 상세](../../concepts/clean-architecture/)
+
+---
+
+### Onion Architecture (어니언 아키텍처)
+
+**정의:** Jeffrey Palermo가 제안한 도메인 모델 중심 아키텍처
+
+**구조 (양파 레이어):**
+- **Domain Model** (가장 안쪽): [Entity](#entity-엔티티), [Value Object](#value-object-값-객체), [Aggregate](#aggregate-집합체)
+- **Domain Service**: 여러 Aggregate 조합
+- **Application Service**: 유스케이스 흐름 조율
+- **Infrastructure** (가장 바깥): UI, DB, 외부 연동
+
+**핵심 특징:**
+- Domain Model이 어떤 것에도 의존하지 않음
+- DDD와 가장 잘 어울리는 아키텍처
+- [Repository](#repository-리포지토리) 인터페이스는 Domain에 위치
+
+📖 [어니언 아키텍처 상세](../../concepts/onion-architecture/)
+
+---
+
+### Dependency Inversion (의존성 역전)
+
+**정의:** 고수준 모듈이 저수준 모듈에 의존하지 않고, 둘 다 추상화에 의존하는 원칙
+
+**DDD에서의 적용:**
+```
+Domain (고수준) → OrderRepository (Interface)
+                         ↑
+Infrastructure (저수준) → JpaOrderRepository (구현)
+```
+
+**효과:**
+- 도메인이 인프라에 의존하지 않음
+- 구현체 교체 용이 (JPA → MyBatis)
+- 테스트 용이 (Mock 주입)
+
+📖 [헥사고날 아키텍처](../../concepts/hexagonal-architecture/) | [어니언 아키텍처](../../concepts/onion-architecture/)
+
+---
+
 ### CQRS (Command Query Responsibility Segregation)
 
 **정의:** 명령(쓰기)과 조회(읽기)의 모델을 분리
@@ -444,6 +620,220 @@ flowchart LR
 > - **Hexagonal Architecture**: Port(인터페이스)와 Adapter(구현체)로 도메인을 외부로부터 보호
 > - **CQRS**: 명령(쓰기)과 조회(읽기) 모델 분리로 각각 최적화
 > - **Event Sourcing**: 상태 대신 이벤트를 저장하고 재생하여 현재 상태 도출
+
+---
+
+## 안티패턴
+
+> 📖 자세한 내용: [안티패턴과 함정](../../concepts/anti-patterns/)
+
+### Anemic Domain Model (빈약한 도메인 모델)
+
+**정의:** [Entity](#entity-엔티티)가 데이터만 가지고 로직이 없는 상태
+
+**증상:**
+- Entity에 getter/setter만 존재
+- 모든 비즈니스 로직이 Service에 분산
+- Entity가 단순한 데이터 컨테이너
+
+**해결책:** 비즈니스 로직을 [Entity](#entity-엔티티)와 [Aggregate](#aggregate-집합체)로 이동
+
+📖 [안티패턴 상세](../../concepts/anti-patterns/#anemic-domain-model)
+
+---
+
+### God Aggregate
+
+**정의:** 너무 많은 것을 포함하는 거대한 [Aggregate](#aggregate-집합체)
+
+**증상:**
+- 다른 Aggregate를 ID가 아닌 객체로 직접 참조
+- 트랜잭션 범위가 과도하게 넓음
+- 동시성 충돌 빈번
+
+**해결책:** ID 참조로 분리, 작은 Aggregate 유지
+
+📖 [안티패턴 상세](../../concepts/anti-patterns/#god-aggregate)
+
+---
+
+### Big Ball of Mud
+
+**정의:** 모든 것을 하나의 거대한 [Bounded Context](#bounded-context-경계된-컨텍스트)로 만드는 것
+
+**증상:**
+- 병합 충돌 빈번
+- 작은 변경에도 전체 재배포 필요
+- 용어가 여러 의미로 혼용
+
+**해결책:** 명확한 경계를 찾아 Context 분리
+
+📖 [안티패턴 상세](../../concepts/anti-patterns/#big-ball-of-mud)
+
+---
+
+### Primitive Obsession (원시 타입 집착)
+
+**정의:** 도메인 개념을 String, int 같은 원시 타입으로 표현
+
+**문제점:**
+- 컴파일러가 타입 검증 불가
+- 잘못된 값이 쉽게 들어감
+- 도메인 규칙 보호 불가
+
+**해결책:** [Value Object](#value-object-값-객체) 사용
+
+```java
+// ❌ Primitive Obsession
+public void createOrder(String customerId, String email, int amount)
+
+// ✅ Value Object 사용
+public void createOrder(CustomerId customerId, Email email, Money amount)
+```
+
+📖 [안티패턴 상세](../../concepts/anti-patterns/#primitive-obsession)
+
+---
+
+### Smart UI Anti-Pattern
+
+**정의:** 비즈니스 로직이 UI나 Controller에 있는 상태
+
+**문제점:**
+- 테스트 어려움
+- 재사용 불가
+- 계층 책임 혼란
+
+**해결책:** 로직을 도메인 계층으로 이동, Controller는 얇게 유지
+
+📖 [안티패턴 상세](../../concepts/anti-patterns/#smart-ui)
+
+---
+
+## 테스트 패턴
+
+> 📖 자세한 내용: [테스트 전략](../../concepts/testing/)
+
+### Test Pyramid (테스트 피라미드)
+
+**정의:** 단위 테스트를 가장 많이, E2E 테스트를 가장 적게 작성하는 전략
+
+**구성:**
+- **단위 테스트** (가장 많음): Domain Model, Value Object - 빠름, 비용 낮음
+- **통합 테스트** (중간): Repository, 외부 연동 - 중간 속도
+- **E2E 테스트** (가장 적음): 전체 시나리오 - 느림, 비용 높음
+
+📖 [테스트 전략 상세](../../concepts/testing/#test-pyramid)
+
+---
+
+### Test Fixture
+
+**정의:** 테스트에 필요한 기본 데이터를 생성하는 헬퍼 메서드 모음
+
+**예시:**
+```java
+public class OrderFixtures {
+    public static Order createPendingOrder() {
+        return Order.create(customerId, createValidAddress(), createDefaultOrderLines());
+    }
+
+    public static Order createConfirmedOrder() {
+        Order order = createPendingOrder();
+        order.confirm();
+        return order;
+    }
+}
+```
+
+📖 [테스트 전략 상세](../../concepts/testing/#test-fixture)
+
+---
+
+### Test Builder
+
+**정의:** Fluent API를 사용하여 가독성 높은 테스트 데이터를 생성하는 패턴
+
+**예시:**
+```java
+Order order = OrderBuilder.anOrder()
+    .withCustomerId("VIP-001")
+    .withOrderLine("PROD-001", "상품", 10000, 2)
+    .confirmed()
+    .build();
+```
+
+📖 [테스트 전략 상세](../../concepts/testing/#test-builder)
+
+---
+
+## 기타 용어
+
+### DTO (Data Transfer Object)
+
+**정의:** 계층 간 데이터 전송을 위한 객체
+
+**특징:**
+- 순수한 데이터 컨테이너
+- 비즈니스 로직 없음
+- 계층 간 의존성 분리
+
+**사용 위치:**
+- Presentation ↔ Application 계층 간 통신
+- 외부 API 요청/응답
+
+---
+
+### Eventual Consistency (결과적 일관성)
+
+**정의:** 즉각적인 일관성 대신 일정 시간 후에 일관성이 달성되는 것
+
+**사용 시점:**
+- [Aggregate](#aggregate-집합체) 경계를 넘는 연산
+- [Domain Event](#domain-event-도메인-이벤트)를 통한 비동기 처리
+- 마이크로서비스 간 통신
+
+**관련 개념:** [Saga](#saga-사가)
+
+📖 [도메인 이벤트 상세](../../concepts/domain-events/)
+
+---
+
+### Saga (사가)
+
+**정의:** 여러 [Aggregate](#aggregate-집합체) 또는 서비스에 걸친 장기 실행 비즈니스 트랜잭션을 관리하는 패턴
+
+**종류:**
+- **Choreography**: 각 서비스가 이벤트에 반응하여 다음 단계 트리거
+- **Orchestration**: 중앙 조정자가 순서 제어
+
+**사용 시점:**
+- 분산 트랜잭션 필요
+- 여러 Aggregate의 결과적 일관성 달성
+
+📖 [도메인 이벤트 상세](../../concepts/domain-events/#saga)
+
+---
+
+### Transaction Script
+
+**정의:** 각 비즈니스 트랜잭션을 하나의 프로시저로 구현하는 패턴
+
+**특징:**
+- 단순한 CRUD에 적합
+- 비즈니스 로직이 서비스에 집중
+- 복잡해지면 유지보수 어려움
+
+**비교:** [Anemic Domain Model](#anemic-domain-model-빈약한-도메인-모델)과 유사한 결과 초래 가능
+
+---
+
+> **안티패턴 & 테스트 핵심 포인트**
+>
+> - **Anemic Domain Model**: Entity에 로직 없이 getter/setter만 있음 → Rich Domain Model로 개선
+> - **God Aggregate**: 너무 큰 Aggregate → ID 참조로 분리
+> - **Test Pyramid**: 단위 테스트 많이, E2E 적게
+> - **Eventual Consistency**: Domain Event로 Aggregate 간 결과적 일관성 달성
 
 ---
 
