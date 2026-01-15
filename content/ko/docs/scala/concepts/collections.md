@@ -1,8 +1,24 @@
 ---
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 title: 컬렉션
 weight: 7
 ---
+
+## 전체 비유: 도서관 시스템
+
+Scala 컬렉션을 **도서관**에 비유하면 이해하기 쉽습니다:
+
+| 도서관 비유 | Scala 개념 | 특성 |
+|-----------|-----------|------|
+| 서가의 책 순서 | Seq (시퀀스) | 순서가 있는 컬렉션 |
+| 책장별 책 나열 | List (연결 리스트) | 앞에서 빠른 추가/제거 |
+| 도서 번호 색인 | Vector (인덱스 시퀀스) | 랜덤 접근 최적화 |
+| 등록된 회원 명단 | Set (집합) | 중복 없는 고유 요소 |
+| 도서 목록 카탈로그 | Map (맵) | ISBN → 도서 정보 매핑 |
+| 보존 서고 (원본 보관) | 불변 컬렉션 | 원본 변경 없이 새 복사본 생성 |
+| 열람실 책상 (임시 작업) | 가변 컬렉션 | 성능상 필요시에만 사용 |
+
+도서관에서 책의 순서, 검색 방법, 보관 정책이 중요하듯이, 컬렉션에서도 데이터의 구조와 접근 방식이 프로그램 설계의 핵심입니다.
 
 {{< callout type="info" title="TL;DR" >}}
 - Scala는 **불변 컬렉션**을 기본으로 사용합니다 (스레드 안전, 예측 가능)
@@ -487,7 +503,23 @@ val flat2 = nested.flatMap(identity)
 
 </details>
 
+#### 관련 개념
+
+컬렉션은 다음 개념들과 밀접하게 연결됩니다:
+
+| 관련 개념 | 연결 관계 |
+|----------|----------|
+| [고차 함수]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) | `map`, `filter`, `fold` 등 컬렉션의 핵심 연산 |
+| [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | 리스트의 `head :: tail` 분해, `collect` 연산 |
+| [for 표현식]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) | 컬렉션 순회와 변환을 위한 선언적 문법 |
+| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Option, Either 등 대수적 타입도 컬렉션처럼 처리 |
+| [제네릭]({{< relref "/docs/scala/concepts/generics" >}}) | `List[A]`, `Map[K, V]` 등 타입 파라미터화 |
+| [공변성]({{< relref "/docs/scala/concepts/variance" >}}) | `List[+A]` 등 컬렉션의 타입 가변성 |
+
 #### 다음 단계
 
-- [고차 함수](higher-order-functions/) — map, filter, fold 심화
-- [For Comprehension](for-comprehensions/) — 모나딕 연산
+| 학습 경로 | 설명 |
+|----------|------|
+| [고차 함수]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) | `map`, `filter`, `fold` 패턴 심화 학습 |
+| [for 표현식]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) | 모나딕 연산과 컬렉션 조합 |
+| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Option, Either를 활용한 안전한 프로그래밍 |

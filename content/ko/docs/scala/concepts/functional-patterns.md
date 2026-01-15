@@ -1,8 +1,25 @@
 ---
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 title: 함수형 프로그래밍 패턴
 weight: 17
 ---
+
+## 전체 비유: 레고 블록 조립
+
+함수형 프로그래밍 패턴을 **레고 블록 조립**에 비유하면 이해하기 쉽습니다:
+
+| 레고 비유 | Scala 개념 | 역할 |
+|----------|-----------|------|
+| 블록의 표준 연결부 | 타입 시그니처 | 조합 가능성 보장 |
+| 같은 블록 → 같은 결과 | 참조 투명성 | 예측 가능한 동작 |
+| 원본 블록 보존 | 불변성 | 부수 효과 없음 |
+| 블록 색 변환기 | Functor (map) | 내용물만 변환, 구조 유지 |
+| 블록 연결기 | Monad (flatMap) | 순차적 조립 연결 |
+| "비어 있음" 표시 블록 | Option | 값의 유무 표현 |
+| "오류 라벨" 블록 | Either | 성공/실패 정보 포함 |
+| 블록 조립 설명서 | for comprehension | 조립 순서 기술 |
+
+레고를 조립할 때 **표준 연결부가 있어야 어떤 블록이든 연결**할 수 있듯이, 함수형 프로그래밍에서는 Functor, Monad 같은 추상화가 다양한 타입을 일관되게 조합할 수 있게 해줍니다.
 
 {{< callout type="info" title="TL;DR" >}}
 - **참조 투명성**: 함수 호출을 결과로 대체해도 의미 변화 없음
@@ -461,8 +478,24 @@ validateAll(results)  // Left(List("에러1", "에러2"))
 - [ZIO 공식 문서](https://zio.dev/)
 - [Functional Programming in Scala](https://www.manning.com/books/functional-programming-in-scala)
 
+#### 관련 개념
+
+함수형 패턴은 다음 개념들과 밀접하게 연결됩니다:
+
+| 관련 개념 | 연결 관계 |
+|----------|----------|
+| [고차 함수]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) | `map`, `flatMap`, `filter` 등의 기반 |
+| [for 표현식]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) | Monad 연산의 문법적 설탕 |
+| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | Functor, Monad 등 추상화 구현 방식 |
+| [케이스 클래스]({{< relref "/docs/scala/concepts/case-classes" >}}) | 불변 데이터 구조 정의 |
+| [동시성]({{< relref "/docs/scala/concepts/concurrency" >}}) | Future, IO 등 비동기 효과 타입 |
+| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | 고차 타입 (F[_]) 이해 |
+
 #### 다음 단계
 
-- [Cats 라이브러리](https://typelevel.org/cats/)
-- [ZIO 라이브러리](https://zio.dev/)
-- [fs2 스트리밍](https://fs2.io/)
+| 학습 경로 | 설명 |
+|----------|------|
+| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | 다형성 추상화 패턴 심화 |
+| [Cats 라이브러리](https://typelevel.org/cats/) | 함수형 추상화 라이브러리 |
+| [ZIO 라이브러리](https://zio.dev/) | 타입 안전한 효과 시스템 |
+| [fs2 스트리밍](https://fs2.io/) | 함수형 스트림 처리 |
