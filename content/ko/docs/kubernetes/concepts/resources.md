@@ -1,10 +1,30 @@
 ---
-lastmod: "2026-01-11"
+lastmod: "2026-01-15"
 title: 리소스 관리
 weight: 8
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+## 전체 비유: 아파트 전기/수도 배정
+
+리소스 관리를 **아파트 전기/수도 배정**에 비유하면 이해하기 쉽습니다:
+
+| 아파트 공과금 비유 | Kubernetes | 역할 |
+|------------------|------------|------|
+| 기본 전기 용량 | requests | 최소 보장 리소스 |
+| 최대 전기 용량 | limits | 사용 가능한 최대치 |
+| 전기 초과 시 차단기 | CPU 스로틀링 | 한계 초과 시 성능 저하 |
+| 수도 초과 시 단수 | OOMKilled | 메모리 초과 시 강제 종료 |
+| 프리미엄 세대 | Guaranteed QoS | 가장 마지막에 퇴거 요청 |
+| 일반 세대 | Burstable QoS | 중간 우선순위 |
+| 관리비 미납 세대 | BestEffort QoS | 가장 먼저 퇴거 요청 |
+| 단지 전체 전기 한도 | ResourceQuota | 네임스페이스 총량 제한 |
+| 세대별 기본 배정량 | LimitRange | 기본 리소스 설정 |
+
+이처럼 requests는 "항상 보장받는 기본 전기량"이고, limits는 "절대 넘을 수 없는 최대 사용량"입니다.
+
 ---
 
 > **대상 독자**: Kubernetes에서 리소스를 효율적으로 관리하고 싶은 백엔드 개발자

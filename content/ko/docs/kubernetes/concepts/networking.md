@@ -1,10 +1,30 @@
 ---
-lastmod: "2026-01-11"
+lastmod: "2026-01-15"
 title: 네트워킹
 weight: 7
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+## 전체 비유: 아파트 단지 출입 시스템
+
+Kubernetes 네트워킹을 **아파트 단지 출입 시스템**에 비유하면 이해하기 쉽습니다:
+
+| 아파트 출입 비유 | Kubernetes | 역할 |
+|----------------|------------|------|
+| 세대 간 방문 | Pod-to-Pod 통신 | 같은 단지 내 자유로운 왕래 |
+| 각 세대 고유 호수 | Pod IP | 고유한 네트워크 주소 |
+| 동 현관 인터폰 | Service | 안정적인 접근점 제공 |
+| 단지 정문/경비실 | Ingress | 외부 방문자 안내 및 통제 |
+| 방문자 명부 | Ingress Rules | 도메인/경로별 라우팅 규칙 |
+| 외부 전화 연결 | NodePort | 외부에서 특정 포트로 접근 |
+| 대표 전화번호 | LoadBalancer | 외부 고정 IP 제공 |
+| 출입 통제 규칙 | NetworkPolicy | 특정 세대 간 왕래 제한 |
+| VIP 전용 출입구 | TLS Termination | HTTPS 암호화 처리 |
+
+이처럼 Ingress는 "단지 정문에서 방문자를 확인하고 올바른 동/호수로 안내"하는 것과 같습니다.
+
 ---
 
 > **대상 독자**: Kubernetes 네트워크 구조를 이해하고 싶은 백엔드 개발자

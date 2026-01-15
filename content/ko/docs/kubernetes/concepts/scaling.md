@@ -1,10 +1,30 @@
 ---
-lastmod: "2026-01-11"
+lastmod: "2026-01-15"
 title: 스케일링
 weight: 9
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+## 전체 비유: 아파트 세대 수 조절
+
+스케일링을 **아파트 세대 수 조절**에 비유하면 이해하기 쉽습니다:
+
+| 아파트 관리 비유 | Kubernetes | 역할 |
+|----------------|------------|------|
+| 입주 수요에 따라 세대 수 조절 | 스케일링 | 트래픽에 따른 Pod 수 조정 |
+| 세대 수 늘리기 | Horizontal Scaling (HPA) | Pod 개수 증가 |
+| 세대 크기 늘리기 | Vertical Scaling (VPA) | Pod 리소스 증가 |
+| 입주율 50% 초과 시 증축 | averageUtilization | 스케일링 기준 메트릭 |
+| 최소 3세대 유지 | minReplicas | 최소 Pod 수 |
+| 최대 10세대까지 | maxReplicas | 최대 Pod 수 |
+| 증축은 빠르게, 감축은 천천히 | scaleUp/scaleDown 정책 | 급격한 변화 방지 |
+| 전기 사용량 측정기 | Metrics Server | 리소스 사용량 모니터링 |
+| 성수기 자동 증축 | 자동 스케일링 | 부하에 따른 자동 조절 |
+
+이처럼 HPA는 "입주 수요가 늘면 세대 수를 늘리고, 줄면 다시 줄이는" 자동 관리 시스템입니다.
+
 ---
 
 > **대상 독자**: Kubernetes에서 자동 스케일링을 구성하고 싶은 백엔드 개발자
