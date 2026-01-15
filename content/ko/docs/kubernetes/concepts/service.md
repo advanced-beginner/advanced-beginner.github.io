@@ -1,10 +1,30 @@
 ---
-lastmod: "2026-01-11"
+lastmod: "2026-01-15"
 title: Service
 weight: 4
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+## 전체 비유: 아파트 인터폰/안내 시스템
+
+Service를 **아파트 인터폰 시스템**에 비유하면 이해하기 쉽습니다:
+
+| 아파트 인터폰 비유 | Kubernetes Service | 역할 |
+|------------------|-------------------|------|
+| 동 현관 인터폰 | Service | 고정된 접근점으로 세대 연결 |
+| 인터폰 번호 (101동) | ClusterIP | 변하지 않는 내부 주소 |
+| 세대 호수 변경되어도 인터폰 동일 | Pod IP 변경 무관 | Service IP는 고정 |
+| 같은 세대 여러 명에게 연결 | Load Balancing | 여러 Pod에 트래픽 분산 |
+| 내부 인터폰 | ClusterIP | 단지 내부에서만 통화 가능 |
+| 외부 전화 연결 | NodePort | 외부에서 특정 포트로 연결 |
+| 대표 전화번호 | LoadBalancer | 외부 고정 IP로 연결 |
+| 입주민 명부 | Endpoints | Service가 관리하는 Pod IP 목록 |
+| "101동 김철수네" | DNS | 이름으로 Service 접근 |
+
+이처럼 Service는 "세대 번호가 바뀌어도 인터폰 번호는 그대로여서 항상 연결 가능"한 것과 같습니다.
+
 ---
 
 > **대상 독자**: Kubernetes에서 네트워크 접근을 설정하고 싶은 백엔드 개발자

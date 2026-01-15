@@ -1,10 +1,31 @@
 ---
-lastmod: "2026-01-11"
+lastmod: "2026-01-15"
 title: 헬스 체크
 weight: 10
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+## 전체 비유: 아파트 안전 점검
+
+헬스 체크를 **아파트 안전 점검**에 비유하면 이해하기 쉽습니다:
+
+| 아파트 점검 비유 | Kubernetes | 역할 |
+|----------------|------------|------|
+| 정기 안전 점검 | Health Check | 애플리케이션 상태 확인 |
+| "살아 계신가요?" 확인 | Liveness Probe | 컨테이너 생존 확인 |
+| "손님 받을 준비 됐나요?" | Readiness Probe | 트래픽 수신 준비 확인 |
+| "이사 완료됐나요?" | Startup Probe | 시작 완료 여부 확인 |
+| 응답 없으면 119 호출 | Liveness 실패 → 재시작 | 컨테이너 재시작 |
+| 바쁘면 손님 안 받음 | Readiness 실패 → 트래픽 제외 | Service에서 제외 |
+| 이사 중이면 기다림 | Startup 진행 중 | 다른 Probe 비활성화 |
+| 초인종 눌러서 확인 | HTTP Probe | HTTP 엔드포인트 체크 |
+| 전화해서 확인 | TCP Probe | 포트 연결 체크 |
+| 가스 점검 (직접 확인) | Exec Probe | 명령어 실행 체크 |
+
+이처럼 Probe는 "관리인이 주기적으로 세대를 방문하여 상태를 확인"하는 것과 같습니다.
+
 ---
 
 > **대상 독자**: Kubernetes에서 애플리케이션 상태를 모니터링하고 싶은 백엔드 개발자

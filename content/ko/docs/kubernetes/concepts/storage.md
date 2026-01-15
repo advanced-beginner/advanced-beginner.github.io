@@ -1,10 +1,30 @@
 ---
-lastmod: "2026-01-11"
+lastmod: "2026-01-15"
 title: Volume과 스토리지
 weight: 6
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+## 전체 비유: 아파트 수납공간과 창고
+
+Volume과 스토리지를 **아파트 수납공간**에 비유하면 이해하기 쉽습니다:
+
+| 아파트 수납 비유 | Kubernetes | 역할 |
+|----------------|------------|------|
+| 세대 내 붙박이장 | emptyDir | Pod와 함께 생성/삭제되는 임시 공간 |
+| 단지 공용 창고 | PersistentVolume (PV) | 이사해도 유지되는 외부 저장소 |
+| 창고 사용 신청서 | PersistentVolumeClaim (PVC) | 필요한 용량과 조건 요청 |
+| 창고 자동 배정 시스템 | StorageClass | 요청 시 자동으로 창고 할당 |
+| 세대 간 물건 공유 | Volume Mount | 컨테이너 간 데이터 공유 |
+| 개인만 사용 | ReadWriteOnce (RWO) | 단일 노드에서만 읽기/쓰기 |
+| 여러 세대가 읽기만 | ReadOnlyMany (ROX) | 여러 노드에서 읽기 전용 |
+| 여러 세대가 함께 사용 | ReadWriteMany (RWX) | 여러 노드에서 읽기/쓰기 |
+| 퇴거 시 창고 처리 | Reclaim Policy | Retain(유지), Delete(삭제) |
+
+이처럼 emptyDir은 "이사하면 사라지는 붙박이장"이고, PV/PVC는 "이사해도 물건이 남아있는 별도 창고"입니다.
+
 ---
 
 > **대상 독자**: Kubernetes에서 데이터를 영구 저장하고 싶은 백엔드 개발자

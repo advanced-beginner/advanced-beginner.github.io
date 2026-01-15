@@ -1,10 +1,30 @@
 ---
-lastmod: "2026-01-11"
+lastmod: "2026-01-15"
 title: ConfigMap과 Secret
 weight: 5
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+## 전체 비유: 아파트 게시판과 우편함
+
+ConfigMap과 Secret을 **아파트 게시판과 우편함**에 비유하면 이해하기 쉽습니다:
+
+| 아파트 비유 | Kubernetes | 역할 |
+|------------|------------|------|
+| 로비 게시판 | ConfigMap | 모든 입주민이 볼 수 있는 공지사항 |
+| 개인 우편함 (비밀번호) | Secret | 민감한 정보 보관 |
+| 게시판 내용 | data (평문) | 일반 설정 값 |
+| 우편함 내용 | data (Base64) | 인코딩된 민감 정보 |
+| 게시판 읽고 메모 | 환경 변수 주입 | 설정을 Pod에 전달 |
+| 게시판 사진 찍어가기 | 볼륨 마운트 | 파일로 설정 전달 |
+| 게시판 내용 변경 | ConfigMap 업데이트 | 설정 변경 (재시작 필요할 수도) |
+| DB 접속 정보 | Secret | 비밀번호, API 키 등 |
+| Wi-Fi 비밀번호 공유 | ConfigMap | 공개해도 되는 설정 |
+
+이처럼 ConfigMap은 "게시판에 붙여 모두가 보는 공지"이고, Secret은 "개인 우편함에 넣어 본인만 확인하는 정보"입니다.
+
 ---
 
 > **대상 독자**: 애플리케이션 설정을 Kubernetes에서 관리하고 싶은 백엔드 개발자

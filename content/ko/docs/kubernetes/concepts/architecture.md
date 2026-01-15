@@ -1,10 +1,30 @@
 ---
-lastmod: "2026-01-11"
+lastmod: "2026-01-15"
 title: 아키텍처
 weight: 1
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+## 전체 비유: 아파트 단지 운영 본부
+
+Kubernetes 아키텍처를 **아파트 단지 운영 본부**에 비유하면 이해하기 쉽습니다:
+
+| 아파트 단지 비유 | Kubernetes | 역할 |
+|----------------|------------|------|
+| 관리사무소 | Control Plane | 단지 전체 운영 결정 및 지휘 |
+| 관리소장 | API Server | 모든 요청의 창구, 인증/인가 담당 |
+| 입주민 대장 | etcd | 모든 세대 정보 기록 및 보관 |
+| 입주 배정 담당자 | Scheduler | 새 입주자를 어느 동에 배치할지 결정 |
+| 시설 관리팀 | Controller Manager | 세대 수 유지, 시설 상태 점검 |
+| 각 동 건물 | Worker Node | 실제 세대가 있는 공간 |
+| 동 관리인 | Kubelet | 해당 동의 세대 관리, 상태 보고 |
+| 동 안내 데스크 | Kube-proxy | 방문자를 올바른 세대로 안내 |
+| 이삿짐 업체 | Container Runtime | 실제 이사(컨테이너 실행) 담당 |
+
+이처럼 Control Plane은 "관리사무소에서 단지 전체를 운영"하고, Worker Node는 "각 동에서 실제 입주민을 수용"합니다.
+
 ---
 
 > **대상 독자**: Kubernetes 구조를 이해하고 싶은 백엔드 개발자

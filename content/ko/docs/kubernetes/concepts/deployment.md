@@ -1,10 +1,29 @@
 ---
-lastmod: "2026-01-11"
+lastmod: "2026-01-15"
 title: Deployment
 weight: 3
 author:
   name: Advanced Beginner
   github: advanced-beginner
+---
+
+## 전체 비유: 입주민 관리 시스템
+
+Deployment를 **아파트 입주민 관리 시스템**에 비유하면 이해하기 쉽습니다:
+
+| 아파트 관리 비유 | Kubernetes Deployment | 역할 |
+|----------------|----------------------|------|
+| 입주민 관리 시스템 | Deployment | 세대(Pod) 배치와 업데이트 총괄 |
+| "항상 3세대 유지" 규칙 | replicas: 3 | 원하는 세대 수 선언 |
+| 세대 목록 관리대장 | ReplicaSet | 실제 세대 수 유지 담당 |
+| 순차적 이사 | Rolling Update | 한 세대씩 새 버전으로 교체 |
+| 이전 주소로 복귀 | Rollback | 문제 시 이전 상태로 되돌리기 |
+| 공실 발생 시 자동 입주 | 자동 복구 | Pod 장애 시 자동 재생성 |
+| 입주 규격 템플릿 | Pod Template | 생성할 세대의 표준 사양 |
+| 과거 입주 기록 보관 | revisionHistory | 롤백용 이전 버전 유지 |
+
+이처럼 Deployment는 "관리사무소가 항상 일정 수의 세대를 유지하고, 리모델링 시 순차적으로 진행"하는 것과 같습니다.
+
 ---
 
 > **대상 독자**: Kubernetes에서 애플리케이션을 배포하고 싶은 백엔드 개발자
