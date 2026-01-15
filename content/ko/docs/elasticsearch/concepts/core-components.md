@@ -1,7 +1,7 @@
 ---
 title: 핵심 구성요소
 weight: 1
-lastmod: 2026-01-10
+lastmod: 2026-01-15
 ---
 
 {{< callout type="tip" title="TL;DR" >}}
@@ -16,6 +16,22 @@ lastmod: 2026-01-10
 **선수 지식**: JSON 기본 문법, REST API 개념
 
 Elasticsearch의 핵심 구성요소인 Cluster, Node, Index, Document, Shard의 역할과 관계를 이해합니다.
+
+## 전체 비유: 대형 도서관 체인
+
+Elasticsearch 구성요소를 **대형 도서관 체인**에 비유하면 이해하기 쉽습니다:
+
+| 도서관 비유 | Elasticsearch | 역할 |
+|------------|---------------|------|
+| 도서관 체인 본사 | Cluster | 모든 지점을 통합 관리 |
+| 각 지점 건물 | Node | 실제 서버 (책 보관, 대출 처리) |
+| 분야별 서가 (소설, 과학) | Index | 비슷한 종류의 문서 모음 |
+| 책 한 권 | Document | JSON 형태의 개별 데이터 |
+| 같은 책이 여러 지점에 분산 | Shard | 데이터를 조각내어 분산 저장 |
+| 복본 (인기 도서 여러 부) | Replica | 읽기 성능 향상, 장애 대비 |
+| 색인 카드 (단어→책 목록) | Inverted Index | 빠른 검색을 위한 역색인 |
+
+**핵심 원리**: 한 지점(노드)이 문을 닫아도 다른 지점에서 같은 책(Replica)을 찾을 수 있습니다.
 
 ## 전체 구조
 

@@ -1,7 +1,7 @@
 ---
 title: 인덱싱 전략
 weight: 6
-lastmod: 2026-01-08
+lastmod: 2026-01-15
 prerequisites:
   - title: 핵심 구성요소
     path: /docs/elasticsearch/concepts/core-components/
@@ -19,6 +19,24 @@ related_concepts:
 - [핵심 구성요소](core-components/) - Shard, Segment 개념
 - [데이터 모델링](data-modeling/) - Mapping, Analyzer 기본
 {{% /notice %}}
+
+## 전체 비유: 도서관의 신간 입고 프로세스
+
+인덱싱 전략을 **도서관의 신간 입고 프로세스**에 비유하면 이해하기 쉽습니다:
+
+| 도서관 비유 | Elasticsearch | 역할 |
+|------------|---------------|------|
+| 한 권씩 등록 | 단건 인덱싱 | 느리지만 즉시 확인 가능 |
+| 박스 단위 대량 입고 | Bulk 인덱싱 | 훨씬 빠름 (10배 이상) |
+| 입고 후 서가 배치 | Refresh | 검색 가능하게 만듦 (기본 1초) |
+| 영구 장서 등록 | Flush | 디스크에 영구 저장 |
+| 입고 일지 | Translog | 장애 시 복구용 기록 |
+| 신간 분류 규칙 템플릿 | Index Template | 새 인덱스 자동 설정 |
+| 오래된 책 → 창고 → 폐기 | ILM (Index Lifecycle) | Hot → Warm → Cold → Delete |
+| 구판 → 신판 교체 | Reindex | 데이터 마이그레이션 |
+| 도서 별칭 (시리즈명) | Alias | 인덱스 별명으로 무중단 교체 |
+
+이처럼 인덱싱 전략은 "도서관에 새 책을 효율적으로 입고하고 관리"하는 프로세스와 같습니다.
 
 대용량 데이터를 효율적으로 저장하기 위한 Bulk 인덱싱, Refresh, Index Lifecycle Management를 배웁니다.
 
