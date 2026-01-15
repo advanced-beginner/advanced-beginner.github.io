@@ -4,7 +4,24 @@ description: Observability의 핵심 개념을 원리부터 이해합니다
 weight: 2
 bookCollapseSection: true
 author: "@advanced-beginner"
-lastmod: "2026-01-12"
+lastmod: "2026-01-15"
+---
+
+## 전체 비유: 병원 모니터링 시스템
+
+Observability를 **병원의 환자 모니터링 시스템**에 비유하면 이해하기 쉽습니다:
+
+| 병원 모니터링 비유 | Observability | 역할 |
+|------------------|---------------|------|
+| 환자 모니터 (맥박, 혈압) | Metrics | 수치로 상태 파악 |
+| 의무 기록 (진료 기록) | Logs | 상세 이벤트 기록 |
+| CT/MRI 영상 | Traces | 문제 위치 시각화 |
+| 중환자실 모니터링 대시보드 | Dashboard | 전체 상태 한눈에 파악 |
+| 이상 징후 시 알림 | Alerting | 문제 발생 시 즉시 알림 |
+| 국제 의료 기록 표준 | OpenTelemetry | 표준화된 데이터 형식 |
+
+이처럼 병원이 환자 상태를 다각도로 모니터링하듯, Observability는 시스템을 다양한 관점에서 관측합니다.
+
 ---
 
 단순히 "이렇게 쓰세요"가 아닌, **왜 이렇게 설계되었는가**를 설명합니다.

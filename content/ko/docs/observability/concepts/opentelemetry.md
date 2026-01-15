@@ -3,7 +3,26 @@ title: OpenTelemetry
 description: 관측성 표준 - Metrics, Logs, Traces를 하나의 프레임워크로 통합합니다
 weight: 13
 author: "@advanced-beginner"
-lastmod: "2026-01-12"
+lastmod: "2026-01-15"
+---
+
+## 전체 비유: 국제 의료 기록 표준
+
+OpenTelemetry를 **국제 의료 기록 표준(HL7/FHIR)**에 비유하면 이해하기 쉽습니다:
+
+| 의료 표준 비유 | OpenTelemetry | 역할 |
+|---------------|---------------|------|
+| 병원마다 다른 차트 양식 | 벤더별 SDK | 호환 안 되는 형식들 |
+| 국제 의료 기록 표준 | OpenTelemetry 표준 | 통일된 데이터 형식 |
+| 표준 진료 기록 양식 | Semantic Conventions | 공통 속성 이름 규약 |
+| 병원 내 기록 시스템 | OTel SDK | 데이터 수집 |
+| 기록 전송 센터 | OTel Collector | 수집/변환/전송 |
+| 다양한 EMR 시스템 | 다양한 백엔드 | Jaeger, Prometheus 등 |
+| 병원 이전해도 기록 호환 | 벤더 중립성 | 백엔드 변경 용이 |
+| 자동 기록 시스템 | Auto-instrumentation | 코드 변경 없이 계측 |
+
+이처럼 국제 표준이 있으면 어느 병원에서도 환자 기록을 읽을 수 있듯, OpenTelemetry는 어떤 백엔드로도 데이터를 보낼 수 있습니다.
+
 ---
 
 > **대상 독자**: 관측성 시스템을 표준화하려는 개발자, SRE
