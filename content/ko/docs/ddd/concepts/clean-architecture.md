@@ -1,7 +1,7 @@
 ---
 title: 클린 아키텍처
 weight: 8
-lastmod: "2026-01-13"
+lastmod: "2026-01-15"
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---

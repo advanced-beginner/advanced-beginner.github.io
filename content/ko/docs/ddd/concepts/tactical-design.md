@@ -1,7 +1,7 @@
 ---
 title: 전술적 설계
 weight: 2
-lastmod: "2026-01-13"
+lastmod: "2026-01-15"
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
@@ -16,6 +16,20 @@ author_url: "http://github.com/kimbenji"
 {{< /callout >}}
 
 도메인 모델을 구체적으로 구현하기 위한 패턴들이 바로 전술적 설계입니다. 전략적 설계가 "큰 그림"을 그리는 것이라면, 전술적 설계는 "구체적인 구현 방법"을 제시합니다.
+
+{{< callout type="tip" title="비유: 레고 블록" >}}
+전술적 설계의 빌딩 블록은 **레고 블록**과 같습니다:
+
+| 레고 블록 | DDD 빌딩 블록 | 특징 |
+|----------|--------------|------|
+| **고유 번호가 있는 특수 블록** | Entity | 식별자로 구분, 상태 변경 가능 |
+| **색깔/모양만 있는 일반 블록** | Value Object | 값으로 비교, 교체 가능 |
+| **설명서에 따라 조립한 세트** | Aggregate | 함께 변경되는 블록들의 묶음 |
+| **블록 보관함** | Repository | 조립한 세트를 저장/조회 |
+| **조립 도우미** | Domain Service | 여러 세트를 조합하는 로직 |
+
+레고 세트를 분해하지 않고 통째로 보관함에 넣듯, **Aggregate는 통째로 저장합니다.**
+{{< /callout >}}
 
 > **이 페이지 예제의 공통 import:**
 > ```java
@@ -1263,6 +1277,24 @@ Domain Service를 설계할 때는 특정 Entity에 속하지 않는 로직인�
 [ ] 무상태인가?
 [ ] 도메인 계층에만 의존하는가?
 ```
+
+#### 핵심 요약
+
+{{< callout type="info" title="전술적 설계 핵심 정리" >}}
+| 빌딩 블록 | 핵심 특징 | 구현 팁 |
+|----------|----------|--------|
+| **Entity** | 식별자로 구분, 가변 | `equals()`는 ID만 비교 |
+| **Value Object** | 값으로 구분, 불변 | Java Record 활용 |
+| **Aggregate** | 일관성 경계, Root만 외부 노출 | Root만 Repository 가짐 |
+| **Repository** | 컬렉션처럼 동작 | 인터페이스는 도메인에, 구현은 인프라에 |
+| **Domain Service** | 여러 Aggregate 조합 | 무상태, 도메인만 의존 |
+| **Factory** | 복잡한 생성 캡슐화 | 간단하면 정적 메서드로 충분 |
+
+**기억할 것:**
+- **Primitive Obsession 피하기**: String 대신 OrderId, int 대신 Money
+- **Aggregate 간 참조**: 객체 대신 ID로 참조
+- **풍부한 도메인 모델**: getter/setter만 있는 빈약한 모델 지양
+{{< /callout >}}
 
 #### 다음 단계
 

@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-13"
+lastmod: "2026-01-15"
 title: Aggregate 실전 패턴
 weight: 4
 author: "@kimbenji"
@@ -18,6 +18,19 @@ author_url: "http://github.com/kimbenji"
 # Aggregate 실전 패턴
 
 Aggregate 설계를 위한 구현 패턴과 의사결정 가이드입니다.
+
+## 왜 Aggregate에 패턴이 필요한가?
+
+Aggregate는 단순히 객체를 묶는 것이 아닙니다. **일관성, 동시성, 생명주기**라는 세 가지 책임을 져야 합니다. 이 책임을 효과적으로 수행하기 위해 검증된 패턴들이 존재합니다.
+
+{{< callout type="tip" title="비유: 아파트 관리" >}}
+Aggregate 패턴을 **아파트 관리**에 비유할 수 있습니다:
+
+- **낙관적 락(Optimistic Locking)**: 택배 보관함처럼 "먼저 온 사람이 가져가고, 늦은 사람은 재배송 요청"하는 방식입니다. 충돌이 드물 때 효율적입니다.
+- **도메인 이벤트**: 관리사무소 공지처럼 "이런 일이 있었습니다"라고 알리면, 관심 있는 주민이 각자 대응합니다.
+- **Factory Method**: 입주 신청서처럼 "정해진 양식으로만 입주 가능"하게 하여 잘못된 상태의 입주를 방지합니다.
+- **불변식 검증**: "한 세대에 최대 6명"같은 규칙을 항상 지키도록 합니다.
+{{< /callout >}}
 
 > **이 페이지 예제의 공통 import:**
 > ```java
@@ -94,7 +107,22 @@ public class Order {
 
 ## 실전 패턴
 
+각 패턴의 **왜**, **언제 사용**, **트레이드오프**를 함께 설명합니다.
+
 ### 패턴 1: 낙관적 락(Optimistic Locking)
+
+**왜 필요한가?**
+동시에 여러 사용자가 같은 Aggregate를 수정하면 한쪽의 변경이 사라질 수 있습니다(Lost Update). 낙관적 락은 "충돌이 드물 것"이라고 가정하고, 실제 충돌 시에만 재시도를 요구합니다.
+
+**트레이드오프:**
+| 장점 | 단점 |
+|------|------|
+| 락 대기 없이 높은 동시성 | 충돌 시 재시도 로직 필요 |
+| 읽기 성능 저하 없음 | 충돌이 잦으면 사용자 경험 저하 |
+| 구현이 간단 (@Version) | 긴 트랜잭션에서는 비효율적 |
+
+**언제 사용?**: 충돌 확률이 5% 미만인 경우, 읽기 위주 시스템
+**언제 피해야?**: 충돌이 잦은 경우 (예: 실시간 경매의 최고가 갱신)
 
 ```java
 @Entity
@@ -120,11 +148,21 @@ try {
 }
 ```
 
-### 패턴 2: Aggregate 복원
+### 패턴 2: Aggregate 복원 (Factory Pattern)
+
+**왜 필요한가?**
+Aggregate의 생성과 DB 로딩은 다른 문맥입니다. 새로 만들 때는 불변식을 검증하고 이벤트를 발행해야 하지만, DB에서 복원할 때는 이미 유효한 상태이므로 검증이 불필요합니다. 두 경로를 분리해야 코드가 명확해집니다.
+
+**트레이드오프:**
+| 장점 | 단점 |
+|------|------|
+| 생성 의도가 명확함 | 팩토리 메서드가 여러 개 필요 |
+| 불변식 검증 위치 명확 | 코드량 증가 |
+| 테스트가 쉬움 | 학습 곡선 존재 |
 
 ```java
 public class Order {
-    // 저장된 상태에서 복원 (Factory 패턴)
+    // 저장된 상태에서 복원 (검증 없이)
     public static Order reconstitute(
         OrderId id,
         CustomerId customerId,
@@ -160,6 +198,19 @@ public class Order {
 
 ### 패턴 3: 도메인 이벤트 수집
 
+**왜 필요한가?**
+Aggregate 간 직접 참조는 강결합을 만듭니다. "주문 확정 시 재고 차감"을 Order 안에서 직접 구현하면 Order가 Stock에 의존하게 됩니다. 이벤트를 통해 "무슨 일이 일어났다"만 알리면 수신자가 자유롭게 반응할 수 있습니다.
+
+**트레이드오프:**
+| 장점 | 단점 |
+|------|------|
+| Aggregate 간 느슨한 결합 | 이벤트 흐름 추적 어려움 |
+| 새 기능 추가가 쉬움 | 결과적 일관성 수용 필요 |
+| 테스트 용이 | 이벤트 스키마 관리 필요 |
+
+**언제 사용?**: Aggregate 경계를 넘는 모든 통합
+**언제 피해야?**: 즉각적 일관성이 필수인 경우 (해당 로직은 같은 Aggregate에 포함해야 함)
+
 ```java
 public abstract class AggregateRoot {
     private final List<DomainEvent> domainEvents = new ArrayList<>();
@@ -193,6 +244,16 @@ public class Order extends AggregateRoot {
 
 ### 패턴 4: Repository에서 이벤트 발행
 
+**왜 필요한가?**
+이벤트 발행 시점이 중요합니다. 트랜잭션 커밋 전에 발행하면 롤백 시 이벤트만 나가는 문제가 생깁니다. Repository에서 저장 성공 후 발행하면 이 문제를 방지할 수 있습니다.
+
+**트레이드오프:**
+| 접근법 | 장점 | 단점 |
+|--------|------|------|
+| Repository에서 발행 | 저장과 발행 일관성 | Repository 책임 증가 |
+| @TransactionalEventListener | Spring 표준 | 설정 복잡도 |
+| Outbox 패턴 | 완벽한 보장 | 구현 복잡도 높음 |
+
 ```java
 @Repository
 public class JpaOrderRepository implements OrderRepository {
@@ -217,6 +278,8 @@ public class JpaOrderRepository implements OrderRepository {
 ## Aggregate 경계 결정 가이드
 
 ### 질문 체크리스트
+
+아래 의사결정 트리는 새로운 Entity를 기존 Aggregate에 포함시킬지, 별도 Aggregate로 분리할지 결정하는 데 도움을 줍니다. 세 가지 질문에 모두 "Yes"인 경우에만 같은 Aggregate에 포함합니다.
 
 ```mermaid
 flowchart TB

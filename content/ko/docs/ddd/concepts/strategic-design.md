@@ -1,7 +1,7 @@
 ---
 title: 전략적 설계
 weight: 1
-lastmod: "2026-01-13"
+lastmod: "2026-01-15"
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
@@ -16,6 +16,19 @@ author_url: "http://github.com/kimbenji"
 {{< /callout >}}
 
 복잡한 도메인을 어떻게 나누고 통합할지 결정하는 고수준 설계가 바로 전략적 설계입니다. 이는 DDD의 출발점이자 전체 시스템 아키텍처를 결정하는 핵심 활동입니다.
+
+{{< callout type="tip" title="비유: 세계 지도 제작" >}}
+전략적 설계는 **세계 지도를 그리는 것**과 같습니다:
+
+| 지도 제작 | 전략적 설계 | 설명 |
+|----------|------------|------|
+| **대륙 구분** | Subdomain | 비즈니스를 핵심/지원/범용으로 분류 |
+| **언어권 표시** | Ubiquitous Language | 각 영역에서 사용하는 공통 용어 정의 |
+| **국경선** | Bounded Context | 모델이 적용되는 명확한 경계 |
+| **무역로/동맹** | Context Mapping | 경계 간 협력 방식 정의 |
+
+세계 지도를 그릴 때 개별 건물(클래스)은 신경 쓰지 않습니다. 마찬가지로 전략적 설계는 **큰 그림**에 집중합니다.
+{{< /callout >}}
 
 #### 개요
 
@@ -842,6 +855,22 @@ EventStorming을 하고 나면 Order Context와 Inventory Context 같은 경계�
 ```
 
 이런 결과물은 그대로 코드로 전환할 수 있는 설계 청사진이 됩니다.
+
+#### 핵심 요약
+
+{{< callout type="info" title="전략적 설계 핵심 정리" >}}
+| 개념 | 질문 | 핵심 활동 |
+|------|------|----------|
+| **Subdomain** | 어디에 투자할까? | Core/Supporting/Generic 분류 |
+| **Ubiquitous Language** | 어떻게 소통할까? | 용어 사전 작성, 코드에 반영 |
+| **Bounded Context** | 어디까지 같은 모델? | 동음이의어 발견 → 경계 설정 |
+| **Context Mapping** | 어떻게 협력할까? | ACL, Customer-Supplier 등 패턴 선택 |
+
+**기억할 것:**
+- Core Domain에 최고의 인력과 시간 투입
+- 같은 용어가 다른 의미로 쓰이면 Context 분리 신호
+- Context 간 통합은 느슨하게 (이벤트 기반 권장)
+{{< /callout >}}
 
 #### 다음 단계
 
