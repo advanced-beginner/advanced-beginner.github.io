@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 title: Consumer Group & Offset
 weight: 3
 author: "@kimbenji"
@@ -26,7 +26,18 @@ author_url: "http://github.com/kimbenji"
 
 #### Consumer Group이란?
 
-Consumer Group은 동일한 목적을 가진 Consumer들의 논리적 그룹입니다. 주문 처리 서비스를 예로 들면, 여러 서버 인스턴스가 각각 Consumer로 동작하면서 하나의 Consumer Group을 형성합니다. 이 그룹에 속한 Consumer들은 서로 협력하여 토픽의 메시지를 나눠서 처리합니다.
+Consumer Group은 동일한 목적을 가진 Consumer들의 논리적 그룹입니다. 이를 **콜센터 상담팀**에 비유하면 이해하기 쉽습니다:
+
+| 콜센터 비유 | Kafka |
+|-------------|-------|
+| 대기 중인 고객 전화 | Partition에 쌓인 메시지 |
+| 상담원 팀 | Consumer Group |
+| 개별 상담원 | Consumer |
+| "한 고객은 한 상담원이 끝까지" | "한 Partition은 한 Consumer만" |
+
+상담원 팀(Consumer Group)에서 각 상담원(Consumer)이 대기 큐의 전화를 나눠서 받듯이, Consumer Group의 각 Consumer가 Partition을 나눠서 처리합니다. 중요한 규칙은 **한 고객의 상담은 한 상담원이 처음부터 끝까지 담당**하는 것처럼, 한 Partition의 메시지는 한 Consumer만 처리한다는 것입니다.
+
+주문 처리 서비스를 예로 들면, 여러 서버 인스턴스가 각각 Consumer로 동작하면서 하나의 Consumer Group을 형성합니다. 이 그룹에 속한 Consumer들은 서로 협력하여 토픽의 메시지를 나눠서 처리합니다.
 
 ```mermaid
 flowchart TB
@@ -133,7 +144,9 @@ flowchart TB
 
 #### Offset이란?
 
-Offset은 Partition 내 메시지의 순차적 위치 번호입니다. 0부터 시작하여 메시지가 추가될 때마다 1씩 증가합니다. Consumer는 이 Offset을 통해 어디까지 읽었는지 추적하고, 재시작 시 중단된 지점부터 이어서 처리할 수 있습니다.
+Offset은 Partition 내 메시지의 순차적 위치 번호입니다. 이를 **책갈피**에 비유하면 이해하기 쉽습니다. 책을 읽다가 멈출 때 책갈피를 꽂아두면 다음에 그 위치부터 이어서 읽을 수 있는 것처럼, Consumer도 Offset을 기록해두면 재시작 시 중단된 지점부터 이어서 처리할 수 있습니다.
+
+0부터 시작하여 메시지가 추가될 때마다 1씩 증가합니다.
 
 ```
 Partition 0:

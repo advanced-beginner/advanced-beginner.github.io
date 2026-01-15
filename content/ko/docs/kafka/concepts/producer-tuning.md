@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 title: Producer 튜닝
 weight: 7
 author: "@kimbenji"
@@ -23,6 +23,22 @@ author_url: "http://github.com/kimbenji"
 Producer 성능을 최적화하는 핵심 설정들을 이해합니다. 이 문서는 Kafka 3.6.x 기준으로 작성되었으며, Spring Boot 3.2.x와 Spring Kafka 3.1.x, Java 17 환경에서 코드 예제가 검증되었습니다.
 
 이 문서를 읽기 전에 [심화 개념](advanced-concepts/)에서 acks, Message Key, Idempotent Producer를, [메시지 흐름](message-flow/)에서 Topic, Partition, Broker 개념을 먼저 이해하고 있어야 합니다.
+
+#### 전체 비유: 물류 트럭 운송
+
+Producer 튜닝을 **물류 센터의 트럭 배송**에 비유하면 이해하기 쉽습니다:
+
+| 물류 트럭 비유 | Producer 설정 | 설명 |
+|---------------|---------------|------|
+| 트럭 적재 용량 | batch.size | 16KB(경차) vs 64KB(대형트럭) |
+| 출발 대기 시간 | linger.ms | 0ms=즉시출발, 5ms=조금 기다림 |
+| 물류창고 크기 | buffer.memory | 창고 가득 차면 대기(블로킹) |
+| 포장 압축 | compression.type | 압축하면 더 많이 싣지만 포장시간 소요 |
+| 동시 출발 트럭 수 | max.in.flight | 많으면 빠르지만 도착 순서 뒤섞일 수 있음 |
+
+**핵심 트레이드오프:**
+- **즉시 출발** (linger.ms=0): 빠른 배송, 트럭당 물건 적음 → 저지연
+- **모아서 출발** (linger.ms=5+): 느린 배송, 트럭당 물건 많음 → 고처리량
 
 #### Producer 내부 구조
 

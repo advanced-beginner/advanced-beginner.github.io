@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 title: Consumer 심화 운영
 weight: 4
 author: "@kimbenji"
@@ -116,6 +116,14 @@ public class OrderConsumer {
 {{< /callout >}}
 
 #### 리밸런싱 심층 분석
+
+리밸런싱을 **회사 좌석 재배치**에 비유하면 이해하기 쉽습니다:
+
+| 좌석 재배치 비유 | Kafka 리밸런싱 |
+|-----------------|---------------|
+| 전원 짐 싸서 대기 → 자리 배정 → 이동 | Eager Protocol (Stop-the-World) |
+| 이동할 사람만 짐 싸기 → 자리 배정 | Cooperative Protocol (영향 최소화) |
+| 고정석 부여 (이름표 붙은 자리) | Static Group Membership |
 
 리밸런싱 중에는 모든 Consumer가 일시 정지됩니다. Eager Protocol 기준으로 리밸런싱이 시작되면 모든 Consumer가 Partition을 해제(Stop-the-World)하고, Group Coordinator가 새로운 할당을 계산한 후, 각 Consumer에게 새 Partition을 할당합니다. 10개 Consumer 환경에서는 약 1초, 100개 Consumer 환경에서는 약 10초가 소요됩니다. 대규모 클러스터에서는 분 단위로 소요될 수도 있습니다.
 
