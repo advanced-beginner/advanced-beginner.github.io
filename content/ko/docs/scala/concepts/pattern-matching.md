@@ -1,7 +1,26 @@
 ---
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 title: 패턴 매칭
 weight: 6
+---
+
+## 전체 비유: 우편 분류 센터
+
+패턴 매칭을 **우편 분류 센터**에 비유하면 이해하기 쉽습니다:
+
+| 우편 분류 비유 | Scala 개념 | 역할 |
+|--------------|-----------|------|
+| 우편번호로 분류 | 리터럴 패턴 | 정확한 값 매칭 |
+| 크기/무게로 분류 | 타입 패턴 | 런타임 타입 검사 |
+| 내용물 확인 | 케이스 클래스 패턴 | 구조 분해 |
+| 조건부 특송 | 가드 (if) | 추가 조건 검사 |
+| 수취인 정보 추출 | 변수 바인딩 | 값 추출 |
+| 기타 분류함 | 와일드카드 (_) | 기본값 처리 |
+| 스티커 부착 + 분류 | @ 바인딩 | 전체+부분 동시 접근 |
+| 분류 규칙 정의 | 추출자 (unapply) | 커스텀 패턴 |
+
+이처럼 우편물을 다양한 기준으로 분류하고 정보를 추출하듯, 패턴 매칭은 값을 분석하고 분기합니다.
+
 ---
 
 {{< callout type="info" title="TL;DR" >}}
@@ -601,7 +620,23 @@ object URL {
 
 </details>
 
+#### 관련 개념
+
+패턴 매칭은 다음 개념들과 밀접하게 연결됩니다:
+
+| 관련 개념 | 연결 관계 |
+|----------|----------|
+| [케이스 클래스]({{< relref "/docs/scala/concepts/case-classes" >}}) | 패턴 매칭의 핵심 대상, `unapply` 자동 생성 |
+| [대수적 데이터 타입]({{< relref "/docs/scala/concepts/case-classes#sealed-트레이트와-adt" >}}) | `sealed trait`로 완전성 검사 가능한 타입 정의 |
+| [for 표현식]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) | 제너레이터에서 패턴으로 값 분해 및 필터링 |
+| [고차 함수]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) | `collect`, `partition` 등에서 부분 함수 활용 |
+| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Option, Either 등 대수적 타입과 패턴 매칭 |
+| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | Match Types로 타입 레벨 패턴 매칭 |
+
 #### 다음 단계
 
-- [컬렉션](collections/) — Scala 컬렉션 라이브러리
-- [고차 함수](higher-order-functions/) — 함수형 프로그래밍 심화
+| 학습 경로 | 설명 |
+|----------|------|
+| [컬렉션]({{< relref "/docs/scala/concepts/collections" >}}) | 패턴 매칭과 함께 사용되는 풍부한 컬렉션 API |
+| [고차 함수]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) | `map`, `filter`, `collect`로 함수형 데이터 처리 |
+| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Option, Either, Try를 활용한 안전한 프로그래밍 |

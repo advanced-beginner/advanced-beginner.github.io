@@ -1,8 +1,23 @@
 ---
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 title: 매크로와 메타프로그래밍
 weight: 15
 ---
+
+## 전체 비유: 3D 프린터 공장
+
+메타프로그래밍을 **3D 프린터가 있는 공장**에 비유하면 이해하기 쉽습니다:
+
+| 3D 프린터 비유 | Scala 개념 | 역할 |
+|--------------|-----------|------|
+| 도면 임베딩 | `inline` | 코드를 호출 지점에 직접 삽입 |
+| 조건부 부품 선택 | `inline if/match` | 컴파일 타임 조건 분기 |
+| 설계 검증 시스템 | `error`, `constValue` | 컴파일 타임 검증 |
+| 3D 프린터 (부품 생성) | 매크로 (`${ }`) | 컴파일 타임 코드 생성 |
+| 설계도 원본 | 인용 (`'{ }`) | 런타임 코드 표현 |
+| 프린터 명령어 | `Expr[T]` | 타입 안전한 코드 조각 |
+
+3D 프린터가 **설계도(인용)를 받아 실제 부품(코드)을 출력**하듯이, 매크로는 컴파일 타임에 코드를 분석하고 새로운 코드를 생성합니다. 핵심은 **런타임 전에 모든 준비를 마치는 것**입니다.
 
 {{< callout type="info" title="TL;DR" >}}
 - **inline**: 컴파일 타임에 코드를 인라인하여 런타임 오버헤드 제거
@@ -328,7 +343,22 @@ val f10 = fib(10)  // 컴파일 시 55로 대체
 - [Inline](https://docs.scala-lang.org/scala3/reference/metaprogramming/inline.html)
 - [Macros](https://docs.scala-lang.org/scala3/reference/metaprogramming/macros.html)
 
+#### 관련 개념
+
+메타프로그래밍은 다음 개념들과 밀접하게 연결됩니다:
+
+| 관련 개념 | 연결 관계 |
+|----------|----------|
+| [제네릭]({{< relref "/docs/scala/concepts/generics" >}}) | 타입 매개변수와 inline 결합 |
+| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | `summonInline`으로 컴파일 타임 해결 |
+| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | Match Types와 inline match 연계 |
+| [Implicits]({{< relref "/docs/scala/concepts/implicits" >}}) | given 인스턴스의 컴파일 타임 소환 |
+| [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | inline match로 컴파일 타임 분기 |
+
 #### 다음 단계
 
-- [동시성](concurrency/) — Future, Promise
-- [함수형 패턴](functional-patterns/) — Functor, Monad
+| 학습 경로 | 설명 |
+|----------|------|
+| [동시성]({{< relref "/docs/scala/concepts/concurrency" >}}) | Future, Promise를 활용한 비동기 프로그래밍 |
+| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor, Monad 등 추상화 패턴 |
+| [Scala 3 Metaprogramming 문서](https://docs.scala-lang.org/scala3/reference/metaprogramming.html) | 공식 레퍼런스 |

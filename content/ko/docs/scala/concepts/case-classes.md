@@ -1,7 +1,25 @@
 ---
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 title: 케이스 클래스
 weight: 5
+---
+
+## 전체 비유: 공식 서류 양식
+
+케이스 클래스를 **공식 서류 양식**에 비유하면 이해하기 쉽습니다:
+
+| 서류 양식 비유 | Scala 개념 | 역할 |
+|--------------|-----------|------|
+| 양식 칸 (이름, 주민번호) | 필드 (val) | 자동으로 읽기 전용 |
+| 양식 복사 (일부 수정) | copy 메서드 | 일부 필드만 변경한 복사본 |
+| 동일 양식 비교 | equals/hashCode | 내용으로 동등성 비교 |
+| 양식 번호 부여 | apply | new 없이 생성 |
+| 양식에서 정보 추출 | unapply | 패턴 매칭으로 분해 |
+| 양식 인쇄 | toString | 읽기 좋은 문자열 표현 |
+| 양식 종류 (신청서/계약서) | sealed + ADT | 닫힌 타입 계층 |
+
+이처럼 공식 서류가 불변하고 복사/비교/추출이 용이하듯, 케이스 클래스는 불변 데이터 모델링에 최적화되어 있습니다.
+
 ---
 
 {{< callout type="info" title="TL;DR" >}}
@@ -408,7 +426,20 @@ println(eval(expr))  // 9.0
 
 </details>
 
+#### 관련 개념
+
+| 개념 | 연관성 | 설명 |
+|------|--------|------|
+| [클래스와 객체]({{< relref "/docs/scala/concepts/classes-objects" >}}) | **선수 지식** | 일반 클래스, trait |
+| [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | **필수 조합** | unapply 활용, ADT 분기 |
+| [컬렉션]({{< relref "/docs/scala/concepts/collections" >}}) | **활용** | 불변 데이터 저장 |
+| [제네릭]({{< relref "/docs/scala/concepts/generics" >}}) | **응용** | 제네릭 케이스 클래스 |
+
+---
+
 #### 다음 단계
 
-- [패턴 매칭](pattern-matching/) — match 표현식 심화
-- [컬렉션](collections/) — Scala 컬렉션 라이브러리
+| 추천 순서 | 문서 | 배우는 것 |
+|----------|------|----------|
+| 1 | [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | match 표현식 심화, ADT 활용 |
+| 2 | [컬렉션]({{< relref "/docs/scala/concepts/collections" >}}) | Scala 컬렉션 라이브러리 |

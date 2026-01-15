@@ -1,8 +1,23 @@
 ---
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 title: 고급 타입 시스템
 weight: 14
 ---
+
+## 전체 비유: 건축 설계 시스템
+
+고급 타입 시스템을 **건축 설계 규칙**에 비유하면 이해하기 쉽습니다:
+
+| 건축 설계 비유 | Scala 개념 | 역할 |
+|--------------|-----------|------|
+| "거실 또는 침실" | Union Type (`A \| B`) | 여러 타입 중 하나 |
+| "내진 설계 + 방음 설계" | Intersection (`A & B`) | 여러 조건 동시 충족 |
+| "비공개 내부 설계도" | Opaque Type | 외부에 구현 숨김 |
+| "조건부 자재 선택" | Match Type | 타입 레벨 조건 분기 |
+| "자재 변환 규칙" | Type Lambda | 타입 생성자 매핑 |
+| "방 크기에 따른 자재" | Dependent Type | 값에 따른 타입 결정 |
+
+건축에서 **설계 규칙이 안전한 건물을 보장**하듯이, 고급 타입 시스템은 컴파일 타임에 더 정밀한 제약을 표현하여 **런타임 오류를 사전에 방지**합니다.
 
 {{< callout type="info" title="TL;DR" >}}
 - **Union Types (`|`)**: 여러 타입 중 하나, `Int | String`
@@ -296,7 +311,22 @@ valid.foreach(e => println(e.domain))   // "example.com"
 
 </details>
 
+#### 관련 개념
+
+고급 타입 시스템은 다음 개념들과 밀접하게 연결됩니다:
+
+| 관련 개념 | 연결 관계 |
+|----------|----------|
+| [제네릭]({{< relref "/docs/scala/concepts/generics" >}}) | 타입 매개변수와 타입 경계 기초 |
+| [공변성/반공변성]({{< relref "/docs/scala/concepts/variance" >}}) | 타입 변성과 Union/Intersection의 관계 |
+| [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | Match Types와 값 레벨 패턴 매칭 비교 |
+| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | Type Lambda로 고차 타입 클래스 정의 |
+| [매크로]({{< relref "/docs/scala/concepts/macros-metaprogramming" >}}) | 타입 레벨 프로그래밍과 메타프로그래밍 |
+
 #### 다음 단계
 
-- [매크로](macros-metaprogramming/) — 컴파일 타임 코드 생성
-- [함수형 패턴](functional-patterns/) — Functor, Monad
+| 학습 경로 | 설명 |
+|----------|------|
+| [매크로와 메타프로그래밍]({{< relref "/docs/scala/concepts/macros-metaprogramming" >}}) | 컴파일 타임 코드 생성 |
+| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor, Monad 등 추상화 |
+| [Scala 3 Reference](https://docs.scala-lang.org/scala3/reference/) | 공식 타입 시스템 문서 |

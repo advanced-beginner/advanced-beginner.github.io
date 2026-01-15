@@ -1,8 +1,25 @@
 ---
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 title: 고차 함수
 weight: 8
 ---
+
+## 전체 비유: 식품 가공 공장
+
+고차 함수를 **식품 가공 공장의 생산 라인**에 비유하면 이해하기 쉽습니다:
+
+| 공장 비유 | Scala 개념 | 역할 |
+|----------|-----------|------|
+| 재료 선별기 | `filter` | 조건에 맞는 요소만 통과 |
+| 가공 기계 | `map` | 각 요소를 변환 |
+| 포장 → 개봉 기계 | `flatMap` | 변환 후 평탄화 |
+| 최종 계량기 | `fold`/`reduce` | 모든 요소를 하나로 축약 |
+| 분류 컨베이어 | `partition`/`groupBy` | 조건에 따라 분류 |
+| 기계 연결 | 함수 합성 (`andThen`) | 여러 변환을 연결 |
+| 기계 설정 | 커링 | 일부 파라미터 미리 고정 |
+| 기계 조작법 전달 | 함수를 인자로 | "어떻게" 처리할지 지정 |
+
+공장에서 **기계(함수)를 조립하여 생산 라인(파이프라인)을 구성**하듯이, 고차 함수는 작은 함수들을 조합하여 복잡한 데이터 처리를 수행합니다. 핵심은 **"무엇을" 처리할지와 "어떻게" 처리할지를 분리**하는 것입니다.
 
 {{< callout type="info" title="TL;DR" >}}
 - **고차 함수**는 함수를 인자로 받거나 함수를 반환하는 함수입니다
@@ -800,7 +817,23 @@ fastFib(100)  // 빠르게 계산됨
 
 </details>
 
+#### 관련 개념
+
+고차 함수는 다음 개념들과 밀접하게 연결됩니다:
+
+| 관련 개념 | 연결 관계 |
+|----------|----------|
+| [함수와 메서드]({{< relref "/docs/scala/concepts/functions-methods" >}}) | 일급 함수와 함수 리터럴 기초 |
+| [컬렉션]({{< relref "/docs/scala/concepts/collections" >}}) | `map`, `filter` 등 고차 함수의 주요 사용처 |
+| [for 표현식]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) | `flatMap` 체인의 문법적 설탕 |
+| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor(`map`), Monad(`flatMap`) 추상화 |
+| [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | `collect`에서 패턴 기반 변환 |
+| [동시성]({{< relref "/docs/scala/concepts/concurrency" >}}) | Future의 `map`, `flatMap` 조합 |
+
 #### 다음 단계
 
-- [For Comprehension](for-comprehensions/) — 모나딕 연산의 우아한 표현
-- [Implicit/Given](implicits/) — 문맥적 추상화
+| 학습 경로 | 설명 |
+|----------|------|
+| [for 표현식]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) | `flatMap` 체인을 읽기 쉽게 표현 |
+| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor, Monad 추상화 심화 |
+| [Implicits]({{< relref "/docs/scala/concepts/implicits" >}}) | 문맥적 추상화와 타입 클래스 |

@@ -1,7 +1,25 @@
 ---
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 title: 클래스와 객체
 weight: 4
+---
+
+## 전체 비유: 회사 조직도
+
+Scala의 클래스, 객체, 트레이트를 **회사 조직도**에 비유하면 이해하기 쉽습니다:
+
+| 회사 조직 비유 | Scala 개념 | 역할 |
+|--------------|-----------|------|
+| 직원 (여러 명 가능) | class | 인스턴스를 여러 개 생성 가능 |
+| CEO (한 명만) | object (싱글톤) | 프로그램에서 단 하나만 존재 |
+| 비서실 (직원 보조) | 컴패니언 객체 | 클래스의 정적 멤버 역할 |
+| 역할/자격증 (조합 가능) | trait | 여러 개 믹스인 가능 |
+| 부서 템플릿 | abstract class | 상속받아 구체화 |
+| 직급 체계 | 상속 | extends로 확장 |
+| 공개/비공개 정보 | 접근 제어자 | private, protected |
+
+이처럼 회사에서 다양한 역할이 조합되어 조직을 구성하듯, Scala에서는 클래스, 객체, 트레이트가 조합되어 프로그램을 구성합니다.
+
 ---
 
 {{< callout type="info" title="TL;DR" >}}
@@ -511,7 +529,21 @@ println(p1.compare(p2))     // 1 (p1이 더 비쌈)
 
 </details>
 
+#### 관련 개념
+
+| 개념 | 연관성 | 설명 |
+|------|--------|------|
+| [기본 문법]({{< relref "/docs/scala/concepts/basics" >}}) | **선수 지식** | val/var, 타입 시스템 |
+| [함수와 메서드]({{< relref "/docs/scala/concepts/functions-methods" >}}) | **선수 지식** | def, 고차 함수 |
+| [케이스 클래스]({{< relref "/docs/scala/concepts/case-classes" >}}) | **불변 데이터** | 보일러플레이트 없는 데이터 클래스 |
+| [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | **trait 활용** | sealed trait와 패턴 매칭 |
+| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | **trait 응용** | ad-hoc 다형성 구현 |
+
+---
+
 #### 다음 단계
 
-- [케이스 클래스](case-classes/) — 불변 데이터 모델링
-- [패턴 매칭](pattern-matching/) — match 표현식 심화
+| 추천 순서 | 문서 | 배우는 것 |
+|----------|------|----------|
+| 1 | [케이스 클래스]({{< relref "/docs/scala/concepts/case-classes" >}}) | 불변 데이터 모델링 |
+| 2 | [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | match 표현식 심화 |

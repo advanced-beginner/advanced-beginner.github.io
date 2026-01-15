@@ -1,8 +1,23 @@
 ---
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 title: 제네릭
 weight: 9
 ---
+
+## 전체 비유: 만능 수납함
+
+제네릭을 **만능 수납함 시스템**에 비유하면 이해하기 쉽습니다:
+
+| 수납함 비유 | Scala 개념 | 역할 |
+|-----------|-----------|------|
+| 규격화된 수납함 | 제네릭 클래스 `Box[A]` | 어떤 타입이든 담을 수 있는 컨테이너 |
+| "책 전용" 라벨 | 타입 매개변수 `A` | 담을 내용물의 타입 지정 |
+| "도서류 이하만" 규칙 | 상한 경계 `A <: Book` | 허용 타입 범위 제한 |
+| "인쇄물 이상만" 규칙 | 하한 경계 `A >: Paper` | 최소 타입 요구사항 |
+| "무게 측정 가능" 조건 | 컨텍스트 경계 `A : Weighable` | 특정 기능 보유 요구 |
+| 빈 수납함 | `None`, `List.empty[A]` | 명시적 타입 필요 |
+
+수납함에 라벨을 붙여 **어떤 물건을 담을 수 있는지 명시**하듯이, 제네릭은 컴파일 시점에 타입을 검사하여 **잘못된 타입의 데이터가 들어가는 것을 방지**합니다.
 
 {{< callout type="info" title="TL;DR" >}}
 - 제네릭은 **타입 안전한 재사용 가능한 코드**를 작성하게 해줍니다
@@ -391,7 +406,23 @@ find(List("a", "bb", "ccc"))(_.length > 2)  // Some("ccc")
 
 </details>
 
+#### 관련 개념
+
+제네릭은 다음 개념들과 밀접하게 연결됩니다:
+
+| 관련 개념 | 연결 관계 |
+|----------|----------|
+| [공변성/반공변성]({{< relref "/docs/scala/concepts/variance" >}}) | 제네릭 타입의 상속 관계 정의 |
+| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | 컨텍스트 경계로 타입 클래스 요구 |
+| [Implicits]({{< relref "/docs/scala/concepts/implicits" >}}) | 컨텍스트 경계의 암시적 해결 |
+| [케이스 클래스]({{< relref "/docs/scala/concepts/case-classes" >}}) | 제네릭 ADT 정의 |
+| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Option, Either, Try 등 제네릭 타입 |
+| [컬렉션]({{< relref "/docs/scala/concepts/collections" >}}) | List[A], Map[K, V] 등 제네릭 컬렉션 |
+
 #### 다음 단계
 
-- [공변성/반공변성](variance/) — 제네릭 타입의 변성
-- [타입 클래스](type-classes/) — Ad-hoc 다형성
+| 학습 경로 | 설명 |
+|----------|------|
+| [공변성/반공변성]({{< relref "/docs/scala/concepts/variance" >}}) | 제네릭 타입의 서브타이핑 규칙 |
+| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | Ad-hoc 다형성과 컨텍스트 경계 심화 |
+| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | 고차 타입, 타입 멤버 등 |

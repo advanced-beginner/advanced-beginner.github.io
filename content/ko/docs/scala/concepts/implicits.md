@@ -1,8 +1,23 @@
 ---
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 title: Implicit / Given
 weight: 11
 ---
+
+## 전체 비유: 개인 비서
+
+암시적 기능을 **개인 비서 시스템**에 비유하면 이해하기 쉽습니다:
+
+| 비서 비유 | Scala 개념 | 역할 |
+|----------|-----------|------|
+| 비서가 자동으로 자료 준비 | `given`/`implicit val` | 필요한 값을 자동 제공 |
+| "비서에게 부탁해" | `using`/`implicit` 매개변수 | 암시적으로 값 요청 |
+| 비서의 스킬 확장 | `extension` 메서드 | 기존 타입에 기능 추가 |
+| 비서 유형별 전문 서비스 | 타입 클래스 | 타입별 맞춤 동작 |
+| 비서 찾기 순서 | 암시적 범위 | 현재 스코프 → 컴패니언 |
+| 비서 고용 | `import ... given` | 암시적 인스턴스 도입 |
+
+비서가 **당신이 말하지 않아도 필요한 것을 준비**하듯이, 암시적 기능은 컴파일러가 필요한 값을 자동으로 찾아서 전달합니다. 핵심은 **명확한 규칙(타입)**에 따라 적절한 값을 선택하는 것입니다.
 
 {{< callout type="info" title="TL;DR" >}}
 - 암시적 기능은 컴파일러가 자동으로 값을 전달하거나 타입을 변환합니다
@@ -639,7 +654,22 @@ extension (n: Int)
 
 </details>
 
+#### 관련 개념
+
+암시적 기능은 다음 개념들과 밀접하게 연결됩니다:
+
+| 관련 개념 | 연결 관계 |
+|----------|----------|
+| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | 암시적 기능의 가장 중요한 활용처 |
+| [제네릭]({{< relref "/docs/scala/concepts/generics" >}}) | 컨텍스트 경계 (`A : Ordering`) |
+| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor, Monad 인스턴스 제공 |
+| [동시성]({{< relref "/docs/scala/concepts/concurrency" >}}) | `ExecutionContext`의 암시적 전달 |
+| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | 타입 멤버와 암시적 해결 |
+
 #### 다음 단계
 
-- [타입 클래스](type-classes/) — 타입 클래스 패턴 심화
-- [함수형 패턴](functional-patterns/) — Functor, Monad
+| 학습 경로 | 설명 |
+|----------|------|
+| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | Ad-hoc 다형성 패턴 심화 |
+| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor, Monad 등 추상화 |
+| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | 의존 타입, 타입 레벨 프로그래밍 |

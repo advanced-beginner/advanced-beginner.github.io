@@ -1,8 +1,24 @@
 ---
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 title: 동시성
 weight: 16
 ---
+
+## 전체 비유: 레스토랑 주방
+
+Scala 동시성을 **레스토랑 주방**에 비유하면 이해하기 쉽습니다:
+
+| 레스토랑 비유 | Scala 개념 | 역할 |
+|-------------|-----------|------|
+| 주문서 | Future | 비동기 계산의 결과를 나타내는 약속 |
+| 주방장들 | ExecutionContext | 작업을 실행하는 스레드 풀 |
+| 요리 단계 연결 | flatMap/map | 순차적 비동기 작업 연결 |
+| 여러 요리 동시 조리 | 병렬 Future | 독립적 작업의 동시 실행 |
+| 요리 완료 알림벨 | Promise | 외부에서 결과를 설정 |
+| 첫 번째 완성 요리 | firstCompletedOf | 가장 먼저 완료되는 작업 |
+| 모든 요리 완성 대기 | sequence | 모든 Future 완료 대기 |
+
+레스토랑에서 여러 주방장이 동시에 요리하듯이, Future를 사용하면 여러 작업을 동시에 처리할 수 있습니다. 중요한 것은 **작업 간의 의존성을 파악**하여 순차/병렬 실행을 올바르게 선택하는 것입니다.
 
 {{< callout type="info" title="TL;DR" >}}
 - **Future**: 비동기 계산 결과를 나타내는 타입
@@ -503,8 +519,23 @@ val result2 = Future.sequence(List(fetchA(), fetchB(), fetchC()))
 
 </details>
 
+#### 관련 개념
+
+동시성은 다음 개념들과 밀접하게 연결됩니다:
+
+| 관련 개념 | 연결 관계 |
+|----------|----------|
+| [for 표현식]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) | Future의 `flatMap` 체인을 읽기 쉽게 작성 |
+| [고차 함수]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) | `map`, `flatMap`, `recover` 등 조합 메서드 |
+| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | IO, ZIO 등 참조 투명한 효과 시스템 |
+| [Implicits]({{< relref "/docs/scala/concepts/implicits" >}}) | `ExecutionContext`의 암시적 전달 |
+| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | Cats Effect의 `Async`, `Concurrent` 타입 클래스 |
+
 #### 다음 단계
 
-- [함수형 패턴](functional-patterns/) — Functor, Monad 심화
-- [Akka 공식 문서](https://akka.io/)
-- [ZIO 공식 문서](https://zio.dev/)
+| 학습 경로 | 설명 |
+|----------|------|
+| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor, Monad 등 추상화 심화 학습 |
+| [Implicits]({{< relref "/docs/scala/concepts/implicits" >}}) | ExecutionContext 전달 메커니즘 이해 |
+| [Akka 공식 문서](https://akka.io/) | 액터 기반 동시성 모델 |
+| [ZIO 공식 문서](https://zio.dev/) | 타입 안전한 효과 시스템 |

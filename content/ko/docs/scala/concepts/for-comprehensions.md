@@ -1,8 +1,23 @@
 ---
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 title: For Comprehension
 weight: 10
 ---
+
+## 전체 비유: 조립 라인
+
+For comprehension을 **공장 조립 라인**에 비유하면 이해하기 쉽습니다:
+
+| 조립 라인 비유 | Scala 개념 | 역할 |
+|--------------|-----------|------|
+| 부품 공급 컨베이어 | 생성자 (`<-`) | 데이터 소스에서 값 추출 |
+| 품질 검사 스테이션 | 가드 (`if`) | 조건에 맞는 값만 통과 |
+| 조립 작업대 | 값 정의 (`=`) | 중간 계산 결과 저장 |
+| 완제품 출하 | `yield` | 최종 결과 생성 |
+| 여러 라인 합류 | 다중 생성자 | 여러 소스의 조합 |
+| 불량품 → 라인 정지 | None/Left | 실패 시 즉시 중단 |
+
+조립 라인에서 부품이 순차적으로 가공되듯이, for comprehension에서는 각 단계가 이전 단계의 결과에 의존합니다. **불량품(None/Left)이 발견되면 전체 라인이 멈추는 것**이 핵심입니다.
 
 {{< callout type="info" title="TL;DR" >}}
 - For comprehension은 `flatMap`, `map`, `withFilter`의 문법적 설탕입니다
@@ -397,7 +412,23 @@ result  // None
 
 </details>
 
+#### 관련 개념
+
+For comprehension은 다음 개념들과 밀접하게 연결됩니다:
+
+| 관련 개념 | 연결 관계 |
+|----------|----------|
+| [고차 함수]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) | `map`, `flatMap`, `withFilter`로 변환됨 |
+| [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | 생성자에서 구조 분해 패턴 사용 가능 |
+| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Option, Either, Try와 함께 안전한 연산 |
+| [동시성]({{< relref "/docs/scala/concepts/concurrency" >}}) | Future 조합의 핵심 문법 |
+| [컬렉션]({{< relref "/docs/scala/concepts/collections" >}}) | 데카르트 곱, 필터링 등 컬렉션 조합 |
+| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | Monad 타입 클래스와의 관계 |
+
 #### 다음 단계
 
-- [Implicit/Given](implicits/) — 문맥적 추상화
-- [함수형 패턴](functional-patterns/) — Monad, Functor 심화
+| 학습 경로 | 설명 |
+|----------|------|
+| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Monad, Functor 등 추상화 심화 |
+| [Implicits]({{< relref "/docs/scala/concepts/implicits" >}}) | 문맥적 추상화 메커니즘 |
+| [동시성]({{< relref "/docs/scala/concepts/concurrency" >}}) | Future 병렬/순차 실행 패턴 |

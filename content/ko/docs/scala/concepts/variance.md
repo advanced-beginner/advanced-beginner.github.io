@@ -1,8 +1,22 @@
 ---
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 title: 공변성 / 반공변성
 weight: 13
 ---
+
+## 전체 비유: 물류 창고 시스템
+
+변성을 **물류 창고 시스템**에 비유하면 이해하기 쉽습니다:
+
+| 물류 비유 | Scala 개념 | 역할 |
+|----------|-----------|------|
+| 출고 전용 창고 | 공변 (`+A`) | 생산자 - 값을 꺼내기만 함 |
+| 입고 전용 창고 | 반공변 (`-A`) | 소비자 - 값을 넣기만 함 |
+| 입출고 창고 | 무공변 (`A`) | 양방향 - 넣고 꺼내기 모두 |
+| 개 사육장 → 동물원 | `List[Dog] <: List[Animal]` | 더 넓은 곳으로 이동 가능 |
+| 동물 핸들러 → 개 핸들러 | `Handler[Animal] <: Handler[Dog]` | 더 일반적인 것이 더 유용 |
+
+물류에서 **출고 전용 창고는 큰 카테고리로 물건을 보낼 수 있고**, **입고 전용 창고는 작은 카테고리의 물건도 받을 수 있습니다**. 변성은 이런 물류 흐름의 타입 안전한 규칙입니다.
 
 {{< callout type="info" title="TL;DR" >}}
 - **공변(+A)**: 생산자 역할, `List[Dog] <: List[Animal]`
@@ -335,7 +349,22 @@ trait Transformer[-A, +B] {
 
 </details>
 
+#### 관련 개념
+
+변성은 다음 개념들과 밀접하게 연결됩니다:
+
+| 관련 개념 | 연결 관계 |
+|----------|----------|
+| [제네릭]({{< relref "/docs/scala/concepts/generics" >}}) | 타입 매개변수와 타입 경계 기초 |
+| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | Union/Intersection 타입과 변성 |
+| [컬렉션]({{< relref "/docs/scala/concepts/collections" >}}) | `List[+A]` 등 컬렉션의 변성 |
+| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | `Function1[-A, +B]` 타입의 변성 |
+| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | 타입 클래스 인스턴스의 변성 |
+
 #### 다음 단계
 
-- [고급 타입](type-system-advanced/) — Union, Intersection, Match Types
-- [타입 클래스](type-classes/) — Ad-hoc 다형성 심화
+| 학습 경로 | 설명 |
+|----------|------|
+| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | Union, Intersection, Match Types |
+| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | Ad-hoc 다형성 패턴 심화 |
+| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor, Monad 등 추상화 |

@@ -1,8 +1,23 @@
 ---
-lastmod: "2026-01-10"
+lastmod: "2026-01-15"
 title: 타입 클래스
 weight: 12
 ---
+
+## 전체 비유: 만능 어댑터 시스템
+
+타입 클래스를 **전자기기 어댑터 시스템**에 비유하면 이해하기 쉽습니다:
+
+| 어댑터 비유 | Scala 개념 | 역할 |
+|-----------|-----------|------|
+| 어댑터 규격 (USB-C 등) | 타입 클래스 (`trait Show[A]`) | 기능의 인터페이스 정의 |
+| 특정 기기용 어댑터 | 인스턴스 (`given Show[Int]`) | 특정 타입에 대한 구현 |
+| 어댑터 사용 포트 | API (`def show[A: Show]`) | 타입 클래스를 사용하는 메서드 |
+| 어댑터 연결 | `extension` 메서드 | 타입에 메서드 추가 |
+| 기기 본체 변경 불필요 | 기존 타입 수정 없음 | 외부에서 기능 추가 |
+| 여러 어댑터 선택 | 여러 인스턴스 정의 | 상황별 다른 동작 |
+
+기기 본체를 분해하지 않고 **어댑터만 연결하면 새 기능을 사용**할 수 있듯이, 타입 클래스는 기존 타입을 수정하지 않고 새로운 기능을 추가합니다. 핵심은 **"어떤 기능이 필요한지"와 "어떻게 구현할지"를 분리**하는 것입니다.
 
 {{< callout type="info" title="TL;DR" >}}
 - 타입 클래스는 **기존 타입을 수정하지 않고** 새 기능을 추가하는 패턴입니다
@@ -392,7 +407,22 @@ None.toJson                // "null"
 
 </details>
 
+#### 관련 개념
+
+타입 클래스는 다음 개념들과 밀접하게 연결됩니다:
+
+| 관련 개념 | 연결 관계 |
+|----------|----------|
+| [Implicits]({{< relref "/docs/scala/concepts/implicits" >}}) | 인스턴스의 암시적 해결 메커니즘 |
+| [제네릭]({{< relref "/docs/scala/concepts/generics" >}}) | 컨텍스트 경계 (`A : Show`) |
+| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor, Monad 등 핵심 타입 클래스 |
+| [공변성/반공변성]({{< relref "/docs/scala/concepts/variance" >}}) | 타입 클래스 인스턴스의 변성 |
+| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | 고차 타입으로 타입 클래스 정의 |
+
 #### 다음 단계
 
-- [공변성/반공변성](variance/) — 제네릭 타입의 변성
-- [고급 타입](type-system-advanced/) — Scala 3의 고급 타입 기능
+| 학습 경로 | 설명 |
+|----------|------|
+| [공변성/반공변성]({{< relref "/docs/scala/concepts/variance" >}}) | 제네릭 타입의 서브타이핑 규칙 |
+| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor, Monad 등 추상화 |
+| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | 타입 레벨 프로그래밍 |
