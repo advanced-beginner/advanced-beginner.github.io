@@ -1,31 +1,31 @@
 ---
 lastmod: "2026-01-16"
-title: Future 에러 처리
+title: Future Error Handling
 weight: 2
 ---
 
-비동기 코드에서 예외를 안전하게 처리하고 디버깅하는 방법을 안내합니다.
+Learn how to safely handle and debug exceptions in asynchronous code.
 
-**소요 시간**: 약 15-20분
+**Estimated time**: 15-20 minutes
 
 {{< callout type="tip" title="TL;DR" >}}
-- `recover`/`recoverWith`: 특정 예외를 처리하고 대체값 반환
-- `transform`: 성공/실패 모두 변환
-- `onComplete`: 부수 효과 (로깅 등)에만 사용
-- **절대 하지 말 것**: `Await.result`로 예외를 동기적으로 던지기
+- `recover`/`recoverWith`: Handle specific exceptions and return fallback values
+- `transform`: Transform both success and failure cases
+- `onComplete`: Use only for side effects (logging, etc.)
+- **Never do this**: Use `Await.result` to throw exceptions synchronously
 {{< /callout >}}
 
 ---
 
-## 이 가이드가 해결하는 문제
+## What This Guide Solves
 
-다음 상황에서 이 가이드를 사용하세요:
+Use this guide when:
 
-- Future에서 발생한 예외가 조용히 사라지는 경우
-- 비동기 코드의 에러를 어떻게 처리해야 할지 모를 때
-- `recover`, `recoverWith`, `transform` 중 어떤 것을 사용해야 할지 결정이 필요할 때
+- Exceptions in Future silently disappear
+- You don't know how to handle errors in asynchronous code
+- You need to decide between `recover`, `recoverWith`, and `transform`
 
-### 증상
+### Symptoms
 
 ```scala
 import scala.concurrent.Future
@@ -34,30 +34,30 @@ import scala.concurrent.ExecutionContext.Implicits.global
 val future = Future {
   throw new RuntimeException("Something went wrong")
 }
-// 프로그램은 정상 종료되지만, 예외는 어디로 갔을까?
+// Program exits normally, but where did the exception go?
 ```
 
-### 이 가이드가 다루지 않는 것
+### What This Guide Does NOT Cover
 
-- **Future의 기본 개념**: [동시성 개념 문서]({{< relref "/docs/scala/concepts/concurrency" >}})를 참조하세요
-- **Cats Effect IO / ZIO의 에러 처리**: 해당 라이브러리 문서를 참조하세요
-- **액터 시스템(Akka)의 에러 처리**: Akka 문서를 참조하세요
+- **Basic Future concepts**: See [Concurrency Concepts]({{< relref "/docs/scala/concepts/concurrency" >}})
+- **Cats Effect IO / ZIO error handling**: Refer to respective library documentation
+- **Akka actor system error handling**: Refer to Akka documentation
 
 ---
 
-## 시작하기 전에
+## Before You Begin
 
-다음 환경이 준비되어 있는지 확인하세요:
+Ensure you have the following environment ready:
 
-| 항목 | 요구 사항 | 확인 방법 |
-|------|----------|----------|
-| Scala 버전 | 2.13.x 또는 3.x | `scala -version` |
-| 빌드 도구 | sbt 1.x 또는 Gradle 8.x | `sbt --version` |
-| 의존성 | scala-library (기본 포함) | - |
+| Item | Requirement | How to Check |
+|------|-------------|--------------|
+| Scala version | 2.13.x or 3.x | `scala -version` |
+| Build tool | sbt 1.x or Gradle 8.x | `sbt --version` |
+| Dependencies | scala-library (included by default) | - |
 
-### 필요한 import
+### Required Imports
 
-모든 예제에서 다음 import가 필요합니다:
+All examples require these imports:
 
 ```scala
 import scala.concurrent.{Future, ExecutionContext}
@@ -67,9 +67,9 @@ import scala.util.{Try, Success, Failure}
 
 ---
 
-## 1단계: Future 실패 기본 이해
+## Step 1: Understanding Future Failures
 
-### 1.1 Future의 두 가지 상태
+### 1.1 Two States of Future
 
 ```scala
 val successFuture: Future[Int] = Future.successful(42)
@@ -79,9 +79,9 @@ successFuture.value  // Some(Success(42))
 failedFuture.value   // Some(Failure(java.lang.Exception: Error))
 ```
 
-### 1.2 예외가 사라지는 이유
+### 1.2 Why Exceptions Disappear
 
-Future는 비동기로 실행되므로, 메인 스레드가 먼저 종료되면 예외를 확인할 기회가 없습니다:
+Future runs asynchronously, so if the main thread exits first, there's no opportunity to observe the exception:
 
 ```scala
 val future = Future {
@@ -89,60 +89,60 @@ val future = Future {
   throw new RuntimeException("Error")
 }
 
-// 메인 스레드가 바로 종료되면 예외가 출력되지 않음
+// If main thread exits immediately, exception is never printed
 println("Main thread finished")
 ```
 
-**해결**: 적절한 에러 핸들러를 등록하거나, 테스트에서는 `Await`을 사용하세요.
+**Solution**: Register appropriate error handlers, or use `Await` in tests.
 
 ---
 
-## 2단계: 에러 처리 패턴 선택
+## Step 2: Choose an Error Handling Pattern
 
-다음 결정 가이드를 참고하세요:
+Refer to this decision guide:
 
-| 상황 | 사용할 메서드 |
-|------|-------------|
-| 예외를 기본값으로 바꾸고 싶다 | `recover` |
-| 예외 시 다른 Future를 실행하고 싶다 | `recoverWith` |
-| 성공/실패 모두 다른 타입으로 변환하고 싶다 | `transform` |
-| 로깅만 하고 결과는 그대로 전달하고 싶다 | `andThen` |
+| Situation | Method to Use |
+|-----------|---------------|
+| Want to replace exception with a default value | `recover` |
+| Want to run another Future on exception | `recoverWith` |
+| Want to transform both success and failure to different types | `transform` |
+| Want to log only while passing result through | `andThen` |
 
-### 2.1 recover - 예외를 값으로 변환
+### 2.1 recover - Transform Exception to Value
 
-특정 예외를 처리하고 기본값을 반환합니다:
+Handle specific exceptions and return default values:
 
 ```scala
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import java.io.IOException
 
-// 예외 정의
+// Exception definitions
 class UserNotFoundException(msg: String) extends Exception(msg)
 class DatabaseException(msg: String) extends Exception(msg)
 
-// 사용 예시
+// Usage example
 def fetchUserAge(userId: String): Future[Int] = {
-  // 실제로는 DB 조회
+  // Actually queries DB
   Future {
     if (userId == "unknown") throw new UserNotFoundException(s"User $userId not found")
-    30 // 정상 반환
+    30 // Normal return
   }.recover {
-    case _: UserNotFoundException => 0  // 기본값
+    case _: UserNotFoundException => 0  // Default value
     case e: DatabaseException =>
       println(s"DB error for user $userId: ${e.getMessage}")
-      -1  // 에러 표시값
+      -1  // Error indicator value
   }
 }
 
-// 테스트
+// Test
 fetchUserAge("alice").foreach(age => println(s"Age: $age"))  // Age: 30
 fetchUserAge("unknown").foreach(age => println(s"Age: $age")) // Age: 0
 ```
 
-### 2.2 recoverWith - 예외를 다른 Future로 변환
+### 2.2 recoverWith - Transform Exception to Another Future
 
-실패 시 대체 Future를 실행합니다:
+Execute a fallback Future on failure:
 
 ```scala
 import scala.concurrent.Future
@@ -152,7 +152,7 @@ import java.util.concurrent.TimeoutException
 case class Data(value: String)
 
 def fetchFromPrimary(): Future[Data] = Future {
-  // 시뮬레이션: 타임아웃 발생
+  // Simulation: Timeout occurs
   throw new TimeoutException("Primary server timeout")
 }
 
@@ -167,14 +167,14 @@ val result: Future[Data] = fetchFromPrimary().recoverWith {
 }
 
 result.foreach(d => println(s"Got: ${d.value}"))
-// 출력:
+// Output:
 // Primary timed out, trying backup...
 // Got: backup data
 ```
 
-### 2.3 transform - 성공/실패 모두 변환
+### 2.3 transform - Transform Both Success and Failure
 
-성공과 실패를 모두 처리해야 할 때 사용합니다:
+Use when you need to handle both success and failure:
 
 ```scala
 import scala.concurrent.Future
@@ -190,23 +190,23 @@ val future: Future[String] = riskyOperation().transform {
   case Success(value) =>
     Success(s"Got: $value")
   case Failure(e) =>
-    Success(s"Failed: ${e.getMessage}")  // 실패를 성공으로 변환
+    Success(s"Failed: ${e.getMessage}")  // Transform failure to success
 }
 
-future.foreach(println)  // "Got: 42" 또는 "Failed: Random failure"
+future.foreach(println)  // "Got: 42" or "Failed: Random failure"
 ```
 
 ---
 
-## 3단계: 로깅과 모니터링
+## Step 3: Logging and Monitoring
 
-### 3.1 onComplete - 부수 효과용
+### 3.1 onComplete - For Side Effects Only
 
-{{< callout type="warning" title="주의" >}}
-`onComplete`의 반환 타입은 `Unit`입니다. 비즈니스 로직에 사용하지 마세요.
+{{< callout type="warning" title="Warning" >}}
+`onComplete` returns `Unit`. Do not use it for business logic.
 {{< /callout >}}
 
-로깅이나 메트릭에만 사용하세요:
+Use only for logging or metrics:
 
 ```scala
 import scala.concurrent.Future
@@ -228,12 +228,12 @@ future.onComplete {
     // metrics.incrementCounter("orders.failure")
 }
 
-// 결과를 반환하려면 별도의 map/recover 사용
+// Use separate map/recover to return results
 ```
 
-### 3.2 andThen - 체이닝 가능한 부수 효과
+### 3.2 andThen - Chainable Side Effects
 
-`onComplete`과 비슷하지만 원래 Future를 그대로 반환합니다:
+Similar to `onComplete` but returns the original Future:
 
 ```scala
 import scala.concurrent.Future
@@ -257,7 +257,7 @@ val result = processOrder("ORD-123")
   }
 
 result.foreach(println)
-// 출력:
+// Output:
 // [INFO] Order started
 // [INFO] Order completed: ORDER ORD-123 PROCESSED
 // ORDER ORD-123 PROCESSED
@@ -265,13 +265,13 @@ result.foreach(println)
 
 ---
 
-## 4단계: 흔한 실수와 해결
+## Step 4: Common Mistakes and Solutions
 
-### 4.1 Await 남용
+### 4.1 Await Abuse
 
-{{< callout type="error" title="위험" >}}
-프로덕션 코드에서 `Await.result`는 스레드를 블로킹하여 성능을 심각하게 저하시킵니다.
-테스트 코드에서만 사용하세요.
+{{< callout type="error" title="Danger" >}}
+`Await.result` in production code blocks threads and severely degrades performance.
+Use only in test code.
 {{< /callout >}}
 
 ```scala
@@ -279,49 +279,49 @@ import scala.concurrent.{Future, Await}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
-// 잘못된 예: 블로킹으로 예외 처리
+// Wrong: Blocking for exception handling
 def badExample(): Unit = {
   val future = Future { throw new RuntimeException("Error") }
   try {
-    val result = Await.result(future, 5.seconds)  // 블로킹!
+    val result = Await.result(future, 5.seconds)  // Blocking!
   } catch {
     case e: Exception => println(s"Error: ${e.getMessage}")
   }
 }
 
-// 올바른 예: 비동기 처리
+// Correct: Asynchronous handling
 def goodExample(): Future[Int] = {
   Future { throw new RuntimeException("Error") }
     .recover {
       case e: Exception =>
         println(s"Error: ${e.getMessage}")
-        -1  // 기본값 반환
+        -1  // Return default value
     }
 }
 ```
 
-### 4.2 예외 삼키기
+### 4.2 Swallowing Exceptions
 
 ```scala
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Success, Failure}
 
-// 잘못된 예: 예외를 무시
+// Wrong: Ignoring exceptions
 val future = Future { throw new RuntimeException("Error") }
 future.onComplete {
-  case Failure(_) => // 아무것도 안 함 - 위험!
+  case Failure(_) => // Do nothing - Dangerous!
   case Success(v) => println(v)
 }
 
-// 올바른 예: 최소한 로깅
+// Correct: At least log
 future.onComplete {
   case Failure(e) => println(s"[ERROR] Unexpected error: ${e.getMessage}")
   case Success(v) => println(v)
 }
 ```
 
-### 4.3 중첩 Future
+### 4.3 Nested Future
 
 ```scala
 import scala.concurrent.Future
@@ -335,20 +335,20 @@ def fetchOrders(user: User): Future[List[Order]] = Future {
   List(Order("1", user.id))
 }
 
-// 잘못된 예: Future[Future[T]]
+// Wrong: Future[Future[T]]
 val nested: Future[Future[List[Order]]] = fetchUser("123").map(fetchOrders)
 
-// 올바른 예: flatMap 사용
+// Correct: Use flatMap
 val flat: Future[List[Order]] = fetchUser("123").flatMap(fetchOrders)
 ```
 
 ---
 
-## 5단계: 여러 Future 조합 시 에러 처리
+## Step 5: Error Handling with Multiple Futures
 
 ### 5.1 for comprehension
 
-하나라도 실패하면 전체가 실패합니다:
+If any one fails, the entire computation fails:
 
 ```scala
 import scala.concurrent.Future
@@ -374,11 +374,11 @@ result.recover {
   case e: NoSuchElementException => (defaultUser, Nil, Nil)
   case e: Exception =>
     println(s"[ERROR] Failed to fetch data: ${e.getMessage}")
-    throw e  // 다시 던지기
+    throw e  // Re-throw
 }
 ```
 
-### 5.2 Future.sequence 에러 처리
+### 5.2 Future.sequence Error Handling
 
 ```scala
 import scala.concurrent.Future
@@ -390,19 +390,19 @@ val futures: List[Future[Int]] = List(
   Future.successful(3)
 )
 
-// 하나라도 실패하면 전체 실패
+// If any fails, entire sequence fails
 Future.sequence(futures).recover {
   case e =>
     println(s"Sequence failed: ${e.getMessage}")
-    List.empty  // 에러 시 빈 리스트
+    List.empty  // Return empty list on error
 }
 
-// 개별 실패를 허용하려면
+// To allow individual failures
 val recovered: List[Future[Int]] = futures.map(_.recover { case _ => -1 })
 Future.sequence(recovered).foreach(println)  // List(1, -1, 3)
 ```
 
-### 5.3 firstCompletedOf - 가장 빠른 성공 사용
+### 5.3 firstCompletedOf - Use the Fastest Success
 
 ```scala
 import scala.concurrent.Future
@@ -423,27 +423,27 @@ val fastest = Future.firstCompletedOf(List(
   fetchFromServer2()
 ))
 
-fastest.foreach(println)  // "Server 2 response" (더 빠른 응답)
+fastest.foreach(println)  // "Server 2 response" (faster response)
 ```
 
 ---
 
-## 체크리스트
+## Checklist
 
-Future 에러 처리 시 확인사항:
+When handling Future errors, verify the following:
 
-- [ ] **모든 Future에 에러 핸들러가 있는가?** - `recover` 또는 `recoverWith`
-- [ ] **예외가 로깅되는가?** - `onComplete` 또는 `andThen`
-- [ ] **Await를 사용하지 않는가?** - 테스트 코드 외에는 피하기
-- [ ] **중첩 Future가 없는가?** - `flatMap` 사용
-- [ ] **타임아웃이 설정되어 있는가?** - 외부 호출 시 필수
+- [ ] **Do all Futures have error handlers?** - `recover` or `recoverWith`
+- [ ] **Are exceptions being logged?** - `onComplete` or `andThen`
+- [ ] **Are you avoiding Await?** - Avoid outside of test code
+- [ ] **Are there no nested Futures?** - Use `flatMap`
+- [ ] **Are timeouts configured?** - Required for external calls
 
-**모든 항목을 확인했는데도 예외가 사라진다면**, `onComplete`으로 디버깅 로그를 추가하세요.
+**If exceptions still disappear after checking all items**, add debugging logs with `onComplete`.
 
 ---
 
-## 관련 문서
+## Related Documentation
 
-- [동시성]({{< relref "/docs/scala/concepts/concurrency" >}}) - Future와 Promise 기초
-- [Implicit/Given 디버깅]({{< relref "/docs/scala/howto/implicit-debugging" >}}) - ExecutionContext 문제 해결
-- [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) - 모나딕 에러 처리
+- [Concurrency]({{< relref "/docs/scala/concepts/concurrency" >}}) - Future and Promise basics
+- [Implicit/Given Debugging]({{< relref "/docs/scala/howto/implicit-debugging" >}}) - ExecutionContext troubleshooting
+- [Functional Patterns]({{< relref "/docs/scala/concepts/functional-patterns" >}}) - Monadic error handling
