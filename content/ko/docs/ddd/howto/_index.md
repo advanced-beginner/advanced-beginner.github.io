@@ -1,6 +1,6 @@
 ---
 bookCollapseSection: true
-title: 하우투 가이드
+title: How-To Guide
 weight: 4
 lastmod: "2026-01-13"
 author: "@kimbenji"
@@ -11,8 +11,8 @@ author_url: "http://github.com/kimbenji"
 > **선수 지식**: [전술적 설계](../concepts/tactical-design/) 문서를 읽었거나 DDD 빌딩 블록에 대한 기본 지식
 > **이 섹션의 목적**: DDD 적용 시 마주치는 구체적인 문제를 단계별로 해결
 
-{{< callout type="info" title="하우투 가이드란?" >}}
-하우투 가이드는 **특정 문제를 해결**하기 위한 실용적 지침입니다. "왜"보다는 "어떻게"에 집중하며, 각 가이드는 명확한 문제 상황에서 시작하여 검증 가능한 해결책으로 끝납니다. 개념 이해가 필요하다면 먼저 [개념 이해](../concepts/) 섹션을 참고하세요.
+{{< callout type="info" title="How-To Guide란?" >}}
+How-To Guide는 **특정 문제를 해결**하기 위한 실용적 지침입니다. "왜"보다는 "어떻게"에 집중하며, 각 가이드는 명확한 문제 상황에서 시작하여 검증 가능한 해결책으로 끝납니다. 개념 이해가 필요하다면 먼저 [개념 이해](../concepts/) 섹션을 참고하세요.
 {{< /callout >}}
 
 ## 이 섹션에서 다루는 것

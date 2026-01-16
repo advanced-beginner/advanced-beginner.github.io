@@ -1,7 +1,7 @@
 ---
 bookCollapseSection: true
 lastmod: "2026-01-16"
-title: 하우투 가이드
+title: How-To Guide
 weight: 4
 author:
   name: Advanced Beginner
@@ -52,7 +52,7 @@ flowchart TD
 | [네트워크 트러블슈팅](network-troubleshooting/) | Service나 Ingress가 연결되지 않을 때 | 30분 |
 | [로그 수집 및 분석](logging-guide/) | 효과적으로 로그를 수집하고 분석할 때 | 25분 |
 
-## 하우투 가이드 사용법
+## How-To Guide 사용법
 
 1. 현재 겪고 있는 문제와 일치하는 가이드를 선택하세요
 2. **시작하기 전에** 섹션에서 전제 조건을 확인하세요
