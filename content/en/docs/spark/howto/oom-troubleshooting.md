@@ -1,12 +1,17 @@
 ---
 title: Troubleshooting OutOfMemoryError
 weight: 1
-lastmod: "2026-01-10"
+lastmod: "2026-01-16"
 author:
   name: Advanced Beginner
   github: advanced-beginner
 doc_type: howto
+description: "Step-by-step guide to diagnose and resolve OOM errors in Spark"
 ---
+
+{{< callout type="info" >}}
+**Estimated Time**: About 15 minutes
+{{< /callout >}}
 
 {{% notice style="tip" title="TL;DR" %}}
 - **Driver OOM**: Reduce `collect()` result size, increase `spark.driver.memory`
@@ -34,11 +39,29 @@ This guide explains step-by-step how to diagnose and resolve OOM errors.
 
 ## Prerequisites
 
-| Item | Description |
-|------|-------------|
-| **Environment** | Spark application execution environment (local or cluster) |
-| **Tools** | Access to Spark UI (`http://localhost:4040` or History Server) |
-| **Permissions** | Authority to change Spark settings |
+| Item | Requirement | How to Verify |
+|------|-------------|---------------|
+| **Spark Version** | 2.4 or higher (3.x recommended) | `spark-submit --version` |
+| **Java Version** | 8, 11, or 17 | `java -version` |
+| **Spark UI** | Accessible | Open `http://localhost:4040` in browser |
+| **Permissions** | Can modify Spark settings | Verify spark-submit execution permissions |
+
+**Supported Environments**: Linux, macOS, Windows (WSL2 recommended)
+
+### Environment Verification
+
+Run the following commands to verify your environment is ready:
+
+```bash
+# Check Java version
+java -version
+
+# Check Spark version
+spark-submit --version
+
+# Verify Spark UI access (while application is running)
+curl -s http://localhost:4040/api/v1/applications | head -1
+```
 
 ---
 
@@ -70,9 +93,11 @@ Container killed by YARN for exceeding memory limits
 
 ## Step 2: Resolving Driver OOM
 
-Driver OOM typically occurs when **collecting large amounts of data to the Driver**.
+Driver OOM typically occurs when **collecting large amounts of data to the Driver**. Follow these steps in order.
 
 ### 2.1 Review collect() Usage
+
+First, check for `collect()` calls in your code.
 
 **Problem Code:**
 ```java
@@ -159,6 +184,10 @@ Example: 40GB data → 40,000 / 200 = 200 partitions
 
 ### 3.3 Increase Executor Memory
 
+{{< callout type="warning" >}}
+**Warning**: Do not set Executor memory above 75% of the cluster node's physical memory. YARN/Kubernetes overhead may cause Container termination.
+{{< /callout >}}
+
 ```bash
 # spark-submit
 spark-submit \
@@ -240,20 +269,50 @@ WindowSpec bounded = Window.partitionBy("user_id")
 
 ## Verification
 
-Confirm that OOM is resolved:
+Verify OOM resolution using these criteria:
 
-1. **Check Spark UI**: Review memory usage in Executors tab
-2. **Verify Job Completion**: All Stages completed successfully
-3. **Check Logs**: No OOM-related error messages
+### Success Criteria
+
+| Item | Success Condition |
+|------|-------------------|
+| **Job Completion** | All Stages in SUCCEEDED state |
+| **Memory Usage** | Executor memory utilization below 80% |
+| **GC Time** | Less than 10% of total execution time |
+| **Error Logs** | No OOM-related messages |
+
+### Verification Steps
+
+1. **Check Spark UI**: Review memory usage in Executors tab.
+   - Check the **Storage Memory** column for usage
+   - There should be no red warnings
+
+2. **Verify Job Completion**: Confirm all Stages are green (SUCCEEDED) in Jobs tab.
+
+3. **Check Logs**: Run the following command to verify no OOM errors.
 
 ```bash
-# Check logs for OOM
+# Check logs for OOM (success if no output)
 grep -i "outofmemory\|oom\|killed" spark-logs/*.log
+
+# Expected result: No output
 ```
 
 ---
 
 ## Troubleshooting Checklist
+
+### Solutions by Error Message
+
+| Error Message | Cause | Solution |
+|---------------|-------|----------|
+| `java.lang.OutOfMemoryError: Java heap space` (Driver) | Collecting large data to Driver | `collect()` → `take(n)` or save to file |
+| `java.lang.OutOfMemoryError: Java heap space` (Executor) | Partition size too large | Increase partitions with `repartition` |
+| `Container killed by YARN for exceeding memory limits` | Insufficient YARN memory overhead | Increase `spark.executor.memoryOverhead` |
+| `java.lang.OutOfMemoryError: GC overhead limit exceeded` | GC using 90%+ CPU | Increase memory or enable Off-Heap |
+| `ExecutorLostFailure (executor X exited caused by one of the running tasks)` | Executor memory insufficient | Increase Executor memory, reduce partition size |
+| `Total size of serialized results is bigger than spark.driver.maxResultSize` | Driver result size exceeded | Increase `spark.driver.maxResultSize` or reduce result size |
+
+### Quick Diagnosis Table
 
 | Symptom | Check | Solution |
 |---------|-------|----------|

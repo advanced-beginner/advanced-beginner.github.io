@@ -1,12 +1,17 @@
 ---
 title: Resolving Data Skew
 weight: 2
-lastmod: "2026-01-10"
+lastmod: "2026-01-16"
 author:
   name: Advanced Beginner
   github: advanced-beginner
 doc_type: howto
+description: "Guide to diagnose and resolve data skew issues where data concentrates in specific partitions"
 ---
+
+{{< callout type="info" >}}
+**Estimated Time**: About 20 minutes
+{{< /callout >}}
 
 {{% notice style="tip" title="TL;DR" %}}
 - **Diagnosis**: Compare Task Duration Min/Max in Spark UI Stages tab (10x+ difference = skew)
@@ -28,11 +33,25 @@ This is **Data Skew** - data is concentrated on specific keys, causing those par
 
 ## Prerequisites
 
-| Item | Description |
-|------|-------------|
-| **Environment** | Spark 2.4+ (AQE requires 3.0+) |
-| **Tools** | Access to Spark UI |
-| **Data** | Key column used for joins or grouping exists |
+| Item | Requirement | How to Verify |
+|------|-------------|---------------|
+| **Spark Version** | 2.4+ (AQE requires 3.0+) | `spark-submit --version` |
+| **Spark UI** | Accessible | Open `http://localhost:4040` in browser |
+| **Data** | Key column used for joins/grouping exists | Verify key column in schema |
+
+**Supported Environments**: Linux, macOS, Windows (WSL2 recommended)
+
+### Environment Verification
+
+Run the following commands to verify your environment is ready:
+
+```bash
+# Check Spark version (3.0+ required for AQE)
+spark-submit --version
+
+# Verify Spark UI access (while application is running)
+curl -s http://localhost:4040/api/v1/applications | head -1
+```
 
 ---
 
@@ -123,12 +142,25 @@ Dataset<Row> result = largeTable.join(smallTable, "key");
 
 Use when AQE is not available or more fine-grained control is needed.
 
+{{< callout type="warning" >}}
+**Warning**: Salting replicates the small table, increasing memory usage. Setting `numSaltBuckets` too high may degrade performance. Start with values between 10-20.
+{{< /callout >}}
+
 ### 3.1 Basic Salting
 
 Add random suffixes to hot keys to distribute across multiple partitions.
 
 ```java
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.RowFactory;
+import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.types.StructType;
 import static org.apache.spark.sql.functions.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 int numSaltBuckets = 10;  // Distribute hot keys across 10 partitions
 
@@ -177,6 +209,10 @@ Dataset<Row> saltedLarge = largeTable.withColumn("salt",
 
 Broadcast is most effective when joining with small tables (tens of MB or less).
 
+{{< callout type="warning" >}}
+**Warning**: If broadcast table size exceeds 20% of Executor memory, OOM may occur. Do not broadcast tables over 100MB.
+{{< /callout >}}
+
 ```java
 import static org.apache.spark.sql.functions.broadcast;
 
@@ -218,13 +254,22 @@ Dataset<Row> result = joined.union(
 
 ## Verification
 
-Confirm that skew is resolved:
+Verify skew resolution using these criteria:
+
+### Success Criteria
+
+| Item | Success Condition |
+|------|-------------------|
+| **Task Duration** | Min/Max difference within 3x |
+| **Shuffle Read Size** | Even partition sizes (within 2x) |
+| **Job Completion** | All Tasks in SUCCEEDED state |
+| **skew_ratio** | 2-3 or less |
 
 ### Check in Spark UI
 
-1. Check Task Duration distribution in **Stages** tab
-2. Verify Min/Max difference is within 2-3x
-3. Check **Event Timeline** for even Task distribution
+1. Check Task Duration distribution in **Stages** tab.
+2. Verify Min/Max difference is within 2-3x.
+3. Check **Event Timeline** for even Task distribution.
 
 ### Check with Code
 
@@ -246,6 +291,17 @@ result.groupBy(spark_partition_id())
 ---
 
 ## Troubleshooting Checklist
+
+### Solutions by Error Message
+
+| Symptom/Log Message | Cause | Solution |
+|---------------------|-------|----------|
+| `Stage X: 199/200 tasks completed` (last Task delayed) | Data skew | Enable AQE or apply Salting |
+| `FetchFailedException: Too large frame` | Single partition data too large | Partition split or Salting |
+| `Container killed by YARN` (specific Tasks only) | Hot partition memory exceeded | Distribute hot keys |
+| Task Duration Min/Max 10x+ difference in Spark UI | Data skew | Apply skew resolution techniques |
+
+### Recommended Solutions by Situation
 
 | Situation | Recommended Solution |
 |-----------|---------------------|

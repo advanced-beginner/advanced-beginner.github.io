@@ -1,12 +1,17 @@
 ---
 title: Optimizing Shuffle
 weight: 3
-lastmod: "2026-01-10"
+lastmod: "2026-01-16"
 author:
   name: Advanced Beginner
   github: advanced-beginner
 doc_type: howto
+description: "Guide to minimize Spark shuffle and significantly improve job performance"
 ---
+
+{{< callout type="info" >}}
+**Estimated Time**: About 20 minutes
+{{< /callout >}}
 
 {{% notice style="tip" title="TL;DR" %}}
 - **Check Shuffle**: `Exchange` node in `df.explain()` = shuffle occurs
@@ -17,9 +22,16 @@ doc_type: howto
 
 ## Problem Definition
 
-In Spark jobs, **Stage transitions take too long** or excessive network I/O occurs. Shuffle is the most expensive operation in Spark, so it should be minimized.
+Shuffle optimization is needed when you see these symptoms:
 
-Operations that cause shuffle:
+| Symptom | Where to Check |
+|---------|----------------|
+| Stage transitions take 10+ seconds | Spark UI → Jobs tab |
+| Shuffle Read/Write is tens of GB or more | Spark UI → Stages tab |
+| Timeout due to network I/O | Application logs |
+| Many `Exchange` nodes in `explain()` | Execution plan output |
+
+Shuffle is the most expensive operation in Spark. The following operations cause shuffle:
 - `groupBy`, `reduceByKey`
 - `join`, `cogroup`
 - `repartition`, `coalesce(shuffle=true)`
@@ -29,10 +41,34 @@ Operations that cause shuffle:
 
 ## Prerequisites
 
-| Item | Description |
-|------|-------------|
-| **Environment** | Spark application execution environment |
-| **Tools** | Access to Spark UI, `explain()` method available |
+| Item | Requirement | How to Verify |
+|------|-------------|---------------|
+| **Spark Version** | 2.4+ (AQE requires 3.0+) | `spark-submit --version` |
+| **Spark UI** | Accessible | Open `http://localhost:4040` in browser |
+| **Permissions** | Can modify Spark settings | Verify spark-submit execution permissions |
+
+**Supported Environments**: Linux, macOS, Windows (WSL2 recommended)
+
+### Environment Verification
+
+Run the following commands to verify your environment is ready:
+
+```bash
+# Check Spark version
+spark-submit --version
+
+# Verify Spark UI access (while application is running)
+curl -s http://localhost:4040/api/v1/applications | head -1
+```
+
+### Recommended Resolution Order
+
+Follow this order for maximum optimization impact:
+
+1. **Step 2**: Eliminate unnecessary shuffles (most effective)
+2. **Step 3**: Broadcast join (for small table joins)
+3. **Step 4**: Adjust shuffle partition count
+4. **Step 5-6**: Advanced optimization (as needed)
 
 ---
 
@@ -219,6 +255,10 @@ AQE automatically merges small partitions to reduce overhead.
 
 Eliminate shuffle for repeatedly joined tables using bucketing.
 
+{{< callout type="warning" >}}
+**Warning**: Bucketing requires a Hive metastore and rewrites the table. Overhead may be high for one-time joins. Use only when joining repeatedly on the same key.
+{{< /callout >}}
+
 ### 5.1 Create Bucketed Tables
 
 ```java
@@ -271,13 +311,22 @@ SparkSession spark = SparkSession.builder()
 
 ## Verification
 
-Confirm that shuffle is optimized:
+Verify shuffle optimization using these criteria:
+
+### Success Criteria
+
+| Item | Success Condition |
+|------|-------------------|
+| **Shuffle Write** | 50%+ reduction compared to before |
+| **Stage Count** | Fewer Exchange nodes in `explain()` |
+| **Execution Time** | 30%+ reduction compared to before |
+| **Broadcast Join** | `BroadcastHashJoin` in `explain()` |
 
 ### Check in Spark UI
 
-1. **Stages** tab → Check Shuffle Read/Write sizes
-2. Verify shuffle data volume decreased compared to before
-3. Check for reduced Stage count (when shuffle is eliminated)
+1. Check Shuffle Read/Write sizes in **Stages** tab.
+2. Verify shuffle data volume decreased.
+3. Check for reduced Stage count (when shuffle is eliminated).
 
 ### Compare Execution Time
 
@@ -292,6 +341,18 @@ System.out.println("Execution time: " + duration + "ms");
 ---
 
 ## Troubleshooting Checklist
+
+### Solutions by Error Message
+
+| Error Message/Symptom | Cause | Solution |
+|-----------------------|-------|----------|
+| `FetchFailedException: Failed to connect` | Shuffle data transfer failed | Enable shuffle compression, increase network timeout |
+| `java.io.IOException: No space left on device` | Shuffle disk space insufficient | Free up `spark.local.dir` or change path |
+| `TimeoutException` (during shuffle) | Network bottleneck | Increase shuffle partitions, use broadcast |
+| Shuffle Write > 100GB in Spark UI | Excessive shuffle | Eliminate unnecessary shuffle, apply filter first |
+| Stage transitions take 10+ seconds | Shuffle overhead | Apply broadcast join or bucketing |
+
+### Recommended Solutions by Situation
 
 | Situation | Recommended Solution |
 |-----------|---------------------|
