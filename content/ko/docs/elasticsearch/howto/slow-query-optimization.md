@@ -1,10 +1,18 @@
 ---
-lastmod: "2026-01-14"
+lastmod: "2026-01-16"
 title: 느린 쿼리 최적화
 weight: 1
 ---
 
 검색 응답 시간이 느릴 때 원인을 진단하고 개선하는 방법을 안내합니다.
+
+**소요 시간**: 약 15-30분
+
+{{< callout type="info" title="이 가이드의 범위" >}}
+**다루는 내용**: 쿼리 수준의 성능 최적화, Profile API 분석, 캐시 활용
+
+**다루지 않는 내용**: 클러스터 수준 튜닝(노드 추가, 하드웨어 업그레이드)은 [성능 튜닝]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}})을 참조하세요.
+{{< /callout >}}
 
 {{< callout type="tip" title="TL;DR" >}}
 - **Profile API**로 쿼리 실행 계획 분석
@@ -12,6 +20,31 @@ weight: 1
 - **쿼리 유형 최적화**: `match` 대신 `term`, 와일드카드 앞자리 피하기
 - **캐시 활용**: filter context 사용, request cache 활성화
 {{< /callout >}}
+
+---
+
+## 시작하기 전에
+
+다음 조건을 확인하세요:
+
+| 항목 | 요구사항 | 확인 방법 |
+|------|---------|----------|
+| Elasticsearch 버전 | 7.x 이상 | `curl -X GET "localhost:9200"` |
+| 클러스터 상태 | green 또는 yellow | `curl -X GET "localhost:9200/_cluster/health"` |
+| 인덱스 접근 권한 | 읽기 + 설정 변경 | 아래 명령어로 테스트 |
+
+```bash
+# Elasticsearch 실행 상태 확인
+curl -X GET "localhost:9200/_cluster/health?pretty"
+
+# 정상 응답 예시: "status": "green" 또는 "yellow"
+```
+
+{{< callout type="warning" title="주의" >}}
+Slow Log 설정 변경은 인덱스 설정 변경 권한이 필요합니다. 권한이 없으면 관리자에게 문의하세요.
+{{< /callout >}}
+
+---
 
 ## 증상
 
@@ -33,7 +66,7 @@ curl -X GET "localhost:9200/products/_search" -H 'Content-Type: application/json
 
 ### 1.1 Profile API로 쿼리 분석
 
-쿼리에 `profile: true`를 추가하면 실행 계획을 볼 수 있습니다:
+쿼리에 `profile: true`를 추가하여 실행 계획을 확인하세요:
 
 ```bash
 curl -X GET "localhost:9200/products/_search" -H 'Content-Type: application/json' -d'
@@ -68,7 +101,7 @@ curl -X GET "localhost:9200/products/_search" -H 'Content-Type: application/json
 
 ### 1.2 Slow Log 활성화
 
-느린 쿼리를 자동으로 로깅하도록 설정합니다:
+느린 쿼리를 자동으로 로깅하도록 설정하세요:
 
 ```bash
 curl -X PUT "localhost:9200/products/_settings" -H 'Content-Type: application/json' -d'
@@ -244,7 +277,11 @@ curl -X GET "localhost:9200/_cat/shards/products?v"
 
 ### 5.2 Refresh Interval 조정
 
-인덱싱이 많은 시간에는 refresh를 줄입니다:
+{{< callout type="warning" title="주의" >}}
+refresh_interval을 `-1`로 설정하면 새로 인덱싱된 문서가 검색되지 않습니다. 반드시 작업 완료 후 원래 값으로 복구하세요.
+{{< /callout >}}
+
+인덱싱이 많은 시간에는 refresh를 줄이세요:
 
 ```bash
 # 배치 인덱싱 중 refresh 비활성화
@@ -271,6 +308,78 @@ curl -X POST "localhost:9200/products/_refresh"
 - [ ] **_source 필터링을 했는가?** - 필요한 필드만 반환
 - [ ] **페이지네이션이 적절한가?** - 깊은 페이지는 search_after 사용
 - [ ] **캐시가 활용되고 있는가?** - filter 캐시, request cache 확인
+
+---
+
+## 성공 확인
+
+최적화가 성공했는지 다음 방법으로 확인하세요:
+
+1. **took 값 비교**: 동일한 쿼리의 `took` 값이 50% 이상 감소했는지 확인
+   ```bash
+   # 최적화 전후 took 값 비교
+   curl -X GET "localhost:9200/products/_search?pretty" -H 'Content-Type: application/json' -d'
+   {
+     "query": { "match": { "name": "테스트" } }
+   }' | grep took
+   ```
+
+2. **Profile API 비교**: `time_in_nanos` 값이 감소했는지 확인
+
+3. **Slow Log 확인**: 설정한 임계값(예: 500ms)을 초과하는 쿼리가 더 이상 기록되지 않는지 확인
+
+{{< callout type="tip" title="성공 기준" >}}
+- took 값이 기존 대비 50% 이상 감소
+- Slow Log에 새로운 경고가 기록되지 않음
+- 사용자 체감 응답 시간 개선
+{{< /callout >}}
+
+---
+
+## 자주 발생하는 오류
+
+### "index_not_found_exception"
+
+```json
+{
+  "error": {
+    "type": "index_not_found_exception",
+    "reason": "no such index [products]"
+  }
+}
+```
+
+**원인**: 인덱스 이름이 잘못되었거나 존재하지 않음
+
+**해결**: 인덱스 목록을 확인하세요:
+```bash
+curl -X GET "localhost:9200/_cat/indices?v"
+```
+
+### "search_phase_execution_exception"
+
+```json
+{
+  "error": {
+    "type": "search_phase_execution_exception",
+    "reason": "all shards failed"
+  }
+}
+```
+
+**원인**: 쿼리 문법 오류 또는 매핑과 맞지 않는 쿼리
+
+**해결**:
+1. 쿼리 JSON 문법을 검증하세요
+2. 인덱스 매핑을 확인하세요: `curl -X GET "localhost:9200/products/_mapping?pretty"`
+
+### 권한 오류 (403 Forbidden)
+
+**원인**: 인덱스 읽기 또는 설정 변경 권한 부족
+
+**해결**: 클러스터 관리자에게 다음 권한을 요청하세요:
+- `read` - 검색 실행
+- `manage` - Slow Log 설정 변경
 
 ---
 

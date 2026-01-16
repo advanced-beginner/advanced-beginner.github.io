@@ -1,10 +1,18 @@
 ---
-lastmod: "2026-01-14"
+lastmod: "2026-01-16"
 title: 메모리 문제 해결
 weight: 2
 ---
 
 OutOfMemoryError나 GC 문제가 발생할 때 원인을 진단하고 해결하는 방법을 안내합니다.
+
+**소요 시간**: 약 20-40분 (GC 로그 분석 시 추가 10분)
+
+{{< callout type="info" title="이 가이드의 범위" >}}
+**다루는 내용**: 힙 메모리 설정, Circuit Breaker, Field Data 최적화, GC 튜닝
+
+**다루지 않는 내용**: 노드 추가, 하드웨어 업그레이드는 [클러스터 관리]({{< relref "/docs/elasticsearch/concepts/cluster-management" >}})를 참조하세요.
+{{< /callout >}}
 
 {{< callout type="tip" title="TL;DR" >}}
 - **힙 메모리**: 전체 메모리의 50% 이하, 최대 31GB
@@ -12,6 +20,40 @@ OutOfMemoryError나 GC 문제가 발생할 때 원인을 진단하고 해결하�
 - **필드 데이터**: text 필드 집계 피하기, doc_values 활용
 - **GC 튜닝**: G1GC 사용, 로그 분석으로 문제 파악
 {{< /callout >}}
+
+---
+
+## 시작하기 전에
+
+다음 조건을 확인하세요:
+
+| 항목 | 요구사항 | 확인 방법 |
+|------|---------|----------|
+| 서버 접근 권한 | SSH 또는 콘솔 접근 | 서버에 로그인 가능 |
+| jvm.options 수정 권한 | root 또는 elasticsearch 사용자 | 아래 경로 확인 |
+| ES 재시작 권한 | 서비스 재시작 가능 | `systemctl restart elasticsearch` |
+
+**jvm.options 파일 위치**:
+
+| 설치 방식 | 경로 |
+|----------|------|
+| Debian/Ubuntu (apt) | `/etc/elasticsearch/jvm.options` |
+| RPM/CentOS (yum) | `/etc/elasticsearch/jvm.options` |
+| tar.gz 압축 해제 | `{ES_HOME}/config/jvm.options` |
+| Docker | 환경 변수 `ES_JAVA_OPTS` 사용 |
+
+```bash
+# jvm.options 파일 위치 확인
+ls -la /etc/elasticsearch/jvm.options 2>/dev/null || \
+ls -la $ES_HOME/config/jvm.options 2>/dev/null || \
+echo "jvm.options 파일을 찾을 수 없습니다"
+```
+
+{{< callout type="warning" title="주의" >}}
+jvm.options 변경 후 Elasticsearch를 재시작해야 합니다. 운영 환경에서는 롤링 재시작을 권장합니다.
+{{< /callout >}}
+
+---
 
 ## 증상
 
@@ -303,6 +345,97 @@ curl -X POST "localhost:9200/products/_search?scroll=1m" -H 'Content-Type: appli
 - [ ] **Circuit Breaker가 적절한가?** - 너무 높으면 OOM, 너무 낮으면 쿼리 실패
 - [ ] **GC 로그를 분석했는가?** - 패턴 파악
 - [ ] **불필요한 인덱스가 있는가?** - 오래된 인덱스 정리
+
+---
+
+## 성공 확인
+
+메모리 문제가 해결되었는지 다음 방법으로 확인하세요:
+
+1. **힙 사용률 확인**: `heap.percent`가 75% 이하로 안정적으로 유지되는지 확인
+   ```bash
+   # 힙 사용률 모니터링 (5초 간격으로 10회)
+   for i in {1..10}; do
+     curl -s "localhost:9200/_cat/nodes?v&h=name,heap.percent" && sleep 5
+   done
+   ```
+
+2. **Circuit Breaker 확인**: 더 이상 breaker가 발동하지 않는지 확인
+   ```bash
+   curl -X GET "localhost:9200/_nodes/stats/breaker?pretty" | grep tripped
+   ```
+
+3. **OOM 로그 확인**: 새로운 OutOfMemoryError가 발생하지 않는지 확인
+   ```bash
+   # 최근 로그에서 OOM 검색
+   grep -i "OutOfMemory" /var/log/elasticsearch/*.log | tail -5
+   ```
+
+{{< callout type="tip" title="성공 기준" >}}
+- `heap.percent`가 75% 이하로 안정
+- Circuit Breaker `tripped` 값이 증가하지 않음
+- 24시간 동안 OOM 미발생
+{{< /callout >}}
+
+---
+
+## 자주 발생하는 오류
+
+### jvm.options 문법 오류
+
+**증상**: Elasticsearch가 시작되지 않음
+
+```
+Error: Could not create the Java Virtual Machine.
+Error: A fatal exception has occurred. Program will exit.
+```
+
+**원인**: jvm.options 파일에 잘못된 옵션이 있음
+
+**해결**:
+1. jvm.options 파일의 문법을 확인하세요
+2. 각 옵션이 새 줄에 있는지 확인하세요
+3. 공백이나 특수문자가 없는지 확인하세요
+
+```bash
+# 올바른 형식
+-Xms8g
+-Xmx8g
+
+# 잘못된 형식 (공백 포함)
+-Xms 8g
+-Xmx=8g
+```
+
+### Elasticsearch 시작 실패 (메모리 부족)
+
+**증상**: 서비스가 시작되지 않음
+
+```
+[ERROR] bootstrap checks failed
+max virtual memory areas vm.max_map_count [65530] is too low
+```
+
+**해결**:
+```bash
+# 임시 설정
+sudo sysctl -w vm.max_map_count=262144
+
+# 영구 설정
+echo "vm.max_map_count=262144" | sudo tee -a /etc/sysctl.conf
+```
+
+### Docker 환경에서 메모리 제한
+
+**증상**: 컨테이너가 OOM으로 종료됨
+
+**해결**: Docker 실행 시 메모리 제한과 ES_JAVA_OPTS를 함께 설정하세요:
+```bash
+docker run -d \
+  --memory="4g" \
+  -e ES_JAVA_OPTS="-Xms2g -Xmx2g" \
+  elasticsearch:8.x
+```
 
 ---
 
