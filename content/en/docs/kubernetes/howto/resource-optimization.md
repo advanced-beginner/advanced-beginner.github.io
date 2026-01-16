@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-11"
+lastmod: "2026-01-16"
 title: Resource Optimization
 weight: 2
 author:
@@ -8,97 +8,180 @@ author:
 ---
 
 > **Objective**: Find appropriate CPU/memory settings to improve resource efficiency
-> **Prerequisites**: Understanding of resource management concepts
 > **Estimated Time**: 45 minutes
 
-{{< callout type="tip" title="TL;DR" >}}
-- Measure actual usage with Metrics Server
-- Check recommendations with VPA Recommender
-- Adjust incrementally while monitoring
+{{< callout type="info" title="Scope of This Guide" >}}
+**Covers**: Measuring resource usage, determining appropriate requests/limits values, resolving throttling/OOM
+
+**Does not cover**: Auto-scaling (see [Scaling]({{< relref "/docs/kubernetes/concepts/scaling" >}})), Pod startup issues (see [Pod Troubleshooting](pod-troubleshooting/))
 {{< /callout >}}
 
-## Why Resource Optimization?
+## Before You Begin
 
-| Configuration | Problem |
-|---------------|---------|
-| requests too high | Resource waste, scheduling difficulties |
-| requests too low | Throttling, OOM risk |
-| limits too high | Allowing excessive resource usage |
-| limits too low | Frequent throttling, OOM |
+Verify the following prerequisites.
 
-## 1. Measure Current Usage
-
-### Verify Metrics Server Installation
+### 1. Verify kubectl Installation and Version
 
 ```bash
-# Check Metrics Server operation
-kubectl top nodes
-kubectl top pods
+kubectl version --client
 ```
 
-If you get an error, install Metrics Server:
+**Success output:**
+```
+Client Version: v1.28.0
+```
+
+### 2. Verify Metrics Server Installation
 
 ```bash
-# Minikube
-minikube addons enable metrics-server
+kubectl top nodes
+```
 
-# Other environments
+**Success output:**
+```
+NAME           CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%
+node-1         250m         12%    1024Mi          50%
+```
+
+**If you get an error, install Metrics Server.**
+
+{{< tabs "metrics-server-install" >}}
+{{< tab "Minikube" >}}
+```bash
+minikube addons enable metrics-server
+```
+{{< /tab >}}
+{{< tab "Other Environments" >}}
+```bash
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 ```
+{{< /tab >}}
+{{< /tabs >}}
 
-### Check Usage
+Wait 1-2 minutes after installation, then verify again.
+
+### 3. Verify Target Pods
+
+Verify the Pods you want to optimize are in Running status.
 
 ```bash
-# Usage by Pod
-kubectl top pods
-
-# Usage by container
-kubectl top pods --containers
-
-# Specific namespace
-kubectl top pods -n production
+kubectl get pods -l app=<your-app>
 ```
 
-**Expected Output:**
+**Success output:**
+```
+NAME                     READY   STATUS    RESTARTS   AGE
+my-app-xxx-yyy           1/1     Running   0          5m
+```
+
+---
+
+## Step 1: Measure Current Usage
+
+{{< callout type="warning" title="Measurement Duration" >}}
+Measure for at least 1 hour for accurate analysis. Including peak hours is recommended.
+{{< /callout >}}
+
+### Check Pod Resource Usage
+
+```bash
+kubectl top pods
+```
+
+**Expected output:**
 ```
 NAME                    CPU(cores)   MEMORY(bytes)
 my-app-xxx-yyy          50m          256Mi
 my-app-xxx-zzz          45m          248Mi
 ```
 
-### Track Usage Over Time
-
-Use with watch for continuous monitoring:
+To check by container, run:
 
 ```bash
-# Refresh every 2 seconds
+kubectl top pods --containers
+```
+
+**Success check:** CPU(cores) and MEMORY(bytes) values are displayed.
+
+### Track Usage Over Time
+
+Start real-time monitoring that refreshes every 2 seconds.
+
+```bash
 watch -n 2 kubectl top pods
 ```
 
-## 2. Determine Appropriate Values
+{{< callout type="tip" title="Tip" >}}
+Record both peak time maximum values and normal operation values.
+{{< /callout >}}
 
-### Empirical Guidelines
+**Recording example:**
 
-| Item | Recommended Value |
-|------|-------------------|
-| CPU requests | 80-100% of normal usage |
-| CPU limits | 2-4x requests or unset |
-| Memory requests | 110-120% of normal usage |
-| Memory limits | 1.2-1.5x requests |
+| Time Period | CPU | Memory |
+|-------------|-----|--------|
+| Normal | 50m | 256Mi |
+| Peak | 200m | 400Mi |
 
-### Using VPA Recommender
+---
 
-Installing VPA automatically calculates recommended values:
+## Step 2: Check Current Settings
+
+Check the current resource settings of your Deployment.
 
 ```bash
-# Install VPA (components only)
-git clone https://github.com/kubernetes/autoscaler.git
-cd autoscaler/vertical-pod-autoscaler
-./hack/vpa-up.sh
+kubectl get deployment <deployment-name> -o jsonpath='{.spec.template.spec.containers[0].resources}'
 ```
 
+**Expected output:**
+```json
+{"limits":{"cpu":"1000m","memory":"2Gi"},"requests":{"cpu":"500m","memory":"1Gi"}}
+```
+
+### Problem Diagnosis Criteria
+
+| Current State | Problem | Action |
+|---------------|---------|--------|
+| requests > 5x actual usage | Resource waste | Decrease requests |
+| requests < actual usage | Throttling risk | Increase requests |
+| limits < peak usage | OOM/throttling occurring | Increase limits |
+
+**Success check:** You can view current settings and compare with actual usage.
+
+---
+
+## Step 3: Calculate Appropriate Values
+
+### Recommended Calculation Formula
+
+```
+CPU requests = Normal usage × 1.2 (20% buffer)
+CPU limits   = Peak usage × 1.5 or unset
+
+Memory requests = Normal usage × 1.2
+Memory limits   = requests × 1.5
+```
+
+### Calculation Example
+
+**Measurements:**
+- Normal CPU: 50m, Peak CPU: 200m
+- Normal Memory: 256Mi, Peak Memory: 400Mi
+
+**Calculations:**
+```
+CPU requests = 50m × 1.2 = 60m → 100m (rounded)
+CPU limits   = 200m × 1.5 = 300m → 500m
+
+Memory requests = 256Mi × 1.2 = 307Mi → 320Mi
+Memory limits   = 320Mi × 1.5 = 480Mi → 512Mi
+```
+
+### Using VPA Recommender (Optional)
+
+Installing VPA automatically calculates recommended values.
+
 ```yaml
-# vpa.yaml - Check recommendations only (don't apply)
+# vpa.yaml
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
 metadata:
@@ -109,74 +192,99 @@ spec:
     kind: Deployment
     name: my-app
   updatePolicy:
-    updateMode: "Off"  # Only recommend, don't apply
+    updateMode: "Off"  # Only show recommendations, don't auto-apply
 ```
 
 ```bash
-# Check VPA recommendations
+kubectl apply -f vpa.yaml
 kubectl describe vpa my-app-vpa
 ```
 
-## 3. Adjust Resource Settings
+**Success check:** Recommended values are displayed in the Recommendation section.
 
-### Incremental Adjustment Method
+---
 
-1. Measure current usage (at least 1 hour)
-2. Set requests to normal usage + 20%
-3. Set limits to 1.5x requests
-4. Monitor after deployment
-5. Repeat adjustments as needed
+## Step 4: Apply Changes
 
-### Configuration Examples
+{{< callout type="warning" title="Caution" >}}
+In production environments, avoid making large changes at once. Adjust incrementally.
+{{< /callout >}}
 
-**Before (Excessive settings):**
-```yaml
-resources:
-  requests:
-    memory: "1Gi"
-    cpu: "500m"
-  limits:
-    memory: "2Gi"
-    cpu: "1000m"
+### Modify Deployment
+
+```bash
+kubectl edit deployment <deployment-name>
 ```
 
-**Actual Usage:** CPU 50m, Memory 256Mi
+Or use the patch command.
 
-**After (Optimized):**
-```yaml
-resources:
-  requests:
-    memory: "300Mi"
-    cpu: "100m"
-  limits:
-    memory: "512Mi"
-    cpu: "500m"
+```bash
+kubectl patch deployment <deployment-name> -p '
+{
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [{
+          "name": "<container-name>",
+          "resources": {
+            "requests": {
+              "memory": "320Mi",
+              "cpu": "100m"
+            },
+            "limits": {
+              "memory": "512Mi",
+              "cpu": "500m"
+            }
+          }
+        }]
+      }
+    }
+  }
+}'
 ```
 
-## 4. Monitor and Validate
+**Success check:** New Pod is created and reaches Running status.
+
+```bash
+kubectl rollout status deployment <deployment-name>
+```
+
+---
+
+## Step 5: Validate
+
+Verify the following after making changes.
 
 ### Check for Throttling
 
-Check if CPU throttling is occurring:
+Check if CPU throttling is occurring.
 
 ```bash
-# Check in Pod (cgroup v1)
 kubectl exec <pod-name> -- cat /sys/fs/cgroup/cpu/cpu.stat
-# If nr_throttled increases, throttling is occurring
+```
 
-# cgroup v2
+**Check output:**
+```
+nr_throttled 0      # 0 means no throttling
+throttled_time 0    # 0 means normal
+```
+
+{{< callout type="tip" title="cgroup v2 Environments" >}}
+In cgroup v2 environments, use the following command:
+```bash
 kubectl exec <pod-name> -- cat /sys/fs/cgroup/cpu.stat
 ```
+{{< /callout >}}
 
 ### Check for OOM
 
-```bash
-# Check OOM events
-kubectl get events --field-selector reason=OOMKilling
+Verify no OOM events are occurring.
 
-# Check in Pod status
-kubectl describe pod <pod-name> | grep -A 5 "Last State"
+```bash
+kubectl get events --field-selector reason=OOMKilling
 ```
+
+**Success check:** No events returned.
 
 ### Check QoS Class
 
@@ -184,9 +292,84 @@ kubectl describe pod <pod-name> | grep -A 5 "Last State"
 kubectl get pod <pod-name> -o jsonpath='{.status.qosClass}'
 ```
 
-## 5. Java Application Specific Settings
+| QoS Class | Meaning | Recommended Scenario |
+|-----------|---------|---------------------|
+| Guaranteed | requests = limits | Critical workloads |
+| Burstable | requests < limits | General workloads |
+| BestEffort | No resources set | Test environments only |
 
-### JVM Heap and Container Memory
+**Success check:** Intended QoS class is applied.
+
+---
+
+## Common Errors
+
+### "OOMKilled" Repeatedly Occurring
+
+**Cause:** Memory limits are too low.
+
+**Solution:**
+```bash
+# Check current limits
+kubectl describe pod <pod-name> | grep -A 2 "Limits"
+
+# Increase limits (e.g., 512Mi → 1Gi)
+kubectl patch deployment <name> -p '{"spec":{"template":{"spec":{"containers":[{"name":"<container>","resources":{"limits":{"memory":"1Gi"}}}]}}}}'
+```
+
+### Response Delay Due to CPU Throttling
+
+**Cause:** CPU limits are too low.
+
+**Solution:**
+1. Increase CPU limits, or
+2. Remove CPU limits (set only requests)
+
+```yaml
+resources:
+  requests:
+    cpu: "100m"
+  # limits.cpu omitted - can use node CPU
+  limits:
+    memory: "512Mi"
+```
+
+### "0/N nodes are available: Insufficient cpu/memory"
+
+**Cause:** requests exceed available node resources.
+
+**Solution:**
+```bash
+# Check node available resources
+kubectl describe nodes | grep -A 5 "Allocatable"
+
+# Adjust requests to be within available resources
+```
+
+### Metrics Server "error: Metrics API not available"
+
+**Cause:** Metrics Server is not installed or not ready.
+
+**Solution:**
+```bash
+# Check Metrics Server status
+kubectl get pods -n kube-system | grep metrics-server
+
+# Check logs
+kubectl logs -n kube-system deployment/metrics-server
+```
+
+---
+
+## Java Application Specific Settings
+
+JVM heap memory configuration is critical for Java applications.
+
+{{< callout type="warning" title="Caution" >}}
+Setting JVM heap equal to container memory will cause OOM. JVM uses additional memory beyond heap (metaspace, thread stacks, etc.).
+{{< /callout >}}
+
+### Recommended Settings
 
 ```yaml
 resources:
@@ -196,33 +379,38 @@ resources:
     memory: "1Gi"
 env:
 - name: JAVA_OPTS
-  value: "-XX:MaxRAMPercentage=75.0"  # 75% of container memory for heap
-```
-
-JVM heap configuration guidelines:
-
-| Container Memory | Recommended Heap Ratio |
-|------------------|------------------------|
-| < 512Mi | 50-60% |
-| 512Mi - 2Gi | 65-75% |
-| > 2Gi | 75-80% |
-
-### Spring Boot Configuration
-
-```yaml
-env:
-- name: JAVA_OPTS
   value: "-XX:MaxRAMPercentage=75.0 -XX:+UseG1GC"
 ```
 
+### Heap Ratio by Container Memory
+
+| Container Memory | Recommended Heap Ratio | Reason |
+|-----------------|------------------------|--------|
+| < 512Mi | 50-60% | Non-heap memory ratio is relatively higher |
+| 512Mi - 2Gi | 65-75% | Typical settings |
+| > 2Gi | 75-80% | Non-heap ratio decreases for large heaps |
+
+**Success check:** Pod runs stably without OOM.
+
+---
+
 ## Checklist
 
+### Measurement
 - [ ] Is Metrics Server installed?
 - [ ] Have you measured usage for at least 1 hour?
-- [ ] Are requests slightly higher than normal usage?
+- [ ] Did you check peak time usage?
+
+### Configuration
+- [ ] Are requests 100-120% of normal usage?
 - [ ] Can limits accommodate peak usage?
-- [ ] For Java apps, is JVM heap configured appropriately?
-- [ ] After deployment, are there no throttling/OOM issues?
+- [ ] For Java apps, is JVM heap appropriately configured?
+
+### Validation
+- [ ] Is the Pod in Running status after changes?
+- [ ] Is there no CPU throttling?
+- [ ] Is there no OOM occurring?
+- [ ] Is the intended QoS class applied?
 
 ---
 
@@ -230,6 +418,6 @@ env:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Auto-scaling | [Scaling](../concepts/scaling/) |
+| Configure auto-scaling | [Scaling]({{< relref "/docs/kubernetes/concepts/scaling" >}}) |
 | Resolve Pod issues | [Pod Troubleshooting](pod-troubleshooting/) |
-| Resource management concepts | [Resource Management](../concepts/resources/) |
+| Resource management concepts | [Resource Management]({{< relref "/docs/kubernetes/concepts/resources" >}}) |
