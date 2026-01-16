@@ -1,5 +1,5 @@
 ---
-lastmod: "2026-01-14"
+lastmod: "2026-01-16"
 title: How-To 가이드
 weight: 4
 bookCollapseSection: true
@@ -9,5 +9,7 @@ bookCollapseSection: true
 
 ## 트러블슈팅
 
-- [Implicit/Given 디버깅](./implicit-debugging/) - 암시적 값을 찾지 못할 때 진단하는 방법
-- [Future 에러 처리](./future-error-handling/) - 비동기 코드에서 예외를 안전하게 처리하는 방법
+| 가이드 | 설명 | 소요 시간 |
+|--------|------|----------|
+| [Implicit/Given 디버깅](./implicit-debugging/) | 암시적 값을 찾지 못할 때 진단하는 방법 | 10-15분 |
+| [Future 에러 처리](./future-error-handling/) | 비동기 코드에서 예외를 안전하게 처리하는 방법 | 15-20분 |
