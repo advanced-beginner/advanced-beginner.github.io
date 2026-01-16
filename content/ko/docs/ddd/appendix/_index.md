@@ -25,5 +25,5 @@ author_url: "http://github.com/kimbenji"
 ## 이 섹션에서 다루지 않는 것
 
 - 개념에 대한 상세 설명 → [개념 이해](../concepts/) 참고
-- 단계별 문제 해결 방법 → [하우투 가이드](../howto/) 참고
+- 단계별 문제 해결 방법 → [How-To Guide](../howto/) 참고
 - 실행 가능한 코드 예제 → [실습 예제](../examples/) 참고

@@ -90,7 +90,7 @@ Kubernetes의 핵심 원리를 **백엔드 개발자의 관점**에서 설명합
 - [기본 예제](examples/basic/) - Pod, Deployment, Service 실습
 - [Spring Boot 배포](examples/spring-boot/) - Spring Boot 애플리케이션 Kubernetes 배포
 
-**[하우투 가이드](howto/)**
+**[How-To Guide](howto/)**
 
 특정 문제를 해결하기 위한 단계별 가이드입니다:
 - [Pod 트러블슈팅](howto/pod-troubleshooting/) - Pod가 시작되지 않을 때 진단

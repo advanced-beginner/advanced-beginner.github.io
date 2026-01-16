@@ -97,7 +97,7 @@ Spring Boot 기반의 실행 가능한 예제 코드입니다. 환경 설정부�
 - [환경 설정](examples/setup/) - Java/Spring Boot와 Spark 통합 환경 구성
 - [기본 예제](examples/basic/) - 데이터 로딩, 변환, 집계의 기초
 
-**[하우투 가이드](howto/)**
+**[How-To Guide](howto/)**
 
 특정 문제를 해결하기 위한 단계별 가이드입니다:
 - [OutOfMemoryError 해결하기](howto/oom-troubleshooting/) - 메모리 부족 오류 진단 및 해결

@@ -1,6 +1,6 @@
 ---
 lastmod: "2026-01-14"
-title: How-To 가이드
+title: How-To Guide
 weight: 4
 bookCollapseSection: true
 ---
