@@ -21,6 +21,18 @@ Rather than just "do it this way", we explain **why such design is necessary** f
 
 ## Available Guides
 
+| Technology | Docs | How-to | Description |
+|------------|:----:|:------:|-------------|
+| [Apache Kafka](docs/kafka/) | 22 | 4 | Distributed messaging system |
+| [Domain-Driven Design](docs/ddd/) | 21 | 4 | Complex business logic design |
+| [Scala](docs/scala/) | 28 | 2 | Functional + OOP JVM language |
+| [Apache Spark](docs/spark/) | 24 | 3 | Large-scale data processing |
+| [Kubernetes](docs/kubernetes/) | 18 | 4 | Container orchestration |
+| [Elasticsearch](docs/elasticsearch/) | 20 | - | Distributed search engine |
+| [Observability](docs/observability/) | 28 | 3 | System observability (Metrics, Logs, Traces) |
+
+---
+
 ### [Apache Kafka](docs/kafka/)
 
 Practical usage of distributed messaging systems. From Producer/Consumer basics to transactions, replication, failure handling, and performance tuning.
@@ -51,6 +63,46 @@ A JVM language combining functional and object-oriented programming. From basic 
 - Type system: Generics, Variance, Type Classes
 - Implicits/Given and principles of implicit conversions
 
+### [Apache Spark](docs/spark/)
+
+A distributed computing engine for large-scale data processing. Explains in-memory processing, lazy evaluation, and DAG optimization from a Java/Spring developer's perspective.
+
+**What you'll learn:**
+- Spark architecture and execution model (Driver, Executor, Stage)
+- Differences between RDD, DataFrame, and Dataset
+- Real-time data processing with Structured Streaming
+- Memory tuning and performance optimization strategies
+
+### [Kubernetes](docs/kubernetes/)
+
+A practical guide to container orchestration platform. From Pod, Deployment, Service to scaling, networking, and monitoring.
+
+**What you'll learn:**
+- Kubernetes architecture and core resources (Pod, Deployment, Service)
+- Configuration management with ConfigMap/Secret
+- Auto-scaling with HPA
+- Health checks and zero-downtime deployment strategies
+
+### [Elasticsearch](docs/elasticsearch/)
+
+A distributed search engine for large-scale search and real-time analytics. Covers full-text search beyond RDB limitations and practical operational know-how.
+
+**What you'll learn:**
+- Inverted Index and Lucene internals
+- Query DSL and Aggregation analysis
+- Korean search optimization and autocomplete implementation
+- Cluster operation, performance tuning, and failure response
+
+### [Observability](docs/observability/)
+
+A practical guide to system observability. From the three pillars (Metrics, Logs, Traces) to advanced Prometheus, Grafana, and PromQL.
+
+**What you'll learn:**
+- Roles and interconnections of the three observability pillars (Metrics, Logs, Traces)
+- Prometheus architecture and PromQL query language
+- SRE Golden Signals (Latency, Traffic, Errors, Saturation)
+- Distributed tracing and OpenTelemetry integration
+
 ## Characteristics of this guide
 
 **First Principles** — We start from the fundamental problems the technology solves, not just surface-level usage. Understanding "why" before "how" builds adaptability.
@@ -67,3 +119,11 @@ A JVM language combining functional and object-oriented programming. From basic 
 - **Want to learn domain model design** → [Tactical Design](docs/ddd/concepts/tactical-design/)
 - **New to Scala** → [Scala Quick Start](docs/scala/quick-start/)
 - **Want deep understanding of Scala's type system** → [Type Classes](docs/scala/concepts/type-classes/)
+- **Want to process large-scale data with Spark** → [Spark Quick Start](docs/spark/quick-start/)
+- **Want to understand Spark internals** → [Spark Architecture](docs/spark/concepts/architecture/)
+- **New to Kubernetes** → [Kubernetes Quick Start](docs/kubernetes/quick-start/)
+- **Want to optimize Kubernetes resource settings** → [Resource Management](docs/kubernetes/concepts/resources/)
+- **Want to implement a search engine** → [Elasticsearch Quick Start](docs/elasticsearch/quick-start/)
+- **Want to optimize Korean search** → [Korean Search Optimization](docs/elasticsearch/concepts/korean-search/)
+- **Want to start system monitoring** → [Observability Quick Start](docs/observability/quick-start/)
+- **Want to learn PromQL in depth** → [Advanced PromQL](docs/observability/concepts/promql/)
