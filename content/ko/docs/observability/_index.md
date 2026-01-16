@@ -4,7 +4,7 @@ bookCollapseSection: true
 description: 시스템 관측성 실무 가이드 - Metrics, Logs, Traces 3요소부터 Prometheus, Grafana, PromQL 심화까지
 weight: 5
 author: "@advanced-beginner"
-lastmod: "2026-01-12"
+lastmod: "2026-01-16"
 ---
 
 ## Observability란?
@@ -91,6 +91,7 @@ graph LR
 
 - [높은 지연시간 진단](howto/debug-high-latency/) - P99 지연 원인 추적
 - [메트릭 카디널리티 최적화](howto/reduce-cardinality/) - 비용 절감 전략
+- [알림 피로도 관리](howto/manage-alert-fatigue/) - 노이즈 알림 줄이기
 
 ### [부록](appendix/)
 - [용어 사전](appendix/glossary/) - Observability 용어 빠른 참조

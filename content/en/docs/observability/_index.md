@@ -4,7 +4,7 @@ bookCollapseSection: true
 description: Practical guide to system observability - From the three pillars of Metrics, Logs, and Traces to advanced Prometheus, Grafana, and PromQL
 weight: 5
 author: "@advanced-beginner"
-lastmod: "2026-01-12"
+lastmod: "2026-01-16"
 ---
 
 ## What is Observability?
@@ -91,6 +91,7 @@ Common problem scenarios and solutions in practice.
 
 - [Debugging High Latency](howto/debug-high-latency/) - Tracking P99 latency causes
 - [Metrics Cardinality Optimization](howto/reduce-cardinality/) - Cost reduction strategies
+- [Managing Alert Fatigue](howto/manage-alert-fatigue/) - Reduce noise alerts
 
 ### [Appendix](appendix/)
 - [Glossary](appendix/glossary/) - Quick reference for Observability terms
