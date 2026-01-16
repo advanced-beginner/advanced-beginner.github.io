@@ -1,6 +1,6 @@
 ---
 bookCollapseSection: true
-title: 하우투 가이드
+title: How-To Guide
 weight: 4
 lastmod: "2026-01-10"
 author:
@@ -36,7 +36,7 @@ Spark에서 가장 흔히 발생하는 메모리 부족 오류를 진단하고 �
 - 브로드캐스트 조인 활용
 - 파티션 수 최적화
 
-## 하우투 가이드 사용법
+## How-To Guide 사용법
 
 각 가이드는 다음 구조로 작성되어 있습니다:
 
