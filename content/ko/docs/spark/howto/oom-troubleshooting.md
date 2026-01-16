@@ -1,12 +1,17 @@
 ---
 title: OutOfMemoryError 해결하기
 weight: 1
-lastmod: "2026-01-10"
+lastmod: "2026-01-16"
 author:
   name: Advanced Beginner
   github: advanced-beginner
 doc_type: howto
+description: "Spark에서 발생하는 OOM 오류를 진단하고 해결하는 단계별 가이드"
 ---
+
+{{< callout type="info" >}}
+**예상 소요 시간**: 약 15분
+{{< /callout >}}
 
 {{% notice style="tip" title="TL;DR" %}}
 - **Driver OOM**: `collect()` 결과 크기 줄이기, `spark.driver.memory` 증가
@@ -34,11 +39,29 @@ Container killed by YARN for exceeding memory limits
 
 ## 전제 조건
 
-| 항목 | 설명 |
-|------|------|
-| **환경** | Spark 애플리케이션 실행 환경 (로컬 또는 클러스터) |
-| **도구** | Spark UI 접근 가능 (`http://localhost:4040` 또는 History Server) |
-| **권한** | Spark 설정 변경 권한 |
+| 항목 | 요구 사항 | 확인 방법 |
+|------|----------|----------|
+| **Spark 버전** | 2.4 이상 (3.x 권장) | `spark-submit --version` |
+| **Java 버전** | 8, 11, 또는 17 | `java -version` |
+| **Spark UI** | 접근 가능 | 브라우저에서 `http://localhost:4040` 열기 |
+| **권한** | Spark 설정 변경 가능 | spark-submit 실행 권한 확인 |
+
+**지원 환경**: Linux, macOS, Windows (WSL2 권장)
+
+### 환경 확인
+
+다음 명령어로 환경이 준비되었는지 확인하세요:
+
+```bash
+# Java 버전 확인
+java -version
+
+# Spark 버전 확인
+spark-submit --version
+
+# Spark UI 접근 확인 (애플리케이션 실행 중일 때)
+curl -s http://localhost:4040/api/v1/applications | head -1
+```
 
 ---
 
@@ -70,9 +93,11 @@ Container killed by YARN for exceeding memory limits
 
 ## Step 2: Driver OOM 해결
 
-Driver OOM은 주로 **대량의 데이터를 Driver로 수집**할 때 발생합니다.
+Driver OOM은 주로 **대량의 데이터를 Driver로 수집**할 때 발생합니다. 아래 단계를 순서대로 따르세요.
 
 ### 2.1 collect() 사용 점검
+
+먼저 코드에서 `collect()` 호출을 확인하세요.
 
 **문제 코드:**
 ```java
@@ -159,6 +184,10 @@ Dataset<Row> coalesced = df.coalesce(100);
 
 ### 3.3 Executor 메모리 증가
 
+{{< callout type="warning" >}}
+**주의**: Executor 메모리를 클러스터 노드 물리 메모리의 75% 이상으로 설정하지 마세요. YARN/Kubernetes 오버헤드로 인해 Container가 강제 종료될 수 있습니다.
+{{< /callout >}}
+
 ```bash
 # spark-submit
 spark-submit \
@@ -240,20 +269,50 @@ WindowSpec bounded = Window.partitionBy("user_id")
 
 ## 검증
 
-OOM이 해결되었는지 확인하세요:
+OOM이 해결되었는지 다음 기준으로 확인하세요:
 
-1. **Spark UI 확인**: Executors 탭에서 메모리 사용량 확인
-2. **작업 완료 확인**: 모든 Stage가 성공적으로 완료
-3. **로그 확인**: OOM 관련 오류 메시지 없음
+### 성공 기준
+
+| 항목 | 성공 조건 |
+|------|----------|
+| **작업 완료** | 모든 Stage가 SUCCEEDED 상태 |
+| **메모리 사용량** | Executor 메모리 사용률 80% 이하 |
+| **GC 시간** | 전체 실행 시간의 10% 미만 |
+| **오류 로그** | OOM 관련 메시지 없음 |
+
+### 확인 방법
+
+1. **Spark UI 확인**: Executors 탭에서 메모리 사용량을 확인하세요.
+   - **Storage Memory** 열에서 사용량 확인
+   - 빨간색 경고가 없어야 합니다
+
+2. **작업 완료 확인**: Jobs 탭에서 모든 Stage가 녹색(SUCCEEDED)인지 확인하세요.
+
+3. **로그 확인**: 다음 명령어로 OOM 관련 오류가 없는지 확인하세요.
 
 ```bash
-# 로그에서 OOM 확인
+# 로그에서 OOM 확인 (결과가 없으면 성공)
 grep -i "outofmemory\|oom\|killed" spark-logs/*.log
+
+# 예상 결과: 아무것도 출력되지 않음
 ```
 
 ---
 
 ## 트러블슈팅 체크리스트
+
+### 오류 메시지별 해결 방법
+
+| 오류 메시지 | 원인 | 해결 방법 |
+|------------|------|----------|
+| `java.lang.OutOfMemoryError: Java heap space` (Driver) | Driver에서 대량 데이터 수집 | `collect()` → `take(n)` 또는 파일 저장 |
+| `java.lang.OutOfMemoryError: Java heap space` (Executor) | 파티션 크기 과다 | `repartition`으로 파티션 증가 |
+| `Container killed by YARN for exceeding memory limits` | YARN 메모리 오버헤드 부족 | `spark.executor.memoryOverhead` 증가 |
+| `java.lang.OutOfMemoryError: GC overhead limit exceeded` | GC에 CPU 90% 이상 사용 | 메모리 증가 또는 Off-Heap 활성화 |
+| `ExecutorLostFailure (executor X exited caused by one of the running tasks)` | Executor 메모리 부족 | Executor 메모리 증가, 파티션 크기 감소 |
+| `Total size of serialized results is bigger than spark.driver.maxResultSize` | Driver 결과 크기 초과 | `spark.driver.maxResultSize` 증가 또는 결과 크기 줄이기 |
+
+### 빠른 진단 표
 
 | 증상 | 확인 사항 | 해결 방법 |
 |------|----------|----------|

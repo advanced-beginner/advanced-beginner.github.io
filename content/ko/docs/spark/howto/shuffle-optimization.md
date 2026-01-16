@@ -1,12 +1,17 @@
 ---
 title: 셔플 최적화하기
 weight: 3
-lastmod: "2026-01-10"
+lastmod: "2026-01-16"
 author:
   name: Advanced Beginner
   github: advanced-beginner
 doc_type: howto
+description: "Spark 셔플을 최소화하여 작업 성능을 대폭 개선하는 가이드"
 ---
+
+{{< callout type="info" >}}
+**예상 소요 시간**: 약 20분
+{{< /callout >}}
 
 {{% notice style="tip" title="TL;DR" %}}
 - **셔플 확인**: `df.explain()`에서 `Exchange` 노드 = 셔플 발생
@@ -17,9 +22,16 @@ doc_type: howto
 
 ## 문제 정의
 
-Spark 작업에서 **Stage 간 전환이 오래 걸리거나** 네트워크 I/O가 과도하게 발생합니다. 셔플은 Spark에서 가장 비용이 큰 연산이므로 최소화해야 합니다.
+다음과 같은 증상이 나타나면 셔플 최적화가 필요합니다:
 
-셔플이 발생하는 연산:
+| 증상 | 확인 위치 |
+|------|----------|
+| Stage 간 전환이 10초 이상 걸림 | Spark UI → Jobs 탭 |
+| Shuffle Read/Write가 수십 GB 이상 | Spark UI → Stages 탭 |
+| 네트워크 I/O로 인한 타임아웃 | 애플리케이션 로그 |
+| `explain()`에서 `Exchange` 노드 다수 | 실행 계획 출력 |
+
+셔플은 Spark에서 가장 비용이 큰 연산입니다. 아래 연산은 셔플을 발생시킵니다:
 - `groupBy`, `reduceByKey`
 - `join`, `cogroup`
 - `repartition`, `coalesce(shuffle=true)`
@@ -29,10 +41,34 @@ Spark 작업에서 **Stage 간 전환이 오래 걸리거나** 네트워크 I/O�
 
 ## 전제 조건
 
-| 항목 | 설명 |
-|------|------|
-| **환경** | Spark 애플리케이션 실행 환경 |
-| **도구** | Spark UI, `explain()` 메서드 사용 가능 |
+| 항목 | 요구 사항 | 확인 방법 |
+|------|----------|----------|
+| **Spark 버전** | 2.4+ (AQE는 3.0+) | `spark-submit --version` |
+| **Spark UI** | 접근 가능 | 브라우저에서 `http://localhost:4040` 열기 |
+| **권한** | Spark 설정 변경 가능 | spark-submit 실행 권한 확인 |
+
+**지원 환경**: Linux, macOS, Windows (WSL2 권장)
+
+### 환경 확인
+
+다음 명령어로 환경이 준비되었는지 확인하세요:
+
+```bash
+# Spark 버전 확인
+spark-submit --version
+
+# Spark UI 접근 확인 (애플리케이션 실행 중일 때)
+curl -s http://localhost:4040/api/v1/applications | head -1
+```
+
+### 권장 해결 순서
+
+최적화 효과가 큰 순서로 진행하세요:
+
+1. **Step 2**: 불필요한 셔플 제거 (가장 효과적)
+2. **Step 3**: 브로드캐스트 조인 (작은 테이블 조인 시)
+3. **Step 4**: 셔플 파티션 수 조정
+4. **Step 5~6**: 고급 최적화 (필요 시)
 
 ---
 
@@ -217,7 +253,11 @@ AQE가 자동으로 작은 파티션을 병합하여 오버헤드를 줄입니�
 
 ## Step 5: 버케팅으로 사전 파티셔닝
 
-반복 조인되는 테이블은 버케팅으로 셔플을 제거합니다.
+반복 조인되는 테이블은 버케팅으로 셔플을 제거하세요.
+
+{{< callout type="warning" >}}
+**주의**: 버케팅은 Hive 메타스토어가 필요하며, 테이블을 다시 작성해야 합니다. 일회성 조인에는 오버헤드가 클 수 있으므로, 동일한 키로 반복 조인하는 경우에만 사용하세요.
+{{< /callout >}}
 
 ### 5.1 버케팅된 테이블 생성
 
@@ -271,13 +311,22 @@ SparkSession spark = SparkSession.builder()
 
 ## 검증
 
-셔플이 최적화되었는지 확인하세요:
+셔플이 최적화되었는지 다음 기준으로 확인하세요:
+
+### 성공 기준
+
+| 항목 | 성공 조건 |
+|------|----------|
+| **Shuffle Write** | 최적화 전 대비 50% 이상 감소 |
+| **Stage 수** | `explain()`의 Exchange 노드 수 감소 |
+| **실행 시간** | 최적화 전 대비 30% 이상 단축 |
+| **브로드캐스트 조인** | `explain()`에서 `BroadcastHashJoin` 확인 |
 
 ### Spark UI에서 확인
 
-1. **Stages** 탭 → Shuffle Read/Write 크기 확인
-2. 이전 대비 셔플 데이터량 감소 확인
-3. Stage 수 감소 확인 (셔플 제거 시)
+1. **Stages** 탭 → Shuffle Read/Write 크기를 확인하세요.
+2. 이전 대비 셔플 데이터량이 감소했는지 확인하세요.
+3. Stage 수가 감소했는지 확인하세요 (셔플 제거 시).
 
 ### 실행 시간 비교
 
@@ -292,6 +341,18 @@ System.out.println("실행 시간: " + duration + "ms");
 ---
 
 ## 트러블슈팅 체크리스트
+
+### 오류 메시지별 해결 방법
+
+| 오류 메시지/증상 | 원인 | 해결 방법 |
+|-----------------|------|----------|
+| `FetchFailedException: Failed to connect` | 셔플 데이터 전송 실패 | 셔플 파일 압축 활성화, 네트워크 타임아웃 증가 |
+| `java.io.IOException: No space left on device` | 셔플 디스크 공간 부족 | `spark.local.dir` 용량 확보 또는 경로 변경 |
+| `TimeoutException` (셔플 중) | 네트워크 병목 | 셔플 파티션 수 증가, 브로드캐스트 활용 |
+| Spark UI에서 Shuffle Write > 100GB | 과도한 셔플 | 불필요한 셔플 제거, 필터 먼저 적용 |
+| Stage 간 전환 10초 이상 | 셔플 오버헤드 | 브로드캐스트 조인 또는 버케팅 적용 |
+
+### 상황별 권장 해결책
 
 | 상황 | 권장 해결책 |
 |------|------------|
