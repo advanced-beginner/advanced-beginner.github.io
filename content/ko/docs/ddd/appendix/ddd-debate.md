@@ -1,7 +1,7 @@
 ---
 title: "DDD 토론: 긍정파 vs 부정파"
 weight: 4
-lastmod: "2026-01-17"
+lastmod: "2026-01-16"
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 skip_evaluation: true
