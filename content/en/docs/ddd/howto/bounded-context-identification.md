@@ -376,4 +376,4 @@ public void handle(OrderConfirmedEvent event) {
 
 - [Strategic Design]({{< relref "/docs/ddd/concepts/strategic-design" >}}) - Context Mapping patterns in detail
 - [Defining Aggregate Boundaries]({{< relref "/docs/ddd/howto/aggregate-boundaries" >}}) - Internal Context design
-- [Event-Driven Architecture]({{< relref "/docs/ddd/concepts/architecture/event-driven" >}}) - Communication between Contexts
+- [Domain Events]({{< relref "/docs/ddd/concepts/domain-events" >}}) - Communication between Contexts
