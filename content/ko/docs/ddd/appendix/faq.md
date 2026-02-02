@@ -12,17 +12,17 @@ DDD를 적용할 때 자주 받는 질문과 답변입니다.
 
 > **TL;DR**
 >
-> - DDD는 **아키텍처가 아닌 방법론**이며, 복잡한 비즈니스 로직이 있을 때 가치가 있습니다
+> - DDD는 <strong>아키텍처가 아닌 방법론</strong>이며, 복잡한 비즈니스 로직이 있을 때 가치가 있습니다
 > - Entity는 ID로, Value Object는 속성 값으로 동등성을 판단합니다
 > - Aggregate는 "진정한 불변식을 보호하는 최소 단위"로 설계합니다
-> - **유비쿼터스 언어**가 DDD 적용 시 가장 중요한 요소입니다
+> - <strong>유비쿼터스 언어</strong>가 DDD 적용 시 가장 중요한 요소입니다
 > - 레거시 시스템에도 ACL(Anti-Corruption Layer)을 통해 점진적으로 적용 가능합니다
 
 ## 기본 개념
 
 ### Q: DDD는 아키텍처인가요?
 
-**A:** 아닙니다. DDD는 **복잡한 도메인을 다루는 방법론**입니다.
+**A:** 아닙니다. DDD는 <strong>복잡한 도메인을 다루는 방법론</strong>입니다.
 
 ```
 DDD가 아닌 것:
@@ -40,7 +40,7 @@ DDD인 것:
 
 ### Q: DDD는 모든 프로젝트에 필요한가요?
 
-**A:** 아닙니다. **복잡한 비즈니스 로직이 있을 때** 가치가 있습니다.
+**A:** 아닙니다. <strong>복잡한 비즈니스 로직이 있을 때</strong> 가치가 있습니다.
 
 ```mermaid
 flowchart TB
@@ -63,7 +63,7 @@ flowchart TB
 
 ### Q: Entity와 Value Object를 어떻게 구분하나요?
 
-**A:** **"시간이 지나도 추적해야 하는가?"**로 판단합니다.
+**A:** <strong>"시간이 지나도 추적해야 하는가?"</strong>로 판단합니다.
 
 | 기준 | Entity | Value Object |
 |------|--------|--------------|
@@ -88,7 +88,7 @@ money1.equals(money2);  // true (값으로 비교)
 
 ### Q: Aggregate 크기는 어떻게 결정하나요?
 
-**A:** **"진정한 불변식(invariant)"을 보호하는 최소 단위**로 만듭니다.
+**A:** <strong>"진정한 불변식(invariant)"을 보호하는 최소 단위</strong>로 만듭니다.
 
 ```
 잘못된 접근:
@@ -120,10 +120,10 @@ public class Order {
 
 > **기본 개념 핵심 포인트**
 >
-> - DDD는 아키텍처가 아닌 **도메인 중심 방법론**입니다
+> - DDD는 아키텍처가 아닌 <strong>도메인 중심 방법론</strong>입니다
 > - 복잡한 비즈니스 로직이 있는 프로젝트에 적합합니다
-> - Entity는 **ID로 동등성 판단**, Value Object는 **속성 값으로 동등성 판단**
-> - Aggregate는 **불변식을 보호하는 최소 단위**로 설계합니다
+> - Entity는 <strong>ID로 동등성 판단</strong>, Value Object는 <strong>속성 값으로 동등성 판단</strong>
+> - Aggregate는 <strong>불변식을 보호하는 최소 단위</strong>로 설계합니다
 
 ---
 
@@ -131,7 +131,7 @@ public class Order {
 
 ### Q: Repository는 Aggregate마다 만들어야 하나요?
 
-**A:** 네, **Aggregate Root마다 하나의 Repository**를 만듭니다.
+**A:** 네, <strong>Aggregate Root마다 하나의 Repository</strong>를 만듭니다.
 
 ```java
 // ✅ Aggregate Root(Order)만 Repository
@@ -153,7 +153,7 @@ public interface OrderRepository {
 
 ### Q: 도메인 서비스와 애플리케이션 서비스의 차이는?
 
-**A:** **도메인 로직 vs 유스케이스 조율**의 차이입니다.
+**A:** <strong>도메인 로직 vs 유스케이스 조율</strong>의 차이입니다.
 
 | 구분 | Domain Service | Application Service |
 |------|----------------|---------------------|
@@ -192,7 +192,7 @@ public class OrderApplicationService {
 
 ### Q: 도메인 이벤트는 언제 발행하나요?
 
-**A:** **상태 변경 후, 다른 시스템에 알려야 할 때** 발행합니다.
+**A:** <strong>상태 변경 후, 다른 시스템에 알려야 할 때</strong> 발행합니다.
 
 ```java
 public class Order {
@@ -229,7 +229,7 @@ sequenceDiagram
 
 ### Q: 트랜잭션은 어디서 관리하나요?
 
-**A:** **Application Service**에서 관리합니다.
+**A:** <strong>Application Service</strong>에서 관리합니다.
 
 ```java
 @Service
@@ -253,7 +253,7 @@ public class OrderApplicationService {
 
 ### Q: JPA Entity와 도메인 Entity를 분리해야 하나요?
 
-**A:** **상황에 따라 다릅니다.**
+**A:** <strong>상황에 따라 다릅니다.</strong>
 
 **분리하는 경우 (권장):**
 
@@ -305,11 +305,11 @@ public class Order {
 
 > **구현 관련 핵심 포인트**
 >
-> - **Repository는 Aggregate Root마다** 하나만 만듭니다
-> - Domain Service는 **도메인 로직**, Application Service는 **유스케이스 조율**
-> - 도메인 이벤트는 **상태 변경 후** 발행합니다 (트랜잭션 커밋 후)
-> - **트랜잭션은 Application Service**에서 관리합니다
-> - JPA Entity와 도메인 Entity 분리는 **상황에 따라** 결정합니다
+> - <strong>Repository는 Aggregate Root마다</strong> 하나만 만듭니다
+> - Domain Service는 <strong>도메인 로직</strong>, Application Service는 <strong>유스케이스 조율</strong>
+> - 도메인 이벤트는 <strong>상태 변경 후</strong> 발행합니다 (트랜잭션 커밋 후)
+> - <strong>트랜잭션은 Application Service</strong>에서 관리합니다
+> - JPA Entity와 도메인 Entity 분리는 <strong>상황에 따라</strong> 결정합니다
 
 ---
 
@@ -317,7 +317,7 @@ public class Order {
 
 ### Q: Hexagonal과 Clean Architecture 중 무엇을 사용하나요?
 
-**A:** 둘은 **같은 원칙을 다른 관점으로 설명**한 것입니다.
+**A:** 둘은 <strong>같은 원칙을 다른 관점으로 설명</strong>한 것입니다.
 
 ```
 공통점:
@@ -330,13 +330,13 @@ public class Order {
 - Clean: 동심원 레이어 관점 (수직)
 ```
 
-**실무에서는 둘을 조합**하여 사용합니다.
+<strong>실무에서는 둘을 조합</strong>하여 사용합니다.
 
 ---
 
 ### Q: CQRS는 항상 필요한가요?
 
-**A:** 아닙니다. **복잡한 조회가 있을 때만** 고려하세요.
+**A:** 아닙니다. <strong>복잡한 조회가 있을 때만</strong> 고려하세요.
 
 ```
 CQRS가 필요한 경우:
@@ -352,9 +352,9 @@ CQRS가 과한 경우:
 
 > **아키텍처 관련 핵심 포인트**
 >
-> - Hexagonal과 Clean Architecture는 **같은 원칙을 다른 관점**으로 설명한 것
-> - 실무에서는 둘을 **조합하여 사용**합니다
-> - CQRS는 **복잡한 조회가 있을 때만** 고려하세요
+> - Hexagonal과 Clean Architecture는 <strong>같은 원칙을 다른 관점</strong>으로 설명한 것
+> - 실무에서는 둘을 <strong>조합하여 사용</strong>합니다
+> - CQRS는 <strong>복잡한 조회가 있을 때만</strong> 고려하세요
 
 ---
 
@@ -362,7 +362,7 @@ CQRS가 과한 경우:
 
 ### Q: 도메인 전문가가 없으면 어떻게 하나요?
 
-**A:** **누군가는 도메인을 가장 잘 아는 사람**이 있습니다.
+**A:** <strong>누군가는 도메인을 가장 잘 아는 사람</strong>이 있습니다.
 
 ```
 도메인 전문가 후보:
@@ -382,7 +382,7 @@ CQRS가 과한 경우:
 
 ### Q: 팀원들이 DDD를 모르면 어떻게 시작하나요?
 
-**A:** **작게 시작**하세요.
+**A:** <strong>작게 시작</strong>하세요.
 
 ```
 1주차: 기본 개념 공유
@@ -406,7 +406,7 @@ CQRS가 과한 경우:
 
 ### Q: 레거시 시스템에 DDD를 적용할 수 있나요?
 
-**A:** 네, **점진적으로** 적용합니다.
+**A:** 네, <strong>점진적으로</strong> 적용합니다.
 
 ```mermaid
 flowchart LR
@@ -416,7 +416,7 @@ flowchart LR
 ```
 
 **전략:**
-1. **Anti-Corruption Layer**로 레거시 격리
+1. <strong>Anti-Corruption Layer</strong>로 레거시 격리
 2. 새 기능은 DDD로 개발
 3. 점진적으로 레거시 기능 마이그레이션
 4. Strangler Fig Pattern 활용
@@ -436,9 +436,9 @@ public class LegacyOrderAdapter implements OrderReader {
 
 > **팀/조직 관련 핵심 포인트**
 >
-> - 도메인 전문가가 없다면 **가장 도메인을 잘 아는 사람**을 찾으세요
-> - DDD 도입은 **작게 시작**하세요 (기본 개념 → 용어 사전 → 점진적 확장)
-> - 레거시 시스템에는 **ACL로 격리 후 점진적 마이그레이션**을 추천합니다
+> - 도메인 전문가가 없다면 <strong>가장 도메인을 잘 아는 사람</strong>을 찾으세요
+> - DDD 도입은 <strong>작게 시작</strong>하세요 (기본 개념 → 용어 사전 → 점진적 확장)
+> - 레거시 시스템에는 <strong>ACL로 격리 후 점진적 마이그레이션</strong>을 추천합니다
 
 ---
 
@@ -446,7 +446,7 @@ public class LegacyOrderAdapter implements OrderReader {
 
 ### Q: DDD 적용 시 가장 중요한 것은?
 
-**A:** **유비쿼터스 언어**입니다.
+**A:** <strong>유비쿼터스 언어</strong>입니다.
 
 ```
 코드에서 비즈니스 용어를 사용하면:
@@ -456,7 +456,7 @@ public class LegacyOrderAdapter implements OrderReader {
 ✓ 요구사항 변경 대응 쉬움
 ```
 
-기술적 패턴(Aggregate, Repository 등)보다 **언어 통일이 먼저**입니다.
+기술적 패턴(Aggregate, Repository 등)보다 <strong>언어 통일이 먼저</strong>입니다.
 
 ---
 
@@ -481,7 +481,7 @@ flowchart LR
 
 ### Q: DDD를 적용했는데 코드량이 늘었어요
 
-**A:** 초기에는 **정상**입니다. 장기적으로 **유지보수 비용이 줄어듭니다.**
+**A:** 초기에는 <strong>정상</strong>입니다. 장기적으로 <strong>유지보수 비용이 줄어듭니다.</strong>
 
 ```
 단기 비용:
@@ -503,10 +503,10 @@ flowchart LR
 
 > **실무 팁 핵심 포인트**
 >
-> - DDD 적용 시 가장 중요한 것은 **유비쿼터스 언어**입니다
-> - 학습 순서: **Quick Start → 전술적 패턴 → 전략적 패턴 → 아키텍처 → 실전 적용**
-> - 초기 코드량 증가는 정상이며, **장기적으로 유지보수 비용이 줄어듭니다**
-> - 핵심 도메인에만 DDD를 집중하고 **과도한 추상화는 피하세요**
+> - DDD 적용 시 가장 중요한 것은 <strong>유비쿼터스 언어</strong>입니다
+> - 학습 순서: <strong>Quick Start → 전술적 패턴 → 전략적 패턴 → 아키텍처 → 실전 적용</strong>
+> - 초기 코드량 증가는 정상이며, <strong>장기적으로 유지보수 비용이 줄어듭니다</strong>
+> - 핵심 도메인에만 DDD를 집중하고 <strong>과도한 추상화는 피하세요</strong>
 
 ## 다음 단계
 

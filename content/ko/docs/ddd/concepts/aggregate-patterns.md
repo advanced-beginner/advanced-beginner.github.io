@@ -12,7 +12,7 @@ author_url: "http://github.com/kimbenji"
 > **핵심 질문**: "Aggregate 구현 시 어떤 패턴을 적용해야 하는가?"
 
 {{< callout type="tip" title="요약" >}}
-실전 패턴: **Factory Method**(생성) + **Domain Event 발행** + **Optimistic Locking**(동시성) + **Soft Delete**(삭제)
+실전 패턴: <strong>Factory Method</strong>(생성) + <strong>Domain Event 발행</strong> + <strong>Optimistic Locking</strong>(동시성) + <strong>Soft Delete</strong>(삭제)
 {{< /callout >}}
 
 # Aggregate 실전 패턴
@@ -21,10 +21,10 @@ Aggregate 설계를 위한 구현 패턴과 의사결정 가이드입니다.
 
 ## 왜 Aggregate에 패턴이 필요한가?
 
-Aggregate는 단순히 객체를 묶는 것이 아닙니다. **일관성, 동시성, 생명주기**라는 세 가지 책임을 져야 합니다. 이 책임을 효과적으로 수행하기 위해 검증된 패턴들이 존재합니다.
+Aggregate는 단순히 객체를 묶는 것이 아닙니다. <strong>일관성, 동시성, 생명주기</strong>라는 세 가지 책임을 져야 합니다. 이 책임을 효과적으로 수행하기 위해 검증된 패턴들이 존재합니다.
 
 {{< callout type="tip" title="비유: 아파트 관리" >}}
-Aggregate 패턴을 **아파트 관리**에 비유할 수 있습니다:
+Aggregate 패턴을 <strong>아파트 관리</strong>에 비유할 수 있습니다:
 
 - **낙관적 락(Optimistic Locking)**: 택배 보관함처럼 "먼저 온 사람이 가져가고, 늦은 사람은 재배송 요청"하는 방식입니다. 충돌이 드물 때 효율적입니다.
 - **도메인 이벤트**: 관리사무소 공지처럼 "이런 일이 있었습니다"라고 알리면, 관심 있는 주민이 각자 대응합니다.
@@ -107,7 +107,7 @@ public class Order {
 
 ## 실전 패턴
 
-각 패턴의 **왜**, **언제 사용**, **트레이드오프**를 함께 설명합니다.
+각 패턴의 <strong>왜</strong>, <strong>언제 사용</strong>, <strong>트레이드오프</strong>를 함께 설명합니다.
 
 ### 패턴 1: 낙관적 락(Optimistic Locking)
 

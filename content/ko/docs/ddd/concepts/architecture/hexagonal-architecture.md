@@ -123,7 +123,7 @@ flowchart LR
     OutboundPorts --> EXT2["외부 시스템"]
 ```
 
-**두 종류의 Port**를 이해하는 것이 중요합니다. 아래 표는 각 Port의 특성을 정리한 것입니다.
+<strong>두 종류의 Port</strong>를 이해하는 것이 중요합니다. 아래 표는 각 Port의 특성을 정리한 것입니다.
 
 | Port 종류 | 방향 | 역할 | 예시 |
 |----------|------|------|------|
@@ -165,7 +165,7 @@ flowchart LR
     end
 ```
 
-**두 종류의 Adapter**를 구분하는 것이 중요합니다. 아래 표는 각 Adapter의 특성을 정리한 것입니다.
+<strong>두 종류의 Adapter</strong>를 구분하는 것이 중요합니다. 아래 표는 각 Adapter의 특성을 정리한 것입니다.
 
 | Adapter 종류 | 다른 이름 | 역할 | 예시 |
 |-------------|----------|------|------|
@@ -1165,7 +1165,7 @@ com.example.order/
 | **Driving** | 나를 호출하는 것 | Controller, Kafka Listener |
 | **Driven** | 내가 호출하는 것 | Repository 구현, API Client |
 
-**기억할 것:** 의존성은 항상 **바깥 → 안쪽**으로만 향합니다. Application Core는 외부 기술을 전혀 모릅니다.
+<strong>기억할 것:</strong> 의존성은 항상 <strong>바깥 → 안쪽</strong>으로만 향합니다. Application Core는 외부 기술을 전혀 모릅니다.
 {{< /callout >}}
 
 ---

@@ -37,7 +37,7 @@ DDD 패턴을 적용하여 주문 도메인을 구현합니다.
 
 ## 왜 이렇게 설계했는가?
 
-코드를 보기 전에, 각 설계 결정의 **이유**를 먼저 이해합니다.
+코드를 보기 전에, 각 설계 결정의 <strong>이유</strong>를 먼저 이해합니다.
 
 ### 설계 결정 요약
 
@@ -64,13 +64,13 @@ flowchart TD
 > **다이어그램 설명**: Entity vs Value Object 판단 흐름도입니다. "시간이 지나도 추적해야 하나?" 질문에 No면 Value Object, Yes면 "Order 없이 존재 가능한가?" 추가 질문으로 Yes면 별도 Aggregate, No면 내부 Entity로 결정합니다.
 
 **Money가 Value Object인 이유:**
-- "10,000원"과 "10,000원"은 **같은 돈**입니다 (값으로 비교)
-- 금액을 "수정"하는 게 아니라 **새 금액으로 교체**합니다
+- "10,000원"과 "10,000원"은 <strong>같은 돈</strong>입니다 (값으로 비교)
+- 금액을 "수정"하는 게 아니라 <strong>새 금액으로 교체</strong>합니다
 - 금액의 변경 이력을 추적할 필요가 없습니다
 
 **OrderLine이 Entity인 이유:**
-- 같은 상품을 담아도 "첫 번째 항목"과 "두 번째 항목"은 **다릅니다** (ID로 구분)
-- 수량을 **변경**할 수 있어야 합니다 (상태 변경 추적)
+- 같은 상품을 담아도 "첫 번째 항목"과 "두 번째 항목"은 <strong>다릅니다</strong> (ID로 구분)
+- 수량을 <strong>변경</strong>할 수 있어야 합니다 (상태 변경 추적)
 - 하지만 Order 없이는 존재할 수 없으므로 내부 Entity입니다
 
 ### Aggregate 경계: 왜 Order만 Root인가?
@@ -97,17 +97,17 @@ flowchart LR
 > **다이어그램 설명**: 왼쪽은 잘못된 설계로 Order가 Customer와 Product 전체를 포함합니다. 오른쪽은 올바른 설계로 Order가 CustomerId, ProductId만 참조합니다. 다른 Aggregate는 ID로만 참조해야 합니다.
 
 **Customer를 ID로만 참조하는 이유:**
-- Customer는 주문과 **독립적인 생명주기**를 가집니다
-- 주문을 저장할 때 고객 정보 전체를 함께 저장하면 **데이터 중복**
-- 고객 정보 변경 시 모든 주문의 고객 정보도 변경해야 하는 **일관성 문제**
+- Customer는 주문과 <strong>독립적인 생명주기</strong>를 가집니다
+- 주문을 저장할 때 고객 정보 전체를 함께 저장하면 <strong>데이터 중복</strong>
+- 고객 정보 변경 시 모든 주문의 고객 정보도 변경해야 하는 <strong>일관성 문제</strong>
 
 **ProductId만 참조하는 이유:**
-- 상품 가격이 변경되어도 **주문 당시 가격**은 유지되어야 합니다
-- 그래서 OrderLine에 `price`를 **스냅샷**으로 저장합니다
+- 상품 가격이 변경되어도 <strong>주문 당시 가격</strong>은 유지되어야 합니다
+- 그래서 OrderLine에 `price`를 <strong>스냅샷</strong>으로 저장합니다
 
 ### 불변식(Invariant): 무엇을 보호하는가?
 
-Order Aggregate가 **항상 보장**하는 규칙들입니다:
+Order Aggregate가 <strong>항상 보장</strong>하는 규칙들입니다:
 
 | 불변식 | 코드 위치 | 비즈니스 이유 |
 |--------|----------|--------------|
@@ -126,7 +126,7 @@ public OrderLine(ProductId productId, ...) { }
 OrderLine(ProductId productId, ...) { }
 ```
 
-**이유:** OrderLine은 Order 없이 존재할 수 없습니다. 패키지 프라이빗으로 만들면 **컴파일 타임에 잘못된 사용을 방지**합니다.
+**이유:** OrderLine은 Order 없이 존재할 수 없습니다. 패키지 프라이빗으로 만들면 <strong>컴파일 타임에 잘못된 사용을 방지</strong>합니다.
 
 {{% notice style="tip" title="핵심 포인트: 설계 결정" %}}
 - **Aggregate 경계**: 일관성이 보장되어야 하는 범위. Order + OrderLine이 하나의 경계

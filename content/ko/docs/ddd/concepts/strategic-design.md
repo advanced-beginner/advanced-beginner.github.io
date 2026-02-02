@@ -12,13 +12,13 @@ author_url: "http://github.com/kimbenji"
 > **핵심 질문**: "시스템을 어떻게 나누고, 각 부분이 어떻게 협력해야 하는가?"
 
 {{< callout type="tip" title="요약" >}}
-전략적 설계의 4가지 핵심 개념: **Subdomain**(비즈니스 영역 분류) → **Ubiquitous Language**(공통 언어 정의) → **Bounded Context**(모델 경계 설정) → **Context Mapping**(경계 간 협력 방식 정의)
+전략적 설계의 4가지 핵심 개념: <strong>Subdomain</strong>(비즈니스 영역 분류) → <strong>Ubiquitous Language</strong>(공통 언어 정의) → <strong>Bounded Context</strong>(모델 경계 설정) → <strong>Context Mapping</strong>(경계 간 협력 방식 정의)
 {{< /callout >}}
 
 복잡한 도메인을 어떻게 나누고 통합할지 결정하는 고수준 설계가 바로 전략적 설계입니다. 이는 DDD의 출발점이자 전체 시스템 아키텍처를 결정하는 핵심 활동입니다.
 
 {{< callout type="tip" title="비유: 세계 지도 제작" >}}
-전략적 설계는 **세계 지도를 그리는 것**과 같습니다:
+전략적 설계는 <strong>세계 지도를 그리는 것</strong>과 같습니다:
 
 | 지도 제작 | 전략적 설계 | 설명 |
 |----------|------------|------|
@@ -27,7 +27,7 @@ author_url: "http://github.com/kimbenji"
 | **국경선** | Bounded Context | 모델이 적용되는 명확한 경계 |
 | **무역로/동맹** | Context Mapping | 경계 간 협력 방식 정의 |
 
-세계 지도를 그릴 때 개별 건물(클래스)은 신경 쓰지 않습니다. 마찬가지로 전략적 설계는 **큰 그림**에 집중합니다.
+세계 지도를 그릴 때 개별 건물(클래스)은 신경 쓰지 않습니다. 마찬가지로 전략적 설계는 <strong>큰 그림</strong>에 집중합니다.
 {{< /callout >}}
 
 #### 개요
@@ -48,7 +48,7 @@ flowchart TB
     BC --> CM
 ```
 
-전략적 설계의 각 구성요소는 다음과 같은 질문에 답합니다. **Subdomain**은 "비즈니스의 핵심은 무엇인가?"라는 질문으로 도메인을 Core, Supporting, Generic으로 분류합니다. **Ubiquitous Language**는 "어떤 언어로 소통할 것인가?"를 정의하며 용어 사전을 산출물로 만듭니다. **Bounded Context**는 "시스템을 어떻게 나눌 것인가?"에 답하며 컨텍스트 경계를 명확히 합니다. 마지막으로 **Context Mapping**은 "시스템 간 어떻게 통합할 것인가?"를 결정하여 통합 전략을 수립합니다.
+전략적 설계의 각 구성요소는 다음과 같은 질문에 답합니다. <strong>Subdomain</strong>은 "비즈니스의 핵심은 무엇인가?"라는 질문으로 도메인을 Core, Supporting, Generic으로 분류합니다. <strong>Ubiquitous Language</strong>는 "어떤 언어로 소통할 것인가?"를 정의하며 용어 사전을 산출물로 만듭니다. <strong>Bounded Context</strong>는 "시스템을 어떻게 나눌 것인가?"에 답하며 컨텍스트 경계를 명확히 합니다. 마지막으로 <strong>Context Mapping</strong>은 "시스템 간 어떻게 통합할 것인가?"를 결정하여 통합 전략을 수립합니다.
 
 | 구성요소 | 질문 | 산출물 |
 |---------|------|--------|
@@ -90,7 +90,7 @@ flowchart TB
 
 **Subdomain 유형**
 
-Subdomain은 세 가지 유형으로 분류됩니다. **Core Domain**은 비즈니스의 핵심 경쟁력을 만드는 영역으로 최우선 투자가 필요하며 최고의 개발자를 배치해야 합니다. 예를 들어 배달앱의 배차 알고리즘은 Core Domain입니다. **Supporting Domain**은 핵심을 지원하지만 차별화 요소는 아닌 영역으로 적절한 수준의 투자가 필요합니다. 재고 관리나 고객 관리가 여기에 해당합니다. **Generic Domain**은 모든 비즈니스에 공통적으로 필요한 영역으로 외부 솔루션을 활용하는 것이 효율적입니다. 결제, 인증, 이메일 발송 등이 이에 속합니다.
+Subdomain은 세 가지 유형으로 분류됩니다. <strong>Core Domain</strong>은 비즈니스의 핵심 경쟁력을 만드는 영역으로 최우선 투자가 필요하며 최고의 개발자를 배치해야 합니다. 예를 들어 배달앱의 배차 알고리즘은 Core Domain입니다. <strong>Supporting Domain</strong>은 핵심을 지원하지만 차별화 요소는 아닌 영역으로 적절한 수준의 투자가 필요합니다. 재고 관리나 고객 관리가 여기에 해당합니다. <strong>Generic Domain</strong>은 모든 비즈니스에 공통적으로 필요한 영역으로 외부 솔루션을 활용하는 것이 효율적입니다. 결제, 인증, 이메일 발송 등이 이에 속합니다.
 
 | 유형 | 특성 | 투자 | 예시 |
 |------|------|------|------|
