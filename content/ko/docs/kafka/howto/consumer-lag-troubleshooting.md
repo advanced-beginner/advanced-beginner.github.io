@@ -65,7 +65,7 @@ order-service-group orders         2          980             1490            51
 | 심각 | Lag 급증, 처리 불가 | 긴급 대응 |
 
 {{< callout type="warning" title="주의" >}}
-Lag 숫자만으로 판단하지 마세요. **증가 추세**가 더 중요합니다. Lag가 1000이어도 감소 중이면 괜찮지만, Lag가 100이어도 계속 증가하면 문제입니다.
+Lag 숫자만으로 판단하지 마세요. <strong>증가 추세</strong>가 더 중요합니다. Lag가 1000이어도 감소 중이면 괜찮지만, Lag가 100이어도 계속 증가하면 문제입니다.
 {{< /callout >}}
 
 ### 1.3 Spring Boot에서 Lag 확인

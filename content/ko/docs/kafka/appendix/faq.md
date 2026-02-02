@@ -54,10 +54,10 @@ Consumer Group은 병렬 처리와 장애 복구를 위해 필요합니다. 같�
 장점으로는 Partition을 분배하여 처리량을 높일 수 있고, Consumer에 장애가 발생하면 해당 Consumer의 Partition이 다른 Consumer에게 자동으로 재할당되며, 독립적인 Consumer Group은 동일한 메시지를 각자 처리할 수 있어 여러 서비스가 같은 이벤트를 활용할 수 있습니다.
 
 {{< callout type="info" title="핵심 포인트" >}}
-- Kafka는 메시지 큐가 아니라 **분산 이벤트 스트리밍 플랫폼**입니다
+- Kafka는 메시지 큐가 아니라 <strong>분산 이벤트 스트리밍 플랫폼</strong>입니다
 - 메시지 순서는 **같은 Partition 내에서만** 보장됩니다
 - Partition 수는 처음에 적게 시작하고 필요시 늘리세요 (줄일 수 없음)
-- Consumer Group으로 **병렬 처리**와 **장애 복구**를 구현합니다
+- Consumer Group으로 <strong>병렬 처리</strong>와 <strong>장애 복구</strong>를 구현합니다
 {{< /callout >}}
 
 #### 설정 관련

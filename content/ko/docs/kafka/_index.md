@@ -9,7 +9,7 @@ author_url: "http://github.com/kimbenji"
 
 ## Kafka란?
 
-Apache Kafka는 **분산 이벤트 스트리밍 플랫폼**입니다. 단순히 말하면, 시스템 간에 메시지를 안전하고 빠르게 전달하는 중개자입니다.
+Apache Kafka는 <strong>분산 이벤트 스트리밍 플랫폼</strong>입니다. 단순히 말하면, 시스템 간에 메시지를 안전하고 빠르게 전달하는 중개자입니다.
 
 ### 왜 Kafka가 필요한가?
 
@@ -22,7 +22,7 @@ Apache Kafka는 **분산 이벤트 스트리밍 플랫폼**입니다. 단순히 
 | B를 C, D도 호출하면 부하 폭증 | Kafka가 버퍼 역할, 각자 속도로 소비 |
 | A-B 강한 결합 | Producer/Consumer 분리로 느슨한 결합 |
 
-Kafka는 이런 문제들을 해결하면서도 **메시지 유실 없이**, **순서를 보장**하며, **대용량 처리**가 가능합니다.
+Kafka는 이런 문제들을 해결하면서도 <strong>메시지 유실 없이</strong>, <strong>순서를 보장</strong>하며, <strong>대용량 처리</strong>가 가능합니다.
 
 ### 언제 Kafka를 써야 할까?
 
