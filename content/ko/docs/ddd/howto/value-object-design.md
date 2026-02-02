@@ -612,7 +612,7 @@ public final class Money {
 
 **해결 방법**:
 
-Value Object 자체에는 ID가 없지만, **저장을 위한 기술적 ID**가 필요할 수 있습니다:
+Value Object 자체에는 ID가 없지만, <strong>저장을 위한 기술적 ID</strong>가 필요할 수 있습니다:
 
 ```java
 // 도메인 모델 - ID 없음

@@ -12,13 +12,13 @@ author_url: "http://github.com/kimbenji"
 > **핵심 질문**: "도메인 모델을 어떤 패턴으로 구현해야 하는가?"
 
 {{< callout type="tip" title="요약" >}}
-전술적 설계 빌딩 블록: **Entity**(식별자로 구분) + **Value Object**(값으로 구분) → **Aggregate**(일관성 경계) + **Repository**(영속화) + **Domain Service**(도메인 로직) + **Domain Event**(이벤트 통신)
+전술적 설계 빌딩 블록: <strong>Entity</strong>(식별자로 구분) + <strong>Value Object</strong>(값으로 구분) → <strong>Aggregate</strong>(일관성 경계) + <strong>Repository</strong>(영속화) + <strong>Domain Service</strong>(도메인 로직) + <strong>Domain Event</strong>(이벤트 통신)
 {{< /callout >}}
 
 도메인 모델을 구체적으로 구현하기 위한 패턴들이 바로 전술적 설계입니다. 전략적 설계가 "큰 그림"을 그리는 것이라면, 전술적 설계는 "구체적인 구현 방법"을 제시합니다.
 
 {{< callout type="tip" title="비유: 레고 블록" >}}
-전술적 설계의 빌딩 블록은 **레고 블록**과 같습니다:
+전술적 설계의 빌딩 블록은 <strong>레고 블록</strong>과 같습니다:
 
 | 레고 블록 | DDD 빌딩 블록 | 특징 |
 |----------|--------------|------|
@@ -28,7 +28,7 @@ author_url: "http://github.com/kimbenji"
 | **블록 보관함** | Repository | 조립한 세트를 저장/조회 |
 | **조립 도우미** | Domain Service | 여러 세트를 조합하는 로직 |
 
-레고 세트를 분해하지 않고 통째로 보관함에 넣듯, **Aggregate는 통째로 저장합니다.**
+레고 세트를 분해하지 않고 통째로 보관함에 넣듯, <strong>Aggregate는 통째로 저장합니다.</strong>
 {{< /callout >}}
 
 > **이 페이지 예제의 공통 import:**
@@ -89,7 +89,7 @@ flowchart LR
     end
 ```
 
-Entity의 특징을 구체적으로 살펴보겠습니다. **Identity**는 고유 식별자로 구분되는 특성입니다. 주문번호나 회원ID가 대표적인 예입니다. **Mutability**는 상태가 변경될 수 있다는 특성입니다. 예를 들어 주문 상태가 PENDING에서 CONFIRMED로 변경됩니다. **Lifecycle**은 생성, 변경, 소멸의 생명주기를 가진다는 특성입니다. 회원 가입, 활동, 탈퇴의 과정이 여기에 해당합니다.
+Entity의 특징을 구체적으로 살펴보겠습니다. <strong>Identity</strong>는 고유 식별자로 구분되는 특성입니다. 주문번호나 회원ID가 대표적인 예입니다. <strong>Mutability</strong>는 상태가 변경될 수 있다는 특성입니다. 예를 들어 주문 상태가 PENDING에서 CONFIRMED로 변경됩니다. <strong>Lifecycle</strong>은 생성, 변경, 소멸의 생명주기를 가진다는 특성입니다. 회원 가입, 활동, 탈퇴의 과정이 여기에 해당합니다.
 
 | 특성 | 설명 | 예시 |
 |------|------|------|
@@ -188,7 +188,7 @@ flowchart LR
     end
 ```
 
-Value Object의 특징을 정리하면 다음과 같습니다. **Immutability**는 생성 후 변경할 수 없다는 특성입니다. Money(1000, KRW)를 생성한 후에는 금액이나 통화를 바꿀 수 없습니다. **Value Equality**는 모든 속성이 같으면 같은 객체로 취급된다는 특성입니다. 1000원과 1000원은 동일합니다. **Self-Contained**는 자체적으로 유효성을 검증한다는 특성입니다. 음수 금액은 생성 시점에 거부됩니다.
+Value Object의 특징을 정리하면 다음과 같습니다. <strong>Immutability</strong>는 생성 후 변경할 수 없다는 특성입니다. Money(1000, KRW)를 생성한 후에는 금액이나 통화를 바꿀 수 없습니다. <strong>Value Equality</strong>는 모든 속성이 같으면 같은 객체로 취급된다는 특성입니다. 1000원과 1000원은 동일합니다. <strong>Self-Contained</strong>는 자체적으로 유효성을 검증한다는 특성입니다. 음수 금액은 생성 시점에 거부됩니다.
 
 | 특성 | 설명 | 예시 |
 |------|------|------|
@@ -842,7 +842,7 @@ public class JpaOrderRepository implements OrderRepository {
 }
 ```
 
-Specification 패턴의 장점을 정리하면 다음과 같습니다. **재사용성**은 비즈니스 규칙을 여러 곳에서 재사용할 수 있다는 것입니다. **가독성**은 복잡한 조건을 명확하게 표현한다는 것입니다. **테스트 용이**는 각 규칙을 독립적으로 테스트할 수 있다는 것입니다. **조합 가능**은 and, or, not으로 복잡한 규칙을 구성할 수 있다는 것입니다.
+Specification 패턴의 장점을 정리하면 다음과 같습니다. <strong>재사용성</strong>은 비즈니스 규칙을 여러 곳에서 재사용할 수 있다는 것입니다. <strong>가독성</strong>은 복잡한 조건을 명확하게 표현한다는 것입니다. <strong>테스트 용이</strong>는 각 규칙을 독립적으로 테스트할 수 있다는 것입니다. <strong>조합 가능</strong>은 and, or, not으로 복잡한 규칙을 구성할 수 있다는 것입니다.
 
 | 장점 | 설명 |
 |------|------|

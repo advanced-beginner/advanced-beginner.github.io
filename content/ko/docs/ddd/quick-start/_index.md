@@ -13,7 +13,7 @@ author_url: "http://github.com/kimbenji"
 > **이 문서를 읽으면**: DDD의 핵심 개념과 기존 방식과의 차이점을 이해하고, 프로젝트에 DDD 적용 여부를 판단할 수 있습니다
 
 {{< callout type="info" title="이 문서의 목적" >}}
-이 문서는 **튜토리얼이 아닌 개요 문서**입니다. DDD의 핵심 개념을 빠르게 훑어보고 전체 그림을 파악하는 것이 목적입니다. 실제 코드를 작성하는 단계별 실습은 [실습 예제](../examples/) 섹션을 참고하세요.
+이 문서는 <strong>튜토리얼이 아닌 개요 문서</strong>입니다. DDD의 핵심 개념을 빠르게 훑어보고 전체 그림을 파악하는 것이 목적입니다. 실제 코드를 작성하는 단계별 실습은 [실습 예제](../examples/) 섹션을 참고하세요.
 {{< /callout >}}
 
 {{< callout type="tip" title="TL;DR" >}}
@@ -238,10 +238,10 @@ flowchart TB
 
 | 비즈니스 용어 | 코드 | 테스트 |
 |--------------|------|--------|
-| 주문을 **생성**한다 | `Order.create()` | `주문_생성_테스트()` |
-| 주문을 **확정**한다 | `order.confirm()` | `주문_확정_테스트()` |
-| 주문을 **취소**한다 | `order.cancel()` | `주문_취소_테스트()` |
-| **배송지**를 변경한다 | `order.changeShippingAddress()` | `배송지_변경_테스트()` |
+| 주문을 <strong>생성</strong>한다 | `Order.create()` | `주문_생성_테스트()` |
+| 주문을 <strong>확정</strong>한다 | `order.confirm()` | `주문_확정_테스트()` |
+| 주문을 <strong>취소</strong>한다 | `order.cancel()` | `주문_취소_테스트()` |
+| <strong>배송지</strong>를 변경한다 | `order.changeShippingAddress()` | `배송지_변경_테스트()` |
 
 **Domain Event (도메인 이벤트)**
 

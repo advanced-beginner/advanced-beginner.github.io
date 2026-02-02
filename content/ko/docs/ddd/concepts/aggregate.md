@@ -12,7 +12,7 @@ author_url: "http://github.com/kimbenji"
 > **핵심 질문**: "Aggregate 경계를 어떻게 정하고, 크기는 어느 정도가 적당한가?"
 
 {{< callout type="tip" title="요약" >}}
-Aggregate 설계 핵심: **불변식 기반 경계 설정** → **작게 유지** → **ID로 참조** → **결과적 일관성 활용**
+Aggregate 설계 핵심: <strong>불변식 기반 경계 설정</strong> → <strong>작게 유지</strong> → <strong>ID로 참조</strong> → <strong>결과적 일관성 활용</strong>
 {{< /callout >}}
 
 # Aggregate 심화
@@ -20,7 +20,7 @@ Aggregate 설계 핵심: **불변식 기반 경계 설정** → **작게 유지*
 Aggregate의 설계 원칙, 트랜잭션 경계, 실전 패턴을 깊이 있게 다룹니다.
 
 {{< callout type="tip" title="비유: 가족과 이웃" >}}
-Aggregate를 이해하는 가장 쉬운 비유는 **가족 단위**입니다.
+Aggregate를 이해하는 가장 쉬운 비유는 <strong>가족 단위</strong>입니다.
 
 - **가족(Aggregate)**: 함께 살고, 함께 이사하고, 가계부를 공유하는 단위입니다. 가족 내 일은 가장(Aggregate Root)을 통해 외부와 소통합니다.
 - **가족 구성원(내부 Entity)**: 자녀는 독립적으로 존재할 수 없고, 가족과 함께 움직입니다. 외부인이 자녀에게 직접 용돈을 주지 않고 부모를 통합니다.
@@ -39,7 +39,7 @@ Aggregate를 이해하는 가장 쉬운 비유는 **가족 단위**입니다.
 
 ## 왜 Aggregate가 필요한가?
 
-객체 지향 설계에서 가장 어려운 질문 중 하나는 **"어디까지 하나의 단위로 묶을 것인가?"**입니다.
+객체 지향 설계에서 가장 어려운 질문 중 하나는 <strong>"어디까지 하나의 단위로 묶을 것인가?"</strong>입니다.
 
 **Aggregate 없이 설계하면 생기는 문제:**
 
@@ -68,7 +68,7 @@ public void processOrder(OrderId orderId) {
 
 ## Aggregate란?
 
-**Aggregate**는 데이터 변경의 단위로 취급되는 연관된 객체들의 묶음입니다.
+<strong>Aggregate</strong>는 데이터 변경의 단위로 취급되는 연관된 객체들의 묶음입니다.
 
 아래 다이어그램은 Order Aggregate의 구조를 보여줍니다. Order가 Aggregate Root로서 유일한 진입점 역할을 하고, OrderLine과 ShippingAddress는 내부 객체로서 외부에서 직접 접근할 수 없습니다. 외부(External)는 반드시 Order를 통해서만 내부 객체를 조작할 수 있습니다.
 
@@ -102,7 +102,7 @@ flowchart TB
 
 ### 원칙 1: 진정한 불변식(Invariant)을 보호하라
 
-**불변식**이란 항상 참이어야 하는 비즈니스 규칙입니다.
+<strong>불변식</strong>이란 항상 참이어야 하는 비즈니스 규칙입니다.
 
 ```java
 public class Order {
@@ -204,7 +204,7 @@ Order Aggregate에 포함:
 - 동시 수정 충돌이 자주 발생하면 분리 신호
 
 {{< callout type="warning" title="트레이드오프: 너무 작게 쪼개면 안 되는 경우" >}}
-"작게 설계하라"는 원칙에도 **한계**가 있습니다. 너무 작게 쪼개면 오히려 문제가 됩니다:
+"작게 설계하라"는 원칙에도 <strong>한계</strong>가 있습니다. 너무 작게 쪼개면 오히려 문제가 됩니다:
 
 **분리하면 안 되는 신호:**
 - **원자적 일관성이 필수인 경우**: "주문 항목 추가와 총액 계산"은 반드시 함께 일어나야 합니다. 분리하면 총액이 맞지 않는 순간이 생깁니다.
