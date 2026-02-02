@@ -76,11 +76,11 @@ sbt run
 
 각 예제에서 학습할 수 있는 핵심 개념들을 정리했습니다. 예제를 실행하기 전에 어떤 내용을 다루는지 미리 파악하면 학습 효과가 높아집니다.
 
-**환경 설정**에서는 Scala 개발의 기초가 되는 환경 구성을 다룹니다. sbt 프로젝트 구성 방법, IntelliJ IDEA나 VS Code 같은 IDE 설정, 그리고 일상적으로 자주 사용하는 sbt 명령어들을 배웁니다.
+<strong>환경 설정</strong>에서는 Scala 개발의 기초가 되는 환경 구성을 다룹니다. sbt 프로젝트 구성 방법, IntelliJ IDEA나 VS Code 같은 IDE 설정, 그리고 일상적으로 자주 사용하는 sbt 명령어들을 배웁니다.
 
-**기본 예제**에서는 Scala의 핵심 기능들을 실습합니다. 케이스 클래스를 사용한 데이터 모델링, 패턴 매칭을 활용한 분기 처리, map, filter, fold 같은 컬렉션 연산, 그리고 고차 함수 작성법을 익힙니다.
+<strong>기본 예제</strong>에서는 Scala의 핵심 기능들을 실습합니다. 케이스 클래스를 사용한 데이터 모델링, 패턴 매칭을 활용한 분기 처리, map, filter, fold 같은 컬렉션 연산, 그리고 고차 함수 작성법을 익힙니다.
 
-**Scala 2 vs 3 비교**에서는 두 버전 간의 차이점을 코드로 직접 비교합니다. 중괄호 vs 들여쓰기 문법, implicit에서 given/using으로의 마이그레이션, 새로운 enum 문법, Extension Methods 등을 다룹니다.
+<strong>Scala 2 vs 3 비교</strong>에서는 두 버전 간의 차이점을 코드로 직접 비교합니다. 중괄호 vs 들여쓰기 문법, implicit에서 given/using으로의 마이그레이션, 새로운 enum 문법, Extension Methods 등을 다룹니다.
 
 #### 직접 실습하기
 

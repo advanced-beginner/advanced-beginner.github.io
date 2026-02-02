@@ -149,8 +149,8 @@ Scala 3는 기본적으로 더 상세한 에러 메시지와 해결 제안을 �
 
 {{< tabs "ide-settings" >}}
 {{< tab "IntelliJ IDEA" >}}
-1. **Preferences** → **Build, Execution, Deployment** → **Compiler** → **Scala Compiler**로 이동하세요
-2. **Additional compiler options**에 `-Xlog-implicits` 추가하세요 (Scala 2)
+1. <strong>Preferences</strong> → <strong>Build, Execution, Deployment</strong> → <strong>Compiler</strong> → <strong>Scala Compiler</strong>로 이동하세요
+2. <strong>Additional compiler options</strong>에 `-Xlog-implicits` 추가하세요 (Scala 2)
 3. **Ctrl+Shift+P** (Windows/Linux) 또는 **Cmd+Shift+P** (macOS)로 암시적 힌트를 토글하세요
 
 **성공 확인**: 코드에서 암시적 파라미터가 회색 텍스트로 표시됩니다.

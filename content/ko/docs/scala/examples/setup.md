@@ -5,9 +5,9 @@ weight: 1
 ---
 
 {{% notice style="primary" title="TL;DR" %}}
-- **Coursier**로 JDK, sbt, Scala CLI를 한 번에 설치
-- **sbt**는 Scala의 표준 빌드 도구로 컴파일, 테스트, 의존성 관리 담당
-- **IntelliJ IDEA** 또는 **VS Code + Metals**로 IDE 설정
+- <strong>Coursier</strong>로 JDK, sbt, Scala CLI를 한 번에 설치
+- <strong>sbt</strong>는 Scala의 표준 빌드 도구로 컴파일, 테스트, 의존성 관리 담당
+- <strong>IntelliJ IDEA</strong> 또는 <strong>VS Code + Metals</strong>로 IDE 설정
 - 프로젝트 구조: `build.sbt` (설정) + `src/main/scala/` (소스) + `src/test/scala/` (테스트)
 {{% /notice %}}
 

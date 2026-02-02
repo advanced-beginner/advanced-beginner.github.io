@@ -8,7 +8,7 @@ author_url: "https://github.com/advanced-beginner"
 
 ## 전체 비유: 건축 자재 선택
 
-Scala의 기본 문법을 **건축 자재 선택**에 비유하면 이해하기 쉽습니다:
+Scala의 기본 문법을 <strong>건축 자재 선택</strong>에 비유하면 이해하기 쉽습니다:
 
 | 건축 비유 | Scala 개념 | 역할 |
 |----------|-----------|------|
