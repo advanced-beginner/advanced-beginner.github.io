@@ -6,7 +6,7 @@ weight: 2
 
 ## 전체 비유: 교통 시스템
 
-Scala의 제어 구조를 **교통 시스템**에 비유하면 이해하기 쉽습니다:
+Scala의 제어 구조를 <strong>교통 시스템</strong>에 비유하면 이해하기 쉽습니다:
 
 | 교통 시스템 비유 | Scala 개념 | 역할 |
 |-----------------|-----------|------|
@@ -22,7 +22,7 @@ Scala의 제어 구조를 **교통 시스템**에 비유하면 이해하기 쉽�
 ---
 
 {{< callout type="info" title="TL;DR" >}}
-- Scala의 if, for, match는 모두 **표현식**으로 값을 반환합니다
+- Scala의 if, for, match는 모두 <strong>표현식</strong>으로 값을 반환합니다
 - for comprehension은 컬렉션 변환과 모나딕 연산을 간결하게 표현합니다
 - match는 Java switch보다 강력하며 타입 매칭, 가드 조건을 지원합니다
 - while은 문(statement)이므로 함수형 코드에서는 가급적 피합니다

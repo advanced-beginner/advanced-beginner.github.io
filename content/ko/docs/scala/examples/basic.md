@@ -5,11 +5,11 @@ weight: 2
 ---
 
 {{% notice style="primary" title="TL;DR" %}}
-- **케이스 클래스**로 불변 데이터 모델링, 자동 생성되는 `equals`, `copy` 활용
-- **Option**으로 null 안전성, **Either**로 상세한 에러 처리
-- **패턴 매칭**으로 타입에 따른 분기 처리
+- <strong>케이스 클래스</strong>로 불변 데이터 모델링, 자동 생성되는 `equals`, `copy` 활용
+- <strong>Option</strong>으로 null 안전성, <strong>Either</strong>로 상세한 에러 처리
+- <strong>패턴 매칭</strong>으로 타입에 따른 분기 처리
 - **컬렉션 API** (`map`, `filter`, `groupBy`)로 선언적 데이터 처리
-- **타입 클래스**로 확장 가능한 기능 구현
+- <strong>타입 클래스</strong>로 확장 가능한 기능 구현
 {{% /notice %}}
 
 **대상 독자**: Scala 환경 설정을 마친 개발자, 실제 코드로 Scala를 학습하려는 분
