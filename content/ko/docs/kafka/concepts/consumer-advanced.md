@@ -117,7 +117,7 @@ public class OrderConsumer {
 
 #### 리밸런싱 심층 분석
 
-리밸런싱을 **회사 좌석 재배치**에 비유하면 이해하기 쉽습니다:
+리밸런싱을 <strong>회사 좌석 재배치</strong>에 비유하면 이해하기 쉽습니다:
 
 | 좌석 재배치 비유 | Kafka 리밸런싱 |
 |-----------------|---------------|
@@ -336,13 +336,13 @@ kafka-get-offsets.sh --topic orders \
 
 Consumer 애플리케이션을 프로덕션에 배포하기 전에 다음 사항을 확인해야 합니다.
 
-**설정 점검**으로는 group.id 명명 규칙 준수({서비스명}-{용도}), auto.offset.reset 의도대로 설정(보통 earliest), enable.auto.commit=false(수동 커밋 권장), max.poll.interval.ms가 최대 처리 시간보다 큰지, session.timeout.ms/heartbeat.interval.ms 비율(15:1 권장), partition.assignment.strategy가 CooperativeStickyAssignor인지 확인합니다.
+<strong>설정 점검</strong>으로는 group.id 명명 규칙 준수({서비스명}-{용도}), auto.offset.reset 의도대로 설정(보통 earliest), enable.auto.commit=false(수동 커밋 권장), max.poll.interval.ms가 최대 처리 시간보다 큰지, session.timeout.ms/heartbeat.interval.ms 비율(15:1 권장), partition.assignment.strategy가 CooperativeStickyAssignor인지 확인합니다.
 
-**모니터링 준비**로는 Consumer Lag 메트릭 수집 설정, Lag 임계값 알림 설정(warning: 10,000 / critical: 50,000), 리밸런싱 발생 알림 설정, Consumer 인스턴스 수 모니터링을 확인합니다.
+<strong>모니터링 준비</strong>로는 Consumer Lag 메트릭 수집 설정, Lag 임계값 알림 설정(warning: 10,000 / critical: 50,000), 리밸런싱 발생 알림 설정, Consumer 인스턴스 수 모니터링을 확인합니다.
 
-**장애 대응 준비**로는 DLQ(Dead Letter Queue) 구성, Offset 리셋 절차 문서화, 롤백 계획 수립, 담당자 연락처 및 에스컬레이션 경로를 준비합니다.
+<strong>장애 대응 준비</strong>로는 DLQ(Dead Letter Queue) 구성, Offset 리셋 절차 문서화, 롤백 계획 수립, 담당자 연락처 및 에스컬레이션 경로를 준비합니다.
 
-**성능 검증**으로는 예상 TPS의 2배 부하 테스트 완료, Consumer 인스턴스 수가 Partition 수 이하인지 확인, 메모리 사용량 모니터링(GC 로그 활성화)을 확인합니다.
+<strong>성능 검증</strong>으로는 예상 TPS의 2배 부하 테스트 완료, Consumer 인스턴스 수가 Partition 수 이하인지 확인, 메모리 사용량 모니터링(GC 로그 활성화)을 확인합니다.
 
 #### FAQ
 
