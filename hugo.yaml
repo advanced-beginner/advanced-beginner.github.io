@@ -96,7 +96,7 @@ params:
   BookToC: true
   BookSection: docs
   BookSearch: true
-  BookComments: false
+  BookComments: true
   BookPortableLinks: "warning"
   BookDateFormat: "2023-10-15"
   BookEditLink: "https://github.com/advanced-beginner/advanced-beginner.github.io/edit/main/{{ .Path }}"
