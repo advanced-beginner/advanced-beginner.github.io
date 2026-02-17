@@ -2,7 +2,7 @@
 bookCollapseSection: true
 title: 개념 이해
 weight: 2
-lastmod: "2026-01-15"
+lastmod: "2026-02-17"
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
@@ -44,8 +44,10 @@ DDD는 <strong>전략적 설계</strong>와 <strong>전술적 설계</strong>라
 | 문서 | 핵심 질문 | 배우는 것 |
 |------|----------|----------|
 | [전략적 설계](strategic-design/) | "시스템을 어떻게 나눌 것인가?" | Subdomain, Bounded Context, Context Mapping, Ubiquitous Language |
-| [전술적 설계](tactical-design/) | "경계 안에서 무엇을 만들 것인가?" | Entity, Value Object, Repository, Domain Service, Specification |
+| [전술적 설계](tactical-design/) | "경계 안에서 무엇을 만들 것인가?" | Entity, Value Object, Repository, Domain Service, Factory |
 | [Aggregate 심화](aggregate/) | "일관성 경계를 어떻게 정할 것인가?" | Aggregate Root, 트랜잭션 경계, 크기 결정 원칙 |
+| [Aggregate 실전 패턴](aggregate-patterns/) | "Aggregate를 실전에서 어떻게 최적화하는가?" | 구현 최적화, 이벤트 활용 패턴 |
+| [도메인 모델 패턴](domain-model-patterns/) | "빌딩 블록 너머의 도메인 로직을 어떻게 구조화하는가?" | Specification, Policy, Module, Builder, Null Object |
 
 ### 2단계: 아키텍처
 
@@ -128,4 +130,5 @@ flowchart TB
 
 - **DDD가 처음이라면**: [전략적 설계](strategic-design/)부터 시작하세요
 - **구현 패턴이 궁금하다면**: [전술적 설계](tactical-design/)를 먼저 훑어보세요
+- **Specification, Policy 등 심화 패턴이 궁금하다면**: [도메인 모델 패턴](domain-model-patterns/)을 참고하세요
 - **아키텍처 선택이 고민이라면**: [아키텍처 패턴 비교](architecture/)를 참고하세요
