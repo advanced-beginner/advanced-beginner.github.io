@@ -1,5 +1,6 @@
 ---
 title: FAQ
+description: "Frequently asked questions about Domain-Driven Design"
 weight: 3
 lastmod: "2026-01-13"
 author: "@kimbenji"
@@ -510,5 +511,5 @@ Long-term benefits:
 
 ## Next Steps
 
-- [Glossary](glossary/) - DDD terminology
-- [References](references/) - Learning resources
+- [Glossary]({{< relref "/docs/ddd/appendix/glossary" >}}) - DDD terminology
+- [References]({{< relref "/docs/ddd/appendix/references" >}}) - Learning resources

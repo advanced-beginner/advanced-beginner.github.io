@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-14"
 title: Case Classes
+description: "Case class mechanics and immutable data modeling"
 weight: 5
 ---
 
@@ -410,5 +411,5 @@ println(eval(expr))  // 9.0
 
 #### Next Steps
 
-- [Pattern Matching](pattern-matching/) — Advanced match expressions
-- [Collections](collections/) — Scala collection library
+- [Pattern Matching]({{< relref "/docs/scala/concepts/pattern-matching" >}}) — Advanced match expressions
+- [Collections]({{< relref "/docs/scala/concepts/collections" >}}) — Scala collection library

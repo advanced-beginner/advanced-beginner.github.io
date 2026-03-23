@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Message Flow
+description: "Message flow mechanics from Producer to Consumer"
 weight: 2
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
@@ -16,7 +17,7 @@ author_url: "http://github.com/kimbenji"
 
 **Target Audience**: Developers who understand Kafka's basic components, those learning detailed message delivery operations
 
-**Prerequisites**: Understanding of Producer, Consumer, Broker, Topic, Partition concepts from [Core Components](core-components/)
+**Prerequisites**: Understanding of Producer, Consumer, Broker, Topic, Partition concepts from [Core Components]({{< relref "/docs/kafka/concepts/core-components" >}})
 
 ---
 
@@ -278,4 +279,4 @@ Pull method allows Consumer to fetch messages at its own pace. However, if poll(
 
 This document covered the complete process of message delivery from Producer to Consumer. Next step is to learn in more detail about Consumer Group and Offset management.
 
-- [Consumer Group and Offset](consumer-group/) - Details of parallel processing and state management
+- [Consumer Group and Offset]({{< relref "/docs/kafka/concepts/consumer-group" >}}) - Details of parallel processing and state management

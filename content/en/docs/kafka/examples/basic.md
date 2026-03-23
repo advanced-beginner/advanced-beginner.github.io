@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Implementing Producer/Consumer with Spring Kafka
+description: "Step-by-step Producer/Consumer with Spring Kafka"
 weight: 2
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
@@ -21,7 +22,7 @@ This document provides a step-by-step guide to sending and receiving messages us
 |------|-------------|
 | **Target Audience** | Backend developers who want to use Kafka in Spring Boot applications |
 | **Prerequisites** | Basic Java syntax, Spring Boot fundamentals, Kafka basic concepts |
-| **Prior Completion** | [Quick Start](../quick-start/) example completed, [Environment Setup](setup/) configuration done |
+| **Prior Completion** | [Quick Start]({{< relref "/docs/kafka/quick-start" >}}) example completed, [Environment Setup]({{< relref "/docs/kafka/examples/setup" >}}) configuration done |
 | **Estimated Time** | About 30 minutes |
 
 {{< callout type="warning" title="Platform-specific Notes" >}}
@@ -635,6 +636,6 @@ spring:
 
 ## Next Steps
 
-- [Order System](order-system/) - Real-world example applying domain-driven design
-- [Consumer Advanced Settings](../concepts/consumer-tuning/) - Performance optimization methods
-- [Error Handling Patterns](../concepts/error-handling/) - Production error handling strategies
+- [Order System]({{< relref "/docs/kafka/examples/order-system" >}}) - Real-world example applying domain-driven design
+- [Consumer Advanced Settings]({{< relref "/docs/kafka/concepts/consumer-tuning" >}}) - Performance optimization methods
+- [Error Handling Patterns]({{< relref "/docs/kafka/concepts/error-handling" >}}) - Production error handling strategies

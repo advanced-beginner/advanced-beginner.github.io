@@ -12,7 +12,7 @@ This guide walks you through changing index mappings (field types, analyzers, et
 {{< callout type="info" title="Scope of This Guide" >}}
 **Covers**: Zero-downtime mapping changes using the Reindex API, Alias switching strategy, and validation methods
 
-**Does not cover**: For large-scale index rebuilds, see [Index Rebuild](../index-rebuild/). For cluster-level changes, see [Cluster Scaling](../cluster-scaling/).
+**Does not cover**: For large-scale index rebuilds, see [Index Rebuild]({{< relref "/docs/elasticsearch/index-rebuild" >}}). For cluster-level changes, see [Cluster Scaling]({{< relref "/docs/elasticsearch/cluster-scaling" >}}).
 {{< /callout >}}
 
 {{< callout type="tip" title="TL;DR" >}}
@@ -409,6 +409,6 @@ curl -X DELETE "localhost:9200/products-v2"
 
 ## Related Documents
 
-- [Index Rebuild](../index-rebuild/) - Large-scale index rebuild strategies
-- [Cluster Scaling](../cluster-scaling/) - Cluster-level scaling
-- [Slow Query Optimization](../slow-query-optimization/) - Query performance improvements
+- [Index Rebuild]({{< relref "/docs/elasticsearch/index-rebuild" >}}) - Large-scale index rebuild strategies
+- [Cluster Scaling]({{< relref "/docs/elasticsearch/cluster-scaling" >}}) - Cluster-level scaling
+- [Slow Query Optimization]({{< relref "/docs/elasticsearch/slow-query-optimization" >}}) - Query performance improvements

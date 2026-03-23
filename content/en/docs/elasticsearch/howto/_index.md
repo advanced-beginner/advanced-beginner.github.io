@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-16"
 title: How-To Guides
+description: "Elasticsearch operational troubleshooting guides"
 weight: 4
 bookCollapseSection: true
 ---
@@ -15,13 +16,13 @@ Each guide is designed for immediate application in specific problem situations.
 
 | Guide | Description | Level | Duration |
 |-------|-------------|-------|----------|
-| [Slow Query Optimization](./slow-query-optimization/) | Diagnose and improve slow search response times | Intermediate | 15-30 min |
-| [Memory Troubleshooting](./memory-troubleshooting/) | Handle OOM and GC issues | Intermediate | 20-40 min |
+| [Slow Query Optimization]({{< relref "/docs/elasticsearch/howto/slow-query-optimization" >}}) | Diagnose and improve slow search response times | Intermediate | 15-30 min |
+| [Memory Troubleshooting]({{< relref "/docs/elasticsearch/howto/memory-troubleshooting" >}}) | Handle OOM and GC issues | Intermediate | 20-40 min |
 
 ## Operations
 
 | Guide | Description | Level | Duration |
 |-------|-------------|-------|----------|
-| [Mapping Migration](./mapping-migration/) | Change index mappings without downtime using Reindex and Alias switching | Intermediate | 20-40 min |
-| [Index Rebuild](./index-rebuild/) | Efficiently rebuild large indices using _reindex, Snapshot/Restore, or Logstash | Intermediate | 30-60 min |
-| [Cluster Scaling](./cluster-scaling/) | Safely scale an Elasticsearch cluster with node addition and Hot-Warm-Cold architecture | Advanced | 30-60 min |
+| [Mapping Migration]({{< relref "/docs/elasticsearch/howto/mapping-migration" >}}) | Change index mappings without downtime using Reindex and Alias switching | Intermediate | 20-40 min |
+| [Index Rebuild]({{< relref "/docs/elasticsearch/howto/index-rebuild" >}}) | Efficiently rebuild large indices using _reindex, Snapshot/Restore, or Logstash | Intermediate | 30-60 min |
+| [Cluster Scaling]({{< relref "/docs/elasticsearch/howto/cluster-scaling" >}}) | Safely scale an Elasticsearch cluster with node addition and Hot-Warm-Cold architecture | Advanced | 30-60 min |

@@ -1,5 +1,6 @@
 ---
 title: Structured Streaming
+description: "Structured Streaming mechanics and stream processing model"
 weight: 8
 lastmod: "2026-01-07"
 ---
@@ -489,5 +490,5 @@ public class RealTimeSalesAggregation {
 
 ## Next Steps
 
-- [MLlib](mllib/) - Machine learning with Spark
-- [Performance Tuning](tuning/) - Streaming performance optimization
+- [MLlib]({{< relref "/docs/spark/concepts/mllib" >}}) - Machine learning with Spark
+- [Performance Tuning]({{< relref "/docs/spark/concepts/tuning" >}}) - Streaming performance optimization

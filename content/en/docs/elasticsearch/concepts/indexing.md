@@ -1,5 +1,6 @@
 ---
 title: Indexing Strategy
+description: "Indexing strategy mechanics and optimization methods"
 weight: 6
 lastmod: 2026-01-08
 prerequisites:
@@ -16,8 +17,8 @@ related_concepts:
 
 {{< callout type="info" title="Prerequisites" >}}
 Before reading this document, understand these concepts first:
-- [Core Components](core-components/) - Shard, Segment concepts
-- [Data Modeling](data-modeling/) - Mapping, Analyzer basics
+- [Core Components]({{< relref "/docs/elasticsearch/concepts/core-components" >}}) - Shard, Segment concepts
+- [Data Modeling]({{< relref "/docs/elasticsearch/concepts/data-modeling" >}}) - Mapping, Analyzer basics
 {{< /callout >}}
 
 Learn Bulk indexing, Refresh, and Index Lifecycle Management for efficiently storing large volumes of data.
@@ -169,7 +170,7 @@ PUT /products/_settings
 ### Translog
 
 Write-Ahead Log to prevent data loss. Plays an important role in Lucene internals.
-→ [Lucene Internals Details](core-components/#lucene-internals-advanced)
+→ [Lucene Internals Details]({{< relref "/docs/elasticsearch/concepts/core-components#lucene-internals-advanced" >}})
 
 ```mermaid
 flowchart LR
@@ -239,7 +240,7 @@ Now automatically applied when creating `products-2024`, `products-2025`, etc.
 ## Index Lifecycle Management (ILM)
 
 Automatically manage the lifecycle of time-series data. Especially useful for managing log data.
-→ [ILM Practical Example](../examples/log-analysis/#ilm-policy)
+→ [ILM Practical Example]({{< relref "/docs/elasticsearch/examples/log-analysis#ilm-policy" >}})
 
 ### Lifecycle Phases
 
@@ -471,6 +472,6 @@ PUT /products/_settings
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Cluster configuration | [Cluster Management](cluster-management/) |
-| Search optimization | [Performance Tuning](performance-tuning/) |
-| Failure response | [High Availability](high-availability/) |
+| Cluster configuration | [Cluster Management]({{< relref "/docs/elasticsearch/concepts/cluster-management" >}}) |
+| Search optimization | [Performance Tuning]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) |
+| Failure response | [High Availability]({{< relref "/docs/elasticsearch/concepts/high-availability" >}}) |

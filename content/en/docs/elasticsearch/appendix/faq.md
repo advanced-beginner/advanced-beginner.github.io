@@ -1,5 +1,6 @@
 ---
 title: FAQ
+description: "Frequently asked questions about Elasticsearch"
 weight: 2
 lastmod: 2026-01-10
 ---

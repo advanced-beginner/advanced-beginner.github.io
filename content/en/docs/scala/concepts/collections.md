@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-14"
 title: Collections
+description: "Scala collection library mechanics and usage patterns"
 weight: 7
 ---
 
@@ -489,5 +490,5 @@ val flat2 = nested.flatMap(identity)
 
 #### Next Steps
 
-- [Higher-Order Functions](higher-order-functions/) — Advanced map, filter, fold
-- [For Comprehension](for-comprehensions/) — Monadic operations
+- [Higher-Order Functions]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) — Advanced map, filter, fold
+- [For Comprehension]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) — Monadic operations

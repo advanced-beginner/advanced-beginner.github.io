@@ -1,5 +1,6 @@
 ---
 title: Basic Examples
+description: "Step-by-step Spark basic operations and data processing"
 weight: 2
 lastmod: "2026-01-07"
 ---
@@ -750,5 +751,5 @@ public class FraudDetectionAnalysis {
 
 After completing the examples:
 
-- [Performance Tuning](../concepts/tuning/) - Code optimization
-- [Appendix](../appendix/) - Glossary, FAQ
+- [Performance Tuning]({{< relref "/docs/spark/concepts/tuning" >}}) - Code optimization
+- [Appendix]({{< relref "/docs/spark/appendix" >}}) - Glossary, FAQ

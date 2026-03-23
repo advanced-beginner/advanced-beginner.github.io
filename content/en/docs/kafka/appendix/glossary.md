@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Glossary
+description: "Key Kafka terminology and definitions"
 weight: 1
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
@@ -183,8 +184,8 @@ An external service that managed Kafka cluster metadata. Handled Broker lists, T
 
 #### Next Steps
 
-- [Concepts](../concepts/) - Kafka core concepts
-- [Quick Start](../quick-start/) - Quick start guide
-- [Microservices Example](../examples/microservices/) - Multi-service event flow
-- [References](references/) - Official documentation, blogs
-- [FAQ](faq/) - Frequently asked questions
+- [Concepts]({{< relref "/docs/kafka/concepts" >}}) - Kafka core concepts
+- [Quick Start]({{< relref "/docs/kafka/quick-start" >}}) - Quick start guide
+- [Microservices Example]({{< relref "/docs/kafka/examples/microservices" >}}) - Multi-service event flow
+- [References]({{< relref "/docs/kafka/appendix/references" >}}) - Official documentation, blogs
+- [FAQ]({{< relref "/docs/kafka/appendix/faq" >}}) - Frequently asked questions

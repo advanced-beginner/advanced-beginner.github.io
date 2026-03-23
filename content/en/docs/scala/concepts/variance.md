@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-14"
 title: Covariance / Contravariance
+description: "Covariance and contravariance mechanics and type safety"
 weight: 13
 ---
 
@@ -337,5 +338,5 @@ trait Transformer[-A, +B] {
 
 #### Next Steps
 
-- [Advanced Types](type-system-advanced/) — Union, Intersection, Match Types
-- [Type Classes](type-classes/) — Advanced ad-hoc polymorphism
+- [Advanced Types]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) — Union, Intersection, Match Types
+- [Type Classes]({{< relref "/docs/scala/concepts/type-classes" >}}) — Advanced ad-hoc polymorphism

@@ -60,44 +60,44 @@ graph LR
 
 ## What This Guide Covers
 
-### [Quick Start](quick-start/)
+### [Quick Start]({{< relref "/docs/observability/quick-start" >}})
 Build a Prometheus + Grafana environment in 10 minutes and verify your first metrics.
 
-### [Concepts](concepts/)
+### [Concepts]({{< relref "/docs/observability/concepts" >}})
 Explains not just "how to use" but **"why it was designed this way"**.
 
 | Topic | What You'll Learn |
 |------|----------|
-| [Three Pillars of Observability](concepts/three-pillars/) | Roles of Metrics, Logs, Traces and their interconnections |
-| [Metrics Fundamentals](concepts/metrics-fundamentals/) | Understanding Counter, Gauge, Histogram, Summary types |
-| [Prometheus Architecture](concepts/prometheus-architecture/) | Pull model, time series DB, service discovery |
-| [PromQL](concepts/promql/) | Query language from basics to advanced (7 documents) |
-| [SRE Golden Signals](concepts/golden-signals/) | Deep dive into Latency, Traffic, Errors, Saturation (6 documents) |
-| [Log Aggregation](concepts/log-aggregation/) | Loki vs ELK comparison, log design patterns |
-| [Distributed Tracing](concepts/distributed-tracing/) | Span, Trace ID, Context Propagation |
-| [OpenTelemetry](concepts/opentelemetry/) | Observability standards and integration methods |
-| [Dashboard Design](concepts/dashboard-design/) | Effective visualization principles |
+| [Three Pillars of Observability]({{< relref "/docs/observability/concepts/three-pillars" >}}) | Roles of Metrics, Logs, Traces and their interconnections |
+| [Metrics Fundamentals]({{< relref "/docs/observability/concepts/metrics-fundamentals" >}}) | Understanding Counter, Gauge, Histogram, Summary types |
+| [Prometheus Architecture]({{< relref "/docs/observability/concepts/prometheus-architecture" >}}) | Pull model, time series DB, service discovery |
+| [PromQL]({{< relref "/docs/observability/concepts/promql" >}}) | Query language from basics to advanced (7 documents) |
+| [SRE Golden Signals]({{< relref "/docs/observability/concepts/golden-signals" >}}) | Deep dive into Latency, Traffic, Errors, Saturation (6 documents) |
+| [Log Aggregation]({{< relref "/docs/observability/concepts/log-aggregation" >}}) | Loki vs ELK comparison, log design patterns |
+| [Distributed Tracing]({{< relref "/docs/observability/concepts/distributed-tracing" >}}) | Span, Trace ID, Context Propagation |
+| [OpenTelemetry]({{< relref "/docs/observability/concepts/opentelemetry" >}}) | Observability standards and integration methods |
+| [Dashboard Design]({{< relref "/docs/observability/concepts/dashboard-design" >}}) | Effective visualization principles |
 
-### [Examples](examples/)
+### [Examples]({{< relref "/docs/observability/examples" >}})
 Hands-on experience with executable code.
 
-- [Environment Setup](examples/setup/) - Full stack configuration with Docker Compose
-- [Spring Boot Metrics](examples/spring-boot-metrics/) - Actuator + Micrometer setup
-- [Kafka Monitoring](examples/kafka-monitoring/) - Building Kafka cluster observability
-- [Full-Stack Observability](examples/full-stack/) - Metrics + Logs + Traces integration
+- [Environment Setup]({{< relref "/docs/observability/examples/setup" >}}) - Full stack configuration with Docker Compose
+- [Spring Boot Metrics]({{< relref "/docs/observability/examples/spring-boot-metrics" >}}) - Actuator + Micrometer setup
+- [Kafka Monitoring]({{< relref "/docs/observability/examples/kafka-monitoring" >}}) - Building Kafka cluster observability
+- [Full-Stack Observability]({{< relref "/docs/observability/examples/full-stack" >}}) - Metrics + Logs + Traces integration
 
-### [How-To Guides](howto/)
+### [How-To Guides]({{< relref "/docs/observability/howto" >}})
 Common problem scenarios and solutions in practice.
 
-- [Debugging High Latency](howto/debug-high-latency/) - Tracking P99 latency causes
-- [Metrics Cardinality Optimization](howto/reduce-cardinality/) - Cost reduction strategies
-- [Managing Alert Fatigue](howto/manage-alert-fatigue/) - Reduce noise alerts
+- [Debugging High Latency]({{< relref "/docs/observability/howto/debug-high-latency" >}}) - Tracking P99 latency causes
+- [Metrics Cardinality Optimization]({{< relref "/docs/observability/howto/reduce-cardinality" >}}) - Cost reduction strategies
+- [Managing Alert Fatigue]({{< relref "/docs/observability/howto/manage-alert-fatigue" >}}) - Reduce noise alerts
 
-### [Appendix](appendix/)
-- [Glossary](appendix/glossary/) - Quick reference for Observability terms
-- [FAQ](appendix/faq/) - Frequently asked questions
-- [Alerting Actions Guide](appendix/alerting-actions/) - Response strategies after PromQL detection
-- [References](appendix/references/) - Official documentation and additional learning resources
+### [Appendix]({{< relref "/docs/observability/appendix" >}})
+- [Glossary]({{< relref "/docs/observability/appendix/glossary" >}}) - Quick reference for Observability terms
+- [FAQ]({{< relref "/docs/observability/appendix/faq" >}}) - Frequently asked questions
+- [Alerting Actions Guide]({{< relref "/docs/observability/appendix/alerting-actions" >}}) - Response strategies after PromQL detection
+- [References]({{< relref "/docs/observability/appendix/references" >}}) - Official documentation and additional learning resources
 
 ## Prerequisites
 

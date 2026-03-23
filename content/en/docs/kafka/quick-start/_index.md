@@ -2,6 +2,7 @@
 bookCollapseSection: true
 lastmod: "2026-01-10"
 title: Quick Start
+description: "Step-by-step guide to Kafka core concepts and practice"
 weight: 1
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
@@ -113,7 +114,7 @@ docker-compose up -d
 {{< /tab >}}
 {{< /tabs >}}
 
-If the `docker-compose.yml` file doesn't exist, check the [Environment Setup Guide](../examples/setup/) for the content and save it as `docker/docker-compose.yml`.
+If the `docker-compose.yml` file doesn't exist, check the [Environment Setup Guide]({{< relref "/docs/kafka/examples/setup" >}}) for the content and save it as `docker/docker-compose.yml`.
 
 ### Verify Execution
 
@@ -460,6 +461,6 @@ After completing Quick Start, proceed to the following:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Understand Kafka concepts | [Core Components](../concepts/core-components/) |
-| Practice more complex examples | [Implementing Producer/Consumer with Spring Kafka](../examples/basic/) |
-| Learn production settings | [Environment Setup](../examples/setup/) |
+| Understand Kafka concepts | [Core Components]({{< relref "/docs/kafka/concepts/core-components" >}}) |
+| Practice more complex examples | [Implementing Producer/Consumer with Spring Kafka]({{< relref "/docs/kafka/examples/basic" >}}) |
+| Learn production settings | [Environment Setup]({{< relref "/docs/kafka/examples/setup" >}}) |

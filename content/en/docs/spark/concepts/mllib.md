@@ -1,5 +1,6 @@
 ---
 title: MLlib
+description: "MLlib mechanics and machine learning pipeline design"
 weight: 9
 lastmod: "2026-01-07"
 ---
@@ -530,5 +531,5 @@ public class ChurnPrediction {
 
 ## Next Steps
 
-- [Performance Tuning](tuning/) - ML workload optimization
-- [Deployment](deployment/) - Model serving and batch prediction
+- [Performance Tuning]({{< relref "/docs/spark/concepts/tuning" >}}) - ML workload optimization
+- [Deployment]({{< relref "/docs/spark/concepts/deployment" >}}) - Model serving and batch prediction

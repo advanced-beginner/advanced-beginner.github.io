@@ -1,6 +1,7 @@
 ---
 bookCollapseSection: true
 title: How-To Guides
+description: "Spark operational troubleshooting guides"
 weight: 4
 lastmod: "2026-01-10"
 author:
@@ -12,7 +13,7 @@ Step-by-step guides for solving specific problems. Each document explains how to
 
 ## Guide List
 
-**[Troubleshooting OutOfMemoryError](oom-troubleshooting/)**
+**[Troubleshooting OutOfMemoryError]({{< relref "/docs/spark/howto/oom-troubleshooting" >}})**
 
 Diagnose and resolve the most common memory shortage errors in Spark.
 
@@ -20,7 +21,7 @@ Diagnose and resolve the most common memory shortage errors in Spark.
 - Optimizing memory settings
 - Adjusting partition sizes
 
-**[Resolving Data Skew](data-skew/)**
+**[Resolving Data Skew]({{< relref "/docs/spark/howto/data-skew" >}})**
 
 Fix performance degradation caused by data concentration in specific partitions.
 
@@ -28,7 +29,7 @@ Fix performance degradation caused by data concentration in specific partitions.
 - Salting techniques
 - Enabling AQE skew join
 
-**[Optimizing Shuffle](shuffle-optimization/)**
+**[Optimizing Shuffle]({{< relref "/docs/spark/howto/shuffle-optimization" >}})**
 
 Improve Spark job performance by reducing network I/O.
 
@@ -45,4 +46,4 @@ Each guide is structured as follows:
 3. **Step-by-Step Solution**: Including commands and code
 4. **Verification**: How to confirm the problem is resolved
 
-If you get stuck during troubleshooting, refer to the [FAQ](../appendix/faq/).
+If you get stuck during troubleshooting, refer to the [FAQ]({{< relref "/docs/spark/appendix/faq" >}}).

@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Monitoring Basics
+description: "Kafka monitoring metrics and cluster health checks"
 weight: 10
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
@@ -16,7 +17,7 @@ author_url: "http://github.com/kimbenji"
 
 **Target Audience**: Operators and developers managing and monitoring Kafka clusters
 
-**Prerequisites**: Offset and Lag concepts from [Consumer Group & Offset](consumer-group/)
+**Prerequisites**: Offset and Lag concepts from [Consumer Group & Offset]({{< relref "/docs/kafka/concepts/consumer-group" >}})
 
 ---
 
@@ -348,4 +349,4 @@ For monitoring tools, use kafka-consumer-groups CLI, Spring Actuator, Prometheus
 
 #### Next Steps
 
-- [Hands-on Examples](../examples/) - Apply what you've learned in practice
+- [Hands-on Examples]({{< relref "/docs/kafka/examples" >}}) - Apply what you've learned in practice

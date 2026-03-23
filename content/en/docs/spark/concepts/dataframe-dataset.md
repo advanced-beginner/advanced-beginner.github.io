@@ -1,5 +1,6 @@
 ---
 title: DataFrame and Dataset
+description: "DataFrame and Dataset mechanics and usage patterns"
 weight: 3
 lastmod: "2026-01-07"
 ---
@@ -661,5 +662,5 @@ val names = ds.map(_.name)
 
 After understanding DataFrame and Dataset:
 
-- [Spark SQL](spark-sql/) - Query DataFrames with SQL
-- [Transformations and Actions](transformations-actions/) - Understanding when operations execute
+- [Spark SQL]({{< relref "/docs/spark/concepts/spark-sql" >}}) - Query DataFrames with SQL
+- [Transformations and Actions]({{< relref "/docs/spark/concepts/transformations-actions" >}}) - Understanding when operations execute

@@ -67,49 +67,49 @@ When considering Spark adoption, evaluate based on data scale and processing com
 
 This guide is structured step-by-step so Java/Spring developers can apply Spark in practice.
 
-**[Quick Start](quick-start/)**
+**[Quick Start]({{< relref "/docs/spark/quick-start" >}})**
 Run a Spark application in 5 minutes. See working code before concepts.
 
-**[Concepts](concepts/)**
+**[Concepts]({{< relref "/docs/spark/concepts" >}})**
 
 Explains Spark's core principles from a **Java/Spring developer's perspective**. The table below summarizes topics covered in each concept document:
 
 | Topic | What You'll Learn |
 |-------|-------------------|
-| [Architecture](concepts/architecture/) | Roles and operation of Driver, Executor, Cluster Manager |
-| [RDD Basics](concepts/rdd/) | Spark's basic abstraction, distributed collection concepts |
-| [DataFrame and Dataset](concepts/dataframe-dataset/) | Modern type-safe distributed data processing API |
-| [Spark SQL](concepts/spark-sql/) | Querying distributed data with SQL |
-| [Transformations and Actions](concepts/transformations-actions/) | Difference between lazy evaluation and immediate execution |
-| [Partitioning and Shuffle](concepts/partitioning/) | Core of distributed processing, data distribution strategies |
-| [Caching and Persistence](concepts/caching/) | Leveraging in-memory processing |
-| [Structured Streaming](concepts/structured-streaming/) | Real-time stream data processing |
-| [MLlib](concepts/mllib/) | Machine learning in distributed environments |
-| [Performance Tuning](concepts/tuning/) | Memory, partition, shuffle optimization |
-| [Deployment and Cluster Management](concepts/deployment/) | Standalone, YARN, Kubernetes configuration |
+| [Architecture]({{< relref "/docs/spark/concepts/architecture" >}}) | Roles and operation of Driver, Executor, Cluster Manager |
+| [RDD Basics]({{< relref "/docs/spark/concepts/rdd" >}}) | Spark's basic abstraction, distributed collection concepts |
+| [DataFrame and Dataset]({{< relref "/docs/spark/concepts/dataframe-dataset" >}}) | Modern type-safe distributed data processing API |
+| [Spark SQL]({{< relref "/docs/spark/concepts/spark-sql" >}}) | Querying distributed data with SQL |
+| [Transformations and Actions]({{< relref "/docs/spark/concepts/transformations-actions" >}}) | Difference between lazy evaluation and immediate execution |
+| [Partitioning and Shuffle]({{< relref "/docs/spark/concepts/partitioning" >}}) | Core of distributed processing, data distribution strategies |
+| [Caching and Persistence]({{< relref "/docs/spark/concepts/caching" >}}) | Leveraging in-memory processing |
+| [Structured Streaming]({{< relref "/docs/spark/concepts/structured-streaming" >}}) | Real-time stream data processing |
+| [MLlib]({{< relref "/docs/spark/concepts/mllib" >}}) | Machine learning in distributed environments |
+| [Performance Tuning]({{< relref "/docs/spark/concepts/tuning" >}}) | Memory, partition, shuffle optimization |
+| [Deployment and Cluster Management]({{< relref "/docs/spark/concepts/deployment" >}}) | Standalone, YARN, Kubernetes configuration |
 
 Learning these concepts in order will give you a systematic understanding of Spark's internals.
 
-**[Hands-on Examples](examples/)**
+**[Hands-on Examples]({{< relref "/docs/spark/examples" >}})**
 
 Executable example code based on Spring Boot. Learn through practice from environment setup to basic data processing:
 
-- [Environment Setup](examples/setup/) - Java/Spring Boot and Spark integration setup
-- [Basic Examples](examples/basic/) - Fundamentals of data loading, transformation, aggregation
+- [Environment Setup]({{< relref "/docs/spark/examples/setup" >}}) - Java/Spring Boot and Spark integration setup
+- [Basic Examples]({{< relref "/docs/spark/examples/basic" >}}) - Fundamentals of data loading, transformation, aggregation
 
-**[How-To Guides](howto/)**
+**[How-To Guides]({{< relref "/docs/spark/howto" >}})**
 
 Step-by-step guides for solving specific problems:
-- [Troubleshooting OutOfMemoryError](howto/oom-troubleshooting/) - Diagnosing and resolving memory errors
-- [Resolving Data Skew](howto/data-skew/) - Fixing partition imbalance
-- [Optimizing Shuffle](howto/shuffle-optimization/) - Minimizing network I/O
+- [Troubleshooting OutOfMemoryError]({{< relref "/docs/spark/howto/oom-troubleshooting" >}}) - Diagnosing and resolving memory errors
+- [Resolving Data Skew]({{< relref "/docs/spark/howto/data-skew" >}}) - Fixing partition imbalance
+- [Optimizing Shuffle]({{< relref "/docs/spark/howto/shuffle-optimization" >}}) - Minimizing network I/O
 
-**[Appendix](appendix/)**
+**[Appendix]({{< relref "/docs/spark/appendix" >}})**
 
 Reference materials for use during learning:
-- [Glossary](appendix/glossary/) - Quick reference for Spark terms
-- [FAQ](appendix/faq/) - Frequently asked questions
-- [References](appendix/references/) - Official docs and additional learning resources
+- [Glossary]({{< relref "/docs/spark/appendix/glossary" >}}) - Quick reference for Spark terms
+- [FAQ]({{< relref "/docs/spark/appendix/faq" >}}) - Frequently asked questions
+- [References]({{< relref "/docs/spark/appendix/references" >}}) - Official docs and additional learning resources
 
 ## Spark vs Hadoop MapReduce
 

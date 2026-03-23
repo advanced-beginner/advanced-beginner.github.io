@@ -309,6 +309,6 @@ Now that you understand StatefulSets, proceed to the following:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Access control | [RBAC](rbac/) |
-| Batch job execution | [Jobs and CronJobs](jobs/) |
-| Network policies | [NetworkPolicy](network-policy/) |
+| Access control | [RBAC]({{< relref "/docs/kubernetes/concepts/rbac" >}}) |
+| Batch job execution | [Jobs and CronJobs]({{< relref "/docs/kubernetes/concepts/jobs" >}}) |
+| Network policies | [NetworkPolicy]({{< relref "/docs/kubernetes/concepts/network-policy" >}}) |

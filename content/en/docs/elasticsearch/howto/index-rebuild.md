@@ -12,7 +12,7 @@ This guide walks you through efficiently rebuilding large indices.
 {{< callout type="info" title="Scope of This Guide" >}}
 **Covers**: _reindex API, Snapshot/Restore, Logstash comparison, large-scale processing strategies, and performance optimization
 
-**Does not cover**: For simple mapping changes, see [Mapping Migration](../mapping-migration/). For cluster scaling, see [Cluster Scaling](../cluster-scaling/).
+**Does not cover**: For simple mapping changes, see [Mapping Migration]({{< relref "/docs/elasticsearch/mapping-migration" >}}). For cluster scaling, see [Cluster Scaling]({{< relref "/docs/elasticsearch/cluster-scaling" >}}).
 {{< /callout >}}
 
 {{< callout type="tip" title="TL;DR" >}}
@@ -436,6 +436,6 @@ curl -X PUT "localhost:9200/products-v1/_settings" -H 'Content-Type: application
 
 ## Related Documents
 
-- [Mapping Migration](../mapping-migration/) - Zero-downtime mapping migration
-- [Cluster Scaling](../cluster-scaling/) - Cluster-level scaling
-- [Memory Troubleshooting](../memory-troubleshooting/) - Handling memory issues during rebuilds
+- [Mapping Migration]({{< relref "/docs/elasticsearch/mapping-migration" >}}) - Zero-downtime mapping migration
+- [Cluster Scaling]({{< relref "/docs/elasticsearch/cluster-scaling" >}}) - Cluster-level scaling
+- [Memory Troubleshooting]({{< relref "/docs/elasticsearch/memory-troubleshooting" >}}) - Handling memory issues during rebuilds

@@ -11,9 +11,9 @@ Guides for diagnosing and resolving common production issues.
 
 ## Guide List
 
-1. [Debugging High Latency](debug-high-latency/) - Tracing root causes of P99 latency spikes
-2. [Optimizing Metric Cardinality](reduce-cardinality/) - Reducing Prometheus costs
-3. [Managing Alert Fatigue](manage-alert-fatigue/) - Reduce noise and focus on critical alerts
+1. [Debugging High Latency]({{< relref "/docs/observability/howto/debug-high-latency" >}}) - Tracing root causes of P99 latency spikes
+2. [Optimizing Metric Cardinality]({{< relref "/docs/observability/howto/reduce-cardinality" >}}) - Reducing Prometheus costs
+3. [Managing Alert Fatigue]({{< relref "/docs/observability/howto/manage-alert-fatigue" >}}) - Reduce noise and focus on critical alerts
 
 ## Guide Format
 

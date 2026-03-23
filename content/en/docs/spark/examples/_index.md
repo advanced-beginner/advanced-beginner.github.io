@@ -1,5 +1,6 @@
 ---
 title: Hands-on Examples
+description: "Spark hands-on examples learning guide and document index"
 weight: 3
 lastmod: "2026-01-07"
 ---
@@ -8,7 +9,7 @@ Example code for hands-on experience with Spark.
 
 ## Example List
 
-### [Environment Setup](setup/)
+### [Environment Setup]({{< relref "/docs/spark/examples/setup" >}})
 
 Configure project environment for integrating Java/Spring Boot with Spark.
 
@@ -17,7 +18,7 @@ Configure project environment for integrating Java/Spring Boot with Spark.
 - Considerations for Spring Boot and Spark integration
 - Resolving logging conflicts
 
-### [Basic Examples](basic/)
+### [Basic Examples]({{< relref "/docs/spark/examples/basic" >}})
 
 Basic examples utilizing Spark's core features.
 
@@ -28,7 +29,7 @@ Basic examples utilizing Spark's core features.
 - SQL queries
 - **Real public dataset examples** (NYC Taxi, Kaggle)
 
-### [Monitoring Setup](monitoring/)
+### [Monitoring Setup]({{< relref "/docs/spark/examples/monitoring" >}})
 
 Monitoring configuration for stable operation of Spark applications in production environments.
 
@@ -38,7 +39,7 @@ Monitoring configuration for stable operation of Spark applications in productio
 - Structured logging (Log4j2, JSON)
 - Alert configuration
 
-### [Spring Boot Integration](spring-boot/)
+### [Spring Boot Integration]({{< relref "/docs/spark/examples/spring-boot" >}})
 
 Spark and Spring Boot integration patterns for Java/Spring developers.
 
@@ -48,7 +49,7 @@ Spark and Spring Boot integration patterns for Java/Spring developers.
 - Integration testing
 - Java vs Scala comparison
 
-### [ETL Pipeline](etl-pipeline/)
+### [ETL Pipeline]({{< relref "/docs/spark/examples/etl-pipeline" >}})
 
 Complete ETL pipeline examples ready for production environments.
 
@@ -105,6 +106,6 @@ configurations.all {
 
 After completing the examples:
 
-- [Performance Tuning](../concepts/tuning/) - Code optimization strategies
-- [Deployment](../concepts/deployment/) - Production deployment
-- [Appendix](../appendix/) - Glossary, FAQ
+- [Performance Tuning]({{< relref "/docs/spark/concepts/tuning" >}}) - Code optimization strategies
+- [Deployment]({{< relref "/docs/spark/concepts/deployment" >}}) - Production deployment
+- [Appendix]({{< relref "/docs/spark/appendix" >}}) - Glossary, FAQ

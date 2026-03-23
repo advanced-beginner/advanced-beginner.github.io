@@ -1,5 +1,6 @@
 ---
 title: Designing Value Objects
+description: "How to design and implement Value Objects"
 weight: 3
 lastmod: "2026-01-16"
 author: "@kimbenji"

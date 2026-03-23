@@ -1,5 +1,6 @@
 ---
 title: Spark Connect
+description: "Spark Connect mechanics and remote execution architecture"
 weight: 12
 lastmod: "2026-01-07"
 ---
@@ -370,6 +371,6 @@ Dataset<Row> df = spark.read().parquet("data.parquet");
 
 ## Related Documents
 
-- [Architecture](architecture/) - Spark cluster structure
-- [Spring Boot Integration](../examples/spring-boot/) - Spring integration
-- [Deployment](deployment/) - Cluster deployment methods
+- [Architecture]({{< relref "/docs/spark/concepts/architecture" >}}) - Spark cluster structure
+- [Spring Boot Integration]({{< relref "/docs/spark/examples/spring-boot" >}}) - Spring integration
+- [Deployment]({{< relref "/docs/spark/concepts/deployment" >}}) - Cluster deployment methods

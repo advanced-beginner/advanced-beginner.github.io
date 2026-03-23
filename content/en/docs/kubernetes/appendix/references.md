@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-11"
 title: References
+description: "Official Kubernetes documentation and references"
 weight: 3
 author:
   name: Advanced Beginner

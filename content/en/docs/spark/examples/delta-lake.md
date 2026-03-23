@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-08"
 title: Delta Lake Integration
+description: "Step-by-step Delta Lake integration implementation"
 weight: 6
 ---
 
@@ -475,6 +476,6 @@ object DeltaLakePipeline extends App {
 
 ## Next Steps
 
-- [Structured Streaming](../concepts/structured-streaming/) - Real-time processing
-- [Performance Tuning](../concepts/tuning/) - Spark optimization
+- [Structured Streaming]({{< relref "/docs/spark/concepts/structured-streaming" >}}) - Real-time processing
+- [Performance Tuning]({{< relref "/docs/spark/concepts/tuning" >}}) - Spark optimization
 - [Kafka Integration]({{< relref "/docs/kafka" >}}) - Stream source

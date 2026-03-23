@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-16"
 title: Message Loss Prevention Guide
+description: "How to diagnose and prevent message loss"
 weight: 3
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
@@ -602,7 +603,7 @@ Verify your message loss prevention settings:
 
 ## Related Documentation
 
-- [Producer Performance Tuning](producer-performance-tuning/) - Balancing reliability and performance
-- [Consumer Lag Troubleshooting](consumer-lag-troubleshooting/) - Consumer-side problem solving
+- [Producer Performance Tuning]({{< relref "/docs/kafka/howto/producer-performance-tuning" >}}) - Balancing reliability and performance
+- [Consumer Lag Troubleshooting]({{< relref "/docs/kafka/howto/consumer-lag-troubleshooting" >}}) - Consumer-side problem solving
 - [Transactions]({{< relref "/docs/kafka/concepts/transactions" >}}) - Exactly-Once semantics details
 - [Error Handling Patterns]({{< relref "/docs/kafka/concepts/error-handling" >}}) - Production error handling strategies

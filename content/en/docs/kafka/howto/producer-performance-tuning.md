@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Producer Performance Tuning
+description: "How to diagnose and optimize Producer performance"
 weight: 2
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
@@ -400,6 +401,6 @@ Follow this order when optimizing performance:
 
 ## Related Documentation
 
-- [Core Components - Producer](../concepts/core-components/#producer의-역할과-동작-원리) - Producer operation principles
-- [Consumer Lag Troubleshooting](consumer-lag-troubleshooting/) - Consumer-side optimization
-- [Error Handling Patterns](../concepts/error-handling/) - Production error handling strategies
+- [Core Components - Producer]({{< relref "/docs/kafka/concepts/core-components#producer의-역할과-동작-원리" >}}) - Producer operation principles
+- [Consumer Lag Troubleshooting]({{< relref "/docs/kafka/howto/consumer-lag-troubleshooting" >}}) - Consumer-side optimization
+- [Error Handling Patterns]({{< relref "/docs/kafka/concepts/error-handling" >}}) - Production error handling strategies

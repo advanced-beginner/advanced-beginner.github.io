@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-11"
 title: Service
+description: "Service mechanics and service discovery explained"
 weight: 4
 author:
   name: Advanced Beginner
@@ -404,6 +405,6 @@ Once you understand Services, proceed to the next steps:
 
 | Goal | Recommended Doc |
 |------|----------------|
-| External HTTP routing | [Networking](networking/) |
-| Separate configuration | [ConfigMap and Secret](configmap-secret/) |
-| Actual deployment practice | [Spring Boot Deployment](../examples/spring-boot/) |
+| External HTTP routing | [Networking]({{< relref "/docs/kubernetes/concepts/networking" >}}) |
+| Separate configuration | [ConfigMap and Secret]({{< relref "/docs/kubernetes/concepts/configmap-secret" >}}) |
+| Actual deployment practice | [Spring Boot Deployment]({{< relref "/docs/kubernetes/examples/spring-boot" >}}) |

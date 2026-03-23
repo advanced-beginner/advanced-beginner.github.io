@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-11"
 title: FAQ
+description: "Frequently asked questions about Kubernetes"
 weight: 2
 author:
   name: Advanced Beginner

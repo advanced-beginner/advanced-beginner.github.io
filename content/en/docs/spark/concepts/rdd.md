@@ -1,5 +1,6 @@
 ---
 title: RDD Basics
+description: "RDD mechanics and lazy evaluation model explained"
 weight: 2
 lastmod: "2026-01-10"
 author:
@@ -19,7 +20,7 @@ author:
 **Prerequisites**:
 - Java Collections API (List, Map, etc.)
 - Lambda expressions and functional programming basics
-- Understanding of [Architecture](architecture/) document
+- Understanding of [Architecture]({{< relref "/docs/spark/concepts/architecture" >}}) document
 
 ---
 
@@ -518,5 +519,5 @@ public class LogAnalysis {
 
 After understanding RDD basics, learn more efficient APIs:
 
-- [DataFrame and Dataset](dataframe-dataset/) - High-level APIs and Catalyst optimization
-- [Transformations and Actions](transformations-actions/) - Deep dive into lazy evaluation
+- [DataFrame and Dataset]({{< relref "/docs/spark/concepts/dataframe-dataset" >}}) - High-level APIs and Catalyst optimization
+- [Transformations and Actions]({{< relref "/docs/spark/concepts/transformations-actions" >}}) - Deep dive into lazy evaluation

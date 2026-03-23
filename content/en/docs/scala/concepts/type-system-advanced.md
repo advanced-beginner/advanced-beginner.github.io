@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-14"
 title: Advanced Type System
+description: "Advanced Scala type system mechanics and patterns"
 weight: 14
 ---
 
@@ -18,9 +19,9 @@ weight: 14
 Scala 3 provides an even more powerful and expressive type system. This document covers Scala 3's new type features.
 
 > **Prerequisites**: To understand this document, you should be familiar with:
-> - [Generics](generics/) - Type parameters, type bounds
-> - [Variance](variance/) - Variance concepts
-> - [Pattern Matching](pattern-matching/) - Basic pattern matching
+> - [Generics]({{< relref "/docs/scala/concepts/generics" >}}) - Type parameters, type bounds
+> - [Variance]({{< relref "/docs/scala/concepts/variance" >}}) - Variance concepts
+> - [Pattern Matching]({{< relref "/docs/scala/concepts/pattern-matching" >}}) - Basic pattern matching
 >
 > **Difficulty**: ⭐⭐⭐⭐ (Advanced) - Includes Scala 3-only features
 
@@ -298,5 +299,5 @@ valid.foreach(e => println(e.domain))   // "example.com"
 
 #### Next Steps
 
-- [Macros](macros-metaprogramming/) — Compile-time code generation
-- [Functional Patterns](functional-patterns/) — Functor, Monad
+- [Macros]({{< relref "/docs/scala/concepts/macros-metaprogramming" >}}) — Compile-time code generation
+- [Functional Patterns]({{< relref "/docs/scala/concepts/functional-patterns" >}}) — Functor, Monad

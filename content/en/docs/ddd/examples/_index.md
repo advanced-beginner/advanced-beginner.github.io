@@ -1,6 +1,7 @@
 ---
 bookCollapseSection: true
 title: Hands-on Examples
+description: "DDD hands-on examples learning guide and document index"
 weight: 3
 lastmod: "2026-01-13"
 author: "@kimbenji"
@@ -8,7 +9,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **Target Audience**: Developers who understand DDD concepts and want to implement them in actual code
-> **Prerequisites**: [Quick Start](../quick-start/) and Tactical Design from [Concepts](../concepts/) section
+> **Prerequisites**: [Quick Start]({{< relref "/docs/ddd/quick-start" >}}) and Tactical Design from [Concepts]({{< relref "/docs/ddd/concepts" >}}) section
 > **Purpose of this Section**: Implement DDD patterns with actual Spring Boot code through an order domain
 
 {{< callout type="warning" title="Before You Start" >}}
@@ -26,10 +27,10 @@ Learning progresses from project setup to domain model implementation, applicati
 
 | Step | Document | What You'll Learn | Duration |
 |------|----------|-------------------|----------|
-| 1 | [Project Setup](setup/) | Project structure, dependency configuration | ~15 min |
-| 2 | [Order Domain](order-domain/) | Aggregate, Entity, Value Object implementation | ~40 min |
-| 3 | [Application Layer](application-layer/) | Use Case, Domain Service implementation | ~30 min |
-| 4 | [Event Sourcing Practice](event-sourcing/) | Event storage, snapshots, time travel | ~45 min |
+| 1 | [Project Setup]({{< relref "/docs/ddd/examples/setup" >}}) | Project structure, dependency configuration | ~15 min |
+| 2 | [Order Domain]({{< relref "/docs/ddd/examples/order-domain" >}}) | Aggregate, Entity, Value Object implementation | ~40 min |
+| 3 | [Application Layer]({{< relref "/docs/ddd/examples/application-layer" >}}) | Use Case, Domain Service implementation | ~30 min |
+| 4 | [Event Sourcing Practice]({{< relref "/docs/ddd/examples/event-sourcing" >}}) | Event storage, snapshots, time travel | ~45 min |
 
 ## What You'll Build
 

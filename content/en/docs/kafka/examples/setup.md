@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Environment Setup
+description: "Step-by-step Kafka development environment setup"
 weight: 1
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
@@ -357,5 +358,5 @@ Verify the following items to ensure environment setup is complete. Check if Kaf
 
 #### Next Steps
 
-- [Basic Examples](basic/) - Producer/Consumer implementation
-- [Order System](order-system/) - Real-world example
+- [Basic Examples]({{< relref "/docs/kafka/examples/basic" >}}) - Producer/Consumer implementation
+- [Order System]({{< relref "/docs/kafka/examples/order-system" >}}) - Real-world example

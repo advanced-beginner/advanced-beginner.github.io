@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-11"
 title: Basic Example
+description: "Step-by-step Kubernetes basic resource deployment"
 weight: 2
 author:
   name: Advanced Beginner
@@ -426,6 +427,6 @@ After completing the basic example, proceed to:
 
 | Goal | Recommended Document |
 |------|----------|
-| Deploy real app | [Spring Boot Deployment](spring-boot/) |
-| Troubleshooting | [Pod Troubleshooting](../howto/pod-troubleshooting/) |
-| Deepen concepts | [Resource Management](../concepts/resources/) |
+| Deploy real app | [Spring Boot Deployment]({{< relref "/docs/kubernetes/examples/spring-boot" >}}) |
+| Troubleshooting | [Pod Troubleshooting]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) |
+| Deepen concepts | [Resource Management]({{< relref "/docs/kubernetes/concepts/resources" >}}) |

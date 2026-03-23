@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Ecosystem
+description: "Kafka Connect, Streams, and ecosystem components"
 weight: 12
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
@@ -16,7 +17,7 @@ author_url: "http://github.com/kimbenji"
 
 **Target Audience**: Developers and data engineers building data pipelines using the Kafka ecosystem
 
-**Prerequisites**: Understanding of Topic, Producer, Consumer concepts from [Core Components](core-components/), overall data flow from [Message Flow](message-flow/)
+**Prerequisites**: Understanding of Topic, Producer, Consumer concepts from [Core Components]({{< relref "/docs/kafka/concepts/core-components" >}}), overall data flow from [Message Flow]({{< relref "/docs/kafka/concepts/message-flow" >}})
 
 ---
 
@@ -507,6 +508,6 @@ Use Kafka Streams when real-time data processing and transformation is needed. I
 
 This document covered the core components of the Kafka ecosystem. If you understand the role and usage of each component, you can try building them hands-on through practical examples.
 
-- [Practice Examples](../examples/) - Hands-on with Kafka Connect, Schema Registry, Kafka Streams
-- [Security](security/) - Security configuration for ecosystem components
-- [Monitoring](monitoring/) - Monitoring Connect and Streams metrics
+- [Practice Examples]({{< relref "/docs/kafka/examples" >}}) - Hands-on with Kafka Connect, Schema Registry, Kafka Streams
+- [Security]({{< relref "/docs/kafka/concepts/security" >}}) - Security configuration for ecosystem components
+- [Monitoring]({{< relref "/docs/kafka/concepts/monitoring" >}}) - Monitoring Connect and Streams metrics

@@ -1,13 +1,14 @@
 ---
 lastmod: "2026-01-13"
 title: Aggregate Practical Patterns
+description: "Aggregate patterns: mechanics and application strategies"
 weight: 4
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
 
 > **Target Audience**: Developers who have learned Aggregate basics and want to learn practical patterns
-> **Prerequisites**: Understanding core concepts from [Aggregate Deep Dive](aggregate/)
+> **Prerequisites**: Understanding core concepts from [Aggregate Deep Dive]({{< relref "/docs/ddd/concepts/aggregate" >}})
 > **Reading Time**: About 30 minutes
 > **Key Question**: "What patterns should I apply when implementing Aggregates?"
 
@@ -352,5 +353,5 @@ public class Order {
 
 ## Next Steps
 
-- [Domain Events](domain-events/) - Event-based integration
-- [Anti-Patterns](anti-patterns/) - Common mistakes to avoid
+- [Domain Events]({{< relref "/docs/ddd/concepts/domain-events" >}}) - Event-based integration
+- [Anti-Patterns]({{< relref "/docs/ddd/concepts/anti-patterns" >}}) - Common mistakes to avoid

@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Security
+description: "Kafka authentication, authorization, and encryption setup"
 weight: 11
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
@@ -16,7 +17,7 @@ author_url: "http://github.com/kimbenji"
 
 **Target Audience**: Operators and security administrators configuring Kafka cluster security
 
-**Prerequisites**: Understanding of Broker, Producer, Consumer concepts from [Core Components](core-components/), basic security concepts (encryption, authentication, authorization)
+**Prerequisites**: Understanding of Broker, Producer, Consumer concepts from [Core Components]({{< relref "/docs/kafka/concepts/core-components" >}}), basic security concepts (encryption, authentication, authorization)
 
 ---
 
@@ -518,5 +519,5 @@ Applying the same security configuration as production is recommended. Applying 
 
 #### Next Steps
 
-- [Monitoring](monitoring/) - Monitoring security events
-- [Ecosystem](ecosystem/) - Schema Registry security configuration
+- [Monitoring]({{< relref "/docs/kafka/concepts/monitoring" >}}) - Monitoring security events
+- [Ecosystem]({{< relref "/docs/kafka/concepts/ecosystem" >}}) - Schema Registry security configuration

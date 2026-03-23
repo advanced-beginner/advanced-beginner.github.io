@@ -1,5 +1,6 @@
 ---
 title: Product Search System
+description: "Step-by-step product search system with Elasticsearch"
 weight: 3
 lastmod: 2026-01-10
 prerequisites:
@@ -701,6 +702,6 @@ curl "http://localhost:8080/api/products/autocomplete?q=맥북"
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Improve search quality | [Search Relevance](../concepts/search-relevance/) |
-| Performance optimization | [Performance Tuning](../concepts/performance-tuning/) |
-| Data analysis | [Aggregations](../concepts/aggregations/) |
+| Improve search quality | [Search Relevance]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) |
+| Performance optimization | [Performance Tuning]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) |
+| Data analysis | [Aggregations]({{< relref "/docs/elasticsearch/concepts/aggregations" >}}) |

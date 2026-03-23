@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-14"
 title: For Comprehension
+description: "For Comprehension mechanics and monad composition"
 weight: 10
 ---
 
@@ -399,5 +400,5 @@ result  // None
 
 #### Next Steps
 
-- [Implicit/Given](implicits/) — Contextual abstraction
-- [Functional Patterns](functional-patterns/) — Advanced Monad, Functor
+- [Implicit/Given]({{< relref "/docs/scala/concepts/implicits" >}}) — Contextual abstraction
+- [Functional Patterns]({{< relref "/docs/scala/concepts/functional-patterns" >}}) — Advanced Monad, Functor

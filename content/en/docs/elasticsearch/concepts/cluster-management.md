@@ -1,5 +1,6 @@
 ---
 title: Cluster Management
+description: "Cluster management mechanics and operational strategies"
 weight: 7
 lastmod: 2026-01-08
 ---
@@ -401,6 +402,6 @@ PUT /_cluster/settings
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Search optimization | [Performance Tuning](performance-tuning/) |
-| Failure response | [High Availability](high-availability/) |
-| Practical implementation | [Product Search System](../examples/product-search/) |
+| Search optimization | [Performance Tuning]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) |
+| Failure response | [High Availability]({{< relref "/docs/elasticsearch/concepts/high-availability" >}}) |
+| Practical implementation | [Product Search System]({{< relref "/docs/elasticsearch/examples/product-search" >}}) |

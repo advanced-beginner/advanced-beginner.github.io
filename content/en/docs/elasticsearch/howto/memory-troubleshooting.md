@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-16"
 title: Memory Troubleshooting
+description: "How to diagnose and resolve Elasticsearch memory issues"
 weight: 2
 ---
 
@@ -441,6 +442,6 @@ docker run -d \
 
 ## Related Documentation
 
-- [Cluster Management](../concepts/cluster-management/) - Node configuration and monitoring
-- [Performance Tuning](../concepts/performance-tuning/) - Overall performance optimization
-- [Slow Query Optimization](slow-query-optimization/) - Query-level optimization
+- [Cluster Management]({{< relref "/docs/elasticsearch/concepts/cluster-management" >}}) - Node configuration and monitoring
+- [Performance Tuning]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) - Overall performance optimization
+- [Slow Query Optimization]({{< relref "/docs/elasticsearch/howto/slow-query-optimization" >}}) - Query-level optimization

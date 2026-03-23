@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-14"
 title: Generics
+description: "Scala generics and type parameter mechanics explained"
 weight: 9
 ---
 
@@ -393,5 +394,5 @@ find(List("a", "bb", "ccc"))(_.length > 2)  // Some("ccc")
 
 #### Next Steps
 
-- [Variance](variance/) — Variance in generic types
-- [Type Classes](type-classes/) — Ad-hoc polymorphism
+- [Variance]({{< relref "/docs/scala/concepts/variance" >}}) — Variance in generic types
+- [Type Classes]({{< relref "/docs/scala/concepts/type-classes" >}}) — Ad-hoc polymorphism

@@ -11,7 +11,7 @@ Supporting materials for quick reference.
 
 ## Table of Contents
 
-1. [Glossary](glossary/) - Observability terminology definitions
-2. [FAQ](faq/) - Frequently asked questions
-3. [Alerting Actions Guide](alerting-actions/) - Response strategies after PromQL detection
-4. [References](references/) - Official documentation and additional learning resources
+1. [Glossary]({{< relref "/docs/observability/appendix/glossary" >}}) - Observability terminology definitions
+2. [FAQ]({{< relref "/docs/observability/appendix/faq" >}}) - Frequently asked questions
+3. [Alerting Actions Guide]({{< relref "/docs/observability/appendix/alerting-actions" >}}) - Response strategies after PromQL detection
+4. [References]({{< relref "/docs/observability/appendix/references" >}}) - Official documentation and additional learning resources

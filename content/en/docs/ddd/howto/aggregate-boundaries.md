@@ -1,5 +1,6 @@
 ---
 title: Defining Aggregate Boundaries
+description: "How to identify and define Aggregate boundaries"
 weight: 1
 lastmod: "2026-01-10"
 author: "@kimbenji"
@@ -8,7 +9,7 @@ author_url: "http://github.com/kimbenji"
 
 > **Problem It Solves**: Performance issues from making Aggregates too large, or consistency violations from making them too small
 > **Time Required**: ~30 minutes
-> **Prerequisites**: Assumes you have read the [Aggregate Deep Dive](../concepts/aggregate/) document
+> **Prerequisites**: Assumes you have read the [Aggregate Deep Dive]({{< relref "/docs/ddd/concepts/aggregate" >}}) document
 
 {{< callout type="warning" title="Success Criteria" >}}
 After completing this guide, you will be able to:
@@ -325,6 +326,6 @@ public void confirmOrder(OrderId orderId) {
 
 ## Next Steps
 
-- [Aggregate Deep Dive](../concepts/aggregate/) - More detailed design principles and patterns
-- [Domain Events](../concepts/domain-events/) - Communication methods between Aggregates
-- [Order Domain Example](../examples/order-domain/) - Actual implementation examples
+- [Aggregate Deep Dive]({{< relref "/docs/ddd/concepts/aggregate" >}}) - More detailed design principles and patterns
+- [Domain Events]({{< relref "/docs/ddd/concepts/domain-events" >}}) - Communication methods between Aggregates
+- [Order Domain Example]({{< relref "/docs/ddd/examples/order-domain" >}}) - Actual implementation examples

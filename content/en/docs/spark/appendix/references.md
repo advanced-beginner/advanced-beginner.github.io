@@ -1,5 +1,6 @@
 ---
 title: References
+description: "Official Spark documentation and reference materials"
 weight: 3
 lastmod: "2026-01-07"
 ---

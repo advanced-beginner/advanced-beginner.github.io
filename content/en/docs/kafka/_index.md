@@ -39,33 +39,33 @@ Kafka solves these problems while providing **no message loss**, **order guarant
 
 ## What This Guide Covers
 
-### [Quick Start](quick-start/)
+### [Quick Start]({{< relref "/docs/kafka/quick-start" >}})
 Send and receive Kafka messages in 5 minutes. See working code before concepts.
 
-### [Concepts](concepts/)
+### [Concepts]({{< relref "/docs/kafka/concepts" >}})
 Not just "use it this way", but explaining **why it works this way**.
 
 | Topic | What You'll Learn |
 |-------|-------------------|
-| [Core Components](concepts/core-components/) | Roles and relationships of Broker, Topic, Partition, Producer, Consumer |
-| [Message Flow](concepts/message-flow/) | The complete journey of a message from Producer to Consumer |
-| [Consumer Group & Offset](concepts/consumer-group/) | Core of parallel processing and message position management |
-| [Replication & Fault Tolerance](concepts/replication/) | How to survive failures without data loss |
-| [Transactions](concepts/transactions/) | How to guarantee exactly-once processing |
-| [Error Handling](concepts/error-handling/) | Real-world error scenarios and resolution patterns |
-| [Performance Tuning](concepts/producer-tuning/) | Producer/Consumer optimization strategies |
-| [Monitoring](concepts/monitoring/) | Understanding Kafka status in production |
+| [Core Components]({{< relref "/docs/kafka/concepts/core-components" >}}) | Roles and relationships of Broker, Topic, Partition, Producer, Consumer |
+| [Message Flow]({{< relref "/docs/kafka/concepts/message-flow" >}}) | The complete journey of a message from Producer to Consumer |
+| [Consumer Group & Offset]({{< relref "/docs/kafka/concepts/consumer-group" >}}) | Core of parallel processing and message position management |
+| [Replication & Fault Tolerance]({{< relref "/docs/kafka/concepts/replication" >}}) | How to survive failures without data loss |
+| [Transactions]({{< relref "/docs/kafka/concepts/transactions" >}}) | How to guarantee exactly-once processing |
+| [Error Handling]({{< relref "/docs/kafka/concepts/error-handling" >}}) | Real-world error scenarios and resolution patterns |
+| [Performance Tuning]({{< relref "/docs/kafka/concepts/producer-tuning" >}}) | Producer/Consumer optimization strategies |
+| [Monitoring]({{< relref "/docs/kafka/concepts/monitoring" >}}) | Understanding Kafka status in production |
 
-### [Hands-on Examples](examples/)
+### [Hands-on Examples]({{< relref "/docs/kafka/examples" >}})
 Executable example code based on Spring Boot.
 
-- [Environment Setup](examples/setup/) - Docker Kafka cluster configuration
-- [Basic Examples](examples/basic/) - Producer/Consumer implementation
-- [Order System](examples/order-system/) - Real business scenario example
+- [Environment Setup]({{< relref "/docs/kafka/examples/setup" >}}) - Docker Kafka cluster configuration
+- [Basic Examples]({{< relref "/docs/kafka/examples/basic" >}}) - Producer/Consumer implementation
+- [Order System]({{< relref "/docs/kafka/examples/order-system" >}}) - Real business scenario example
 
-### [Appendix](appendix/)
-- [Glossary](appendix/glossary/) - Quick reference for Kafka terms
-- [References](appendix/references/) - Official docs and additional learning resources
+### [Appendix]({{< relref "/docs/kafka/appendix" >}})
+- [Glossary]({{< relref "/docs/kafka/appendix/glossary" >}}) - Quick reference for Kafka terms
+- [References]({{< relref "/docs/kafka/appendix/references" >}}) - Official docs and additional learning resources
 
 ## Prerequisites
 

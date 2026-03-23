@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-14"
 title: Implicit / Given
+description: "Implicit and Given mechanics and usage patterns"
 weight: 11
 ---
 
@@ -641,5 +642,5 @@ extension (n: Int)
 
 #### Next Steps
 
-- [Type Classes](type-classes/) — Advanced type class patterns
-- [Functional Patterns](functional-patterns/) — Functor, Monad
+- [Type Classes]({{< relref "/docs/scala/concepts/type-classes" >}}) — Advanced type class patterns
+- [Functional Patterns]({{< relref "/docs/scala/concepts/functional-patterns" >}}) — Functor, Monad

@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-11"
 title: Spring Boot Deployment
+description: "Step-by-step Spring Boot deployment on Kubernetes"
 weight: 3
 author:
   name: Advanced Beginner
@@ -409,6 +410,6 @@ After completing Spring Boot deployment, proceed to:
 
 | Goal | Recommended Document |
 |------|----------|
-| Troubleshooting | [Pod Troubleshooting](../howto/pod-troubleshooting/) |
-| Auto-scaling | [Scaling](../concepts/scaling/) |
-| Resource optimization | [Resource Optimization](../howto/resource-optimization/) |
+| Troubleshooting | [Pod Troubleshooting]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) |
+| Auto-scaling | [Scaling]({{< relref "/docs/kubernetes/concepts/scaling" >}}) |
+| Resource optimization | [Resource Optimization]({{< relref "/docs/kubernetes/howto/resource-optimization" >}}) |

@@ -63,43 +63,43 @@ Kubernetes adoption should consider team size, service complexity, and operation
 
 This guide is structured step-by-step for backend developers to apply Kubernetes in practice.
 
-**[Quick Start](quick-start/)**
+**[Quick Start]({{< relref "/docs/kubernetes/quick-start" >}})**
 Deploy an application to Kubernetes in 5 minutes. See a working environment before diving into concepts.
 
-**[Concepts](concepts/)**
+**[Concepts]({{< relref "/docs/kubernetes/concepts" >}})**
 
 Explains Kubernetes core principles from a **backend developer's perspective**.
 
 | Topic | What you'll learn |
 |-------|------------------|
-| [Architecture](concepts/architecture/) | Components and roles of Control Plane, Worker Node |
-| [Pod](concepts/pod/) | Kubernetes' minimum deployment unit, container grouping |
-| [Deployment](concepts/deployment/) | Application deployment and update strategies |
-| [Service](concepts/service/) | Network access to Pods and load balancing |
-| [ConfigMap and Secret](concepts/configmap-secret/) | Separating configuration and sensitive information |
-| [Volume and Storage](concepts/storage/) | Persistent data storage and PV/PVC |
-| [Networking](concepts/networking/) | Intra/external cluster communication and Ingress |
-| [Resource Management](concepts/resources/) | CPU/memory requests and limits |
-| [Scaling](concepts/scaling/) | Auto-scaling with HPA, VPA |
-| [Health Checks](concepts/health-checks/) | Liveness, Readiness, Startup Probe |
+| [Architecture]({{< relref "/docs/kubernetes/concepts/architecture" >}}) | Components and roles of Control Plane, Worker Node |
+| [Pod]({{< relref "/docs/kubernetes/concepts/pod" >}}) | Kubernetes' minimum deployment unit, container grouping |
+| [Deployment]({{< relref "/docs/kubernetes/concepts/deployment" >}}) | Application deployment and update strategies |
+| [Service]({{< relref "/docs/kubernetes/concepts/service" >}}) | Network access to Pods and load balancing |
+| [ConfigMap and Secret]({{< relref "/docs/kubernetes/concepts/configmap-secret" >}}) | Separating configuration and sensitive information |
+| [Volume and Storage]({{< relref "/docs/kubernetes/concepts/storage" >}}) | Persistent data storage and PV/PVC |
+| [Networking]({{< relref "/docs/kubernetes/concepts/networking" >}}) | Intra/external cluster communication and Ingress |
+| [Resource Management]({{< relref "/docs/kubernetes/concepts/resources" >}}) | CPU/memory requests and limits |
+| [Scaling]({{< relref "/docs/kubernetes/concepts/scaling" >}}) | Auto-scaling with HPA, VPA |
+| [Health Checks]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) | Liveness, Readiness, Startup Probe |
 
-**[Hands-on Examples](examples/)**
+**[Hands-on Examples]({{< relref "/docs/kubernetes/examples" >}})**
 
 Practice with executable examples:
-- [Environment Setup](examples/setup/) - Local Kubernetes environment setup (Minikube, Kind)
-- [Basic Examples](examples/basic/) - Pod, Deployment, Service practice
-- [Spring Boot Deployment](examples/spring-boot/) - Deploying Spring Boot applications to Kubernetes
+- [Environment Setup]({{< relref "/docs/kubernetes/examples/setup" >}}) - Local Kubernetes environment setup (Minikube, Kind)
+- [Basic Examples]({{< relref "/docs/kubernetes/examples/basic" >}}) - Pod, Deployment, Service practice
+- [Spring Boot Deployment]({{< relref "/docs/kubernetes/examples/spring-boot" >}}) - Deploying Spring Boot applications to Kubernetes
 
-**[How-To Guides](howto/)**
+**[How-To Guides]({{< relref "/docs/kubernetes/howto" >}})**
 
 Step-by-step guides for solving specific problems:
-- [Pod Troubleshooting](howto/pod-troubleshooting/) - Diagnosing when Pods don't start
-- [Resource Optimization](howto/resource-optimization/) - Finding optimal resource settings
+- [Pod Troubleshooting]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) - Diagnosing when Pods don't start
+- [Resource Optimization]({{< relref "/docs/kubernetes/howto/resource-optimization" >}}) - Finding optimal resource settings
 
-**[Appendix](appendix/)**
-- [Glossary](appendix/glossary/) - Quick reference for Kubernetes terms
-- [FAQ](appendix/faq/) - Frequently asked questions
-- [References](appendix/references/) - Official documentation and additional learning resources
+**[Appendix]({{< relref "/docs/kubernetes/appendix" >}})**
+- [Glossary]({{< relref "/docs/kubernetes/appendix/glossary" >}}) - Quick reference for Kubernetes terms
+- [FAQ]({{< relref "/docs/kubernetes/appendix/faq" >}}) - Frequently asked questions
+- [References]({{< relref "/docs/kubernetes/appendix/references" >}}) - Official documentation and additional learning resources
 
 ## Docker vs Kubernetes
 

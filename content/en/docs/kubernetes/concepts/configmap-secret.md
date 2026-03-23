@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-11"
 title: ConfigMap and Secret
+description: "ConfigMap and Secret mechanics and configuration management"
 weight: 5
 author:
   name: Advanced Beginner
@@ -408,6 +409,6 @@ Once you understand ConfigMap and Secret, proceed to the next steps:
 
 | Goal | Recommended Doc |
 |------|----------------|
-| Store persistent data | [Volume and Storage](storage/) |
-| Check application status | [Health Checks](health-checks/) |
-| Actual deployment practice | [Spring Boot Deployment](../examples/spring-boot/) |
+| Store persistent data | [Volume and Storage]({{< relref "/docs/kubernetes/concepts/storage" >}}) |
+| Check application status | [Health Checks]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) |
+| Actual deployment practice | [Spring Boot Deployment]({{< relref "/docs/kubernetes/examples/spring-boot" >}}) |

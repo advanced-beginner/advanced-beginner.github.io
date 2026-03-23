@@ -315,5 +315,5 @@ result.groupBy(spark_partition_id())
 
 ## Next Steps
 
-- [Optimizing Shuffle](shuffle-optimization/) - Minimize shuffle I/O
-- [Performance Tuning](../concepts/tuning/) - Overall performance optimization
+- [Optimizing Shuffle]({{< relref "/docs/spark/howto/shuffle-optimization" >}}) - Minimize shuffle I/O
+- [Performance Tuning]({{< relref "/docs/spark/concepts/tuning" >}}) - Overall performance optimization

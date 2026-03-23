@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-13"
 title: Event Sourcing Practice
+description: "Step-by-step Event Sourcing pattern implementation"
 weight: 4
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
@@ -21,7 +22,7 @@ author_url: "http://github.com/kimbenji"
 | **Target Audience** | Developers looking to implement the Event Sourcing pattern |
 | **DDD** | Understanding of Aggregate and Domain Event concepts |
 | **Java** | Switch Expression, Pattern Matching syntax |
-| **Prerequisites** | [Order Domain](order-domain/), [Application Layer](application-layer/) completed |
+| **Prerequisites** | [Order Domain]({{< relref "/docs/ddd/examples/order-domain" >}}), [Application Layer]({{< relref "/docs/ddd/examples/application-layer" >}}) completed |
 
 Implement the Event Sourcing pattern for an order domain. Store events instead of state, and restore state by replaying events.
 
@@ -786,6 +787,6 @@ class OrderTest {
 
 ## Next Steps
 
-- [CQRS](../concepts/cqrs/) - Command and Query separation
-- [Domain Events](../concepts/domain-events/) - Event publishing and subscribing
+- [CQRS]({{< relref "/docs/ddd/concepts/cqrs" >}}) - Command and Query separation
+- [Domain Events]({{< relref "/docs/ddd/concepts/domain-events" >}}) - Event publishing and subscribing
 - [Kafka Integration]({{< relref "/docs/kafka/examples/microservices" >}}) - External event publishing

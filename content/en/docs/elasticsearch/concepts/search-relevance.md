@@ -1,5 +1,6 @@
 ---
 title: Search Relevance
+description: "Search relevance scoring mechanics and tuning methods"
 weight: 4
 lastmod: 2026-01-08
 prerequisites:
@@ -16,8 +17,8 @@ related_concepts:
 
 {{< callout type="info" title="Prerequisites" >}}
 Before reading this document, understand these concepts first:
-- [Query DSL](query-dsl/) - match, bool query basics
-- [Data Modeling](data-modeling/) - Analyzer operation principles
+- [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) - match, bool query basics
+- [Data Modeling]({{< relref "/docs/elasticsearch/concepts/data-modeling" >}}) - Analyzer operation principles
 {{< /callout >}}
 
 Learn relevance tuning methods including Score, BM25, and Boosting to improve search result quality.
@@ -369,7 +370,7 @@ graph LR
 ### 1. Synonym Handling
 
 Configure custom Analyzer for synonym handling.
-→ [Analyzer basics](data-modeling/#analyzer)
+→ [Analyzer basics]({{< relref "/docs/elasticsearch/concepts/data-modeling#analyzer" >}})
 
 ```json
 PUT /products
@@ -519,6 +520,6 @@ Use `max_boost` in function_score:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Data analysis | [Aggregations](aggregations/) |
-| Practical implementation | [Product Search System](../examples/product-search/) |
-| Performance optimization | [Performance Tuning](performance-tuning/) |
+| Data analysis | [Aggregations]({{< relref "/docs/elasticsearch/concepts/aggregations" >}}) |
+| Practical implementation | [Product Search System]({{< relref "/docs/elasticsearch/examples/product-search" >}}) |
+| Performance optimization | [Performance Tuning]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) |

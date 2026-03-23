@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Order System
+description: "Step-by-step order system implementation with Kafka"
 weight: 3
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
@@ -20,7 +21,7 @@ Implement an event-driven order system closer to real-world applications. In thi
 | Item | Description |
 |------|-------------|
 | **Target Audience** | Backend developers looking to build event-driven systems |
-| **Prerequisites** | Spring Boot fundamentals, Kafka basic concepts, [Basic Examples](basic/) completed |
+| **Prerequisites** | Spring Boot fundamentals, Kafka basic concepts, [Basic Examples]({{< relref "/docs/kafka/examples/basic" >}}) completed |
 | **Required Environment** | Kafka running via Docker, JDK 17+, Gradle |
 | **Estimated Time** | About 45 minutes |
 
@@ -372,4 +373,4 @@ The complete source code for this example is available at the link below. Check 
 
 #### Next Steps
 
-- [Appendix](../appendix/) - Glossary and references
+- [Appendix]({{< relref "/docs/kafka/appendix" >}}) - Glossary and references

@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-14"
 title: Concurrency
+description: "Future, Actor, and Scala concurrency model explained"
 weight: 16
 ---
 
@@ -505,6 +506,6 @@ val result2 = Future.sequence(List(fetchA(), fetchB(), fetchC()))
 
 #### Next Steps
 
-- [Functional Patterns](functional-patterns/) — Advanced Functor, Monad
+- [Functional Patterns]({{< relref "/docs/scala/concepts/functional-patterns" >}}) — Advanced Functor, Monad
 - [Akka Documentation](https://akka.io/)
 - [ZIO Documentation](https://zio.dev/)

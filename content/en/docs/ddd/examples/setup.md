@@ -1,5 +1,6 @@
 ---
 title: Project Setup
+description: "Step-by-step DDD example project environment setup"
 weight: 1
 lastmod: "2026-01-13"
 author: "@kimbenji"
@@ -389,4 +390,4 @@ com.example
 
 ## Next Steps
 
-- [Order Domain](order-domain/) - Aggregate, Entity, Value Object implementation
+- [Order Domain]({{< relref "/docs/ddd/examples/order-domain" >}}) - Aggregate, Entity, Value Object implementation

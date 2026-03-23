@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-14"
 title: Type Classes
+description: "Type class mechanics and polymorphism implementation"
 weight: 12
 ---
 
@@ -394,5 +395,5 @@ None.toJson                // "null"
 
 #### Next Steps
 
-- [Variance](variance/) — Covariance and contravariance in generic types
-- [Advanced Types](type-system-advanced/) — Advanced type features in Scala 3
+- [Variance]({{< relref "/docs/scala/concepts/variance" >}}) — Covariance and contravariance in generic types
+- [Advanced Types]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) — Advanced type features in Scala 3

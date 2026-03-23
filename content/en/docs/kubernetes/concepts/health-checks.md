@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-11"
 title: Health Checks
+description: "Liveness, Readiness, and Startup Probe mechanics"
 weight: 10
 author:
   name: Advanced Beginner
@@ -360,6 +361,6 @@ Once you understand health checks, proceed to the next steps:
 
 | Goal | Recommended Doc |
 |------|----------------|
-| Troubleshoot Pods | [Pod Troubleshooting](../howto/pod-troubleshooting/) |
-| Actual deployment practice | [Spring Boot Deployment](../examples/spring-boot/) |
-| Auto-scaling | [Scaling](scaling/) |
+| Troubleshoot Pods | [Pod Troubleshooting]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) |
+| Actual deployment practice | [Spring Boot Deployment]({{< relref "/docs/kubernetes/examples/spring-boot" >}}) |
+| Auto-scaling | [Scaling]({{< relref "/docs/kubernetes/concepts/scaling" >}}) |

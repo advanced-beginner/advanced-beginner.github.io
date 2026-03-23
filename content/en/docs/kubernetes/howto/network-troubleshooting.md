@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-16"
 title: Network Troubleshooting
+description: "How to diagnose and resolve Kubernetes network issues"
 weight: 3
 author:
   name: Advanced Beginner
@@ -13,7 +14,7 @@ author:
 {{< callout type="info" title="Scope of This Guide" >}}
 **Covers**: Service connectivity issues, DNS issues, Ingress routing issues
 
-**Does not cover**: Pod startup issues (see [Pod Troubleshooting](pod-troubleshooting/)), external network firewall configuration
+**Does not cover**: Pod startup issues (see [Pod Troubleshooting]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}})), external network firewall configuration
 {{< /callout >}}
 
 ## Before You Begin
@@ -47,7 +48,7 @@ my-app-xxx-yyy           1/1     Running   0          5m
 ```
 
 {{< callout type="warning" title="If Pod is Not Running" >}}
-First, resolve Pod issues by referring to [Pod Troubleshooting](pod-troubleshooting/).
+First, resolve Pod issues by referring to [Pod Troubleshooting]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}).
 {{< /callout >}}
 
 ### 3. Prepare Test Pod
@@ -492,7 +493,7 @@ gcloud compute firewall-rules list
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Resolve Pod issues | [Pod Troubleshooting](pod-troubleshooting/) |
+| Resolve Pod issues | [Pod Troubleshooting]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) |
 | Networking concepts | [Networking]({{< relref "/docs/kubernetes/concepts/networking" >}}) |
 | Service concepts | [Service]({{< relref "/docs/kubernetes/concepts/service" >}}) |
-| Log analysis | [Log Collection & Analysis](logging-guide/) |
+| Log analysis | [Log Collection & Analysis]({{< relref "/docs/kubernetes/howto/logging-guide" >}}) |

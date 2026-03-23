@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-11"
 title: Deployment
+description: "Deployment mechanics and rolling update strategies"
 weight: 3
 author:
   name: Advanced Beginner
@@ -430,6 +431,6 @@ Once you understand Deployments, proceed to the next steps:
 
 | Goal | Recommended Doc |
 |------|----------------|
-| Access Pods | [Service](service/) |
-| Auto-scaling | [Scaling](scaling/) |
-| Configure health checks | [Health Checks](health-checks/) |
+| Access Pods | [Service]({{< relref "/docs/kubernetes/concepts/service" >}}) |
+| Auto-scaling | [Scaling]({{< relref "/docs/kubernetes/concepts/scaling" >}}) |
+| Configure health checks | [Health Checks]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) |

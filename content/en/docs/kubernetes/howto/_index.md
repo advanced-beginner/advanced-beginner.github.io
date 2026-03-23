@@ -2,6 +2,7 @@
 bookCollapseSection: true
 lastmod: "2026-01-16"
 title: How-to Guides
+description: "Kubernetes operational troubleshooting guides"
 weight: 4
 author:
   name: Advanced Beginner
@@ -38,19 +39,19 @@ flowchart TD
 
 | Symptom | Recommended Guide |
 |---------|-------------------|
-| Pod won't start, CrashLoopBackOff | [Pod Troubleshooting](pod-troubleshooting/) |
-| Slow response, OOMKilled, CPU throttling | [Resource Optimization](resource-optimization/) |
-| Service/Ingress connection failure, DNS error | [Network Troubleshooting](network-troubleshooting/) |
-| Finding error causes, log analysis | [Log Collection & Analysis](logging-guide/) |
+| Pod won't start, CrashLoopBackOff | [Pod Troubleshooting]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) |
+| Slow response, OOMKilled, CPU throttling | [Resource Optimization]({{< relref "/docs/kubernetes/howto/resource-optimization" >}}) |
+| Service/Ingress connection failure, DNS error | [Network Troubleshooting]({{< relref "/docs/kubernetes/howto/network-troubleshooting" >}}) |
+| Finding error causes, log analysis | [Log Collection & Analysis]({{< relref "/docs/kubernetes/howto/logging-guide" >}}) |
 
 ## Guide List
 
 | Guide | Situation | Estimated Time |
 |-------|-----------|----------------|
-| [Pod Troubleshooting](pod-troubleshooting/) | When Pod fails to start or terminates abnormally | 30 min |
-| [Resource Optimization](resource-optimization/) | When you need to find appropriate CPU/memory settings | 45 min |
-| [Network Troubleshooting](network-troubleshooting/) | When Service or Ingress fails to connect | 30 min |
-| [Log Collection & Analysis](logging-guide/) | When you need to effectively collect and analyze logs | 25 min |
+| [Pod Troubleshooting]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) | When Pod fails to start or terminates abnormally | 30 min |
+| [Resource Optimization]({{< relref "/docs/kubernetes/howto/resource-optimization" >}}) | When you need to find appropriate CPU/memory settings | 45 min |
+| [Network Troubleshooting]({{< relref "/docs/kubernetes/howto/network-troubleshooting" >}}) | When Service or Ingress fails to connect | 30 min |
+| [Log Collection & Analysis]({{< relref "/docs/kubernetes/howto/logging-guide" >}}) | When you need to effectively collect and analyze logs | 25 min |
 
 ## How to Use These Guides
 

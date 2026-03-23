@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Advanced Error Handling
+description: "Kafka error handling patterns and retry strategies"
 weight: 9
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
@@ -16,7 +17,7 @@ author_url: "http://github.com/kimbenji"
 
 **Target Audience**: Developers implementing Consumer error handling strategies
 
-**Prerequisites**: Consumer operation principles from [Consumer Group & Offset](consumer-group/), Spring Kafka basics
+**Prerequisites**: Consumer operation principles from [Consumer Group & Offset]({{< relref "/docs/kafka/concepts/consumer-group" >}}), Spring Kafka basics
 
 ---
 
@@ -386,4 +387,4 @@ By error type, retry transient errors with exponential backoff, move permanent e
 
 #### Next Steps
 
-- [Monitoring Basics](monitoring/) - Kafka monitoring and metrics
+- [Monitoring Basics]({{< relref "/docs/kafka/concepts/monitoring" >}}) - Kafka monitoring and metrics

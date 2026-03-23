@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-14"
 title: Higher-Order Functions
+description: "Higher-order function mechanics and composition patterns"
 weight: 8
 ---
 
@@ -802,5 +803,5 @@ fastFib(100)  // Computed quickly
 
 #### Next Steps
 
-- [For Comprehension](for-comprehensions/) — Elegant expression of monadic operations
-- [Implicit/Given](implicits/) — Contextual abstraction
+- [For Comprehension]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) — Elegant expression of monadic operations
+- [Implicit/Given]({{< relref "/docs/scala/concepts/implicits" >}}) — Contextual abstraction

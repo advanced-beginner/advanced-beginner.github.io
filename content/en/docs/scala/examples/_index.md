@@ -2,6 +2,7 @@
 bookCollapseSection: true
 lastmod: "2026-01-14"
 title: Practical Examples
+description: "Scala hands-on examples learning guide and document index"
 weight: 3
 ---
 
@@ -13,11 +14,11 @@ The following table lists the example projects provided. We recommend progressin
 
 | Example | Description | Difficulty |
 |------|------|--------|
-| [Environment Setup](setup/) | Detailed guide for sbt, IDE setup | Beginner |
-| [Basic Examples](basic/) | Comprehensive examples applying core concepts | Beginner |
-| [Scala 2 vs 3 Comparison](scala2-vs-scala3/) | Code comparison by version | Intermediate |
-| [Spark Integration](spark-integration/) | Using Apache Spark with Scala | Intermediate |
-| [Practical Project](practical-project/) | REST API, data pipelines | Advanced |
+| [Environment Setup]({{< relref "/docs/scala/examples/setup" >}}) | Detailed guide for sbt, IDE setup | Beginner |
+| [Basic Examples]({{< relref "/docs/scala/examples/basic" >}}) | Comprehensive examples applying core concepts | Beginner |
+| [Scala 2 vs 3 Comparison]({{< relref "/docs/scala/examples/scala2-vs-scala3" >}}) | Code comparison by version | Intermediate |
+| [Spark Integration]({{< relref "/docs/scala/examples/spark-integration" >}}) | Using Apache Spark with Scala | Intermediate |
+| [Practical Project]({{< relref "/docs/scala/examples/practical-project" >}}) | REST API, data pipelines | Advanced |
 
 #### Example project structure
 

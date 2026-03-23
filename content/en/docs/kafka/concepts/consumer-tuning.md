@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Consumer Tuning
+description: "Consumer performance tuning parameters and strategies"
 weight: 8
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
@@ -16,7 +17,7 @@ author_url: "http://github.com/kimbenji"
 
 **Target Audience**: Developers optimizing Consumer performance, operators seeking operational stability
 
-**Prerequisites**: Consumer operation principles from [Consumer Group & Offset](consumer-group/)
+**Prerequisites**: Consumer operation principles from [Consumer Group & Offset]({{< relref "/docs/kafka/concepts/consumer-group" >}})
 
 ---
 
@@ -316,4 +317,4 @@ To increase throughput, increase fetch.min.bytes and max.poll.records. To reduce
 
 #### Next Steps
 
-- [Advanced Error Handling](error-handling/) - Error handling patterns and Dead Letter Topic
+- [Advanced Error Handling]({{< relref "/docs/kafka/concepts/error-handling" >}}) - Error handling patterns and Dead Letter Topic

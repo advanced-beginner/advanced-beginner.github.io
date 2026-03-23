@@ -1,5 +1,6 @@
 ---
 title: Performance Tuning
+description: "Spark performance tuning parameters and strategies"
 weight: 10
 lastmod: "2026-01-07"
 ---
@@ -395,14 +396,14 @@ df.explain(true);
 
 ## Next Steps
 
-- [Deployment and Cluster Management](deployment/) - Production environment configuration
-- [FAQ](../appendix/faq/) - Solving common performance issues
+- [Deployment and Cluster Management]({{< relref "/docs/spark/concepts/deployment" >}}) - Production environment configuration
+- [FAQ]({{< relref "/docs/spark/appendix/faq" >}}) - Solving common performance issues
 
 ## Related Documents
 
-- [Architecture](architecture/) - Driver/Executor memory structure
-- [Partitioning and Shuffle](partitioning/) - Detailed shuffle optimization
-- [Caching and Persistence](caching/) - Cache memory management
-- [Spark SQL](spark-sql/) - SQL query optimization
-- [Basic Examples](../examples/basic/) - Optimization application examples
-- [Glossary](../appendix/glossary/) - AQE, Tungsten term definitions
+- [Architecture]({{< relref "/docs/spark/concepts/architecture" >}}) - Driver/Executor memory structure
+- [Partitioning and Shuffle]({{< relref "/docs/spark/concepts/partitioning" >}}) - Detailed shuffle optimization
+- [Caching and Persistence]({{< relref "/docs/spark/concepts/caching" >}}) - Cache memory management
+- [Spark SQL]({{< relref "/docs/spark/concepts/spark-sql" >}}) - SQL query optimization
+- [Basic Examples]({{< relref "/docs/spark/examples/basic" >}}) - Optimization application examples
+- [Glossary]({{< relref "/docs/spark/appendix/glossary" >}}) - AQE, Tungsten term definitions

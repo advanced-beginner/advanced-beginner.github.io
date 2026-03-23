@@ -1,5 +1,6 @@
 ---
 title: Deployment and Cluster Management
+description: "Spark deployment modes and cluster management strategies"
 weight: 11
 lastmod: "2026-01-07"
 ---
@@ -464,5 +465,5 @@ Create clusters through each platform's management console or CLI.
 
 ## Next Steps
 
-- [FAQ](../appendix/faq/) - Common operational issues
-- [References](../appendix/references/) - Additional learning resources
+- [FAQ]({{< relref "/docs/spark/appendix/faq" >}}) - Common operational issues
+- [References]({{< relref "/docs/spark/appendix/references" >}}) - Additional learning resources

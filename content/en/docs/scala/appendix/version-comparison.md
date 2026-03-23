@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-14"
 title: Scala 2 vs Scala 3 Version Comparison
+description: "Scala 2 vs Scala 3 key changes comparison"
 weight: 2
 ---
 

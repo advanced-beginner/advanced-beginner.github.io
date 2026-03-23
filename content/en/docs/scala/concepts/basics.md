@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-14"
 title: Basic Syntax
+description: "Scala basic syntax and type system fundamentals"
 weight: 1
 author: "@advanced-beginner"
 author_url: "https://github.com/advanced-beginner"
@@ -576,5 +577,5 @@ println(s"$name is $age years old.")
 
 Once you've learned basic syntax, proceed to the next topics.
 
-- [Control Structures](control-structures/) — if, for, while, match expressions
-- [Functions and Methods](functions-methods/) — Function definition and advanced features
+- [Control Structures]({{< relref "/docs/scala/concepts/control-structures" >}}) — if, for, while, match expressions
+- [Functions and Methods]({{< relref "/docs/scala/concepts/functions-methods" >}}) — Function definition and advanced features

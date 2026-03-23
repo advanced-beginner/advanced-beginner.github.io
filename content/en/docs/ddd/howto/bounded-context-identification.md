@@ -1,5 +1,6 @@
 ---
 title: Identifying Bounded Contexts
+description: "How to identify and define Bounded Contexts"
 weight: 2
 lastmod: "2026-01-16"
 author: "@kimbenji"

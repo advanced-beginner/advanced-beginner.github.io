@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-14"
 title: Functions and Methods
+description: "Scala functions vs methods: differences and mechanics"
 weight: 3
 ---
 
@@ -770,5 +771,5 @@ println(fibonacci(50))  // 12586269025
 
 #### Next Steps
 
-- [Classes and Objects](classes-objects/) — OOP basics
-- [Higher-Order Functions](higher-order-functions/) — Advanced functional programming
+- [Classes and Objects]({{< relref "/docs/scala/concepts/classes-objects" >}}) — OOP basics
+- [Higher-Order Functions]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) — Advanced functional programming

@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-11"
 title: Networking
+description: "Kubernetes networking model and how it works"
 weight: 7
 author:
   name: Advanced Beginner
@@ -381,6 +382,6 @@ Once you understand networking, proceed to the next steps:
 
 | Goal | Recommended Doc |
 |------|----------------|
-| Resource configuration | [Resource Management](resources/) |
-| Auto-scaling | [Scaling](scaling/) |
-| Actual deployment practice | [Spring Boot Deployment](../examples/spring-boot/) |
+| Resource configuration | [Resource Management]({{< relref "/docs/kubernetes/concepts/resources" >}}) |
+| Auto-scaling | [Scaling]({{< relref "/docs/kubernetes/concepts/scaling" >}}) |
+| Actual deployment practice | [Spring Boot Deployment]({{< relref "/docs/kubernetes/examples/spring-boot" >}}) |

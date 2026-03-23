@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-16"
 title: Pod Troubleshooting
+description: "How to diagnose and resolve Pod failures"
 weight: 1
 author:
   name: Advanced Beginner
@@ -13,7 +14,7 @@ author:
 {{< callout type="info" title="Scope of This Guide" >}}
 **Covers**: Pod startup failures, CrashLoopBackOff, ImagePullBackOff, Readiness failures
 
-**Does not cover**: Network connectivity issues (see [Network Troubleshooting](network-troubleshooting/)), performance degradation due to resource constraints (see [Resource Optimization](resource-optimization/))
+**Does not cover**: Network connectivity issues (see [Network Troubleshooting]({{< relref "/docs/kubernetes/howto/network-troubleshooting" >}})), performance degradation due to resource constraints (see [Resource Optimization]({{< relref "/docs/kubernetes/howto/resource-optimization" >}}))
 {{< /callout >}}
 
 ## Before You Begin
@@ -412,7 +413,7 @@ gcloud container node-pools list --cluster <cluster-name>
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Resolve network issues | [Network Troubleshooting](network-troubleshooting/) |
-| Optimize resources | [Resource Optimization](resource-optimization/) |
+| Resolve network issues | [Network Troubleshooting]({{< relref "/docs/kubernetes/howto/network-troubleshooting" >}}) |
+| Optimize resources | [Resource Optimization]({{< relref "/docs/kubernetes/howto/resource-optimization" >}}) |
 | Configure health checks | [Health Checks]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) |
 | Practice deployment | [Spring Boot Deployment]({{< relref "/docs/kubernetes/examples/spring-boot" >}}) |

@@ -1,5 +1,6 @@
 ---
 title: ETL Pipeline
+description: "Step-by-step ETL pipeline implementation with Spark"
 weight: 6
 lastmod: "2026-01-07"
 ---
@@ -741,6 +742,6 @@ public class EtlScheduler {
 
 ## Related Documents
 
-- [Basic Examples](basic/) - DataFrame basic operations
-- [Monitoring](monitoring/) - Pipeline monitoring
-- [Performance Tuning](../concepts/tuning/) - Large-scale processing optimization
+- [Basic Examples]({{< relref "/docs/spark/examples/basic" >}}) - DataFrame basic operations
+- [Monitoring]({{< relref "/docs/spark/examples/monitoring" >}}) - Pipeline monitoring
+- [Performance Tuning]({{< relref "/docs/spark/concepts/tuning" >}}) - Large-scale processing optimization

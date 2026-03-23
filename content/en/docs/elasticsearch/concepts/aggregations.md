@@ -1,5 +1,6 @@
 ---
 title: Aggregations
+description: "Elasticsearch aggregation mechanics and analytics usage"
 weight: 5
 lastmod: 2026-01-08
 prerequisites:
@@ -16,8 +17,8 @@ related_concepts:
 
 {{< callout type="info" title="Prerequisites" >}}
 Before reading this document, understand these concepts first:
-- [Query DSL](query-dsl/) - Basic query structure
-- [Data Modeling](data-modeling/) - keyword vs text types
+- [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) - Basic query structure
+- [Data Modeling]({{< relref "/docs/elasticsearch/concepts/data-modeling" >}}) - keyword vs text types
 {{< /callout >}}
 
 Learn how to analyze data and extract statistics using Elasticsearch Aggregations.
@@ -657,6 +658,6 @@ Pagination for large data:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Indexing optimization | [Indexing Strategy](indexing/) |
-| Practical implementation | [Product Search System](../examples/product-search/) |
-| Performance optimization | [Performance Tuning](performance-tuning/) |
+| Indexing optimization | [Indexing Strategy]({{< relref "/docs/elasticsearch/concepts/indexing" >}}) |
+| Practical implementation | [Product Search System]({{< relref "/docs/elasticsearch/examples/product-search" >}}) |
+| Performance optimization | [Performance Tuning]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) |

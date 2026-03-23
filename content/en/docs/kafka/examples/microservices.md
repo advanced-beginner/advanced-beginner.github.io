@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Microservices Integration
+description: "Step-by-step Kafka-based microservices integration"
 weight: 4
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
@@ -20,7 +21,7 @@ Implement event-driven communication using Kafka in a microservices environment.
 | Item | Description |
 |------|-------------|
 | **Target Audience** | Developers building event-driven communication in microservices architecture |
-| **Prerequisites** | Kafka basics, Spring Boot, understanding of [Order System](order-system/) example |
+| **Prerequisites** | Kafka basics, Spring Boot, understanding of [Order System]({{< relref "/docs/kafka/examples/order-system" >}}) example |
 | **Required Environment** | Docker, JDK 17+, environment capable of running multiple services |
 | **Estimated Time** | About 60 minutes |
 
@@ -635,5 +636,5 @@ Items to verify when integrating Kafka with microservices. Include correlationId
 
 #### Next Steps
 
-- [Error Handling](../../kafka/concepts/error-handling/) - DLT, retry strategies
-- [Monitoring](../../kafka/concepts/monitoring/) - Metrics collection and alerts
+- [Error Handling]({{< relref "/docs/kafka/concepts/error-handling" >}}) - DLT, retry strategies
+- [Monitoring]({{< relref "/docs/kafka/concepts/monitoring" >}}) - Metrics collection and alerts

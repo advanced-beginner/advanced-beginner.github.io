@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: References
+description: "Official Kafka documentation and reference materials"
 weight: 2
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

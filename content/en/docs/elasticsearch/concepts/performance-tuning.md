@@ -1,5 +1,6 @@
 ---
 title: Performance Tuning
+description: "Performance tuning strategies and optimization methods"
 weight: 8
 lastmod: 2026-01-08
 ---
@@ -375,7 +376,7 @@ GET /products/_explain/1
 ## Indexing Performance
 
 For detailed indexing performance optimization, see the Indexing Strategy document.
-→ [Indexing Strategy Details](indexing/)
+→ [Indexing Strategy Details]({{< relref "/docs/elasticsearch/concepts/indexing" >}})
 
 ### Adjust Refresh Interval
 
@@ -454,6 +455,6 @@ PUT /products/_settings
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Failure response | [High Availability](high-availability/) |
-| Cluster configuration | [Cluster Management](cluster-management/) |
-| Practical implementation | [Product Search System](../examples/product-search/) |
+| Failure response | [High Availability]({{< relref "/docs/elasticsearch/concepts/high-availability" >}}) |
+| Cluster configuration | [Cluster Management]({{< relref "/docs/elasticsearch/concepts/cluster-management" >}}) |
+| Practical implementation | [Product Search System]({{< relref "/docs/elasticsearch/examples/product-search" >}}) |

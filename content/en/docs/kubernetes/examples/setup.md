@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-11"
 title: Environment Setup
+description: "Step-by-step Kubernetes development environment setup"
 weight: 1
 author:
   name: Advanced Beginner
@@ -316,6 +317,6 @@ After completing environment setup, proceed to:
 
 | Goal | Recommended Document |
 |------|----------|
-| Getting started with Kubernetes | [Quick Start](../quick-start/) |
-| Practice basic resources | [Basic Example](basic/) |
-| Deploy real app | [Spring Boot Deployment](spring-boot/) |
+| Getting started with Kubernetes | [Quick Start]({{< relref "/docs/kubernetes/quick-start" >}}) |
+| Practice basic resources | [Basic Example]({{< relref "/docs/kubernetes/examples/basic" >}}) |
+| Deploy real app | [Spring Boot Deployment]({{< relref "/docs/kubernetes/examples/spring-boot" >}}) |

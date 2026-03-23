@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-16"
 title: Future Error Handling
+description: "How to diagnose and safely handle Future errors"
 weight: 2
 ---
 

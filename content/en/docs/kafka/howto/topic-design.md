@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-16"
 title: Topic Design and Partition Planning Guide
+description: "How to design topics and determine partition counts"
 weight: 4
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
@@ -446,4 +447,4 @@ Verify these before creating a topic:
 
 - [Core Components - Topic and Partition]({{< relref "/docs/kafka/concepts/core-components" >}}) - Topic and partition concepts
 - [Replication and Fault Tolerance]({{< relref "/docs/kafka/concepts/replication" >}}) - Replication mechanism details
-- [Message Loss Prevention](message-loss-prevention/) - Reliable messaging configuration
+- [Message Loss Prevention]({{< relref "/docs/kafka/howto/message-loss-prevention" >}}) - Reliable messaging configuration

@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-11"
 title: Glossary
+description: "Key Kubernetes terminology and definitions"
 weight: 1
 author:
   name: Advanced Beginner

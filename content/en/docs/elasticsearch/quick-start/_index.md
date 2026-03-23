@@ -1,6 +1,7 @@
 ---
 bookCollapseSection: true
 title: Quick Start
+description: "Step-by-step Elasticsearch core concepts and practice"
 weight: 1
 lastmod: 2026-01-10
 ---
@@ -68,7 +69,7 @@ docker-compose up -d
 ```
 
 > **Don't have docker-compose.yml?**
-> Check the file contents in [Environment Setup Guide](../examples/setup/).
+> Check the file contents in [Environment Setup Guide]({{< relref "/docs/elasticsearch/examples/setup" >}}).
 
 Verify successful startup:
 
@@ -346,6 +347,6 @@ After completing Quick Start, proceed to the next steps:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Understand Elasticsearch structure | [Core Components](../concepts/core-components/) |
-| Learn schema design | [Data Modeling](../concepts/data-modeling/) |
-| Spring Boot integration | [Environment Setup](../examples/setup/) |
+| Understand Elasticsearch structure | [Core Components]({{< relref "/docs/elasticsearch/concepts/core-components" >}}) |
+| Learn schema design | [Data Modeling]({{< relref "/docs/elasticsearch/concepts/data-modeling" >}}) |
+| Spring Boot integration | [Environment Setup]({{< relref "/docs/elasticsearch/examples/setup" >}}) |

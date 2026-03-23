@@ -97,35 +97,35 @@ Elasticsearch is not the only option:
 
 ## What This Guide Covers
 
-### [Quick Start](quick-start/)
+### [Quick Start]({{< relref "/docs/elasticsearch/quick-start" >}})
 Store and search data in Elasticsearch in 5 minutes. See it working before diving into concepts.
 
-### [Concepts](concepts/)
+### [Concepts]({{< relref "/docs/elasticsearch/concepts" >}})
 Not just "use it this way", but explaining **why it works this way**.
 
 | Topic | What You'll Learn |
 |-------|-------------------|
-| [Core Components](concepts/core-components/) | Roles and relationships of Cluster, Node, Index, Document, Shard |
-| [Data Modeling](concepts/data-modeling/) | Mapping, Field Type, Analyzer design |
-| [Query DSL](concepts/query-dsl/) | Writing search queries with Match, Term, Bool |
-| [Search Relevance](concepts/search-relevance/) | Improving search quality with Score, BM25, Boosting |
-| [Aggregations](concepts/aggregations/) | Data analysis with Bucket and Metric aggregations |
-| [Indexing Strategy](concepts/indexing/) | Bulk indexing, Refresh, ILM settings |
-| [Cluster Management](concepts/cluster-management/) | Node configuration, shard allocation, status monitoring |
-| [Performance Tuning](concepts/performance-tuning/) | Query optimization, caching, JVM settings |
-| [High Availability](concepts/high-availability/) | Replica, Snapshot, failure response |
+| [Core Components]({{< relref "/docs/elasticsearch/concepts/core-components" >}}) | Roles and relationships of Cluster, Node, Index, Document, Shard |
+| [Data Modeling]({{< relref "/docs/elasticsearch/concepts/data-modeling" >}}) | Mapping, Field Type, Analyzer design |
+| [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) | Writing search queries with Match, Term, Bool |
+| [Search Relevance]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) | Improving search quality with Score, BM25, Boosting |
+| [Aggregations]({{< relref "/docs/elasticsearch/concepts/aggregations" >}}) | Data analysis with Bucket and Metric aggregations |
+| [Indexing Strategy]({{< relref "/docs/elasticsearch/concepts/indexing" >}}) | Bulk indexing, Refresh, ILM settings |
+| [Cluster Management]({{< relref "/docs/elasticsearch/concepts/cluster-management" >}}) | Node configuration, shard allocation, status monitoring |
+| [Performance Tuning]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) | Query optimization, caching, JVM settings |
+| [High Availability]({{< relref "/docs/elasticsearch/concepts/high-availability" >}}) | Replica, Snapshot, failure response |
 
-### [Hands-on Examples](examples/)
+### [Hands-on Examples]({{< relref "/docs/elasticsearch/examples" >}})
 Executable example code based on Spring Boot.
 
-- [Environment Setup](examples/setup/) - Docker Elasticsearch + Kibana configuration
-- [Basic Examples](examples/basic/) - Document CRUD and basic search implementation
-- [Product Search System](examples/product-search/) - Korean search, autocomplete, filtering implementation
+- [Environment Setup]({{< relref "/docs/elasticsearch/examples/setup" >}}) - Docker Elasticsearch + Kibana configuration
+- [Basic Examples]({{< relref "/docs/elasticsearch/examples/basic" >}}) - Document CRUD and basic search implementation
+- [Product Search System]({{< relref "/docs/elasticsearch/examples/product-search" >}}) - Korean search, autocomplete, filtering implementation
 
-### [Appendix](appendix/)
-- [Glossary](appendix/glossary/) - Quick reference for Elasticsearch terms
-- [FAQ](appendix/faq/) - Frequently asked questions
-- [References](appendix/references/) - Official docs and additional learning resources
+### [Appendix]({{< relref "/docs/elasticsearch/appendix" >}})
+- [Glossary]({{< relref "/docs/elasticsearch/appendix/glossary" >}}) - Quick reference for Elasticsearch terms
+- [FAQ]({{< relref "/docs/elasticsearch/appendix/faq" >}}) - Frequently asked questions
+- [References]({{< relref "/docs/elasticsearch/appendix/references" >}}) - Official docs and additional learning resources
 
 ## Prerequisites
 

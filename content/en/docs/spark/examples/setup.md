@@ -1,5 +1,6 @@
 ---
 title: Environment Setup
+description: "Step-by-step Spark development environment setup"
 weight: 1
 lastmod: "2026-01-07"
 ---
@@ -448,4 +449,4 @@ java -version  # Check version
 
 After environment setup is complete:
 
-- [Basic Examples](basic/) - Data processing examples
+- [Basic Examples]({{< relref "/docs/spark/examples/basic" >}}) - Data processing examples

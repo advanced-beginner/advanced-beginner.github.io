@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-14"
 title: References
+description: "Official Scala documentation and reference materials"
 weight: 4
 ---
 
@@ -98,7 +99,7 @@ A brief introduction to how concepts learned in this guide are applied in real-w
 
 **Cats: Type Classes in Practice**
 
-Explore how the patterns learned in [Type Classes](../concepts/type-classes/) are actually used in Cats.
+Explore how the patterns learned in [Type Classes]({{< relref "/docs/scala/concepts/type-classes" >}}) are actually used in Cats.
 
 ```scala
 // Type class pattern learned in this guide
@@ -126,11 +127,11 @@ List(Order(100, 2), Order(200, 3)).combineAll
 // Order(300, 5)
 ```
 
-**Related Concepts:** [Type Classes](../concepts/type-classes/), [Implicits/Given](../concepts/implicits/)
+**Related Concepts:** [Type Classes]({{< relref "/docs/scala/concepts/type-classes" >}}), [Implicits/Given]({{< relref "/docs/scala/concepts/implicits" >}})
 
 **ZIO: Functional Effect System**
 
-[Higher-Order Functions](../concepts/higher-order-functions/) and [For Comprehensions](../concepts/for-comprehensions/) shine in ZIO.
+[Higher-Order Functions]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) and [For Comprehensions]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) shine in ZIO.
 
 ```scala
 import zio.*
@@ -150,11 +151,11 @@ yield ()
 // Unsafe.unsafe { implicit u => Runtime.default.unsafe.run(program) }
 ```
 
-**Related Concepts:** [For Comprehensions](../concepts/for-comprehensions/), [Functional Patterns](../concepts/functional-patterns/)
+**Related Concepts:** [For Comprehensions]({{< relref "/docs/scala/concepts/for-comprehensions" >}}), [Functional Patterns]({{< relref "/docs/scala/concepts/functional-patterns" >}})
 
 **http4s: Functional HTTP**
 
-[Pattern Matching](../concepts/pattern-matching/) and [Case Classes](../concepts/case-classes/) utilized in routing.
+[Pattern Matching]({{< relref "/docs/scala/concepts/pattern-matching" >}}) and [Case Classes]({{< relref "/docs/scala/concepts/case-classes" >}}) utilized in routing.
 
 ```scala
 import org.http4s.*
@@ -173,11 +174,11 @@ val routes = HttpRoutes.of[IO] {
 }
 ```
 
-**Related Concepts:** [Pattern Matching](../concepts/pattern-matching/), [Case Classes](../concepts/case-classes/)
+**Related Concepts:** [Pattern Matching]({{< relref "/docs/scala/concepts/pattern-matching" >}}), [Case Classes]({{< relref "/docs/scala/concepts/case-classes" >}})
 
 **Circe: JSON Type Classes**
 
-[Type Classes](../concepts/type-classes/) and [Generics](../concepts/generics/) used for JSON conversion.
+[Type Classes]({{< relref "/docs/scala/concepts/type-classes" >}}) and [Generics]({{< relref "/docs/scala/concepts/generics" >}}) used for JSON conversion.
 
 ```scala
 import io.circe.*
@@ -195,7 +196,7 @@ user.asJson.noSpaces  // {"name":"Alice","age":30}
 // Right(User("Bob", 25))
 ```
 
-**Related Concepts:** [Case Classes](../concepts/case-classes/), [Type Classes](../concepts/type-classes/)
+**Related Concepts:** [Case Classes]({{< relref "/docs/scala/concepts/case-classes" >}}), [Type Classes]({{< relref "/docs/scala/concepts/type-classes" >}})
 
 **Next Learning Directions**
 

@@ -1,6 +1,7 @@
 ---
 bookCollapseSection: true
 title: Quick Start
+description: "Step-by-step guide to DDD core concepts and practice"
 weight: 1
 lastmod: "2026-01-13"
 author: "@kimbenji"
@@ -13,7 +14,7 @@ author_url: "http://github.com/kimbenji"
 > **After Reading**: You'll understand DDD's core concepts and differences from traditional approaches, and be able to decide whether to apply DDD to your project
 
 {{< callout type="info" title="Purpose of This Document" >}}
-This document is **an overview, not a tutorial**. The goal is to quickly survey DDD's core concepts and grasp the big picture. For step-by-step hands-on practice with actual code, refer to the [Hands-on Examples](../examples/) section.
+This document is **an overview, not a tutorial**. The goal is to quickly survey DDD's core concepts and grasp the big picture. For step-by-step hands-on practice with actual code, refer to the [Hands-on Examples]({{< relref "/docs/ddd/examples" >}}) section.
 {{< /callout >}}
 
 {{< callout type="tip" title="TL;DR" >}}
@@ -334,4 +335,4 @@ Cause: Confusion between infrastructure concerns and domain boundaries
 
 ## Next Steps
 
-Now that you understand the core concepts, let's dive deeper. Starting from Quick Start, learn Bounded Context and Context Mapping in [Strategic Design](../concepts/strategic-design/), study Entity, Value Object, and Aggregate patterns in [Tactical Design](../concepts/tactical-design/), then learn Hexagonal and Clean Architecture in [Architecture](../concepts/architecture/) and finish with hands-on examples—this is the recommended learning path.
+Now that you understand the core concepts, let's dive deeper. Starting from Quick Start, learn Bounded Context and Context Mapping in [Strategic Design]({{< relref "/docs/ddd/concepts/strategic-design" >}}), study Entity, Value Object, and Aggregate patterns in [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design" >}}), then learn Hexagonal and Clean Architecture in [Architecture]({{< relref "/docs/ddd/concepts/architecture" >}}) and finish with hands-on examples—this is the recommended learning path.

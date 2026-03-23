@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Frequently Asked Questions
+description: "Frequently asked questions about Apache Kafka"
 weight: 4
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
@@ -325,5 +326,5 @@ For example: with 6 Partitions and concurrency 3, 3 threads each handle 2 Partit
 
 #### Next Steps
 
-- [Glossary](glossary/) - Kafka terminology
-- [References](references/) - Learning resources
+- [Glossary]({{< relref "/docs/kafka/appendix/glossary" >}}) - Kafka terminology
+- [References]({{< relref "/docs/kafka/appendix/references" >}}) - Learning resources

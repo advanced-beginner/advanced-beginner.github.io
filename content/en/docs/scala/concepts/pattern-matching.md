@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-14"
 title: Pattern Matching
+description: "Pattern matching mechanics and matching strategies"
 weight: 6
 ---
 
@@ -345,7 +346,7 @@ val int: Elem[Array[Int]] = 1       // Int
 val str: Elem[List[String]] = "hi"  // String
 ```
 
-> 💡 Match Types are an advanced feature used for type-level programming. For details, see [Advanced Type System](type-system-advanced/).
+> 💡 Match Types are an advanced feature used for type-level programming. For details, see [Advanced Type System]({{< relref "/docs/scala/concepts/type-system-advanced" >}}).
 
 #### Where Pattern Matching is Used
 
@@ -603,5 +604,5 @@ object URL {
 
 #### Next Steps
 
-- [Collections](collections/) — Scala collection library
-- [Higher-Order Functions](higher-order-functions/) — Advanced functional programming
+- [Collections]({{< relref "/docs/scala/concepts/collections" >}}) — Scala collection library
+- [Higher-Order Functions]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) — Advanced functional programming

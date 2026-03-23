@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-14"
 title: FAQ
+description: "Frequently asked questions about Scala"
 weight: 3
 ---
 

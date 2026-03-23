@@ -1,6 +1,7 @@
 ---
 bookCollapseSection: true
 title: Appendix
+description: "DDD appendix resources and reference documents"
 weight: 5
 lastmod: "2026-01-13"
 author: "@kimbenji"
@@ -18,12 +19,12 @@ The appendix is not meant to be read in order, but rather as **reference materia
 
 | Resource | Description | When to Use |
 |----------|-------------|-------------|
-| [Glossary](glossary/) | 30+ DDD core terminology definitions | Quick reference when terms are confusing |
-| [FAQ](faq/) | Common questions and answers from practice | When judgment is needed during adoption/implementation |
-| [References](references/) | Recommended books, articles, presentations | When you want to learn more deeply |
+| [Glossary]({{< relref "/docs/ddd/appendix/glossary" >}}) | 30+ DDD core terminology definitions | Quick reference when terms are confusing |
+| [FAQ]({{< relref "/docs/ddd/appendix/faq" >}}) | Common questions and answers from practice | When judgment is needed during adoption/implementation |
+| [References]({{< relref "/docs/ddd/appendix/references" >}}) | Recommended books, articles, presentations | When you want to learn more deeply |
 
 ## What This Section Does NOT Cover
 
-- Detailed explanations of concepts → See [Concepts](../concepts/)
-- Step-by-step problem solving methods → See [How-to Guides](../howto/)
-- Executable code examples → See [Examples](../examples/)
+- Detailed explanations of concepts → See [Concepts]({{< relref "/docs/ddd/concepts" >}})
+- Step-by-step problem solving methods → See [How-to Guides]({{< relref "/docs/ddd/howto" >}})
+- Executable code examples → See [Examples]({{< relref "/docs/ddd/examples" >}})

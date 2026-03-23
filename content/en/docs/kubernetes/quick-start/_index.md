@@ -2,6 +2,7 @@
 bookCollapseSection: true
 lastmod: "2026-01-11"
 title: Quick Start
+description: "Step-by-step Kubernetes core concepts and practice"
 weight: 1
 author:
   name: Advanced Beginner
@@ -518,7 +519,7 @@ After completing Quick Start, proceed to the next steps:
 
 | Goal | Recommended document |
 |------|---------------------|
-| Understand Kubernetes structure | [Architecture](../concepts/architecture/) |
-| Deep dive into Pod concepts | [Pod](../concepts/pod/) |
-| Practice more complex examples | [Basic Examples](../examples/basic/) |
-| Deploy a real application | [Spring Boot Deployment](../examples/spring-boot/) |
+| Understand Kubernetes structure | [Architecture]({{< relref "/docs/kubernetes/concepts/architecture" >}}) |
+| Deep dive into Pod concepts | [Pod]({{< relref "/docs/kubernetes/concepts/pod" >}}) |
+| Practice more complex examples | [Basic Examples]({{< relref "/docs/kubernetes/examples/basic" >}}) |
+| Deploy a real application | [Spring Boot Deployment]({{< relref "/docs/kubernetes/examples/spring-boot" >}}) |

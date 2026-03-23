@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-14"
 title: Macros and Metaprogramming
+description: "Scala macros and metaprogramming mechanics explained"
 weight: 15
 ---
 
@@ -18,9 +19,9 @@ weight: 15
 Metaprogramming enables code generation and validation at compile time. Scala 3 provides `inline` and a new macro system. By leveraging these features, you can reduce boilerplate code, perform optimizations at compile time, and enable type-safe code generation.
 
 > 📚 **Prerequisites**: This is an advanced topic. You should be familiar with:
-> - [Generics](generics/) - Type parameters
-> - [Type Classes](type-classes/) - Type-level abstraction
-> - [Advanced Types](type-system-advanced/) - Match Types, Type Lambdas
+> - [Generics]({{< relref "/docs/scala/concepts/generics" >}}) - Type parameters
+> - [Type Classes]({{< relref "/docs/scala/concepts/type-classes" >}}) - Type-level abstraction
+> - [Advanced Types]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) - Match Types, Type Lambdas
 >
 > **Difficulty**: ⭐⭐⭐⭐⭐ (Very Advanced)
 
@@ -330,5 +331,5 @@ For more details, refer to the official documentation.
 
 #### Next Steps
 
-- [Concurrency](concurrency/) — Future, Promise
-- [Functional Patterns](functional-patterns/) — Functor, Monad
+- [Concurrency]({{< relref "/docs/scala/concepts/concurrency" >}}) — Future, Promise
+- [Functional Patterns]({{< relref "/docs/scala/concepts/functional-patterns" >}}) — Functor, Monad

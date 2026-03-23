@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-11"
 title: Volume and Storage
+description: "Volume and PersistentVolume mechanics and management"
 weight: 6
 author:
   name: Advanced Beginner
@@ -462,6 +463,6 @@ Once you understand Volumes and storage, proceed to the next steps:
 
 | Goal | Recommended Doc |
 |------|----------------|
-| Network configuration | [Networking](networking/) |
-| Resource management | [Resource Management](resources/) |
-| Actual deployment practice | [Spring Boot Deployment](../examples/spring-boot/) |
+| Network configuration | [Networking]({{< relref "/docs/kubernetes/concepts/networking" >}}) |
+| Resource management | [Resource Management]({{< relref "/docs/kubernetes/concepts/resources" >}}) |
+| Actual deployment practice | [Spring Boot Deployment]({{< relref "/docs/kubernetes/examples/spring-boot" >}}) |

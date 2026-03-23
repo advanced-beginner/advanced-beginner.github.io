@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-16"
 title: Implicit/Given Debugging
+description: "How to diagnose and resolve Implicit/Given errors"
 weight: 1
 ---
 

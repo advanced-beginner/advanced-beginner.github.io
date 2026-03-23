@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-16"
 title: Log Collection & Analysis
+description: "How to collect and analyze Kubernetes logs"
 weight: 4
 author:
   name: Advanced Beginner
@@ -446,6 +447,6 @@ gcloud logging read 'resource.type="k8s_container" AND severity>=ERROR' --limit=
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Resolve Pod issues | [Pod Troubleshooting](pod-troubleshooting/) |
-| Resolve network issues | [Network Troubleshooting](network-troubleshooting/) |
+| Resolve Pod issues | [Pod Troubleshooting]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) |
+| Resolve network issues | [Network Troubleshooting]({{< relref "/docs/kubernetes/howto/network-troubleshooting" >}}) |
 | Configure health checks | [Health Checks]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) |

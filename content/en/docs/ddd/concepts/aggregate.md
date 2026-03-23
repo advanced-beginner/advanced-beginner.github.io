@@ -1,13 +1,14 @@
 ---
 lastmod: "2026-01-13"
 title: Aggregate Deep Dive
+description: "Aggregate mechanics and consistency boundary design"
 weight: 3
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
 
 > **Target Audience**: Developers who understand Aggregate basics and need deep dive into design
-> **Prerequisites**: Entity, Value Object concepts from [Tactical Design](tactical-design/)
+> **Prerequisites**: Entity, Value Object concepts from [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design" >}})
 > **Reading Time**: About 25 minutes
 > **Key Question**: "How do I determine Aggregate boundaries, and what is the appropriate size?"
 
@@ -649,5 +650,5 @@ Should this Entity be included in the Aggregate?
 
 ## Next Steps
 
-- [Aggregate Practical Patterns](aggregate-patterns/) - Implementation patterns, anti-patterns, and decision guides
-- [Domain Events](domain-events/) - Event-based integration
+- [Aggregate Practical Patterns]({{< relref "/docs/ddd/concepts/aggregate-patterns" >}}) - Implementation patterns, anti-patterns, and decision guides
+- [Domain Events]({{< relref "/docs/ddd/concepts/domain-events" >}}) - Event-based integration

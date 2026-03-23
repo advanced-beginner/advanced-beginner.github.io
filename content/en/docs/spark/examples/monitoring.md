@@ -1,5 +1,6 @@
 ---
 title: Monitoring Setup
+description: "Step-by-step Spark monitoring environment setup"
 weight: 4
 lastmod: "2026-01-07"
 ---
@@ -484,6 +485,6 @@ public class WeeklyReportGenerator {
 
 ## Related Documents
 
-- [Performance Tuning](../concepts/tuning/) - Optimization based on monitoring results
-- [FAQ - Debugging Guide](../appendix/faq/#spark-ui-debugging-guide) - Troubleshooting
-- [Architecture](../concepts/architecture/) - Understanding memory model
+- [Performance Tuning]({{< relref "/docs/spark/concepts/tuning" >}}) - Optimization based on monitoring results
+- [FAQ - Debugging Guide]({{< relref "/docs/spark/appendix/faq#spark-ui-debugging-guide" >}}) - Troubleshooting
+- [Architecture]({{< relref "/docs/spark/concepts/architecture" >}}) - Understanding memory model

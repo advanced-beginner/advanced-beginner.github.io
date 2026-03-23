@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-14"
 title: Scala 2 vs Scala 3 Comparison
+description: "Scala 2 vs Scala 3 syntax differences with code examples"
 weight: 3
 ---
 
@@ -504,6 +505,6 @@ However, Scala 3 style is recommended for new projects to fully leverage new fea
 
 Once you understand Scala 2 and 3 differences, proceed with practical project development.
 
-- [Version Comparison](../appendix/version-comparison/) — Full difference summary
+- [Version Comparison]({{< relref "/docs/scala/appendix/version-comparison" >}}) — Full difference summary
 - [Migration Guide](https://docs.scala-lang.org/scala3/guides/migration/compatibility-intro.html)
-- [Practical Projects](practical-project/) — Real service implementation
+- [Practical Projects]({{< relref "/docs/scala/examples/practical-project" >}}) — Real service implementation

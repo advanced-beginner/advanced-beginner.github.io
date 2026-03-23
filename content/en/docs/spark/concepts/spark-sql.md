@@ -1,5 +1,6 @@
 ---
 title: Spark SQL
+description: "Spark SQL mechanics and Catalyst optimizer explained"
 weight: 4
 lastmod: "2026-01-07"
 ---
@@ -804,5 +805,5 @@ public class ComplexAnalysis {
 
 ## Next Steps
 
-- [Transformations and Actions](transformations-actions/) - Understanding lazy evaluation
-- [Partitioning and Shuffle](partitioning/) - Distributed processing optimization
+- [Transformations and Actions]({{< relref "/docs/spark/concepts/transformations-actions" >}}) - Understanding lazy evaluation
+- [Partitioning and Shuffle]({{< relref "/docs/spark/concepts/partitioning" >}}) - Distributed processing optimization

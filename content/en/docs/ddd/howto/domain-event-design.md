@@ -1,5 +1,6 @@
 ---
 title: Designing Domain Events
+description: "How to design and implement domain events"
 weight: 4
 lastmod: "2026-01-16"
 author: "@kimbenji"

@@ -1,5 +1,6 @@
 ---
 title: References
+description: "Official DDD documentation and reference materials"
 weight: 2
 lastmod: "2026-01-13"
 author: "@kimbenji"

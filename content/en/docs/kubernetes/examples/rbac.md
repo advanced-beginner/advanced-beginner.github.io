@@ -300,6 +300,6 @@ After completing the RBAC configuration lab, proceed to the following:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| State management | [StatefulSet Lab](../examples/statefulset/) |
-| Periodic tasks | [CronJob Lab](../examples/cronjob/) |
-| Network policies | [Networking](../concepts/networking/) |
+| State management | [StatefulSet Lab]({{< relref "/docs/kubernetes/examples/statefulset" >}}) |
+| Periodic tasks | [CronJob Lab]({{< relref "/docs/kubernetes/examples/cronjob" >}}) |
+| Network policies | [Networking]({{< relref "/docs/kubernetes/concepts/networking" >}}) |

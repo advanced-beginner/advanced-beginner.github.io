@@ -1,5 +1,6 @@
 ---
 title: Core Components
+description: "Index, Shard, Node, and other core components explained"
 weight: 1
 lastmod: 2026-01-10
 ---
@@ -524,6 +525,6 @@ flowchart TB
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Schema design | [Data Modeling](data-modeling/) |
-| Write search queries | [Query DSL](query-dsl/) |
-| Hands-on practice | [Basic Examples](../examples/basic/) |
+| Schema design | [Data Modeling]({{< relref "/docs/elasticsearch/concepts/data-modeling" >}}) |
+| Write search queries | [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) |
+| Hands-on practice | [Basic Examples]({{< relref "/docs/elasticsearch/examples/basic" >}}) |

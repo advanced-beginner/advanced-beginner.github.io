@@ -1,5 +1,6 @@
 ---
 title: Anti-Patterns and Pitfalls
+description: "Common DDD anti-patterns and how to avoid them"
 weight: 8
 lastmod: "2026-01-13"
 author: "@kimbenji"
@@ -7,7 +8,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **Target Audience**: Developers who are applying or considering adopting DDD
-> **Prerequisites**: Basic concepts from [Quick Start](../quick-start/) and [Tactical Design](tactical-design/)
+> **Prerequisites**: Basic concepts from [Quick Start]({{< relref "/docs/ddd/quick-start" >}}) and [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design" >}})
 > **Reading Time**: About 20 minutes
 > **Key Question**: "What are the common mistakes when applying DDD, and how can they be avoided?"
 
@@ -566,5 +567,5 @@ The stage of verifying quality at the team level. Did you use business terminolo
 
 #### Next Steps
 
-- [Examples](../examples/) - Implementing with correct patterns
-- [Glossary](../appendix/glossary/) - DDD terminology reference
+- [Examples]({{< relref "/docs/ddd/examples" >}}) - Implementing with correct patterns
+- [Glossary]({{< relref "/docs/ddd/appendix/glossary" >}}) - DDD terminology reference

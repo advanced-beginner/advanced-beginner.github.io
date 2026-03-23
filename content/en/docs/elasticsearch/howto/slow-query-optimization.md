@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-16"
 title: Slow Query Optimization
+description: "How to diagnose and optimize slow queries"
 weight: 1
 ---
 
@@ -385,6 +386,6 @@ curl -X GET "localhost:9200/_cat/indices?v"
 
 ## Related Documentation
 
-- [Query DSL](../concepts/query-dsl/) - Query type characteristics
-- [Performance Tuning](../concepts/performance-tuning/) - Cluster-level tuning
-- [Memory Troubleshooting](memory-troubleshooting/) - Handling OOM issues
+- [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) - Query type characteristics
+- [Performance Tuning]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) - Cluster-level tuning
+- [Memory Troubleshooting]({{< relref "/docs/elasticsearch/howto/memory-troubleshooting" >}}) - Handling OOM issues

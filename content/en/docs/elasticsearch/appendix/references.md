@@ -1,5 +1,6 @@
 ---
 title: References
+description: "Official Elasticsearch documentation and references"
 weight: 3
 lastmod: 2026-01-10
 ---

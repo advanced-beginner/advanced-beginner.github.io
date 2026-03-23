@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Consumer Advanced Operations
+description: "Advanced Consumer operations and failure handling"
 weight: 4
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
@@ -16,13 +17,13 @@ author_url: "http://github.com/kimbenji"
 
 **Target audience**: Developers and operators running Kafka Consumers in production
 
-**Prerequisites**: Basic concepts from [Consumer Group & Offset](consumer-group/), ISR and Leader concepts from [Replication](replication/)
+**Prerequisites**: Basic concepts from [Consumer Group & Offset]({{< relref "/docs/kafka/concepts/consumer-group" >}}), ISR and Leader concepts from [Replication]({{< relref "/docs/kafka/concepts/replication" >}})
 
 ---
 
 This document covers rebalancing optimization, Consumer Lag monitoring, and troubleshooting. It is based on Kafka 3.6.x, with code examples verified in Spring Boot 3.2.x, Spring Kafka 3.1.x, Micrometer 1.12.x, and Java 17 environments.
 
-Before reading this document, you should understand basic concepts from [Consumer Group & Offset](consumer-group/) and ISR and Leader concepts from [Replication](replication/).
+Before reading this document, you should understand basic concepts from [Consumer Group & Offset]({{< relref "/docs/kafka/concepts/consumer-group" >}}) and ISR and Leader concepts from [Replication]({{< relref "/docs/kafka/concepts/replication" >}}).
 
 #### Core Consumer Group Settings
 
@@ -358,5 +359,5 @@ Apply parallel processing (concurrency setting), batch processing (batch listene
 
 #### Next Steps
 
-- [Producer Tuning](producer-tuning/) - Producer performance optimization
-- [Transactions](transactions/) - Exactly-Once processing
+- [Producer Tuning]({{< relref "/docs/kafka/concepts/producer-tuning" >}}) - Producer performance optimization
+- [Transactions]({{< relref "/docs/kafka/concepts/transactions" >}}) - Exactly-Once processing

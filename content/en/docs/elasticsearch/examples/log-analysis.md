@@ -1,5 +1,6 @@
 ---
 title: Log Analysis System
+description: "Step-by-step log analysis system with Elasticsearch"
 weight: 4
 lastmod: 2026-01-10
 prerequisites:
@@ -706,6 +707,6 @@ if (log.isDebugEnabled()) {
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Advanced aggregations | [Aggregations](../concepts/aggregations/) |
-| Performance optimization | [Performance Tuning](../concepts/performance-tuning/) |
-| Cluster management | [High Availability](../concepts/high-availability/) |
+| Advanced aggregations | [Aggregations]({{< relref "/docs/elasticsearch/concepts/aggregations" >}}) |
+| Performance optimization | [Performance Tuning]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) |
+| Cluster management | [High Availability]({{< relref "/docs/elasticsearch/concepts/high-availability" >}}) |

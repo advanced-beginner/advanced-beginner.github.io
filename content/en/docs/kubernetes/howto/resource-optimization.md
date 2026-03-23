@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-16"
 title: Resource Optimization
+description: "How to analyze and optimize Kubernetes resources"
 weight: 2
 author:
   name: Advanced Beginner
@@ -13,7 +14,7 @@ author:
 {{< callout type="info" title="Scope of This Guide" >}}
 **Covers**: Measuring resource usage, determining appropriate requests/limits values, resolving throttling/OOM
 
-**Does not cover**: Auto-scaling (see [Scaling]({{< relref "/docs/kubernetes/concepts/scaling" >}})), Pod startup issues (see [Pod Troubleshooting](pod-troubleshooting/))
+**Does not cover**: Auto-scaling (see [Scaling]({{< relref "/docs/kubernetes/concepts/scaling" >}})), Pod startup issues (see [Pod Troubleshooting]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}))
 {{< /callout >}}
 
 ## Before You Begin
@@ -419,5 +420,5 @@ env:
 | Goal | Recommended Document |
 |------|---------------------|
 | Configure auto-scaling | [Scaling]({{< relref "/docs/kubernetes/concepts/scaling" >}}) |
-| Resolve Pod issues | [Pod Troubleshooting](pod-troubleshooting/) |
+| Resolve Pod issues | [Pod Troubleshooting]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) |
 | Resource management concepts | [Resource Management]({{< relref "/docs/kubernetes/concepts/resources" >}}) |

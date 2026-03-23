@@ -2,6 +2,7 @@
 bookCollapseSection: true
 lastmod: "2026-01-14"
 title: Quick Start
+description: "Step-by-step guide to Scala core concepts and practice"
 weight: 1
 ---
 
@@ -325,9 +326,9 @@ You've successfully completed the Scala Quick Start! Now you can:
 
 Now that environment setup is complete, it's time to learn Scala's core concepts one by one.
 
-1. **[Basic Syntax](../concepts/basics/)** — Learn variables, types, and type inference in detail
-2. **[Control Structures](../concepts/control-structures/)** — if, for, match expressions
-3. **[Functions and Methods](../concepts/functions-methods/)** — Function definition and advanced features
+1. **[Basic Syntax]({{< relref "/docs/scala/concepts/basics" >}})** — Learn variables, types, and type inference in detail
+2. **[Control Structures]({{< relref "/docs/scala/concepts/control-structures" >}})** — if, for, match expressions
+3. **[Functions and Methods]({{< relref "/docs/scala/concepts/functions-methods" >}})** — Function definition and advanced features
 
 ## Troubleshooting
 

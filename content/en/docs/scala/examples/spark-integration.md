@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-14"
 title: Spark Integration
+description: "Step-by-step Spark application development with Scala"
 weight: 4
 ---
 
@@ -708,4 +709,4 @@ After learning basic Spark usage, continue learning with these topics.
 
 - [Spark Guide]({{< relref "/docs/spark" >}}) - Deep dive into Spark
 - [Kafka Integration]({{< relref "/docs/kafka" >}}) - Structured Streaming + Kafka
-- [Functional Patterns](../concepts/functional-patterns/) - Functional programming in Spark
+- [Functional Patterns]({{< relref "/docs/scala/concepts/functional-patterns" >}}) - Functional programming in Spark

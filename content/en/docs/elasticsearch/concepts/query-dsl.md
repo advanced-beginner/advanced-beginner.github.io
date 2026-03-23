@@ -1,5 +1,6 @@
 ---
 title: Query DSL
+description: "Query DSL mechanics and query writing techniques"
 weight: 3
 lastmod: 2026-01-10
 ---
@@ -13,7 +14,7 @@ lastmod: 2026-01-10
 {{< /callout >}}
 
 **Target Audience**: Developers who understand Elasticsearch basics
-**Prerequisites**: [Core Components](core-components/), JSON basics
+**Prerequisites**: [Core Components]({{< relref "/docs/elasticsearch/concepts/core-components" >}}), JSON basics
 
 Learn how to write various search queries using Elasticsearch's Query DSL (Domain Specific Language).
 
@@ -638,6 +639,6 @@ Response:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Improve search quality | [Search Relevance](search-relevance/) |
-| Data analysis | [Aggregations](aggregations/) |
-| Hands-on practice | [Basic Examples](../examples/basic/) |
+| Improve search quality | [Search Relevance]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) |
+| Data analysis | [Aggregations]({{< relref "/docs/elasticsearch/concepts/aggregations" >}}) |
+| Hands-on practice | [Basic Examples]({{< relref "/docs/elasticsearch/examples/basic" >}}) |

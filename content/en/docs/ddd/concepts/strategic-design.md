@@ -1,5 +1,6 @@
 ---
 title: Strategic Design
+description: "Bounded Context, Context Map, and strategic design"
 weight: 1
 lastmod: "2026-01-13"
 author: "@kimbenji"
@@ -7,7 +8,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **Target Audience**: Architects and senior developers who want to understand the big picture of DDD
-> **Prerequisites**: Have read [Quick Start](../quick-start/) or understand basic DDD concepts
+> **Prerequisites**: Have read [Quick Start]({{< relref "/docs/ddd/quick-start" >}}) or understand basic DDD concepts
 > **Estimated Time**: About 30 minutes
 > **Key Question**: "How should we divide the system, and how should each part collaborate?"
 
@@ -847,5 +848,5 @@ Such results become a design blueprint that can be directly converted to code.
 
 #### Next Steps
 
-- [Tactical Design](tactical-design/) - Entity, Value Object, Aggregate patterns
-- [Architecture](architecture/) - Hexagonal, Clean Architecture
+- [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design" >}}) - Entity, Value Object, Aggregate patterns
+- [Architecture]({{< relref "/docs/ddd/concepts/architecture" >}}) - Hexagonal, Clean Architecture
