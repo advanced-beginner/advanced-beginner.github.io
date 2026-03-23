@@ -366,3 +366,4 @@ Kafka 모니터링의 핵심 메트릭은 세 가지입니다. Consumer Lag은 �
 #### 다음 단계
 
 - [실습 예제](../examples/) - 배운 개념을 직접 적용해보기
+- [Prometheus 아키텍처]({{< relref "/docs/observability/concepts/prometheus-architecture" >}}) - Kafka 메트릭 수집에 사용되는 Prometheus의 아키텍처와 동작 원리

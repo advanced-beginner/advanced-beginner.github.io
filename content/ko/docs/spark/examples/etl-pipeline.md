@@ -801,3 +801,4 @@ public class EtlScheduler {
 - [기본 예제](basic/) - DataFrame 기본 연산
 - [모니터링](monitoring/) - 파이프라인 모니터링
 - [성능 튜닝](../concepts/tuning/) - 대용량 처리 최적화
+- [Elasticsearch 데이터 모델링]({{< relref "/docs/elasticsearch/concepts/data-modeling" >}}) - ETL 결과를 Elasticsearch에 적재할 때의 인덱스 설계 원칙

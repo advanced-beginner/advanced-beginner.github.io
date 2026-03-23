@@ -493,6 +493,7 @@ validateAll(results)  // Left(List("에러1", "에러2"))
 | [케이스 클래스]({{< relref "/docs/scala/concepts/case-classes" >}}) | 불변 데이터 구조 정의 |
 | [동시성]({{< relref "/docs/scala/concepts/concurrency" >}}) | Future, IO 등 비동기 효과 타입 |
 | [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | 고차 타입 (F[_]) 이해 |
+| [도메인 모델 패턴]({{< relref "/docs/ddd/concepts/domain-model-patterns" >}}) | 함수형 패턴을 활용한 도메인 모델 설계 |
 
 #### 다음 단계
 

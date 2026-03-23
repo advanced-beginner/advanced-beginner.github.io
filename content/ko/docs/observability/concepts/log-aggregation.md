@@ -492,6 +492,10 @@ try { ... } catch (Exception e) {
 
 ---
 
+## 관련 문서
+
+- [Elasticsearch 데이터 모델링]({{< relref "/docs/elasticsearch/concepts/data-modeling" >}}) - ELK 스택에서 로그 인덱스를 설계할 때 참고할 데이터 모델링 원칙
+
 ## 다음 단계
 
 | 추천 순서 | 문서 | 배우는 것 |

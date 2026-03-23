@@ -304,6 +304,10 @@ Pod가 삭제되어도 PVC는 유지됩니다. 새로 생성된 Pod는 동일한
 
 ---
 
+## 관련 문서
+
+- [Kafka 핵심 구성요소 - Broker 클러스터]({{< relref "/docs/kafka/concepts/core-components" >}}) - StatefulSet으로 배포되는 대표적 사례인 Kafka Broker의 구조와 동작 원리
+
 ## 다음 단계
 
 StatefulSet을 이해했다면 다음 단계로 진행하세요:

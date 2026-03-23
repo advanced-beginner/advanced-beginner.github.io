@@ -620,6 +620,10 @@ public void handleSecond(OrderConfirmedEvent event) {
 }
 ```
 
+## 관련 문서
+
+- [Kafka 토픽 설계 가이드]({{< relref "/docs/kafka/howto/topic-design" >}}) - 도메인 이벤트를 Kafka 토픽으로 발행할 때의 설계 원칙
+
 ## 다음 단계
 
 - [이벤트 기반 아키텍처]({{< relref "/docs/ddd/concepts/architecture/event-driven" >}}) - 이벤트 소싱, CQRS

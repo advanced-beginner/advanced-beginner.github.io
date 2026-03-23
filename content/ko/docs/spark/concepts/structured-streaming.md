@@ -574,6 +574,10 @@ public class RealTimeSalesAggregation {
 }
 ```
 
+## 관련 문서
+
+- [Kafka 핵심 구성요소]({{< relref "/docs/kafka/concepts/core-components" >}}) - Structured Streaming의 주요 소스/싱크인 Kafka의 Topic, Partition, Consumer Group 개념
+
 ## 다음 단계
 
 - [MLlib](mllib/) - Spark로 머신러닝

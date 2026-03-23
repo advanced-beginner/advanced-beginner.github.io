@@ -402,6 +402,10 @@ public void handleOrder(OrderEvent event) {
 
 Idempotent Producer는 단일 Partition에서 중복을 방지하고 Kafka 3.0부터 기본 활성화입니다. Transactions는 여러 Partition에 원자적으로 쓰며 transaction-id-prefix가 필요합니다. read_committed는 커밋된 메시지만 읽어 트랜잭션 격리를 제공합니다.
 
+#### 관련 문서
+
+- [Aggregate의 트랜잭션 경계]({{< relref "/docs/ddd/concepts/aggregate" >}}) - DDD 관점에서 트랜잭션 경계를 Aggregate 단위로 설계하는 방법
+
 #### 다음 단계
 
 - [Producer 튜닝](producer-tuning/) - 성능 최적화 설정

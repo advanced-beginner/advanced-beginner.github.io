@@ -427,3 +427,4 @@ kafka-console-consumer.sh --bootstrap-server localhost:9092 \
 - [메시지 흐름](message-flow/) - Producer에서 Consumer까지 메시지가 전달되는 전체 과정을 단계별로 추적합니다
 - [Consumer Group과 Offset](consumer-group/) - 병렬 처리와 Offset 관리의 세부 사항을 학습합니다
 - [실습 예제](../examples/basic/) - 이론을 바탕으로 직접 코드를 작성하고 동작을 확인합니다
+- [도메인 이벤트 기반 아키텍처]({{< relref "/docs/ddd/concepts/architecture/event-driven" >}}) - Kafka의 구성요소가 DDD 이벤트 아키텍처에서 어떻게 활용되는지 살펴봅니다
