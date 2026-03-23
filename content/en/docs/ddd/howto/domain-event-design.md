@@ -621,6 +621,4 @@ public void handleSecond(OrderConfirmedEvent event) {
 
 ## Next Steps
 
-- [Domain Events]({{< relref "/docs/ddd/concepts/domain-events" >}}) - Event Sourcing, CQRS
-- [CQRS]({{< relref "/docs/ddd/concepts/cqrs" >}}) - Command Query Separation
 - [Event Sourcing Example]({{< relref "/docs/ddd/examples/event-sourcing" >}}) - Practical implementation example
