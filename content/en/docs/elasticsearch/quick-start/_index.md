@@ -69,7 +69,7 @@ docker-compose up -d
 ```
 
 > **Don't have docker-compose.yml?**
-> Check the file contents in [Environment Setup Guide]({{< relref "/docs/elasticsearch/examples/setup" >}}).
+> Check the file contents in [Environment Setup Guide](../examples/setup/).
 
 Verify successful startup:
 

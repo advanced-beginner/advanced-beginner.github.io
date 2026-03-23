@@ -14,7 +14,7 @@ author:
 {{< callout type="info" title="이 가이드의 범위" >}}
 **다루는 내용**: Service 연결 문제, DNS 문제, Ingress 라우팅 문제
 
-**다루지 않는 내용**: Pod 시작 문제([Pod 트러블슈팅]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) 참조), 외부 네트워크 방화벽 설정
+**다루지 않는 내용**: Pod 시작 문제([Pod 트러블슈팅](pod-troubleshooting/) 참조), 외부 네트워크 방화벽 설정
 {{< /callout >}}
 
 ## 시작하기 전에
@@ -48,7 +48,7 @@ my-app-xxx-yyy           1/1     Running   0          5m
 ```
 
 {{< callout type="warning" title="Pod가 Running이 아닌 경우" >}}
-먼저 [Pod 트러블슈팅]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}})을 참조하여 Pod 문제를 해결하세요.
+먼저 [Pod 트러블슈팅](pod-troubleshooting/)을 참조하여 Pod 문제를 해결하세요.
 {{< /callout >}}
 
 ### 3. 테스트 Pod 준비

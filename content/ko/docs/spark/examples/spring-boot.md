@@ -735,6 +735,6 @@ val result = df
 
 ## 관련 문서
 
-- [환경 설정]({{< relref "/docs/spark/examples/setup" >}}) - 기본 프로젝트 구성
-- [모니터링]({{< relref "/docs/spark/examples/monitoring" >}}) - 운영 모니터링 설정
-- [성능 튜닝]({{< relref "/docs/spark/concepts/tuning" >}}) - 최적화 전략
+- [환경 설정](setup/) - 기본 프로젝트 구성
+- [모니터링](monitoring/) - 운영 모니터링 설정
+- [성능 튜닝](../concepts/tuning/) - 최적화 전략

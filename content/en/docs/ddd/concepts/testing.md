@@ -8,7 +8,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **Target Audience**: Developers establishing testing strategies for DDD-based projects
-> **Prerequisites**: [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design" >}}) building blocks, basic JUnit/Mockito usage
+> **Prerequisites**: [Tactical Design](tactical-design/) building blocks, basic JUnit/Mockito usage
 > **Time Required**: About 25 minutes
 > **Key Question**: "How should tests be organized in DDD architecture?"
 
@@ -729,4 +729,4 @@ Entities and Value Objects are pure domain logic so can be tested quickly withou
 
 #### Next Steps
 
-- [Anti-Patterns]({{< relref "/docs/ddd/concepts/anti-patterns" >}}) - Common testing mistakes
+- [Anti-Patterns](anti-patterns/) - Common testing mistakes

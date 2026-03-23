@@ -67,10 +67,10 @@ When considering Spark adoption, evaluate based on data scale and processing com
 
 This guide is structured step-by-step so Java/Spring developers can apply Spark in practice.
 
-**[Quick Start]({{< relref "/docs/spark/quick-start" >}})**
+**[Quick Start](quick-start/)**
 Run a Spark application in 5 minutes. See working code before concepts.
 
-**[Concepts]({{< relref "/docs/spark/concepts" >}})**
+**[Concepts](concepts/)**
 
 Explains Spark's core principles from a **Java/Spring developer's perspective**. The table below summarizes topics covered in each concept document:
 
@@ -90,26 +90,26 @@ Explains Spark's core principles from a **Java/Spring developer's perspective**.
 
 Learning these concepts in order will give you a systematic understanding of Spark's internals.
 
-**[Hands-on Examples]({{< relref "/docs/spark/examples" >}})**
+**[Hands-on Examples](examples/)**
 
 Executable example code based on Spring Boot. Learn through practice from environment setup to basic data processing:
 
-- [Environment Setup]({{< relref "/docs/spark/examples/setup" >}}) - Java/Spring Boot and Spark integration setup
-- [Basic Examples]({{< relref "/docs/spark/examples/basic" >}}) - Fundamentals of data loading, transformation, aggregation
+- [Environment Setup](examples/setup/) - Java/Spring Boot and Spark integration setup
+- [Basic Examples](examples/basic/) - Fundamentals of data loading, transformation, aggregation
 
-**[How-To Guides]({{< relref "/docs/spark/howto" >}})**
+**[How-To Guides](howto/)**
 
 Step-by-step guides for solving specific problems:
-- [Troubleshooting OutOfMemoryError]({{< relref "/docs/spark/howto/oom-troubleshooting" >}}) - Diagnosing and resolving memory errors
-- [Resolving Data Skew]({{< relref "/docs/spark/howto/data-skew" >}}) - Fixing partition imbalance
-- [Optimizing Shuffle]({{< relref "/docs/spark/howto/shuffle-optimization" >}}) - Minimizing network I/O
+- [Troubleshooting OutOfMemoryError](howto/oom-troubleshooting/) - Diagnosing and resolving memory errors
+- [Resolving Data Skew](howto/data-skew/) - Fixing partition imbalance
+- [Optimizing Shuffle](howto/shuffle-optimization/) - Minimizing network I/O
 
-**[Appendix]({{< relref "/docs/spark/appendix" >}})**
+**[Appendix](appendix/)**
 
 Reference materials for use during learning:
-- [Glossary]({{< relref "/docs/spark/appendix/glossary" >}}) - Quick reference for Spark terms
-- [FAQ]({{< relref "/docs/spark/appendix/faq" >}}) - Frequently asked questions
-- [References]({{< relref "/docs/spark/appendix/references" >}}) - Official docs and additional learning resources
+- [Glossary](appendix/glossary/) - Quick reference for Spark terms
+- [FAQ](appendix/faq/) - Frequently asked questions
+- [References](appendix/references/) - Official docs and additional learning resources
 
 ## Spark vs Hadoop MapReduce
 

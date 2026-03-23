@@ -32,46 +32,46 @@ Observability를 **병원의 환자 모니터링 시스템**에 비유하면 이
 
 Observability를 처음 접한다면 이 순서로 학습하세요.
 
-1. [관측성 3요소]({{< relref "/docs/observability/concepts/three-pillars" >}}) - Metrics, Logs, Traces의 역할과 상호 연결
-2. [메트릭 기초]({{< relref "/docs/observability/concepts/metrics-fundamentals" >}}) - Counter, Gauge, Histogram, Summary 타입 이해
-3. [Prometheus 아키텍처]({{< relref "/docs/observability/concepts/prometheus-architecture" >}}) - Pull 모델, 시계열 DB, 서비스 디스커버리
+1. [관측성 3요소](three-pillars/) - Metrics, Logs, Traces의 역할과 상호 연결
+2. [메트릭 기초](metrics-fundamentals/) - Counter, Gauge, Histogram, Summary 타입 이해
+3. [Prometheus 아키텍처](prometheus-architecture/) - Pull 모델, 시계열 DB, 서비스 디스커버리
 
 ### PromQL 심화
 
 Prometheus 쿼리 언어를 깊이 있게 다룹니다.
 
-4. [PromQL 개요]({{< relref "/docs/observability/concepts/promql" >}}) - PromQL 학습 로드맵
-5. [기본 문법]({{< relref "/docs/observability/concepts/promql/syntax-basics" >}}) - 셀렉터, 레이블 매칭, 시간 범위
-6. [집계 연산자]({{< relref "/docs/observability/concepts/promql/aggregation-operators" >}}) - sum, avg, count, topk, by/without
-7. [rate와 increase]({{< relref "/docs/observability/concepts/promql/rate-and-increase" >}}) - Counter 메트릭 처리의 핵심
-8. [histogram_quantile]({{< relref "/docs/observability/concepts/promql/histogram-quantile" >}}) - 백분위(P50/P95/P99) 계산
-9. [Recording Rules]({{< relref "/docs/observability/concepts/promql/recording-rules" >}}) - 복잡한 쿼리 사전 계산
-10. [Alerting Rules]({{< relref "/docs/observability/concepts/promql/alerting-rules" >}}) - 알림 규칙 작성법
+4. [PromQL 개요](promql/) - PromQL 학습 로드맵
+5. [기본 문법](promql/syntax-basics/) - 셀렉터, 레이블 매칭, 시간 범위
+6. [집계 연산자](promql/aggregation-operators/) - sum, avg, count, topk, by/without
+7. [rate와 increase](promql/rate-and-increase/) - Counter 메트릭 처리의 핵심
+8. [histogram_quantile](promql/histogram-quantile/) - 백분위(P50/P95/P99) 계산
+9. [Recording Rules](promql/recording-rules/) - 복잡한 쿼리 사전 계산
+10. [Alerting Rules](promql/alerting-rules/) - 알림 규칙 작성법
 
 ### SRE 황금 신호
 
 Google SRE가 제시한 4대 핵심 지표를 서비스 유형별로 적용합니다.
 
-11. [황금 신호 개요]({{< relref "/docs/observability/concepts/golden-signals" >}}) - 4대 신호 소개와 USE/RED 메서드
-12. [Latency]({{< relref "/docs/observability/concepts/golden-signals/latency" >}}) - 지연시간 측정 전략
-13. [Traffic]({{< relref "/docs/observability/concepts/golden-signals/traffic" >}}) - 트래픽/처리량 모니터링
-14. [Errors]({{< relref "/docs/observability/concepts/golden-signals/errors" >}}) - 에러율 정의와 분류
-15. [Saturation]({{< relref "/docs/observability/concepts/golden-signals/saturation" >}}) - 포화도(리소스 사용률)
-16. [서비스 유형별 적용]({{< relref "/docs/observability/concepts/golden-signals/by-service-type" >}}) - 웹 API, Kafka, DB별 가이드
+11. [황금 신호 개요](golden-signals/) - 4대 신호 소개와 USE/RED 메서드
+12. [Latency](golden-signals/latency/) - 지연시간 측정 전략
+13. [Traffic](golden-signals/traffic/) - 트래픽/처리량 모니터링
+14. [Errors](golden-signals/errors/) - 에러율 정의와 분류
+15. [Saturation](golden-signals/saturation/) - 포화도(리소스 사용률)
+16. [서비스 유형별 적용](golden-signals/by-service-type/) - 웹 API, Kafka, DB별 가이드
 
 ### 로깅과 트레이싱
 
 메트릭을 넘어 로그와 분산 추적을 통합합니다.
 
-17. [로그 수집]({{< relref "/docs/observability/concepts/log-aggregation" >}}) - Loki vs ELK 비교, 로그 설계 패턴
-18. [분산 추적]({{< relref "/docs/observability/concepts/distributed-tracing" >}}) - Span, Trace ID, Context Propagation
-19. [OpenTelemetry]({{< relref "/docs/observability/concepts/opentelemetry" >}}) - 관측성 표준과 통합 방법
+17. [로그 수집](log-aggregation/) - Loki vs ELK 비교, 로그 설계 패턴
+18. [분산 추적](distributed-tracing/) - Span, Trace ID, Context Propagation
+19. [OpenTelemetry](opentelemetry/) - 관측성 표준과 통합 방법
 
 ### 운영
 
 효과적인 운영을 위한 실무 지식입니다.
 
-20. [대시보드 설계]({{< relref "/docs/observability/concepts/dashboard-design" >}}) - 효과적인 시각화 원칙
+20. [대시보드 설계](dashboard-design/) - 효과적인 시각화 원칙
 
 ## 문서 구성 패턴
 

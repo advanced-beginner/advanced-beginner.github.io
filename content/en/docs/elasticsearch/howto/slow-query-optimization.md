@@ -12,7 +12,7 @@ Learn how to diagnose and improve slow search response times.
 {{< callout type="info" title="Scope of This Guide" >}}
 **Covered**: Query-level performance optimization, Profile API analysis, cache utilization
 
-**Not Covered**: Cluster-level tuning (adding nodes, hardware upgrades) - see [Performance Tuning]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}})
+**Not Covered**: Cluster-level tuning (adding nodes, hardware upgrades) - see [Performance Tuning](../concepts/performance-tuning/)
 {{< /callout >}}
 
 {{< callout type="tip" title="TL;DR" >}}
@@ -386,6 +386,6 @@ curl -X GET "localhost:9200/_cat/indices?v"
 
 ## Related Documentation
 
-- [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) - Query type characteristics
-- [Performance Tuning]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) - Cluster-level tuning
-- [Memory Troubleshooting]({{< relref "/docs/elasticsearch/howto/memory-troubleshooting" >}}) - Handling OOM issues
+- [Query DSL](../concepts/query-dsl/) - Query type characteristics
+- [Performance Tuning](../concepts/performance-tuning/) - Cluster-level tuning
+- [Memory Troubleshooting](memory-troubleshooting/) - Handling OOM issues

@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **Target Audience**: SREs and infrastructure engineers managing system capacity
-> **Prerequisites**: [Prometheus Architecture]({{< relref "/docs/observability/concepts/prometheus-architecture" >}})
+> **Prerequisites**: [Prometheus Architecture](../prometheus-architecture/)
 > **After reading this**: You'll be able to detect resource bottlenecks early and establish capacity planning
 
 ## TL;DR

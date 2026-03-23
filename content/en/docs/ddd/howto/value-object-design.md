@@ -9,7 +9,7 @@ author_url: "http://github.com/kimbenji"
 
 > **Problem Solved**: High complexity from making everything an Entity, or low type safety due to Primitive Obsession
 > **Time Required**: ~20 min
-> **Prerequisites**: Assumes you have read the [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design" >}}) document
+> **Prerequisites**: Assumes you have read the [Tactical Design](../concepts/tactical-design/) document
 
 {{< callout type="warning" title="Success Criteria" >}}
 After completing this guide, you will be able to:
@@ -632,6 +632,6 @@ public class AddressEntity {
 
 ## Next Steps
 
-- [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design" >}}) - Entity and Aggregate details
-- [Defining Aggregate Boundaries]({{< relref "/docs/ddd/howto/aggregate-boundaries" >}}) - Deciding Value Object inclusion
-- [Testing Strategy]({{< relref "/docs/ddd/concepts/testing" >}}) - How to test Value Objects
+- [Tactical Design](../concepts/tactical-design/) - Entity and Aggregate details
+- [Defining Aggregate Boundaries](aggregate-boundaries/) - Deciding Value Object inclusion
+- [Testing Strategy](../concepts/testing/) - How to test Value Objects

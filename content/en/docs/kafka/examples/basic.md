@@ -636,6 +636,6 @@ spring:
 
 ## Next Steps
 
-- [Order System]({{< relref "/docs/kafka/examples/order-system" >}}) - Real-world example applying domain-driven design
-- [Consumer Advanced Settings]({{< relref "/docs/kafka/concepts/consumer-tuning" >}}) - Performance optimization methods
-- [Error Handling Patterns]({{< relref "/docs/kafka/concepts/error-handling" >}}) - Production error handling strategies
+- [Order System](order-system/) - Real-world example applying domain-driven design
+- [Consumer Advanced Settings](../concepts/consumer-tuning/) - Performance optimization methods
+- [Error Handling Patterns](../concepts/error-handling/) - Production error handling strategies

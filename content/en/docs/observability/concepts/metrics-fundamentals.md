@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **Target Audience**: Developers designing Prometheus metrics for the first time
-> **Prerequisites**: [Three Pillars of Observability]({{< relref "/docs/observability/concepts/three-pillars" >}})
+> **Prerequisites**: [Three Pillars of Observability](three-pillars/)
 > **After Reading**: You'll be able to select the appropriate metric type and implement it correctly
 
 ## TL;DR

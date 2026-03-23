@@ -22,18 +22,18 @@ PromQL (Prometheus Query Language) is a query language for querying and analyzin
 
 ### Fundamentals (1 hour)
 
-1. [Basic Syntax]({{< relref "/docs/observability/concepts/promql/syntax-basics" >}}) - Selectors, label matching, time ranges
-2. [Aggregation Operators]({{< relref "/docs/observability/concepts/promql/aggregation-operators" >}}) - sum, avg, count, topk, by/without
+1. [Basic Syntax](syntax-basics/) - Selectors, label matching, time ranges
+2. [Aggregation Operators](aggregation-operators/) - sum, avg, count, topk, by/without
 
 ### Practical Application (2 hours)
 
-3. [rate and increase]({{< relref "/docs/observability/concepts/promql/rate-and-increase" >}}) - Core concepts for Counter metrics
-4. [histogram_quantile]({{< relref "/docs/observability/concepts/promql/histogram-quantile" >}}) - Calculate P50/P95/P99 percentiles
+3. [rate and increase](rate-and-increase/) - Core concepts for Counter metrics
+4. [histogram_quantile](histogram-quantile/) - Calculate P50/P95/P99 percentiles
 
 ### Advanced (1 hour)
 
-5. [Recording Rules]({{< relref "/docs/observability/concepts/promql/recording-rules" >}}) - Pre-compute complex queries
-6. [Alerting Rules]({{< relref "/docs/observability/concepts/promql/alerting-rules" >}}) - Write alert rules
+5. [Recording Rules](recording-rules/) - Pre-compute complex queries
+6. [Alerting Rules](alerting-rules/) - Write alert rules
 
 ## Quick Reference
 

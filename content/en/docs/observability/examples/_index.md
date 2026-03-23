@@ -11,10 +11,10 @@ Implement observability directly with executable code and configurations.
 
 ## Learning Path
 
-1. [Environment Setup]({{< relref "/docs/observability/examples/setup" >}}) - Configure Prometheus + Grafana + Loki + Tempo with Docker Compose
-2. [Spring Boot Metrics]({{< relref "/docs/observability/examples/spring-boot-metrics" >}}) - Configure Actuator + Micrometer
-3. [Kafka Monitoring]({{< relref "/docs/observability/examples/kafka-monitoring" >}}) - Build Kafka cluster observability
-4. [Full-Stack Observability]({{< relref "/docs/observability/examples/full-stack" >}}) - Integrate Metrics + Logs + Traces
+1. [Environment Setup](setup/) - Configure Prometheus + Grafana + Loki + Tempo with Docker Compose
+2. [Spring Boot Metrics](spring-boot-metrics/) - Configure Actuator + Micrometer
+3. [Kafka Monitoring](kafka-monitoring/) - Build Kafka cluster observability
+4. [Full-Stack Observability](full-stack/) - Integrate Metrics + Logs + Traces
 
 ## Example Project Structure
 

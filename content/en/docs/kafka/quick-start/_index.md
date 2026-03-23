@@ -114,7 +114,7 @@ docker-compose up -d
 {{< /tab >}}
 {{< /tabs >}}
 
-If the `docker-compose.yml` file doesn't exist, check the [Environment Setup Guide]({{< relref "/docs/kafka/examples/setup" >}}) for the content and save it as `docker/docker-compose.yml`.
+If the `docker-compose.yml` file doesn't exist, check the [Environment Setup Guide](../examples/setup/) for the content and save it as `docker/docker-compose.yml`.
 
 ### Verify Execution
 

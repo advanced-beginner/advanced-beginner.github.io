@@ -97,10 +97,10 @@ Elasticsearch is not the only option:
 
 ## What This Guide Covers
 
-### [Quick Start]({{< relref "/docs/elasticsearch/quick-start" >}})
+### [Quick Start](quick-start/)
 Store and search data in Elasticsearch in 5 minutes. See it working before diving into concepts.
 
-### [Concepts]({{< relref "/docs/elasticsearch/concepts" >}})
+### [Concepts](concepts/)
 Not just "use it this way", but explaining **why it works this way**.
 
 | Topic | What You'll Learn |
@@ -115,17 +115,17 @@ Not just "use it this way", but explaining **why it works this way**.
 | [Performance Tuning](concepts/performance-tuning/) | Query optimization, caching, JVM settings |
 | [High Availability](concepts/high-availability/) | Replica, Snapshot, failure response |
 
-### [Hands-on Examples]({{< relref "/docs/elasticsearch/examples" >}})
+### [Hands-on Examples](examples/)
 Executable example code based on Spring Boot.
 
-- [Environment Setup]({{< relref "/docs/elasticsearch/examples/setup" >}}) - Docker Elasticsearch + Kibana configuration
-- [Basic Examples]({{< relref "/docs/elasticsearch/examples/basic" >}}) - Document CRUD and basic search implementation
-- [Product Search System]({{< relref "/docs/elasticsearch/examples/product-search" >}}) - Korean search, autocomplete, filtering implementation
+- [Environment Setup](examples/setup/) - Docker Elasticsearch + Kibana configuration
+- [Basic Examples](examples/basic/) - Document CRUD and basic search implementation
+- [Product Search System](examples/product-search/) - Korean search, autocomplete, filtering implementation
 
-### [Appendix]({{< relref "/docs/elasticsearch/appendix" >}})
-- [Glossary]({{< relref "/docs/elasticsearch/appendix/glossary" >}}) - Quick reference for Elasticsearch terms
-- [FAQ]({{< relref "/docs/elasticsearch/appendix/faq" >}}) - Frequently asked questions
-- [References]({{< relref "/docs/elasticsearch/appendix/references" >}}) - Official docs and additional learning resources
+### [Appendix](appendix/)
+- [Glossary](appendix/glossary/) - Quick reference for Elasticsearch terms
+- [FAQ](appendix/faq/) - Frequently asked questions
+- [References](appendix/references/) - Official docs and additional learning resources
 
 ## Prerequisites
 

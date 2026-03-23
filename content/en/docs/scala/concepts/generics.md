@@ -394,5 +394,5 @@ find(List("a", "bb", "ccc"))(_.length > 2)  // Some("ccc")
 
 #### Next Steps
 
-- [Variance]({{< relref "/docs/scala/concepts/variance" >}}) — Variance in generic types
-- [Type Classes]({{< relref "/docs/scala/concepts/type-classes" >}}) — Ad-hoc polymorphism
+- [Variance](variance/) — Variance in generic types
+- [Type Classes](type-classes/) — Ad-hoc polymorphism

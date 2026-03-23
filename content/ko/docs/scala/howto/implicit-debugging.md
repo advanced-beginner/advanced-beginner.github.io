@@ -44,8 +44,8 @@ Ambiguous given instances
 
 ### 이 가이드가 다루지 않는 것
 
-- **암시적 변환(implicit conversion)의 원리**: [Implicit/Given 개념 문서]({{< relref "/docs/scala/concepts/implicits" >}})를 참조하세요
-- **타입 클래스 설계 방법**: [타입 클래스 개념 문서]({{< relref "/docs/scala/concepts/type-classes" >}})를 참조하세요
+- **암시적 변환(implicit conversion)의 원리**: [Implicit/Given 개념 문서](../concepts/implicits/)를 참조하세요
+- **타입 클래스 설계 방법**: [타입 클래스 개념 문서](../concepts/type-classes/)를 참조하세요
 - **Cats/ZIO 등 라이브러리의 암시적 값**: 해당 라이브러리 문서를 참조하세요
 
 ---
@@ -321,6 +321,6 @@ people.sorted  // 어떤 것을 사용해야 할지 모름
 
 ## 관련 문서
 
-- [Implicit/Given 개념]({{< relref "/docs/scala/concepts/implicits" >}}) - 암시적 변환의 원리
-- [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) - 타입 클래스 패턴
-- [Future 에러 처리]({{< relref "/docs/scala/howto/future-error-handling" >}}) - ExecutionContext 문제 해결
+- [Implicit/Given 개념](../concepts/implicits/) - 암시적 변환의 원리
+- [타입 클래스](../concepts/type-classes/) - 타입 클래스 패턴
+- [Future 에러 처리](future-error-handling/) - ExecutionContext 문제 해결

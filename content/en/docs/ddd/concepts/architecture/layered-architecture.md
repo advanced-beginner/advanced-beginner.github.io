@@ -910,6 +910,6 @@ Abstract all external service integrations as interfaces. Going through this pro
 
 #### Next Steps
 
-- [헥사고날 아키텍처]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}}) - Port와 Adapter로 외부 격리
-- [클린 아키텍처]({{< relref "/docs/ddd/concepts/architecture/clean-architecture" >}}) - 엄격한 의존성 규칙
-- [어니언 아키텍처]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}}) - 도메인 모델 중심
+- [헥사고날 아키텍처](hexagonal-architecture/) - Port와 Adapter로 외부 격리
+- [클린 아키텍처](clean-architecture/) - 엄격한 의존성 규칙
+- [어니언 아키텍처](onion-architecture/) - 도메인 모델 중심

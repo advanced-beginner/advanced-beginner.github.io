@@ -57,10 +57,10 @@ Scala는 Java와 100% 호환되면서도 더 안전하고 표현력 있는 코�
 
 이 가이드는 기초부터 고급까지 단계별로 Scala를 학습할 수 있도록 구성되어 있습니다.
 
-**[Quick Start]({{< relref "/docs/scala/quick-start" >}})**
+**[Quick Start](quick-start/)**
 5분 만에 Scala를 설치하고 첫 번째 프로그램을 실행합니다.
 
-**[개념 이해]({{< relref "/docs/scala/concepts" >}})**
+**[개념 이해](concepts/)**
 
 Scala의 핵심 개념을 기초, 중급, 고급으로 분류하여 단계별로 학습합니다.
 
@@ -96,27 +96,27 @@ Scala의 핵심 개념을 기초, 중급, 고급으로 분류하여 단계별로
 | [동시성](concepts/concurrency/) | Future, Promise, ExecutionContext |
 | [함수형 패턴](concepts/functional-patterns/) | Functor, Monad, 참조 투명성 |
 
-**[실습 예제]({{< relref "/docs/scala/examples" >}})**
+**[실습 예제](examples/)**
 
 sbt 기반의 실행 가능한 예제 프로젝트입니다. 배운 개념을 실제 코드로 확인하세요.
 
-- [환경 설정]({{< relref "/docs/scala/examples/setup" >}}) - sbt, IDE 설정
-- [기본 예제]({{< relref "/docs/scala/examples/basic" >}}) - 핵심 개념 활용 예제
-- [Scala 2 vs 3 비교]({{< relref "/docs/scala/examples/scala2-vs-scala3" >}}) - 버전별 코드 비교
+- [환경 설정](examples/setup/) - sbt, IDE 설정
+- [기본 예제](examples/basic/) - 핵심 개념 활용 예제
+- [Scala 2 vs 3 비교](examples/scala2-vs-scala3/) - 버전별 코드 비교
 
-**[How-To Guide]({{< relref "/docs/scala/howto" >}})**
+**[How-To Guide](howto/)**
 
 특정 문제를 해결하기 위한 단계별 가이드입니다:
-- [Implicit/Given 디버깅]({{< relref "/docs/scala/howto/implicit-debugging" >}}) - 암시적 값을 찾지 못할 때 진단
-- [Future 에러 처리]({{< relref "/docs/scala/howto/future-error-handling" >}}) - 비동기 코드에서 예외 처리
+- [Implicit/Given 디버깅](howto/implicit-debugging/) - 암시적 값을 찾지 못할 때 진단
+- [Future 에러 처리](howto/future-error-handling/) - 비동기 코드에서 예외 처리
 
-**[부록]({{< relref "/docs/scala/appendix" >}})**
+**[부록](appendix/)**
 
 용어 사전, 버전 비교, FAQ 등 학습에 도움이 되는 참고 자료입니다.
-- [용어 사전]({{< relref "/docs/scala/appendix/glossary" >}}) - Scala 용어 빠른 참조
-- [버전 비교]({{< relref "/docs/scala/appendix/version-comparison" >}}) - Scala 2 vs 3 차이점 요약
-- [FAQ]({{< relref "/docs/scala/appendix/faq" >}}) - 자주 묻는 질문
-- [참고 자료]({{< relref "/docs/scala/appendix/references" >}}) - 공식 문서 및 추가 학습 자료
+- [용어 사전](appendix/glossary/) - Scala 용어 빠른 참조
+- [버전 비교](appendix/version-comparison/) - Scala 2 vs 3 차이점 요약
+- [FAQ](appendix/faq/) - 자주 묻는 질문
+- [참고 자료](appendix/references/) - 공식 문서 및 추가 학습 자료
 
 #### 바로 시작하기
 

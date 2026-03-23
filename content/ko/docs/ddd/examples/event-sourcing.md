@@ -787,6 +787,6 @@ class OrderTest {
 
 ## 다음 단계
 
-- [CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}}) - 명령과 조회 분리
-- [도메인 이벤트]({{< relref "/docs/ddd/concepts/architecture/event-driven" >}}) - 이벤트 발행과 구독
-- [Kafka 연동]({{< relref "/docs/kafka/examples/microservices" >}}) - 이벤트 외부 발행
+- [CQRS](../concepts/architecture/cqrs/) - 명령과 조회 분리
+- [도메인 이벤트](../concepts/architecture/event-driven/) - 이벤트 발행과 구독
+- [Kafka 연동](../../kafka/examples/microservices/) - 이벤트 외부 발행

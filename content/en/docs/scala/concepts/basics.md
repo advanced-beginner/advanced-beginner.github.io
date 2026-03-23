@@ -577,5 +577,5 @@ println(s"$name is $age years old.")
 
 Once you've learned basic syntax, proceed to the next topics.
 
-- [Control Structures]({{< relref "/docs/scala/concepts/control-structures" >}}) — if, for, while, match expressions
-- [Functions and Methods]({{< relref "/docs/scala/concepts/functions-methods" >}}) — Function definition and advanced features
+- [Control Structures](control-structures/) — if, for, while, match expressions
+- [Functions and Methods](functions-methods/) — Function definition and advanced features

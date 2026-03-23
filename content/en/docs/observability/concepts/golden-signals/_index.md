@@ -123,14 +123,14 @@ Besides Golden Signals, these are frequently used methodologies.
 
 ### By Signal
 
-1. [Latency]({{< relref "/docs/observability/concepts/golden-signals/latency" >}}) - Latency measurement strategy (P50, P95, P99)
-2. [Traffic]({{< relref "/docs/observability/concepts/golden-signals/traffic" >}}) - Traffic/throughput monitoring
-3. [Errors]({{< relref "/docs/observability/concepts/golden-signals/errors" >}}) - Error rate definition and classification
-4. [Saturation]({{< relref "/docs/observability/concepts/golden-signals/saturation" >}}) - Saturation (resource usage)
+1. [Latency](latency/) - Latency measurement strategy (P50, P95, P99)
+2. [Traffic](traffic/) - Traffic/throughput monitoring
+3. [Errors](errors/) - Error rate definition and classification
+4. [Saturation](saturation/) - Saturation (resource usage)
 
 ### By Service Type
 
-5. [By Service Type]({{< relref "/docs/observability/concepts/golden-signals/by-service-type" >}}) - Guides for Web API, Kafka, DB
+5. [By Service Type](by-service-type/) - Guides for Web API, Kafka, DB
 
 ---
 

@@ -511,5 +511,5 @@ Long-term benefits:
 
 ## Next Steps
 
-- [Glossary]({{< relref "/docs/ddd/appendix/glossary" >}}) - DDD terminology
-- [References]({{< relref "/docs/ddd/appendix/references" >}}) - Learning resources
+- [Glossary](glossary/) - DDD terminology
+- [References](references/) - Learning resources

@@ -472,5 +472,5 @@ SparkSession spark = SparkSession.builder()
 
 After understanding the architecture, learn about data abstractions:
 
-- [RDD Basics]({{< relref "/docs/spark/concepts/rdd" >}}) - Spark's basic data abstraction
-- [DataFrame and Dataset]({{< relref "/docs/spark/concepts/dataframe-dataset" >}}) - Modern high-level APIs
+- [RDD Basics](rdd/) - Spark's basic data abstraction
+- [DataFrame and Dataset](dataframe-dataset/) - Modern high-level APIs

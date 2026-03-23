@@ -14,7 +14,7 @@ author:
 {{< callout type="info" title="Scope of This Guide" >}}
 **Covers**: Pod startup failures, CrashLoopBackOff, ImagePullBackOff, Readiness failures
 
-**Does not cover**: Network connectivity issues (see [Network Troubleshooting]({{< relref "/docs/kubernetes/howto/network-troubleshooting" >}})), performance degradation due to resource constraints (see [Resource Optimization]({{< relref "/docs/kubernetes/howto/resource-optimization" >}}))
+**Does not cover**: Network connectivity issues (see [Network Troubleshooting](network-troubleshooting/)), performance degradation due to resource constraints (see [Resource Optimization](resource-optimization/))
 {{< /callout >}}
 
 ## Before You Begin

@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **Target Audience**: Developers and SREs improving service reliability
-> **Prerequisites**: [Aggregation Operators]({{< relref "/docs/observability/concepts/promql/aggregation-operators" >}})
+> **Prerequisites**: [Aggregation Operators](../promql/aggregation-operators/)
 > **After reading this**: You'll be able to systematically classify errors and set up SLO-based monitoring
 
 ## TL;DR

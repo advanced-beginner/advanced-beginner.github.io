@@ -25,7 +25,7 @@ Recording Rules를 **병원의 정기 통계 보고서**에 비유하면 이해�
 ---
 
 > **대상 독자**: 대시보드 성능 문제를 겪는 운영자, SRE
-> **선수 지식**: [histogram_quantile]({{< relref "/docs/observability/concepts/promql/histogram-quantile" >}})
+> **선수 지식**: [histogram_quantile](histogram-quantile/)
 > **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: Recording Rules로 쿼리 성능을 개선하고 복잡한 메트릭을 관리할 수 있습니다
 

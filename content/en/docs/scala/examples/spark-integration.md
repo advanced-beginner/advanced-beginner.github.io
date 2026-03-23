@@ -707,6 +707,6 @@ For local development, use sbt run or spark-shell. For cluster deployment, use s
 
 After learning basic Spark usage, continue learning with these topics.
 
-- [Spark Guide]({{< relref "/docs/spark" >}}) - Deep dive into Spark
-- [Kafka Integration]({{< relref "/docs/kafka" >}}) - Structured Streaming + Kafka
-- [Functional Patterns]({{< relref "/docs/scala/concepts/functional-patterns" >}}) - Functional programming in Spark
+- [Spark Guide](../../spark/) - Deep dive into Spark
+- [Kafka Integration](../../kafka/) - Structured Streaming + Kafka
+- [Functional Patterns](../concepts/functional-patterns/) - Functional programming in Spark

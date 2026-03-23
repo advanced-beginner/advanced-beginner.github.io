@@ -603,6 +603,6 @@ ValidatedNec collects errors in NonEmptyChain. mapN combines results only when a
 
 After learning practical project examples, continue with these topics.
 
-- [Spark Integration]({{< relref "/docs/scala/examples/spark-integration" >}}) - Large-scale data processing
-- [Functional Patterns]({{< relref "/docs/scala/concepts/functional-patterns" >}}) - Cats, ZIO usage
-- [Concurrency]({{< relref "/docs/scala/concepts/concurrency" >}}) - Future, IO deep dive
+- [Spark Integration](spark-integration/) - Large-scale data processing
+- [Functional Patterns](../concepts/functional-patterns/) - Cats, ZIO usage
+- [Concurrency](../concepts/concurrency/) - Future, IO deep dive

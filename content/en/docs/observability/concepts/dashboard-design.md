@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **Target Audience**: Developers and SREs designing Grafana dashboards
-> **Prerequisites**: [SRE Golden Signals]({{< relref "/docs/observability/concepts/golden-signals" >}})
+> **Prerequisites**: [SRE Golden Signals](golden-signals/)
 > **After Reading**: You'll be able to design effective dashboards and quickly identify problems
 
 ## TL;DR

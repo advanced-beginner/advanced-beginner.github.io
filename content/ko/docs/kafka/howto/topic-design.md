@@ -445,7 +445,7 @@ delete.topic.enable=true
 
 ## 관련 문서
 
-- [핵심 구성요소 - Topic과 Partition]({{< relref "/docs/kafka/concepts/core-components" >}}) - 토픽과 파티션 개념
-- [복제와 내결함성]({{< relref "/docs/kafka/concepts/replication" >}}) - 복제 메커니즘 상세
-- [메시지 손실 방지]({{< relref "/docs/kafka/howto/message-loss-prevention" >}}) - 안정적인 메시징 설정
-- [Bounded Context 식별 가이드]({{< relref "/docs/ddd/howto/bounded-context-identification" >}}) - 토픽 네이밍의 도메인 경계를 DDD로 식별하는 방법
+- [핵심 구성요소 - Topic과 Partition](../concepts/core-components/) - 토픽과 파티션 개념
+- [복제와 내결함성](../concepts/replication/) - 복제 메커니즘 상세
+- [메시지 손실 방지](message-loss-prevention/) - 안정적인 메시징 설정
+- [Bounded Context 식별 가이드](../../ddd/howto/bounded-context-identification/) - 토픽 네이밍의 도메인 경계를 DDD로 식별하는 방법

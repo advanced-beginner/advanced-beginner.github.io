@@ -17,8 +17,8 @@ related_concepts:
 
 {{< callout type="info" title="Prerequisites" >}}
 Before reading this document, understand these concepts first:
-- [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) - match, bool query basics
-- [Data Modeling]({{< relref "/docs/elasticsearch/concepts/data-modeling" >}}) - Analyzer operation principles
+- [Query DSL](query-dsl/) - match, bool query basics
+- [Data Modeling](data-modeling/) - Analyzer operation principles
 {{< /callout >}}
 
 Learn relevance tuning methods including Score, BM25, and Boosting to improve search result quality.
@@ -370,7 +370,7 @@ graph LR
 ### 1. Synonym Handling
 
 Configure custom Analyzer for synonym handling.
-→ [Analyzer basics]({{< relref "/docs/elasticsearch/concepts/data-modeling#analyzer" >}})
+→ [Analyzer basics](data-modeling/#analyzer)
 
 ```json
 PUT /products

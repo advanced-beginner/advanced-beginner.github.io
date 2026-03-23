@@ -358,5 +358,5 @@ Verify the following items to ensure environment setup is complete. Check if Kaf
 
 #### Next Steps
 
-- [Basic Examples]({{< relref "/docs/kafka/examples/basic" >}}) - Producer/Consumer implementation
-- [Order System]({{< relref "/docs/kafka/examples/order-system" >}}) - Real-world example
+- [Basic Examples](basic/) - Producer/Consumer implementation
+- [Order System](order-system/) - Real-world example

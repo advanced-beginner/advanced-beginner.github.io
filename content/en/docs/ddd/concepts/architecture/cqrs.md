@@ -8,7 +8,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **Target Audience**: Developers designing systems with complex query requirements or performance optimization needs
-> **Prerequisites**: [Event-Driven Architecture]({{< relref "/docs/ddd/concepts/architecture/event-driven" >}}) or basic understanding of event-driven architecture concepts
+> **Prerequisites**: [Event-Driven Architecture](event-driven/) or basic understanding of event-driven architecture concepts
 > **Estimated Time**: About 35 minutes
 > **Key Question**: "When should you separate read and write models?"
 
@@ -653,5 +653,5 @@ The Command Controller handles write operations like POST, PUT, DELETE, typicall
 
 #### Next Steps
 
-- [Testing Strategy]({{< relref "/docs/ddd/concepts/testing" >}}) - Testing CQRS systems
-- [Anti-Patterns]({{< relref "/docs/ddd/concepts/anti-patterns" >}}) - Common mistakes when applying CQRS
+- [Testing Strategy](../testing/) - Testing CQRS systems
+- [Anti-Patterns](../anti-patterns/) - Common mistakes when applying CQRS

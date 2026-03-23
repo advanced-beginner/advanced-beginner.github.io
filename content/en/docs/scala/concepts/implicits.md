@@ -642,5 +642,5 @@ extension (n: Int)
 
 #### Next Steps
 
-- [Type Classes]({{< relref "/docs/scala/concepts/type-classes" >}}) — Advanced type class patterns
-- [Functional Patterns]({{< relref "/docs/scala/concepts/functional-patterns" >}}) — Functor, Monad
+- [Type Classes](type-classes/) — Advanced type class patterns
+- [Functional Patterns](functional-patterns/) — Functor, Monad

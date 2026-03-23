@@ -26,7 +26,7 @@ OpenTelemetry를 **국제 의료 기록 표준(HL7/FHIR)**에 비유하면 이�
 ---
 
 > **대상 독자**: 관측성 시스템을 표준화하려는 개발자, SRE
-> **선수 지식**: [관측성 3요소]({{< relref "/docs/observability/concepts/three-pillars" >}}), [분산 추적]({{< relref "/docs/observability/concepts/distributed-tracing" >}})
+> **선수 지식**: [관측성 3요소](three-pillars/), [분산 추적](distributed-tracing/)
 > **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: OpenTelemetry를 이해하고 프로젝트에 적용할 수 있습니다
 

@@ -39,8 +39,8 @@ covariant type A occurs in contravariant position in type A => Unit
 
 ### 이 가이드가 다루지 않는 것
 
-- **타입 시스템의 기초 개념**: [타입 시스템 개념 문서]({{< relref "/docs/scala/concepts/type-system-advanced" >}})를 참조하세요
-- **암시적 값 관련 에러**: [Implicit/Given 디버깅]({{< relref "/docs/scala/howto/implicit-debugging" >}})을 참조하세요
+- **타입 시스템의 기초 개념**: [타입 시스템 개념 문서](../concepts/type-system-advanced/)를 참조하세요
+- **암시적 값 관련 에러**: [Implicit/Given 디버깅](implicit-debugging/)을 참조하세요
 - **매크로/리플렉션 관련 에러**: 해당 라이브러리 문서를 참조하세요
 
 ---
@@ -395,6 +395,6 @@ def process[A: ClassTag](list: List[A]): Unit = {
 
 ## 관련 문서
 
-- [타입 시스템]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) - Scala 타입 시스템의 기초
-- [Implicit/Given 디버깅]({{< relref "/docs/scala/howto/implicit-debugging" >}}) - 암시적 값 관련 에러 해결
-- [Future 에러 처리]({{< relref "/docs/scala/howto/future-error-handling" >}}) - 비동기 코드의 에러 처리
+- [타입 시스템](../concepts/type-system-advanced/) - Scala 타입 시스템의 기초
+- [Implicit/Given 디버깅](implicit-debugging/) - 암시적 값 관련 에러 해결
+- [Future 에러 처리](future-error-handling/) - 비동기 코드의 에러 처리

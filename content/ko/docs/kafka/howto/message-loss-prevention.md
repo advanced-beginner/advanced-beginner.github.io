@@ -603,8 +603,8 @@ message.max.bytes=5242880
 
 ## 관련 문서
 
-- [Producer 성능 최적화]({{< relref "/docs/kafka/howto/producer-performance-tuning" >}}) - 안정성과 성능의 균형
-- [Consumer Lag 트러블슈팅]({{< relref "/docs/kafka/howto/consumer-lag-troubleshooting" >}}) - Consumer 측 문제 해결
-- [트랜잭션]({{< relref "/docs/kafka/concepts/transactions" >}}) - Exactly-Once 의미론 상세
-- [에러 처리 패턴]({{< relref "/docs/kafka/concepts/error-handling" >}}) - 프로덕션 에러 처리 전략
-- [로그 수집과 중앙화]({{< relref "/docs/observability/concepts/log-aggregation" >}}) - 메시지 손실 추적을 위한 중앙 집중식 로그 관리
+- [Producer 성능 최적화](producer-performance-tuning/) - 안정성과 성능의 균형
+- [Consumer Lag 트러블슈팅](consumer-lag-troubleshooting/) - Consumer 측 문제 해결
+- [트랜잭션](../concepts/transactions/) - Exactly-Once 의미론 상세
+- [에러 처리 패턴](../concepts/error-handling/) - 프로덕션 에러 처리 전략
+- [로그 수집과 중앙화](../../observability/concepts/log-aggregation/) - 메시지 손실 추적을 위한 중앙 집중식 로그 관리

@@ -58,7 +58,7 @@ For a single service, Metrics + Logs may be sufficient. For microservices, Trace
 - Storage cost increase
 - Can cause OOM
 
-**Solution**: See [Cardinality Optimization]({{< relref "/docs/observability/howto/reduce-cardinality" >}})
+**Solution**: See [Cardinality Optimization](../howto/reduce-cardinality/)
 
 ---
 

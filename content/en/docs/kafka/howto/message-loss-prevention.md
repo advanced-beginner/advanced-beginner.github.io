@@ -603,7 +603,7 @@ Verify your message loss prevention settings:
 
 ## Related Documentation
 
-- [Producer Performance Tuning]({{< relref "/docs/kafka/howto/producer-performance-tuning" >}}) - Balancing reliability and performance
-- [Consumer Lag Troubleshooting]({{< relref "/docs/kafka/howto/consumer-lag-troubleshooting" >}}) - Consumer-side problem solving
-- [Transactions]({{< relref "/docs/kafka/concepts/transactions" >}}) - Exactly-Once semantics details
-- [Error Handling Patterns]({{< relref "/docs/kafka/concepts/error-handling" >}}) - Production error handling strategies
+- [Producer Performance Tuning](producer-performance-tuning/) - Balancing reliability and performance
+- [Consumer Lag Troubleshooting](consumer-lag-troubleshooting/) - Consumer-side problem solving
+- [Transactions](../concepts/transactions/) - Exactly-Once semantics details
+- [Error Handling Patterns](../concepts/error-handling/) - Production error handling strategies

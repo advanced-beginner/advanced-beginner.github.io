@@ -376,7 +376,7 @@ GET /products/_explain/1
 ## Indexing Performance
 
 For detailed indexing performance optimization, see the Indexing Strategy document.
-→ [Indexing Strategy Details]({{< relref "/docs/elasticsearch/concepts/indexing" >}})
+→ [Indexing Strategy Details](indexing/)
 
 ### Adjust Refresh Interval
 

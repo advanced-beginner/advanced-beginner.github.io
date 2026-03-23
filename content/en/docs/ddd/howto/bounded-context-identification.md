@@ -9,7 +9,7 @@ author_url: "http://github.com/kimbenji"
 
 > **Problem Solved**: Unsure how to divide the system, or high inter-team dependencies due to incorrectly defined Context boundaries
 > **Time Required**: ~25 min
-> **Prerequisites**: Assumes you have read the [Strategic Design]({{< relref "/docs/ddd/concepts/strategic-design" >}}) document
+> **Prerequisites**: Assumes you have read the [Strategic Design](../concepts/strategic-design/) document
 
 {{< callout type="warning" title="Success Criteria" >}}
 After completing this guide, you will be able to:
@@ -375,5 +375,5 @@ public void handle(OrderConfirmedEvent event) {
 
 ## Next Steps
 
-- [Strategic Design]({{< relref "/docs/ddd/concepts/strategic-design" >}}) - Context Mapping patterns in detail
-- [Defining Aggregate Boundaries]({{< relref "/docs/ddd/howto/aggregate-boundaries" >}}) - Internal Context design
+- [Strategic Design](../concepts/strategic-design/) - Context Mapping patterns in detail
+- [Defining Aggregate Boundaries](aggregate-boundaries/) - Internal Context design

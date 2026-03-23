@@ -8,7 +8,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **대상 독자**: DDD를 적용하고 있거나 도입을 고려 중인 개발자
-> **선수 지식**: [Quick Start]({{< relref "/docs/ddd/quick-start" >}})와 [전술적 설계]({{< relref "/docs/ddd/concepts/tactical-design" >}}) 기본 개념
+> **선수 지식**: [Quick Start](../quick-start/)와 [전술적 설계](tactical-design/) 기본 개념
 > **소요 시간**: 약 20분
 > **핵심 질문**: "DDD 적용 시 흔히 저지르는 실수는 무엇이고, 어떻게 피할 수 있는가?"
 
@@ -603,5 +603,5 @@ DDD 프로젝트의 각 단계에서 안티패턴을 조기에 발견하기 위�
 
 #### 다음 단계
 
-- [실습 예제]({{< relref "/docs/ddd/examples" >}}) - 올바른 패턴으로 구현하기
-- [용어 사전]({{< relref "/docs/ddd/appendix/glossary" >}}) - DDD 용어 정리
+- [실습 예제](../examples/) - 올바른 패턴으로 구현하기
+- [용어 사전](../appendix/glossary/) - DDD 용어 정리

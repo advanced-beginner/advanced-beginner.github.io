@@ -7,7 +7,7 @@ author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
 
-> **대상 독자**: [전술적 설계]({{< relref "/docs/ddd/concepts/tactical-design" >}}) 빌딩 블록을 이해한 백엔드 개발자
+> **대상 독자**: [전술적 설계](tactical-design/) 빌딩 블록을 이해한 백엔드 개발자
 > **선수 지식**: Entity, Value Object, Repository, Domain Service 개념 이해
 > **소요 시간**: 약 25-30분
 > **핵심 질문**: "핵심 빌딩 블록만으로 표현하기 어려운 도메인 로직을 어떻게 구조화하는가?"
@@ -519,7 +519,7 @@ public class OrderApplicationService {
 
 **Aggregate Builder**
 
-복잡한 Aggregate 생성 시 Builder 패턴을 활용합니다. [전술적 설계]({{< relref "/docs/ddd/concepts/tactical-design" >}})에서 다룬 Factory가 "외부 의존성이 필요한 복잡한 생성"에 적합하다면, Builder는 "여러 속성을 조합하여 객체를 만드는" 상황에 적합합니다. 내부 Builder 클래스로 유창한 인터페이스를 제공하고, `build` 메서드에서 최종 검증을 수행합니다.
+복잡한 Aggregate 생성 시 Builder 패턴을 활용합니다. [전술적 설계](tactical-design/)에서 다룬 Factory가 "외부 의존성이 필요한 복잡한 생성"에 적합하다면, Builder는 "여러 속성을 조합하여 객체를 만드는" 상황에 적합합니다. 내부 Builder 클래스로 유창한 인터페이스를 제공하고, `build` 메서드에서 최종 검증을 수행합니다.
 
 ```java
 public class Order {
@@ -663,6 +663,6 @@ public Discount getDiscount() {
 
 #### 다음 단계
 
-- [아키텍처 패턴]({{< relref "/docs/ddd/concepts/architecture" >}}) - 빌딩 블록과 패턴을 배치하는 코드 구조
-- [테스트 전략]({{< relref "/docs/ddd/concepts/testing" >}}) - 도메인 모델을 검증하는 테스트 방법
-- [안티패턴과 함정]({{< relref "/docs/ddd/concepts/anti-patterns" >}}) - 흔히 저지르는 실수와 해결법
+- [아키텍처 패턴](architecture/) - 빌딩 블록과 패턴을 배치하는 코드 구조
+- [테스트 전략](testing/) - 도메인 모델을 검증하는 테스트 방법
+- [안티패턴과 함정](anti-patterns/) - 흔히 저지르는 실수와 해결법

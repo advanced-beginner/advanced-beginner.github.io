@@ -141,14 +141,14 @@ Golden Signals 외에 자주 사용되는 방법론입니다.
 
 ### 신호별 심화
 
-1. [Latency]({{< relref "/docs/observability/concepts/golden-signals/latency" >}}) - 지연시간 측정 전략 (P50, P95, P99)
-2. [Traffic]({{< relref "/docs/observability/concepts/golden-signals/traffic" >}}) - 트래픽/처리량 모니터링
-3. [Errors]({{< relref "/docs/observability/concepts/golden-signals/errors" >}}) - 에러율 정의와 분류
-4. [Saturation]({{< relref "/docs/observability/concepts/golden-signals/saturation" >}}) - 포화도(리소스 사용률)
+1. [Latency](latency/) - 지연시간 측정 전략 (P50, P95, P99)
+2. [Traffic](traffic/) - 트래픽/처리량 모니터링
+3. [Errors](errors/) - 에러율 정의와 분류
+4. [Saturation](saturation/) - 포화도(리소스 사용률)
 
 ### 서비스 유형별 적용
 
-5. [서비스 유형별 적용]({{< relref "/docs/observability/concepts/golden-signals/by-service-type" >}}) - 웹 API, Kafka, DB별 가이드
+5. [서비스 유형별 적용](by-service-type/) - 웹 API, Kafka, DB별 가이드
 
 ---
 

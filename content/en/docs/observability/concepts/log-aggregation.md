@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **Target Audience**: Developers and SREs designing log systems
-> **Prerequisites**: [Three Pillars of Observability]({{< relref "/docs/observability/concepts/three-pillars" >}})
+> **Prerequisites**: [Three Pillars of Observability](three-pillars/)
 > **After Reading**: You'll be able to select a log collection system and design effective logs
 
 ## TL;DR

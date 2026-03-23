@@ -449,4 +449,4 @@ java -version  # Check version
 
 After environment setup is complete:
 
-- [Basic Examples]({{< relref "/docs/spark/examples/basic" >}}) - Data processing examples
+- [Basic Examples](basic/) - Data processing examples

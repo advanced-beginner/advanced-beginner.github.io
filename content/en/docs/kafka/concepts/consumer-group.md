@@ -17,13 +17,13 @@ author_url: "http://github.com/kimbenji"
 
 **Target audience**: Developers building or operating Kafka Consumers, those learning about parallel processing and state management
 
-**Prerequisites**: Topic and Partition concepts from [Message Flow]({{< relref "/docs/kafka/concepts/message-flow" >}}), Leader/Follower concepts from [Replication]({{< relref "/docs/kafka/concepts/replication" >}})
+**Prerequisites**: Topic and Partition concepts from [Message Flow](message-flow/), Leader/Follower concepts from [Replication](replication/)
 
 ---
 
 Understanding the core concepts of parallel processing and progress state management. This document is based on Kafka 3.6.x, with code examples verified in Spring Boot 3.2.x, Spring Kafka 3.1.x, and Java 17 environments.
 
-Before reading this document, you should understand the Topic and Partition concepts from [Message Flow]({{< relref "/docs/kafka/concepts/message-flow" >}}) and the Leader and Follower concepts from [Replication]({{< relref "/docs/kafka/concepts/replication" >}}).
+Before reading this document, you should understand the Topic and Partition concepts from [Message Flow](message-flow/) and the Leader and Follower concepts from [Replication](replication/).
 
 #### What is a Consumer Group?
 
@@ -303,7 +303,7 @@ kafka-consumer-groups.sh --describe --group order-service \
 # order-service   orders   0          1523            1523            0
 ```
 
-In the output above, if CURRENT-OFFSET is displayed, Offsets have already been committed. In this case, setting earliest will not read from the beginning. You need to manually reset Offsets, and detailed methods can be found in [Consumer Advanced Operations]({{< relref "/docs/kafka/concepts/consumer-advanced" >}}).
+In the output above, if CURRENT-OFFSET is displayed, Offsets have already been committed. In this case, setting earliest will not read from the beginning. You need to manually reset Offsets, and detailed methods can be found in [Consumer Advanced Operations](consumer-advanced/).
 
 {{< callout type="info" title="Key Points" >}}
 - Auto commit is convenient but risks data loss; manual commit provides precise control
@@ -337,7 +337,7 @@ sequenceDiagram
 
 When Consumer 1 fails, Kafka detects this and initiates rebalancing. Partitions 0 and 1 that Consumer 1 was handling are reassigned to Consumer 2. Consumer 2 resumes message processing from each Partition's Committed Offset.
 
-During rebalancing, all Consumers in that Consumer Group temporarily stop processing messages. Minimizing this downtime is an important operational concern. Details on rebalancing optimization and Lag monitoring are covered in [Consumer Advanced Operations]({{< relref "/docs/kafka/concepts/consumer-advanced" >}}).
+During rebalancing, all Consumers in that Consumer Group temporarily stop processing messages. Minimizing this downtime is an important operational concern. Details on rebalancing optimization and Lag monitoring are covered in [Consumer Advanced Operations](consumer-advanced/).
 
 {{< callout type="info" title="Key Points" >}}
 - Kafka automatically performs rebalancing when a Consumer fails
@@ -425,5 +425,5 @@ kafka-consumer-groups.sh --describe --group order-service \
 
 #### Next Steps
 
-- [Consumer Advanced Operations]({{< relref "/docs/kafka/concepts/consumer-advanced" >}}) - Rebalancing optimization, Lag monitoring
-- [Replication]({{< relref "/docs/kafka/concepts/replication" >}}) - Data replication and high availability
+- [Consumer Advanced Operations](consumer-advanced/) - Rebalancing optimization, Lag monitoring
+- [Replication](replication/) - Data replication and high availability

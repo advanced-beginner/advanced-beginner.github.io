@@ -400,5 +400,5 @@ result  // None
 
 #### Next Steps
 
-- [Implicit/Given]({{< relref "/docs/scala/concepts/implicits" >}}) — Contextual abstraction
-- [Functional Patterns]({{< relref "/docs/scala/concepts/functional-patterns" >}}) — Advanced Monad, Functor
+- [Implicit/Given](implicits/) — Contextual abstraction
+- [Functional Patterns](functional-patterns/) — Advanced Monad, Functor

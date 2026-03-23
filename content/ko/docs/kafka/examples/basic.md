@@ -636,6 +636,6 @@ spring:
 
 ## 다음 단계
 
-- [주문 시스템]({{< relref "/docs/kafka/examples/order-system" >}}) - 도메인 주도 설계를 적용한 실전 예제
-- [Consumer 고급 설정]({{< relref "/docs/kafka/concepts/consumer-tuning" >}}) - 성능 최적화 방법
-- [에러 처리 패턴]({{< relref "/docs/kafka/concepts/error-handling" >}}) - 프로덕션 에러 처리 전략
+- [주문 시스템](order-system/) - 도메인 주도 설계를 적용한 실전 예제
+- [Consumer 고급 설정](../concepts/consumer-tuning/) - 성능 최적화 방법
+- [에러 처리 패턴](../concepts/error-handling/) - 프로덕션 에러 처리 전략

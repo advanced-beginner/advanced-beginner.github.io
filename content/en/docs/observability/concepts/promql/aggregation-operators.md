@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **Target Audience**: Developers who know basic PromQL syntax
-> **Prerequisites**: [Basic Syntax]({{< relref "/docs/observability/concepts/promql/syntax-basics" >}})
+> **Prerequisites**: [Basic Syntax](syntax-basics/)
 > **What You'll Learn**: Aggregate multiple time series to calculate meaningful metrics
 
 ## TL;DR

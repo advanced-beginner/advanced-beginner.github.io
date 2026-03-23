@@ -358,6 +358,6 @@ Lag 문제 해결 시 다음 순서로 점검하세요:
 
 ## 관련 문서
 
-- [Consumer 고급 설정]({{< relref "/docs/kafka/concepts/consumer-tuning" >}}) - Consumer 튜닝 상세 가이드
-- [핵심 구성요소]({{< relref "/docs/kafka/concepts/core-components" >}}) - Consumer Group과 Partition 이해
-- [Producer 성능 최적화]({{< relref "/docs/kafka/howto/producer-performance-tuning" >}}) - Producer 측 최적화
+- [Consumer 고급 설정](../concepts/consumer-tuning/) - Consumer 튜닝 상세 가이드
+- [핵심 구성요소](../concepts/core-components/) - Consumer Group과 Partition 이해
+- [Producer 성능 최적화](producer-performance-tuning/) - Producer 측 최적화

@@ -12,7 +12,7 @@ This guide walks you through safely scaling an Elasticsearch cluster.
 {{< callout type="info" title="Scope of This Guide" >}}
 **Covers**: Adding data nodes, role-based node separation, Hot-Warm-Cold architecture, and post-scaling validation
 
-**Does not cover**: For query-level performance optimization, see [Slow Query Optimization]({{< relref "/docs/elasticsearch/howto/slow-query-optimization" >}}). For memory issues, see [Memory Troubleshooting]({{< relref "/docs/elasticsearch/howto/memory-troubleshooting" >}}).
+**Does not cover**: For query-level performance optimization, see [Slow Query Optimization](slow-query-optimization/). For memory issues, see [Memory Troubleshooting](memory-troubleshooting/).
 {{< /callout >}}
 
 {{< callout type="tip" title="TL;DR" >}}
@@ -473,6 +473,6 @@ curl -X GET "localhost:9200/_cat/master?v"
 
 ## Related Documents
 
-- [Mapping Migration]({{< relref "/docs/elasticsearch/howto/mapping-migration" >}}) - Zero-downtime mapping migration
-- [Index Rebuild]({{< relref "/docs/elasticsearch/howto/index-rebuild" >}}) - Large-scale index rebuild
-- [Memory Troubleshooting]({{< relref "/docs/elasticsearch/howto/memory-troubleshooting" >}}) - Handling memory issues after scaling
+- [Mapping Migration](mapping-migration/) - Zero-downtime mapping migration
+- [Index Rebuild](index-rebuild/) - Large-scale index rebuild
+- [Memory Troubleshooting](memory-troubleshooting/) - Handling memory issues after scaling

@@ -805,5 +805,5 @@ public class ComplexAnalysis {
 
 ## Next Steps
 
-- [Transformations and Actions]({{< relref "/docs/spark/concepts/transformations-actions" >}}) - Understanding lazy evaluation
-- [Partitioning and Shuffle]({{< relref "/docs/spark/concepts/partitioning" >}}) - Distributed processing optimization
+- [Transformations and Actions](transformations-actions/) - Understanding lazy evaluation
+- [Partitioning and Shuffle](partitioning/) - Distributed processing optimization

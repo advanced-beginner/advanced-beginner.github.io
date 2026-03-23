@@ -10,11 +10,11 @@ Elasticsearch reference materials.
 
 ## Contents
 
-### [Glossary]({{< relref "/docs/elasticsearch/appendix/glossary" >}})
+### [Glossary](glossary/)
 Quick lookup for Elasticsearch core terms.
 
-### [FAQ]({{< relref "/docs/elasticsearch/appendix/faq" >}})
+### [FAQ](faq/)
 Collection of frequently asked questions and answers.
 
-### [References]({{< relref "/docs/elasticsearch/appendix/references" >}})
+### [References](references/)
 Official documentation, recommended books, and community resource links.

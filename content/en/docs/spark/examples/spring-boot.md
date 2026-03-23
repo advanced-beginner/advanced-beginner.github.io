@@ -686,6 +686,6 @@ val result = df
 
 ## Related Documents
 
-- [Environment Setup]({{< relref "/docs/spark/examples/setup" >}}) - Basic project configuration
-- [Monitoring]({{< relref "/docs/spark/examples/monitoring" >}}) - Operational monitoring setup
-- [Performance Tuning]({{< relref "/docs/spark/concepts/tuning" >}}) - Optimization strategies
+- [Environment Setup](setup/) - Basic project configuration
+- [Monitoring](monitoring/) - Operational monitoring setup
+- [Performance Tuning](../concepts/tuning/) - Optimization strategies

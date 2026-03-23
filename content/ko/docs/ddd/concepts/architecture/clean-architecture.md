@@ -8,7 +8,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **대상 독자**: 엄격한 의존성 관리가 필요한 대규모 프로젝트 개발자
-> **선수 지식**: [헥사고날 아키텍처]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}})의 Port/Adapter 개념
+> **선수 지식**: [헥사고날 아키텍처](hexagonal-architecture/)의 Port/Adapter 개념
 > **소요 시간**: 약 25분
 
 # 클린 아키텍처 (Clean Architecture)
@@ -776,7 +776,7 @@ class OrderControllerTest {
 
 - ❌ 소규모, 단기 프로젝트 → 오버엔지니어링
 - ❌ 단순 CRUD 애플리케이션
-- ❌ 팀이 아키텍처에 익숙하지 않을 때 → [계층형]({{< relref "/docs/ddd/concepts/architecture/layered-architecture" >}})으로 시작
+- ❌ 팀이 아키텍처에 익숙하지 않을 때 → [계층형](layered-architecture/)으로 시작
 - ❌ MVP, 프로토타입 개발
 
 ### Best Practice: 어떤 시스템에 어울리는가?
@@ -902,6 +902,6 @@ public interface OrderRepository {
 
 ## 다음 단계
 
-- [어니언 아키텍처]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}}) - 도메인 모델 중심
-- [헥사고날 아키텍처]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}}) - Port와 Adapter 관점
-- [CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}}) - 읽기/쓰기 분리
+- [어니언 아키텍처](onion-architecture/) - 도메인 모델 중심
+- [헥사고날 아키텍처](hexagonal-architecture/) - Port와 Adapter 관점
+- [CQRS](cqrs/) - 읽기/쓰기 분리

@@ -531,5 +531,5 @@ public class ChurnPrediction {
 
 ## Next Steps
 
-- [Performance Tuning]({{< relref "/docs/spark/concepts/tuning" >}}) - ML workload optimization
-- [Deployment]({{< relref "/docs/spark/concepts/deployment" >}}) - Model serving and batch prediction
+- [Performance Tuning](tuning/) - ML workload optimization
+- [Deployment](deployment/) - Model serving and batch prediction

@@ -8,7 +8,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **대상 독자**: DDD 기반 프로젝트에서 테스트 전략을 수립하려는 개발자
-> **선수 지식**: [전술적 설계]({{< relref "/docs/ddd/concepts/tactical-design" >}}) 빌딩 블록, 기본적인 JUnit/Mockito 사용법
+> **선수 지식**: [전술적 설계](tactical-design/) 빌딩 블록, 기본적인 JUnit/Mockito 사용법
 > **소요 시간**: 약 25분
 > **핵심 질문**: "DDD 아키텍처에서 테스트를 어떻게 구성해야 하는가?"
 
@@ -741,4 +741,4 @@ Entity와 Value Object는 순수한 도메인 로직이므로 Mock 없이 빠르
 
 #### 다음 단계
 
-- [안티패턴]({{< relref "/docs/ddd/concepts/anti-patterns" >}}) - 테스트 시 흔한 실수
+- [안티패턴](anti-patterns/) - 테스트 시 흔한 실수

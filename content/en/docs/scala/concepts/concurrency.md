@@ -506,6 +506,6 @@ val result2 = Future.sequence(List(fetchA(), fetchB(), fetchC()))
 
 #### Next Steps
 
-- [Functional Patterns]({{< relref "/docs/scala/concepts/functional-patterns" >}}) — Advanced Functor, Monad
+- [Functional Patterns](functional-patterns/) — Advanced Functor, Monad
 - [Akka Documentation](https://akka.io/)
 - [ZIO Documentation](https://zio.dev/)

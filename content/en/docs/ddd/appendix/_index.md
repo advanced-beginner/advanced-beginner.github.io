@@ -26,6 +26,6 @@ The appendix is not meant to be read in order, but rather as **reference materia
 
 ## What This Section Does NOT Cover
 
-- Detailed explanations of concepts → See [Concepts]({{< relref "/docs/ddd/concepts" >}})
-- Step-by-step problem solving methods → See [How-to Guides]({{< relref "/docs/ddd/howto" >}})
-- Executable code examples → See [Examples]({{< relref "/docs/ddd/examples" >}})
+- Detailed explanations of concepts → See [Concepts](../concepts/)
+- Step-by-step problem solving methods → See [How-to Guides](../howto/)
+- Executable code examples → See [Examples](../examples/)

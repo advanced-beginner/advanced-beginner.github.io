@@ -434,13 +434,13 @@ Key metrics to watch:
 
 ## Next Steps
 
-- [Caching and Persistence]({{< relref "/docs/spark/concepts/caching" >}}) - Prevent recomputation with intermediate result storage
-- [Performance Tuning]({{< relref "/docs/spark/concepts/tuning" >}}) - Overall performance optimization strategies
+- [Caching and Persistence](caching/) - Prevent recomputation with intermediate result storage
+- [Performance Tuning](tuning/) - Overall performance optimization strategies
 
 ## Related Documents
 
-- [Architecture]({{< relref "/docs/spark/concepts/architecture" >}}) - Understanding distributed processing structure
-- [Transformations and Actions]({{< relref "/docs/spark/concepts/transformations-actions" >}}) - Narrow/Wide Transformations
-- [Spark SQL]({{< relref "/docs/spark/concepts/spark-sql" >}}) - Partition handling in SQL queries
-- [Deployment and Cluster Management]({{< relref "/docs/spark/concepts/deployment" >}}) - Partition settings in cluster environments
-- [Glossary]({{< relref "/docs/spark/appendix/glossary" >}}) - Partition, Shuffle term definitions
+- [Architecture](architecture/) - Understanding distributed processing structure
+- [Transformations and Actions](transformations-actions/) - Narrow/Wide Transformations
+- [Spark SQL](spark-sql/) - Partition handling in SQL queries
+- [Deployment and Cluster Management](deployment/) - Partition settings in cluster environments
+- [Glossary](../appendix/glossary/) - Partition, Shuffle term definitions

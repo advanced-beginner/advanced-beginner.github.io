@@ -490,5 +490,5 @@ public class RealTimeSalesAggregation {
 
 ## Next Steps
 
-- [MLlib]({{< relref "/docs/spark/concepts/mllib" >}}) - Machine learning with Spark
-- [Performance Tuning]({{< relref "/docs/spark/concepts/tuning" >}}) - Streaming performance optimization
+- [MLlib](mllib/) - Machine learning with Spark
+- [Performance Tuning](tuning/) - Streaming performance optimization

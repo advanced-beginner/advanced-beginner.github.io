@@ -39,10 +39,10 @@ Kafka는 이런 문제들을 해결하면서도 <strong>메시지 유실 없이<
 
 ## 이 가이드에서 다루는 것
 
-### [Quick Start]({{< relref "/docs/kafka/quick-start" >}})
+### [Quick Start](quick-start/)
 5분 만에 Kafka 메시지를 보내고 받아봅니다. 개념보다 먼저 동작하는 코드를 확인하세요.
 
-### [개념 이해]({{< relref "/docs/kafka/concepts" >}})
+### [개념 이해](concepts/)
 단순히 "이렇게 쓰세요"가 아닌, **왜 이렇게 동작하는지** 원리를 설명합니다.
 
 | 주제 | 배우는 것 |
@@ -56,16 +56,16 @@ Kafka는 이런 문제들을 해결하면서도 <strong>메시지 유실 없이<
 | [성능 튜닝](concepts/producer-tuning/) | Producer/Consumer 최적화 전략 |
 | [모니터링](concepts/monitoring/) | 운영 환경에서 Kafka 상태 파악하기 |
 
-### [실습 예제]({{< relref "/docs/kafka/examples" >}})
+### [실습 예제](examples/)
 Spring Boot 기반의 실행 가능한 예제 코드입니다.
 
-- [환경 설정]({{< relref "/docs/kafka/examples/setup" >}}) - Docker로 Kafka 클러스터 구성
-- [기본 예제]({{< relref "/docs/kafka/examples/basic" >}}) - Producer/Consumer 구현
-- [주문 시스템]({{< relref "/docs/kafka/examples/order-system" >}}) - 실제 비즈니스 시나리오 예제
+- [환경 설정](examples/setup/) - Docker로 Kafka 클러스터 구성
+- [기본 예제](examples/basic/) - Producer/Consumer 구현
+- [주문 시스템](examples/order-system/) - 실제 비즈니스 시나리오 예제
 
-### [부록]({{< relref "/docs/kafka/appendix" >}})
-- [용어 사전]({{< relref "/docs/kafka/appendix/glossary" >}}) - Kafka 용어 빠른 참조
-- [참고 자료]({{< relref "/docs/kafka/appendix/references" >}}) - 공식 문서 및 추가 학습 자료
+### [부록](appendix/)
+- [용어 사전](appendix/glossary/) - Kafka 용어 빠른 참조
+- [참고 자료](appendix/references/) - 공식 문서 및 추가 학습 자료
 
 ## 선수 지식
 

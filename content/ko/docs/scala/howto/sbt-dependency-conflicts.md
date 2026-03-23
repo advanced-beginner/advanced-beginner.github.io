@@ -351,6 +351,6 @@ excludeDependencies += ExclusionRule("org.slf4j", "slf4j-log4j12")
 
 ## 관련 문서
 
-- [타입 에러 디버깅]({{< relref "/docs/scala/howto/type-error-debugging" >}}) - 컴파일 타임 에러 해결
-- [Implicit/Given 디버깅]({{< relref "/docs/scala/howto/implicit-debugging" >}}) - 암시적 값 관련 에러 해결
-- [Future 에러 처리]({{< relref "/docs/scala/howto/future-error-handling" >}}) - 비동기 코드의 에러 처리
+- [타입 에러 디버깅](type-error-debugging/) - 컴파일 타임 에러 해결
+- [Implicit/Given 디버깅](implicit-debugging/) - 암시적 값 관련 에러 해결
+- [Future 에러 처리](future-error-handling/) - 비동기 코드의 에러 처리

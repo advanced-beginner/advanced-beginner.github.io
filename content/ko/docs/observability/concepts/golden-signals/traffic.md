@@ -25,7 +25,7 @@ Traffic을 **병원 외래 환자 방문량**에 비유하면 이해하기 쉽�
 ---
 
 > **대상 독자**: 서비스 용량 계획을 수립하려는 개발자, SRE
-> **선수 지식**: [rate와 increase]({{< relref "/docs/observability/concepts/promql/rate-and-increase" >}})
+> **선수 지식**: [rate와 increase](../promql/rate-and-increase/)
 > **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: 트래픽 패턴을 분석하고 용량 계획에 활용할 수 있습니다
 

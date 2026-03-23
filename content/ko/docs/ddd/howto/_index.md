@@ -9,11 +9,11 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **대상 독자**: DDD 기본 개념(Entity, Value Object, Aggregate)을 이해한 개발자
-> **선수 지식**: [전술적 설계]({{< relref "/docs/ddd/concepts/tactical-design" >}}) 문서를 읽었거나 DDD 빌딩 블록에 대한 기본 지식
+> **선수 지식**: [전술적 설계](../concepts/tactical-design/) 문서를 읽었거나 DDD 빌딩 블록에 대한 기본 지식
 > **이 섹션의 목적**: DDD 적용 시 마주치는 구체적인 문제를 단계별로 해결
 
 {{< callout type="info" title="How-To Guide란?" >}}
-How-To Guide는 <strong>특정 문제를 해결</strong>하기 위한 실용적 지침입니다. "왜"보다는 "어떻게"에 집중하며, 각 가이드는 명확한 문제 상황에서 시작하여 검증 가능한 해결책으로 끝납니다. 개념 이해가 필요하다면 먼저 [개념 이해]({{< relref "/docs/ddd/concepts" >}}) 섹션을 참고하세요.
+How-To Guide는 <strong>특정 문제를 해결</strong>하기 위한 실용적 지침입니다. "왜"보다는 "어떻게"에 집중하며, 각 가이드는 명확한 문제 상황에서 시작하여 검증 가능한 해결책으로 끝납니다. 개념 이해가 필요하다면 먼저 [개념 이해](../concepts/) 섹션을 참고하세요.
 {{< /callout >}}
 
 ## 이 섹션에서 다루는 것
@@ -27,9 +27,9 @@ How-To Guide는 <strong>특정 문제를 해결</strong>하기 위한 실용적 
 
 ## 이 섹션에서 다루지 않는 것
 
-- DDD 개념 설명 → [개념 이해]({{< relref "/docs/ddd/concepts" >}}) 참고
-- 전체 프로젝트 구현 예제 → [실습 예제]({{< relref "/docs/ddd/examples" >}}) 참고
-- 용어 정의 → [용어 사전]({{< relref "/docs/ddd/appendix/glossary" >}}) 참고
+- DDD 개념 설명 → [개념 이해](../concepts/) 참고
+- 전체 프로젝트 구현 예제 → [실습 예제](../examples/) 참고
+- 용어 정의 → [용어 사전](../appendix/glossary/) 참고
 
 ## 가이드 활용 방법
 

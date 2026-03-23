@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **소요 시간**: 30분
-> **선수 지식**: [Spring Boot 메트릭]({{< relref "/docs/observability/examples/spring-boot-metrics" >}})
+> **선수 지식**: [Spring Boot 메트릭](spring-boot-metrics/)
 > **이 문서를 읽으면**: 3요소(Metrics, Logs, Traces)를 연결하여 문제를 추적할 수 있습니다
 
 ## 목표

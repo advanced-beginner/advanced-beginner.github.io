@@ -40,7 +40,7 @@ val future = Future {
 
 ### What This Guide Does NOT Cover
 
-- **Basic Future concepts**: See [Concurrency Concepts]({{< relref "/docs/scala/concepts/concurrency" >}})
+- **Basic Future concepts**: See [Concurrency Concepts](../concepts/concurrency/)
 - **Cats Effect IO / ZIO error handling**: Refer to respective library documentation
 - **Akka actor system error handling**: Refer to Akka documentation
 
@@ -445,6 +445,6 @@ When handling Future errors, verify the following:
 
 ## Related Documentation
 
-- [Concurrency]({{< relref "/docs/scala/concepts/concurrency" >}}) - Future and Promise basics
-- [Implicit/Given Debugging]({{< relref "/docs/scala/howto/implicit-debugging" >}}) - ExecutionContext troubleshooting
-- [Functional Patterns]({{< relref "/docs/scala/concepts/functional-patterns" >}}) - Monadic error handling
+- [Concurrency](../concepts/concurrency/) - Future and Promise basics
+- [Implicit/Given Debugging](implicit-debugging/) - ExecutionContext troubleshooting
+- [Functional Patterns](../concepts/functional-patterns/) - Monadic error handling

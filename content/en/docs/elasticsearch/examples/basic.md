@@ -567,7 +567,7 @@ curl -X DELETE http://localhost:9200/products
 ### Korean Search Not Working
 
 The default `standard` analyzer doesn't perform Korean morphological analysis.
-Check Nori settings in [Product Search System]({{< relref "/docs/elasticsearch/examples/product-search" >}}) example.
+Check Nori settings in [Product Search System](product-search/) example.
 
 {{< callout type="info" title="Key Points" >}}
 - If auto index creation fails, verify `@Document(createIndex = true)`

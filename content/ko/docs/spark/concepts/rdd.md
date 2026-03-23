@@ -20,7 +20,7 @@ author:
 **선수 지식**:
 - Java 컬렉션 API (List, Map 등)
 - 람다 표현식 및 함수형 프로그래밍 기초
-- [아키텍처]({{< relref "/docs/spark/concepts/architecture" >}}) 문서 이해
+- [아키텍처](architecture/) 문서 이해
 
 **소요 시간**: 약 25-30분
 
@@ -632,5 +632,5 @@ public class LogAnalysis {
 
 RDD의 기본을 이해했다면, 더 효율적인 API를 학습하세요:
 
-- [DataFrame과 Dataset]({{< relref "/docs/spark/concepts/dataframe-dataset" >}}) - 고수준 API와 Catalyst 최적화
-- [Transformation과 Action]({{< relref "/docs/spark/concepts/transformations-actions" >}}) - 지연 평가 심화
+- [DataFrame과 Dataset](dataframe-dataset/) - 고수준 API와 Catalyst 최적화
+- [Transformation과 Action](transformations-actions/) - 지연 평가 심화

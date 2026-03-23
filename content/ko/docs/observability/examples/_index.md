@@ -11,10 +11,10 @@ lastmod: "2026-01-12"
 
 ## 학습 순서
 
-1. [환경 구성]({{< relref "/docs/observability/examples/setup" >}}) - Docker Compose로 Prometheus + Grafana + Loki + Tempo 구성
-2. [Spring Boot 메트릭]({{< relref "/docs/observability/examples/spring-boot-metrics" >}}) - Actuator + Micrometer 설정
-3. [Kafka 모니터링]({{< relref "/docs/observability/examples/kafka-monitoring" >}}) - Kafka 클러스터 관측성 구축
-4. [풀스택 Observability]({{< relref "/docs/observability/examples/full-stack" >}}) - 메트릭 + 로그 + 트레이스 통합
+1. [환경 구성](setup/) - Docker Compose로 Prometheus + Grafana + Loki + Tempo 구성
+2. [Spring Boot 메트릭](spring-boot-metrics/) - Actuator + Micrometer 설정
+3. [Kafka 모니터링](kafka-monitoring/) - Kafka 클러스터 관측성 구축
+4. [풀스택 Observability](full-stack/) - 메트릭 + 로그 + 트레이스 통합
 
 ## 예제 프로젝트 구조
 

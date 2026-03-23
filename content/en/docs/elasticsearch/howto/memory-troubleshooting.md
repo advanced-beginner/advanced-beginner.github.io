@@ -12,7 +12,7 @@ Learn how to diagnose and resolve OutOfMemoryError and GC issues.
 {{< callout type="info" title="Scope of This Guide" >}}
 **Covered**: Heap memory settings, Circuit Breaker, Field Data optimization, GC tuning
 
-**Not Covered**: Adding nodes, hardware upgrades - see [Cluster Management]({{< relref "/docs/elasticsearch/concepts/cluster-management" >}})
+**Not Covered**: Adding nodes, hardware upgrades - see [Cluster Management](../concepts/cluster-management/)
 {{< /callout >}}
 
 {{< callout type="tip" title="TL;DR" >}}
@@ -442,6 +442,6 @@ docker run -d \
 
 ## Related Documentation
 
-- [Cluster Management]({{< relref "/docs/elasticsearch/concepts/cluster-management" >}}) - Node configuration and monitoring
-- [Performance Tuning]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) - Overall performance optimization
-- [Slow Query Optimization]({{< relref "/docs/elasticsearch/howto/slow-query-optimization" >}}) - Query-level optimization
+- [Cluster Management](../concepts/cluster-management/) - Node configuration and monitoring
+- [Performance Tuning](../concepts/performance-tuning/) - Overall performance optimization
+- [Slow Query Optimization](slow-query-optimization/) - Query-level optimization

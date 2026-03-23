@@ -912,4 +912,4 @@ flowchart TB
 
 ## 다음 단계
 
-- [부록]({{< relref "/docs/ddd/appendix" >}}) - 용어 사전, 참고 자료
+- [부록](../appendix/) - 용어 사전, 참고 자료

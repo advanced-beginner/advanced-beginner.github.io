@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **Target Audience**: Developers and SREs establishing capacity planning
-> **Prerequisites**: [rate and increase]({{< relref "/docs/observability/concepts/promql/rate-and-increase" >}})
+> **Prerequisites**: [rate and increase](../promql/rate-and-increase/)
 > **After reading this**: You'll be able to analyze traffic patterns and use them for capacity planning
 
 ## TL;DR

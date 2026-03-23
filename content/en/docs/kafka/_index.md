@@ -39,10 +39,10 @@ Kafka solves these problems while providing **no message loss**, **order guarant
 
 ## What This Guide Covers
 
-### [Quick Start]({{< relref "/docs/kafka/quick-start" >}})
+### [Quick Start](quick-start/)
 Send and receive Kafka messages in 5 minutes. See working code before concepts.
 
-### [Concepts]({{< relref "/docs/kafka/concepts" >}})
+### [Concepts](concepts/)
 Not just "use it this way", but explaining **why it works this way**.
 
 | Topic | What You'll Learn |
@@ -56,16 +56,16 @@ Not just "use it this way", but explaining **why it works this way**.
 | [Performance Tuning](concepts/producer-tuning/) | Producer/Consumer optimization strategies |
 | [Monitoring](concepts/monitoring/) | Understanding Kafka status in production |
 
-### [Hands-on Examples]({{< relref "/docs/kafka/examples" >}})
+### [Hands-on Examples](examples/)
 Executable example code based on Spring Boot.
 
-- [Environment Setup]({{< relref "/docs/kafka/examples/setup" >}}) - Docker Kafka cluster configuration
-- [Basic Examples]({{< relref "/docs/kafka/examples/basic" >}}) - Producer/Consumer implementation
-- [Order System]({{< relref "/docs/kafka/examples/order-system" >}}) - Real business scenario example
+- [Environment Setup](examples/setup/) - Docker Kafka cluster configuration
+- [Basic Examples](examples/basic/) - Producer/Consumer implementation
+- [Order System](examples/order-system/) - Real business scenario example
 
-### [Appendix]({{< relref "/docs/kafka/appendix" >}})
-- [Glossary]({{< relref "/docs/kafka/appendix/glossary" >}}) - Quick reference for Kafka terms
-- [References]({{< relref "/docs/kafka/appendix/references" >}}) - Official docs and additional learning resources
+### [Appendix](appendix/)
+- [Glossary](appendix/glossary/) - Quick reference for Kafka terms
+- [References](appendix/references/) - Official docs and additional learning resources
 
 ## Prerequisites
 

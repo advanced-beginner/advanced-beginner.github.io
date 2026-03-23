@@ -14,7 +14,7 @@ lastmod: 2026-01-15
 {{< /callout >}}
 
 **대상 독자**: 시맨틱 검색이나 추천 시스템을 구현하려는 개발자
-**선수 지식**: [핵심 구성요소]({{< relref "/docs/elasticsearch/concepts/core-components" >}}), [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}), 기본적인 ML 개념
+**선수 지식**: [핵심 구성요소](core-components/), [Query DSL](query-dsl/), 기본적인 ML 개념
 
 **소요 시간**: 약 25-30분
 

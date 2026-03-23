@@ -26,7 +26,7 @@ PromQL 기본 문법을 **병원 EMR 검색 시스템**에 비유하면 이해�
 ---
 
 > **대상 독자**: PromQL을 처음 배우는 개발자
-> **선수 지식**: [메트릭 기초]({{< relref "/docs/observability/concepts/metrics-fundamentals" >}})
+> **선수 지식**: [메트릭 기초](../metrics-fundamentals/)
 > **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: 기본적인 PromQL 쿼리를 작성하고 원하는 메트릭을 조회할 수 있습니다
 

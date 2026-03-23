@@ -489,4 +489,4 @@ java -version  # 버전 확인
 
 환경 설정이 완료되었다면:
 
-- [기본 예제]({{< relref "/docs/spark/examples/basic" >}}) - 데이터 처리 예제
+- [기본 예제](basic/) - 데이터 처리 예제

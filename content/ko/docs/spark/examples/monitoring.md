@@ -541,6 +541,6 @@ public class WeeklyReportGenerator {
 
 ## 관련 문서
 
-- [성능 튜닝]({{< relref "/docs/spark/concepts/tuning" >}}) - 모니터링 결과를 기반으로 최적화
-- [FAQ - 디버깅 가이드]({{< relref "/docs/spark/appendix/faq#spark-ui-활용-디버깅-가이드" >}}) - 문제 해결
-- [아키텍처]({{< relref "/docs/spark/concepts/architecture" >}}) - 메모리 모델 이해
+- [성능 튜닝](../concepts/tuning/) - 모니터링 결과를 기반으로 최적화
+- [FAQ - 디버깅 가이드](../appendix/faq/#spark-ui-활용-디버깅-가이드) - 문제 해결
+- [아키텍처](../concepts/architecture/) - 메모리 모델 이해

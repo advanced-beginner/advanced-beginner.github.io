@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **Target Audience**: Developers and SREs looking to improve service response times
-> **Prerequisites**: [histogram_quantile]({{< relref "/docs/observability/concepts/promql/histogram-quantile" >}})
+> **Prerequisites**: [histogram_quantile](../promql/histogram-quantile/)
 > **After reading this**: You'll be able to accurately measure latency and set up SLA-based alerts
 
 ## TL;DR

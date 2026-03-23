@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **소요 시간**: 20분
-> **선수 지식**: Kafka 기초, [환경 구성]({{< relref "/docs/observability/examples/setup" >}})
+> **선수 지식**: Kafka 기초, [환경 구성](setup/)
 > **이 문서를 읽으면**: Kafka 클러스터와 Consumer Lag을 모니터링할 수 있습니다
 
 ## Kafka 모니터링 핵심 지표

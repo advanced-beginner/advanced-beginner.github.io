@@ -373,4 +373,4 @@ The complete source code for this example is available at the link below. Check 
 
 #### Next Steps
 
-- [Appendix]({{< relref "/docs/kafka/appendix" >}}) - Glossary and references
+- [Appendix](../appendix/) - Glossary and references

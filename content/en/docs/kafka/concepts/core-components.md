@@ -422,6 +422,6 @@ kafka-console-consumer.sh --bootstrap-server localhost:9092 \
 
 This document covered Kafka's five core components. If you understand each component's role and operation, the next step is to examine in more detail how messages are delivered from Producer to Consumer. Consumer Group and Offset management, Replication mechanisms are also important topics in actual operations.
 
-- [Message Flow]({{< relref "/docs/kafka/concepts/message-flow" >}}) - Trace the complete process of message delivery from Producer to Consumer step by step
-- [Consumer Group and Offset]({{< relref "/docs/kafka/concepts/consumer-group" >}}) - Learn details of parallel processing and Offset management
-- [Practice Examples]({{< relref "/docs/kafka/examples/basic" >}}) - Write code directly based on theory and verify operation
+- [Message Flow](message-flow/) - Trace the complete process of message delivery from Producer to Consumer step by step
+- [Consumer Group and Offset](consumer-group/) - Learn details of parallel processing and Offset management
+- [Practice Examples](../examples/basic/) - Write code directly based on theory and verify operation

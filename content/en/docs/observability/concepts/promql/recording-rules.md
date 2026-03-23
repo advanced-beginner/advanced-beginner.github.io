@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **Target Audience**: Operators and SREs experiencing dashboard performance issues
-> **Prerequisites**: [histogram_quantile]({{< relref "/docs/observability/concepts/promql/histogram-quantile" >}})
+> **Prerequisites**: [histogram_quantile](histogram-quantile/)
 > **What You'll Learn**: Improve query performance with Recording Rules and manage complex metrics
 
 ## TL;DR

@@ -8,7 +8,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **대상 독자**: 도메인 모델링과 트랜잭션 개념을 이해한 개발자
-> **선수 지식**: [어니언 아키텍처]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}}) 또는 Aggregate 경계 개념에 대한 이해
+> **선수 지식**: [어니언 아키텍처](onion-architecture/) 또는 Aggregate 경계 개념에 대한 이해
 > **소요 시간**: 약 30분
 > **핵심 질문**: "도메인 이벤트를 언제, 왜 사용해야 하는가?"
 
@@ -1006,6 +1006,6 @@ public void handle(ConsumerRecord<String, JsonNode> record) {
 
 #### 다음 단계
 
-- [CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}}) - 이벤트 기반 시스템과 잘 어울리는 패턴
-- [실습 예제]({{< relref "/docs/ddd/examples" >}}) - Spring Boot로 구현하는 주문 도메인
-- [Kafka 핵심 구성요소]({{< relref "/docs/kafka/concepts/core-components" >}}) - 이벤트 기반 아키텍처의 메시지 브로커로 사용되는 Kafka의 구성요소
+- [CQRS](cqrs/) - 이벤트 기반 시스템과 잘 어울리는 패턴
+- [실습 예제](../../examples/) - Spring Boot로 구현하는 주문 도메인
+- [Kafka 핵심 구성요소](../../../kafka/concepts/core-components/) - 이벤트 기반 아키텍처의 메시지 브로커로 사용되는 Kafka의 구성요소

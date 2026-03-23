@@ -326,9 +326,9 @@ Scala Quick Start를 성공적으로 완료했습니다! 이제 여러분은:
 
 환경 설정이 끝났으니 이제 Scala의 핵심 개념들을 하나씩 배워볼 차례입니다.
 
-1. **[기본 문법]({{< relref "/docs/scala/concepts/basics" >}})** — 변수, 타입, 타입 추론 자세히 배우기
-2. **[제어 구조]({{< relref "/docs/scala/concepts/control-structures" >}})** — if, for, match 표현식
-3. **[함수와 메서드]({{< relref "/docs/scala/concepts/functions-methods" >}})** — 함수 정의와 고급 기능
+1. **[기본 문법](../concepts/basics/)** — 변수, 타입, 타입 추론 자세히 배우기
+2. **[제어 구조](../concepts/control-structures/)** — if, for, match 표현식
+3. **[함수와 메서드](../concepts/functions-methods/)** — 함수 정의와 고급 기능
 
 ## 트러블슈팅
 

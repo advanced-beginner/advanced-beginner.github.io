@@ -17,8 +17,8 @@ related_concepts:
 
 {{< callout type="info" title="선수 개념" >}}
 이 문서를 읽기 전에 다음 개념을 먼저 이해하세요:
-- [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) - 기본 쿼리 구조
-- [데이터 모델링]({{< relref "/docs/elasticsearch/concepts/data-modeling" >}}) - keyword vs text 타입
+- [Query DSL](query-dsl/) - 기본 쿼리 구조
+- [데이터 모델링](data-modeling/) - keyword vs text 타입
 {{< /callout >}}
 
 **소요 시간**: 약 25-30분

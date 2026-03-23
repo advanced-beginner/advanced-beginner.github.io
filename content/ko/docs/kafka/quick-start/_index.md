@@ -114,7 +114,7 @@ docker-compose up -d
 {{< /tab >}}
 {{< /tabs >}}
 
-`docker-compose.yml` 파일이 없다면 [환경 구성 가이드]({{< relref "/docs/kafka/examples/setup" >}})에서 내용을 확인하고 `docker/docker-compose.yml`로 저장하세요.
+`docker-compose.yml` 파일이 없다면 [환경 구성 가이드](../examples/setup/)에서 내용을 확인하고 `docker/docker-compose.yml`로 저장하세요.
 
 ### 실행 확인
 

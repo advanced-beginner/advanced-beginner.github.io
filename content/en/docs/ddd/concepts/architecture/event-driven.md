@@ -8,7 +8,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **Target Audience**: Developers who understand domain modeling and transaction concepts
-> **Prerequisites**: Understanding of [Onion Architecture]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}}) or Aggregate boundary concepts
+> **Prerequisites**: Understanding of [Onion Architecture](onion-architecture/) or Aggregate boundary concepts
 > **Estimated Time**: About 30 minutes
 > **Key Question**: "When and why should you use domain events?"
 
@@ -1006,6 +1006,6 @@ Domain events are business-meaningful occurrences expressed in code. Event patte
 
 #### Next Steps
 
-- [CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}}) - A pattern that pairs well with event-driven systems
-- [Hands-on Examples]({{< relref "/docs/ddd/examples" >}}) - Implementing an order domain with Spring Boot
-- [Kafka Core Components]({{< relref "/docs/kafka/concepts/core-components" >}}) - Components of Kafka used as a message broker in event-driven architecture
+- [CQRS](cqrs/) - A pattern that pairs well with event-driven systems
+- [Hands-on Examples](../../examples/) - Implementing an order domain with Spring Boot
+- [Kafka Core Components](../../../kafka/concepts/core-components/) - Components of Kafka used as a message broker in event-driven architecture

@@ -751,5 +751,5 @@ public class FraudDetectionAnalysis {
 
 After completing the examples:
 
-- [Performance Tuning]({{< relref "/docs/spark/concepts/tuning" >}}) - Code optimization
-- [Appendix]({{< relref "/docs/spark/appendix" >}}) - Glossary, FAQ
+- [Performance Tuning](../concepts/tuning/) - Code optimization
+- [Appendix](../appendix/) - Glossary, FAQ

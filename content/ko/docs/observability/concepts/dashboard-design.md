@@ -26,7 +26,7 @@ lastmod: "2026-01-15"
 ---
 
 > **대상 독자**: Grafana 대시보드를 설계하려는 개발자, SRE
-> **선수 지식**: [SRE 황금 신호]({{< relref "/docs/observability/concepts/golden-signals" >}})
+> **선수 지식**: [SRE 황금 신호](golden-signals/)
 > **소요 시간**: 약 20분
 > **이 문서를 읽으면**: 효과적인 대시보드를 설계하고 문제를 빠르게 파악할 수 있습니다
 

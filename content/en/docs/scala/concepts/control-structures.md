@@ -532,5 +532,5 @@ println(grade(55))  // F
 
 Once you've learned control structures, proceed to the next topics.
 
-- [Functions and Methods]({{< relref "/docs/scala/concepts/functions-methods" >}}) — Function definition and advanced features
-- [Pattern Matching]({{< relref "/docs/scala/concepts/pattern-matching" >}}) — Advanced match expressions
+- [Functions and Methods](functions-methods/) — Function definition and advanced features
+- [Pattern Matching](pattern-matching/) — Advanced match expressions

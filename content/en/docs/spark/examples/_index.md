@@ -9,7 +9,7 @@ Example code for hands-on experience with Spark.
 
 ## Example List
 
-### [Environment Setup]({{< relref "/docs/spark/examples/setup" >}})
+### [Environment Setup](setup/)
 
 Configure project environment for integrating Java/Spring Boot with Spark.
 
@@ -18,7 +18,7 @@ Configure project environment for integrating Java/Spring Boot with Spark.
 - Considerations for Spring Boot and Spark integration
 - Resolving logging conflicts
 
-### [Basic Examples]({{< relref "/docs/spark/examples/basic" >}})
+### [Basic Examples](basic/)
 
 Basic examples utilizing Spark's core features.
 
@@ -29,7 +29,7 @@ Basic examples utilizing Spark's core features.
 - SQL queries
 - **Real public dataset examples** (NYC Taxi, Kaggle)
 
-### [Monitoring Setup]({{< relref "/docs/spark/examples/monitoring" >}})
+### [Monitoring Setup](monitoring/)
 
 Monitoring configuration for stable operation of Spark applications in production environments.
 
@@ -39,7 +39,7 @@ Monitoring configuration for stable operation of Spark applications in productio
 - Structured logging (Log4j2, JSON)
 - Alert configuration
 
-### [Spring Boot Integration]({{< relref "/docs/spark/examples/spring-boot" >}})
+### [Spring Boot Integration](spring-boot/)
 
 Spark and Spring Boot integration patterns for Java/Spring developers.
 
@@ -49,7 +49,7 @@ Spark and Spring Boot integration patterns for Java/Spring developers.
 - Integration testing
 - Java vs Scala comparison
 
-### [ETL Pipeline]({{< relref "/docs/spark/examples/etl-pipeline" >}})
+### [ETL Pipeline](etl-pipeline/)
 
 Complete ETL pipeline examples ready for production environments.
 
@@ -106,6 +106,6 @@ configurations.all {
 
 After completing the examples:
 
-- [Performance Tuning]({{< relref "/docs/spark/concepts/tuning" >}}) - Code optimization strategies
-- [Deployment]({{< relref "/docs/spark/concepts/deployment" >}}) - Production deployment
-- [Appendix]({{< relref "/docs/spark/appendix" >}}) - Glossary, FAQ
+- [Performance Tuning](../concepts/tuning/) - Code optimization strategies
+- [Deployment](../concepts/deployment/) - Production deployment
+- [Appendix](../appendix/) - Glossary, FAQ

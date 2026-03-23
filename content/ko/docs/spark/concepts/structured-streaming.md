@@ -18,7 +18,7 @@ author:
 **대상 독자**: 실시간 데이터 처리가 필요한 데이터 엔지니어
 
 **선수 지식**:
-- [DataFrame과 Dataset]({{< relref "/docs/spark/concepts/dataframe-dataset" >}}) API
+- [DataFrame과 Dataset](dataframe-dataset/) API
 - Kafka 기본 개념 (선택 사항)
 - 이벤트 시간 vs 처리 시간 개념
 
@@ -576,9 +576,9 @@ public class RealTimeSalesAggregation {
 
 ## 관련 문서
 
-- [Kafka 핵심 구성요소]({{< relref "/docs/kafka/concepts/core-components" >}}) - Structured Streaming의 주요 소스/싱크인 Kafka의 Topic, Partition, Consumer Group 개념
+- [Kafka 핵심 구성요소](../../kafka/concepts/core-components/) - Structured Streaming의 주요 소스/싱크인 Kafka의 Topic, Partition, Consumer Group 개념
 
 ## 다음 단계
 
-- [MLlib]({{< relref "/docs/spark/concepts/mllib" >}}) - Spark로 머신러닝
-- [성능 튜닝]({{< relref "/docs/spark/concepts/tuning" >}}) - 스트리밍 성능 최적화
+- [MLlib](mllib/) - Spark로 머신러닝
+- [성능 튜닝](tuning/) - 스트리밍 성능 최적화

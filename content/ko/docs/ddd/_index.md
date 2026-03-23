@@ -38,11 +38,11 @@ DDD는 전통적인 데이터 중심 설계와 근본적으로 다른 접근법�
 
 ## 이 가이드에서 다루는 것
 
-**[Quick Start]({{< relref "/docs/ddd/quick-start" >}})**
+**[Quick Start](quick-start/)**
 
 DDD 핵심 개념을 빠르게 훑어봅니다. 전체 그림을 먼저 잡고 세부 내용으로 들어가세요.
 
-**[개념 이해]({{< relref "/docs/ddd/concepts" >}})**
+**[개념 이해](concepts/)**
 
 DDD는 크게 <strong>전략적 설계</strong>와 <strong>전술적 설계</strong>로 나뉩니다. 전략적 설계는 시스템의 큰 그림을 다루며 Bounded Context, Context Map, 유비쿼터스 언어 등의 개념을 포함합니다. 전술적 설계는 코드 레벨의 패턴을 다루며 Entity, Value Object, Repository, Aggregate, 도메인 이벤트 등의 구체적인 구현 패턴을 제공합니다. 심화 주제로는 CQRS를 통한 명령과 조회의 분리, 다양한 아키텍처 패턴(Layered, Hexagonal, Clean Architecture), 도메인 모델 테스트 전략, 그리고 흔한 실수를 피하는 안티패턴 가이드가 있습니다.
 
@@ -57,27 +57,27 @@ DDD는 크게 <strong>전략적 설계</strong>와 <strong>전술적 설계</str
 | [테스트 전략](concepts/testing/) | 도메인 모델 테스트 방법 |
 | [안티패턴](concepts/anti-patterns/) | 흔한 실수와 피하는 방법 |
 
-**[How-To Guide]({{< relref "/docs/ddd/howto" >}})**
+**[How-To Guide](howto/)**
 
 DDD를 적용하면서 마주치는 구체적인 문제를 해결하는 방법을 단계별로 안내합니다.
 
-- [Aggregate 경계 정하기]({{< relref "/docs/ddd/howto/aggregate-boundaries" >}}) - 불변식 기반으로 Aggregate 경계를 설계하는 방법
+- [Aggregate 경계 정하기](howto/aggregate-boundaries/) - 불변식 기반으로 Aggregate 경계를 설계하는 방법
 
-**[실습 예제]({{< relref "/docs/ddd/examples" >}})**
+**[실습 예제](examples/)**
 
 실제 주문 도메인을 DDD로 구현하는 예제를 통해 학습한 개념을 실전에 적용합니다. 환경 설정부터 시작하여 주문 도메인의 Entity, Value Object, Aggregate를 구현하고, 애플리케이션 레이어에서 Use Case와 도메인 서비스를 작성합니다.
 
-- [환경 설정]({{< relref "/docs/ddd/examples/setup" >}}) - 프로젝트 구조와 의존성
-- [주문 도메인]({{< relref "/docs/ddd/examples/order-domain" >}}) - Entity, Value Object, Aggregate 구현
-- [애플리케이션 레이어]({{< relref "/docs/ddd/examples/application-layer" >}}) - Use Case와 도메인 서비스
+- [환경 설정](examples/setup/) - 프로젝트 구조와 의존성
+- [주문 도메인](examples/order-domain/) - Entity, Value Object, Aggregate 구현
+- [애플리케이션 레이어](examples/application-layer/) - Use Case와 도메인 서비스
 
-**[부록]({{< relref "/docs/ddd/appendix" >}})**
+**[부록](appendix/)**
 
 학습 중 참고할 수 있는 보조 자료를 제공합니다. 용어 사전에서는 DDD 핵심 용어를 빠르게 확인할 수 있고, FAQ에서는 자주 묻는 질문에 대한 답변을, 참고 자료에서는 추가 학습을 위한 도서와 아티클을 찾을 수 있습니다.
 
-- [용어 사전]({{< relref "/docs/ddd/appendix/glossary" >}}) - DDD 용어 빠른 참조
-- [FAQ]({{< relref "/docs/ddd/appendix/faq" >}}) - 자주 묻는 질문
-- [참고 자료]({{< relref "/docs/ddd/appendix/references" >}}) - 추가 학습 자료
+- [용어 사전](appendix/glossary/) - DDD 용어 빠른 참조
+- [FAQ](appendix/faq/) - 자주 묻는 질문
+- [참고 자료](appendix/references/) - 추가 학습 자료
 
 ## 선수 지식
 

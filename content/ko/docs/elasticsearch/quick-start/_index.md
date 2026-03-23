@@ -69,7 +69,7 @@ docker-compose up -d
 ```
 
 > **docker-compose.yml이 없다면?**
-> [환경 구성 가이드]({{< relref "/docs/elasticsearch/examples/setup" >}})에서 파일 내용을 확인하세요.
+> [환경 구성 가이드](../examples/setup/)에서 파일 내용을 확인하세요.
 
 정상 실행 확인:
 

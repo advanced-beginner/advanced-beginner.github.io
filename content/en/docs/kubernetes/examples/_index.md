@@ -72,4 +72,4 @@ All examples require the following environment:
 - kubectl 1.29.x or higher
 - Local Kubernetes cluster (Minikube or Kind)
 
-If your environment is not set up, start with the [Environment Setup]({{< relref "/docs/kubernetes/examples/setup" >}}) example.
+If your environment is not set up, start with the [Environment Setup](setup/) example.

@@ -17,7 +17,7 @@ author_url: "http://github.com/kimbenji"
 
 **대상 독자**: Kafka 클러스터를 운영하고 모니터링하려는 운영자 및 개발자
 
-**선수 지식**: [Consumer Group & Offset]({{< relref "/docs/kafka/concepts/consumer-group" >}})의 Offset과 Lag 개념
+**선수 지식**: [Consumer Group & Offset](consumer-group/)의 Offset과 Lag 개념
 
 **소요 시간**: 약 25-30분
 
@@ -365,5 +365,5 @@ Kafka 모니터링의 핵심 메트릭은 세 가지입니다. Consumer Lag은 �
 
 #### 다음 단계
 
-- [실습 예제]({{< relref "/docs/kafka/examples" >}}) - 배운 개념을 직접 적용해보기
-- [Prometheus 아키텍처]({{< relref "/docs/observability/concepts/prometheus-architecture" >}}) - Kafka 메트릭 수집에 사용되는 Prometheus의 아키텍처와 동작 원리
+- [실습 예제](../examples/) - 배운 개념을 직접 적용해보기
+- [Prometheus 아키텍처](../../observability/concepts/prometheus-architecture/) - Kafka 메트릭 수집에 사용되는 Prometheus의 아키텍처와 동작 원리

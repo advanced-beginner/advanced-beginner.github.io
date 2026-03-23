@@ -14,7 +14,7 @@ author:
 {{< callout type="info" title="이 가이드의 범위" >}}
 **다루는 내용**: 리소스 사용량 측정, requests/limits 적정값 산정, 스로틀링/OOM 해결
 
-**다루지 않는 내용**: 자동 스케일링([스케일링]({{< relref "/docs/kubernetes/concepts/scaling" >}}) 참조), Pod 시작 문제([Pod 트러블슈팅]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) 참조)
+**다루지 않는 내용**: 자동 스케일링([스케일링](../concepts/scaling/) 참조), Pod 시작 문제([Pod 트러블슈팅](pod-troubleshooting/) 참조)
 {{< /callout >}}
 
 ## 시작하기 전에

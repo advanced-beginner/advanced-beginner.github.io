@@ -465,5 +465,5 @@ Create clusters through each platform's management console or CLI.
 
 ## Next Steps
 
-- [FAQ]({{< relref "/docs/spark/appendix/faq" >}}) - Common operational issues
-- [References]({{< relref "/docs/spark/appendix/references" >}}) - Additional learning resources
+- [FAQ](../appendix/faq/) - Common operational issues
+- [References](../appendix/references/) - Additional learning resources

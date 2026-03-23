@@ -13,7 +13,7 @@ author_url: "http://github.com/kimbenji"
 > **이 섹션의 목적**: DDD의 핵심 개념과 패턴을 "왜" 그리고 "무엇"인지 설명
 
 {{< callout type="info" title="설명 문서란?" >}}
-이 섹션은 <strong>개념 이해</strong>를 목적으로 합니다. "어떻게 구현하는가"보다 "왜 이렇게 설계하는가"에 집중합니다. 실제 구현 방법은 [실습 예제]({{< relref "/docs/ddd/examples" >}})를, 특정 문제 해결 방법은 [How-To Guide]({{< relref "/docs/ddd/howto" >}})를 참고하세요.
+이 섹션은 <strong>개념 이해</strong>를 목적으로 합니다. "어떻게 구현하는가"보다 "왜 이렇게 설계하는가"에 집중합니다. 실제 구현 방법은 [실습 예제](../examples/)를, 특정 문제 해결 방법은 [How-To Guide](../howto/)를 참고하세요.
 {{< /callout >}}
 
 ## DDD를 왜 배워야 하는가?
@@ -129,7 +129,7 @@ flowchart TB
 
 ## 다음 단계
 
-- **DDD가 처음이라면**: [전략적 설계]({{< relref "/docs/ddd/concepts/strategic-design" >}})부터 시작하세요
-- **구현 패턴이 궁금하다면**: [전술적 설계]({{< relref "/docs/ddd/concepts/tactical-design" >}})를 먼저 훑어보세요
-- **Specification, Policy 등 심화 패턴이 궁금하다면**: [도메인 모델 패턴]({{< relref "/docs/ddd/concepts/domain-model-patterns" >}})을 참고하세요
-- **아키텍처 선택이 고민이라면**: [아키텍처 패턴 비교]({{< relref "/docs/ddd/concepts/architecture" >}})를 참고하세요
+- **DDD가 처음이라면**: [전략적 설계](strategic-design/)부터 시작하세요
+- **구현 패턴이 궁금하다면**: [전술적 설계](tactical-design/)를 먼저 훑어보세요
+- **Specification, Policy 등 심화 패턴이 궁금하다면**: [도메인 모델 패턴](domain-model-patterns/)을 참고하세요
+- **아키텍처 선택이 고민이라면**: [아키텍처 패턴 비교](architecture/)를 참고하세요

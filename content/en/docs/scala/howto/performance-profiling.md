@@ -488,6 +488,6 @@ Items to verify for performance optimization:
 
 ## Related Documents
 
-- [Type Error Debugging]({{< relref "/docs/scala/howto/type-error-debugging" >}}) - Resolving type-related compilation errors
-- [Resolving sbt Dependency Conflicts]({{< relref "/docs/scala/howto/sbt-dependency-conflicts" >}}) - Build dependency issues
-- [Future Error Handling]({{< relref "/docs/scala/howto/future-error-handling" >}}) - Async code performance and error handling
+- [Type Error Debugging](type-error-debugging/) - Resolving type-related compilation errors
+- [Resolving sbt Dependency Conflicts](sbt-dependency-conflicts/) - Build dependency issues
+- [Future Error Handling](future-error-handling/) - Async code performance and error handling

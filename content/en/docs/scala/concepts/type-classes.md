@@ -395,5 +395,5 @@ None.toJson                // "null"
 
 #### Next Steps
 
-- [Variance]({{< relref "/docs/scala/concepts/variance" >}}) — Covariance and contravariance in generic types
-- [Advanced Types]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) — Advanced type features in Scala 3
+- [Variance](variance/) — Covariance and contravariance in generic types
+- [Advanced Types](type-system-advanced/) — Advanced type features in Scala 3

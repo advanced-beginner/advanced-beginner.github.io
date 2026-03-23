@@ -8,7 +8,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **Target Audience**: Developers who are applying or considering adopting DDD
-> **Prerequisites**: Basic concepts from [Quick Start]({{< relref "/docs/ddd/quick-start" >}}) and [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design" >}})
+> **Prerequisites**: Basic concepts from [Quick Start](../quick-start/) and [Tactical Design](tactical-design/)
 > **Reading Time**: About 20 minutes
 > **Key Question**: "What are the common mistakes when applying DDD, and how can they be avoided?"
 
@@ -567,5 +567,5 @@ The stage of verifying quality at the team level. Did you use business terminolo
 
 #### Next Steps
 
-- [Examples]({{< relref "/docs/ddd/examples" >}}) - Implementing with correct patterns
-- [Glossary]({{< relref "/docs/ddd/appendix/glossary" >}}) - DDD terminology reference
+- [Examples](../examples/) - Implementing with correct patterns
+- [Glossary](../appendix/glossary/) - DDD terminology reference

@@ -476,6 +476,6 @@ object DeltaLakePipeline extends App {
 
 ## Next Steps
 
-- [Structured Streaming]({{< relref "/docs/spark/concepts/structured-streaming" >}}) - Real-time processing
-- [Performance Tuning]({{< relref "/docs/spark/concepts/tuning" >}}) - Spark optimization
-- [Kafka Integration]({{< relref "/docs/kafka" >}}) - Stream source
+- [Structured Streaming](../concepts/structured-streaming/) - Real-time processing
+- [Performance Tuning](../concepts/tuning/) - Spark optimization
+- [Kafka Integration](../../kafka/) - Stream source

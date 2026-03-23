@@ -636,5 +636,5 @@ Items to verify when integrating Kafka with microservices. Include correlationId
 
 #### Next Steps
 
-- [Error Handling]({{< relref "/docs/kafka/concepts/error-handling" >}}) - DLT, retry strategies
-- [Monitoring]({{< relref "/docs/kafka/concepts/monitoring" >}}) - Metrics collection and alerts
+- [Error Handling](../concepts/error-handling/) - DLT, retry strategies
+- [Monitoring](../concepts/monitoring/) - Metrics collection and alerts

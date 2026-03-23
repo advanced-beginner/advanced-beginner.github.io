@@ -14,7 +14,7 @@ lastmod: 2026-01-10
 {{< /callout >}}
 
 **Target Audience**: Developers who understand Elasticsearch basics
-**Prerequisites**: [Core Components]({{< relref "/docs/elasticsearch/concepts/core-components" >}}), JSON basics
+**Prerequisites**: [Core Components](core-components/), JSON basics
 
 Learn how to write various search queries using Elasticsearch's Query DSL (Domain Specific Language).
 

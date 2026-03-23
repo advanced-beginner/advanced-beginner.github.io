@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **Target Audience**: Developers who want to operate or deeply understand Prometheus
-> **Prerequisites**: [Metrics Fundamentals]({{< relref "/docs/observability/concepts/metrics-fundamentals" >}})
+> **Prerequisites**: [Metrics Fundamentals](metrics-fundamentals/)
 > **After Reading**: You'll understand Prometheus design philosophy and components, and be able to plan operational strategies
 
 ## TL;DR

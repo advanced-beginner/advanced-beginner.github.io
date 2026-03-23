@@ -40,7 +40,7 @@ val future = Future {
 
 ### 이 가이드가 다루지 않는 것
 
-- **Future의 기본 개념**: [동시성 개념 문서]({{< relref "/docs/scala/concepts/concurrency" >}})를 참조하세요
+- **Future의 기본 개념**: [동시성 개념 문서](../concepts/concurrency/)를 참조하세요
 - **Cats Effect IO / ZIO의 에러 처리**: 해당 라이브러리 문서를 참조하세요
 - **액터 시스템(Akka)의 에러 처리**: Akka 문서를 참조하세요
 
@@ -445,6 +445,6 @@ Future 에러 처리 시 확인사항:
 
 ## 관련 문서
 
-- [동시성]({{< relref "/docs/scala/concepts/concurrency" >}}) - Future와 Promise 기초
-- [Implicit/Given 디버깅]({{< relref "/docs/scala/howto/implicit-debugging" >}}) - ExecutionContext 문제 해결
-- [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) - 모나딕 에러 처리
+- [동시성](../concepts/concurrency/) - Future와 Promise 기초
+- [Implicit/Given 디버깅](implicit-debugging/) - ExecutionContext 문제 해결
+- [함수형 패턴](../concepts/functional-patterns/) - 모나딕 에러 처리

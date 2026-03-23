@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **Target Audience**: SREs operating various service types
-> **Prerequisites**: [SRE Golden Signals]({{< relref "/docs/observability/concepts/golden-signals" >}})
+> **Prerequisites**: [SRE Golden Signals](./)
 > **After reading this**: You'll be able to apply the four signals tailored to service characteristics
 
 ## TL;DR

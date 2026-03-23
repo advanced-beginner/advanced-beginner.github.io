@@ -1181,4 +1181,4 @@ public abstract class AggregateRoot<ID> {
 
 ## Next Steps
 
-- [Application Layer]({{< relref "/docs/ddd/examples/application-layer" >}}) - Use Case and service implementation
+- [Application Layer](application-layer/) - Use Case and service implementation

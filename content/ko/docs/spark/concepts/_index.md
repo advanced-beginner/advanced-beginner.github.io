@@ -74,28 +74,28 @@ Java/Spring 개발자에게 Spark는 익숙하면서도 새로운 패러다임�
 
 먼저 Spark의 핵심 구조와 API를 이해합니다:
 
-1. [아키텍처]({{< relref "/docs/spark/concepts/architecture" >}}) - Driver, Executor, Cluster Manager의 역할과 상호작용
-2. [RDD 기초]({{< relref "/docs/spark/concepts/rdd" >}}) - Spark의 기본 추상화, 분산 컬렉션의 개념
-3. [DataFrame과 Dataset]({{< relref "/docs/spark/concepts/dataframe-dataset" >}}) - 현대적인 고수준 API
-4. [Spark SQL]({{< relref "/docs/spark/concepts/spark-sql" >}}) - SQL로 분산 데이터 처리
-5. [Transformation과 Action]({{< relref "/docs/spark/concepts/transformations-actions" >}}) - 지연 평가와 실행의 핵심
+1. [아키텍처](architecture/) - Driver, Executor, Cluster Manager의 역할과 상호작용
+2. [RDD 기초](rdd/) - Spark의 기본 추상화, 분산 컬렉션의 개념
+3. [DataFrame과 Dataset](dataframe-dataset/) - 현대적인 고수준 API
+4. [Spark SQL](spark-sql/) - SQL로 분산 데이터 처리
+5. [Transformation과 Action](transformations-actions/) - 지연 평가와 실행의 핵심
 
 **심화 개념**
 
 기초를 이해했다면 성능 최적화와 고급 기능을 학습합니다:
 
-6. [파티셔닝과 셔플]({{< relref "/docs/spark/concepts/partitioning" >}}) - 분산 처리의 핵심, 데이터 분배 전략
-7. [캐싱과 영속성]({{< relref "/docs/spark/concepts/caching" >}}) - 인메모리 처리 최적화
-8. [Structured Streaming]({{< relref "/docs/spark/concepts/structured-streaming" >}}) - 실시간 스트림 데이터 처리
-9. [MLlib]({{< relref "/docs/spark/concepts/mllib" >}}) - 분산 머신러닝
+6. [파티셔닝과 셔플](partitioning/) - 분산 처리의 핵심, 데이터 분배 전략
+7. [캐싱과 영속성](caching/) - 인메모리 처리 최적화
+8. [Structured Streaming](structured-streaming/) - 실시간 스트림 데이터 처리
+9. [MLlib](mllib/) - 분산 머신러닝
 
 **운영 개념**
 
 프로덕션 환경에서 Spark를 운영하기 위한 지식입니다:
 
-10. [성능 튜닝]({{< relref "/docs/spark/concepts/tuning" >}}) - 메모리, 파티션, 셔플 최적화
-11. [배포와 클러스터 관리]({{< relref "/docs/spark/concepts/deployment" >}}) - Standalone, YARN, Kubernetes 환경
-12. [Spark Connect]({{< relref "/docs/spark/concepts/spark-connect" >}}) - 씬 클라이언트 아키텍처 (Spark 3.4+)
+10. [성능 튜닝](tuning/) - 메모리, 파티션, 셔플 최적화
+11. [배포와 클러스터 관리](deployment/) - Standalone, YARN, Kubernetes 환경
+12. [Spark Connect](spark-connect/) - 씬 클라이언트 아키텍처 (Spark 3.4+)
 
 ## 핵심 개념 요약
 

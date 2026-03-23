@@ -636,5 +636,5 @@ class OrderServiceIntegrationTest {
 
 #### 다음 단계
 
-- [에러 처리]({{< relref "/docs/kafka/concepts/error-handling" >}}) - DLT, 재시도 전략
-- [모니터링]({{< relref "/docs/kafka/concepts/monitoring" >}}) - 메트릭 수집과 알림
+- [에러 처리](../concepts/error-handling/) - DLT, 재시도 전략
+- [모니터링](../concepts/monitoring/) - 메트릭 수집과 알림

@@ -18,8 +18,8 @@ author:
 **대상 독자**: 프로덕션 Spark 워크로드를 최적화하는 시니어 엔지니어
 
 **선수 지식**:
-- [파티셔닝과 셔플]({{< relref "/docs/spark/concepts/partitioning" >}}) 이해
-- [캐싱과 영속성]({{< relref "/docs/spark/concepts/caching" >}}) 이해
+- [파티셔닝과 셔플](partitioning/) 이해
+- [캐싱과 영속성](caching/) 이해
 - Spark UI 기본 사용법
 
 **소요 시간**: 약 25-30분
@@ -564,14 +564,14 @@ df.explain(true);
 
 ## 다음 단계
 
-- [배포와 클러스터 관리]({{< relref "/docs/spark/concepts/deployment" >}}) - 프로덕션 환경 구성
-- [FAQ]({{< relref "/docs/spark/appendix/faq" >}}) - 자주 발생하는 성능 문제 해결
+- [배포와 클러스터 관리](deployment/) - 프로덕션 환경 구성
+- [FAQ](../appendix/faq/) - 자주 발생하는 성능 문제 해결
 
 ## 관련 문서
 
-- [아키텍처]({{< relref "/docs/spark/concepts/architecture" >}}) - Driver/Executor 메모리 구조
-- [파티셔닝과 셔플]({{< relref "/docs/spark/concepts/partitioning" >}}) - 셔플 최적화 상세
-- [캐싱과 영속성]({{< relref "/docs/spark/concepts/caching" >}}) - 캐시 메모리 관리
-- [Spark SQL]({{< relref "/docs/spark/concepts/spark-sql" >}}) - SQL 쿼리 최적화
-- [기본 예제]({{< relref "/docs/spark/examples/basic" >}}) - 최적화 적용 예제
-- [용어 사전]({{< relref "/docs/spark/appendix/glossary" >}}) - AQE, Tungsten 용어 정의
+- [아키텍처](architecture/) - Driver/Executor 메모리 구조
+- [파티셔닝과 셔플](partitioning/) - 셔플 최적화 상세
+- [캐싱과 영속성](caching/) - 캐시 메모리 관리
+- [Spark SQL](spark-sql/) - SQL 쿼리 최적화
+- [기본 예제](../examples/basic/) - 최적화 적용 예제
+- [용어 사전](../appendix/glossary/) - AQE, Tungsten 용어 정의

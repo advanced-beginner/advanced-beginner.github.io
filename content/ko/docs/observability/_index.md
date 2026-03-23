@@ -60,10 +60,10 @@ graph LR
 
 ## 이 가이드에서 다루는 것
 
-### [Quick Start]({{< relref "/docs/observability/quick-start" >}})
+### [Quick Start](quick-start/)
 10분 만에 Prometheus + Grafana 환경을 구축하고 첫 번째 메트릭을 확인합니다.
 
-### [개념 이해]({{< relref "/docs/observability/concepts" >}})
+### [개념 이해](concepts/)
 "어떻게 쓰는가"를 넘어 **"왜 이렇게 설계되었는가"**를 설명합니다.
 
 | 주제 | 배우는 것 |
@@ -78,26 +78,26 @@ graph LR
 | [OpenTelemetry](concepts/opentelemetry/) | 관측성 표준과 통합 방법 |
 | [대시보드 설계](concepts/dashboard-design/) | 효과적인 시각화 원칙 |
 
-### [실습 예제]({{< relref "/docs/observability/examples" >}})
+### [실습 예제](examples/)
 실행 가능한 코드로 직접 경험합니다.
 
-- [환경 구성]({{< relref "/docs/observability/examples/setup" >}}) - Docker Compose로 전체 스택 구성
-- [Spring Boot 메트릭]({{< relref "/docs/observability/examples/spring-boot-metrics" >}}) - Actuator + Micrometer 설정
-- [Kafka 모니터링]({{< relref "/docs/observability/examples/kafka-monitoring" >}}) - Kafka 클러스터 관측성 구축
-- [풀스택 Observability]({{< relref "/docs/observability/examples/full-stack" >}}) - 메트릭 + 로그 + 트레이스 통합
+- [환경 구성](examples/setup/) - Docker Compose로 전체 스택 구성
+- [Spring Boot 메트릭](examples/spring-boot-metrics/) - Actuator + Micrometer 설정
+- [Kafka 모니터링](examples/kafka-monitoring/) - Kafka 클러스터 관측성 구축
+- [풀스택 Observability](examples/full-stack/) - 메트릭 + 로그 + 트레이스 통합
 
-### [문제 해결]({{< relref "/docs/observability/howto" >}})
+### [문제 해결](howto/)
 실무에서 자주 마주치는 문제 상황과 해결법입니다.
 
-- [높은 지연시간 진단]({{< relref "/docs/observability/howto/debug-high-latency" >}}) - P99 지연 원인 추적
-- [메트릭 카디널리티 최적화]({{< relref "/docs/observability/howto/reduce-cardinality" >}}) - 비용 절감 전략
-- [알림 피로도 관리]({{< relref "/docs/observability/howto/manage-alert-fatigue" >}}) - 노이즈 알림 줄이기
+- [높은 지연시간 진단](howto/debug-high-latency/) - P99 지연 원인 추적
+- [메트릭 카디널리티 최적화](howto/reduce-cardinality/) - 비용 절감 전략
+- [알림 피로도 관리](howto/manage-alert-fatigue/) - 노이즈 알림 줄이기
 
-### [부록]({{< relref "/docs/observability/appendix" >}})
-- [용어 사전]({{< relref "/docs/observability/appendix/glossary" >}}) - Observability 용어 빠른 참조
-- [FAQ]({{< relref "/docs/observability/appendix/faq" >}}) - 자주 묻는 질문
-- [알림 후 액션 가이드]({{< relref "/docs/observability/appendix/alerting-actions" >}}) - PromQL 감지 후 대응 방안
-- [참고 자료]({{< relref "/docs/observability/appendix/references" >}}) - 공식 문서 및 추가 학습 자료
+### [부록](appendix/)
+- [용어 사전](appendix/glossary/) - Observability 용어 빠른 참조
+- [FAQ](appendix/faq/) - 자주 묻는 질문
+- [알림 후 액션 가이드](appendix/alerting-actions/) - PromQL 감지 후 대응 방안
+- [참고 자료](appendix/references/) - 공식 문서 및 추가 학습 자료
 
 ## 선수 지식
 

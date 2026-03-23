@@ -12,6 +12,6 @@ Glossary and reference materials.
 
 ## Contents
 
-1. [Glossary]({{< relref "/docs/kafka/appendix/glossary" >}}) - Kafka terminology A-Z
-2. [References]({{< relref "/docs/kafka/appendix/references" >}}) - Official documentation, books, communities
-3. [Frequently Asked Questions]({{< relref "/docs/kafka/appendix/faq" >}}) - Kafka FAQ
+1. [Glossary](glossary/) - Kafka terminology A-Z
+2. [References](references/) - Official documentation, books, communities
+3. [Frequently Asked Questions](faq/) - Kafka FAQ

@@ -358,6 +358,6 @@ Follow this order when troubleshooting Lag issues:
 
 ## Related Documentation
 
-- [Advanced Consumer Settings]({{< relref "/docs/kafka/concepts/consumer-tuning" >}}) - Detailed Consumer tuning guide
-- [Core Components]({{< relref "/docs/kafka/concepts/core-components" >}}) - Understanding Consumer Groups and Partitions
-- [Producer Performance Tuning]({{< relref "/docs/kafka/howto/producer-performance-tuning" >}}) - Producer-side optimization
+- [Advanced Consumer Settings](../concepts/consumer-tuning/) - Detailed Consumer tuning guide
+- [Core Components](../concepts/core-components/) - Understanding Consumer Groups and Partitions
+- [Producer Performance Tuning](producer-performance-tuning/) - Producer-side optimization

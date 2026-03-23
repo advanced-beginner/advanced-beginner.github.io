@@ -803,5 +803,5 @@ fastFib(100)  // Computed quickly
 
 #### Next Steps
 
-- [For Comprehension]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) — Elegant expression of monadic operations
-- [Implicit/Given]({{< relref "/docs/scala/concepts/implicits" >}}) — Contextual abstraction
+- [For Comprehension](for-comprehensions/) — Elegant expression of monadic operations
+- [Implicit/Given](implicits/) — Contextual abstraction

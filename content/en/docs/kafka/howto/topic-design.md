@@ -445,6 +445,6 @@ Verify these before creating a topic:
 
 ## Related Documentation
 
-- [Core Components - Topic and Partition]({{< relref "/docs/kafka/concepts/core-components" >}}) - Topic and partition concepts
-- [Replication and Fault Tolerance]({{< relref "/docs/kafka/concepts/replication" >}}) - Replication mechanism details
-- [Message Loss Prevention]({{< relref "/docs/kafka/howto/message-loss-prevention" >}}) - Reliable messaging configuration
+- [Core Components - Topic and Partition](../concepts/core-components/) - Topic and partition concepts
+- [Replication and Fault Tolerance](../concepts/replication/) - Replication mechanism details
+- [Message Loss Prevention](message-loss-prevention/) - Reliable messaging configuration

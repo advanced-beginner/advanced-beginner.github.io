@@ -76,32 +76,32 @@ flowchart TB
 
 기본 개념을 이해해야 이후 내용을 학습할 수 있습니다.
 
-1. [핵심 구성요소]({{< relref "/docs/elasticsearch/concepts/core-components" >}}) - Cluster, Node, Index, Document, Shard의 역할과 관계
-2. [데이터 모델링]({{< relref "/docs/elasticsearch/concepts/data-modeling" >}}) - Mapping 정의, Field Type 선택, Analyzer 이해
-3. [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) - Match, Term, Bool 쿼리로 데이터 검색
+1. [핵심 구성요소](core-components/) - Cluster, Node, Index, Document, Shard의 역할과 관계
+2. [데이터 모델링](data-modeling/) - Mapping 정의, Field Type 선택, Analyzer 이해
+3. [Query DSL](query-dsl/) - Match, Term, Bool 쿼리로 데이터 검색
 
 ### 2단계: 검색 심화
 
 검색 품질을 높이고 데이터를 분석합니다.
 
-4. [검색 관련성]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) - Score 계산 원리, BM25 알고리즘, Boosting
-5. [집계]({{< relref "/docs/elasticsearch/concepts/aggregations" >}}) - Bucket, Metric, Pipeline 집계로 데이터 분석
+4. [검색 관련성](search-relevance/) - Score 계산 원리, BM25 알고리즘, Boosting
+5. [집계](aggregations/) - Bucket, Metric, Pipeline 집계로 데이터 분석
 
 ### 3단계: 운영
 
 프로덕션 환경에서 안정적으로 운영합니다.
 
-6. [인덱싱 전략]({{< relref "/docs/elasticsearch/concepts/indexing" >}}) - Bulk 인덱싱, Refresh 최적화, Index Lifecycle 관리
-7. [클러스터 관리]({{< relref "/docs/elasticsearch/concepts/cluster-management" >}}) - 노드 구성, 샤드 할당, 클러스터 확장
-8. [성능 튜닝]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) - 쿼리 최적화, 캐싱 전략, 하드웨어 선택
-9. [고가용성]({{< relref "/docs/elasticsearch/concepts/high-availability" >}}) - Replica 설정, Snapshot 백업, 장애 대응
+6. [인덱싱 전략](indexing/) - Bulk 인덱싱, Refresh 최적화, Index Lifecycle 관리
+7. [클러스터 관리](cluster-management/) - 노드 구성, 샤드 할당, 클러스터 확장
+8. [성능 튜닝](performance-tuning/) - 쿼리 최적화, 캐싱 전략, 하드웨어 선택
+9. [고가용성](high-availability/) - Replica 설정, Snapshot 백업, 장애 대응
 
 ### 4단계: 고급 기능
 
 특수한 요구사항을 해결합니다.
 
-10. [Vector Search (kNN)]({{< relref "/docs/elasticsearch/concepts/vector-search" >}}) - 시맨틱 검색, 유사 상품 추천, 임베딩 활용
-11. [한글 검색 최적화]({{< relref "/docs/elasticsearch/concepts/korean-search" >}}) - Nori 분석기, 자동완성, 초성 검색
+10. [Vector Search (kNN)](vector-search/) - 시맨틱 검색, 유사 상품 추천, 임베딩 활용
+11. [한글 검색 최적화](korean-search/) - Nori 분석기, 자동완성, 초성 검색
 
 ## 핵심 개념 요약
 

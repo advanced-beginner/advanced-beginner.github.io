@@ -44,8 +44,8 @@ Ambiguous given instances
 
 ### What This Guide Does NOT Cover
 
-- **How implicit conversions work**: See [Implicit/Given Concepts]({{< relref "/docs/scala/concepts/implicits" >}})
-- **How to design type classes**: See [Type Classes Concepts]({{< relref "/docs/scala/concepts/type-classes" >}})
+- **How implicit conversions work**: See [Implicit/Given Concepts](../concepts/implicits/)
+- **How to design type classes**: See [Type Classes Concepts](../concepts/type-classes/)
 - **Implicit values in Cats/ZIO libraries**: Refer to respective library documentation
 
 ---
@@ -321,6 +321,6 @@ When implicit values are not found, check the following:
 
 ## Related Documentation
 
-- [Implicit/Given Concepts]({{< relref "/docs/scala/concepts/implicits" >}}) - How implicit conversions work
-- [Type Classes]({{< relref "/docs/scala/concepts/type-classes" >}}) - Type class patterns
-- [Future Error Handling]({{< relref "/docs/scala/howto/future-error-handling" >}}) - ExecutionContext troubleshooting
+- [Implicit/Given Concepts](../concepts/implicits/) - How implicit conversions work
+- [Type Classes](../concepts/type-classes/) - Type class patterns
+- [Future Error Handling](future-error-handling/) - ExecutionContext troubleshooting

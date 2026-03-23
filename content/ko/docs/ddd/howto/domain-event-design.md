@@ -9,7 +9,7 @@ author_url: "http://github.com/kimbenji"
 
 > **해결하는 문제**: Aggregate 간 강한 결합으로 트랜잭션이 복잡해지거나, 변경 전파가 어려운 상황
 > **소요 시간**: 약 25분
-> **전제 조건**: [Aggregate 심화]({{< relref "/docs/ddd/concepts/aggregate" >}}) 문서를 읽었다고 가정
+> **전제 조건**: [Aggregate 심화](../concepts/aggregate/) 문서를 읽었다고 가정
 
 {{< callout type="warning" title="성공 기준" >}}
 이 가이드를 완료하면 다음을 할 수 있습니다:
@@ -622,10 +622,10 @@ public void handleSecond(OrderConfirmedEvent event) {
 
 ## 관련 문서
 
-- [Kafka 토픽 설계 가이드]({{< relref "/docs/kafka/howto/topic-design" >}}) - 도메인 이벤트를 Kafka 토픽으로 발행할 때의 설계 원칙
+- [Kafka 토픽 설계 가이드](../../kafka/howto/topic-design/) - 도메인 이벤트를 Kafka 토픽으로 발행할 때의 설계 원칙
 
 ## 다음 단계
 
-- [이벤트 기반 아키텍처]({{< relref "/docs/ddd/concepts/architecture/event-driven" >}}) - 이벤트 소싱, CQRS
-- [CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}}) - 명령과 조회 분리
-- [Event Sourcing 예제]({{< relref "/docs/ddd/examples/event-sourcing" >}}) - 실제 구현 예시
+- [이벤트 기반 아키텍처](../concepts/architecture/event-driven/) - 이벤트 소싱, CQRS
+- [CQRS](../concepts/architecture/cqrs/) - 명령과 조회 분리
+- [Event Sourcing 예제](../examples/event-sourcing/) - 실제 구현 예시

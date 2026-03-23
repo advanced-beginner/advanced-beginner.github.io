@@ -12,7 +12,7 @@ weight: 1
 {{< callout type="info" title="이 가이드의 범위" >}}
 **다루는 내용**: 쿼리 수준의 성능 최적화, Profile API 분석, 캐시 활용
 
-**다루지 않는 내용**: 클러스터 수준 튜닝(노드 추가, 하드웨어 업그레이드)은 [성능 튜닝]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}})을 참조하세요.
+**다루지 않는 내용**: 클러스터 수준 튜닝(노드 추가, 하드웨어 업그레이드)은 [성능 튜닝](../concepts/performance-tuning/)을 참조하세요.
 {{< /callout >}}
 
 {{< callout type="tip" title="TL;DR" >}}
@@ -386,6 +386,6 @@ curl -X GET "localhost:9200/_cat/indices?v"
 
 ## 관련 문서
 
-- [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) - 쿼리 유형별 특징
-- [성능 튜닝]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) - 클러스터 수준 튜닝
-- [메모리 문제 해결]({{< relref "/docs/elasticsearch/howto/memory-troubleshooting" >}}) - OOM 발생 시 대응
+- [Query DSL](../concepts/query-dsl/) - 쿼리 유형별 특징
+- [성능 튜닝](../concepts/performance-tuning/) - 클러스터 수준 튜닝
+- [메모리 문제 해결](memory-troubleshooting/) - OOM 발생 시 대응

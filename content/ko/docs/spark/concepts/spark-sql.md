@@ -19,7 +19,7 @@ author:
 
 **선수 지식**:
 - 표준 SQL 문법 (SELECT, JOIN, GROUP BY, Window 함수)
-- [DataFrame과 Dataset]({{< relref "/docs/spark/concepts/dataframe-dataset" >}}) 기본 이해
+- [DataFrame과 Dataset](dataframe-dataset/) 기본 이해
 
 **소요 시간**: 약 25-30분
 
@@ -872,5 +872,5 @@ public class ComplexAnalysis {
 
 ## 다음 단계
 
-- [Transformation과 Action]({{< relref "/docs/spark/concepts/transformations-actions" >}}) - 연산의 지연 평가 이해
-- [파티셔닝과 셔플]({{< relref "/docs/spark/concepts/partitioning" >}}) - 분산 처리 최적화
+- [Transformation과 Action](transformations-actions/) - 연산의 지연 평가 이해
+- [파티셔닝과 셔플](partitioning/) - 분산 처리 최적화

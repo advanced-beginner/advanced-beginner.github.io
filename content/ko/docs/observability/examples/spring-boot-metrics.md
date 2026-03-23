@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **소요 시간**: 20분
-> **선수 지식**: Spring Boot, [환경 구성]({{< relref "/docs/observability/examples/setup" >}})
+> **선수 지식**: Spring Boot, [환경 구성](setup/)
 > **이 문서를 읽으면**: Spring Boot 애플리케이션에 Observability를 적용할 수 있습니다
 
 ---

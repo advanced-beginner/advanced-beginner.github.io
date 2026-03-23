@@ -567,7 +567,7 @@ curl -X DELETE http://localhost:9200/products
 ### 한글 검색 안 됨
 
 기본 `standard` analyzer는 한글 형태소 분석을 하지 않습니다.
-[상품 검색 시스템]({{< relref "/docs/elasticsearch/examples/product-search" >}}) 예제에서 Nori 설정을 확인하세요.
+[상품 검색 시스템](product-search/) 예제에서 Nori 설정을 확인하세요.
 
 {{< callout type="info" title="핵심 포인트" >}}
 - 인덱스 자동 생성이 안 되면 `@Document(createIndex = true)` 확인

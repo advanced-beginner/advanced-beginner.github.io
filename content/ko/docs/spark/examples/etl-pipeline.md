@@ -798,7 +798,7 @@ public class EtlScheduler {
 
 ## 관련 문서
 
-- [기본 예제]({{< relref "/docs/spark/examples/basic" >}}) - DataFrame 기본 연산
-- [모니터링]({{< relref "/docs/spark/examples/monitoring" >}}) - 파이프라인 모니터링
-- [성능 튜닝]({{< relref "/docs/spark/concepts/tuning" >}}) - 대용량 처리 최적화
-- [Elasticsearch 데이터 모델링]({{< relref "/docs/elasticsearch/concepts/data-modeling" >}}) - ETL 결과를 Elasticsearch에 적재할 때의 인덱스 설계 원칙
+- [기본 예제](basic/) - DataFrame 기본 연산
+- [모니터링](monitoring/) - 파이프라인 모니터링
+- [성능 튜닝](../concepts/tuning/) - 대용량 처리 최적화
+- [Elasticsearch 데이터 모델링](../../elasticsearch/concepts/data-modeling/) - ETL 결과를 Elasticsearch에 적재할 때의 인덱스 설계 원칙

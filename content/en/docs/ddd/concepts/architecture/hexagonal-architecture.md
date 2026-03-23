@@ -8,7 +8,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **Target Audience**: Developers considering testability and external dependency replacement
-> **Prerequisites**: Understanding the limitations of [Layered Architecture]({{< relref "/docs/ddd/concepts/architecture/layered-architecture" >}})
+> **Prerequisites**: Understanding the limitations of [Layered Architecture](layered-architecture/)
 > **Estimated Time**: About 20 minutes
 
 Also known as the **Ports and Adapters** pattern. An architecture that completely isolates the application core from the external world. The core idea of hexagonal architecture is to place business logic at the center and handle all external interactions through Ports and Adapters. This way, even if external technologies change, core business logic remains unaffected.
@@ -1173,6 +1173,6 @@ com.example.order/
 
 #### Next Steps
 
-- [Clean Architecture]({{< relref "/docs/ddd/concepts/architecture/clean-architecture" >}}) - Stricter dependency rules
-- [Onion Architecture]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}}) - Domain model centered
-- [CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}}) - Read/write separation
+- [Clean Architecture](clean-architecture/) - Stricter dependency rules
+- [Onion Architecture](onion-architecture/) - Domain model centered
+- [CQRS](cqrs/) - Read/write separation

@@ -352,6 +352,6 @@ Items to verify when resolving dependency conflicts:
 
 ## Related Documents
 
-- [Type Error Debugging]({{< relref "/docs/scala/howto/type-error-debugging" >}}) - Resolving compile-time errors
-- [Implicit/Given Debugging]({{< relref "/docs/scala/howto/implicit-debugging" >}}) - Resolving implicit value errors
-- [Future Error Handling]({{< relref "/docs/scala/howto/future-error-handling" >}}) - Error handling in asynchronous code
+- [Type Error Debugging](type-error-debugging/) - Resolving compile-time errors
+- [Implicit/Given Debugging](implicit-debugging/) - Resolving implicit value errors
+- [Future Error Handling](future-error-handling/) - Error handling in asynchronous code

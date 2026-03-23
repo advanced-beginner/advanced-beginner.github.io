@@ -811,5 +811,5 @@ public class FraudDetectionAnalysis {
 
 예제를 완료했다면:
 
-- [성능 튜닝]({{< relref "/docs/spark/concepts/tuning" >}}) - 코드 최적화
-- [부록]({{< relref "/docs/spark/appendix" >}}) - 용어 사전, FAQ
+- [성능 튜닝](../concepts/tuning/) - 코드 최적화
+- [부록](../appendix/) - 용어 사전, FAQ

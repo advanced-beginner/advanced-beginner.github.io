@@ -18,8 +18,8 @@ author:
 **대상 독자**: Spark 성능 튜닝을 시작하는 데이터 엔지니어
 
 **선수 지식**:
-- [아키텍처]({{< relref "/docs/spark/concepts/architecture" >}}) 문서의 Stage, Task 개념
-- [Transformation과 Action]({{< relref "/docs/spark/concepts/transformations-actions" >}})의 Wide/Narrow 구분
+- [아키텍처](architecture/) 문서의 Stage, Task 개념
+- [Transformation과 Action](transformations-actions/)의 Wide/Narrow 구분
 
 **소요 시간**: 약 25-30분
 
@@ -503,13 +503,13 @@ Dataset<Row> joined = users.join(events, "user_id");
 
 ## 다음 단계
 
-- [캐싱과 영속성]({{< relref "/docs/spark/concepts/caching" >}}) - 중간 결과 저장으로 재계산 방지
-- [성능 튜닝]({{< relref "/docs/spark/concepts/tuning" >}}) - 전체적인 성능 최적화 전략
+- [캐싱과 영속성](caching/) - 중간 결과 저장으로 재계산 방지
+- [성능 튜닝](tuning/) - 전체적인 성능 최적화 전략
 
 ## 관련 문서
 
-- [아키텍처]({{< relref "/docs/spark/concepts/architecture" >}}) - 분산 처리 구조 이해
-- [Transformation과 Action]({{< relref "/docs/spark/concepts/transformations-actions" >}}) - Narrow/Wide Transformation
-- [Spark SQL]({{< relref "/docs/spark/concepts/spark-sql" >}}) - SQL 쿼리의 파티션 처리
-- [배포와 클러스터 관리]({{< relref "/docs/spark/concepts/deployment" >}}) - 클러스터 환경에서의 파티션 설정
-- [용어 사전]({{< relref "/docs/spark/appendix/glossary" >}}) - Partition, Shuffle 용어 정의
+- [아키텍처](architecture/) - 분산 처리 구조 이해
+- [Transformation과 Action](transformations-actions/) - Narrow/Wide Transformation
+- [Spark SQL](spark-sql/) - SQL 쿼리의 파티션 처리
+- [배포와 클러스터 관리](deployment/) - 클러스터 환경에서의 파티션 설정
+- [용어 사전](../appendix/glossary/) - Partition, Shuffle 용어 정의

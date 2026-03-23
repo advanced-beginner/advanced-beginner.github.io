@@ -654,5 +654,5 @@ SparkSession spark = SparkSession.builder()
 
 아키텍처를 이해했다면, 다음으로 데이터 추상화에 대해 학습하세요:
 
-- [RDD 기초]({{< relref "/docs/spark/concepts/rdd" >}}) - Spark의 기본 데이터 추상화
-- [DataFrame과 Dataset]({{< relref "/docs/spark/concepts/dataframe-dataset" >}}) - 현대적인 고수준 API
+- [RDD 기초](rdd/) - Spark의 기본 데이터 추상화
+- [DataFrame과 Dataset](dataframe-dataset/) - 현대적인 고수준 API

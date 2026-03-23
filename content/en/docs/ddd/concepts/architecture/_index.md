@@ -9,7 +9,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **Target Audience**: Developers and architects who need to choose a project architecture
-> **Prerequisites**: Understanding of [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design" >}}) building blocks
+> **Prerequisites**: Understanding of [Tactical Design](../tactical-design/) building blocks
 > **Section Purpose**: Understand the philosophy of architecture patterns and make appropriate choices for your project
 
 {{< callout type="info" title="What is the Architecture Section?" >}}
@@ -227,7 +227,7 @@ We recommend learning each architecture pattern in the following order.
 
 ## Next Steps
 
-- **If you are just starting**: Begin with [Layered Architecture]({{< relref "/docs/ddd/concepts/architecture/layered-architecture" >}})
-- **If you have many external integrations**: Check out [Hexagonal Architecture]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}})
-- **If you are applying DDD**: [Onion Architecture]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}}) is a good fit
-- **If query performance matters**: Consider [CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}})
+- **If you are just starting**: Begin with [Layered Architecture](layered-architecture/)
+- **If you have many external integrations**: Check out [Hexagonal Architecture](hexagonal-architecture/)
+- **If you are applying DDD**: [Onion Architecture](onion-architecture/) is a good fit
+- **If query performance matters**: Consider [CQRS](cqrs/)

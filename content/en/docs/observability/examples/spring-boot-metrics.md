@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **Time Required**: 20 minutes
-> **Prerequisites**: Spring Boot, [Environment Setup]({{< relref "/docs/observability/examples/setup" >}})
+> **Prerequisites**: Spring Boot, [Environment Setup](setup/)
 > **What You'll Learn**: Apply observability to Spring Boot applications
 
 ---

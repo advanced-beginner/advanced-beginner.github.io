@@ -63,10 +63,10 @@ Kubernetes adoption should consider team size, service complexity, and operation
 
 This guide is structured step-by-step for backend developers to apply Kubernetes in practice.
 
-**[Quick Start]({{< relref "/docs/kubernetes/quick-start" >}})**
+**[Quick Start](quick-start/)**
 Deploy an application to Kubernetes in 5 minutes. See a working environment before diving into concepts.
 
-**[Concepts]({{< relref "/docs/kubernetes/concepts" >}})**
+**[Concepts](concepts/)**
 
 Explains Kubernetes core principles from a **backend developer's perspective**.
 
@@ -83,23 +83,23 @@ Explains Kubernetes core principles from a **backend developer's perspective**.
 | [Scaling](concepts/scaling/) | Auto-scaling with HPA, VPA |
 | [Health Checks](concepts/health-checks/) | Liveness, Readiness, Startup Probe |
 
-**[Hands-on Examples]({{< relref "/docs/kubernetes/examples" >}})**
+**[Hands-on Examples](examples/)**
 
 Practice with executable examples:
-- [Environment Setup]({{< relref "/docs/kubernetes/examples/setup" >}}) - Local Kubernetes environment setup (Minikube, Kind)
-- [Basic Examples]({{< relref "/docs/kubernetes/examples/basic" >}}) - Pod, Deployment, Service practice
-- [Spring Boot Deployment]({{< relref "/docs/kubernetes/examples/spring-boot" >}}) - Deploying Spring Boot applications to Kubernetes
+- [Environment Setup](examples/setup/) - Local Kubernetes environment setup (Minikube, Kind)
+- [Basic Examples](examples/basic/) - Pod, Deployment, Service practice
+- [Spring Boot Deployment](examples/spring-boot/) - Deploying Spring Boot applications to Kubernetes
 
-**[How-To Guides]({{< relref "/docs/kubernetes/howto" >}})**
+**[How-To Guides](howto/)**
 
 Step-by-step guides for solving specific problems:
-- [Pod Troubleshooting]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) - Diagnosing when Pods don't start
-- [Resource Optimization]({{< relref "/docs/kubernetes/howto/resource-optimization" >}}) - Finding optimal resource settings
+- [Pod Troubleshooting](howto/pod-troubleshooting/) - Diagnosing when Pods don't start
+- [Resource Optimization](howto/resource-optimization/) - Finding optimal resource settings
 
-**[Appendix]({{< relref "/docs/kubernetes/appendix" >}})**
-- [Glossary]({{< relref "/docs/kubernetes/appendix/glossary" >}}) - Quick reference for Kubernetes terms
-- [FAQ]({{< relref "/docs/kubernetes/appendix/faq" >}}) - Frequently asked questions
-- [References]({{< relref "/docs/kubernetes/appendix/references" >}}) - Official documentation and additional learning resources
+**[Appendix](appendix/)**
+- [Glossary](appendix/glossary/) - Quick reference for Kubernetes terms
+- [FAQ](appendix/faq/) - Frequently asked questions
+- [References](appendix/references/) - Official documentation and additional learning resources
 
 ## Docker vs Kubernetes
 

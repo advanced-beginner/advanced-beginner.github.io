@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **Target Audience**: Developers and SREs who need response time analysis
-> **Prerequisites**: [Metrics Fundamentals]({{< relref "/docs/observability/concepts/metrics-fundamentals" >}}), [rate and increase]({{< relref "/docs/observability/concepts/promql/rate-and-increase" >}})
+> **Prerequisites**: [Metrics Fundamentals](../metrics-fundamentals/), [rate and increase](rate-and-increase/)
 > **What You'll Learn**: Calculate accurate percentiles from Histograms and monitor SLAs
 
 ## TL;DR

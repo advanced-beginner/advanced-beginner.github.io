@@ -390,4 +390,4 @@ com.example
 
 ## Next Steps
 
-- [Order Domain]({{< relref "/docs/ddd/examples/order-domain" >}}) - Aggregate, Entity, Value Object implementation
+- [Order Domain](order-domain/) - Aggregate, Entity, Value Object implementation

@@ -514,5 +514,5 @@ println(p1.compare(p2))     // 1 (p1 is more expensive)
 
 #### Next Steps
 
-- [Case Classes]({{< relref "/docs/scala/concepts/case-classes" >}}) — Immutable data modeling
-- [Pattern Matching]({{< relref "/docs/scala/concepts/pattern-matching" >}}) — Advanced match expressions
+- [Case Classes](case-classes/) — Immutable data modeling
+- [Pattern Matching](pattern-matching/) — Advanced match expressions

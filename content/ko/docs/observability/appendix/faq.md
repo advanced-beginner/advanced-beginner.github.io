@@ -58,7 +58,7 @@ Monitoring은 Observability의 일부입니다. Observability는 예상치 못�
 - 스토리지 비용 증가
 - 심하면 OOM 발생
 
-**해결**: [카디널리티 최적화]({{< relref "/docs/observability/howto/reduce-cardinality" >}}) 참고
+**해결**: [카디널리티 최적화](../howto/reduce-cardinality/) 참고
 
 ---
 

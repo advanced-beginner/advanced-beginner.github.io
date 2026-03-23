@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **Time Required**: 30 minutes
-> **Prerequisites**: [Spring Boot Metrics]({{< relref "/docs/observability/examples/spring-boot-metrics" >}})
+> **Prerequisites**: [Spring Boot Metrics](spring-boot-metrics/)
 > **What You'll Learn**: Track issues by connecting the three pillars (Metrics, Logs, Traces)
 
 ## Goal

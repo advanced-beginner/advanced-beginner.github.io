@@ -33,7 +33,7 @@ Rather than just "do it this way", we explain **why such design is necessary** f
 
 ---
 
-### [Apache Kafka]({{< relref "/docs/kafka" >}})
+### [Apache Kafka](docs/kafka/)
 
 Practical usage of distributed messaging systems. From Producer/Consumer basics to transactions, replication, failure handling, and performance tuning.
 
@@ -43,7 +43,7 @@ Practical usage of distributed messaging systems. From Producer/Consumer basics 
 - Achieving exactly-once delivery with transactions
 - Real-world error handling patterns and monitoring
 
-### [Domain-Driven Design]({{< relref "/docs/ddd" >}})
+### [Domain-Driven Design](docs/ddd/)
 
 A methodology for tackling complex business logic systematically. From strategic design to tactical patterns, CQRS, and event sourcing.
 
@@ -53,7 +53,7 @@ A methodology for tackling complex business logic systematically. From strategic
 - Implementing loose coupling with Domain Events
 - Practical order domain implementation examples
 
-### [Scala]({{< relref "/docs/scala" >}})
+### [Scala](docs/scala/)
 
 A JVM language combining functional and object-oriented programming. From basic syntax to advanced type systems and functional patterns. Covers both Scala 2.13 and Scala 3 syntax.
 
@@ -63,7 +63,7 @@ A JVM language combining functional and object-oriented programming. From basic 
 - Type system: Generics, Variance, Type Classes
 - Implicits/Given and principles of implicit conversions
 
-### [Apache Spark]({{< relref "/docs/spark" >}})
+### [Apache Spark](docs/spark/)
 
 A distributed computing engine for large-scale data processing. Explains in-memory processing, lazy evaluation, and DAG optimization from a Java/Spring developer's perspective.
 
@@ -73,7 +73,7 @@ A distributed computing engine for large-scale data processing. Explains in-memo
 - Real-time data processing with Structured Streaming
 - Memory tuning and performance optimization strategies
 
-### [Kubernetes]({{< relref "/docs/kubernetes" >}})
+### [Kubernetes](docs/kubernetes/)
 
 A practical guide to container orchestration platform. From Pod, Deployment, Service to scaling, networking, and monitoring.
 
@@ -83,7 +83,7 @@ A practical guide to container orchestration platform. From Pod, Deployment, Ser
 - Auto-scaling with HPA
 - Health checks and zero-downtime deployment strategies
 
-### [Elasticsearch]({{< relref "/docs/elasticsearch" >}})
+### [Elasticsearch](docs/elasticsearch/)
 
 A distributed search engine for large-scale search and real-time analytics. Covers full-text search beyond RDB limitations and practical operational know-how.
 
@@ -93,7 +93,7 @@ A distributed search engine for large-scale search and real-time analytics. Cove
 - Korean search optimization and autocomplete implementation
 - Cluster operation, performance tuning, and failure response
 
-### [Observability]({{< relref "/docs/observability" >}})
+### [Observability](docs/observability/)
 
 A practical guide to system observability. From the three pillars (Metrics, Logs, Traces) to advanced Prometheus, Grafana, and PromQL.
 
@@ -113,17 +113,17 @@ A practical guide to system observability. From the three pillars (Metrics, Logs
 
 ## Where should I start?
 
-- **New to Kafka** → [Kafka Quick Start]({{< relref "/docs/kafka/quick-start" >}})
-- **Know Kafka basics but want deeper understanding** → [Kafka Core Components]({{< relref "/docs/kafka/concepts/core-components" >}})
-- **Curious about what DDD is** → [DDD Quick Start]({{< relref "/docs/ddd/quick-start" >}})
-- **Want to learn domain model design** → [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design" >}})
-- **New to Scala** → [Scala Quick Start]({{< relref "/docs/scala/quick-start" >}})
-- **Want deep understanding of Scala's type system** → [Type Classes]({{< relref "/docs/scala/concepts/type-classes" >}})
-- **Want to process large-scale data with Spark** → [Spark Quick Start]({{< relref "/docs/spark/quick-start" >}})
-- **Want to understand Spark internals** → [Spark Architecture]({{< relref "/docs/spark/concepts/architecture" >}})
-- **New to Kubernetes** → [Kubernetes Quick Start]({{< relref "/docs/kubernetes/quick-start" >}})
-- **Want to optimize Kubernetes resource settings** → [Resource Management]({{< relref "/docs/kubernetes/concepts/resources" >}})
-- **Want to implement a search engine** → [Elasticsearch Quick Start]({{< relref "/docs/elasticsearch/quick-start" >}})
-- **Want to optimize Korean search** → [Korean Search Optimization]({{< relref "/docs/elasticsearch/concepts/korean-search" >}})
-- **Want to start system monitoring** → [Observability Quick Start]({{< relref "/docs/observability/quick-start" >}})
-- **Want to learn PromQL in depth** → [Advanced PromQL]({{< relref "/docs/observability/concepts/promql" >}})
+- **New to Kafka** → [Kafka Quick Start](docs/kafka/quick-start/)
+- **Know Kafka basics but want deeper understanding** → [Kafka Core Components](docs/kafka/concepts/core-components/)
+- **Curious about what DDD is** → [DDD Quick Start](docs/ddd/quick-start/)
+- **Want to learn domain model design** → [Tactical Design](docs/ddd/concepts/tactical-design/)
+- **New to Scala** → [Scala Quick Start](docs/scala/quick-start/)
+- **Want deep understanding of Scala's type system** → [Type Classes](docs/scala/concepts/type-classes/)
+- **Want to process large-scale data with Spark** → [Spark Quick Start](docs/spark/quick-start/)
+- **Want to understand Spark internals** → [Spark Architecture](docs/spark/concepts/architecture/)
+- **New to Kubernetes** → [Kubernetes Quick Start](docs/kubernetes/quick-start/)
+- **Want to optimize Kubernetes resource settings** → [Resource Management](docs/kubernetes/concepts/resources/)
+- **Want to implement a search engine** → [Elasticsearch Quick Start](docs/elasticsearch/quick-start/)
+- **Want to optimize Korean search** → [Korean Search Optimization](docs/elasticsearch/concepts/korean-search/)
+- **Want to start system monitoring** → [Observability Quick Start](docs/observability/quick-start/)
+- **Want to learn PromQL in depth** → [Advanced PromQL](docs/observability/concepts/promql/)

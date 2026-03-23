@@ -9,7 +9,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **Target Audience**: Developers who understand DDD concepts and want to implement them in actual code
-> **Prerequisites**: [Quick Start]({{< relref "/docs/ddd/quick-start" >}}) and Tactical Design from [Concepts]({{< relref "/docs/ddd/concepts" >}}) section
+> **Prerequisites**: [Quick Start](../quick-start/) and Tactical Design from [Concepts](../concepts/) section
 > **Purpose of this Section**: Implement DDD patterns with actual Spring Boot code through an order domain
 
 {{< callout type="warning" title="Before You Start" >}}

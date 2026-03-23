@@ -9,7 +9,7 @@ author_url: "http://github.com/kimbenji"
 
 # DDD Glossary
 
-A compilation of Domain-Driven Design core terminology. For detailed explanations, see the [Concepts]({{< relref "/docs/ddd/concepts" >}}) section.
+A compilation of Domain-Driven Design core terminology. For detailed explanations, see the [Concepts](../concepts/) section.
 
 > **TL;DR**
 >
@@ -19,7 +19,7 @@ A compilation of Domain-Driven Design core terminology. For detailed explanation
 
 ## Strategic Design
 
-> For details: [Strategic Design]({{< relref "/docs/ddd/concepts/strategic-design" >}})
+> For details: [Strategic Design](../concepts/strategic-design/)
 
 ### Bounded Context
 
@@ -35,7 +35,7 @@ A compilation of Domain-Driven Design core terminology. For detailed explanation
 - "Product" in Sales Context = price, promotions
 - "Product" in Inventory Context = quantity, warehouse location
 
-For details: [Strategic Design]({{< relref "/docs/ddd/concepts/strategic-design#bounded-context" >}})
+For details: [Strategic Design](../concepts/strategic-design/#bounded-context)
 
 ---
 
@@ -54,7 +54,7 @@ For details: [Strategic Design]({{< relref "/docs/ddd/concepts/strategic-design#
 | **Open Host Service** | Expose standard API | Multiple consumers |
 | **Published Language** | Use standard data format | [Domain Event](#domain-event) integration |
 
-For details: [Strategic Design]({{< relref "/docs/ddd/concepts/strategic-design#context-mapping" >}})
+For details: [Strategic Design](../concepts/strategic-design/#context-mapping)
 
 ---
 
@@ -74,7 +74,7 @@ Code: order.confirm()
 Test: @Test void order_confirmation_changes_status_to_CONFIRMED()
 ```
 
-For details: [Strategic Design]({{< relref "/docs/ddd/concepts/strategic-design#ubiquitous-language" >}})
+For details: [Strategic Design](../concepts/strategic-design/#ubiquitous-language)
 
 ---
 
@@ -88,7 +88,7 @@ For details: [Strategic Design]({{< relref "/docs/ddd/concepts/strategic-design#
 - Should not be outsourced
 - Manage complexity by modeling with [Aggregate](#aggregate)
 
-For details: [Strategic Design]({{< relref "/docs/ddd/concepts/strategic-design#domain-types" >}})
+For details: [Strategic Design](../concepts/strategic-design/#domain-types)
 
 ---
 
@@ -122,7 +122,7 @@ For details: [Strategic Design]({{< relref "/docs/ddd/concepts/strategic-design#
 
 ## Tactical Design
 
-> For details: [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design" >}})
+> For details: [Tactical Design](../concepts/tactical-design/)
 
 ### Entity
 
@@ -145,7 +145,7 @@ public boolean equals(Object o) {
 }
 ```
 
-For details: [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design#entity" >}}) | [Order Domain Example]({{< relref "/docs/ddd/examples/order-domain" >}})
+For details: [Tactical Design](../concepts/tactical-design/#entity) | [Order Domain Example](../examples/order-domain/)
 
 ---
 
@@ -169,7 +169,7 @@ public record Money(BigDecimal amount, Currency currency) {
 }
 ```
 
-For details: [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design#value-object" >}}) | [Order Domain Example]({{< relref "/docs/ddd/examples/order-domain#value-object" >}})
+For details: [Tactical Design](../concepts/tactical-design/#value-object) | [Order Domain Example](../examples/order-domain/#value-object)
 
 ---
 
@@ -189,7 +189,7 @@ For details: [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design#va
 
 **Related Terms:** [Entity](#entity), [Value Object](#value-object), [Repository](#repository)
 
-For details: [Aggregate]({{< relref "/docs/ddd/concepts/aggregate" >}}) | [Aggregate Patterns]({{< relref "/docs/ddd/concepts/aggregate-patterns" >}})
+For details: [Aggregate](../concepts/aggregate/) | [Aggregate Patterns](../concepts/aggregate-patterns/)
 
 ---
 
@@ -215,7 +215,7 @@ public class Order extends AggregateRoot<OrderId> {
 }
 ```
 
-For details: [Aggregate]({{< relref "/docs/ddd/concepts/aggregate#aggregate-root" >}}) | [Order Domain Example]({{< relref "/docs/ddd/examples/order-domain" >}})
+For details: [Aggregate](../concepts/aggregate/#aggregate-root) | [Order Domain Example](../examples/order-domain/)
 
 ---
 
@@ -240,7 +240,7 @@ public interface OrderRepository {
 public class JpaOrderRepository implements OrderRepository { }
 ```
 
-For details: [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design#repository" >}})
+For details: [Tactical Design](../concepts/tactical-design/#repository)
 
 ---
 
@@ -264,7 +264,7 @@ public class DiscountCalculator {
 }
 ```
 
-For details: [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design#domain-service" >}})
+For details: [Tactical Design](../concepts/tactical-design/#domain-service)
 
 ---
 
@@ -290,7 +290,7 @@ public class OrderConfirmedEvent extends DomainEvent {
 }
 ```
 
-For details: [Domain Events]({{< relref "/docs/ddd/concepts" >}}) | [Event Sourcing Example]({{< relref "/docs/ddd/examples/event-sourcing" >}})
+For details: [Domain Events](../concepts/) | [Event Sourcing Example](../examples/event-sourcing/)
 
 ---
 
@@ -303,7 +303,7 @@ For details: [Domain Events]({{< relref "/docs/ddd/concepts" >}}) | [Event Sourc
 - When other service lookups are needed
 - Multiple creation methods exist
 
-For details: [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design#factory" >}})
+For details: [Tactical Design](../concepts/tactical-design/#factory)
 
 ---
 
@@ -329,7 +329,7 @@ public class OrderService {
 }
 ```
 
-For details: [Application Layer Example]({{< relref "/docs/ddd/examples/application-layer" >}})
+For details: [Application Layer Example](../examples/application-layer/)
 
 > **Tactical Design Key Points**
 >
@@ -344,7 +344,7 @@ For details: [Application Layer Example]({{< relref "/docs/ddd/examples/applicat
 
 ## Architecture Patterns
 
-> For details: [Architecture Overview]({{< relref "/docs/ddd/concepts/architecture" >}})
+> For details: [Architecture Overview](../concepts/architecture/)
 
 ### Layered Architecture
 
@@ -364,7 +364,7 @@ For details: [Application Layer Example]({{< relref "/docs/ddd/examples/applicat
 
 **Related Terms:** [Application Service](#application-service), [Repository](#repository)
 
-For details: [Layered Architecture]({{< relref "/docs/ddd/concepts" >}})
+For details: [Layered Architecture](../concepts/)
 
 ---
 
@@ -392,7 +392,7 @@ For details: [Layered Architecture]({{< relref "/docs/ddd/concepts" >}})
 
 **Related Patterns:** [Layered Architecture](#layered-architecture), Clean Architecture, Onion Architecture
 
-For details: [Hexagonal Architecture]({{< relref "/docs/ddd/concepts" >}}) | [Clean Architecture]({{< relref "/docs/ddd/concepts" >}})
+For details: [Hexagonal Architecture](../concepts/) | [Clean Architecture](../concepts/)
 
 ---
 
@@ -415,7 +415,7 @@ flowchart LR
 
 **Related Patterns:** When used with [Event Sourcing](#event-sourcing), synchronize Read Model with [Domain Events](#domain-event)
 
-For details: [CQRS]({{< relref "/docs/ddd/concepts" >}})
+For details: [CQRS](../concepts/)
 
 ---
 
@@ -437,7 +437,7 @@ Event Stream:
 
 **Related Patterns:** [CQRS](#cqrs-command-query-responsibility-segregation), [Domain Event](#domain-event)
 
-For details: [Event Sourcing Example]({{< relref "/docs/ddd/examples/event-sourcing" >}}) - EventStore, snapshots, time travel implementation
+For details: [Event Sourcing Example](../examples/event-sourcing/) - EventStore, snapshots, time travel implementation
 
 > **Architecture Patterns Key Points**
 >
@@ -450,7 +450,7 @@ For details: [Event Sourcing Example]({{< relref "/docs/ddd/examples/event-sourc
 
 ## Next Steps
 
-- [Concepts]({{< relref "/docs/ddd/concepts" >}}) - Strategic/tactical design, architecture
-- [Examples]({{< relref "/docs/ddd/examples" >}}) - Spring Boot-based implementations
-- [References]({{< relref "/docs/ddd/appendix/references" >}}) - Books, articles, presentations
-- [FAQ]({{< relref "/docs/ddd/appendix/faq" >}}) - Frequently asked questions
+- [Concepts](../concepts/) - Strategic/tactical design, architecture
+- [Examples](../examples/) - Spring Boot-based implementations
+- [References](references/) - Books, articles, presentations
+- [FAQ](faq/) - Frequently asked questions

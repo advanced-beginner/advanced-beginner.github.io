@@ -12,7 +12,7 @@ Try running various Kafka examples with Spring Boot yourself.
 
 ## Learning Path
 
-1. [Environment Setup]({{< relref "/docs/kafka/examples/setup" >}}) - Docker Compose, Spring Boot configuration
-2. [Basic Examples]({{< relref "/docs/kafka/examples/basic" >}}) - Producer/Consumer implementation patterns
-3. [Order System]({{< relref "/docs/kafka/examples/order-system" >}}) - Real-world event-driven system
-4. [Microservices Integration]({{< relref "/docs/kafka/examples/microservices" >}}) - Multi-service event flow, Saga pattern
+1. [Environment Setup](setup/) - Docker Compose, Spring Boot configuration
+2. [Basic Examples](basic/) - Producer/Consumer implementation patterns
+3. [Order System](order-system/) - Real-world event-driven system
+4. [Microservices Integration](microservices/) - Multi-service event flow, Saga pattern

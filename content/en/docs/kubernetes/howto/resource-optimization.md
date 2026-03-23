@@ -14,7 +14,7 @@ author:
 {{< callout type="info" title="Scope of This Guide" >}}
 **Covers**: Measuring resource usage, determining appropriate requests/limits values, resolving throttling/OOM
 
-**Does not cover**: Auto-scaling (see [Scaling]({{< relref "/docs/kubernetes/concepts/scaling" >}})), Pod startup issues (see [Pod Troubleshooting]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}))
+**Does not cover**: Auto-scaling (see [Scaling](../concepts/scaling/)), Pod startup issues (see [Pod Troubleshooting](pod-troubleshooting/))
 {{< /callout >}}
 
 ## Before You Begin

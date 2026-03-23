@@ -27,7 +27,7 @@ lastmod: "2026-01-15"
 ---
 
 > **대상 독자**: 로그 시스템을 설계하려는 개발자, SRE
-> **선수 지식**: [관측성 3요소]({{< relref "/docs/observability/concepts/three-pillars" >}})
+> **선수 지식**: [관측성 3요소](three-pillars/)
 > **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: 로그 수집 시스템을 선택하고 효과적인 로그를 설계할 수 있습니다
 
@@ -494,7 +494,7 @@ try { ... } catch (Exception e) {
 
 ## 관련 문서
 
-- [Elasticsearch 데이터 모델링]({{< relref "/docs/elasticsearch/concepts/data-modeling" >}}) - ELK 스택에서 로그 인덱스를 설계할 때 참고할 데이터 모델링 원칙
+- [Elasticsearch 데이터 모델링](../../elasticsearch/concepts/data-modeling/) - ELK 스택에서 로그 인덱스를 설계할 때 참고할 데이터 모델링 원칙
 
 ## 다음 단계
 

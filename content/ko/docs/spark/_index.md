@@ -67,10 +67,10 @@ Spark 도입을 고려할 때는 데이터 규모와 처리 복잡도를 기준�
 
 이 가이드는 Java/Spring 개발자가 Spark를 실무에 적용할 수 있도록 단계별로 구성되어 있습니다.
 
-**[Quick Start]({{< relref "/docs/spark/quick-start" >}})**
+**[Quick Start](quick-start/)**
 5분 만에 Spark 애플리케이션을 실행해봅니다. 개념보다 먼저 동작하는 코드를 확인하세요.
 
-**[개념 이해]({{< relref "/docs/spark/concepts" >}})**
+**[개념 이해](concepts/)**
 
 Spark의 핵심 원리를 **Java/Spring 개발자의 관점**에서 설명합니다. 아래 표는 각 개념 문서에서 다루는 주제와 학습 내용을 정리한 것입니다:
 
@@ -90,26 +90,26 @@ Spark의 핵심 원리를 **Java/Spring 개발자의 관점**에서 설명합니
 
 이 개념들을 순서대로 학습하면 Spark의 내부 동작을 체계적으로 이해할 수 있습니다.
 
-**[실습 예제]({{< relref "/docs/spark/examples" >}})**
+**[실습 예제](examples/)**
 
 Spring Boot 기반의 실행 가능한 예제 코드입니다. 환경 설정부터 기본 데이터 처리까지 실습을 통해 학습합니다:
 
-- [환경 설정]({{< relref "/docs/spark/examples/setup" >}}) - Java/Spring Boot와 Spark 통합 환경 구성
-- [기본 예제]({{< relref "/docs/spark/examples/basic" >}}) - 데이터 로딩, 변환, 집계의 기초
+- [환경 설정](examples/setup/) - Java/Spring Boot와 Spark 통합 환경 구성
+- [기본 예제](examples/basic/) - 데이터 로딩, 변환, 집계의 기초
 
-**[How-To Guide]({{< relref "/docs/spark/howto" >}})**
+**[How-To Guide](howto/)**
 
 특정 문제를 해결하기 위한 단계별 가이드입니다:
-- [OutOfMemoryError 해결하기]({{< relref "/docs/spark/howto/oom-troubleshooting" >}}) - 메모리 부족 오류 진단 및 해결
-- [데이터 스큐 해결하기]({{< relref "/docs/spark/howto/data-skew" >}}) - 파티션 불균형 해결
-- [셔플 최적화하기]({{< relref "/docs/spark/howto/shuffle-optimization" >}}) - 네트워크 I/O 최소화
+- [OutOfMemoryError 해결하기](howto/oom-troubleshooting/) - 메모리 부족 오류 진단 및 해결
+- [데이터 스큐 해결하기](howto/data-skew/) - 파티션 불균형 해결
+- [셔플 최적화하기](howto/shuffle-optimization/) - 네트워크 I/O 최소화
 
-**[부록]({{< relref "/docs/spark/appendix" >}})**
+**[부록](appendix/)**
 
 학습 중 참고할 수 있는 보조 자료입니다:
-- [용어 사전]({{< relref "/docs/spark/appendix/glossary" >}}) - Spark 용어 빠른 참조
-- [FAQ]({{< relref "/docs/spark/appendix/faq" >}}) - 자주 묻는 질문
-- [참고 자료]({{< relref "/docs/spark/appendix/references" >}}) - 공식 문서 및 추가 학습 자료
+- [용어 사전](appendix/glossary/) - Spark 용어 빠른 참조
+- [FAQ](appendix/faq/) - 자주 묻는 질문
+- [참고 자료](appendix/references/) - 공식 문서 및 추가 학습 자료
 
 ## Spark vs Hadoop MapReduce
 

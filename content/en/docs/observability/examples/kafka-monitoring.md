@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **Time Required**: 20 minutes
-> **Prerequisites**: Kafka basics, [Environment Setup]({{< relref "/docs/observability/examples/setup" >}})
+> **Prerequisites**: Kafka basics, [Environment Setup](setup/)
 > **What You'll Learn**: Monitor Kafka clusters and Consumer Lag
 
 ## Core Kafka Monitoring Metrics

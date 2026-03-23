@@ -14,7 +14,7 @@ author:
 {{< callout type="info" title="이 가이드의 범위" >}}
 **다루는 내용**: Pod 시작 실패, CrashLoopBackOff, ImagePullBackOff, Readiness 실패
 
-**다루지 않는 내용**: 네트워크 연결 문제([네트워크 트러블슈팅]({{< relref "/docs/kubernetes/howto/network-troubleshooting" >}}) 참조), 리소스 부족으로 인한 성능 저하([리소스 최적화]({{< relref "/docs/kubernetes/howto/resource-optimization" >}}) 참조)
+**다루지 않는 내용**: 네트워크 연결 문제([네트워크 트러블슈팅](network-troubleshooting/) 참조), 리소스 부족으로 인한 성능 저하([리소스 최적화](resource-optimization/) 참조)
 {{< /callout >}}
 
 ## 시작하기 전에

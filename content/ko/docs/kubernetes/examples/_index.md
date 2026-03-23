@@ -65,4 +65,4 @@ flowchart TD
 - kubectl 1.29.x 이상
 - 로컬 Kubernetes 클러스터 (Minikube 또는 Kind)
 
-환경 설정이 되어 있지 않다면 먼저 [환경 설정]({{< relref "/docs/kubernetes/examples/setup" >}}) 예제를 따라 진행하세요.
+환경 설정이 되어 있지 않다면 먼저 [환경 설정](setup/) 예제를 따라 진행하세요.

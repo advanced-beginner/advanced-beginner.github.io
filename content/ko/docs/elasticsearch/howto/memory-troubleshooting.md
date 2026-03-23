@@ -12,7 +12,7 @@ OutOfMemoryError나 GC 문제가 발생할 때 원인을 진단하고 해결하�
 {{< callout type="info" title="이 가이드의 범위" >}}
 **다루는 내용**: 힙 메모리 설정, Circuit Breaker, Field Data 최적화, GC 튜닝
 
-**다루지 않는 내용**: 노드 추가, 하드웨어 업그레이드는 [클러스터 관리]({{< relref "/docs/elasticsearch/concepts/cluster-management" >}})를 참조하세요.
+**다루지 않는 내용**: 노드 추가, 하드웨어 업그레이드는 [클러스터 관리](../concepts/cluster-management/)를 참조하세요.
 {{< /callout >}}
 
 {{< callout type="tip" title="TL;DR" >}}
@@ -442,6 +442,6 @@ docker run -d \
 
 ## 관련 문서
 
-- [클러스터 관리]({{< relref "/docs/elasticsearch/concepts/cluster-management" >}}) - 노드 구성 및 모니터링
-- [성능 튜닝]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) - 전체적인 성능 최적화
-- [느린 쿼리 최적화]({{< relref "/docs/elasticsearch/howto/slow-query-optimization" >}}) - 쿼리 수준 최적화
+- [클러스터 관리](../concepts/cluster-management/) - 노드 구성 및 모니터링
+- [성능 튜닝](../concepts/performance-tuning/) - 전체적인 성능 최적화
+- [느린 쿼리 최적화](slow-query-optimization/) - 쿼리 수준 최적화

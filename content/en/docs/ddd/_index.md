@@ -38,11 +38,11 @@ DDD takes a fundamentally different approach from traditional data-centric desig
 
 ## What This Guide Covers
 
-**[Quick Start]({{< relref "/docs/ddd/quick-start" >}})**
+**[Quick Start](quick-start/)**
 
 A quick overview of DDD core concepts. Get the big picture before diving into details.
 
-**[Concepts]({{< relref "/docs/ddd/concepts" >}})**
+**[Concepts](concepts/)**
 
 DDD is broadly divided into **Strategic Design** and **Tactical Design**. Strategic Design deals with the big picture of the system, including concepts like Bounded Context, Context Map, and Ubiquitous Language. Tactical Design deals with code-level patterns, providing concrete implementation patterns such as Entity, Value Object, Repository, Aggregate, and Domain Events. Advanced topics include separating commands and queries through CQRS, various architecture patterns (Layered, Hexagonal, Clean Architecture), domain model testing strategies, and anti-pattern guides to avoid common mistakes.
 
@@ -57,27 +57,27 @@ DDD is broadly divided into **Strategic Design** and **Tactical Design**. Strate
 | [Testing Strategy](concepts/testing/) | How to test domain models |
 | [Anti-patterns](concepts/anti-patterns/) | Common mistakes and how to avoid them |
 
-**[How-to Guides]({{< relref "/docs/ddd/howto" >}})**
+**[How-to Guides](howto/)**
 
 Step-by-step guides to solving specific problems you encounter when applying DDD.
 
-- [Defining Aggregate Boundaries]({{< relref "/docs/ddd/howto/aggregate-boundaries" >}}) - How to design Aggregate boundaries based on invariants
+- [Defining Aggregate Boundaries](howto/aggregate-boundaries/) - How to design Aggregate boundaries based on invariants
 
-**[Hands-on Examples]({{< relref "/docs/ddd/examples" >}})**
+**[Hands-on Examples](examples/)**
 
 Apply learned concepts to practice through examples implementing an actual order domain with DDD. Starting from environment setup, you'll implement Entities, Value Objects, and Aggregates for the order domain, then write Use Cases and domain services in the application layer.
 
-- [Environment Setup]({{< relref "/docs/ddd/examples/setup" >}}) - Project structure and dependencies
-- [Order Domain]({{< relref "/docs/ddd/examples/order-domain" >}}) - Entity, Value Object, Aggregate implementation
-- [Application Layer]({{< relref "/docs/ddd/examples/application-layer" >}}) - Use Cases and domain services
+- [Environment Setup](examples/setup/) - Project structure and dependencies
+- [Order Domain](examples/order-domain/) - Entity, Value Object, Aggregate implementation
+- [Application Layer](examples/application-layer/) - Use Cases and domain services
 
-**[Appendix]({{< relref "/docs/ddd/appendix" >}})**
+**[Appendix](appendix/)**
 
 Reference materials to consult during learning. The glossary provides quick access to DDD core terms, FAQ answers frequently asked questions, and references offer books and articles for further learning.
 
-- [Glossary]({{< relref "/docs/ddd/appendix/glossary" >}}) - Quick reference for DDD terms
-- [FAQ]({{< relref "/docs/ddd/appendix/faq" >}}) - Frequently asked questions
-- [References]({{< relref "/docs/ddd/appendix/references" >}}) - Additional learning resources
+- [Glossary](appendix/glossary/) - Quick reference for DDD terms
+- [FAQ](appendix/faq/) - Frequently asked questions
+- [References](appendix/references/) - Additional learning resources
 
 ## Prerequisites
 

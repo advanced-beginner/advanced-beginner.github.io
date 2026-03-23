@@ -386,13 +386,13 @@ Dataset<Row> filtered = df.filter(...);  // df is cached
 
 ## Next Steps
 
-- [Structured Streaming]({{< relref "/docs/spark/concepts/structured-streaming" >}}) - Real-time data processing
-- [Performance Tuning]({{< relref "/docs/spark/concepts/tuning" >}}) - Overall performance optimization
+- [Structured Streaming](structured-streaming/) - Real-time data processing
+- [Performance Tuning](tuning/) - Overall performance optimization
 
 ## Related Documents
 
-- [Transformations and Actions]({{< relref "/docs/spark/concepts/transformations-actions" >}}) - Relationship between lazy evaluation and caching
-- [Partitioning and Shuffle]({{< relref "/docs/spark/concepts/partitioning" >}}) - Partition optimization before caching
-- [RDD Basics]({{< relref "/docs/spark/concepts/rdd" >}}) - RDD-level persist/cache
-- [MLlib]({{< relref "/docs/spark/concepts/mllib" >}}) - Caching in machine learning
-- [Glossary]({{< relref "/docs/spark/appendix/glossary" >}}) - Persist, Storage Level term definitions
+- [Transformations and Actions](transformations-actions/) - Relationship between lazy evaluation and caching
+- [Partitioning and Shuffle](partitioning/) - Partition optimization before caching
+- [RDD Basics](rdd/) - RDD-level persist/cache
+- [MLlib](mllib/) - Caching in machine learning
+- [Glossary](../appendix/glossary/) - Persist, Storage Level term definitions

@@ -911,4 +911,4 @@ flowchart TB
 
 ## Next Steps
 
-- [Event Sourcing Practice]({{< relref "/docs/ddd/examples/event-sourcing" >}}) - Event storage, snapshots, time travel
+- [Event Sourcing Practice](event-sourcing/) - Event storage, snapshots, time travel

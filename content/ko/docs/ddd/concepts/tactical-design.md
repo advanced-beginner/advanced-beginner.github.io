@@ -8,7 +8,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **대상 독자**: DDD 빌딩 블록을 코드로 구현하고 싶은 백엔드 개발자
-> **선수 지식**: [전략적 설계]({{< relref "/docs/ddd/concepts/strategic-design" >}})를 읽었거나 Bounded Context 개념에 대한 이해
+> **선수 지식**: [전략적 설계](strategic-design/)를 읽었거나 Bounded Context 개념에 대한 이해
 > **소요 시간**: 약 40분
 > **핵심 질문**: "도메인 모델을 어떤 패턴으로 구현해야 하는가?"
 
@@ -611,7 +611,7 @@ public class OrderFactory {
 
 #### 빌딩 블록의 배치
 
-지금까지 살펴본 빌딩 블록들은 코드 내에서 계층별로 배치됩니다. Entity, Value Object, Domain Service, Repository Interface는 도메인 계층에, Application Service는 응용 계층에, Repository 구현체는 인프라 계층에 위치합니다. 이 계층 구조에 대한 자세한 내용은 [아키텍처 패턴]({{< relref "/docs/ddd/concepts/architecture" >}})에서 다룹니다.
+지금까지 살펴본 빌딩 블록들은 코드 내에서 계층별로 배치됩니다. Entity, Value Object, Domain Service, Repository Interface는 도메인 계층에, Application Service는 응용 계층에, Repository 구현체는 인프라 계층에 위치합니다. 이 계층 구조에 대한 자세한 내용은 [아키텍처 패턴](architecture/)에서 다룹니다.
 
 ```mermaid
 flowchart TB
@@ -705,6 +705,6 @@ Domain Service를 설계할 때는 특정 Entity에 속하지 않는 로직인�
 
 #### 다음 단계
 
-- [Aggregate 심화]({{< relref "/docs/ddd/concepts/aggregate" >}}) - Aggregate 설계 원칙과 트랜잭션 경계
-- [도메인 모델 패턴]({{< relref "/docs/ddd/concepts/domain-model-patterns" >}}) - Specification, Policy 등 도메인 모델을 풍부하게 만드는 보조 패턴
-- [아키텍처 패턴]({{< relref "/docs/ddd/concepts/architecture" >}}) - 빌딩 블록을 배치하는 코드 구조
+- [Aggregate 심화](aggregate/) - Aggregate 설계 원칙과 트랜잭션 경계
+- [도메인 모델 패턴](domain-model-patterns/) - Specification, Policy 등 도메인 모델을 풍부하게 만드는 보조 패턴
+- [아키텍처 패턴](architecture/) - 빌딩 블록을 배치하는 코드 구조

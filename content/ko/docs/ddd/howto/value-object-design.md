@@ -9,7 +9,7 @@ author_url: "http://github.com/kimbenji"
 
 > **해결하는 문제**: 모든 것을 Entity로 만들어 복잡도가 높아지거나, Primitive Obsession으로 타입 안정성이 낮은 상황
 > **소요 시간**: 약 20분
-> **전제 조건**: [전술적 설계]({{< relref "/docs/ddd/concepts/tactical-design" >}}) 문서를 읽었다고 가정
+> **전제 조건**: [전술적 설계](../concepts/tactical-design/) 문서를 읽었다고 가정
 
 {{< callout type="warning" title="성공 기준" >}}
 이 가이드를 완료하면 다음을 할 수 있습니다:
@@ -632,6 +632,6 @@ public class AddressEntity {
 
 ## 다음 단계
 
-- [전술적 설계]({{< relref "/docs/ddd/concepts/tactical-design" >}}) - Entity와 Aggregate 상세
-- [Aggregate 경계 정하기]({{< relref "/docs/ddd/howto/aggregate-boundaries" >}}) - Value Object 포함 결정
-- [테스트 전략]({{< relref "/docs/ddd/concepts/testing" >}}) - Value Object 테스트 방법
+- [전술적 설계](../concepts/tactical-design/) - Entity와 Aggregate 상세
+- [Aggregate 경계 정하기](aggregate-boundaries/) - Value Object 포함 결정
+- [테스트 전략](../concepts/testing/) - Value Object 테스트 방법

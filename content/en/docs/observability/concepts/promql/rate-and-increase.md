@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **Target Audience**: Developers working with Counter metrics
-> **Prerequisites**: [Metrics Fundamentals]({{< relref "/docs/observability/concepts/metrics-fundamentals" >}}), [Aggregation Operators]({{< relref "/docs/observability/concepts/promql/aggregation-operators" >}})
+> **Prerequisites**: [Metrics Fundamentals](../metrics-fundamentals/), [Aggregation Operators](aggregation-operators/)
 > **What You'll Learn**: Calculate per-second rate and total increase from Counter metrics accurately
 
 ## TL;DR

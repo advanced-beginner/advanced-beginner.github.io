@@ -8,7 +8,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **Target Audience**: Developers looking for an architecture that works well with DDD
-> **Prerequisites**: [Hexagonal Architecture]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}}) and Dependency Inversion Principle
+> **Prerequisites**: [Hexagonal Architecture](hexagonal-architecture/) and Dependency Inversion Principle
 > **Estimated Time**: About 20 minutes
 
 # Onion Architecture
@@ -1024,8 +1024,8 @@ flowchart LR
 
 - Simple CRUD applications
 - Small, short-term projects
-- Teams with no DDD experience -- start with [Layered Architecture]({{< relref "/docs/ddd/concepts/architecture/layered-architecture" >}})
-- Cases with many external integrations but simple domains -- use [Hexagonal]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}})
+- Teams with no DDD experience -- start with [Layered Architecture](layered-architecture/)
+- Cases with many external integrations but simple domains -- use [Hexagonal](hexagonal-architecture/)
 
 ### Best Practice: Which Systems Fit?
 
@@ -1105,7 +1105,7 @@ public class JpaOrderRepository implements OrderRepository {
 
 ## Next Steps
 
-- [Layered Architecture]({{< relref "/docs/ddd/concepts/architecture/layered-architecture" >}}) - Start from the basics
-- [Hexagonal Architecture]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}}) - External integration focused
-- [Clean Architecture]({{< relref "/docs/ddd/concepts/architecture/clean-architecture" >}}) - Strict rules
-- [CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}}) - Read/write separation
+- [Layered Architecture](layered-architecture/) - Start from the basics
+- [Hexagonal Architecture](hexagonal-architecture/) - External integration focused
+- [Clean Architecture](clean-architecture/) - Strict rules
+- [CQRS](cqrs/) - Read/write separation

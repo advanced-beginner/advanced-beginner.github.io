@@ -60,10 +60,10 @@ graph LR
 
 ## What This Guide Covers
 
-### [Quick Start]({{< relref "/docs/observability/quick-start" >}})
+### [Quick Start](quick-start/)
 Build a Prometheus + Grafana environment in 10 minutes and verify your first metrics.
 
-### [Concepts]({{< relref "/docs/observability/concepts" >}})
+### [Concepts](concepts/)
 Explains not just "how to use" but **"why it was designed this way"**.
 
 | Topic | What You'll Learn |
@@ -78,26 +78,26 @@ Explains not just "how to use" but **"why it was designed this way"**.
 | [OpenTelemetry](concepts/opentelemetry/) | Observability standards and integration methods |
 | [Dashboard Design](concepts/dashboard-design/) | Effective visualization principles |
 
-### [Examples]({{< relref "/docs/observability/examples" >}})
+### [Examples](examples/)
 Hands-on experience with executable code.
 
-- [Environment Setup]({{< relref "/docs/observability/examples/setup" >}}) - Full stack configuration with Docker Compose
-- [Spring Boot Metrics]({{< relref "/docs/observability/examples/spring-boot-metrics" >}}) - Actuator + Micrometer setup
-- [Kafka Monitoring]({{< relref "/docs/observability/examples/kafka-monitoring" >}}) - Building Kafka cluster observability
-- [Full-Stack Observability]({{< relref "/docs/observability/examples/full-stack" >}}) - Metrics + Logs + Traces integration
+- [Environment Setup](examples/setup/) - Full stack configuration with Docker Compose
+- [Spring Boot Metrics](examples/spring-boot-metrics/) - Actuator + Micrometer setup
+- [Kafka Monitoring](examples/kafka-monitoring/) - Building Kafka cluster observability
+- [Full-Stack Observability](examples/full-stack/) - Metrics + Logs + Traces integration
 
-### [How-To Guides]({{< relref "/docs/observability/howto" >}})
+### [How-To Guides](howto/)
 Common problem scenarios and solutions in practice.
 
-- [Debugging High Latency]({{< relref "/docs/observability/howto/debug-high-latency" >}}) - Tracking P99 latency causes
-- [Metrics Cardinality Optimization]({{< relref "/docs/observability/howto/reduce-cardinality" >}}) - Cost reduction strategies
-- [Managing Alert Fatigue]({{< relref "/docs/observability/howto/manage-alert-fatigue" >}}) - Reduce noise alerts
+- [Debugging High Latency](howto/debug-high-latency/) - Tracking P99 latency causes
+- [Metrics Cardinality Optimization](howto/reduce-cardinality/) - Cost reduction strategies
+- [Managing Alert Fatigue](howto/manage-alert-fatigue/) - Reduce noise alerts
 
-### [Appendix]({{< relref "/docs/observability/appendix" >}})
-- [Glossary]({{< relref "/docs/observability/appendix/glossary" >}}) - Quick reference for Observability terms
-- [FAQ]({{< relref "/docs/observability/appendix/faq" >}}) - Frequently asked questions
-- [Alerting Actions Guide]({{< relref "/docs/observability/appendix/alerting-actions" >}}) - Response strategies after PromQL detection
-- [References]({{< relref "/docs/observability/appendix/references" >}}) - Official documentation and additional learning resources
+### [Appendix](appendix/)
+- [Glossary](appendix/glossary/) - Quick reference for Observability terms
+- [FAQ](appendix/faq/) - Frequently asked questions
+- [Alerting Actions Guide](appendix/alerting-actions/) - Response strategies after PromQL detection
+- [References](appendix/references/) - Official documentation and additional learning resources
 
 ## Prerequisites
 

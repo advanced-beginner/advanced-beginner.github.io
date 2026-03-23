@@ -14,7 +14,7 @@ lastmod: 2026-01-15
 {{< /callout >}}
 
 **대상 독자**: Elasticsearch 기본 개념을 이해한 개발자
-**선수 지식**: [핵심 구성요소]({{< relref "/docs/elasticsearch/concepts/core-components" >}}), JSON 기본 문법
+**선수 지식**: [핵심 구성요소](core-components/), JSON 기본 문법
 
 **소요 시간**: 약 25-30분
 

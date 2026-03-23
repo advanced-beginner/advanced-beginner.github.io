@@ -425,6 +425,6 @@ rm -rf .metals .bloop .bsp
 
 환경 설정이 완료되었다면 기본 예제를 통해 Scala의 핵심 개념들을 실습해보세요.
 
-- [기본 예제]({{< relref "/docs/scala/examples/basic" >}}) — 핵심 개념 활용 예제
-- [Scala 2 vs 3 비교]({{< relref "/docs/scala/examples/scala2-vs-scala3" >}}) — 버전별 코드 비교
+- [기본 예제](basic/) — 핵심 개념 활용 예제
+- [Scala 2 vs 3 비교](scala2-vs-scala3/) — 버전별 코드 비교
 

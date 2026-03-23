@@ -84,28 +84,28 @@ The learning path below is designed considering dependencies between concepts. I
 
 Basic concepts cover the core elements that compose a Kubernetes cluster and the application deployment process. The goal is to understand how Pods are created, how Deployments manage Pods, and how Services deliver traffic.
 
-1. [Architecture]({{< relref "/docs/kubernetes/concepts/architecture" >}}) - Understand components of Control Plane and Worker Nodes. Grasp the big picture of how Kubernetes operates.
-2. [Pod]({{< relref "/docs/kubernetes/concepts/pod" >}}) - Learn the concept and lifecycle of Pod, the minimum deployment unit in Kubernetes. Understand why we use Pods instead of containers.
-3. [Deployment]({{< relref "/docs/kubernetes/concepts/deployment" >}}) - Learn Deployment that manages Pod creation, updates, and rollbacks. Understand the principles of zero-downtime deployment.
-4. [Service]({{< relref "/docs/kubernetes/concepts/service" >}}) - Learn Service that provides stable network access to Pods. Understand the differences between ClusterIP, NodePort, and LoadBalancer.
-5. [ConfigMap and Secret]({{< relref "/docs/kubernetes/concepts/configmap-secret" >}}) - Learn how to separate and manage application configuration and sensitive information.
+1. [Architecture](architecture/) - Understand components of Control Plane and Worker Nodes. Grasp the big picture of how Kubernetes operates.
+2. [Pod](pod/) - Learn the concept and lifecycle of Pod, the minimum deployment unit in Kubernetes. Understand why we use Pods instead of containers.
+3. [Deployment](deployment/) - Learn Deployment that manages Pod creation, updates, and rollbacks. Understand the principles of zero-downtime deployment.
+4. [Service](service/) - Learn Service that provides stable network access to Pods. Understand the differences between ClusterIP, NodePort, and LoadBalancer.
+5. [ConfigMap and Secret](configmap-secret/) - Learn how to separate and manage application configuration and sensitive information.
 
 **Advanced Topics**
 
 Advanced topics cover subjects necessary for stable Kubernetes operations in production environments. This includes persistent data storage, network configuration, resource management, auto-scaling, and other content essential for actual service operations.
 
-6. [Volume and Storage]({{< relref "/docs/kubernetes/concepts/storage" >}}) - Learn Persistent Volumes (PV) and Persistent Volume Claims (PVC) that retain data even after Pod termination.
-7. [Networking]({{< relref "/docs/kubernetes/concepts/networking" >}}) - Learn the principles of cluster internal/external communication and HTTP routing through Ingress.
-8. [Resource Management]({{< relref "/docs/kubernetes/concepts/resources" >}}) - Learn how to configure CPU and memory requests and limits. Understand behavior under resource shortage situations.
-9. [Scaling]({{< relref "/docs/kubernetes/concepts/scaling" >}}) - Learn auto-scaling through HPA (Horizontal Pod Autoscaler) and the concept of VPA.
-10. [Health Checks]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) - Learn how to monitor application status and auto-recover through Liveness, Readiness, and Startup Probes.
+6. [Volume and Storage](storage/) - Learn Persistent Volumes (PV) and Persistent Volume Claims (PVC) that retain data even after Pod termination.
+7. [Networking](networking/) - Learn the principles of cluster internal/external communication and HTTP routing through Ingress.
+8. [Resource Management](resources/) - Learn how to configure CPU and memory requests and limits. Understand behavior under resource shortage situations.
+9. [Scaling](scaling/) - Learn auto-scaling through HPA (Horizontal Pod Autoscaler) and the concept of VPA.
+10. [Health Checks](health-checks/) - Learn how to monitor application status and auto-recover through Liveness, Readiness, and Startup Probes.
 
 **Advanced Topics**
 
 Advanced topics cover multi-tenant environment setup, stateful workloads, security, batch processing, and other practical in-depth content.
 
-11. [Namespace]({{< relref "/docs/kubernetes/concepts/namespace" >}}) - Learn how to logically isolate resources within a cluster and limit usage with ResourceQuota.
-12. [StatefulSet]({{< relref "/docs/kubernetes/concepts/statefulset" >}}) - Learn how to deploy and manage stateful applications like databases.
-13. [RBAC]({{< relref "/docs/kubernetes/concepts/rbac" >}}) - Learn how to manage API access permissions for users and services through Role-Based Access Control.
-14. [Jobs and CronJobs]({{< relref "/docs/kubernetes/concepts/jobs" >}}) - Learn how to run and manage one-time batch tasks and schedule-based recurring tasks.
-15. [NetworkPolicy]({{< relref "/docs/kubernetes/concepts/network-policy" >}}) - Learn how to control Pod-to-Pod network traffic to strengthen cluster security.
+11. [Namespace](namespace/) - Learn how to logically isolate resources within a cluster and limit usage with ResourceQuota.
+12. [StatefulSet](statefulset/) - Learn how to deploy and manage stateful applications like databases.
+13. [RBAC](rbac/) - Learn how to manage API access permissions for users and services through Role-Based Access Control.
+14. [Jobs and CronJobs](jobs/) - Learn how to run and manage one-time batch tasks and schedule-based recurring tasks.
+15. [NetworkPolicy](network-policy/) - Learn how to control Pod-to-Pod network traffic to strengthen cluster security.

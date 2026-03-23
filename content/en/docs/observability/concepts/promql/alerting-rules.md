@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **Target Audience**: Developers and SREs setting up monitoring alerts
-> **Prerequisites**: [Recording Rules]({{< relref "/docs/observability/concepts/promql/recording-rules" >}})
+> **Prerequisites**: [Recording Rules](recording-rules/)
 > **What You'll Learn**: Write rules that reduce false positives and alert only on real issues
 
 ## TL;DR

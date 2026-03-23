@@ -17,8 +17,8 @@ related_concepts:
 
 {{< callout type="info" title="Prerequisites" >}}
 Before reading this document, understand these concepts first:
-- [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) - Basic query structure
-- [Data Modeling]({{< relref "/docs/elasticsearch/concepts/data-modeling" >}}) - keyword vs text types
+- [Query DSL](query-dsl/) - Basic query structure
+- [Data Modeling](data-modeling/) - keyword vs text types
 {{< /callout >}}
 
 Learn how to analyze data and extract statistics using Elasticsearch Aggregations.

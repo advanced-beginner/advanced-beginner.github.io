@@ -9,11 +9,11 @@ Supplementary materials and reference information.
 
 ## Contents
 
-### [Glossary]({{< relref "/docs/spark/appendix/glossary" >}})
+### [Glossary](glossary/)
 Key terminology and concepts used in Spark.
 
-### [FAQ]({{< relref "/docs/spark/appendix/faq" >}})
+### [FAQ](faq/)
 Frequently asked questions and solutions to common problems.
 
-### [References]({{< relref "/docs/spark/appendix/references" >}})
+### [References](references/)
 Official documentation, additional learning resources, and community resources.

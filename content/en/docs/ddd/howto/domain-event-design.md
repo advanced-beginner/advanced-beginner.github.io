@@ -9,7 +9,7 @@ author_url: "http://github.com/kimbenji"
 
 > **Problem Solved**: Complex transactions due to tight coupling between Aggregates, or difficulty propagating changes
 > **Time Required**: ~25 min
-> **Prerequisites**: Assumes you have read the [Aggregate Deep Dive]({{< relref "/docs/ddd/concepts/aggregate" >}}) document
+> **Prerequisites**: Assumes you have read the [Aggregate Deep Dive](../concepts/aggregate/) document
 
 {{< callout type="warning" title="Success Criteria" >}}
 After completing this guide, you will be able to:
@@ -622,4 +622,4 @@ public void handleSecond(OrderConfirmedEvent event) {
 
 ## Next Steps
 
-- [Event Sourcing Example]({{< relref "/docs/ddd/examples/event-sourcing" >}}) - Practical implementation example
+- [Event Sourcing Example](../examples/event-sourcing/) - Practical implementation example

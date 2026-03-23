@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **Target Audience**: Developers learning PromQL for the first time
-> **Prerequisites**: [Metrics Fundamentals]({{< relref "/docs/observability/concepts/metrics-fundamentals" >}})
+> **Prerequisites**: [Metrics Fundamentals](../metrics-fundamentals/)
 > **What You'll Learn**: Write basic PromQL queries and retrieve desired metrics
 
 ## TL;DR

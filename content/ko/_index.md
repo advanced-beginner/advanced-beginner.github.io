@@ -32,7 +32,7 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 
 ---
 
-### [Apache Kafka]({{< relref "/docs/kafka" >}})
+### [Apache Kafka](docs/kafka/)
 
 분산 메시징 시스템의 실무 활용법. Producer/Consumer 기본부터 트랜잭션, 복제, 장애 처리, 성능 튜닝까지.
 
@@ -42,7 +42,7 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 - 트랜잭션으로 exactly-once 보장하기
 - 실무 에러 처리 패턴과 모니터링
 
-### [Domain-Driven Design]({{< relref "/docs/ddd" >}})
+### [Domain-Driven Design](docs/ddd/)
 
 복잡한 비즈니스 로직을 체계적으로 다루는 설계 방법론. 전략적 설계부터 전술적 패턴, CQRS와 이벤트 소싱까지.
 
@@ -52,7 +52,7 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 - 도메인 이벤트로 느슨한 결합 구현
 - 실제 주문 도메인 구현 예제
 
-### [Scala]({{< relref "/docs/scala" >}})
+### [Scala](docs/scala/)
 
 함수형과 객체지향을 결합한 JVM 언어. 기본 문법부터 고급 타입 시스템, 함수형 패턴까지. Scala 2.13과 Scala 3 문법을 함께 다룹니다.
 
@@ -62,7 +62,7 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 - 타입 시스템: Generics, Variance, Type Classes
 - Implicits/Given과 암시적 변환의 원리
 
-### [Apache Spark]({{< relref "/docs/spark" >}})
+### [Apache Spark](docs/spark/)
 
 대규모 데이터 처리를 위한 분산 컴퓨팅 엔진. Java/Spring 개발자 관점에서 인메모리 처리, 지연 평가, DAG 최적화를 설명합니다.
 
@@ -72,7 +72,7 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 - Structured Streaming으로 실시간 데이터 처리
 - 메모리 튜닝과 성능 최적화 전략
 
-### [Kubernetes]({{< relref "/docs/kubernetes" >}})
+### [Kubernetes](docs/kubernetes/)
 
 컨테이너 오케스트레이션 플랫폼 실무 가이드. Pod, Deployment, Service부터 스케일링, 네트워킹, 모니터링까지.
 
@@ -82,7 +82,7 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 - HPA를 통한 자동 스케일링
 - 헬스 체크와 무중단 배포 전략
 
-### [Elasticsearch]({{< relref "/docs/elasticsearch" >}})
+### [Elasticsearch](docs/elasticsearch/)
 
 대용량 검색과 실시간 분석을 위한 분산 검색 엔진. RDB의 한계를 넘는 전문 검색과 현실적인 운영 노하우를 다룹니다.
 
@@ -92,7 +92,7 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 - 한글 검색 최적화와 자동완성 구현
 - 클러스터 운영, 성능 튜닝, 장애 대응
 
-### [Observability]({{< relref "/docs/observability" >}})
+### [Observability](docs/observability/)
 
 시스템 관측성 실무 가이드. Metrics, Logs, Traces 3요소부터 Prometheus, Grafana, PromQL 심화까지.
 
@@ -112,17 +112,17 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 
 ## 어디서 시작하면 좋을까요?
 
-- **Kafka를 처음 접한다면** → [Kafka Quick Start]({{< relref "/docs/kafka/quick-start" >}})
-- **Kafka 기본은 아는데 깊이 이해하고 싶다면** → [Kafka 핵심 구성요소]({{< relref "/docs/kafka/concepts/core-components" >}})
-- **DDD가 뭔지 궁금하다면** → [DDD Quick Start]({{< relref "/docs/ddd/quick-start" >}})
-- **도메인 모델 설계를 배우고 싶다면** → [전술적 설계]({{< relref "/docs/ddd/concepts/tactical-design" >}})
-- **Scala를 처음 배운다면** → [Scala Quick Start]({{< relref "/docs/scala/quick-start" >}})
-- **Scala 타입 시스템을 깊이 이해하고 싶다면** → [Type Classes]({{< relref "/docs/scala/concepts/type-classes" >}})
-- **Spark로 대용량 데이터를 처리하고 싶다면** → [Spark Quick Start]({{< relref "/docs/spark/quick-start" >}})
-- **Spark 내부 구조를 이해하고 싶다면** → [Spark 아키텍처]({{< relref "/docs/spark/concepts/architecture" >}})
-- **Kubernetes를 처음 접한다면** → [Kubernetes Quick Start]({{< relref "/docs/kubernetes/quick-start" >}})
-- **Kubernetes 리소스 설정을 최적화하고 싶다면** → [리소스 관리]({{< relref "/docs/kubernetes/concepts/resources" >}})
-- **검색 엔진을 도입하고 싶다면** → [Elasticsearch Quick Start]({{< relref "/docs/elasticsearch/quick-start" >}})
-- **한글 검색을 최적화하고 싶다면** → [한글 검색 최적화]({{< relref "/docs/elasticsearch/concepts/korean-search" >}})
-- **시스템 모니터링을 시작하고 싶다면** → [Observability Quick Start]({{< relref "/docs/observability/quick-start" >}})
-- **PromQL을 깊이 배우고 싶다면** → [PromQL 심화]({{< relref "/docs/observability/concepts/promql" >}})
+- **Kafka를 처음 접한다면** → [Kafka Quick Start](docs/kafka/quick-start/)
+- **Kafka 기본은 아는데 깊이 이해하고 싶다면** → [Kafka 핵심 구성요소](docs/kafka/concepts/core-components/)
+- **DDD가 뭔지 궁금하다면** → [DDD Quick Start](docs/ddd/quick-start/)
+- **도메인 모델 설계를 배우고 싶다면** → [전술적 설계](docs/ddd/concepts/tactical-design/)
+- **Scala를 처음 배운다면** → [Scala Quick Start](docs/scala/quick-start/)
+- **Scala 타입 시스템을 깊이 이해하고 싶다면** → [Type Classes](docs/scala/concepts/type-classes/)
+- **Spark로 대용량 데이터를 처리하고 싶다면** → [Spark Quick Start](docs/spark/quick-start/)
+- **Spark 내부 구조를 이해하고 싶다면** → [Spark 아키텍처](docs/spark/concepts/architecture/)
+- **Kubernetes를 처음 접한다면** → [Kubernetes Quick Start](docs/kubernetes/quick-start/)
+- **Kubernetes 리소스 설정을 최적화하고 싶다면** → [리소스 관리](docs/kubernetes/concepts/resources/)
+- **검색 엔진을 도입하고 싶다면** → [Elasticsearch Quick Start](docs/elasticsearch/quick-start/)
+- **한글 검색을 최적화하고 싶다면** → [한글 검색 최적화](docs/elasticsearch/concepts/korean-search/)
+- **시스템 모니터링을 시작하고 싶다면** → [Observability Quick Start](docs/observability/quick-start/)
+- **PromQL을 깊이 배우고 싶다면** → [PromQL 심화](docs/observability/concepts/promql/)

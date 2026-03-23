@@ -36,28 +36,28 @@ Following this order will give you a systematic understanding from Spark basics 
 
 First, understand Spark's core structure and APIs:
 
-1. [Architecture]({{< relref "/docs/spark/concepts/architecture" >}}) - Roles and interactions of Driver, Executor, Cluster Manager
-2. [RDD Basics]({{< relref "/docs/spark/concepts/rdd" >}}) - Spark's basic abstraction, distributed collection concepts
-3. [DataFrame and Dataset]({{< relref "/docs/spark/concepts/dataframe-dataset" >}}) - Modern high-level APIs
-4. [Spark SQL]({{< relref "/docs/spark/concepts/spark-sql" >}}) - Distributed data processing with SQL
-5. [Transformations and Actions]({{< relref "/docs/spark/concepts/transformations-actions" >}}) - Core of lazy evaluation and execution
+1. [Architecture](architecture/) - Roles and interactions of Driver, Executor, Cluster Manager
+2. [RDD Basics](rdd/) - Spark's basic abstraction, distributed collection concepts
+3. [DataFrame and Dataset](dataframe-dataset/) - Modern high-level APIs
+4. [Spark SQL](spark-sql/) - Distributed data processing with SQL
+5. [Transformations and Actions](transformations-actions/) - Core of lazy evaluation and execution
 
 **Advanced Concepts**
 
 After understanding the basics, learn performance optimization and advanced features:
 
-6. [Partitioning and Shuffle]({{< relref "/docs/spark/concepts/partitioning" >}}) - Core of distributed processing, data distribution strategies
-7. [Caching and Persistence]({{< relref "/docs/spark/concepts/caching" >}}) - In-memory processing optimization
-8. [Structured Streaming]({{< relref "/docs/spark/concepts/structured-streaming" >}}) - Real-time stream data processing
-9. [MLlib]({{< relref "/docs/spark/concepts/mllib" >}}) - Distributed machine learning
+6. [Partitioning and Shuffle](partitioning/) - Core of distributed processing, data distribution strategies
+7. [Caching and Persistence](caching/) - In-memory processing optimization
+8. [Structured Streaming](structured-streaming/) - Real-time stream data processing
+9. [MLlib](mllib/) - Distributed machine learning
 
 **Operations**
 
 Knowledge for operating Spark in production environments:
 
-10. [Performance Tuning]({{< relref "/docs/spark/concepts/tuning" >}}) - Memory, partition, shuffle optimization
-11. [Deployment and Cluster Management]({{< relref "/docs/spark/concepts/deployment" >}}) - Standalone, YARN, Kubernetes environments
-12. [Spark Connect]({{< relref "/docs/spark/concepts/spark-connect" >}}) - Thin client architecture (Spark 3.4+)
+10. [Performance Tuning](tuning/) - Memory, partition, shuffle optimization
+11. [Deployment and Cluster Management](deployment/) - Standalone, YARN, Kubernetes environments
+12. [Spark Connect](spark-connect/) - Thin client architecture (Spark 3.4+)
 
 ## Core Concepts Summary
 

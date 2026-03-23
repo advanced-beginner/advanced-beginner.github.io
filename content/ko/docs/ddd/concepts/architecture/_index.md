@@ -9,7 +9,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **대상 독자**: 프로젝트 아키텍처 선택이 필요한 개발자 및 아키텍트
-> **선수 지식**: [전술적 설계]({{< relref "/docs/ddd/concepts/tactical-design" >}}) 빌딩 블록에 대한 이해
+> **선수 지식**: [전술적 설계](../tactical-design/) 빌딩 블록에 대한 이해
 > **이 섹션의 목적**: 아키텍처 패턴의 철학을 이해하고 프로젝트에 적합한 선택을 할 수 있게 함
 
 {{< callout type="info" title="아키텍처 섹션이란?" >}}
@@ -227,7 +227,7 @@ flowchart LR
 
 ## 다음 단계
 
-- **처음 시작이라면**: [계층형 아키텍처]({{< relref "/docs/ddd/concepts/architecture/layered-architecture" >}})부터 시작하세요
-- **외부 연동이 많다면**: [헥사고날 아키텍처]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}})를 확인하세요
-- **DDD를 적용한다면**: [어니언 아키텍처]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}})가 적합합니다
-- **조회 성능이 중요하다면**: [CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}})를 검토하세요
+- **처음 시작이라면**: [계층형 아키텍처](layered-architecture/)부터 시작하세요
+- **외부 연동이 많다면**: [헥사고날 아키텍처](hexagonal-architecture/)를 확인하세요
+- **DDD를 적용한다면**: [어니언 아키텍처](onion-architecture/)가 적합합니다
+- **조회 성능이 중요하다면**: [CQRS](cqrs/)를 검토하세요

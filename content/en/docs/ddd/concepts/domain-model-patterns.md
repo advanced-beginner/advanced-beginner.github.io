@@ -7,7 +7,7 @@ author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
 
-> **Target Audience**: Backend developers who understand [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design" >}}) building blocks
+> **Target Audience**: Backend developers who understand [Tactical Design](tactical-design/) building blocks
 > **Prerequisites**: Understanding of Entity, Value Object, Repository, Domain Service concepts
 > **Estimated Time**: About 25-30 minutes
 > **Key Question**: "How do you structure domain logic that is difficult to express with core building blocks alone?"
@@ -519,7 +519,7 @@ public class OrderApplicationService {
 
 **Aggregate Builder**
 
-Use the Builder pattern for complex Aggregate creation. While the [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design" >}}) Factory is suited for "complex creation requiring external dependencies," Builder is suited for "assembling objects from multiple attributes." An inner Builder class provides a fluent interface, and the `build` method performs final validation.
+Use the Builder pattern for complex Aggregate creation. While the [Tactical Design](tactical-design/) Factory is suited for "complex creation requiring external dependencies," Builder is suited for "assembling objects from multiple attributes." An inner Builder class provides a fluent interface, and the `build` method performs final validation.
 
 ```java
 public class Order {
@@ -663,6 +663,6 @@ public Discount getDiscount() {
 
 #### Next Steps
 
-- [Architecture Patterns]({{< relref "/docs/ddd/concepts/architecture" >}}) - Code structure for placing building blocks and patterns
-- [Testing Strategy]({{< relref "/docs/ddd/concepts/testing" >}}) - Testing methods to validate domain models
-- [Anti-Patterns and Pitfalls]({{< relref "/docs/ddd/concepts/anti-patterns" >}}) - Common mistakes and solutions
+- [Architecture Patterns](architecture/) - Code structure for placing building blocks and patterns
+- [Testing Strategy](testing/) - Testing methods to validate domain models
+- [Anti-Patterns and Pitfalls](anti-patterns/) - Common mistakes and solutions

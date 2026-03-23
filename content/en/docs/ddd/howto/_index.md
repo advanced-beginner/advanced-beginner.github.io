@@ -9,11 +9,11 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **Target Audience**: Developers who understand basic DDD concepts (Entity, Value Object, Aggregate)
-> **Prerequisites**: Read the [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design" >}}) document or have basic knowledge of DDD building blocks
+> **Prerequisites**: Read the [Tactical Design](../concepts/tactical-design/) document or have basic knowledge of DDD building blocks
 > **Purpose of This Section**: Solve specific problems step-by-step when applying DDD
 
 {{< callout type="info" title="What is a How-To Guide?" >}}
-How-to guides are practical instructions for **solving specific problems**. They focus on "how" rather than "why", and each guide starts with a clear problem situation and ends with a verifiable solution. If you need conceptual understanding first, please refer to the [Concepts]({{< relref "/docs/ddd/concepts" >}}) section.
+How-to guides are practical instructions for **solving specific problems**. They focus on "how" rather than "why", and each guide starts with a clear problem situation and ends with a verifiable solution. If you need conceptual understanding first, please refer to the [Concepts](../concepts/) section.
 {{< /callout >}}
 
 ## What This Section Covers
@@ -27,9 +27,9 @@ How-to guides are practical instructions for **solving specific problems**. They
 
 ## What This Section Does Not Cover
 
-- DDD concept explanations → See [Concepts]({{< relref "/docs/ddd/concepts" >}})
-- Full project implementation examples → See [Examples]({{< relref "/docs/ddd/examples" >}})
-- Term definitions → See [Glossary]({{< relref "/docs/ddd/appendix/glossary" >}})
+- DDD concept explanations → See [Concepts](../concepts/)
+- Full project implementation examples → See [Examples](../examples/)
+- Term definitions → See [Glossary](../appendix/glossary/)
 
 ## How to Use These Guides
 

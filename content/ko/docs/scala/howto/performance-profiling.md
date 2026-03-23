@@ -488,6 +488,6 @@ def process(input: ProcessInput): String = {
 
 ## 관련 문서
 
-- [타입 에러 디버깅]({{< relref "/docs/scala/howto/type-error-debugging" >}}) - 타입 관련 컴파일 에러 해결
-- [sbt 의존성 충돌 해결]({{< relref "/docs/scala/howto/sbt-dependency-conflicts" >}}) - 빌드 의존성 문제 해결
-- [Future 에러 처리]({{< relref "/docs/scala/howto/future-error-handling" >}}) - 비동기 코드 성능과 에러 처리
+- [타입 에러 디버깅](type-error-debugging/) - 타입 관련 컴파일 에러 해결
+- [sbt 의존성 충돌 해결](sbt-dependency-conflicts/) - 빌드 의존성 문제 해결
+- [Future 에러 처리](future-error-handling/) - 비동기 코드 성능과 에러 처리

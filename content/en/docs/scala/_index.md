@@ -57,10 +57,10 @@ This guide covers both **Scala 2.13** and **Scala 3**. The core concepts of both
 
 This guide is structured to help you learn Scala step by step from basics to advanced.
 
-**[Quick Start]({{< relref "/docs/scala/quick-start" >}})**
+**[Quick Start](quick-start/)**
 Install Scala and run your first program in 5 minutes.
 
-**[Understanding Concepts]({{< relref "/docs/scala/concepts" >}})**
+**[Understanding Concepts](concepts/)**
 
 Learn Scala's core concepts categorized into basic, intermediate, and advanced levels.
 
@@ -96,21 +96,21 @@ Learn Scala's core concepts categorized into basic, intermediate, and advanced l
 | [Concurrency](concepts/concurrency/) | Future, Promise, ExecutionContext |
 | [Functional Patterns](concepts/functional-patterns/) | Functor, Monad, referential transparency |
 
-**[Practical Examples]({{< relref "/docs/scala/examples" >}})**
+**[Practical Examples](examples/)**
 
 Executable example projects based on sbt. Verify concepts you've learned with actual code.
 
-- [Environment Setup]({{< relref "/docs/scala/examples/setup" >}}) - sbt, IDE configuration
-- [Basic Examples]({{< relref "/docs/scala/examples/basic" >}}) - Examples applying core concepts
-- [Scala 2 vs 3 Comparison]({{< relref "/docs/scala/examples/scala2-vs-scala3" >}}) - Code comparison by version
+- [Environment Setup](examples/setup/) - sbt, IDE configuration
+- [Basic Examples](examples/basic/) - Examples applying core concepts
+- [Scala 2 vs 3 Comparison](examples/scala2-vs-scala3/) - Code comparison by version
 
-**[Appendix]({{< relref "/docs/scala/appendix" >}})**
+**[Appendix](appendix/)**
 
 Reference materials to help with learning, including glossary, version comparison, FAQ, etc.
-- [Glossary]({{< relref "/docs/scala/appendix/glossary" >}}) - Quick reference for Scala terms
-- [Version Comparison]({{< relref "/docs/scala/appendix/version-comparison" >}}) - Summary of Scala 2 vs 3 differences
-- [FAQ]({{< relref "/docs/scala/appendix/faq" >}}) - Frequently asked questions
-- [References]({{< relref "/docs/scala/appendix/references" >}}) - Official documentation and additional learning resources
+- [Glossary](appendix/glossary/) - Quick reference for Scala terms
+- [Version Comparison](appendix/version-comparison/) - Summary of Scala 2 vs 3 differences
+- [FAQ](appendix/faq/) - Frequently asked questions
+- [References](appendix/references/) - Official documentation and additional learning resources
 
 #### Get started now
 

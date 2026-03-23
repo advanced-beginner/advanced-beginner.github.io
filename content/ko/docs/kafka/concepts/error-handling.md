@@ -17,7 +17,7 @@ author_url: "http://github.com/kimbenji"
 
 **대상 독자**: Consumer 에러 처리 전략을 구현하려는 개발자
 
-**선수 지식**: [Consumer Group & Offset]({{< relref "/docs/kafka/concepts/consumer-group" >}})의 Consumer 동작 원리, Spring Kafka 기초
+**선수 지식**: [Consumer Group & Offset](consumer-group/)의 Consumer 동작 원리, Spring Kafka 기초
 
 **소요 시간**: 약 25-30분
 
@@ -403,4 +403,4 @@ public void handleDlt(
 
 #### 다음 단계
 
-- [모니터링 기초]({{< relref "/docs/kafka/concepts/monitoring" >}}) - Kafka 모니터링 및 메트릭
+- [모니터링 기초](monitoring/) - Kafka 모니터링 및 메트릭

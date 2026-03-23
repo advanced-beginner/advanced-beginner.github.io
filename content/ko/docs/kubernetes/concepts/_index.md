@@ -108,28 +108,28 @@ flowchart TB
 
 기초 개념에서는 Kubernetes 클러스터를 구성하는 핵심 요소들과 애플리케이션이 배포되는 과정을 다룹니다. Pod가 어떻게 생성되고, Deployment가 Pod를 어떻게 관리하며, Service가 어떻게 트래픽을 전달하는지 이해하는 것이 목표입니다.
 
-1. [아키텍처]({{< relref "/docs/kubernetes/concepts/architecture" >}}) - Control Plane과 Worker Node의 구성요소를 이해합니다. Kubernetes가 어떻게 동작하는지 전체 그림을 파악합니다.
-2. [Pod]({{< relref "/docs/kubernetes/concepts/pod" >}}) - Kubernetes의 최소 배포 단위인 Pod의 개념과 생명주기를 학습합니다. 왜 컨테이너 대신 Pod를 사용하는지 이해합니다.
-3. [Deployment]({{< relref "/docs/kubernetes/concepts/deployment" >}}) - Pod의 생성, 업데이트, 롤백을 관리하는 Deployment를 학습합니다. 무중단 배포의 원리를 이해합니다.
-4. [Service]({{< relref "/docs/kubernetes/concepts/service" >}}) - Pod에 대한 안정적인 네트워크 접근을 제공하는 Service를 학습합니다. ClusterIP, NodePort, LoadBalancer의 차이를 이해합니다.
-5. [ConfigMap과 Secret]({{< relref "/docs/kubernetes/concepts/configmap-secret" >}}) - 애플리케이션 설정과 민감 정보를 분리하여 관리하는 방법을 학습합니다.
+1. [아키텍처](architecture/) - Control Plane과 Worker Node의 구성요소를 이해합니다. Kubernetes가 어떻게 동작하는지 전체 그림을 파악합니다.
+2. [Pod](pod/) - Kubernetes의 최소 배포 단위인 Pod의 개념과 생명주기를 학습합니다. 왜 컨테이너 대신 Pod를 사용하는지 이해합니다.
+3. [Deployment](deployment/) - Pod의 생성, 업데이트, 롤백을 관리하는 Deployment를 학습합니다. 무중단 배포의 원리를 이해합니다.
+4. [Service](service/) - Pod에 대한 안정적인 네트워크 접근을 제공하는 Service를 학습합니다. ClusterIP, NodePort, LoadBalancer의 차이를 이해합니다.
+5. [ConfigMap과 Secret](configmap-secret/) - 애플리케이션 설정과 민감 정보를 분리하여 관리하는 방법을 학습합니다.
 
 **심화 학습**
 
 심화 학습에서는 운영 환경에서 Kubernetes를 안정적으로 운영하기 위한 고급 주제들을 다룹니다. 영구 데이터 저장, 네트워크 구성, 리소스 관리, 자동 스케일링 등 실제 서비스 운영에 필수적인 내용입니다.
 
-6. [Volume과 스토리지]({{< relref "/docs/kubernetes/concepts/storage" >}}) - Pod가 종료되어도 데이터를 유지하는 영구 볼륨(PV)과 볼륨 클레임(PVC)을 학습합니다.
-7. [네트워킹]({{< relref "/docs/kubernetes/concepts/networking" >}}) - 클러스터 내부/외부 통신의 원리와 Ingress를 통한 HTTP 라우팅을 학습합니다.
-8. [리소스 관리]({{< relref "/docs/kubernetes/concepts/resources" >}}) - CPU와 메모리의 요청(requests)과 제한(limits) 설정 방법을 학습합니다. 리소스 부족 상황에서의 동작을 이해합니다.
-9. [스케일링]({{< relref "/docs/kubernetes/concepts/scaling" >}}) - HPA(Horizontal Pod Autoscaler)를 통한 자동 스케일링과 VPA의 개념을 학습합니다.
-10. [헬스 체크]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) - Liveness, Readiness, Startup Probe를 통해 애플리케이션 상태를 모니터링하고 자동 복구하는 방법을 학습합니다.
+6. [Volume과 스토리지](storage/) - Pod가 종료되어도 데이터를 유지하는 영구 볼륨(PV)과 볼륨 클레임(PVC)을 학습합니다.
+7. [네트워킹](networking/) - 클러스터 내부/외부 통신의 원리와 Ingress를 통한 HTTP 라우팅을 학습합니다.
+8. [리소스 관리](resources/) - CPU와 메모리의 요청(requests)과 제한(limits) 설정 방법을 학습합니다. 리소스 부족 상황에서의 동작을 이해합니다.
+9. [스케일링](scaling/) - HPA(Horizontal Pod Autoscaler)를 통한 자동 스케일링과 VPA의 개념을 학습합니다.
+10. [헬스 체크](health-checks/) - Liveness, Readiness, Startup Probe를 통해 애플리케이션 상태를 모니터링하고 자동 복구하는 방법을 학습합니다.
 
 **고급 주제**
 
 고급 주제에서는 멀티 테넌트 환경 구성, 상태 유지 워크로드, 보안, 배치 처리 등 실전에서 필요한 심화 내용을 다룹니다.
 
-11. [Namespace]({{< relref "/docs/kubernetes/concepts/namespace" >}}) - 클러스터 내 리소스를 논리적으로 격리하고 ResourceQuota로 사용량을 제한하는 방법을 학습합니다.
-12. [StatefulSet]({{< relref "/docs/kubernetes/concepts/statefulset" >}}) - 데이터베이스와 같이 상태를 유지해야 하는 애플리케이션의 배포와 관리 방법을 학습합니다.
-13. [RBAC]({{< relref "/docs/kubernetes/concepts/rbac" >}}) - Role-Based Access Control을 통해 사용자와 서비스의 API 접근 권한을 관리하는 방법을 학습합니다.
-14. [Job과 CronJob]({{< relref "/docs/kubernetes/concepts/jobs" >}}) - 일회성 배치 작업과 스케줄 기반 반복 작업을 실행하고 관리하는 방법을 학습합니다.
-15. [NetworkPolicy]({{< relref "/docs/kubernetes/concepts/network-policy" >}}) - Pod 간 네트워크 트래픽을 제어하여 클러스터 보안을 강화하는 방법을 학습합니다.
+11. [Namespace](namespace/) - 클러스터 내 리소스를 논리적으로 격리하고 ResourceQuota로 사용량을 제한하는 방법을 학습합니다.
+12. [StatefulSet](statefulset/) - 데이터베이스와 같이 상태를 유지해야 하는 애플리케이션의 배포와 관리 방법을 학습합니다.
+13. [RBAC](rbac/) - Role-Based Access Control을 통해 사용자와 서비스의 API 접근 권한을 관리하는 방법을 학습합니다.
+14. [Job과 CronJob](jobs/) - 일회성 배치 작업과 스케줄 기반 반복 작업을 실행하고 관리하는 방법을 학습합니다.
+15. [NetworkPolicy](network-policy/) - Pod 간 네트워크 트래픽을 제어하여 클러스터 보안을 강화하는 방법을 학습합니다.

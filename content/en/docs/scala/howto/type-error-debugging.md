@@ -39,8 +39,8 @@ covariant type A occurs in contravariant position in type A => Unit
 
 ### What This Guide Does Not Cover
 
-- **Type system fundamentals**: See [Type System Concepts]({{< relref "/docs/scala/concepts/type-system-advanced" >}})
-- **Implicit value errors**: See [Implicit/Given Debugging]({{< relref "/docs/scala/howto/implicit-debugging" >}})
+- **Type system fundamentals**: See [Type System Concepts](../concepts/type-system-advanced/)
+- **Implicit value errors**: See [Implicit/Given Debugging](implicit-debugging/)
 - **Macro/reflection errors**: See the relevant library documentation
 
 ---
@@ -395,6 +395,6 @@ When you encounter a type error, verify the following:
 
 ## Related Documents
 
-- [Type System]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) - Scala type system fundamentals
-- [Implicit/Given Debugging]({{< relref "/docs/scala/howto/implicit-debugging" >}}) - Resolving implicit value errors
-- [Future Error Handling]({{< relref "/docs/scala/howto/future-error-handling" >}}) - Error handling in asynchronous code
+- [Type System](../concepts/type-system-advanced/) - Scala type system fundamentals
+- [Implicit/Given Debugging](implicit-debugging/) - Resolving implicit value errors
+- [Future Error Handling](future-error-handling/) - Error handling in asynchronous code

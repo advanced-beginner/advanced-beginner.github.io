@@ -7,7 +7,7 @@ lastmod: "2026-01-12"
 ---
 
 > **Target Audience**: Developers and SREs standardizing observability systems
-> **Prerequisites**: [Three Pillars of Observability]({{< relref "/docs/observability/concepts/three-pillars" >}}), [Distributed Tracing]({{< relref "/docs/observability/concepts/distributed-tracing" >}})
+> **Prerequisites**: [Three Pillars of Observability](three-pillars/), [Distributed Tracing](distributed-tracing/)
 > **After Reading**: You'll understand OpenTelemetry and be able to apply it to your projects
 
 ## TL;DR

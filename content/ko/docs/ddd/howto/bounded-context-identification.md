@@ -9,7 +9,7 @@ author_url: "http://github.com/kimbenji"
 
 > **해결하는 문제**: 시스템을 어떻게 나눠야 할지 모르거나, Context 경계를 잘못 정해서 팀 간 의존성이 높아진 상황
 > **소요 시간**: 약 25분
-> **전제 조건**: [전략적 설계]({{< relref "/docs/ddd/concepts/strategic-design" >}}) 문서를 읽었다고 가정
+> **전제 조건**: [전략적 설계](../concepts/strategic-design/) 문서를 읽었다고 가정
 
 {{< callout type="warning" title="성공 기준" >}}
 이 가이드를 완료하면 다음을 할 수 있습니다:
@@ -375,6 +375,6 @@ public void handle(OrderConfirmedEvent event) {
 
 ## 다음 단계
 
-- [전략적 설계]({{< relref "/docs/ddd/concepts/strategic-design" >}}) - Context Mapping 패턴 상세
-- [Aggregate 경계 정하기]({{< relref "/docs/ddd/howto/aggregate-boundaries" >}}) - Context 내부 설계
-- [이벤트 기반 아키텍처]({{< relref "/docs/ddd/concepts/architecture/event-driven" >}}) - Context 간 통신
+- [전략적 설계](../concepts/strategic-design/) - Context Mapping 패턴 상세
+- [Aggregate 경계 정하기](aggregate-boundaries/) - Context 내부 설계
+- [이벤트 기반 아키텍처](../concepts/architecture/event-driven/) - Context 간 통신

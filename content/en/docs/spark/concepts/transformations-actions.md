@@ -412,13 +412,13 @@ df.select("id", "category", "value")
 
 ## Next Steps
 
-- [Partitioning and Shuffle]({{< relref "/docs/spark/concepts/partitioning" >}}) - Internal workings of Wide Transformations
-- [Caching and Persistence]({{< relref "/docs/spark/concepts/caching" >}}) - Reusing intermediate results
+- [Partitioning and Shuffle](partitioning/) - Internal workings of Wide Transformations
+- [Caching and Persistence](caching/) - Reusing intermediate results
 
 ## Related Documents
 
-- [Architecture]({{< relref "/docs/spark/concepts/architecture" >}}) - Execution structure of Job, Stage, Task
-- [RDD Basics]({{< relref "/docs/spark/concepts/rdd" >}}) - Low-level Transformation API
-- [DataFrame and Dataset]({{< relref "/docs/spark/concepts/dataframe-dataset" >}}) - High-level data processing API
-- [Performance Tuning]({{< relref "/docs/spark/concepts/tuning" >}}) - Execution plan optimization
-- [Glossary]({{< relref "/docs/spark/appendix/glossary" >}}) - Transformation, Action term definitions
+- [Architecture](architecture/) - Execution structure of Job, Stage, Task
+- [RDD Basics](rdd/) - Low-level Transformation API
+- [DataFrame and Dataset](dataframe-dataset/) - High-level data processing API
+- [Performance Tuning](tuning/) - Execution plan optimization
+- [Glossary](../appendix/glossary/) - Transformation, Action term definitions

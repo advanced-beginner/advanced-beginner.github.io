@@ -26,7 +26,7 @@ lastmod: "2026-01-15"
 ---
 
 > **대상 독자**: 마이크로서비스를 운영하는 개발자, SRE
-> **선수 지식**: [관측성 3요소]({{< relref "/docs/observability/concepts/three-pillars" >}})
+> **선수 지식**: [관측성 3요소](three-pillars/)
 > **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: 분산 추적을 이해하고 서비스 간 요청 흐름을 분석할 수 있습니다
 
@@ -384,7 +384,7 @@ groups:
 
 ## 관련 문서
 
-- [Elasticsearch Query DSL로 트레이스 검색]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) - 트레이스 데이터를 Elasticsearch에 저장한 경우 Query DSL로 검색하는 방법
+- [Elasticsearch Query DSL로 트레이스 검색](../../elasticsearch/concepts/query-dsl/) - 트레이스 데이터를 Elasticsearch에 저장한 경우 Query DSL로 검색하는 방법
 
 ## 다음 단계
 

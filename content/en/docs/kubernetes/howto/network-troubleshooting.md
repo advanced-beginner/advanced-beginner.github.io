@@ -14,7 +14,7 @@ author:
 {{< callout type="info" title="Scope of This Guide" >}}
 **Covers**: Service connectivity issues, DNS issues, Ingress routing issues
 
-**Does not cover**: Pod startup issues (see [Pod Troubleshooting]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}})), external network firewall configuration
+**Does not cover**: Pod startup issues (see [Pod Troubleshooting](pod-troubleshooting/)), external network firewall configuration
 {{< /callout >}}
 
 ## Before You Begin
@@ -48,7 +48,7 @@ my-app-xxx-yyy           1/1     Running   0          5m
 ```
 
 {{< callout type="warning" title="If Pod is Not Running" >}}
-First, resolve Pod issues by referring to [Pod Troubleshooting]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}).
+First, resolve Pod issues by referring to [Pod Troubleshooting](pod-troubleshooting/).
 {{< /callout >}}
 
 ### 3. Prepare Test Pod
