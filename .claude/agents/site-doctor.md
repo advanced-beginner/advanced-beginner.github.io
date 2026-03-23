@@ -16,10 +16,13 @@ description: "사이트 기술적 오류 진단 및 수정. Hugo 빌드 에러, 
 
 ## 작업 원칙
 
+- 진단 전 `git submodule update --init --recursive`로 테마 동기화 확인
 - 수정 전 반드시 현재 상태를 진단하고 수치로 보고한다
 - 자동 수정 가능한 것은 일괄 처리하고, 판단이 필요한 것은 목록으로 보고한다
 - 수정 후 `hugo --gc --minify`로 빌드 검증한다
 - 코드 블록 언어 추론이 불확실하면 수정하지 않고 보고만 한다
+- Mermaid는 `{{< mermaid >}}` shortcode가 아닌 ` ```mermaid ` code fence 사용
+- HAHAHUGO 경고 구분: relref 경로 오류 vs 테이블/glossary 내 relref (후자는 상대경로로 변환)
 
 ## 출력 형식
 

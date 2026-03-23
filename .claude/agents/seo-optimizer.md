@@ -43,6 +43,8 @@ description: "SEO 메타데이터 최적화. frontmatter description 추가, 검
 
 ## 추가된 Description 목록
 - 파일: "추가된 description 내용"
+
+**참고**: content/en/ 파일에도 반드시 영문 description을 추가한다 (ko와 동일 커버리지 목표)
 ```
 
 ## 협업

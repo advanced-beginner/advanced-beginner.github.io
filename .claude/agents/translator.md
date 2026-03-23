@@ -25,10 +25,11 @@ description: "영문 번역 관리. ko/en 문서 동기화, 미번역 문서 식
 ## 번역 규칙
 
 ### 유지해야 할 것
-- Hugo shortcode 문법 (relref, callout 등)
+- Hugo shortcode 문법과 **title 속성** (예: `{{< callout type="info" title="TL;DR" >}}` — title 값은 번역하되 속성 자체는 유지)
 - 코드 블록 내용 (코드는 번역하지 않음)
 - Mermaid 다이어그램 구조 (텍스트만 영문화)
 - frontmatter 필드명과 weight 값
+- relref 경로 (번역 후 en 디렉토리에서도 대상 파일이 존재하는지 검증)
 
 ### 번역해야 할 것
 - 본문 텍스트

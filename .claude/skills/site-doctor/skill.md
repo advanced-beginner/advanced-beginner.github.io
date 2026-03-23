@@ -7,11 +7,20 @@ description: "Hugo 빌드 에러, 코드 블록 언어 미지정, Mermaid 규칙
 
 ## 워크플로우
 
+### Step 0: 환경 준비
+```bash
+git submodule update --init --recursive
+ls themes/hugo-book/layouts/
+```
+테마 submodule이 초기화되어 있는지 확인한다. 비어있으면 shortcode 존재 여부를 오판할 수 있다.
+
 ### Step 1: 빌드 진단
 ```bash
 hugo --gc --minify 2>&1
 ```
 에러/경고를 파싱하여 카테고리별로 분류한다.
+- **HAHAHUGO 경고**: relref shortcode가 Goldmark 파서와 충돌. 테이블/glossary 내 relref를 상대경로로 변환하면 해결.
+- **실제 WARN**: 깨진 링크, 존재하지 않는 파일 참조.
 
 ### Step 2: 코드 블록 언어 미지정 탐지
 ````
