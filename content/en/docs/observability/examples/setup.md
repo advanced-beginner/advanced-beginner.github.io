@@ -372,5 +372,5 @@ docker compose down -v
 
 | Recommended Order | Document | What You'll Learn |
 |----------|------|----------|
-| 1 | [Spring Boot Metrics]({{< relref "/docs/observability/examples/spring-boot-metrics" >}}) | Application integration |
-| 2 | [Kafka Monitoring]({{< relref "/docs/observability/examples/kafka-monitoring" >}}) | Kafka observability |
+| 1 | [Spring Boot Metrics](spring-boot-metrics/) | Application integration |
+| 2 | [Kafka Monitoring](kafka-monitoring/) | Kafka observability |

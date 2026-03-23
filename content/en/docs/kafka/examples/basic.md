@@ -22,7 +22,7 @@ This document provides a step-by-step guide to sending and receiving messages us
 |------|-------------|
 | **Target Audience** | Backend developers who want to use Kafka in Spring Boot applications |
 | **Prerequisites** | Basic Java syntax, Spring Boot fundamentals, Kafka basic concepts |
-| **Prior Completion** | [Quick Start]({{< relref "/docs/kafka/quick-start" >}}) example completed, [Environment Setup]({{< relref "/docs/kafka/examples/setup" >}}) configuration done |
+| **Prior Completion** | [Quick Start](../quick-start/) example completed, [Environment Setup](setup/) configuration done |
 | **Estimated Time** | About 30 minutes |
 
 {{< callout type="warning" title="Platform-specific Notes" >}}

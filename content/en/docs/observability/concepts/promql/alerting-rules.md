@@ -458,5 +458,5 @@ stateDiagram-v2
 
 | Recommended Order | Document | What You'll Learn |
 |-------------------|----------|-------------------|
-| 1 | [SRE Golden Signals]({{< relref "/docs/observability/concepts/golden-signals" >}}) | Selecting metrics to alert on |
-| 2 | [Alert Action Guide]({{< relref "/docs/observability/appendix/alerting-actions" >}}) | Response after receiving alerts |
+| 1 | [SRE Golden Signals](../golden-signals/) | Selecting metrics to alert on |
+| 2 | [Alert Action Guide](../../appendix/alerting-actions/) | Response after receiving alerts |

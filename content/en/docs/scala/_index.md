@@ -68,33 +68,33 @@ Learn Scala's core concepts categorized into basic, intermediate, and advanced l
 
 | Topic | What you'll learn |
 |------|----------|
-| [Basic Syntax]({{< relref "/docs/scala/concepts/basics" >}}) | Variables, constants, basic types, type inference |
-| [Control Structures]({{< relref "/docs/scala/concepts/control-structures" >}}) | if, for, while, match expressions |
-| [Functions and Methods]({{< relref "/docs/scala/concepts/functions-methods" >}}) | def, lambda, default values, varargs |
-| [Classes and Objects]({{< relref "/docs/scala/concepts/classes-objects" >}}) | class, object, trait, enum |
-| [Case Classes]({{< relref "/docs/scala/concepts/case-classes" >}}) | Immutable data modeling |
-| [Pattern Matching]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | Powerful use of match expressions |
+| [Basic Syntax](concepts/basics/) | Variables, constants, basic types, type inference |
+| [Control Structures](concepts/control-structures/) | if, for, while, match expressions |
+| [Functions and Methods](concepts/functions-methods/) | def, lambda, default values, varargs |
+| [Classes and Objects](concepts/classes-objects/) | class, object, trait, enum |
+| [Case Classes](concepts/case-classes/) | Immutable data modeling |
+| [Pattern Matching](concepts/pattern-matching/) | Powerful use of match expressions |
 
 **Intermediate:**
 
 | Topic | What you'll learn |
 |------|----------|
-| [Collections]({{< relref "/docs/scala/concepts/collections" >}}) | List, Set, Map, Seq, Vector |
-| [Higher-Order Functions]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) | map, filter, fold, currying |
-| [Generics]({{< relref "/docs/scala/concepts/generics" >}}) | Type parameters, type bounds |
-| [For Comprehension]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) | Elegant expression of monadic operations |
-| [Implicit/Given]({{< relref "/docs/scala/concepts/implicits" >}}) | Implicit conversions and contextual abstractions |
+| [Collections](concepts/collections/) | List, Set, Map, Seq, Vector |
+| [Higher-Order Functions](concepts/higher-order-functions/) | map, filter, fold, currying |
+| [Generics](concepts/generics/) | Type parameters, type bounds |
+| [For Comprehension](concepts/for-comprehensions/) | Elegant expression of monadic operations |
+| [Implicit/Given](concepts/implicits/) | Implicit conversions and contextual abstractions |
 
 **Advanced:**
 
 | Topic | What you'll learn |
 |------|----------|
-| [Type Classes]({{< relref "/docs/scala/concepts/type-classes" >}}) | Ad-hoc polymorphism pattern |
-| [Variance]({{< relref "/docs/scala/concepts/variance" >}}) | Covariance/contravariance of generic types |
-| [Advanced Types]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | Union, Intersection, Match Types |
-| [Macros]({{< relref "/docs/scala/concepts/macros-metaprogramming" >}}) | Compile-time metaprogramming |
-| [Concurrency]({{< relref "/docs/scala/concepts/concurrency" >}}) | Future, Promise, ExecutionContext |
-| [Functional Patterns]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor, Monad, referential transparency |
+| [Type Classes](concepts/type-classes/) | Ad-hoc polymorphism pattern |
+| [Variance](concepts/variance/) | Covariance/contravariance of generic types |
+| [Advanced Types](concepts/type-system-advanced/) | Union, Intersection, Match Types |
+| [Macros](concepts/macros-metaprogramming/) | Compile-time metaprogramming |
+| [Concurrency](concepts/concurrency/) | Future, Promise, ExecutionContext |
+| [Functional Patterns](concepts/functional-patterns/) | Functor, Monad, referential transparency |
 
 **[Practical Examples]({{< relref "/docs/scala/examples" >}})**
 

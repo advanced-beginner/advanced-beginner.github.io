@@ -264,5 +264,5 @@ kafka_consumer_fetch_manager_records_lag
 
 | Recommended Order | Document | What You'll Learn |
 |----------|------|----------|
-| 1 | [Full-Stack Example]({{< relref "/docs/observability/examples/full-stack" >}}) | Integrated example |
-| 2 | [By Service Type]({{< relref "/docs/observability/concepts/golden-signals/by-service-type" >}}) | Kafka golden signals |
+| 1 | [Full-Stack Example](full-stack/) | Integrated example |
+| 2 | [By Service Type](../concepts/golden-signals/by-service-type/) | Kafka golden signals |

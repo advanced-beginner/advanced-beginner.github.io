@@ -14,12 +14,12 @@ Learn the fundamental building blocks of programming in Scala. From variable dec
 
 | Topic | Content | Key keywords |
 |------|------|-------------|
-| [Basic Syntax]({{< relref "/docs/scala/concepts/basics" >}}) | Variables, constants, basic types | `val`, `var`, type inference |
-| [Control Structures]({{< relref "/docs/scala/concepts/control-structures" >}}) | Conditionals, loops | `if`, `for`, `while`, `match` |
-| [Functions and Methods]({{< relref "/docs/scala/concepts/functions-methods" >}}) | Function definition, lambda | `def`, `=>`, default values |
-| [Classes and Objects]({{< relref "/docs/scala/concepts/classes-objects" >}}) | OOP basics | `class`, `object`, `trait` |
-| [Case Classes]({{< relref "/docs/scala/concepts/case-classes" >}}) | Immutable data models | `case class`, `copy` |
-| [Pattern Matching]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | Powerful branching | `match`, `case`, guards |
+| [Basic Syntax](basics/) | Variables, constants, basic types | `val`, `var`, type inference |
+| [Control Structures](control-structures/) | Conditionals, loops | `if`, `for`, `while`, `match` |
+| [Functions and Methods](functions-methods/) | Function definition, lambda | `def`, `=>`, default values |
+| [Classes and Objects](classes-objects/) | OOP basics | `class`, `object`, `trait` |
+| [Case Classes](case-classes/) | Immutable data models | `case class`, `copy` |
+| [Pattern Matching](pattern-matching/) | Powerful branching | `match`, `case`, guards |
 
 It's best to learn basic concepts in order. In particular, understanding variable declaration and the type system first will make subsequent concepts easier to learn.
 
@@ -29,11 +29,11 @@ Learn functional programming and Scala's characteristic features. Mastering the 
 
 | Topic | Content | Key keywords |
 |------|------|-------------|
-| [Collections]({{< relref "/docs/scala/concepts/collections" >}}) | Data structures | `List`, `Map`, `Set`, `Seq` |
-| [Higher-Order Functions]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) | Functional programming | `map`, `filter`, `fold` |
-| [Generics]({{< relref "/docs/scala/concepts/generics" >}}) | Type parameters | `[T]`, type bounds |
-| [For Comprehension]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) | Monadic operations | `for-yield`, `flatMap` |
-| [Implicit/Given]({{< relref "/docs/scala/concepts/implicits" >}}) | Contextual abstraction | `implicit`, `given`, `using` |
+| [Collections](collections/) | Data structures | `List`, `Map`, `Set`, `Seq` |
+| [Higher-Order Functions](higher-order-functions/) | Functional programming | `map`, `filter`, `fold` |
+| [Generics](generics/) | Type parameters | `[T]`, type bounds |
+| [For Comprehension](for-comprehensions/) | Monadic operations | `for-yield`, `flatMap` |
+| [Implicit/Given](implicits/) | Contextual abstraction | `implicit`, `given`, `using` |
 
 Intermediate topics are crucial for building Scala's functional programming capabilities. Master collections and higher-order functions first, then build on them with For Comprehension and Implicit.
 
@@ -43,12 +43,12 @@ Advanced topics for professional Scala development. Covers advanced features of 
 
 | Topic | Content | Key keywords |
 |------|------|-------------|
-| [Type Classes]({{< relref "/docs/scala/concepts/type-classes" >}}) | Ad-hoc polymorphism | Type class pattern |
-| [Variance]({{< relref "/docs/scala/concepts/variance" >}}) | Generic type variance | `+T`, `-T`, invariance |
-| [Advanced Types]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | Scala 3 type features | Union, Intersection, Match Types |
-| [Macros]({{< relref "/docs/scala/concepts/macros-metaprogramming" >}}) | Compile-time code generation | `inline`, macros |
-| [Concurrency]({{< relref "/docs/scala/concepts/concurrency" >}}) | Asynchronous programming | `Future`, `Promise` |
-| [Functional Patterns]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | FP design patterns | Functor, Monad |
+| [Type Classes](type-classes/) | Ad-hoc polymorphism | Type class pattern |
+| [Variance](variance/) | Generic type variance | `+T`, `-T`, invariance |
+| [Advanced Types](type-system-advanced/) | Scala 3 type features | Union, Intersection, Match Types |
+| [Macros](macros-metaprogramming/) | Compile-time code generation | `inline`, macros |
+| [Concurrency](concurrency/) | Asynchronous programming | `Future`, `Promise` |
+| [Functional Patterns](functional-patterns/) | FP design patterns | Functor, Monad |
 
 It's best to study advanced topics after fully understanding intermediate level content. In particular, type classes are essential for understanding and extending libraries.
 

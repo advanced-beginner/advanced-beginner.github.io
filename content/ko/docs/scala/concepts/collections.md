@@ -512,17 +512,17 @@ val flat2 = nested.flatMap(identity)
 
 | 관련 개념 | 연결 관계 |
 |----------|----------|
-| [고차 함수]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) | `map`, `filter`, `fold` 등 컬렉션의 핵심 연산 |
-| [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | 리스트의 `head :: tail` 분해, `collect` 연산 |
-| [for 표현식]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) | 컬렉션 순회와 변환을 위한 선언적 문법 |
-| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Option, Either 등 대수적 타입도 컬렉션처럼 처리 |
-| [제네릭]({{< relref "/docs/scala/concepts/generics" >}}) | `List[A]`, `Map[K, V]` 등 타입 파라미터화 |
-| [공변성]({{< relref "/docs/scala/concepts/variance" >}}) | `List[+A]` 등 컬렉션의 타입 가변성 |
+| [고차 함수](higher-order-functions/) | `map`, `filter`, `fold` 등 컬렉션의 핵심 연산 |
+| [패턴 매칭](pattern-matching/) | 리스트의 `head :: tail` 분해, `collect` 연산 |
+| [for 표현식](for-comprehensions/) | 컬렉션 순회와 변환을 위한 선언적 문법 |
+| [함수형 패턴](functional-patterns/) | Option, Either 등 대수적 타입도 컬렉션처럼 처리 |
+| [제네릭](generics/) | `List[A]`, `Map[K, V]` 등 타입 파라미터화 |
+| [공변성](variance/) | `List[+A]` 등 컬렉션의 타입 가변성 |
 
 #### 다음 단계
 
 | 학습 경로 | 설명 |
 |----------|------|
-| [고차 함수]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) | `map`, `filter`, `fold` 패턴 심화 학습 |
-| [for 표현식]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) | 모나딕 연산과 컬렉션 조합 |
-| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Option, Either를 활용한 안전한 프로그래밍 |
+| [고차 함수](higher-order-functions/) | `map`, `filter`, `fold` 패턴 심화 학습 |
+| [for 표현식](for-comprehensions/) | 모나딕 연산과 컬렉션 조합 |
+| [함수형 패턴](functional-patterns/) | Option, Either를 활용한 안전한 프로그래밍 |

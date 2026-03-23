@@ -397,6 +397,6 @@ Once you understand the architecture, proceed to the next steps:
 
 | Goal | Recommended Doc |
 |------|----------------|
-| Understand Pod concept | [Pod]({{< relref "/docs/kubernetes/concepts/pod" >}}) |
-| Try actual deployment | [Quick Start]({{< relref "/docs/kubernetes/quick-start" >}}) |
-| Understand network configuration | [Networking]({{< relref "/docs/kubernetes/concepts/networking" >}}) |
+| Understand Pod concept | [Pod](pod/) |
+| Try actual deployment | [Quick Start](../quick-start/) |
+| Understand network configuration | [Networking](networking/) |

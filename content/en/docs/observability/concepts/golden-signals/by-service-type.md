@@ -359,5 +359,5 @@ histogram_quantile(0.99, rate(nginx_upstream_response_time_seconds_bucket[5m]))
 
 | Recommended Order | Document | What You'll Learn |
 |-------------------|----------|-------------------|
-| 1 | [Environment Setup]({{< relref "/docs/observability/examples/setup" >}}) | Practice environment |
-| 2 | [Kafka Monitoring]({{< relref "/docs/observability/examples/kafka-monitoring" >}}) | Kafka details |
+| 1 | [Environment Setup](../../examples/setup/) | Practice environment |
+| 2 | [Kafka Monitoring](../../examples/kafka-monitoring/) | Kafka details |

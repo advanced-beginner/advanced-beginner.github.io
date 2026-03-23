@@ -427,5 +427,5 @@ tests:
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [Alerting Rules]({{< relref "/docs/observability/concepts/promql/alerting-rules" >}}) | 알림 규칙 작성법 |
-| 2 | [SRE 황금 신호]({{< relref "/docs/observability/concepts/golden-signals" >}}) | Recording Rules 활용 |
+| 1 | [Alerting Rules](alerting-rules/) | 알림 규칙 작성법 |
+| 2 | [SRE 황금 신호](../golden-signals/) | Recording Rules 활용 |

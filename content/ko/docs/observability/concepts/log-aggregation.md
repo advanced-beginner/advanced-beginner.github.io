@@ -500,5 +500,5 @@ try { ... } catch (Exception e) {
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [분산 추적]({{< relref "/docs/observability/concepts/distributed-tracing" >}}) | 로그와 트레이스 연결 |
-| 2 | [환경 구성]({{< relref "/docs/observability/examples/setup" >}}) | Loki 실습 |
+| 1 | [분산 추적](distributed-tracing/) | 로그와 트레이스 연결 |
+| 2 | [환경 구성](../examples/setup/) | Loki 실습 |

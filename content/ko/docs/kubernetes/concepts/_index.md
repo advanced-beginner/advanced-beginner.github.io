@@ -84,21 +84,21 @@ flowchart TB
 
 | 개념 | 한 줄 요약 | 핵심 질문 |
 |------|-----------|----------|
-| [아키텍처]({{< relref "/docs/kubernetes/concepts/architecture" >}}) | Control Plane과 Worker Node로 구성된 클러스터 구조 | "Kubernetes는 어떻게 동작하나?" |
-| [Pod]({{< relref "/docs/kubernetes/concepts/pod" >}}) | 컨테이너를 감싸는 최소 배포 단위 | "왜 컨테이너가 아닌 Pod인가?" |
-| [Deployment]({{< relref "/docs/kubernetes/concepts/deployment" >}}) | Pod의 선언적 배포와 업데이트 관리 | "어떻게 무중단 배포하나?" |
-| [Service]({{< relref "/docs/kubernetes/concepts/service" >}}) | Pod에 대한 안정적인 네트워크 접근점 | "변경되는 Pod IP를 어떻게 찾나?" |
-| [ConfigMap/Secret]({{< relref "/docs/kubernetes/concepts/configmap-secret" >}}) | 설정과 민감 정보의 분리 관리 | "설정을 어떻게 코드와 분리하나?" |
-| [Volume/스토리지]({{< relref "/docs/kubernetes/concepts/storage" >}}) | Pod 생명주기와 독립적인 데이터 저장 | "Pod가 죽어도 데이터를 유지하려면?" |
-| [네트워킹]({{< relref "/docs/kubernetes/concepts/networking" >}}) | 클러스터 내/외부 통신과 Ingress | "외부에서 어떻게 접근하나?" |
-| [리소스 관리]({{< relref "/docs/kubernetes/concepts/resources" >}}) | CPU/메모리 요청과 제한 설정 | "얼마나 많은 리소스를 할당할까?" |
-| [스케일링]({{< relref "/docs/kubernetes/concepts/scaling" >}}) | HPA/VPA를 통한 자동 확장/축소 | "트래픽 증가에 어떻게 대응하나?" |
-| [헬스 체크]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) | Probe를 통한 상태 모니터링과 자동 복구 | "앱이 정상인지 어떻게 확인하나?" |
-| [Namespace]({{< relref "/docs/kubernetes/concepts/namespace" >}}) | 클러스터 내 리소스를 논리적으로 격리하는 메커니즘 | "팀별로 리소스를 어떻게 분리하나?" |
-| [StatefulSet]({{< relref "/docs/kubernetes/concepts/statefulset" >}}) | 상태를 유지하는 애플리케이션의 배포와 관리 | "DB를 Kubernetes에 어떻게 배포하나?" |
-| [RBAC]({{< relref "/docs/kubernetes/concepts/rbac" >}}) | 역할 기반 접근 제어로 API 권한 관리 | "누가 어떤 리소스에 접근할 수 있나?" |
-| [Job과 CronJob]({{< relref "/docs/kubernetes/concepts/jobs" >}}) | 일회성/반복 배치 작업 실행 관리 | "배치 작업을 어떻게 실행하나?" |
-| [NetworkPolicy]({{< relref "/docs/kubernetes/concepts/network-policy" >}}) | Pod 간 네트워크 트래픽 제어 | "Pod 간 통신을 어떻게 제한하나?" |
+| [아키텍처](architecture/) | Control Plane과 Worker Node로 구성된 클러스터 구조 | "Kubernetes는 어떻게 동작하나?" |
+| [Pod](pod/) | 컨테이너를 감싸는 최소 배포 단위 | "왜 컨테이너가 아닌 Pod인가?" |
+| [Deployment](deployment/) | Pod의 선언적 배포와 업데이트 관리 | "어떻게 무중단 배포하나?" |
+| [Service](service/) | Pod에 대한 안정적인 네트워크 접근점 | "변경되는 Pod IP를 어떻게 찾나?" |
+| [ConfigMap/Secret](configmap-secret/) | 설정과 민감 정보의 분리 관리 | "설정을 어떻게 코드와 분리하나?" |
+| [Volume/스토리지](storage/) | Pod 생명주기와 독립적인 데이터 저장 | "Pod가 죽어도 데이터를 유지하려면?" |
+| [네트워킹](networking/) | 클러스터 내/외부 통신과 Ingress | "외부에서 어떻게 접근하나?" |
+| [리소스 관리](resources/) | CPU/메모리 요청과 제한 설정 | "얼마나 많은 리소스를 할당할까?" |
+| [스케일링](scaling/) | HPA/VPA를 통한 자동 확장/축소 | "트래픽 증가에 어떻게 대응하나?" |
+| [헬스 체크](health-checks/) | Probe를 통한 상태 모니터링과 자동 복구 | "앱이 정상인지 어떻게 확인하나?" |
+| [Namespace](namespace/) | 클러스터 내 리소스를 논리적으로 격리하는 메커니즘 | "팀별로 리소스를 어떻게 분리하나?" |
+| [StatefulSet](statefulset/) | 상태를 유지하는 애플리케이션의 배포와 관리 | "DB를 Kubernetes에 어떻게 배포하나?" |
+| [RBAC](rbac/) | 역할 기반 접근 제어로 API 권한 관리 | "누가 어떤 리소스에 접근할 수 있나?" |
+| [Job과 CronJob](jobs/) | 일회성/반복 배치 작업 실행 관리 | "배치 작업을 어떻게 실행하나?" |
+| [NetworkPolicy](network-policy/) | Pod 간 네트워크 트래픽 제어 | "Pod 간 통신을 어떻게 제한하나?" |
 
 #### 학습 순서
 

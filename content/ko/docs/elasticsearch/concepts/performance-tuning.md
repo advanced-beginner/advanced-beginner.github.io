@@ -474,6 +474,6 @@ PUT /products/_settings
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 장애 대응 | [고가용성]({{< relref "/docs/elasticsearch/concepts/high-availability" >}}) |
-| 클러스터 구성 | [클러스터 관리]({{< relref "/docs/elasticsearch/concepts/cluster-management" >}}) |
-| 실전 구현 | [상품 검색 시스템]({{< relref "/docs/elasticsearch/examples/product-search" >}}) |
+| 장애 대응 | [고가용성](high-availability/) |
+| 클러스터 구성 | [클러스터 관리](cluster-management/) |
+| 실전 구현 | [상품 검색 시스템](../examples/product-search/) |

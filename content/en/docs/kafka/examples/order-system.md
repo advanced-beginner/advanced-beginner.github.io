@@ -21,7 +21,7 @@ Implement an event-driven order system closer to real-world applications. In thi
 | Item | Description |
 |------|-------------|
 | **Target Audience** | Backend developers looking to build event-driven systems |
-| **Prerequisites** | Spring Boot fundamentals, Kafka basic concepts, [Basic Examples]({{< relref "/docs/kafka/examples/basic" >}}) completed |
+| **Prerequisites** | Spring Boot fundamentals, Kafka basic concepts, [Basic Examples](basic/) completed |
 | **Required Environment** | Kafka running via Docker, JDK 17+, Gradle |
 | **Estimated Time** | About 45 minutes |
 

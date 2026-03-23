@@ -47,14 +47,14 @@ Kafka는 이런 문제들을 해결하면서도 <strong>메시지 유실 없이<
 
 | 주제 | 배우는 것 |
 |------|----------|
-| [핵심 구성요소]({{< relref "/docs/kafka/concepts/core-components" >}}) | Broker, Topic, Partition, Producer, Consumer의 역할과 관계 |
-| [메시지 흐름]({{< relref "/docs/kafka/concepts/message-flow" >}}) | 메시지가 Producer에서 Consumer까지 도달하는 전체 과정 |
-| [Consumer Group과 Offset]({{< relref "/docs/kafka/concepts/consumer-group" >}}) | 병렬 처리와 메시지 위치 관리의 핵심 |
-| [복제와 장애 대응]({{< relref "/docs/kafka/concepts/replication" >}}) | 데이터 유실 없이 장애를 견디는 방법 |
-| [트랜잭션]({{< relref "/docs/kafka/concepts/transactions" >}}) | exactly-once 처리를 보장하는 방법 |
-| [에러 처리]({{< relref "/docs/kafka/concepts/error-handling" >}}) | 실무에서 마주치는 오류 상황과 해결 패턴 |
-| [성능 튜닝]({{< relref "/docs/kafka/concepts/producer-tuning" >}}) | Producer/Consumer 최적화 전략 |
-| [모니터링]({{< relref "/docs/kafka/concepts/monitoring" >}}) | 운영 환경에서 Kafka 상태 파악하기 |
+| [핵심 구성요소](concepts/core-components/) | Broker, Topic, Partition, Producer, Consumer의 역할과 관계 |
+| [메시지 흐름](concepts/message-flow/) | 메시지가 Producer에서 Consumer까지 도달하는 전체 과정 |
+| [Consumer Group과 Offset](concepts/consumer-group/) | 병렬 처리와 메시지 위치 관리의 핵심 |
+| [복제와 장애 대응](concepts/replication/) | 데이터 유실 없이 장애를 견디는 방법 |
+| [트랜잭션](concepts/transactions/) | exactly-once 처리를 보장하는 방법 |
+| [에러 처리](concepts/error-handling/) | 실무에서 마주치는 오류 상황과 해결 패턴 |
+| [성능 튜닝](concepts/producer-tuning/) | Producer/Consumer 최적화 전략 |
+| [모니터링](concepts/monitoring/) | 운영 환경에서 Kafka 상태 파악하기 |
 
 ### [실습 예제]({{< relref "/docs/kafka/examples" >}})
 Spring Boot 기반의 실행 가능한 예제 코드입니다.

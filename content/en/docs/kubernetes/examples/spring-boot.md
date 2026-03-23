@@ -410,6 +410,6 @@ After completing Spring Boot deployment, proceed to:
 
 | Goal | Recommended Document |
 |------|----------|
-| Troubleshooting | [Pod Troubleshooting]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) |
-| Auto-scaling | [Scaling]({{< relref "/docs/kubernetes/concepts/scaling" >}}) |
-| Resource optimization | [Resource Optimization]({{< relref "/docs/kubernetes/howto/resource-optimization" >}}) |
+| Troubleshooting | [Pod Troubleshooting](../howto/pod-troubleshooting/) |
+| Auto-scaling | [Scaling](../concepts/scaling/) |
+| Resource optimization | [Resource Optimization](../howto/resource-optimization/) |

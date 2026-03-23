@@ -503,6 +503,6 @@ public class OrderController {
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [Prometheus 아키텍처]({{< relref "/docs/observability/concepts/prometheus-architecture" >}}) | Pull 모델, 시계열 DB |
-| 2 | [PromQL 기본 문법]({{< relref "/docs/observability/concepts/promql/syntax-basics" >}}) | 셀렉터, 레이블 매칭 |
-| 3 | [rate와 increase]({{< relref "/docs/observability/concepts/promql/rate-and-increase" >}}) | Counter 활용법 |
+| 1 | [Prometheus 아키텍처](prometheus-architecture/) | Pull 모델, 시계열 DB |
+| 2 | [PromQL 기본 문법](promql/syntax-basics/) | 셀렉터, 레이블 매칭 |
+| 3 | [rate와 increase](promql/rate-and-increase/) | Counter 활용법 |

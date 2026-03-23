@@ -577,9 +577,9 @@ After completing Quick Start, choose your next document based on your learning g
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Understand Spark internals | [Architecture]({{< relref "/docs/spark/concepts/architecture" >}}) |
-| Learn RDD basics | [RDD Basics]({{< relref "/docs/spark/concepts/rdd" >}}) |
-| Deep dive into DataFrame | [DataFrame and Dataset]({{< relref "/docs/spark/concepts/dataframe-dataset" >}}) |
-| Spring Boot integration | [Environment Setup]({{< relref "/docs/spark/examples/setup" >}}) |
+| Understand Spark internals | [Architecture](../concepts/architecture/) |
+| Learn RDD basics | [RDD Basics](../concepts/rdd/) |
+| Deep dive into DataFrame | [DataFrame and Dataset](../concepts/dataframe-dataset/) |
+| Spring Boot integration | [Environment Setup](../examples/setup/) |
 
 To understand Spark's overall operation, read the Architecture document first. For a practice-focused approach, start with the Environment Setup document.

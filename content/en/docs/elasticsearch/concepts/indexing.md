@@ -472,6 +472,6 @@ PUT /products/_settings
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Cluster configuration | [Cluster Management]({{< relref "/docs/elasticsearch/concepts/cluster-management" >}}) |
-| Search optimization | [Performance Tuning]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) |
-| Failure response | [High Availability]({{< relref "/docs/elasticsearch/concepts/high-availability" >}}) |
+| Cluster configuration | [Cluster Management](cluster-management/) |
+| Search optimization | [Performance Tuning](performance-tuning/) |
+| Failure response | [High Availability](high-availability/) |

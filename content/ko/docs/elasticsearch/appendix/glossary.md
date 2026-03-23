@@ -489,17 +489,17 @@ Primary와 Replica를 다른 가용 영역(Zone)에 배치하여 장애 대비.
 
 | 약어 | 풀네임 | 의미 | 참고 |
 |------|--------|------|------|
-| BM25 | Best Matching 25 | 기본 스코어링 알고리즘 | [검색 관련성]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) |
-| CCR | Cross-Cluster Replication | 클러스터 간 실시간 복제 | [고가용성]({{< relref "/docs/elasticsearch/concepts/high-availability" >}}) |
-| DSL | Domain Specific Language | 쿼리 언어 | [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) |
-| HNSW | Hierarchical Navigable Small World | kNN 인덱싱 알고리즘 | [Vector Search]({{< relref "/docs/elasticsearch/concepts/vector-search" >}}) |
-| IDF | Inverse Document Frequency | 단어 희소성 지표 | [검색 관련성]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) |
-| ILM | Index Lifecycle Management | 인덱스 수명주기 관리 | [인덱싱 전략]({{< relref "/docs/elasticsearch/concepts/indexing" >}}) |
-| kNN | k-Nearest Neighbors | k-최근접 이웃 검색 | [Vector Search]({{< relref "/docs/elasticsearch/concepts/vector-search" >}}) |
-| NDJSON | Newline Delimited JSON | Bulk API 형식 | [인덱싱 전략]({{< relref "/docs/elasticsearch/concepts/indexing" >}}) |
-| NRT | Near Real-Time | 준실시간 검색 | [핵심 구성요소]({{< relref "/docs/elasticsearch/concepts/core-components" >}}) |
-| SLM | Snapshot Lifecycle Management | 스냅샷 수명주기 관리 | [고가용성]({{< relref "/docs/elasticsearch/concepts/high-availability" >}}) |
-| TF | Term Frequency | 단어 빈도 지표 | [검색 관련성]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) |
+| BM25 | Best Matching 25 | 기본 스코어링 알고리즘 | [검색 관련성](../concepts/search-relevance/) |
+| CCR | Cross-Cluster Replication | 클러스터 간 실시간 복제 | [고가용성](../concepts/high-availability/) |
+| DSL | Domain Specific Language | 쿼리 언어 | [Query DSL](../concepts/query-dsl/) |
+| HNSW | Hierarchical Navigable Small World | kNN 인덱싱 알고리즘 | [Vector Search](../concepts/vector-search/) |
+| IDF | Inverse Document Frequency | 단어 희소성 지표 | [검색 관련성](../concepts/search-relevance/) |
+| ILM | Index Lifecycle Management | 인덱스 수명주기 관리 | [인덱싱 전략](../concepts/indexing/) |
+| kNN | k-Nearest Neighbors | k-최근접 이웃 검색 | [Vector Search](../concepts/vector-search/) |
+| NDJSON | Newline Delimited JSON | Bulk API 형식 | [인덱싱 전략](../concepts/indexing/) |
+| NRT | Near Real-Time | 준실시간 검색 | [핵심 구성요소](../concepts/core-components/) |
+| SLM | Snapshot Lifecycle Management | 스냅샷 수명주기 관리 | [고가용성](../concepts/high-availability/) |
+| TF | Term Frequency | 단어 빈도 지표 | [검색 관련성](../concepts/search-relevance/) |
 
 ---
 

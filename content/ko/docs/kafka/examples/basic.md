@@ -22,7 +22,7 @@ author_url: "http://github.com/kimbenji"
 |------|---------|
 | **대상 독자** | Spring Boot 애플리케이션에서 Kafka를 사용하려는 백엔드 개발자 |
 | **선수 지식** | Java 기본 문법, Spring Boot 기초, Kafka 기본 개념 |
-| **사전 완료** | [Quick Start]({{< relref "/docs/kafka/quick-start" >}}) 예제 완료, [환경 구성]({{< relref "/docs/kafka/examples/setup" >}}) 설정 완료 |
+| **사전 완료** | [Quick Start](../quick-start/) 예제 완료, [환경 구성](setup/) 설정 완료 |
 | **예상 소요 시간** | 약 30분 |
 
 {{< callout type="warning" title="환경별 주의사항" >}}

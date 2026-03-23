@@ -371,5 +371,5 @@ topk(10, sum by (path) (rate(http_requests_total[5m])))
 
 | Recommended Order | Document | What You'll Learn |
 |-------------------|----------|-------------------|
-| 1 | [rate and increase]({{< relref "/docs/observability/concepts/promql/rate-and-increase" >}}) | Core concepts for handling Counters |
-| 2 | [histogram_quantile]({{< relref "/docs/observability/concepts/promql/histogram-quantile" >}}) | Calculate P99 response time |
+| 1 | [rate and increase](rate-and-increase/) | Core concepts for handling Counters |
+| 2 | [histogram_quantile](histogram-quantile/) | Calculate P99 response time |

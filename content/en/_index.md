@@ -23,13 +23,13 @@ Rather than just "do it this way", we explain **why such design is necessary** f
 
 | Technology | Docs | How-to | Description |
 |------------|:----:|:------:|-------------|
-| [Apache Kafka]({{< relref "/docs/kafka" >}}) | 22 | 4 | Distributed messaging system |
-| [Domain-Driven Design]({{< relref "/docs/ddd" >}}) | 21 | 4 | Complex business logic design |
-| [Scala]({{< relref "/docs/scala" >}}) | 28 | 2 | Functional + OOP JVM language |
-| [Apache Spark]({{< relref "/docs/spark" >}}) | 24 | 3 | Large-scale data processing |
-| [Kubernetes]({{< relref "/docs/kubernetes" >}}) | 18 | 4 | Container orchestration |
-| [Elasticsearch]({{< relref "/docs/elasticsearch" >}}) | 20 | - | Distributed search engine |
-| [Observability]({{< relref "/docs/observability" >}}) | 28 | 3 | System observability (Metrics, Logs, Traces) |
+| [Apache Kafka](docs/kafka/) | 22 | 4 | Distributed messaging system |
+| [Domain-Driven Design](docs/ddd/) | 21 | 4 | Complex business logic design |
+| [Scala](docs/scala/) | 28 | 2 | Functional + OOP JVM language |
+| [Apache Spark](docs/spark/) | 24 | 3 | Large-scale data processing |
+| [Kubernetes](docs/kubernetes/) | 18 | 4 | Container orchestration |
+| [Elasticsearch](docs/elasticsearch/) | 20 | - | Distributed search engine |
+| [Observability](docs/observability/) | 28 | 3 | System observability (Metrics, Logs, Traces) |
 
 ---
 

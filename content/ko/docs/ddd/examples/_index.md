@@ -27,10 +27,10 @@ author_url: "http://github.com/kimbenji"
 
 | 단계 | 문서 | 배우는 것 | 소요 시간 |
 |------|------|----------|----------|
-| 1 | [프로젝트 설정]({{< relref "/docs/ddd/examples/setup" >}}) | 프로젝트 구조, 의존성 구성 | 약 15분 |
-| 2 | [주문 도메인]({{< relref "/docs/ddd/examples/order-domain" >}}) | Aggregate, Entity, Value Object 구현 | 약 40분 |
-| 3 | [애플리케이션 계층]({{< relref "/docs/ddd/examples/application-layer" >}}) | Use Case, 도메인 서비스 구현 | 약 30분 |
-| 4 | [Event Sourcing 실습]({{< relref "/docs/ddd/examples/event-sourcing" >}}) | 이벤트 저장, 스냅샷, 시간 여행 | 약 45분 |
+| 1 | [프로젝트 설정](setup/) | 프로젝트 구조, 의존성 구성 | 약 15분 |
+| 2 | [주문 도메인](order-domain/) | Aggregate, Entity, Value Object 구현 | 약 40분 |
+| 3 | [애플리케이션 계층](application-layer/) | Use Case, 도메인 서비스 구현 | 약 30분 |
+| 4 | [Event Sourcing 실습](event-sourcing/) | 이벤트 저장, 스냅샷, 시간 여행 | 약 45분 |
 
 ## 완성 후 결과물
 

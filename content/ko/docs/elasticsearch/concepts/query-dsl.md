@@ -659,6 +659,6 @@ GET /products/_search
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 검색 품질 개선 | [검색 관련성]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) |
-| 데이터 분석 | [집계]({{< relref "/docs/elasticsearch/concepts/aggregations" >}}) |
-| 실습 | [기본 예제]({{< relref "/docs/elasticsearch/examples/basic" >}}) |
+| 검색 품질 개선 | [검색 관련성](search-relevance/) |
+| 데이터 분석 | [집계](aggregations/) |
+| 실습 | [기본 예제](../examples/basic/) |

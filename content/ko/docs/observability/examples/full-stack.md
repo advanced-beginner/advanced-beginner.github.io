@@ -251,5 +251,5 @@ Runbook: https://wiki/runbook/high-error-rate
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [높은 지연시간 진단]({{< relref "/docs/observability/howto/debug-high-latency" >}}) | 문제 해결 |
-| 2 | [알림 후 액션 가이드]({{< relref "/docs/observability/appendix/alerting-actions" >}}) | 대응 방법 |
+| 1 | [높은 지연시간 진단](../howto/debug-high-latency/) | 문제 해결 |
+| 2 | [알림 후 액션 가이드](../appendix/alerting-actions/) | 대응 방법 |

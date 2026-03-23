@@ -320,16 +320,16 @@ valid.foreach(e => println(e.domain))   // "example.com"
 
 | 관련 개념 | 연결 관계 |
 |----------|----------|
-| [제네릭]({{< relref "/docs/scala/concepts/generics" >}}) | 타입 매개변수와 타입 경계 기초 |
-| [공변성/반공변성]({{< relref "/docs/scala/concepts/variance" >}}) | 타입 변성과 Union/Intersection의 관계 |
-| [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | Match Types와 값 레벨 패턴 매칭 비교 |
-| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | Type Lambda로 고차 타입 클래스 정의 |
-| [매크로]({{< relref "/docs/scala/concepts/macros-metaprogramming" >}}) | 타입 레벨 프로그래밍과 메타프로그래밍 |
+| [제네릭](generics/) | 타입 매개변수와 타입 경계 기초 |
+| [공변성/반공변성](variance/) | 타입 변성과 Union/Intersection의 관계 |
+| [패턴 매칭](pattern-matching/) | Match Types와 값 레벨 패턴 매칭 비교 |
+| [타입 클래스](type-classes/) | Type Lambda로 고차 타입 클래스 정의 |
+| [매크로](macros-metaprogramming/) | 타입 레벨 프로그래밍과 메타프로그래밍 |
 
 #### 다음 단계
 
 | 학습 경로 | 설명 |
 |----------|------|
-| [매크로와 메타프로그래밍]({{< relref "/docs/scala/concepts/macros-metaprogramming" >}}) | 컴파일 타임 코드 생성 |
-| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor, Monad 등 추상화 |
+| [매크로와 메타프로그래밍](macros-metaprogramming/) | 컴파일 타임 코드 생성 |
+| [함수형 패턴](functional-patterns/) | Functor, Monad 등 추상화 |
 | [Scala 3 Reference](https://docs.scala-lang.org/scala3/reference/) | 공식 타입 시스템 문서 |

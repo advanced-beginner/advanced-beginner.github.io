@@ -351,6 +351,6 @@ Trace ID: abc123
 
 | Recommended Order | Document | What You'll Learn |
 |----------|------|----------|
-| 1 | [Metrics Fundamentals]({{< relref "/docs/observability/concepts/metrics-fundamentals" >}}) | Counter, Gauge, Histogram types |
-| 2 | [Log Aggregation]({{< relref "/docs/observability/concepts/log-aggregation" >}}) | Loki vs ELK comparison |
-| 3 | [Distributed Tracing]({{< relref "/docs/observability/concepts/distributed-tracing" >}}) | Span, Context Propagation |
+| 1 | [Metrics Fundamentals](metrics-fundamentals/) | Counter, Gauge, Histogram types |
+| 2 | [Log Aggregation](log-aggregation/) | Loki vs ELK comparison |
+| 3 | [Distributed Tracing](distributed-tracing/) | Span, Context Propagation |

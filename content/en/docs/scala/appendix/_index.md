@@ -14,10 +14,10 @@ The table below lists the documents provided in the appendix. Each document is u
 
 | Document | Description |
 |------|------|
-| [Glossary]({{< relref "/docs/scala/appendix/glossary" >}}) | Scala core term definitions |
-| [Version Comparison]({{< relref "/docs/scala/appendix/version-comparison" >}}) | Summary of Scala 2 vs Scala 3 differences |
-| [FAQ]({{< relref "/docs/scala/appendix/faq" >}}) | Frequently asked questions and answers |
-| [References]({{< relref "/docs/scala/appendix/references" >}}) | Official documentation, books, course links |
+| [Glossary](glossary/) | Scala core term definitions |
+| [Version Comparison](version-comparison/) | Summary of Scala 2 vs Scala 3 differences |
+| [FAQ](faq/) | Frequently asked questions and answers |
+| [References](references/) | Official documentation, books, course links |
 
 #### Quick reference
 

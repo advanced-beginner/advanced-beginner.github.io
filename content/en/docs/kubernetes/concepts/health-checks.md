@@ -361,6 +361,6 @@ Once you understand health checks, proceed to the next steps:
 
 | Goal | Recommended Doc |
 |------|----------------|
-| Troubleshoot Pods | [Pod Troubleshooting]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) |
-| Actual deployment practice | [Spring Boot Deployment]({{< relref "/docs/kubernetes/examples/spring-boot" >}}) |
-| Auto-scaling | [Scaling]({{< relref "/docs/kubernetes/concepts/scaling" >}}) |
+| Troubleshoot Pods | [Pod Troubleshooting](../howto/pod-troubleshooting/) |
+| Actual deployment practice | [Spring Boot Deployment](../examples/spring-boot/) |
+| Auto-scaling | [Scaling](scaling/) |

@@ -372,5 +372,5 @@ docker compose down -v
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [Spring Boot 메트릭]({{< relref "/docs/observability/examples/spring-boot-metrics" >}}) | 애플리케이션 연동 |
-| 2 | [Kafka 모니터링]({{< relref "/docs/observability/examples/kafka-monitoring" >}}) | Kafka 관측성 |
+| 1 | [Spring Boot 메트릭](spring-boot-metrics/) | 애플리케이션 연동 |
+| 2 | [Kafka 모니터링](kafka-monitoring/) | Kafka 관측성 |

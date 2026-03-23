@@ -453,5 +453,5 @@ deriv(node_memory_MemAvailable_bytes[5m])
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [histogram_quantile]({{< relref "/docs/observability/concepts/promql/histogram-quantile" >}}) | P99 응답시간 계산 |
-| 2 | [Recording Rules]({{< relref "/docs/observability/concepts/promql/recording-rules" >}}) | 복잡한 쿼리 최적화 |
+| 1 | [histogram_quantile](histogram-quantile/) | P99 응답시간 계산 |
+| 2 | [Recording Rules](recording-rules/) | 복잡한 쿼리 최적화 |

@@ -347,6 +347,6 @@ Quick Start를 완료했다면, 다음 단계로 진행하세요:
 
 | 목표 | 추천 문서 |
 |------|----------|
-| Elasticsearch 구조 이해 | [핵심 구성요소]({{< relref "/docs/elasticsearch/concepts/core-components" >}}) |
-| 스키마 설계 배우기 | [데이터 모델링]({{< relref "/docs/elasticsearch/concepts/data-modeling" >}}) |
-| Spring Boot 연동 | [환경 설정]({{< relref "/docs/elasticsearch/examples/setup" >}}) |
+| Elasticsearch 구조 이해 | [핵심 구성요소](../concepts/core-components/) |
+| 스키마 설계 배우기 | [데이터 모델링](../concepts/data-modeling/) |
+| Spring Boot 연동 | [환경 설정](../examples/setup/) |

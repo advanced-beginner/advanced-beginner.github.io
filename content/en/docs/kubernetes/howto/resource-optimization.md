@@ -419,6 +419,6 @@ env:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Configure auto-scaling | [Scaling]({{< relref "/docs/kubernetes/concepts/scaling" >}}) |
-| Resolve Pod issues | [Pod Troubleshooting]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) |
-| Resource management concepts | [Resource Management]({{< relref "/docs/kubernetes/concepts/resources" >}}) |
+| Configure auto-scaling | [Scaling](../concepts/scaling/) |
+| Resolve Pod issues | [Pod Troubleshooting](pod-troubleshooting/) |
+| Resource management concepts | [Resource Management](../concepts/resources/) |

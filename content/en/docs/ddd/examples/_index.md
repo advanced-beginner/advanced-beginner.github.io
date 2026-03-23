@@ -27,10 +27,10 @@ Learning progresses from project setup to domain model implementation, applicati
 
 | Step | Document | What You'll Learn | Duration |
 |------|----------|-------------------|----------|
-| 1 | [Project Setup]({{< relref "/docs/ddd/examples/setup" >}}) | Project structure, dependency configuration | ~15 min |
-| 2 | [Order Domain]({{< relref "/docs/ddd/examples/order-domain" >}}) | Aggregate, Entity, Value Object implementation | ~40 min |
-| 3 | [Application Layer]({{< relref "/docs/ddd/examples/application-layer" >}}) | Use Case, Domain Service implementation | ~30 min |
-| 4 | [Event Sourcing Practice]({{< relref "/docs/ddd/examples/event-sourcing" >}}) | Event storage, snapshots, time travel | ~45 min |
+| 1 | [Project Setup](setup/) | Project structure, dependency configuration | ~15 min |
+| 2 | [Order Domain](order-domain/) | Aggregate, Entity, Value Object implementation | ~40 min |
+| 3 | [Application Layer](application-layer/) | Use Case, Domain Service implementation | ~30 min |
+| 4 | [Event Sourcing Practice](event-sourcing/) | Event storage, snapshots, time travel | ~45 min |
 
 ## What You'll Build
 

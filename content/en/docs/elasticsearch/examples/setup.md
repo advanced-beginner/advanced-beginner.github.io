@@ -342,6 +342,6 @@ Once setup is complete:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Implement basic CRUD | [Basic Examples]({{< relref "/docs/elasticsearch/examples/basic" >}}) |
-| Understand Elasticsearch structure | [Core Components]({{< relref "/docs/elasticsearch/concepts/core-components" >}}) |
-| Write search queries | [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) |
+| Implement basic CRUD | [Basic Examples](basic/) |
+| Understand Elasticsearch structure | [Core Components](../concepts/core-components/) |
+| Write search queries | [Query DSL](../concepts/query-dsl/) |

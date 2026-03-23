@@ -344,5 +344,5 @@ groups:
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [Kafka 모니터링]({{< relref "/docs/observability/examples/kafka-monitoring" >}}) | Kafka 관측성 |
-| 2 | [풀스택 예제]({{< relref "/docs/observability/examples/full-stack" >}}) | 통합 예제 |
+| 1 | [Kafka 모니터링](kafka-monitoring/) | Kafka 관측성 |
+| 2 | [풀스택 예제](full-stack/) | 통합 예제 |

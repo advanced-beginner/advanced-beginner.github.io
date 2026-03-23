@@ -383,6 +383,6 @@ kubectl get pods -w
 
 | 목표 | 추천 문서 |
 |------|----------|
-| Pod 문제 해결 | [Pod 트러블슈팅]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) |
-| 실제 배포 실습 | [Spring Boot 배포]({{< relref "/docs/kubernetes/examples/spring-boot" >}}) |
-| 자동 스케일링 | [스케일링]({{< relref "/docs/kubernetes/concepts/scaling" >}}) |
+| Pod 문제 해결 | [Pod 트러블슈팅](../howto/pod-troubleshooting/) |
+| 실제 배포 실습 | [Spring Boot 배포](../examples/spring-boot/) |
+| 자동 스케일링 | [스케일링](scaling/) |

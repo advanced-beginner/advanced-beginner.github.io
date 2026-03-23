@@ -342,6 +342,6 @@ Elasticsearch cluster not available: connect timed out
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 기본 CRUD 구현 | [기본 예제]({{< relref "/docs/elasticsearch/examples/basic" >}}) |
-| Elasticsearch 구조 이해 | [핵심 구성요소]({{< relref "/docs/elasticsearch/concepts/core-components" >}}) |
-| 검색 쿼리 작성 | [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) |
+| 기본 CRUD 구현 | [기본 예제](basic/) |
+| Elasticsearch 구조 이해 | [핵심 구성요소](../concepts/core-components/) |
+| 검색 쿼리 작성 | [Query DSL](../concepts/query-dsl/) |

@@ -621,10 +621,10 @@ println(grade(55))  // F
 
 | 개념 | 연관성 | 설명 |
 |------|--------|------|
-| [기본 문법]({{< relref "/docs/scala/concepts/basics" >}}) | **선수 지식** | val/var, 타입 시스템 |
-| [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | **match 심화** | 케이스 클래스, 추출자 활용 |
-| [For Comprehension]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) | **for 심화** | 모나딕 연산, flatMap 변환 |
-| [컬렉션]({{< relref "/docs/scala/concepts/collections" >}}) | **for 활용** | map, filter, fold 연산 |
+| [기본 문법](basics/) | **선수 지식** | val/var, 타입 시스템 |
+| [패턴 매칭](pattern-matching/) | **match 심화** | 케이스 클래스, 추출자 활용 |
+| [For Comprehension](for-comprehensions/) | **for 심화** | 모나딕 연산, flatMap 변환 |
+| [컬렉션](collections/) | **for 활용** | map, filter, fold 연산 |
 
 ---
 
@@ -634,6 +634,6 @@ println(grade(55))  // F
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [함수와 메서드]({{< relref "/docs/scala/concepts/functions-methods" >}}) | 함수 정의와 고급 기능 |
-| 2 | [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | match 표현식 심화, 케이스 클래스 |
+| 1 | [함수와 메서드](functions-methods/) | 함수 정의와 고급 기능 |
+| 2 | [패턴 매칭](pattern-matching/) | match 표현식 심화, 케이스 클래스 |
 

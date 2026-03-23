@@ -371,6 +371,6 @@ Trace ID: abc123
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [메트릭 기초]({{< relref "/docs/observability/concepts/metrics-fundamentals" >}}) | Counter, Gauge, Histogram 타입 |
-| 2 | [로그 수집]({{< relref "/docs/observability/concepts/log-aggregation" >}}) | Loki vs ELK 비교 |
-| 3 | [분산 추적]({{< relref "/docs/observability/concepts/distributed-tracing" >}}) | Span, Context Propagation |
+| 1 | [메트릭 기초](metrics-fundamentals/) | Counter, Gauge, Histogram 타입 |
+| 2 | [로그 수집](log-aggregation/) | Loki vs ELK 비교 |
+| 3 | [분산 추적](distributed-tracing/) | Span, Context Propagation |

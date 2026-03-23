@@ -259,8 +259,8 @@ graph TD
 
 | 문서 | 내용 |
 |------|------|
-| [Latency]({{< relref "/docs/observability/concepts/golden-signals/latency" >}}) | P50/P95/P99 측정, SLA 설정 |
-| [Traffic]({{< relref "/docs/observability/concepts/golden-signals/traffic" >}}) | RPS, 처리량 모니터링 |
-| [Errors]({{< relref "/docs/observability/concepts/golden-signals/errors" >}}) | 에러 분류, 에러 버짓 |
-| [Saturation]({{< relref "/docs/observability/concepts/golden-signals/saturation" >}}) | 리소스 병목 감지 |
-| [서비스 유형별 적용]({{< relref "/docs/observability/concepts/golden-signals/by-service-type" >}}) | API, Kafka, DB 맞춤 지표 |
+| [Latency](latency/) | P50/P95/P99 측정, SLA 설정 |
+| [Traffic](traffic/) | RPS, 처리량 모니터링 |
+| [Errors](errors/) | 에러 분류, 에러 버짓 |
+| [Saturation](saturation/) | 리소스 병목 감지 |
+| [서비스 유형별 적용](by-service-type/) | API, Kafka, DB 맞춤 지표 |

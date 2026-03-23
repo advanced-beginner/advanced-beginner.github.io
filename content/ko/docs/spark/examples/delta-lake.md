@@ -20,7 +20,7 @@ author:
 | 구분 | 내용 |
 |------|------|
 | **대상 독자** | 데이터 레이크 아키텍처를 개선하려는 데이터 엔지니어 |
-| **선수 지식** | Spark DataFrame API, Parquet 포맷 이해, [기본 예제]({{< relref "/docs/spark/examples/basic" >}}) 완료 |
+| **선수 지식** | Spark DataFrame API, Parquet 포맷 이해, [기본 예제](basic/) 완료 |
 | **학습 목표** | Delta Lake로 신뢰성 있는 데이터 레이크를 구축할 수 있다 |
 | **예상 소요 시간** | 약 50분 |
 

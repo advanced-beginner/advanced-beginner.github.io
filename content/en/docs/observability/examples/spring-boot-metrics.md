@@ -344,5 +344,5 @@ groups:
 
 | Recommended Order | Document | What You'll Learn |
 |----------|------|----------|
-| 1 | [Kafka Monitoring]({{< relref "/docs/observability/examples/kafka-monitoring" >}}) | Kafka observability |
-| 2 | [Full-Stack Example]({{< relref "/docs/observability/examples/full-stack" >}}) | Integrated example |
+| 1 | [Kafka Monitoring](kafka-monitoring/) | Kafka observability |
+| 2 | [Full-Stack Example](full-stack/) | Integrated example |

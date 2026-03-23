@@ -314,6 +314,6 @@ StatefulSet을 이해했다면 다음 단계로 진행하세요:
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 접근 권한 관리 | [RBAC]({{< relref "/docs/kubernetes/concepts/rbac" >}}) |
-| 배치 작업 실행 | [Job과 CronJob]({{< relref "/docs/kubernetes/concepts/jobs" >}}) |
-| 네트워크 정책 | [NetworkPolicy]({{< relref "/docs/kubernetes/concepts/network-policy" >}}) |
+| 접근 권한 관리 | [RBAC](rbac/) |
+| 배치 작업 실행 | [Job과 CronJob](jobs/) |
+| 네트워크 정책 | [NetworkPolicy](network-policy/) |

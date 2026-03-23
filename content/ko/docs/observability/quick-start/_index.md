@@ -327,7 +327,7 @@ Quick Start를 완료했다면, 다음 문서로 개념을 깊이 이해하세�
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [관측성 3요소]({{< relref "/docs/observability/concepts/three-pillars" >}}) | Metrics, Logs, Traces의 역할 |
-| 2 | [메트릭 기초]({{< relref "/docs/observability/concepts/metrics-fundamentals" >}}) | Counter, Gauge, Histogram 타입 |
-| 3 | [Prometheus 아키텍처]({{< relref "/docs/observability/concepts/prometheus-architecture" >}}) | Pull 모델, 시계열 DB 원리 |
-| 4 | [Spring Boot 예제]({{< relref "/docs/observability/examples/spring-boot-metrics" >}}) | 실제 애플리케이션 적용 |
+| 1 | [관측성 3요소](../concepts/three-pillars/) | Metrics, Logs, Traces의 역할 |
+| 2 | [메트릭 기초](../concepts/metrics-fundamentals/) | Counter, Gauge, Histogram 타입 |
+| 3 | [Prometheus 아키텍처](../concepts/prometheus-architecture/) | Pull 모델, 시계열 DB 원리 |
+| 4 | [Spring Boot 예제](../examples/spring-boot-metrics/) | 실제 애플리케이션 적용 |

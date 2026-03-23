@@ -328,6 +328,6 @@ Once you understand resource management, proceed to the next steps:
 
 | Goal | Recommended Doc |
 |------|----------------|
-| Auto-scaling | [Scaling]({{< relref "/docs/kubernetes/concepts/scaling" >}}) |
-| Configure health checks | [Health Checks]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) |
-| Resource optimization | [Resource Optimization]({{< relref "/docs/kubernetes/howto/resource-optimization" >}}) |
+| Auto-scaling | [Scaling](scaling/) |
+| Configure health checks | [Health Checks](health-checks/) |
+| Resource optimization | [Resource Optimization](../howto/resource-optimization/) |

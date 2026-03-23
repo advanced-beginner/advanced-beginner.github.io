@@ -68,15 +68,15 @@ graph LR
 
 | 주제 | 배우는 것 |
 |------|----------|
-| [관측성 3요소]({{< relref "/docs/observability/concepts/three-pillars" >}}) | Metrics, Logs, Traces의 역할과 상호 연결 |
-| [메트릭 기초]({{< relref "/docs/observability/concepts/metrics-fundamentals" >}}) | Counter, Gauge, Histogram, Summary 타입 이해 |
-| [Prometheus 아키텍처]({{< relref "/docs/observability/concepts/prometheus-architecture" >}}) | Pull 모델, 시계열 DB, 서비스 디스커버리 |
-| [PromQL]({{< relref "/docs/observability/concepts/promql" >}}) | 쿼리 언어 기초부터 고급 활용까지 (7개 문서) |
-| [SRE 황금 신호]({{< relref "/docs/observability/concepts/golden-signals" >}}) | Latency, Traffic, Errors, Saturation 심화 (6개 문서) |
-| [로그 수집]({{< relref "/docs/observability/concepts/log-aggregation" >}}) | Loki vs ELK 비교, 로그 설계 패턴 |
-| [분산 추적]({{< relref "/docs/observability/concepts/distributed-tracing" >}}) | Span, Trace ID, Context Propagation |
-| [OpenTelemetry]({{< relref "/docs/observability/concepts/opentelemetry" >}}) | 관측성 표준과 통합 방법 |
-| [대시보드 설계]({{< relref "/docs/observability/concepts/dashboard-design" >}}) | 효과적인 시각화 원칙 |
+| [관측성 3요소](concepts/three-pillars/) | Metrics, Logs, Traces의 역할과 상호 연결 |
+| [메트릭 기초](concepts/metrics-fundamentals/) | Counter, Gauge, Histogram, Summary 타입 이해 |
+| [Prometheus 아키텍처](concepts/prometheus-architecture/) | Pull 모델, 시계열 DB, 서비스 디스커버리 |
+| [PromQL](concepts/promql/) | 쿼리 언어 기초부터 고급 활용까지 (7개 문서) |
+| [SRE 황금 신호](concepts/golden-signals/) | Latency, Traffic, Errors, Saturation 심화 (6개 문서) |
+| [로그 수집](concepts/log-aggregation/) | Loki vs ELK 비교, 로그 설계 패턴 |
+| [분산 추적](concepts/distributed-tracing/) | Span, Trace ID, Context Propagation |
+| [OpenTelemetry](concepts/opentelemetry/) | 관측성 표준과 통합 방법 |
+| [대시보드 설계](concepts/dashboard-design/) | 효과적인 시각화 원칙 |
 
 ### [실습 예제]({{< relref "/docs/observability/examples" >}})
 실행 가능한 코드로 직접 경험합니다.

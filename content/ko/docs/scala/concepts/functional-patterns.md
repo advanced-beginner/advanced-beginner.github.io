@@ -487,19 +487,19 @@ validateAll(results)  // Left(List("에러1", "에러2"))
 
 | 관련 개념 | 연결 관계 |
 |----------|----------|
-| [고차 함수]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) | `map`, `flatMap`, `filter` 등의 기반 |
-| [for 표현식]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) | Monad 연산의 문법적 설탕 |
-| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | Functor, Monad 등 추상화 구현 방식 |
-| [케이스 클래스]({{< relref "/docs/scala/concepts/case-classes" >}}) | 불변 데이터 구조 정의 |
-| [동시성]({{< relref "/docs/scala/concepts/concurrency" >}}) | Future, IO 등 비동기 효과 타입 |
-| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | 고차 타입 (F[_]) 이해 |
-| [도메인 모델 패턴]({{< relref "/docs/ddd/concepts/domain-model-patterns" >}}) | 함수형 패턴을 활용한 도메인 모델 설계 |
+| [고차 함수](higher-order-functions/) | `map`, `flatMap`, `filter` 등의 기반 |
+| [for 표현식](for-comprehensions/) | Monad 연산의 문법적 설탕 |
+| [타입 클래스](type-classes/) | Functor, Monad 등 추상화 구현 방식 |
+| [케이스 클래스](case-classes/) | 불변 데이터 구조 정의 |
+| [동시성](concurrency/) | Future, IO 등 비동기 효과 타입 |
+| [고급 타입](type-system-advanced/) | 고차 타입 (F[_]) 이해 |
+| [도메인 모델 패턴](../../ddd/concepts/domain-model-patterns/) | 함수형 패턴을 활용한 도메인 모델 설계 |
 
 #### 다음 단계
 
 | 학습 경로 | 설명 |
 |----------|------|
-| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | 다형성 추상화 패턴 심화 |
+| [타입 클래스](type-classes/) | 다형성 추상화 패턴 심화 |
 | [Cats 라이브러리](https://typelevel.org/cats/) | 함수형 추상화 라이브러리 |
 | [ZIO 라이브러리](https://zio.dev/) | 타입 안전한 효과 시스템 |
 | [fs2 스트리밍](https://fs2.io/) | 함수형 스트림 처리 |

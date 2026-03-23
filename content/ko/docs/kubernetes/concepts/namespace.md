@@ -307,6 +307,6 @@ Namespace를 이해했다면 다음 단계로 진행하세요:
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 상태 유지 워크로드 | [StatefulSet]({{< relref "/docs/kubernetes/concepts/statefulset" >}}) |
-| 접근 권한 관리 | [RBAC]({{< relref "/docs/kubernetes/concepts/rbac" >}}) |
-| 네트워크 정책 | [NetworkPolicy]({{< relref "/docs/kubernetes/concepts/network-policy" >}}) |
+| 상태 유지 워크로드 | [StatefulSet](statefulset/) |
+| 접근 권한 관리 | [RBAC](rbac/) |
+| 네트워크 정책 | [NetworkPolicy](network-policy/) |

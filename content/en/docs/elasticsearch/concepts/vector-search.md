@@ -499,6 +499,6 @@ Question embedding → Return most similar FAQ answer
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Improve search quality | [Search Relevance]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) |
-| Basic search | [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) |
-| Performance optimization | [Performance Tuning]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) |
+| Improve search quality | [Search Relevance](search-relevance/) |
+| Basic search | [Query DSL](query-dsl/) |
+| Performance optimization | [Performance Tuning](performance-tuning/) |

@@ -519,7 +519,7 @@ Quick Start를 완료했다면 다음 단계로 진행하세요:
 
 | 목표 | 추천 문서 |
 |------|----------|
-| Kubernetes 구조 이해하기 | [아키텍처]({{< relref "/docs/kubernetes/concepts/architecture" >}}) |
-| Pod 개념 깊이 이해하기 | [Pod]({{< relref "/docs/kubernetes/concepts/pod" >}}) |
-| 더 복잡한 예제 실습하기 | [기본 예제]({{< relref "/docs/kubernetes/examples/basic" >}}) |
-| 실제 앱 배포해보기 | [Spring Boot 배포]({{< relref "/docs/kubernetes/examples/spring-boot" >}}) |
+| Kubernetes 구조 이해하기 | [아키텍처](../concepts/architecture/) |
+| Pod 개념 깊이 이해하기 | [Pod](../concepts/pod/) |
+| 더 복잡한 예제 실습하기 | [기본 예제](../examples/basic/) |
+| 실제 앱 배포해보기 | [Spring Boot 배포](../examples/spring-boot/) |

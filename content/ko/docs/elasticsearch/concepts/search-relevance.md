@@ -539,6 +539,6 @@ function_score에서 `max_boost` 사용:
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 데이터 분석 | [집계]({{< relref "/docs/elasticsearch/concepts/aggregations" >}}) |
-| 실전 구현 | [상품 검색 시스템]({{< relref "/docs/elasticsearch/examples/product-search" >}}) |
-| 성능 최적화 | [성능 튜닝]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) |
+| 데이터 분석 | [집계](aggregations/) |
+| 실전 구현 | [상품 검색 시스템](../examples/product-search/) |
+| 성능 최적화 | [성능 튜닝](performance-tuning/) |

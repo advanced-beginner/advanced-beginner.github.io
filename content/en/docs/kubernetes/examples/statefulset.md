@@ -308,6 +308,6 @@ After completing the StatefulSet hands-on, proceed to the following:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Access control | [RBAC Configuration Lab]({{< relref "/docs/kubernetes/examples/rbac" >}}) |
-| Periodic tasks | [CronJob Lab]({{< relref "/docs/kubernetes/examples/cronjob" >}}) |
-| Resource management | [Resource Management]({{< relref "/docs/kubernetes/concepts/resources" >}}) |
+| Access control | [RBAC Configuration Lab](rbac/) |
+| Periodic tasks | [CronJob Lab](cronjob/) |
+| Resource management | [Resource Management](../concepts/resources/) |

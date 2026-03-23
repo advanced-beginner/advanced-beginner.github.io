@@ -22,7 +22,7 @@ author_url: "http://github.com/kimbenji"
 | **대상 독자** | Event Sourcing 패턴을 실제로 구현해보려는 개발자 |
 | **DDD** | Aggregate, Domain Event 개념 이해 |
 | **Java** | Switch Expression, Pattern Matching 문법 |
-| **선수 문서** | [주문 도메인]({{< relref "/docs/ddd/examples/order-domain" >}}), [애플리케이션 계층]({{< relref "/docs/ddd/examples/application-layer" >}}) 완료 |
+| **선수 문서** | [주문 도메인](order-domain/), [애플리케이션 계층](application-layer/) 완료 |
 
 Event Sourcing 패턴을 실제 주문 도메인에 구현합니다. 상태 대신 이벤트를 저장하고, 이벤트를 재생하여 상태를 복원합니다.
 

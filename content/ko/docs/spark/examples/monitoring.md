@@ -20,7 +20,7 @@ author:
 | 구분 | 내용 |
 |------|------|
 | **대상 독자** | Spark 애플리케이션을 운영하는 DevOps/데이터 엔지니어 |
-| **선수 지식** | Spark 기본 동작, [기본 예제]({{< relref "/docs/spark/examples/basic" >}}) 완료, Prometheus/Grafana 경험 (선택) |
+| **선수 지식** | Spark 기본 동작, [기본 예제](basic/) 완료, Prometheus/Grafana 경험 (선택) |
 | **학습 목표** | Spark 애플리케이션의 상태를 모니터링하고 문제를 진단할 수 있다 |
 | **예상 소요 시간** | 약 35분 |
 

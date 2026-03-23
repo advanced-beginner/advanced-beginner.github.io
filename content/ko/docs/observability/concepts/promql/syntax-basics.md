@@ -519,5 +519,5 @@ rate(http_requests_total[5m]) > 10
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [집계 연산자]({{< relref "/docs/observability/concepts/promql/aggregation-operators" >}}) | sum, avg, topk, by/without |
-| 2 | [rate와 increase]({{< relref "/docs/observability/concepts/promql/rate-and-increase" >}}) | Counter 처리법 |
+| 1 | [집계 연산자](aggregation-operators/) | sum, avg, topk, by/without |
+| 2 | [rate와 increase](rate-and-increase/) | Counter 처리법 |

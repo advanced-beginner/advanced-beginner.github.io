@@ -416,16 +416,16 @@ None.toJson                // "null"
 
 | 관련 개념 | 연결 관계 |
 |----------|----------|
-| [Implicits]({{< relref "/docs/scala/concepts/implicits" >}}) | 인스턴스의 암시적 해결 메커니즘 |
-| [제네릭]({{< relref "/docs/scala/concepts/generics" >}}) | 컨텍스트 경계 (`A : Show`) |
-| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor, Monad 등 핵심 타입 클래스 |
-| [공변성/반공변성]({{< relref "/docs/scala/concepts/variance" >}}) | 타입 클래스 인스턴스의 변성 |
-| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | 고차 타입으로 타입 클래스 정의 |
+| [Implicits](implicits/) | 인스턴스의 암시적 해결 메커니즘 |
+| [제네릭](generics/) | 컨텍스트 경계 (`A : Show`) |
+| [함수형 패턴](functional-patterns/) | Functor, Monad 등 핵심 타입 클래스 |
+| [공변성/반공변성](variance/) | 타입 클래스 인스턴스의 변성 |
+| [고급 타입](type-system-advanced/) | 고차 타입으로 타입 클래스 정의 |
 
 #### 다음 단계
 
 | 학습 경로 | 설명 |
 |----------|------|
-| [공변성/반공변성]({{< relref "/docs/scala/concepts/variance" >}}) | 제네릭 타입의 서브타이핑 규칙 |
-| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor, Monad 등 추상화 |
-| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | 타입 레벨 프로그래밍 |
+| [공변성/반공변성](variance/) | 제네릭 타입의 서브타이핑 규칙 |
+| [함수형 패턴](functional-patterns/) | Functor, Monad 등 추상화 |
+| [고급 타입](type-system-advanced/) | 타입 레벨 프로그래밍 |

@@ -48,14 +48,14 @@ DDD is broadly divided into **Strategic Design** and **Tactical Design**. Strate
 
 | Topic | What You'll Learn |
 |-------|-------------------|
-| [Strategic Design]({{< relref "/docs/ddd/concepts/strategic-design" >}}) | Bounded Context, Context Map, Ubiquitous Language |
-| [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design" >}}) | Entity, Value Object, Repository patterns |
-| [Aggregate]({{< relref "/docs/ddd/concepts/aggregate" >}}) | Consistency boundaries and transaction scope design |
-| [Domain Events]({{< relref "/docs/ddd/concepts" >}}) | Event-based communication for loose coupling |
-| [CQRS]({{< relref "/docs/ddd/concepts" >}}) | Command Query Responsibility Segregation |
-| [Architecture Patterns]({{< relref "/docs/ddd/concepts/architecture" >}}) | Layered, Hexagonal, Clean Architecture |
-| [Testing Strategy]({{< relref "/docs/ddd/concepts/testing" >}}) | How to test domain models |
-| [Anti-patterns]({{< relref "/docs/ddd/concepts/anti-patterns" >}}) | Common mistakes and how to avoid them |
+| [Strategic Design](concepts/strategic-design/) | Bounded Context, Context Map, Ubiquitous Language |
+| [Tactical Design](concepts/tactical-design/) | Entity, Value Object, Repository patterns |
+| [Aggregate](concepts/aggregate/) | Consistency boundaries and transaction scope design |
+| [Domain Events](concepts/) | Event-based communication for loose coupling |
+| [CQRS](concepts/) | Command Query Responsibility Segregation |
+| [Architecture Patterns](concepts/architecture/) | Layered, Hexagonal, Clean Architecture |
+| [Testing Strategy](concepts/testing/) | How to test domain models |
+| [Anti-patterns](concepts/anti-patterns/) | Common mistakes and how to avoid them |
 
 **[How-to Guides]({{< relref "/docs/ddd/howto" >}})**
 

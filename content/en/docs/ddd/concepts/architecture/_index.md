@@ -22,12 +22,12 @@ Here are analogies to understand architecture patterns at a glance.
 
 | Architecture | Analogy | Core Philosophy | One-Line Summary |
 |-------------|---------|-----------------|-----------------|
-| **[Layered]({{< relref "/docs/ddd/concepts/architecture/layered-architecture" >}})** | Building floors | Simple structure flowing from top to bottom | "Separate layers by role" |
-| **[Hexagonal]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}})** | Smartphone and adapters | Isolate external world with Ports/Adapters | "Protect the inside from the outside" |
-| **[Clean]({{< relref "/docs/ddd/concepts/architecture/clean-architecture" >}})** | Concentric circles of a castle | Dependencies always point inward | "Business rules are king" |
-| **[Onion]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}})** | Onion layers | Domain model at the very center | "Domain is the center of everything" |
-| **[CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}})** | Separate read/write counters | Complete separation of commands and queries | "Optimize reads and writes separately" |
-| **[Event-Driven]({{< relref "/docs/ddd/concepts/architecture/event-driven" >}})** | Company announcement system | Loose coupling and asynchronous communication | "Announce what happened and react" |
+| **[Layered](layered-architecture/)** | Building floors | Simple structure flowing from top to bottom | "Separate layers by role" |
+| **[Hexagonal](hexagonal-architecture/)** | Smartphone and adapters | Isolate external world with Ports/Adapters | "Protect the inside from the outside" |
+| **[Clean](clean-architecture/)** | Concentric circles of a castle | Dependencies always point inward | "Business rules are king" |
+| **[Onion](onion-architecture/)** | Onion layers | Domain model at the very center | "Domain is the center of everything" |
+| **[CQRS](cqrs/)** | Separate read/write counters | Complete separation of commands and queries | "Optimize reads and writes separately" |
+| **[Event-Driven](event-driven/)** | Company announcement system | Loose coupling and asynchronous communication | "Announce what happened and react" |
 
 ## Why Do You Need Architecture Patterns?
 
@@ -123,12 +123,12 @@ Each architecture pattern has its own philosophy and design goals.
 
 | Pattern | Core Concept | Difficulty | Suitable For |
 |---------|-------------|-----------|-------------|
-| **[Layered]({{< relref "/docs/ddd/concepts/architecture/layered-architecture" >}})** | 4 layers flowing top to bottom | Easy | Getting started, simple projects |
-| **[Hexagonal]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}})** | Isolate externals with Ports and Adapters | Medium | Projects with many external integrations |
-| **[Clean]({{< relref "/docs/ddd/concepts/architecture/clean-architecture" >}})** | Strict dependency rules | Hard | Large-scale, long-term projects |
-| **[Onion]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}})** | Domain model centric | Medium | DDD projects |
-| **[CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}})** | Read/write separation | Hard | Complex queries/performance requirements |
-| **[Event-Driven]({{< relref "/docs/ddd/concepts/architecture/event-driven" >}})** | Domain events | Medium~Hard | Microservices, asynchronous processing |
+| **[Layered](layered-architecture/)** | 4 layers flowing top to bottom | Easy | Getting started, simple projects |
+| **[Hexagonal](hexagonal-architecture/)** | Isolate externals with Ports and Adapters | Medium | Projects with many external integrations |
+| **[Clean](clean-architecture/)** | Strict dependency rules | Hard | Large-scale, long-term projects |
+| **[Onion](onion-architecture/)** | Domain model centric | Medium | DDD projects |
+| **[CQRS](cqrs/)** | Read/write separation | Hard | Complex queries/performance requirements |
+| **[Event-Driven](event-driven/)** | Domain events | Medium~Hard | Microservices, asynchronous processing |
 
 ## Best Practice: Which System Fits Which Architecture?
 
@@ -213,17 +213,17 @@ We recommend learning each architecture pattern in the following order.
 
 | Order | Document | Key Question |
 |-------|----------|-------------|
-| 1 | [Layered Architecture]({{< relref "/docs/ddd/concepts/architecture/layered-architecture" >}}) | "How should you structure your code?" |
-| 2 | [Hexagonal Architecture]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}}) | "How should you isolate externals?" |
-| 3 | [Clean Architecture]({{< relref "/docs/ddd/concepts/architecture/clean-architecture" >}}) | "How should you manage dependencies?" |
-| 4 | [Onion Architecture]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}}) | "How should you protect the domain?" |
+| 1 | [Layered Architecture](layered-architecture/) | "How should you structure your code?" |
+| 2 | [Hexagonal Architecture](hexagonal-architecture/) | "How should you isolate externals?" |
+| 3 | [Clean Architecture](clean-architecture/) | "How should you manage dependencies?" |
+| 4 | [Onion Architecture](onion-architecture/) | "How should you protect the domain?" |
 
 ### Advanced Patterns
 
 | Order | Document | Key Question |
 |-------|----------|-------------|
-| 5 | [CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}}) | "Should you separate reads and writes?" |
-| 6 | [Event-Driven Architecture]({{< relref "/docs/ddd/concepts/architecture/event-driven" >}}) | "How should components communicate?" |
+| 5 | [CQRS](cqrs/) | "Should you separate reads and writes?" |
+| 6 | [Event-Driven Architecture](event-driven/) | "How should components communicate?" |
 
 ## Next Steps
 

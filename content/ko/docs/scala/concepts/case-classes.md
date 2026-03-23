@@ -433,10 +433,10 @@ println(eval(expr))  // 9.0
 
 | 개념 | 연관성 | 설명 |
 |------|--------|------|
-| [클래스와 객체]({{< relref "/docs/scala/concepts/classes-objects" >}}) | **선수 지식** | 일반 클래스, trait |
-| [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | **필수 조합** | unapply 활용, ADT 분기 |
-| [컬렉션]({{< relref "/docs/scala/concepts/collections" >}}) | **활용** | 불변 데이터 저장 |
-| [제네릭]({{< relref "/docs/scala/concepts/generics" >}}) | **응용** | 제네릭 케이스 클래스 |
+| [클래스와 객체](classes-objects/) | **선수 지식** | 일반 클래스, trait |
+| [패턴 매칭](pattern-matching/) | **필수 조합** | unapply 활용, ADT 분기 |
+| [컬렉션](collections/) | **활용** | 불변 데이터 저장 |
+| [제네릭](generics/) | **응용** | 제네릭 케이스 클래스 |
 
 ---
 
@@ -444,5 +444,5 @@ println(eval(expr))  // 9.0
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | match 표현식 심화, ADT 활용 |
-| 2 | [컬렉션]({{< relref "/docs/scala/concepts/collections" >}}) | Scala 컬렉션 라이브러리 |
+| 1 | [패턴 매칭](pattern-matching/) | match 표현식 심화, ADT 활용 |
+| 2 | [컬렉션](collections/) | Scala 컬렉션 라이브러리 |

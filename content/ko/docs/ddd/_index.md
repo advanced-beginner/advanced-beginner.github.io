@@ -48,14 +48,14 @@ DDD는 크게 <strong>전략적 설계</strong>와 <strong>전술적 설계</str
 
 | 주제 | 배우는 것 |
 |------|----------|
-| [전략적 설계]({{< relref "/docs/ddd/concepts/strategic-design" >}}) | Bounded Context, Context Map, 유비쿼터스 언어 |
-| [전술적 설계]({{< relref "/docs/ddd/concepts/tactical-design" >}}) | Entity, Value Object, Repository 패턴 |
-| [Aggregate]({{< relref "/docs/ddd/concepts/aggregate" >}}) | 일관성 경계와 트랜잭션 범위 설계 |
-| [도메인 이벤트]({{< relref "/docs/ddd/concepts/architecture/event-driven" >}}) | 느슨한 결합을 위한 이벤트 기반 통신 |
-| [CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}}) | 명령과 조회의 분리 |
-| [아키텍처 패턴]({{< relref "/docs/ddd/concepts/architecture" >}}) | Layered, Hexagonal, Clean Architecture |
-| [테스트 전략]({{< relref "/docs/ddd/concepts/testing" >}}) | 도메인 모델 테스트 방법 |
-| [안티패턴]({{< relref "/docs/ddd/concepts/anti-patterns" >}}) | 흔한 실수와 피하는 방법 |
+| [전략적 설계](concepts/strategic-design/) | Bounded Context, Context Map, 유비쿼터스 언어 |
+| [전술적 설계](concepts/tactical-design/) | Entity, Value Object, Repository 패턴 |
+| [Aggregate](concepts/aggregate/) | 일관성 경계와 트랜잭션 범위 설계 |
+| [도메인 이벤트](concepts/architecture/event-driven/) | 느슨한 결합을 위한 이벤트 기반 통신 |
+| [CQRS](concepts/architecture/cqrs/) | 명령과 조회의 분리 |
+| [아키텍처 패턴](concepts/architecture/) | Layered, Hexagonal, Clean Architecture |
+| [테스트 전략](concepts/testing/) | 도메인 모델 테스트 방법 |
+| [안티패턴](concepts/anti-patterns/) | 흔한 실수와 피하는 방법 |
 
 **[How-To Guide]({{< relref "/docs/ddd/howto" >}})**
 

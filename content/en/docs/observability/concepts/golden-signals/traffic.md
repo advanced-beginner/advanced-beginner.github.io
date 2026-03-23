@@ -353,5 +353,5 @@ groups:
 
 | Recommended Order | Document | What You'll Learn |
 |-------------------|----------|-------------------|
-| 1 | [Errors]({{< relref "/docs/observability/concepts/golden-signals/errors" >}}) | Error rate monitoring |
-| 2 | [Saturation]({{< relref "/docs/observability/concepts/golden-signals/saturation" >}}) | Resource limits |
+| 1 | [Errors](errors/) | Error rate monitoring |
+| 2 | [Saturation](saturation/) | Resource limits |

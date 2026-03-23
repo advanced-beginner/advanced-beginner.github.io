@@ -384,5 +384,5 @@ histogram_quantile(
 
 | Recommended Order | Document | What You'll Learn |
 |-------------------|----------|-------------------|
-| 1 | [Recording Rules]({{< relref "/docs/observability/concepts/promql/recording-rules" >}}) | Pre-compute complex queries |
-| 2 | [SRE Golden Signals - Latency]({{< relref "/docs/observability/concepts/golden-signals/latency" >}}) | Latency monitoring strategy |
+| 1 | [Recording Rules](recording-rules/) | Pre-compute complex queries |
+| 2 | [SRE Golden Signals - Latency](../golden-signals/latency/) | Latency monitoring strategy |

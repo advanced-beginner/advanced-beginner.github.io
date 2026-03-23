@@ -21,7 +21,7 @@ Implement event-driven communication using Kafka in a microservices environment.
 | Item | Description |
 |------|-------------|
 | **Target Audience** | Developers building event-driven communication in microservices architecture |
-| **Prerequisites** | Kafka basics, Spring Boot, understanding of [Order System]({{< relref "/docs/kafka/examples/order-system" >}}) example |
+| **Prerequisites** | Kafka basics, Spring Boot, understanding of [Order System](order-system/) example |
 | **Required Environment** | Docker, JDK 17+, environment capable of running multiple services |
 | **Estimated Time** | About 60 minutes |
 

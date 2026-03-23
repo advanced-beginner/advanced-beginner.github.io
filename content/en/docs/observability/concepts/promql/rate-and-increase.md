@@ -434,5 +434,5 @@ deriv(node_memory_MemAvailable_bytes[5m])
 
 | Recommended Order | Document | What You'll Learn |
 |-------------------|----------|-------------------|
-| 1 | [histogram_quantile]({{< relref "/docs/observability/concepts/promql/histogram-quantile" >}}) | Calculate P99 response time |
-| 2 | [Recording Rules]({{< relref "/docs/observability/concepts/promql/recording-rules" >}}) | Optimize complex queries |
+| 1 | [histogram_quantile](histogram-quantile/) | Calculate P99 response time |
+| 2 | [Recording Rules](recording-rules/) | Optimize complex queries |

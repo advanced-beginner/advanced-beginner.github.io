@@ -455,6 +455,6 @@ PUT /products/_settings
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Failure response | [High Availability]({{< relref "/docs/elasticsearch/concepts/high-availability" >}}) |
-| Cluster configuration | [Cluster Management]({{< relref "/docs/elasticsearch/concepts/cluster-management" >}}) |
-| Practical implementation | [Product Search System]({{< relref "/docs/elasticsearch/examples/product-search" >}}) |
+| Failure response | [High Availability](high-availability/) |
+| Cluster configuration | [Cluster Management](cluster-management/) |
+| Practical implementation | [Product Search System](../examples/product-search/) |

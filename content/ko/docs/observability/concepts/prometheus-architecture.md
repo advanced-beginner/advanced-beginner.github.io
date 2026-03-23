@@ -726,6 +726,6 @@ prometheus_engine_query_duration_seconds
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [PromQL 기본 문법]({{< relref "/docs/observability/concepts/promql/syntax-basics" >}}) | 셀렉터, 레이블 매칭 |
-| 2 | [환경 구성]({{< relref "/docs/observability/examples/setup" >}}) | Docker Compose 실습 |
-| 3 | [알림 전략]({{< relref "/docs/observability/concepts/promql/alerting-rules" >}}) | Alerting Rules 작성 |
+| 1 | [PromQL 기본 문법](promql/syntax-basics/) | 셀렉터, 레이블 매칭 |
+| 2 | [환경 구성](../examples/setup/) | Docker Compose 실습 |
+| 3 | [알림 전략](promql/alerting-rules/) | Alerting Rules 작성 |

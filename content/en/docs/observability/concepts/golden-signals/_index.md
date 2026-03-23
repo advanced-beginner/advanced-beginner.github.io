@@ -241,8 +241,8 @@ graph TD
 
 | Document | Content |
 |----------|---------|
-| [Latency]({{< relref "/docs/observability/concepts/golden-signals/latency" >}}) | P50/P95/P99 measurement, SLA setup |
-| [Traffic]({{< relref "/docs/observability/concepts/golden-signals/traffic" >}}) | RPS, throughput monitoring |
-| [Errors]({{< relref "/docs/observability/concepts/golden-signals/errors" >}}) | Error classification, error budget |
-| [Saturation]({{< relref "/docs/observability/concepts/golden-signals/saturation" >}}) | Resource bottleneck detection |
-| [By Service Type]({{< relref "/docs/observability/concepts/golden-signals/by-service-type" >}}) | Custom metrics for API, Kafka, DB |
+| [Latency](latency/) | P50/P95/P99 measurement, SLA setup |
+| [Traffic](traffic/) | RPS, throughput monitoring |
+| [Errors](errors/) | Error classification, error budget |
+| [Saturation](saturation/) | Resource bottleneck detection |
+| [By Service Type](by-service-type/) | Custom metrics for API, Kafka, DB |

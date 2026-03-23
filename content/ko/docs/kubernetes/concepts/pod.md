@@ -399,6 +399,6 @@ Pod를 이해했다면 다음 단계로 진행하세요:
 
 | 목표 | 추천 문서 |
 |------|----------|
-| Pod 자동 관리 | [Deployment]({{< relref "/docs/kubernetes/concepts/deployment" >}}) |
-| Pod 접근 방법 | [Service]({{< relref "/docs/kubernetes/concepts/service" >}}) |
-| 헬스 체크 설정 | [헬스 체크]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) |
+| Pod 자동 관리 | [Deployment](deployment/) |
+| Pod 접근 방법 | [Service](service/) |
+| 헬스 체크 설정 | [헬스 체크](health-checks/) |

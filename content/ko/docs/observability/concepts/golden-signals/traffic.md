@@ -372,5 +372,5 @@ groups:
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [Errors]({{< relref "/docs/observability/concepts/golden-signals/errors" >}}) | 에러율 모니터링 |
-| 2 | [Saturation]({{< relref "/docs/observability/concepts/golden-signals/saturation" >}}) | 리소스 한계 |
+| 1 | [Errors](errors/) | 에러율 모니터링 |
+| 2 | [Saturation](saturation/) | 리소스 한계 |

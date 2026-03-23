@@ -577,9 +577,9 @@ Quick Start를 완료했다면, 학습 목표에 따라 다음 문서를 선택�
 
 | 목표 | 추천 문서 |
 |------|----------|
-| Spark 내부 동작 이해 | [아키텍처]({{< relref "/docs/spark/concepts/architecture" >}}) |
-| RDD 기초 학습 | [RDD 기초]({{< relref "/docs/spark/concepts/rdd" >}}) |
-| DataFrame 심화 | [DataFrame과 Dataset]({{< relref "/docs/spark/concepts/dataframe-dataset" >}}) |
-| Spring Boot 통합 | [환경 설정]({{< relref "/docs/spark/examples/setup" >}}) |
+| Spark 내부 동작 이해 | [아키텍처](../concepts/architecture/) |
+| RDD 기초 학습 | [RDD 기초](../concepts/rdd/) |
+| DataFrame 심화 | [DataFrame과 Dataset](../concepts/dataframe-dataset/) |
+| Spring Boot 통합 | [환경 설정](../examples/setup/) |
 
 Spark의 전체적인 동작 원리를 이해하려면 아키텍처 문서를, 실습 위주로 진행하려면 환경 설정 문서를 먼저 읽는 것을 권장합니다.

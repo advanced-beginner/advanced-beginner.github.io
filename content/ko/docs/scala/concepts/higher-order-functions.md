@@ -826,17 +826,17 @@ fastFib(100)  // 빠르게 계산됨
 
 | 관련 개념 | 연결 관계 |
 |----------|----------|
-| [함수와 메서드]({{< relref "/docs/scala/concepts/functions-methods" >}}) | 일급 함수와 함수 리터럴 기초 |
-| [컬렉션]({{< relref "/docs/scala/concepts/collections" >}}) | `map`, `filter` 등 고차 함수의 주요 사용처 |
-| [for 표현식]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) | `flatMap` 체인의 문법적 설탕 |
-| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor(`map`), Monad(`flatMap`) 추상화 |
-| [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | `collect`에서 패턴 기반 변환 |
-| [동시성]({{< relref "/docs/scala/concepts/concurrency" >}}) | Future의 `map`, `flatMap` 조합 |
+| [함수와 메서드](functions-methods/) | 일급 함수와 함수 리터럴 기초 |
+| [컬렉션](collections/) | `map`, `filter` 등 고차 함수의 주요 사용처 |
+| [for 표현식](for-comprehensions/) | `flatMap` 체인의 문법적 설탕 |
+| [함수형 패턴](functional-patterns/) | Functor(`map`), Monad(`flatMap`) 추상화 |
+| [패턴 매칭](pattern-matching/) | `collect`에서 패턴 기반 변환 |
+| [동시성](concurrency/) | Future의 `map`, `flatMap` 조합 |
 
 #### 다음 단계
 
 | 학습 경로 | 설명 |
 |----------|------|
-| [for 표현식]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) | `flatMap` 체인을 읽기 쉽게 표현 |
-| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor, Monad 추상화 심화 |
-| [Implicits]({{< relref "/docs/scala/concepts/implicits" >}}) | 문맥적 추상화와 타입 클래스 |
+| [for 표현식](for-comprehensions/) | `flatMap` 체인을 읽기 쉽게 표현 |
+| [함수형 패턴](functional-patterns/) | Functor, Monad 추상화 심화 |
+| [Implicits](implicits/) | 문맥적 추상화와 타입 클래스 |

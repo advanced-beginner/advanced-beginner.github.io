@@ -616,6 +616,6 @@ POST /_snapshot/my_backup/weekly_snapshot/_restore?wait_for_completion=true
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 클러스터 구성 | [클러스터 관리]({{< relref "/docs/elasticsearch/concepts/cluster-management" >}}) |
-| 성능 최적화 | [성능 튜닝]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) |
-| 실전 구현 | [상품 검색 시스템]({{< relref "/docs/elasticsearch/examples/product-search" >}}) |
+| 클러스터 구성 | [클러스터 관리](cluster-management/) |
+| 성능 최적화 | [성능 튜닝](performance-tuning/) |
+| 실전 구현 | [상품 검색 시스템](../examples/product-search/) |

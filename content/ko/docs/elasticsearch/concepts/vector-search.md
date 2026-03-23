@@ -517,6 +517,6 @@ PUT /products-vector
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 검색 품질 개선 | [검색 관련성]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) |
-| 기본 검색 | [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) |
-| 성능 최적화 | [성능 튜닝]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) |
+| 검색 품질 개선 | [검색 관련성](search-relevance/) |
+| 기본 검색 | [Query DSL](query-dsl/) |
+| 성능 최적화 | [성능 튜닝](performance-tuning/) |

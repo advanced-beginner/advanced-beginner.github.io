@@ -20,7 +20,7 @@ author:
 | 구분 | 내용 |
 |------|------|
 | **대상 독자** | Spark로 데이터 파이프라인을 구축하려는 데이터 엔지니어 |
-| **선수 지식** | [기본 예제]({{< relref "/docs/spark/examples/basic" >}}) 완료, Java/Spark DataFrame API |
+| **선수 지식** | [기본 예제](basic/) 완료, Java/Spark DataFrame API |
 | **학습 목표** | 재사용 가능한 ETL 파이프라인을 설계하고 구현할 수 있다 |
 | **예상 소요 시간** | 약 45분 |
 

@@ -377,5 +377,5 @@ histogram_quantile(0.99, rate(nginx_upstream_response_time_seconds_bucket[5m]))
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [환경 구성]({{< relref "/docs/observability/examples/setup" >}}) | 실습 환경 |
-| 2 | [Kafka 모니터링]({{< relref "/docs/observability/examples/kafka-monitoring" >}}) | Kafka 상세 |
+| 1 | [환경 구성](../../examples/setup/) | 실습 환경 |
+| 2 | [Kafka 모니터링](../../examples/kafka-monitoring/) | Kafka 상세 |

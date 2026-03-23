@@ -68,15 +68,15 @@ Explains not just "how to use" but **"why it was designed this way"**.
 
 | Topic | What You'll Learn |
 |------|----------|
-| [Three Pillars of Observability]({{< relref "/docs/observability/concepts/three-pillars" >}}) | Roles of Metrics, Logs, Traces and their interconnections |
-| [Metrics Fundamentals]({{< relref "/docs/observability/concepts/metrics-fundamentals" >}}) | Understanding Counter, Gauge, Histogram, Summary types |
-| [Prometheus Architecture]({{< relref "/docs/observability/concepts/prometheus-architecture" >}}) | Pull model, time series DB, service discovery |
-| [PromQL]({{< relref "/docs/observability/concepts/promql" >}}) | Query language from basics to advanced (7 documents) |
-| [SRE Golden Signals]({{< relref "/docs/observability/concepts/golden-signals" >}}) | Deep dive into Latency, Traffic, Errors, Saturation (6 documents) |
-| [Log Aggregation]({{< relref "/docs/observability/concepts/log-aggregation" >}}) | Loki vs ELK comparison, log design patterns |
-| [Distributed Tracing]({{< relref "/docs/observability/concepts/distributed-tracing" >}}) | Span, Trace ID, Context Propagation |
-| [OpenTelemetry]({{< relref "/docs/observability/concepts/opentelemetry" >}}) | Observability standards and integration methods |
-| [Dashboard Design]({{< relref "/docs/observability/concepts/dashboard-design" >}}) | Effective visualization principles |
+| [Three Pillars of Observability](concepts/three-pillars/) | Roles of Metrics, Logs, Traces and their interconnections |
+| [Metrics Fundamentals](concepts/metrics-fundamentals/) | Understanding Counter, Gauge, Histogram, Summary types |
+| [Prometheus Architecture](concepts/prometheus-architecture/) | Pull model, time series DB, service discovery |
+| [PromQL](concepts/promql/) | Query language from basics to advanced (7 documents) |
+| [SRE Golden Signals](concepts/golden-signals/) | Deep dive into Latency, Traffic, Errors, Saturation (6 documents) |
+| [Log Aggregation](concepts/log-aggregation/) | Loki vs ELK comparison, log design patterns |
+| [Distributed Tracing](concepts/distributed-tracing/) | Span, Trace ID, Context Propagation |
+| [OpenTelemetry](concepts/opentelemetry/) | Observability standards and integration methods |
+| [Dashboard Design](concepts/dashboard-design/) | Effective visualization principles |
 
 ### [Examples]({{< relref "/docs/observability/examples" >}})
 Hands-on experience with executable code.

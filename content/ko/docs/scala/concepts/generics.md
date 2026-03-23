@@ -415,17 +415,17 @@ find(List("a", "bb", "ccc"))(_.length > 2)  // Some("ccc")
 
 | 관련 개념 | 연결 관계 |
 |----------|----------|
-| [공변성/반공변성]({{< relref "/docs/scala/concepts/variance" >}}) | 제네릭 타입의 상속 관계 정의 |
-| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | 컨텍스트 경계로 타입 클래스 요구 |
-| [Implicits]({{< relref "/docs/scala/concepts/implicits" >}}) | 컨텍스트 경계의 암시적 해결 |
-| [케이스 클래스]({{< relref "/docs/scala/concepts/case-classes" >}}) | 제네릭 ADT 정의 |
-| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Option, Either, Try 등 제네릭 타입 |
-| [컬렉션]({{< relref "/docs/scala/concepts/collections" >}}) | List[A], Map[K, V] 등 제네릭 컬렉션 |
+| [공변성/반공변성](variance/) | 제네릭 타입의 상속 관계 정의 |
+| [타입 클래스](type-classes/) | 컨텍스트 경계로 타입 클래스 요구 |
+| [Implicits](implicits/) | 컨텍스트 경계의 암시적 해결 |
+| [케이스 클래스](case-classes/) | 제네릭 ADT 정의 |
+| [함수형 패턴](functional-patterns/) | Option, Either, Try 등 제네릭 타입 |
+| [컬렉션](collections/) | List[A], Map[K, V] 등 제네릭 컬렉션 |
 
 #### 다음 단계
 
 | 학습 경로 | 설명 |
 |----------|------|
-| [공변성/반공변성]({{< relref "/docs/scala/concepts/variance" >}}) | 제네릭 타입의 서브타이핑 규칙 |
-| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | Ad-hoc 다형성과 컨텍스트 경계 심화 |
-| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | 고차 타입, 타입 멤버 등 |
+| [공변성/반공변성](variance/) | 제네릭 타입의 서브타이핑 규칙 |
+| [타입 클래스](type-classes/) | Ad-hoc 다형성과 컨텍스트 경계 심화 |
+| [고급 타입](type-system-advanced/) | 고차 타입, 타입 멤버 등 |

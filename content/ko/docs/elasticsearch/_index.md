@@ -105,15 +105,15 @@ Elasticsearch만이 유일한 선택지는 아닙니다:
 
 | 주제 | 배우는 것 |
 |------|----------|
-| [핵심 구성요소]({{< relref "/docs/elasticsearch/concepts/core-components" >}}) | Cluster, Node, Index, Document, Shard의 역할과 관계 |
-| [데이터 모델링]({{< relref "/docs/elasticsearch/concepts/data-modeling" >}}) | Mapping, Field Type, Analyzer 설계 |
-| [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) | Match, Term, Bool 등 검색 쿼리 작성법 |
-| [검색 관련성]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) | Score, BM25, Boosting으로 검색 품질 높이기 |
-| [집계]({{< relref "/docs/elasticsearch/concepts/aggregations" >}}) | Bucket, Metric 집계로 데이터 분석하기 |
-| [인덱싱 전략]({{< relref "/docs/elasticsearch/concepts/indexing" >}}) | Bulk 인덱싱, Refresh, ILM 설정 |
-| [클러스터 관리]({{< relref "/docs/elasticsearch/concepts/cluster-management" >}}) | 노드 구성, 샤드 할당, 상태 모니터링 |
-| [성능 튜닝]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) | 쿼리 최적화, 캐싱, JVM 설정 |
-| [고가용성]({{< relref "/docs/elasticsearch/concepts/high-availability" >}}) | Replica, Snapshot, 장애 대응 |
+| [핵심 구성요소](concepts/core-components/) | Cluster, Node, Index, Document, Shard의 역할과 관계 |
+| [데이터 모델링](concepts/data-modeling/) | Mapping, Field Type, Analyzer 설계 |
+| [Query DSL](concepts/query-dsl/) | Match, Term, Bool 등 검색 쿼리 작성법 |
+| [검색 관련성](concepts/search-relevance/) | Score, BM25, Boosting으로 검색 품질 높이기 |
+| [집계](concepts/aggregations/) | Bucket, Metric 집계로 데이터 분석하기 |
+| [인덱싱 전략](concepts/indexing/) | Bulk 인덱싱, Refresh, ILM 설정 |
+| [클러스터 관리](concepts/cluster-management/) | 노드 구성, 샤드 할당, 상태 모니터링 |
+| [성능 튜닝](concepts/performance-tuning/) | 쿼리 최적화, 캐싱, JVM 설정 |
+| [고가용성](concepts/high-availability/) | Replica, Snapshot, 장애 대응 |
 
 ### [실습 예제]({{< relref "/docs/elasticsearch/examples" >}})
 Spring Boot 기반의 실행 가능한 예제 코드입니다.

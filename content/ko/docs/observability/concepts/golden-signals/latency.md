@@ -327,5 +327,5 @@ graph TD
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [Traffic]({{< relref "/docs/observability/concepts/golden-signals/traffic" >}}) | 처리량 모니터링 |
-| 2 | [높은 지연시간 진단]({{< relref "/docs/observability/howto/debug-high-latency" >}}) | 문제 해결 가이드 |
+| 1 | [Traffic](traffic/) | 처리량 모니터링 |
+| 2 | [높은 지연시간 진단](../../howto/debug-high-latency/) | 문제 해결 가이드 |

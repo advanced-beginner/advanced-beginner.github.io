@@ -347,6 +347,6 @@ After completing Quick Start, proceed to the next steps:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Understand Elasticsearch structure | [Core Components]({{< relref "/docs/elasticsearch/concepts/core-components" >}}) |
-| Learn schema design | [Data Modeling]({{< relref "/docs/elasticsearch/concepts/data-modeling" >}}) |
-| Spring Boot integration | [Environment Setup]({{< relref "/docs/elasticsearch/examples/setup" >}}) |
+| Understand Elasticsearch structure | [Core Components](../concepts/core-components/) |
+| Learn schema design | [Data Modeling](../concepts/data-modeling/) |
+| Spring Boot integration | [Environment Setup](../examples/setup/) |

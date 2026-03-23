@@ -461,6 +461,6 @@ After completing Quick Start, proceed to the following:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Understand Kafka concepts | [Core Components]({{< relref "/docs/kafka/concepts/core-components" >}}) |
-| Practice more complex examples | [Implementing Producer/Consumer with Spring Kafka]({{< relref "/docs/kafka/examples/basic" >}}) |
-| Learn production settings | [Environment Setup]({{< relref "/docs/kafka/examples/setup" >}}) |
+| Understand Kafka concepts | [Core Components](../concepts/core-components/) |
+| Practice more complex examples | [Implementing Producer/Consumer with Spring Kafka](../examples/basic/) |
+| Learn production settings | [Environment Setup](../examples/setup/) |

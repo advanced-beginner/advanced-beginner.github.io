@@ -614,6 +614,6 @@ PUT /_index_template/logs
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 검색 쿼리 작성 | [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) |
-| 검색 품질 개선 | [검색 관련성]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) |
-| 실습 | [기본 예제]({{< relref "/docs/elasticsearch/examples/basic" >}}) |
+| 검색 쿼리 작성 | [Query DSL](query-dsl/) |
+| 검색 품질 개선 | [검색 관련성](search-relevance/) |
+| 실습 | [기본 예제](../examples/basic/) |

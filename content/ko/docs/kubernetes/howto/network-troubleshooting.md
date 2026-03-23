@@ -493,7 +493,7 @@ gcloud compute firewall-rules list
 
 | 목표 | 추천 문서 |
 |------|----------|
-| Pod 문제 해결 | [Pod 트러블슈팅]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) |
-| 네트워킹 개념 | [네트워킹]({{< relref "/docs/kubernetes/concepts/networking" >}}) |
-| Service 개념 | [Service]({{< relref "/docs/kubernetes/concepts/service" >}}) |
-| 로그 분석 | [로그 수집 및 분석]({{< relref "/docs/kubernetes/howto/logging-guide" >}}) |
+| Pod 문제 해결 | [Pod 트러블슈팅](pod-troubleshooting/) |
+| 네트워킹 개념 | [네트워킹](../concepts/networking/) |
+| Service 개념 | [Service](../concepts/service/) |
+| 로그 분석 | [로그 수집 및 분석](logging-guide/) |

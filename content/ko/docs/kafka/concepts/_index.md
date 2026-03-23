@@ -88,11 +88,11 @@ flowchart TD
 
 | # | 주제 | 해결하는 질문 |
 |---|------|---------------|
-| 1 | [핵심 구성요소]({{< relref "/docs/kafka/concepts/core-components" >}}) | "Kafka는 어떤 부품들로 구성되어 있나?" |
-| 2 | [메시지 흐름]({{< relref "/docs/kafka/concepts/message-flow" >}}) | "메시지가 Producer에서 Consumer까지 어떻게 전달되나?" |
-| 3 | [Consumer Group과 Offset]({{< relref "/docs/kafka/concepts/consumer-group" >}}) | "여러 Consumer가 어떻게 협력하나? 어디까지 읽었는지 어떻게 기억하나?" |
-| 4 | [Replication]({{< relref "/docs/kafka/concepts/replication" >}}) | "서버가 죽어도 데이터가 안전한 이유는?" |
-| 5 | [심화 개념]({{< relref "/docs/kafka/concepts/advanced-concepts" >}}) | "acks, Message Key, 보존 정책 등 자주 쓰는 설정은?" |
+| 1 | [핵심 구성요소](core-components/) | "Kafka는 어떤 부품들로 구성되어 있나?" |
+| 2 | [메시지 흐름](message-flow/) | "메시지가 Producer에서 Consumer까지 어떻게 전달되나?" |
+| 3 | [Consumer Group과 Offset](consumer-group/) | "여러 Consumer가 어떻게 협력하나? 어디까지 읽었는지 어떻게 기억하나?" |
+| 4 | [Replication](replication/) | "서버가 죽어도 데이터가 안전한 이유는?" |
+| 5 | [심화 개념](advanced-concepts/) | "acks, Message Key, 보존 정책 등 자주 쓰는 설정은?" |
 
 {{< callout type="info" >}}
 **💡 여기까지만 읽어도 충분합니다**
@@ -110,13 +110,13 @@ flowchart TD
 
 | # | 주제 | 언제 필요한가? |
 |---|------|----------------|
-| 6 | [트랜잭션과 Exactly-Once]({{< relref "/docs/kafka/concepts/transactions" >}}) | 메시지 중복/유실이 절대 허용되지 않을 때 |
-| 7 | [Producer 튜닝]({{< relref "/docs/kafka/concepts/producer-tuning" >}}) | 처리량을 높이거나 지연시간을 줄여야 할 때 |
-| 8 | [Consumer 튜닝]({{< relref "/docs/kafka/concepts/consumer-tuning" >}}) | Consumer Lag이 계속 증가할 때 |
-| 9 | [에러 처리 심화]({{< relref "/docs/kafka/concepts/error-handling" >}}) | 실패한 메시지를 체계적으로 관리해야 할 때 |
-| 10 | [모니터링 기초]({{< relref "/docs/kafka/concepts/monitoring" >}}) | 클러스터 상태를 실시간으로 파악해야 할 때 |
-| 11 | [보안]({{< relref "/docs/kafka/concepts/security" >}}) | 멀티 테넌트 환경이나 외부 접근 제어가 필요할 때 |
-| 12 | [생태계]({{< relref "/docs/kafka/concepts/ecosystem" >}}) | Kafka Connect, Schema Registry 등 확장 도구가 필요할 때 |
+| 6 | [트랜잭션과 Exactly-Once](transactions/) | 메시지 중복/유실이 절대 허용되지 않을 때 |
+| 7 | [Producer 튜닝](producer-tuning/) | 처리량을 높이거나 지연시간을 줄여야 할 때 |
+| 8 | [Consumer 튜닝](consumer-tuning/) | Consumer Lag이 계속 증가할 때 |
+| 9 | [에러 처리 심화](error-handling/) | 실패한 메시지를 체계적으로 관리해야 할 때 |
+| 10 | [모니터링 기초](monitoring/) | 클러스터 상태를 실시간으로 파악해야 할 때 |
+| 11 | [보안](security/) | 멀티 테넌트 환경이나 외부 접근 제어가 필요할 때 |
+| 12 | [생태계](ecosystem/) | Kafka Connect, Schema Registry 등 확장 도구가 필요할 때 |
 
 ---
 

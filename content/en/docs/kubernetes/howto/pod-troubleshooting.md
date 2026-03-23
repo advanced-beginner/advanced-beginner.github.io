@@ -413,7 +413,7 @@ gcloud container node-pools list --cluster <cluster-name>
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Resolve network issues | [Network Troubleshooting]({{< relref "/docs/kubernetes/howto/network-troubleshooting" >}}) |
-| Optimize resources | [Resource Optimization]({{< relref "/docs/kubernetes/howto/resource-optimization" >}}) |
-| Configure health checks | [Health Checks]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) |
-| Practice deployment | [Spring Boot Deployment]({{< relref "/docs/kubernetes/examples/spring-boot" >}}) |
+| Resolve network issues | [Network Troubleshooting](network-troubleshooting/) |
+| Optimize resources | [Resource Optimization](resource-optimization/) |
+| Configure health checks | [Health Checks](../concepts/health-checks/) |
+| Practice deployment | [Spring Boot Deployment](../examples/spring-boot/) |

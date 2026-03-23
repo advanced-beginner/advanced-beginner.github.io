@@ -475,5 +475,5 @@ try { ... } catch (Exception e) {
 
 | Recommended Order | Document | What You'll Learn |
 |----------|------|----------|
-| 1 | [Distributed Tracing]({{< relref "/docs/observability/concepts/distributed-tracing" >}}) | Connecting logs and traces |
-| 2 | [Environment Setup]({{< relref "/docs/observability/examples/setup" >}}) | Loki hands-on |
+| 1 | [Distributed Tracing](distributed-tracing/) | Connecting logs and traces |
+| 2 | [Environment Setup](../examples/setup/) | Loki hands-on |

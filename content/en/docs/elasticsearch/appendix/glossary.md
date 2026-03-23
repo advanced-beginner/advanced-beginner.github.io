@@ -183,14 +183,14 @@ Semantic search using embedding vectors. Uses [kNN](#knn-k-nearest-neighbors) al
 
 | Abbr | Full Name | Meaning | Reference |
 |------|-----------|---------|-----------|
-| BM25 | Best Matching 25 | Default scoring algorithm | [Search Relevance]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) |
-| CCR | Cross-Cluster Replication | Real-time cross-cluster replication | [High Availability]({{< relref "/docs/elasticsearch/concepts/high-availability" >}}) |
-| DSL | Domain Specific Language | Query language | [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) |
-| IDF | Inverse Document Frequency | Word rarity indicator | [Search Relevance]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) |
-| ILM | Index Lifecycle Management | Index lifecycle management | [Indexing Strategy]({{< relref "/docs/elasticsearch/concepts/indexing" >}}) |
-| kNN | k-Nearest Neighbors | k-nearest neighbor search | [Vector Search]({{< relref "/docs/elasticsearch/concepts/vector-search" >}}) |
-| SLM | Snapshot Lifecycle Management | Snapshot lifecycle management | [High Availability]({{< relref "/docs/elasticsearch/concepts/high-availability" >}}) |
-| TF | Term Frequency | Word frequency indicator | [Search Relevance]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) |
+| BM25 | Best Matching 25 | Default scoring algorithm | [Search Relevance](../concepts/search-relevance/) |
+| CCR | Cross-Cluster Replication | Real-time cross-cluster replication | [High Availability](../concepts/high-availability/) |
+| DSL | Domain Specific Language | Query language | [Query DSL](../concepts/query-dsl/) |
+| IDF | Inverse Document Frequency | Word rarity indicator | [Search Relevance](../concepts/search-relevance/) |
+| ILM | Index Lifecycle Management | Index lifecycle management | [Indexing Strategy](../concepts/indexing/) |
+| kNN | k-Nearest Neighbors | k-nearest neighbor search | [Vector Search](../concepts/vector-search/) |
+| SLM | Snapshot Lifecycle Management | Snapshot lifecycle management | [High Availability](../concepts/high-availability/) |
+| TF | Term Frequency | Word frequency indicator | [Search Relevance](../concepts/search-relevance/) |
 
 ---
 

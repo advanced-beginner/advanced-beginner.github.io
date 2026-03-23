@@ -326,6 +326,6 @@ Now that you understand NetworkPolicy, proceed to the following:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Resource isolation | [Namespace]({{< relref "/docs/kubernetes/concepts/namespace" >}}) |
-| Access control | [RBAC]({{< relref "/docs/kubernetes/concepts/rbac" >}}) |
-| Stateful workloads | [StatefulSet]({{< relref "/docs/kubernetes/concepts/statefulset" >}}) |
+| Resource isolation | [Namespace](namespace/) |
+| Access control | [RBAC](rbac/) |
+| Stateful workloads | [StatefulSet](statefulset/) |

@@ -418,5 +418,5 @@ graph LR
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [대시보드 설계]({{< relref "/docs/observability/concepts/dashboard-design" >}}) | 시각화 |
-| 2 | [풀스택 예제]({{< relref "/docs/observability/examples/full-stack" >}}) | 통합 실습 |
+| 1 | [대시보드 설계](dashboard-design/) | 시각화 |
+| 2 | [풀스택 예제](../examples/full-stack/) | 통합 실습 |

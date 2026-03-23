@@ -60,21 +60,21 @@ flowchart TB
 
 | Concept | One-line Summary | Key Question |
 |---------|------------------|--------------|
-| [Architecture]({{< relref "/docs/kubernetes/concepts/architecture" >}}) | Cluster structure composed of Control Plane and Worker Nodes | "How does Kubernetes work?" |
-| [Pod]({{< relref "/docs/kubernetes/concepts/pod" >}}) | Minimum deployment unit wrapping containers | "Why Pod instead of container?" |
-| [Deployment]({{< relref "/docs/kubernetes/concepts/deployment" >}}) | Declarative deployment and update management of Pods | "How to deploy without downtime?" |
-| [Service]({{< relref "/docs/kubernetes/concepts/service" >}}) | Stable network access point for Pods | "How to find changing Pod IPs?" |
-| [ConfigMap/Secret]({{< relref "/docs/kubernetes/concepts/configmap-secret" >}}) | Separate management of configuration and sensitive information | "How to separate config from code?" |
-| [Volume/Storage]({{< relref "/docs/kubernetes/concepts/storage" >}}) | Data storage independent of Pod lifecycle | "How to persist data when Pod dies?" |
-| [Networking]({{< relref "/docs/kubernetes/concepts/networking" >}}) | Cluster internal/external communication and Ingress | "How to access from outside?" |
-| [Resource Management]({{< relref "/docs/kubernetes/concepts/resources" >}}) | CPU/memory requests and limits configuration | "How much resources to allocate?" |
-| [Scaling]({{< relref "/docs/kubernetes/concepts/scaling" >}}) | Automatic scaling with HPA/VPA | "How to respond to traffic increases?" |
-| [Health Checks]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) | Status monitoring and auto-recovery through Probes | "How to verify app is healthy?" |
-| [Namespace]({{< relref "/docs/kubernetes/concepts/namespace" >}}) | Mechanism to logically isolate resources within a cluster | "How to separate resources by team?" |
-| [StatefulSet]({{< relref "/docs/kubernetes/concepts/statefulset" >}}) | Deployment and management of stateful applications | "How to deploy a DB on Kubernetes?" |
-| [RBAC]({{< relref "/docs/kubernetes/concepts/rbac" >}}) | Role-based access control for API permission management | "Who can access which resources?" |
-| [Jobs and CronJobs]({{< relref "/docs/kubernetes/concepts/jobs" >}}) | One-time and recurring batch job execution | "How to run batch jobs?" |
-| [NetworkPolicy]({{< relref "/docs/kubernetes/concepts/network-policy" >}}) | Control network traffic between Pods | "How to restrict Pod-to-Pod communication?" |
+| [Architecture](architecture/) | Cluster structure composed of Control Plane and Worker Nodes | "How does Kubernetes work?" |
+| [Pod](pod/) | Minimum deployment unit wrapping containers | "Why Pod instead of container?" |
+| [Deployment](deployment/) | Declarative deployment and update management of Pods | "How to deploy without downtime?" |
+| [Service](service/) | Stable network access point for Pods | "How to find changing Pod IPs?" |
+| [ConfigMap/Secret](configmap-secret/) | Separate management of configuration and sensitive information | "How to separate config from code?" |
+| [Volume/Storage](storage/) | Data storage independent of Pod lifecycle | "How to persist data when Pod dies?" |
+| [Networking](networking/) | Cluster internal/external communication and Ingress | "How to access from outside?" |
+| [Resource Management](resources/) | CPU/memory requests and limits configuration | "How much resources to allocate?" |
+| [Scaling](scaling/) | Automatic scaling with HPA/VPA | "How to respond to traffic increases?" |
+| [Health Checks](health-checks/) | Status monitoring and auto-recovery through Probes | "How to verify app is healthy?" |
+| [Namespace](namespace/) | Mechanism to logically isolate resources within a cluster | "How to separate resources by team?" |
+| [StatefulSet](statefulset/) | Deployment and management of stateful applications | "How to deploy a DB on Kubernetes?" |
+| [RBAC](rbac/) | Role-based access control for API permission management | "Who can access which resources?" |
+| [Jobs and CronJobs](jobs/) | One-time and recurring batch job execution | "How to run batch jobs?" |
+| [NetworkPolicy](network-policy/) | Control network traffic between Pods | "How to restrict Pod-to-Pod communication?" |
 
 #### Learning Path
 

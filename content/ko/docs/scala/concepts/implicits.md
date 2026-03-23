@@ -663,16 +663,16 @@ extension (n: Int)
 
 | 관련 개념 | 연결 관계 |
 |----------|----------|
-| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | 암시적 기능의 가장 중요한 활용처 |
-| [제네릭]({{< relref "/docs/scala/concepts/generics" >}}) | 컨텍스트 경계 (`A : Ordering`) |
-| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor, Monad 인스턴스 제공 |
-| [동시성]({{< relref "/docs/scala/concepts/concurrency" >}}) | `ExecutionContext`의 암시적 전달 |
-| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | 타입 멤버와 암시적 해결 |
+| [타입 클래스](type-classes/) | 암시적 기능의 가장 중요한 활용처 |
+| [제네릭](generics/) | 컨텍스트 경계 (`A : Ordering`) |
+| [함수형 패턴](functional-patterns/) | Functor, Monad 인스턴스 제공 |
+| [동시성](concurrency/) | `ExecutionContext`의 암시적 전달 |
+| [고급 타입](type-system-advanced/) | 타입 멤버와 암시적 해결 |
 
 #### 다음 단계
 
 | 학습 경로 | 설명 |
 |----------|------|
-| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | Ad-hoc 다형성 패턴 심화 |
-| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor, Monad 등 추상화 |
-| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | 의존 타입, 타입 레벨 프로그래밍 |
+| [타입 클래스](type-classes/) | Ad-hoc 다형성 패턴 심화 |
+| [함수형 패턴](functional-patterns/) | Functor, Monad 등 추상화 |
+| [고급 타입](type-system-advanced/) | 의존 타입, 타입 레벨 프로그래밍 |

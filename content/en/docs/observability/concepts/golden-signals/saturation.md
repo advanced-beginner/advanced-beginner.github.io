@@ -472,5 +472,5 @@ Thresholds consider **"normal + peak headroom"**. For example, CPU 80% means "ca
 
 | Recommended Order | Document | What You'll Learn |
 |-------------------|----------|-------------------|
-| 1 | [By Service Type]({{< relref "/docs/observability/concepts/golden-signals/by-service-type" >}}) | Custom metrics |
-| 2 | [Cardinality Optimization]({{< relref "/docs/observability/howto/reduce-cardinality" >}}) | Cost reduction |
+| 1 | [By Service Type](by-service-type/) | Custom metrics |
+| 2 | [Cardinality Optimization](../../howto/reduce-cardinality/) | Cost reduction |

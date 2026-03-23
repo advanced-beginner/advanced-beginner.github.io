@@ -596,6 +596,6 @@ PUT /_index_template/logs
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Write search queries | [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) |
-| Improve search quality | [Search Relevance]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) |
-| Hands-on practice | [Basic Examples]({{< relref "/docs/elasticsearch/examples/basic" >}}) |
+| Write search queries | [Query DSL](query-dsl/) |
+| Improve search quality | [Search Relevance](search-relevance/) |
+| Hands-on practice | [Basic Examples](../examples/basic/) |

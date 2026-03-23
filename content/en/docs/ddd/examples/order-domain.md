@@ -24,7 +24,7 @@ author_url: "http://github.com/kimbenji"
 | **Target Audience** | Developers implementing DDD tactical patterns in code |
 | **DDD Basics** | Understanding of Aggregate, Entity, Value Object, Domain Event concepts |
 | **Java** | Experience with Record, Optional, Stream API |
-| **Prerequisite** | [Project Setup]({{< relref "/docs/ddd/examples/setup" >}}) completed |
+| **Prerequisite** | [Project Setup](setup/) completed |
 
 Implementing the order domain with DDD patterns.
 

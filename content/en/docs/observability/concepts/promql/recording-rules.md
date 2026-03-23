@@ -408,5 +408,5 @@ tests:
 
 | Recommended Order | Document | What You'll Learn |
 |-------------------|----------|-------------------|
-| 1 | [Alerting Rules]({{< relref "/docs/observability/concepts/promql/alerting-rules" >}}) | How to write alert rules |
-| 2 | [SRE Golden Signals]({{< relref "/docs/observability/concepts/golden-signals" >}}) | Using Recording Rules |
+| 1 | [Alerting Rules](alerting-rules/) | How to write alert rules |
+| 2 | [SRE Golden Signals](../golden-signals/) | Using Recording Rules |

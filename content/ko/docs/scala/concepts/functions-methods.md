@@ -827,10 +827,10 @@ println(fibonacci(50))  // 12586269025
 
 | 개념 | 연관성 | 설명 |
 |------|--------|------|
-| [기본 문법]({{< relref "/docs/scala/concepts/basics" >}}) | **선수 지식** | val/var, 타입 시스템 |
-| [제어 구조]({{< relref "/docs/scala/concepts/control-structures" >}}) | **선수 지식** | 표현식 기반 프로그래밍 |
-| [고차 함수]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) | **심화** | map, filter, fold 활용 |
-| [For Comprehension]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) | **활용** | 함수 조합의 문법적 설탕 |
+| [기본 문법](basics/) | **선수 지식** | val/var, 타입 시스템 |
+| [제어 구조](control-structures/) | **선수 지식** | 표현식 기반 프로그래밍 |
+| [고차 함수](higher-order-functions/) | **심화** | map, filter, fold 활용 |
+| [For Comprehension](for-comprehensions/) | **활용** | 함수 조합의 문법적 설탕 |
 
 ---
 
@@ -838,5 +838,5 @@ println(fibonacci(50))  // 12586269025
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [클래스와 객체]({{< relref "/docs/scala/concepts/classes-objects" >}}) | OOP 기초, trait 활용 |
-| 2 | [고차 함수]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) | 함수형 프로그래밍 심화 |
+| 1 | [클래스와 객체](classes-objects/) | OOP 기초, trait 활용 |
+| 2 | [고차 함수](higher-order-functions/) | 함수형 프로그래밍 심화 |

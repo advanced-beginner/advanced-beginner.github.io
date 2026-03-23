@@ -702,6 +702,6 @@ curl "http://localhost:8080/api/products/autocomplete?q=맥북"
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 검색 품질 개선 | [검색 관련성]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) |
-| 성능 최적화 | [성능 튜닝]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) |
-| 데이터 분석 | [집계]({{< relref "/docs/elasticsearch/concepts/aggregations" >}}) |
+| 검색 품질 개선 | [검색 관련성](../concepts/search-relevance/) |
+| 성능 최적화 | [성능 튜닝](../concepts/performance-tuning/) |
+| 데이터 분석 | [집계](../concepts/aggregations/) |

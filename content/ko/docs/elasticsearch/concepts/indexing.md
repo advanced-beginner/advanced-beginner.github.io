@@ -492,6 +492,6 @@ PUT /products/_settings
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 클러스터 구성 | [클러스터 관리]({{< relref "/docs/elasticsearch/concepts/cluster-management" >}}) |
-| 검색 최적화 | [성능 튜닝]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) |
-| 장애 대응 | [고가용성]({{< relref "/docs/elasticsearch/concepts/high-availability" >}}) |
+| 클러스터 구성 | [클러스터 관리](cluster-management/) |
+| 검색 최적화 | [성능 튜닝](performance-tuning/) |
+| 장애 대응 | [고가용성](high-availability/) |

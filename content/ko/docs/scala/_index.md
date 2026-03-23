@@ -68,33 +68,33 @@ Scala의 핵심 개념을 기초, 중급, 고급으로 분류하여 단계별로
 
 | 주제 | 배우는 것 |
 |------|----------|
-| [기본 문법]({{< relref "/docs/scala/concepts/basics" >}}) | 변수, 상수, 기본 타입, 타입 추론 |
-| [제어 구조]({{< relref "/docs/scala/concepts/control-structures" >}}) | if, for, while, match 표현식 |
-| [함수와 메서드]({{< relref "/docs/scala/concepts/functions-methods" >}}) | def, 람다, 기본값, 가변 인자 |
-| [클래스와 객체]({{< relref "/docs/scala/concepts/classes-objects" >}}) | class, object, trait, enum |
-| [케이스 클래스]({{< relref "/docs/scala/concepts/case-classes" >}}) | 불변 데이터 모델링 |
-| [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | match 표현식의 강력한 활용 |
+| [기본 문법](concepts/basics/) | 변수, 상수, 기본 타입, 타입 추론 |
+| [제어 구조](concepts/control-structures/) | if, for, while, match 표현식 |
+| [함수와 메서드](concepts/functions-methods/) | def, 람다, 기본값, 가변 인자 |
+| [클래스와 객체](concepts/classes-objects/) | class, object, trait, enum |
+| [케이스 클래스](concepts/case-classes/) | 불변 데이터 모델링 |
+| [패턴 매칭](concepts/pattern-matching/) | match 표현식의 강력한 활용 |
 
 **중급:**
 
 | 주제 | 배우는 것 |
 |------|----------|
-| [컬렉션]({{< relref "/docs/scala/concepts/collections" >}}) | List, Set, Map, Seq, Vector |
-| [고차 함수]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) | map, filter, fold, 커링 |
-| [제네릭]({{< relref "/docs/scala/concepts/generics" >}}) | 타입 매개변수, 타입 경계 |
-| [For Comprehension]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) | 모나딕 연산의 우아한 표현 |
-| [Implicit/Given]({{< relref "/docs/scala/concepts/implicits" >}}) | 암시적 변환과 문맥적 추상화 |
+| [컬렉션](concepts/collections/) | List, Set, Map, Seq, Vector |
+| [고차 함수](concepts/higher-order-functions/) | map, filter, fold, 커링 |
+| [제네릭](concepts/generics/) | 타입 매개변수, 타입 경계 |
+| [For Comprehension](concepts/for-comprehensions/) | 모나딕 연산의 우아한 표현 |
+| [Implicit/Given](concepts/implicits/) | 암시적 변환과 문맥적 추상화 |
 
 **고급:**
 
 | 주제 | 배우는 것 |
 |------|----------|
-| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | Ad-hoc 다형성 패턴 |
-| [공변성/반공변성]({{< relref "/docs/scala/concepts/variance" >}}) | 제네릭 타입의 변성 |
-| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | Union, Intersection, Match Types |
-| [매크로]({{< relref "/docs/scala/concepts/macros-metaprogramming" >}}) | 컴파일 타임 메타프로그래밍 |
-| [동시성]({{< relref "/docs/scala/concepts/concurrency" >}}) | Future, Promise, ExecutionContext |
-| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor, Monad, 참조 투명성 |
+| [타입 클래스](concepts/type-classes/) | Ad-hoc 다형성 패턴 |
+| [공변성/반공변성](concepts/variance/) | 제네릭 타입의 변성 |
+| [고급 타입](concepts/type-system-advanced/) | Union, Intersection, Match Types |
+| [매크로](concepts/macros-metaprogramming/) | 컴파일 타임 메타프로그래밍 |
+| [동시성](concepts/concurrency/) | Future, Promise, ExecutionContext |
+| [함수형 패턴](concepts/functional-patterns/) | Functor, Monad, 참조 투명성 |
 
 **[실습 예제]({{< relref "/docs/scala/examples" >}})**
 

@@ -403,5 +403,5 @@ histogram_quantile(
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [Recording Rules]({{< relref "/docs/observability/concepts/promql/recording-rules" >}}) | 복잡한 쿼리 사전 계산 |
-| 2 | [SRE 황금 신호 - Latency]({{< relref "/docs/observability/concepts/golden-signals/latency" >}}) | 지연시간 모니터링 전략 |
+| 1 | [Recording Rules](recording-rules/) | 복잡한 쿼리 사전 계산 |
+| 2 | [SRE 황금 신호 - Latency](../golden-signals/latency/) | 지연시간 모니터링 전략 |

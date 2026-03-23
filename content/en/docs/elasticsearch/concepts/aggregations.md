@@ -658,6 +658,6 @@ Pagination for large data:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Indexing optimization | [Indexing Strategy]({{< relref "/docs/elasticsearch/concepts/indexing" >}}) |
-| Practical implementation | [Product Search System]({{< relref "/docs/elasticsearch/examples/product-search" >}}) |
-| Performance optimization | [Performance Tuning]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) |
+| Indexing optimization | [Indexing Strategy](indexing/) |
+| Practical implementation | [Product Search System](../examples/product-search/) |
+| Performance optimization | [Performance Tuning](performance-tuning/) |

@@ -430,6 +430,6 @@ ConfigMap과 Secret을 이해했다면 다음 단계로 진행하세요:
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 영구 데이터 저장 | [Volume과 스토리지]({{< relref "/docs/kubernetes/concepts/storage" >}}) |
-| 애플리케이션 상태 확인 | [헬스 체크]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) |
-| 실제 배포 실습 | [Spring Boot 배포]({{< relref "/docs/kubernetes/examples/spring-boot" >}}) |
+| 영구 데이터 저장 | [Volume과 스토리지](storage/) |
+| 애플리케이션 상태 확인 | [헬스 체크](health-checks/) |
+| 실제 배포 실습 | [Spring Boot 배포](../examples/spring-boot/) |

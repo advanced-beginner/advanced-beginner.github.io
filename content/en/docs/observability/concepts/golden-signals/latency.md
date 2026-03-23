@@ -320,5 +320,5 @@ graph TD
 
 | Recommended Order | Document | What You'll Learn |
 |-------------------|----------|-------------------|
-| 1 | [Traffic]({{< relref "/docs/observability/concepts/golden-signals/traffic" >}}) | Throughput monitoring |
-| 2 | [Debugging High Latency]({{< relref "/docs/observability/howto/debug-high-latency" >}}) | Troubleshooting guide |
+| 1 | [Traffic](traffic/) | Throughput monitoring |
+| 2 | [Debugging High Latency](../../howto/debug-high-latency/) | Troubleshooting guide |

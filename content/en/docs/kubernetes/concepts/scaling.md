@@ -400,6 +400,6 @@ Once you understand scaling, proceed to the next steps:
 
 | Goal | Recommended Doc |
 |------|----------------|
-| Configure health checks | [Health Checks]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) |
-| Resource optimization | [Resource Optimization]({{< relref "/docs/kubernetes/howto/resource-optimization" >}}) |
-| Actual deployment practice | [Spring Boot Deployment]({{< relref "/docs/kubernetes/examples/spring-boot" >}}) |
+| Configure health checks | [Health Checks](health-checks/) |
+| Resource optimization | [Resource Optimization](../howto/resource-optimization/) |
+| Actual deployment practice | [Spring Boot Deployment](../examples/spring-boot/) |

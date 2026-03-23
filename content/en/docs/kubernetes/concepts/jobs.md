@@ -308,6 +308,6 @@ Now that you understand Jobs and CronJobs, proceed to the following:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Network policies | [NetworkPolicy]({{< relref "/docs/kubernetes/concepts/network-policy" >}}) |
-| Resource isolation | [Namespace]({{< relref "/docs/kubernetes/concepts/namespace" >}}) |
-| Access control | [RBAC]({{< relref "/docs/kubernetes/concepts/rbac" >}}) |
+| Network policies | [NetworkPolicy](network-policy/) |
+| Resource isolation | [Namespace](namespace/) |
+| Access control | [RBAC](rbac/) |

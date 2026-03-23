@@ -499,5 +499,5 @@ rate(http_requests_total[5m]) > 10
 
 | Recommended Order | Document | What You'll Learn |
 |-------------------|----------|-------------------|
-| 1 | [Aggregation Operators]({{< relref "/docs/observability/concepts/promql/aggregation-operators" >}}) | sum, avg, topk, by/without |
-| 2 | [rate and increase]({{< relref "/docs/observability/concepts/promql/rate-and-increase" >}}) | How to handle Counters |
+| 1 | [Aggregation Operators](aggregation-operators/) | sum, avg, topk, by/without |
+| 2 | [rate and increase](rate-and-increase/) | How to handle Counters |

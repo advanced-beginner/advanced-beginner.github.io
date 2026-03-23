@@ -706,6 +706,6 @@ prometheus_engine_query_duration_seconds
 
 | Recommended Order | Document | What You'll Learn |
 |----------|------|----------|
-| 1 | [PromQL Syntax Basics]({{< relref "/docs/observability/concepts/promql/syntax-basics" >}}) | Selectors, label matching |
-| 2 | [Environment Setup]({{< relref "/docs/observability/examples/setup" >}}) | Docker Compose practice |
-| 3 | [Alerting Strategy]({{< relref "/docs/observability/concepts/promql/alerting-rules" >}}) | Writing Alerting Rules |
+| 1 | [PromQL Syntax Basics](promql/syntax-basics/) | Selectors, label matching |
+| 2 | [Environment Setup](../examples/setup/) | Docker Compose practice |
+| 3 | [Alerting Strategy](promql/alerting-rules/) | Writing Alerting Rules |

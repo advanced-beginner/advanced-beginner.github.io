@@ -483,6 +483,6 @@ public class OrderController {
 
 | Recommended Order | Document | What You'll Learn |
 |----------|------|----------|
-| 1 | [Prometheus Architecture]({{< relref "/docs/observability/concepts/prometheus-architecture" >}}) | Pull model, time series DB |
-| 2 | [PromQL Syntax Basics]({{< relref "/docs/observability/concepts/promql/syntax-basics" >}}) | Selectors, label matching |
-| 3 | [rate and increase]({{< relref "/docs/observability/concepts/promql/rate-and-increase" >}}) | Counter usage |
+| 1 | [Prometheus Architecture](prometheus-architecture/) | Pull model, time series DB |
+| 2 | [PromQL Syntax Basics](promql/syntax-basics/) | Selectors, label matching |
+| 3 | [rate and increase](promql/rate-and-increase/) | Counter usage |

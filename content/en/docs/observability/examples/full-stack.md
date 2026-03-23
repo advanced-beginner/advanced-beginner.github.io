@@ -251,5 +251,5 @@ Runbook: https://wiki/runbook/high-error-rate
 
 | Recommended Order | Document | What You'll Learn |
 |----------|------|----------|
-| 1 | [Debugging High Latency]({{< relref "/docs/observability/howto/debug-high-latency" >}}) | Problem resolution |
-| 2 | [Post-Alert Action Guide]({{< relref "/docs/observability/appendix/alerting-actions" >}}) | Response methods |
+| 1 | [Debugging High Latency](../howto/debug-high-latency/) | Problem resolution |
+| 2 | [Post-Alert Action Guide](../appendix/alerting-actions/) | Response methods |

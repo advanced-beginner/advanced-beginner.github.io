@@ -368,5 +368,5 @@ groups:
 
 | Recommended Order | Document | What You'll Learn |
 |----------|------|----------|
-| 1 | [OpenTelemetry]({{< relref "/docs/observability/concepts/opentelemetry" >}}) | Standardized instrumentation |
-| 2 | [Full-Stack Example]({{< relref "/docs/observability/examples/full-stack" >}}) | Integration hands-on |
+| 1 | [OpenTelemetry](opentelemetry/) | Standardized instrumentation |
+| 2 | [Full-Stack Example](../examples/full-stack/) | Integration hands-on |

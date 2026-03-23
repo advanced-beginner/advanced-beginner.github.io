@@ -22,13 +22,13 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 
 | 기술 | 문서 | How-to | 설명 |
 |------|:----:|:------:|------|
-| [Apache Kafka]({{< relref "/docs/kafka" >}}) | 22 | 4 | 분산 메시징 시스템 |
-| [Domain-Driven Design]({{< relref "/docs/ddd" >}}) | 21 | 4 | 복잡한 비즈니스 로직 설계 |
-| [Scala]({{< relref "/docs/scala" >}}) | 28 | 2 | 함수형 + 객체지향 JVM 언어 |
-| [Apache Spark]({{< relref "/docs/spark" >}}) | 24 | 3 | 대규모 데이터 분산 처리 |
-| [Kubernetes]({{< relref "/docs/kubernetes" >}}) | 18 | 4 | 컨테이너 오케스트레이션 |
-| [Elasticsearch]({{< relref "/docs/elasticsearch" >}}) | 20 | 2 | 분산 검색 엔진 |
-| [Observability]({{< relref "/docs/observability" >}}) | 28 | 3 | 시스템 관측성 (Metrics, Logs, Traces) |
+| [Apache Kafka](docs/kafka/) | 22 | 4 | 분산 메시징 시스템 |
+| [Domain-Driven Design](docs/ddd/) | 21 | 4 | 복잡한 비즈니스 로직 설계 |
+| [Scala](docs/scala/) | 28 | 2 | 함수형 + 객체지향 JVM 언어 |
+| [Apache Spark](docs/spark/) | 24 | 3 | 대규모 데이터 분산 처리 |
+| [Kubernetes](docs/kubernetes/) | 18 | 4 | 컨테이너 오케스트레이션 |
+| [Elasticsearch](docs/elasticsearch/) | 20 | 2 | 분산 검색 엔진 |
+| [Observability](docs/observability/) | 28 | 3 | 시스템 관측성 (Metrics, Logs, Traces) |
 
 ---
 

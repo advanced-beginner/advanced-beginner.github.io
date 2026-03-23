@@ -22,7 +22,7 @@ author_url: "http://github.com/kimbenji"
 | **Target Audience** | Developers looking to implement the Event Sourcing pattern |
 | **DDD** | Understanding of Aggregate and Domain Event concepts |
 | **Java** | Switch Expression, Pattern Matching syntax |
-| **Prerequisites** | [Order Domain]({{< relref "/docs/ddd/examples/order-domain" >}}), [Application Layer]({{< relref "/docs/ddd/examples/application-layer" >}}) completed |
+| **Prerequisites** | [Order Domain](order-domain/), [Application Layer](application-layer/) completed |
 
 Implement the Event Sourcing pattern for an order domain. Store events instead of state, and restore state by replaying events.
 

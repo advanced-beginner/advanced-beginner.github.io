@@ -352,16 +352,16 @@ val f10 = fib(10)  // 컴파일 시 55로 대체
 
 | 관련 개념 | 연결 관계 |
 |----------|----------|
-| [제네릭]({{< relref "/docs/scala/concepts/generics" >}}) | 타입 매개변수와 inline 결합 |
-| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | `summonInline`으로 컴파일 타임 해결 |
-| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | Match Types와 inline match 연계 |
-| [Implicits]({{< relref "/docs/scala/concepts/implicits" >}}) | given 인스턴스의 컴파일 타임 소환 |
-| [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | inline match로 컴파일 타임 분기 |
+| [제네릭](generics/) | 타입 매개변수와 inline 결합 |
+| [타입 클래스](type-classes/) | `summonInline`으로 컴파일 타임 해결 |
+| [고급 타입](type-system-advanced/) | Match Types와 inline match 연계 |
+| [Implicits](implicits/) | given 인스턴스의 컴파일 타임 소환 |
+| [패턴 매칭](pattern-matching/) | inline match로 컴파일 타임 분기 |
 
 #### 다음 단계
 
 | 학습 경로 | 설명 |
 |----------|------|
-| [동시성]({{< relref "/docs/scala/concepts/concurrency" >}}) | Future, Promise를 활용한 비동기 프로그래밍 |
-| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor, Monad 등 추상화 패턴 |
+| [동시성](concurrency/) | Future, Promise를 활용한 비동기 프로그래밍 |
+| [함수형 패턴](functional-patterns/) | Functor, Monad 등 추상화 패턴 |
 | [Scala 3 Metaprogramming 문서](https://docs.scala-lang.org/scala3/reference/metaprogramming.html) | 공식 레퍼런스 |

@@ -310,5 +310,5 @@ providers:
 
 | Recommended Order | Document | What You'll Learn |
 |----------|------|----------|
-| 1 | [Environment Setup]({{< relref "/docs/observability/examples/setup" >}}) | Grafana hands-on |
-| 2 | [Spring Boot Example]({{< relref "/docs/observability/examples/spring-boot-metrics" >}}) | Dashboard application |
+| 1 | [Environment Setup](../examples/setup/) | Grafana hands-on |
+| 2 | [Spring Boot Example](../examples/spring-boot-metrics/) | Dashboard application |

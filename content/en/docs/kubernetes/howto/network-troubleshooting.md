@@ -493,7 +493,7 @@ gcloud compute firewall-rules list
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Resolve Pod issues | [Pod Troubleshooting]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) |
-| Networking concepts | [Networking]({{< relref "/docs/kubernetes/concepts/networking" >}}) |
-| Service concepts | [Service]({{< relref "/docs/kubernetes/concepts/service" >}}) |
-| Log analysis | [Log Collection & Analysis]({{< relref "/docs/kubernetes/howto/logging-guide" >}}) |
+| Resolve Pod issues | [Pod Troubleshooting](pod-troubleshooting/) |
+| Networking concepts | [Networking](../concepts/networking/) |
+| Service concepts | [Service](../concepts/service/) |
+| Log analysis | [Log Collection & Analysis](logging-guide/) |

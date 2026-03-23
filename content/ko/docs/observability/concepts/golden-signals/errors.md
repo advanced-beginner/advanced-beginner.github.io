@@ -399,5 +399,5 @@ groups:
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [Saturation]({{< relref "/docs/observability/concepts/golden-signals/saturation" >}}) | 리소스 포화도 |
-| 2 | [알림 후 액션 가이드]({{< relref "/docs/observability/appendix/alerting-actions" >}}) | 에러 대응 방법 |
+| 1 | [Saturation](saturation/) | 리소스 포화도 |
+| 2 | [알림 후 액션 가이드](../../appendix/alerting-actions/) | 에러 대응 방법 |

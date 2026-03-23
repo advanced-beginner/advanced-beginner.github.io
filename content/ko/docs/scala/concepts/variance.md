@@ -358,16 +358,16 @@ trait Transformer[-A, +B] {
 
 | 관련 개념 | 연결 관계 |
 |----------|----------|
-| [제네릭]({{< relref "/docs/scala/concepts/generics" >}}) | 타입 매개변수와 타입 경계 기초 |
-| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | Union/Intersection 타입과 변성 |
-| [컬렉션]({{< relref "/docs/scala/concepts/collections" >}}) | `List[+A]` 등 컬렉션의 변성 |
-| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | `Function1[-A, +B]` 타입의 변성 |
-| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | 타입 클래스 인스턴스의 변성 |
+| [제네릭](generics/) | 타입 매개변수와 타입 경계 기초 |
+| [고급 타입](type-system-advanced/) | Union/Intersection 타입과 변성 |
+| [컬렉션](collections/) | `List[+A]` 등 컬렉션의 변성 |
+| [함수형 패턴](functional-patterns/) | `Function1[-A, +B]` 타입의 변성 |
+| [타입 클래스](type-classes/) | 타입 클래스 인스턴스의 변성 |
 
 #### 다음 단계
 
 | 학습 경로 | 설명 |
 |----------|------|
-| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | Union, Intersection, Match Types |
-| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | Ad-hoc 다형성 패턴 심화 |
-| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor, Monad 등 추상화 |
+| [고급 타입](type-system-advanced/) | Union, Intersection, Match Types |
+| [타입 클래스](type-classes/) | Ad-hoc 다형성 패턴 심화 |
+| [함수형 패턴](functional-patterns/) | Functor, Monad 등 추상화 |

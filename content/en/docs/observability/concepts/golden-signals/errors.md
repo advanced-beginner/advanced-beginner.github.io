@@ -379,5 +379,5 @@ groups:
 
 | Recommended Order | Document | What You'll Learn |
 |-------------------|----------|-------------------|
-| 1 | [Saturation]({{< relref "/docs/observability/concepts/golden-signals/saturation" >}}) | Resource saturation |
-| 2 | [Post-Alert Action Guide]({{< relref "/docs/observability/appendix/alerting-actions" >}}) | Error response methods |
+| 1 | [Saturation](saturation/) | Resource saturation |
+| 2 | [Post-Alert Action Guide](../../appendix/alerting-actions/) | Error response methods |

@@ -478,5 +478,5 @@ stateDiagram-v2
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [SRE 황금 신호]({{< relref "/docs/observability/concepts/golden-signals" >}}) | 알림 대상 지표 선정 |
-| 2 | [알림 후 액션 가이드]({{< relref "/docs/observability/appendix/alerting-actions" >}}) | 알림 수신 후 대응 |
+| 1 | [SRE 황금 신호](../golden-signals/) | 알림 대상 지표 선정 |
+| 2 | [알림 후 액션 가이드](../../appendix/alerting-actions/) | 알림 수신 후 대응 |

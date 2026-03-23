@@ -306,6 +306,6 @@ Now that you understand Namespaces, proceed to the following:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Stateful workloads | [StatefulSet]({{< relref "/docs/kubernetes/concepts/statefulset" >}}) |
-| Access control | [RBAC]({{< relref "/docs/kubernetes/concepts/rbac" >}}) |
-| Network policies | [NetworkPolicy]({{< relref "/docs/kubernetes/concepts/network-policy" >}}) |
+| Stateful workloads | [StatefulSet](statefulset/) |
+| Access control | [RBAC](rbac/) |
+| Network policies | [NetworkPolicy](network-policy/) |

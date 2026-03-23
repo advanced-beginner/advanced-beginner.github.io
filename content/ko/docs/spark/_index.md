@@ -76,17 +76,17 @@ Spark의 핵심 원리를 **Java/Spring 개발자의 관점**에서 설명합니
 
 | 주제 | 배우는 것 |
 |------|----------|
-| [아키텍처]({{< relref "/docs/spark/concepts/architecture" >}}) | Driver, Executor, Cluster Manager의 역할과 동작 원리 |
-| [RDD 기초]({{< relref "/docs/spark/concepts/rdd" >}}) | Spark의 기본 추상화, 분산 컬렉션의 개념 |
-| [DataFrame과 Dataset]({{< relref "/docs/spark/concepts/dataframe-dataset" >}}) | 타입 안전한 분산 데이터 처리의 현대적 API |
-| [Spark SQL]({{< relref "/docs/spark/concepts/spark-sql" >}}) | SQL로 분산 데이터 쿼리하기 |
-| [Transformation과 Action]({{< relref "/docs/spark/concepts/transformations-actions" >}}) | 지연 평가와 즉시 실행의 차이 |
-| [파티셔닝과 셔플]({{< relref "/docs/spark/concepts/partitioning" >}}) | 분산 처리의 핵심, 데이터 분배 전략 |
-| [캐싱과 영속성]({{< relref "/docs/spark/concepts/caching" >}}) | 인메모리 처리의 활용법 |
-| [Structured Streaming]({{< relref "/docs/spark/concepts/structured-streaming" >}}) | 실시간 스트림 데이터 처리 |
-| [MLlib]({{< relref "/docs/spark/concepts/mllib" >}}) | 분산 환경에서의 머신러닝 |
-| [성능 튜닝]({{< relref "/docs/spark/concepts/tuning" >}}) | 메모리, 파티션, 셔플 최적화 |
-| [배포와 클러스터 관리]({{< relref "/docs/spark/concepts/deployment" >}}) | Standalone, YARN, Kubernetes 환경 구성 |
+| [아키텍처](concepts/architecture/) | Driver, Executor, Cluster Manager의 역할과 동작 원리 |
+| [RDD 기초](concepts/rdd/) | Spark의 기본 추상화, 분산 컬렉션의 개념 |
+| [DataFrame과 Dataset](concepts/dataframe-dataset/) | 타입 안전한 분산 데이터 처리의 현대적 API |
+| [Spark SQL](concepts/spark-sql/) | SQL로 분산 데이터 쿼리하기 |
+| [Transformation과 Action](concepts/transformations-actions/) | 지연 평가와 즉시 실행의 차이 |
+| [파티셔닝과 셔플](concepts/partitioning/) | 분산 처리의 핵심, 데이터 분배 전략 |
+| [캐싱과 영속성](concepts/caching/) | 인메모리 처리의 활용법 |
+| [Structured Streaming](concepts/structured-streaming/) | 실시간 스트림 데이터 처리 |
+| [MLlib](concepts/mllib/) | 분산 환경에서의 머신러닝 |
+| [성능 튜닝](concepts/tuning/) | 메모리, 파티션, 셔플 최적화 |
+| [배포와 클러스터 관리](concepts/deployment/) | Standalone, YARN, Kubernetes 환경 구성 |
 
 이 개념들을 순서대로 학습하면 Spark의 내부 동작을 체계적으로 이해할 수 있습니다.
 

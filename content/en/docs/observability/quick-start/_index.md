@@ -330,7 +330,7 @@ After completing Quick Start, deepen your understanding with these documents.
 
 | Recommended Order | Document | What You'll Learn |
 |----------|------|----------|
-| 1 | [Three Pillars of Observability]({{< relref "/docs/observability/concepts/three-pillars" >}}) | Roles of Metrics, Logs, Traces |
-| 2 | [Metrics Fundamentals]({{< relref "/docs/observability/concepts/metrics-fundamentals" >}}) | Counter, Gauge, Histogram types |
-| 3 | [Prometheus Architecture]({{< relref "/docs/observability/concepts/prometheus-architecture" >}}) | Pull model, time series DB principles |
-| 4 | [Spring Boot Example]({{< relref "/docs/observability/examples/spring-boot-metrics" >}}) | Real application integration |
+| 1 | [Three Pillars of Observability](../concepts/three-pillars/) | Roles of Metrics, Logs, Traces |
+| 2 | [Metrics Fundamentals](../concepts/metrics-fundamentals/) | Counter, Gauge, Histogram types |
+| 3 | [Prometheus Architecture](../concepts/prometheus-architecture/) | Pull model, time series DB principles |
+| 4 | [Spring Boot Example](../examples/spring-boot-metrics/) | Real application integration |

@@ -413,7 +413,7 @@ gcloud container node-pools list --cluster <cluster-name>
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 네트워크 문제 해결 | [네트워크 트러블슈팅]({{< relref "/docs/kubernetes/howto/network-troubleshooting" >}}) |
-| 리소스 최적화 | [리소스 최적화]({{< relref "/docs/kubernetes/howto/resource-optimization" >}}) |
-| 헬스 체크 설정 | [헬스 체크]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) |
-| 배포 실습 | [Spring Boot 배포]({{< relref "/docs/kubernetes/examples/spring-boot" >}}) |
+| 네트워크 문제 해결 | [네트워크 트러블슈팅](network-troubleshooting/) |
+| 리소스 최적화 | [리소스 최적화](resource-optimization/) |
+| 헬스 체크 설정 | [헬스 체크](../concepts/health-checks/) |
+| 배포 실습 | [Spring Boot 배포](../examples/spring-boot/) |

@@ -12,8 +12,8 @@ Step-by-step guides for solving common Scala problems in real-world scenarios.
 
 | Guide | Description | Duration |
 |-------|-------------|----------|
-| [Implicit/Given Debugging]({{< relref "/docs/scala/howto/implicit-debugging" >}}) | How to diagnose when the compiler cannot find implicit values | 10-15 min |
-| [Future Error Handling]({{< relref "/docs/scala/howto/future-error-handling" >}}) | How to safely handle exceptions in asynchronous code | 15-20 min |
-| [Type Error Debugging]({{< relref "/docs/scala/howto/type-error-debugging" >}}) | How to interpret complex type error messages and find the root cause | 15-20 min |
-| [Resolving sbt Dependency Conflicts]({{< relref "/docs/scala/howto/sbt-dependency-conflicts" >}}) | How to diagnose and resolve library version conflicts with eviction rules | 15-20 min |
-| [Performance Profiling]({{< relref "/docs/scala/howto/performance-profiling" >}}) | How to measure and improve Scala code performance with JMH and profiling | 20-25 min |
+| [Implicit/Given Debugging](implicit-debugging/) | How to diagnose when the compiler cannot find implicit values | 10-15 min |
+| [Future Error Handling](future-error-handling/) | How to safely handle exceptions in asynchronous code | 15-20 min |
+| [Type Error Debugging](type-error-debugging/) | How to interpret complex type error messages and find the root cause | 15-20 min |
+| [Resolving sbt Dependency Conflicts](sbt-dependency-conflicts/) | How to diagnose and resolve library version conflicts with eviction rules | 15-20 min |
+| [Performance Profiling](performance-profiling/) | How to measure and improve Scala code performance with JMH and profiling | 20-25 min |

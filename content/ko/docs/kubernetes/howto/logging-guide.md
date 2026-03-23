@@ -447,6 +447,6 @@ gcloud logging read 'resource.type="k8s_container" AND severity>=ERROR' --limit=
 
 | 목표 | 추천 문서 |
 |------|----------|
-| Pod 문제 해결 | [Pod 트러블슈팅]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) |
-| 네트워크 문제 해결 | [네트워크 트러블슈팅]({{< relref "/docs/kubernetes/howto/network-troubleshooting" >}}) |
-| 헬스 체크 설정 | [헬스 체크]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) |
+| Pod 문제 해결 | [Pod 트러블슈팅](pod-troubleshooting/) |
+| 네트워크 문제 해결 | [네트워크 트러블슈팅](network-troubleshooting/) |
+| 헬스 체크 설정 | [헬스 체크](../concepts/health-checks/) |

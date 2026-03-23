@@ -492,5 +492,5 @@ groups:
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [서비스 유형별 적용]({{< relref "/docs/observability/concepts/golden-signals/by-service-type" >}}) | 맞춤형 지표 |
-| 2 | [카디널리티 최적화]({{< relref "/docs/observability/howto/reduce-cardinality" >}}) | 비용 절감 |
+| 1 | [서비스 유형별 적용](by-service-type/) | 맞춤형 지표 |
+| 2 | [카디널리티 최적화](../../howto/reduce-cardinality/) | 비용 절감 |

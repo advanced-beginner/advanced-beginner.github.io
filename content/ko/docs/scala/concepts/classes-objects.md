@@ -536,11 +536,11 @@ println(p1.compare(p2))     // 1 (p1이 더 비쌈)
 
 | 개념 | 연관성 | 설명 |
 |------|--------|------|
-| [기본 문법]({{< relref "/docs/scala/concepts/basics" >}}) | **선수 지식** | val/var, 타입 시스템 |
-| [함수와 메서드]({{< relref "/docs/scala/concepts/functions-methods" >}}) | **선수 지식** | def, 고차 함수 |
-| [케이스 클래스]({{< relref "/docs/scala/concepts/case-classes" >}}) | **불변 데이터** | 보일러플레이트 없는 데이터 클래스 |
-| [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | **trait 활용** | sealed trait와 패턴 매칭 |
-| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | **trait 응용** | ad-hoc 다형성 구현 |
+| [기본 문법](basics/) | **선수 지식** | val/var, 타입 시스템 |
+| [함수와 메서드](functions-methods/) | **선수 지식** | def, 고차 함수 |
+| [케이스 클래스](case-classes/) | **불변 데이터** | 보일러플레이트 없는 데이터 클래스 |
+| [패턴 매칭](pattern-matching/) | **trait 활용** | sealed trait와 패턴 매칭 |
+| [타입 클래스](type-classes/) | **trait 응용** | ad-hoc 다형성 구현 |
 
 ---
 
@@ -548,5 +548,5 @@ println(p1.compare(p2))     // 1 (p1이 더 비쌈)
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [케이스 클래스]({{< relref "/docs/scala/concepts/case-classes" >}}) | 불변 데이터 모델링 |
-| 2 | [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | match 표현식 심화 |
+| 1 | [케이스 클래스](case-classes/) | 불변 데이터 모델링 |
+| 2 | [패턴 매칭](pattern-matching/) | match 표현식 심화 |

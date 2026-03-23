@@ -76,17 +76,17 @@ Explains Spark's core principles from a **Java/Spring developer's perspective**.
 
 | Topic | What You'll Learn |
 |-------|-------------------|
-| [Architecture]({{< relref "/docs/spark/concepts/architecture" >}}) | Roles and operation of Driver, Executor, Cluster Manager |
-| [RDD Basics]({{< relref "/docs/spark/concepts/rdd" >}}) | Spark's basic abstraction, distributed collection concepts |
-| [DataFrame and Dataset]({{< relref "/docs/spark/concepts/dataframe-dataset" >}}) | Modern type-safe distributed data processing API |
-| [Spark SQL]({{< relref "/docs/spark/concepts/spark-sql" >}}) | Querying distributed data with SQL |
-| [Transformations and Actions]({{< relref "/docs/spark/concepts/transformations-actions" >}}) | Difference between lazy evaluation and immediate execution |
-| [Partitioning and Shuffle]({{< relref "/docs/spark/concepts/partitioning" >}}) | Core of distributed processing, data distribution strategies |
-| [Caching and Persistence]({{< relref "/docs/spark/concepts/caching" >}}) | Leveraging in-memory processing |
-| [Structured Streaming]({{< relref "/docs/spark/concepts/structured-streaming" >}}) | Real-time stream data processing |
-| [MLlib]({{< relref "/docs/spark/concepts/mllib" >}}) | Machine learning in distributed environments |
-| [Performance Tuning]({{< relref "/docs/spark/concepts/tuning" >}}) | Memory, partition, shuffle optimization |
-| [Deployment and Cluster Management]({{< relref "/docs/spark/concepts/deployment" >}}) | Standalone, YARN, Kubernetes configuration |
+| [Architecture](concepts/architecture/) | Roles and operation of Driver, Executor, Cluster Manager |
+| [RDD Basics](concepts/rdd/) | Spark's basic abstraction, distributed collection concepts |
+| [DataFrame and Dataset](concepts/dataframe-dataset/) | Modern type-safe distributed data processing API |
+| [Spark SQL](concepts/spark-sql/) | Querying distributed data with SQL |
+| [Transformations and Actions](concepts/transformations-actions/) | Difference between lazy evaluation and immediate execution |
+| [Partitioning and Shuffle](concepts/partitioning/) | Core of distributed processing, data distribution strategies |
+| [Caching and Persistence](concepts/caching/) | Leveraging in-memory processing |
+| [Structured Streaming](concepts/structured-streaming/) | Real-time stream data processing |
+| [MLlib](concepts/mllib/) | Machine learning in distributed environments |
+| [Performance Tuning](concepts/tuning/) | Memory, partition, shuffle optimization |
+| [Deployment and Cluster Management](concepts/deployment/) | Standalone, YARN, Kubernetes configuration |
 
 Learning these concepts in order will give you a systematic understanding of Spark's internals.
 

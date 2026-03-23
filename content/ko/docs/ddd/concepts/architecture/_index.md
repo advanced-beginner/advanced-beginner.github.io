@@ -22,12 +22,12 @@ author_url: "http://github.com/kimbenji"
 
 | 아키텍처 | 비유 | 핵심 철학 | 한 줄 요약 |
 |----------|------|-----------|-----------|
-| **[계층형]({{< relref "/docs/ddd/concepts/architecture/layered-architecture" >}})** | 건물 층 | 위에서 아래로 흐르는 단순한 구조 | "역할별로 층을 나누자" |
-| **[헥사고날]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}})** | 스마트폰과 어댑터 | 외부 세계를 Port/Adapter로 격리 | "내부를 외부로부터 보호하자" |
-| **[클린]({{< relref "/docs/ddd/concepts/architecture/clean-architecture" >}})** | 성의 동심원 | 의존성은 항상 안쪽으로만 | "비즈니스 규칙이 왕이다" |
-| **[어니언]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}})** | 양파 껍질 | 도메인 모델을 가장 중심에 | "도메인이 모든 것의 중심" |
-| **[CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}})** | 읽기/쓰기 분리 창구 | 명령과 조회의 완전한 분리 | "읽기와 쓰기를 따로 최적화" |
-| **[이벤트 기반]({{< relref "/docs/ddd/concepts/architecture/event-driven" >}})** | 회사 공지 시스템 | 느슨한 결합과 비동기 통신 | "일어난 일을 알리고 반응하자" |
+| **[계층형](layered-architecture/)** | 건물 층 | 위에서 아래로 흐르는 단순한 구조 | "역할별로 층을 나누자" |
+| **[헥사고날](hexagonal-architecture/)** | 스마트폰과 어댑터 | 외부 세계를 Port/Adapter로 격리 | "내부를 외부로부터 보호하자" |
+| **[클린](clean-architecture/)** | 성의 동심원 | 의존성은 항상 안쪽으로만 | "비즈니스 규칙이 왕이다" |
+| **[어니언](onion-architecture/)** | 양파 껍질 | 도메인 모델을 가장 중심에 | "도메인이 모든 것의 중심" |
+| **[CQRS](cqrs/)** | 읽기/쓰기 분리 창구 | 명령과 조회의 완전한 분리 | "읽기와 쓰기를 따로 최적화" |
+| **[이벤트 기반](event-driven/)** | 회사 공지 시스템 | 느슨한 결합과 비동기 통신 | "일어난 일을 알리고 반응하자" |
 
 ## 아키텍처 패턴이 왜 필요한가?
 
@@ -123,12 +123,12 @@ flowchart TB
 
 | 패턴 | 핵심 개념 | 난이도 | 적합한 상황 |
 |------|----------|--------|------------|
-| **[계층형]({{< relref "/docs/ddd/concepts/architecture/layered-architecture" >}})** | 위에서 아래로 흐르는 4계층 | 쉬움 | 처음 시작, 단순한 프로젝트 |
-| **[헥사고날]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}})** | Port와 Adapter로 외부 격리 | 보통 | 외부 연동 많은 프로젝트 |
-| **[클린]({{< relref "/docs/ddd/concepts/architecture/clean-architecture" >}})** | 엄격한 의존성 규칙 | 어려움 | 대규모, 장기 프로젝트 |
-| **[어니언]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}})** | 도메인 모델 중심 | 보통 | DDD 적용 프로젝트 |
-| **[CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}})** | 읽기/쓰기 분리 | 어려움 | 복잡한 조회/성능 요구 |
-| **[이벤트 기반]({{< relref "/docs/ddd/concepts/architecture/event-driven" >}})** | 도메인 이벤트 | 보통~어려움 | 마이크로서비스, 비동기 처리 |
+| **[계층형](layered-architecture/)** | 위에서 아래로 흐르는 4계층 | 쉬움 | 처음 시작, 단순한 프로젝트 |
+| **[헥사고날](hexagonal-architecture/)** | Port와 Adapter로 외부 격리 | 보통 | 외부 연동 많은 프로젝트 |
+| **[클린](clean-architecture/)** | 엄격한 의존성 규칙 | 어려움 | 대규모, 장기 프로젝트 |
+| **[어니언](onion-architecture/)** | 도메인 모델 중심 | 보통 | DDD 적용 프로젝트 |
+| **[CQRS](cqrs/)** | 읽기/쓰기 분리 | 어려움 | 복잡한 조회/성능 요구 |
+| **[이벤트 기반](event-driven/)** | 도메인 이벤트 | 보통~어려움 | 마이크로서비스, 비동기 처리 |
 
 ## Best Practice: 어떤 시스템에 어울리는가?
 
@@ -213,17 +213,17 @@ flowchart LR
 
 | 순서 | 문서 | 핵심 질문 |
 |------|------|----------|
-| 1 | [계층형 아키텍처]({{< relref "/docs/ddd/concepts/architecture/layered-architecture" >}}) | "코드를 어떻게 구조화할 것인가?" |
-| 2 | [헥사고날 아키텍처]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}}) | "외부를 어떻게 격리할 것인가?" |
-| 3 | [클린 아키텍처]({{< relref "/docs/ddd/concepts/architecture/clean-architecture" >}}) | "의존성을 어떻게 관리할 것인가?" |
-| 4 | [어니언 아키텍처]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}}) | "도메인을 어떻게 보호할 것인가?" |
+| 1 | [계층형 아키텍처](layered-architecture/) | "코드를 어떻게 구조화할 것인가?" |
+| 2 | [헥사고날 아키텍처](hexagonal-architecture/) | "외부를 어떻게 격리할 것인가?" |
+| 3 | [클린 아키텍처](clean-architecture/) | "의존성을 어떻게 관리할 것인가?" |
+| 4 | [어니언 아키텍처](onion-architecture/) | "도메인을 어떻게 보호할 것인가?" |
 
 ### 고급 패턴
 
 | 순서 | 문서 | 핵심 질문 |
 |------|------|----------|
-| 5 | [CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}}) | "읽기와 쓰기를 분리해야 하는가?" |
-| 6 | [이벤트 기반 아키텍처]({{< relref "/docs/ddd/concepts/architecture/event-driven" >}}) | "컴포넌트 간 통신을 어떻게 할 것인가?" |
+| 5 | [CQRS](cqrs/) | "읽기와 쓰기를 분리해야 하는가?" |
+| 6 | [이벤트 기반 아키텍처](event-driven/) | "컴포넌트 간 통신을 어떻게 할 것인가?" |
 
 ## 다음 단계
 

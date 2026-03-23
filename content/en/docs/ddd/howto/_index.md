@@ -20,10 +20,10 @@ How-to guides are practical instructions for **solving specific problems**. They
 
 | Guide | Problem It Solves | Time Required |
 |-------|-------------------|---------------|
-| [Defining Aggregate Boundaries]({{< relref "/docs/ddd/howto/aggregate-boundaries" >}}) | "Should I group these Entities into one Aggregate?" | ~30 min |
-| [Identifying Bounded Contexts]({{< relref "/docs/ddd/howto/bounded-context-identification" >}}) | "I don't know how to divide the system" | ~25 min |
-| [Designing Value Objects]({{< relref "/docs/ddd/howto/value-object-design" >}}) | "How do I distinguish Entity from Value Object?" | ~20 min |
-| [Designing Domain Events]({{< relref "/docs/ddd/howto/domain-event-design" >}}) | "How should Aggregates communicate?" | ~25 min |
+| [Defining Aggregate Boundaries](aggregate-boundaries/) | "Should I group these Entities into one Aggregate?" | ~30 min |
+| [Identifying Bounded Contexts](bounded-context-identification/) | "I don't know how to divide the system" | ~25 min |
+| [Designing Value Objects](value-object-design/) | "How do I distinguish Entity from Value Object?" | ~20 min |
+| [Designing Domain Events](domain-event-design/) | "How should Aggregates communicate?" | ~25 min |
 
 ## What This Section Does Not Cover
 

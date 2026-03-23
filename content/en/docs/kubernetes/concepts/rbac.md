@@ -330,6 +330,6 @@ Now that you understand RBAC, proceed to the following:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Batch job execution | [Jobs and CronJobs]({{< relref "/docs/kubernetes/concepts/jobs" >}}) |
-| Network policies | [NetworkPolicy]({{< relref "/docs/kubernetes/concepts/network-policy" >}}) |
-| Resource isolation | [Namespace]({{< relref "/docs/kubernetes/concepts/namespace" >}}) |
+| Batch job execution | [Jobs and CronJobs](jobs/) |
+| Network policies | [NetworkPolicy](network-policy/) |
+| Resource isolation | [Namespace](namespace/) |

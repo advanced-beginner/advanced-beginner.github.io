@@ -21,7 +21,7 @@ author_url: "http://github.com/kimbenji"
 | 항목 | 설명 |
 |------|------|
 | **대상 독자** | 이벤트 기반 시스템을 구축하려는 백엔드 개발자 |
-| **선수 지식** | Spring Boot 기초, Kafka 기본 개념, [기본 예제]({{< relref "/docs/kafka/examples/basic" >}}) 완료 |
+| **선수 지식** | Spring Boot 기초, Kafka 기본 개념, [기본 예제](basic/) 완료 |
 | **필수 환경** | Docker로 Kafka 실행 중, JDK 17+, Gradle |
 | **예상 소요 시간** | 약 45분 |
 

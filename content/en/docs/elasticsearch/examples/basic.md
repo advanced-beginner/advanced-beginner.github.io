@@ -124,7 +124,7 @@ public class Product {
 |--------|-------------|-----------|
 | `String id` | `Long id` | ES document IDs are strings, UUID compatible |
 | Explicit `@Field` | Auto mapping | Explicit types ensure predictable behavior |
-| `standard` analyzer | `nori` | Basic example kept simple, see [Product Search]({{< relref "/docs/elasticsearch/examples/product-search" >}}) for Korean search |
+| `standard` analyzer | `nori` | Basic example kept simple, see [Product Search](product-search/) for Korean search |
 
 {{< callout type="info" title="Key Points" >}}
 - Specify index name with `@Document`, document ID field with `@Id`
@@ -581,6 +581,6 @@ Check Nori settings in [Product Search System]({{< relref "/docs/elasticsearch/e
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Implement Korean search | [Product Search System]({{< relref "/docs/elasticsearch/examples/product-search" >}}) |
-| Improve search quality | [Search Relevance]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) |
-| Data analysis | [Aggregations]({{< relref "/docs/elasticsearch/concepts/aggregations" >}}) |
+| Implement Korean search | [Product Search System](product-search/) |
+| Improve search quality | [Search Relevance](../concepts/search-relevance/) |
+| Data analysis | [Aggregations](../concepts/aggregations/) |

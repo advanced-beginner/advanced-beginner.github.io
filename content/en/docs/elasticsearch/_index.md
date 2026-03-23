@@ -105,15 +105,15 @@ Not just "use it this way", but explaining **why it works this way**.
 
 | Topic | What You'll Learn |
 |-------|-------------------|
-| [Core Components]({{< relref "/docs/elasticsearch/concepts/core-components" >}}) | Roles and relationships of Cluster, Node, Index, Document, Shard |
-| [Data Modeling]({{< relref "/docs/elasticsearch/concepts/data-modeling" >}}) | Mapping, Field Type, Analyzer design |
-| [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) | Writing search queries with Match, Term, Bool |
-| [Search Relevance]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) | Improving search quality with Score, BM25, Boosting |
-| [Aggregations]({{< relref "/docs/elasticsearch/concepts/aggregations" >}}) | Data analysis with Bucket and Metric aggregations |
-| [Indexing Strategy]({{< relref "/docs/elasticsearch/concepts/indexing" >}}) | Bulk indexing, Refresh, ILM settings |
-| [Cluster Management]({{< relref "/docs/elasticsearch/concepts/cluster-management" >}}) | Node configuration, shard allocation, status monitoring |
-| [Performance Tuning]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) | Query optimization, caching, JVM settings |
-| [High Availability]({{< relref "/docs/elasticsearch/concepts/high-availability" >}}) | Replica, Snapshot, failure response |
+| [Core Components](concepts/core-components/) | Roles and relationships of Cluster, Node, Index, Document, Shard |
+| [Data Modeling](concepts/data-modeling/) | Mapping, Field Type, Analyzer design |
+| [Query DSL](concepts/query-dsl/) | Writing search queries with Match, Term, Bool |
+| [Search Relevance](concepts/search-relevance/) | Improving search quality with Score, BM25, Boosting |
+| [Aggregations](concepts/aggregations/) | Data analysis with Bucket and Metric aggregations |
+| [Indexing Strategy](concepts/indexing/) | Bulk indexing, Refresh, ILM settings |
+| [Cluster Management](concepts/cluster-management/) | Node configuration, shard allocation, status monitoring |
+| [Performance Tuning](concepts/performance-tuning/) | Query optimization, caching, JVM settings |
+| [High Availability](concepts/high-availability/) | Replica, Snapshot, failure response |
 
 ### [Hands-on Examples]({{< relref "/docs/elasticsearch/examples" >}})
 Executable example code based on Spring Boot.

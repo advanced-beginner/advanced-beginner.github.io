@@ -484,6 +484,6 @@ Volume과 스토리지를 이해했다면 다음 단계로 진행하세요:
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 네트워크 설정 | [네트워킹]({{< relref "/docs/kubernetes/concepts/networking" >}}) |
-| 리소스 관리 | [리소스 관리]({{< relref "/docs/kubernetes/concepts/resources" >}}) |
-| 실제 배포 실습 | [Spring Boot 배포]({{< relref "/docs/kubernetes/examples/spring-boot" >}}) |
+| 네트워크 설정 | [네트워킹](networking/) |
+| 리소스 관리 | [리소스 관리](resources/) |
+| 실제 배포 실습 | [Spring Boot 배포](../examples/spring-boot/) |

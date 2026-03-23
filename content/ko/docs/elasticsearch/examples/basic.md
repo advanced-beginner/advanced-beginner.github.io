@@ -124,7 +124,7 @@ public class Product {
 |------|------|----------|
 | `String id` | `Long id` | ES 문서 ID는 문자열, UUID 사용 가능 |
 | `@Field` 명시 | 자동 매핑 | 타입 명시로 예측 가능한 동작 보장 |
-| `standard` analyzer | `nori` | 기본 예제는 단순하게, 한글 검색은 [상품 검색 예제]({{< relref "/docs/elasticsearch/examples/product-search" >}}) 참조 |
+| `standard` analyzer | `nori` | 기본 예제는 단순하게, 한글 검색은 [상품 검색 예제](product-search/) 참조 |
 
 {{< callout type="info" title="핵심 포인트" >}}
 - `@Document`로 인덱스명 지정, `@Id`로 문서 ID 필드 지정
@@ -581,6 +581,6 @@ curl -X DELETE http://localhost:9200/products
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 한글 검색 구현 | [상품 검색 시스템]({{< relref "/docs/elasticsearch/examples/product-search" >}}) |
-| 검색 품질 개선 | [검색 관련성]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) |
-| 데이터 분석 | [집계]({{< relref "/docs/elasticsearch/concepts/aggregations" >}}) |
+| 한글 검색 구현 | [상품 검색 시스템](product-search/) |
+| 검색 품질 개선 | [검색 관련성](../concepts/search-relevance/) |
+| 데이터 분석 | [집계](../concepts/aggregations/) |

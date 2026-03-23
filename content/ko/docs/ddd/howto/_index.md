@@ -20,10 +20,10 @@ How-To Guide는 <strong>특정 문제를 해결</strong>하기 위한 실용적 
 
 | 가이드 | 해결하는 문제 | 소요 시간 |
 |--------|--------------|----------|
-| [Aggregate 경계 정하기]({{< relref "/docs/ddd/howto/aggregate-boundaries" >}}) | "이 Entity들을 하나의 Aggregate로 묶어야 할까?" | 약 30분 |
-| [Bounded Context 식별하기]({{< relref "/docs/ddd/howto/bounded-context-identification" >}}) | "시스템을 어떻게 나눠야 할지 모르겠다" | 약 25분 |
-| [Value Object 설계하기]({{< relref "/docs/ddd/howto/value-object-design" >}}) | "Entity와 Value Object를 어떻게 구분할까?" | 약 20분 |
-| [도메인 이벤트 설계하기]({{< relref "/docs/ddd/howto/domain-event-design" >}}) | "Aggregate 간 통신을 어떻게 해야 할까?" | 약 25분 |
+| [Aggregate 경계 정하기](aggregate-boundaries/) | "이 Entity들을 하나의 Aggregate로 묶어야 할까?" | 약 30분 |
+| [Bounded Context 식별하기](bounded-context-identification/) | "시스템을 어떻게 나눠야 할지 모르겠다" | 약 25분 |
+| [Value Object 설계하기](value-object-design/) | "Entity와 Value Object를 어떻게 구분할까?" | 약 20분 |
+| [도메인 이벤트 설계하기](domain-event-design/) | "Aggregate 간 통신을 어떻게 해야 할까?" | 약 25분 |
 
 ## 이 섹션에서 다루지 않는 것
 

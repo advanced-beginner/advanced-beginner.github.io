@@ -398,5 +398,5 @@ graph LR
 
 | Recommended Order | Document | What You'll Learn |
 |----------|------|----------|
-| 1 | [Dashboard Design]({{< relref "/docs/observability/concepts/dashboard-design" >}}) | Visualization |
-| 2 | [Full-Stack Example]({{< relref "/docs/observability/examples/full-stack" >}}) | Integration hands-on |
+| 1 | [Dashboard Design](dashboard-design/) | Visualization |
+| 2 | [Full-Stack Example](../examples/full-stack/) | Integration hands-on |

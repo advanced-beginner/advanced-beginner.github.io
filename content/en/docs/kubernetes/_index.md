@@ -72,16 +72,16 @@ Explains Kubernetes core principles from a **backend developer's perspective**.
 
 | Topic | What you'll learn |
 |-------|------------------|
-| [Architecture]({{< relref "/docs/kubernetes/concepts/architecture" >}}) | Components and roles of Control Plane, Worker Node |
-| [Pod]({{< relref "/docs/kubernetes/concepts/pod" >}}) | Kubernetes' minimum deployment unit, container grouping |
-| [Deployment]({{< relref "/docs/kubernetes/concepts/deployment" >}}) | Application deployment and update strategies |
-| [Service]({{< relref "/docs/kubernetes/concepts/service" >}}) | Network access to Pods and load balancing |
-| [ConfigMap and Secret]({{< relref "/docs/kubernetes/concepts/configmap-secret" >}}) | Separating configuration and sensitive information |
-| [Volume and Storage]({{< relref "/docs/kubernetes/concepts/storage" >}}) | Persistent data storage and PV/PVC |
-| [Networking]({{< relref "/docs/kubernetes/concepts/networking" >}}) | Intra/external cluster communication and Ingress |
-| [Resource Management]({{< relref "/docs/kubernetes/concepts/resources" >}}) | CPU/memory requests and limits |
-| [Scaling]({{< relref "/docs/kubernetes/concepts/scaling" >}}) | Auto-scaling with HPA, VPA |
-| [Health Checks]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) | Liveness, Readiness, Startup Probe |
+| [Architecture](concepts/architecture/) | Components and roles of Control Plane, Worker Node |
+| [Pod](concepts/pod/) | Kubernetes' minimum deployment unit, container grouping |
+| [Deployment](concepts/deployment/) | Application deployment and update strategies |
+| [Service](concepts/service/) | Network access to Pods and load balancing |
+| [ConfigMap and Secret](concepts/configmap-secret/) | Separating configuration and sensitive information |
+| [Volume and Storage](concepts/storage/) | Persistent data storage and PV/PVC |
+| [Networking](concepts/networking/) | Intra/external cluster communication and Ingress |
+| [Resource Management](concepts/resources/) | CPU/memory requests and limits |
+| [Scaling](concepts/scaling/) | Auto-scaling with HPA, VPA |
+| [Health Checks](concepts/health-checks/) | Liveness, Readiness, Startup Probe |
 
 **[Hands-on Examples]({{< relref "/docs/kubernetes/examples" >}})**
 

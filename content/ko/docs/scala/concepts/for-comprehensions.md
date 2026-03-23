@@ -421,17 +421,17 @@ For comprehension은 다음 개념들과 밀접하게 연결됩니다:
 
 | 관련 개념 | 연결 관계 |
 |----------|----------|
-| [고차 함수]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) | `map`, `flatMap`, `withFilter`로 변환됨 |
-| [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | 생성자에서 구조 분해 패턴 사용 가능 |
-| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Option, Either, Try와 함께 안전한 연산 |
-| [동시성]({{< relref "/docs/scala/concepts/concurrency" >}}) | Future 조합의 핵심 문법 |
-| [컬렉션]({{< relref "/docs/scala/concepts/collections" >}}) | 데카르트 곱, 필터링 등 컬렉션 조합 |
-| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | Monad 타입 클래스와의 관계 |
+| [고차 함수](higher-order-functions/) | `map`, `flatMap`, `withFilter`로 변환됨 |
+| [패턴 매칭](pattern-matching/) | 생성자에서 구조 분해 패턴 사용 가능 |
+| [함수형 패턴](functional-patterns/) | Option, Either, Try와 함께 안전한 연산 |
+| [동시성](concurrency/) | Future 조합의 핵심 문법 |
+| [컬렉션](collections/) | 데카르트 곱, 필터링 등 컬렉션 조합 |
+| [타입 클래스](type-classes/) | Monad 타입 클래스와의 관계 |
 
 #### 다음 단계
 
 | 학습 경로 | 설명 |
 |----------|------|
-| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Monad, Functor 등 추상화 심화 |
-| [Implicits]({{< relref "/docs/scala/concepts/implicits" >}}) | 문맥적 추상화 메커니즘 |
-| [동시성]({{< relref "/docs/scala/concepts/concurrency" >}}) | Future 병렬/순차 실행 패턴 |
+| [함수형 패턴](functional-patterns/) | Monad, Functor 등 추상화 심화 |
+| [Implicits](implicits/) | 문맥적 추상화 메커니즘 |
+| [동시성](concurrency/) | Future 병렬/순차 실행 패턴 |

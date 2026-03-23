@@ -300,6 +300,6 @@ RBAC 설정 실습을 완료했다면 다음 단계로 진행하세요:
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 상태 관리 | [StatefulSet 실습]({{< relref "/docs/kubernetes/examples/statefulset" >}}) |
-| 주기적 작업 | [CronJob 실습]({{< relref "/docs/kubernetes/examples/cronjob" >}}) |
-| 네트워크 정책 | [네트워킹]({{< relref "/docs/kubernetes/concepts/networking" >}}) |
+| 상태 관리 | [StatefulSet 실습](statefulset/) |
+| 주기적 작업 | [CronJob 실습](cronjob/) |
+| 네트워크 정책 | [네트워킹](../concepts/networking/) |

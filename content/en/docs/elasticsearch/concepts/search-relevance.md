@@ -520,6 +520,6 @@ Use `max_boost` in function_score:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Data analysis | [Aggregations]({{< relref "/docs/elasticsearch/concepts/aggregations" >}}) |
-| Practical implementation | [Product Search System]({{< relref "/docs/elasticsearch/examples/product-search" >}}) |
-| Performance optimization | [Performance Tuning]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) |
+| Data analysis | [Aggregations](aggregations/) |
+| Practical implementation | [Product Search System](../examples/product-search/) |
+| Performance optimization | [Performance Tuning](performance-tuning/) |

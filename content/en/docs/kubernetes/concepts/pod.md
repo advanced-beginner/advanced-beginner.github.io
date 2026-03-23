@@ -379,6 +379,6 @@ Once you understand Pods, proceed to the next steps:
 
 | Goal | Recommended Doc |
 |------|----------------|
-| Automatic Pod management | [Deployment]({{< relref "/docs/kubernetes/concepts/deployment" >}}) |
-| How to access Pods | [Service]({{< relref "/docs/kubernetes/concepts/service" >}}) |
-| Configure health checks | [Health Checks]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) |
+| Automatic Pod management | [Deployment](deployment/) |
+| How to access Pods | [Service](service/) |
+| Configure health checks | [Health Checks](health-checks/) |

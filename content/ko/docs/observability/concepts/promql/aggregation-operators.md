@@ -391,5 +391,5 @@ topk(10, sum by (path) (rate(http_requests_total[5m])))
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [rate와 increase]({{< relref "/docs/observability/concepts/promql/rate-and-increase" >}}) | Counter 처리의 핵심 |
-| 2 | [histogram_quantile]({{< relref "/docs/observability/concepts/promql/histogram-quantile" >}}) | P99 응답시간 계산 |
+| 1 | [rate와 increase](rate-and-increase/) | Counter 처리의 핵심 |
+| 2 | [histogram_quantile](histogram-quantile/) | P99 응답시간 계산 |

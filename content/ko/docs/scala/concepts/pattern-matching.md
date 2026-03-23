@@ -629,17 +629,17 @@ object URL {
 
 | 관련 개념 | 연결 관계 |
 |----------|----------|
-| [케이스 클래스]({{< relref "/docs/scala/concepts/case-classes" >}}) | 패턴 매칭의 핵심 대상, `unapply` 자동 생성 |
-| [대수적 데이터 타입]({{< relref "/docs/scala/concepts/case-classes#sealed-트레이트와-adt" >}}) | `sealed trait`로 완전성 검사 가능한 타입 정의 |
-| [for 표현식]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) | 제너레이터에서 패턴으로 값 분해 및 필터링 |
-| [고차 함수]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) | `collect`, `partition` 등에서 부분 함수 활용 |
-| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Option, Either 등 대수적 타입과 패턴 매칭 |
-| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | Match Types로 타입 레벨 패턴 매칭 |
+| [케이스 클래스](case-classes/) | 패턴 매칭의 핵심 대상, `unapply` 자동 생성 |
+| [대수적 데이터 타입](case-classes#sealed-트레이트와-adt/) | `sealed trait`로 완전성 검사 가능한 타입 정의 |
+| [for 표현식](for-comprehensions/) | 제너레이터에서 패턴으로 값 분해 및 필터링 |
+| [고차 함수](higher-order-functions/) | `collect`, `partition` 등에서 부분 함수 활용 |
+| [함수형 패턴](functional-patterns/) | Option, Either 등 대수적 타입과 패턴 매칭 |
+| [고급 타입](type-system-advanced/) | Match Types로 타입 레벨 패턴 매칭 |
 
 #### 다음 단계
 
 | 학습 경로 | 설명 |
 |----------|------|
-| [컬렉션]({{< relref "/docs/scala/concepts/collections" >}}) | 패턴 매칭과 함께 사용되는 풍부한 컬렉션 API |
-| [고차 함수]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) | `map`, `filter`, `collect`로 함수형 데이터 처리 |
-| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Option, Either, Try를 활용한 안전한 프로그래밍 |
+| [컬렉션](collections/) | 패턴 매칭과 함께 사용되는 풍부한 컬렉션 API |
+| [고차 함수](higher-order-functions/) | `map`, `filter`, `collect`로 함수형 데이터 처리 |
+| [함수형 패턴](functional-patterns/) | Option, Either, Try를 활용한 안전한 프로그래밍 |

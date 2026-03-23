@@ -330,5 +330,5 @@ providers:
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [환경 구성]({{< relref "/docs/observability/examples/setup" >}}) | Grafana 실습 |
-| 2 | [Spring Boot 예제]({{< relref "/docs/observability/examples/spring-boot-metrics" >}}) | 대시보드 적용 |
+| 1 | [환경 구성](../examples/setup/) | Grafana 실습 |
+| 2 | [Spring Boot 예제](../examples/spring-boot-metrics/) | 대시보드 적용 |

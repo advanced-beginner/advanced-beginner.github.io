@@ -528,17 +528,17 @@ val result2 = Future.sequence(List(fetchA(), fetchB(), fetchC()))
 
 | 관련 개념 | 연결 관계 |
 |----------|----------|
-| [for 표현식]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) | Future의 `flatMap` 체인을 읽기 쉽게 작성 |
-| [고차 함수]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) | `map`, `flatMap`, `recover` 등 조합 메서드 |
-| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | IO, ZIO 등 참조 투명한 효과 시스템 |
-| [Implicits]({{< relref "/docs/scala/concepts/implicits" >}}) | `ExecutionContext`의 암시적 전달 |
-| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | Cats Effect의 `Async`, `Concurrent` 타입 클래스 |
+| [for 표현식](for-comprehensions/) | Future의 `flatMap` 체인을 읽기 쉽게 작성 |
+| [고차 함수](higher-order-functions/) | `map`, `flatMap`, `recover` 등 조합 메서드 |
+| [함수형 패턴](functional-patterns/) | IO, ZIO 등 참조 투명한 효과 시스템 |
+| [Implicits](implicits/) | `ExecutionContext`의 암시적 전달 |
+| [타입 클래스](type-classes/) | Cats Effect의 `Async`, `Concurrent` 타입 클래스 |
 
 #### 다음 단계
 
 | 학습 경로 | 설명 |
 |----------|------|
-| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor, Monad 등 추상화 심화 학습 |
-| [Implicits]({{< relref "/docs/scala/concepts/implicits" >}}) | ExecutionContext 전달 메커니즘 이해 |
+| [함수형 패턴](functional-patterns/) | Functor, Monad 등 추상화 심화 학습 |
+| [Implicits](implicits/) | ExecutionContext 전달 메커니즘 이해 |
 | [Akka 공식 문서](https://akka.io/) | 액터 기반 동시성 모델 |
 | [ZIO 공식 문서](https://zio.dev/) | 타입 안전한 효과 시스템 |

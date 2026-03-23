@@ -598,6 +598,6 @@ POST /_snapshot/my_backup/weekly_snapshot/_restore?wait_for_completion=true
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Cluster configuration | [Cluster Management]({{< relref "/docs/elasticsearch/concepts/cluster-management" >}}) |
-| Performance optimization | [Performance Tuning]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) |
-| Practical implementation | [Product Search System]({{< relref "/docs/elasticsearch/examples/product-search" >}}) |
+| Cluster configuration | [Cluster Management](cluster-management/) |
+| Performance optimization | [Performance Tuning](performance-tuning/) |
+| Practical implementation | [Product Search System](../examples/product-search/) |

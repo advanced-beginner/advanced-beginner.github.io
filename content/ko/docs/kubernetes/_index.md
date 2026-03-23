@@ -72,16 +72,16 @@ Kubernetes의 핵심 원리를 **백엔드 개발자의 관점**에서 설명합
 
 | 주제 | 배우는 것 |
 |------|----------|
-| [아키텍처]({{< relref "/docs/kubernetes/concepts/architecture" >}}) | Control Plane, Worker Node의 구성요소와 역할 |
-| [Pod]({{< relref "/docs/kubernetes/concepts/pod" >}}) | Kubernetes의 최소 배포 단위, 컨테이너 그룹화 |
-| [Deployment]({{< relref "/docs/kubernetes/concepts/deployment" >}}) | 애플리케이션 배포와 업데이트 전략 |
-| [Service]({{< relref "/docs/kubernetes/concepts/service" >}}) | Pod에 대한 네트워크 접근과 로드 밸런싱 |
-| [ConfigMap과 Secret]({{< relref "/docs/kubernetes/concepts/configmap-secret" >}}) | 설정과 민감 정보의 분리 관리 |
-| [Volume과 스토리지]({{< relref "/docs/kubernetes/concepts/storage" >}}) | 영구 데이터 저장과 PV/PVC |
-| [네트워킹]({{< relref "/docs/kubernetes/concepts/networking" >}}) | 클러스터 내/외부 통신과 Ingress |
-| [리소스 관리]({{< relref "/docs/kubernetes/concepts/resources" >}}) | CPU/메모리 요청과 제한 |
-| [스케일링]({{< relref "/docs/kubernetes/concepts/scaling" >}}) | HPA, VPA를 통한 자동 스케일링 |
-| [헬스 체크]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) | Liveness, Readiness, Startup Probe |
+| [아키텍처](concepts/architecture/) | Control Plane, Worker Node의 구성요소와 역할 |
+| [Pod](concepts/pod/) | Kubernetes의 최소 배포 단위, 컨테이너 그룹화 |
+| [Deployment](concepts/deployment/) | 애플리케이션 배포와 업데이트 전략 |
+| [Service](concepts/service/) | Pod에 대한 네트워크 접근과 로드 밸런싱 |
+| [ConfigMap과 Secret](concepts/configmap-secret/) | 설정과 민감 정보의 분리 관리 |
+| [Volume과 스토리지](concepts/storage/) | 영구 데이터 저장과 PV/PVC |
+| [네트워킹](concepts/networking/) | 클러스터 내/외부 통신과 Ingress |
+| [리소스 관리](concepts/resources/) | CPU/메모리 요청과 제한 |
+| [스케일링](concepts/scaling/) | HPA, VPA를 통한 자동 스케일링 |
+| [헬스 체크](concepts/health-checks/) | Liveness, Readiness, Startup Probe |
 
 **[실습 예제]({{< relref "/docs/kubernetes/examples" >}})**
 

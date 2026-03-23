@@ -676,6 +676,6 @@ GET /products/_search
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 인덱싱 최적화 | [인덱싱 전략]({{< relref "/docs/elasticsearch/concepts/indexing" >}}) |
-| 실전 구현 | [상품 검색 시스템]({{< relref "/docs/elasticsearch/examples/product-search" >}}) |
-| 성능 최적화 | [성능 튜닝]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) |
+| 인덱싱 최적화 | [인덱싱 전략](indexing/) |
+| 실전 구현 | [상품 검색 시스템](../examples/product-search/) |
+| 성능 최적화 | [성능 튜닝](performance-tuning/) |

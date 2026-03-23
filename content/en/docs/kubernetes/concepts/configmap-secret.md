@@ -409,6 +409,6 @@ Once you understand ConfigMap and Secret, proceed to the next steps:
 
 | Goal | Recommended Doc |
 |------|----------------|
-| Store persistent data | [Volume and Storage]({{< relref "/docs/kubernetes/concepts/storage" >}}) |
-| Check application status | [Health Checks]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) |
-| Actual deployment practice | [Spring Boot Deployment]({{< relref "/docs/kubernetes/examples/spring-boot" >}}) |
+| Store persistent data | [Volume and Storage](storage/) |
+| Check application status | [Health Checks](health-checks/) |
+| Actual deployment practice | [Spring Boot Deployment](../examples/spring-boot/) |

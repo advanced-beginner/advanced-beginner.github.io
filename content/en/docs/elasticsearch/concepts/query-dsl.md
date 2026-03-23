@@ -639,6 +639,6 @@ Response:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| Improve search quality | [Search Relevance]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) |
-| Data analysis | [Aggregations]({{< relref "/docs/elasticsearch/concepts/aggregations" >}}) |
-| Hands-on practice | [Basic Examples]({{< relref "/docs/elasticsearch/examples/basic" >}}) |
+| Improve search quality | [Search Relevance](search-relevance/) |
+| Data analysis | [Aggregations](aggregations/) |
+| Hands-on practice | [Basic Examples](../examples/basic/) |

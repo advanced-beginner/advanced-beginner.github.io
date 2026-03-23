@@ -21,7 +21,7 @@ author_url: "http://github.com/kimbenji"
 | 항목 | 설명 |
 |------|------|
 | **대상 독자** | 마이크로서비스 아키텍처에서 이벤트 기반 통신을 구축하려는 개발자 |
-| **선수 지식** | Kafka 기본, Spring Boot, [주문 시스템]({{< relref "/docs/kafka/examples/order-system" >}}) 예제 이해 |
+| **선수 지식** | Kafka 기본, Spring Boot, [주문 시스템](order-system/) 예제 이해 |
 | **필수 환경** | Docker, JDK 17+, 여러 서비스를 실행할 수 있는 환경 |
 | **예상 소요 시간** | 약 60분 |
 

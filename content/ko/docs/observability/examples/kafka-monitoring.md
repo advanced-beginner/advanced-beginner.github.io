@@ -264,5 +264,5 @@ kafka_consumer_fetch_manager_records_lag
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [풀스택 예제]({{< relref "/docs/observability/examples/full-stack" >}}) | 통합 예제 |
-| 2 | [서비스 유형별 적용]({{< relref "/docs/observability/concepts/golden-signals/by-service-type" >}}) | Kafka 황금 신호 |
+| 1 | [풀스택 예제](full-stack/) | 통합 예제 |
+| 2 | [서비스 유형별 적용](../concepts/golden-signals/by-service-type/) | Kafka 황금 신호 |

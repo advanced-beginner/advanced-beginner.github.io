@@ -411,6 +411,6 @@ After completing the CronJob lab, proceed to the following:
 
 | Goal | Recommended Document |
 |------|---------------------|
-| State management | [StatefulSet Lab]({{< relref "/docs/kubernetes/examples/statefulset" >}}) |
-| Access control | [RBAC Configuration Lab]({{< relref "/docs/kubernetes/examples/rbac" >}}) |
-| Troubleshooting | [Pod Troubleshooting]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) |
+| State management | [StatefulSet Lab](statefulset/) |
+| Access control | [RBAC Configuration Lab](rbac/) |
+| Troubleshooting | [Pod Troubleshooting](../howto/pod-troubleshooting/) |

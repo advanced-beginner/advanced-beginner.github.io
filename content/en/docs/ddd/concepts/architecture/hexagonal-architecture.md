@@ -61,7 +61,7 @@ The hexagonal name does not mean 6 sides are important, but rather conveys that 
 Think about a smartphone. The smartphone itself does not know which charger it uses.
 
 - **Smartphone (Core)**: Handles only core functions like calls and app execution
-- **충전 포트(Port)**: "전원을 공급받고 싶어"라는 interface
+- **Charging Port (Port)**: An interface that says "I want to receive power"
 - **Adapter**: Connects via various methods like USB-C, wireless charging, USB
 
 Even if the charging method changes, the phone's functions remain the same. **Just changing the adapter lets you connect to various devices.**
@@ -205,7 +205,7 @@ In the code above, OrderController receives HTTP requests and calls CreateOrderU
 
 **3. Application Core - "Business Heart"**
 
-Inside the hexagon, there is only pure business logic. Application Core는 Application Layer와 Domain Layer로 구성됩니다. Application Layer는 비즈니스 프로세스의 orchestrate flow하고, Domain Layer는 core business 규칙을 담고 있습니다.
+Inside the hexagon, there is only pure business logic. The Application Core consists of the Application Layer and the Domain Layer. The Application Layer orchestrates business process flow, while the Domain Layer contains the core business rules.
 
 ```mermaid
 flowchart TB
@@ -224,13 +224,13 @@ flowchart TB
     end
 ```
 
-The Application Core knows nothing about the external world. HTTP가 무엇인지, JPA가 무엇인지, Kafka가 무엇인지 모릅니다. 오직 Port interface만 알고 있으며, 순수한 business logic에만 집중합니다.
+The Application Core knows nothing about the external world. It does not know what HTTP is, what JPA is, or what Kafka is. It only knows Port interfaces and focuses solely on pure business logic.
 
 ---
 
 #### Full Structure at a Glance
 
-헥사고날 아키텍처의 모든 요소가 어떻게 협력하는지 전체 그림을 보겠습니다. external world, Driving Adapters, Inbound Ports, Application Core, Outbound Ports, Driven Adapters가 어떻게 연결되는지 이해하면 헥사고날의 핵심을 파악할 수 있습니다.
+Let us see the full picture of how all elements of hexagonal architecture collaborate. Understanding how the external world, Driving Adapters, Inbound Ports, Application Core, Outbound Ports, and Driven Adapters connect reveals the essence of hexagonal architecture.
 
 ```mermaid
 flowchart TB
@@ -282,7 +282,7 @@ flowchart TB
     NA --> MAIL
 ```
 
-위 다이어그램에서 화살표의 방향에 주목하세요. 의존성은 항상 바깥에서 안으로만 향합니다. Application Core는 외부를 전혀 모르며, Port interface만 사용합니다.
+Pay attention to the direction of the arrows in the diagram above. Dependencies always point from outside to inside only. The Application Core knows nothing about the outside and only uses Port interfaces.
 
 ---
 
@@ -296,47 +296,47 @@ First, define the application boundaries with Ports. Inbound Ports define use ca
 
 ```java
 // === Inbound Ports ===
-// Application 패키지에 위치
+// Located in the Application package
 
-// 주문 생성 유스케이스
+// Create order use case
 public interface CreateOrderUseCase {
     OrderId execute(CreateOrderCommand command);
 }
 
-// 주문 확정 유스케이스
+// Confirm order use case
 public interface ConfirmOrderUseCase {
     void execute(OrderId orderId);
 }
 
-// 주문 조회 (Query)
+// Order query (Query)
 public interface GetOrderQuery {
     OrderDto execute(OrderId orderId);
 }
 ```
 
-Inbound Port는 애플리케이션이 제공하는 기능을 명확히 정의합니다. 각 유스케이스는 하나의 비즈니스 목적을 가지고 있으며, 외부에서는 이 interface만 보고 애플리케이션을 호출할 수 있습니다.
+Inbound Ports clearly define the capabilities the application offers. Each use case has a single business purpose, and the outside world can call the application by looking only at these interfaces.
 
 ```java
 // === Outbound Ports ===
-// Application 패키지에 위치
+// Located in the Application package
 
-// 주문 저장
+// Save order
 public interface SaveOrderPort {
     void save(Order order);
 }
 
-// 주문 조회
+// Load order
 public interface LoadOrderPort {
     Order loadById(OrderId id);
     boolean existsById(OrderId id);
 }
 
-// 알림 발송
+// Send notification
 public interface SendNotificationPort {
     void sendOrderConfirmation(Order order);
 }
 
-// 재고 확인
+// Check inventory
 public interface CheckInventoryPort {
     boolean isAvailable(ProductId productId, int quantity);
 }
@@ -346,14 +346,14 @@ Outbound Ports define external services the application needs. All communication
 
 **Step 2: Implement Application Service**
 
-Application Service는 Inbound Port를 구현하고 Outbound Port를 사용합니다. 비즈니스 orchestrate flow하며, Domain 객체를 조합하여 유스케이스를 완성합니다.
+The Application Service implements Inbound Ports and uses Outbound Ports. It orchestrates business flow and composes Domain objects to complete use cases.
 
 ```java
 @Service
 @Transactional
 public class OrderService implements CreateOrderUseCase, ConfirmOrderUseCase {
 
-    // Outbound Ports (interface)만 의존
+    // Depends only on Outbound Ports (interfaces)
     private final SaveOrderPort saveOrderPort;
     private final LoadOrderPort loadOrderPort;
     private final SendNotificationPort notificationPort;
@@ -409,17 +409,17 @@ public class OrderService implements CreateOrderUseCase, ConfirmOrderUseCase {
 }
 ```
 
-위 코드에서 OrderService는 구체적인 implementation가 아닌 Port interface만 의존하고 있습니다. SaveOrderPort가 JPA인지 MongoDB인지, SendNotificationPort가 이메일인지 SMS인지 전혀 모릅니다. 이것이 헥사고날 아키텍처의 핵심입니다.
+In the code above, OrderService depends only on Port interfaces, not concrete implementations. It has no idea whether SaveOrderPort uses JPA or MongoDB, or whether SendNotificationPort sends email or SMS. This is the core of hexagonal architecture.
 
 {{< notice style="tip" >}}
 **Key Point**
 
-Application Service는 **Port(interface)만 알고 있습니다:**
-- `SaveOrderPort` ← JPA인지 MongoDB인지 모름
-- `SendNotificationPort` ← 이메일인지 SMS인지 모름
-- `CheckInventoryPort` ← 내부 DB인지 외부 API인지 모름
+Application Service **only knows Ports (interfaces):**
+- `SaveOrderPort` -- does not know if it is JPA or MongoDB
+- `SendNotificationPort` -- does not know if it is email or SMS
+- `CheckInventoryPort` -- does not know if it is an internal DB or external API
 
-그래서 **외부 기술이 바뀌어도 이 코드는 변경할 필요가 없습니다!**
+That is why **this code never needs to change even when external technologies change!**
 {{< /notice >}}
 
 **Step 3: Implement Driving Adapters**
@@ -487,7 +487,7 @@ The Message Adapter receives Kafka messages and calls Use Cases. The application
 
 **Step 4: Implement Driven Adapters**
 
-Driven Adapter는 Outbound Port를 구현하여 외부 시스템과 통신합니다. 예를 들어, Persistence Adapter는 SaveOrderPort를 구현하여 데이터베이스에 저장하는 technical details을 처리합니다.
+Driven Adapters implement Outbound Ports to communicate with external systems. For example, the Persistence Adapter implements SaveOrderPort to handle the technical details of saving to a database.
 
 ```java
 // === Persistence Adapter (Driven) ===
@@ -568,12 +568,12 @@ InventoryApiAdapter communicates with an external inventory management service. 
 
 #### Package Structure
 
-헥사고날 아키텍처를 패키지로 표현하면 다음과 같습니다. adapter 패키지는 in과 out으로 나뉘며, application 패키지에는 port와 service가 있고, domain 패키지에는 순수한 domain model이 있습니다.
+Here is how hexagonal architecture is expressed as a package structure. The adapter package is divided into in and out, the application package contains ports and services, and the domain package holds the pure domain model.
 
 ```
 com.example.order/
 │
-├── adapter/                          # Adapters (외부와의 연결)
+├── adapter/                          # Adapters (external connections)
 │   ├── in/                           # Driving Adapters
 │   │   ├── web/
 │   │   │   ├── OrderController.java
@@ -593,7 +593,7 @@ com.example.order/
 │       └── inventory/
 │           └── InventoryApiAdapter.java
 │
-├── application/                      # Application Core - 바깥쪽
+├── application/                      # Application Core - outer
 │   ├── port/
 │   │   ├── in/                       # Inbound Ports
 │   │   │   ├── CreateOrderUseCase.java
@@ -607,7 +607,7 @@ com.example.order/
 │   └── service/
 │       └── OrderService.java
 │
-└── domain/                           # Application Core - 안쪽
+└── domain/                           # Application Core - inner
     ├── Order.java
     ├── OrderLine.java
     ├── OrderId.java
@@ -621,7 +621,7 @@ In this structure, the adapter package is on the outermost layer, while applicat
 
 #### Dependency Direction
 
-헥사고날 아키텍처의 핵심은 dependency direction입니다. 모든 의존성은 Adapter에서 Port로, Port에서 Core로 향합니다. Core는 아무것도 의존하지 않습니다.
+The core of hexagonal architecture is the dependency direction. All dependencies point from Adapter to Port, and from Port to Core. The Core depends on nothing.
 
 ```mermaid
 flowchart TB
@@ -644,17 +644,17 @@ flowchart TB
 
 **Core Rules:**
 
-의존성 규칙을 엄격히 지키는 것이 헥사고날 아키텍처의 핵심입니다. 첫째, Adapter는 Port를 구현하고 Port에 의존합니다. 둘째, Application Core는 Adapter를 전혀 모릅니다. 셋째, Domain은 아무것도 의존하지 않으며 순수한 business logic만 담고 있습니다.
+Strictly following the dependency rules is the core of hexagonal architecture. First, Adapters implement and depend on Ports. Second, the Application Core knows nothing about Adapters. Third, the Domain depends on nothing and contains only pure business logic.
 
 ---
 
-#### 헥사고날의 장점
+#### Benefits of Hexagonal
 
 Let us examine the key benefits of hexagonal architecture with concrete examples.
 
 **1. Testing Becomes Easy**
 
-Port만 Mock하면 되므로 테스트가 매우 간단해집니다. 데이터베이스나 외부 API 없이도 business logic을 완벽하게 테스트할 수 있습니다.
+Since you only need to Mock Ports, testing becomes very simple. You can perfectly test business logic without databases or external APIs.
 
 ```java
 // Port만 Mock하면 됩니다

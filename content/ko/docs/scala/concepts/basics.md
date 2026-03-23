@@ -641,10 +641,10 @@ println(s"${name}님은 ${age}세입니다.")
 
 | 개념 | 연관성 | 설명 |
 |------|--------|------|
-| [제어 구조]({{< relref "/docs/scala/concepts/control-structures" >}}) | **다음 학습** | if, for, while도 표현식으로 값을 반환 |
-| [함수와 메서드]({{< relref "/docs/scala/concepts/functions-methods" >}}) | **다음 학습** | 함수 정의와 고급 기능 |
-| [케이스 클래스]({{< relref "/docs/scala/concepts/case-classes" >}}) | **불변성 적용** | val 철학을 데이터 모델에 적용 |
-| [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | **타입 활용** | 타입 계층을 활용한 분기 처리 |
+| [제어 구조](control-structures/) | **다음 학습** | if, for, while도 표현식으로 값을 반환 |
+| [함수와 메서드](functions-methods/) | **다음 학습** | 함수 정의와 고급 기능 |
+| [케이스 클래스](case-classes/) | **불변성 적용** | val 철학을 데이터 모델에 적용 |
+| [패턴 매칭](pattern-matching/) | **타입 활용** | 타입 계층을 활용한 분기 처리 |
 
 ---
 
@@ -654,5 +654,5 @@ println(s"${name}님은 ${age}세입니다.")
 
 | 추천 순서 | 문서 | 배우는 것 |
 |----------|------|----------|
-| 1 | [제어 구조]({{< relref "/docs/scala/concepts/control-structures" >}}) | if, for, while, match 표현식 |
-| 2 | [함수와 메서드]({{< relref "/docs/scala/concepts/functions-methods" >}}) | 함수 정의와 고급 기능 |
+| 1 | [제어 구조](control-structures/) | if, for, while, match 표현식 |
+| 2 | [함수와 메서드](functions-methods/) | 함수 정의와 고급 기능 |

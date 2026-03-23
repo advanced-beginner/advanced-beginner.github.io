@@ -24,7 +24,7 @@ author_url: "http://github.com/kimbenji"
 | **Target Audience** | Developers learning Application Service and Infrastructure layer implementation |
 | **Spring** | Experience with @Service, @Transactional, @Repository annotations |
 | **JPA** | Understanding of Entity, @Embedded, CascadeType |
-| **Prerequisites** | [Project Setup]({{< relref "/docs/ddd/examples/setup" >}}), [Order Domain]({{< relref "/docs/ddd/examples/order-domain" >}}) completed |
+| **Prerequisites** | [Project Setup](setup/), [Order Domain](order-domain/) completed |
 
 Implementing Application Services that orchestrate use cases and the infrastructure layer.
 
