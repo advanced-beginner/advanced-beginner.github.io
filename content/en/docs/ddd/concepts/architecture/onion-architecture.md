@@ -11,15 +11,15 @@ author_url: "http://github.com/kimbenji"
 > **Prerequisites**: [Hexagonal Architecture]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}}) and Dependency Inversion Principle
 > **Estimated Time**: About 20 minutes
 
-# 어니언 아키텍처 (Onion Architecture)
+# Onion Architecture
 
-Jeffrey Palermo가 2008년에 제안한 아키텍처입니다. <strong>domain model을 가장 중심</strong>에 두고, 양파처럼 겹겹이 감싸는 구조입니다.
+An architecture proposed by Jeffrey Palermo in 2008. It places the <strong>domain model at the very center</strong> and wraps it in concentric layers, like an onion.
 
-어니언 아키텍처는 전통적인 계층형 아키텍처의 한계에서 출발합니다. 계층형 아키텍처에서는 상위 계층이 하위 계층에 의존하므로, 데이터베이스 계층의 변경이 서비스 계층에 연쇄적인 영향을 미칩니다. 반면 어니언 아키텍처에서는 <strong>domain model이 어떤 것에도 의존하지 않고</strong>, 인프라스트럭처가 도메인에 의존하는 방향으로 설계합니다. 이를 통해 도메인 로직은 데이터베이스, 프레임워크, 외부 서비스의 변화와 무관하게 순수한 비즈니스 규칙만을 표현할 수 있습니다. DDD(Domain-Driven Design)와 특히 잘 어울리는 이유도 여기에 있습니다.
+Onion architecture starts from the limitations of traditional layered architecture. In layered architecture, upper layers depend on lower layers, so changes in the database layer cascade into the service layer. In contrast, onion architecture is designed so that the <strong>domain model depends on nothing</strong>, and infrastructure depends on the domain. This allows domain logic to express pure business rules regardless of changes in databases, frameworks, or external services. This is precisely why it pairs so well with DDD (Domain-Driven Design).
 
 ## One-Line Summary
 
-> **domain model이 왕이다. 나머지는 모두 도메인을 섬긴다.**
+> **The domain model is king. Everything else serves the domain.**
 
 ```mermaid
 flowchart TB
@@ -45,20 +45,20 @@ flowchart TB
 
 ## Understanding Through the "Onion"
 
-{{< callout type="tip" title="비유: 진짜 양파 🧅" >}}
-양파를 잘라보면 겹겹이 층이 있습니다:
+{{< callout type="tip" title="Analogy: A Real Onion" >}}
+When you cut an onion, you see layer upon layer:
 
-| 양파 층 | 소프트웨어 층 | 특징 |
+| Onion Layer | Software Layer | Characteristics |
 |--------|-------------|------|
-| 바깥 껍질 (버리는 부분) | **Infrastructure** | 교체 가능, technical details |
-| 바깥쪽 | **Application Services** | 흐름 조율 |
-| 안쪽 | **Domain Services** | 도메인 로직 조합 |
-| 💎 **핵심** (가장 단단함) | **Domain Model** | 절대 바뀌지 않는 비즈니스 규칙 |
+| Outer skin (disposable part) | **Infrastructure** | Replaceable, technical details |
+| Outer layer | **Application Services** | Flow orchestration |
+| Inner layer | **Domain Services** | Domain logic composition |
+| **Core** (hardest part) | **Domain Model** | Business rules that never change |
 
-<strong>핵심 아이디어:</strong> domain model은 가장 안쪽에서 <strong>아무것에도 의존하지 않습니다</strong>. 바깥 껍질(Infrastructure)은 언제든 벗겨내고 교체할 수 있지만, 핵심은 그대로 유지됩니다.
+<strong>Core idea:</strong> The domain model sits at the innermost layer and <strong>depends on nothing</strong>. The outer skin (Infrastructure) can be peeled off and replaced at any time, but the core remains intact.
 {{< /callout >}}
 
-아래 다이어그램은 양파의 층 구조를 시각적으로 표현한 것입니다:
+The diagram below visually represents the layered structure of the onion:
 
 ```mermaid
 flowchart TB
@@ -76,15 +76,15 @@ flowchart TB
 
 ## Difference from Clean Architecture
 
-둘 다 "동심원" 구조지만, 강조점이 다릅니다:
+Both have a "concentric circle" structure, but they emphasize different things:
 
-| 관점 | 클린 | 어니언 |
+| Aspect | Clean | Onion |
 |------|------|--------|
-| **중심** | Entity (비즈니스 규칙) | Domain Model (DDD 개념) |
-| **강조** | 의존성 규칙 | 도메인 순수성 |
-| **Domain Service** | Entity에 포함 | 별도 레이어 |
+| **Center** | Entity (business rules) | Domain Model (DDD concepts) |
+| **Emphasis** | Dependency rules | Domain purity |
+| **Domain Service** | Included in Entity | Separate layer |
 | **Use Case** | Interactor | Application Service |
-| **DDD 친화성** | 보통 | 높음 |
+| **DDD Affinity** | Moderate | High |
 
 ```mermaid
 flowchart LR
@@ -104,39 +104,39 @@ flowchart LR
     Clean -.->|"DDD Enhancement"| Onion
 ```
 
-**어니언이 DDD에 더 적합한 이유:**
-- Domain Model과 Domain Service를 명확히 분리
-- Aggregate, Entity, Value Object 개념이 자연스럽게 들어감
-- Repository interface가 Domain에 위치
+**Why Onion is more suitable for DDD:**
+- Clearly separates Domain Model and Domain Service
+- Aggregate, Entity, and Value Object concepts fit naturally
+- Repository interfaces reside in the Domain
 
 ---
 
 ## 4 Layers in Detail
 
-### 1. Domain Model (domain model) - 💎 가장 안쪽
+### 1. Domain Model - Innermost Layer
 
-<strong>core business 개념과 규칙</strong>이 있는 곳입니다.
+This is where <strong>core business concepts and rules</strong> reside.
 
 ```mermaid
 flowchart TB
     subgraph DM["Domain Model"]
-        E["Entity<br>(식별성 있는 객체)"]
-        VO["Value Object<br>(값으로 비교)"]
-        AGG["Aggregate<br>(일관성 경계)"]
+        E["Entity<br>(identity-based object)"]
+        VO["Value Object<br>(compared by value)"]
+        AGG["Aggregate<br>(consistency boundary)"]
         DE["Domain Event<br>(domain event)"]
     end
 ```
 
 ```java
-// Entity: 고유 식별자로 구분
+// Entity: distinguished by unique identifier
 public class Order {
-    private final OrderId id;  // 식별자
+    private final OrderId id;  // identifier
     private CustomerId customerId;
     private List<OrderLine> orderLines;
     private OrderStatus status;
     private Money totalAmount;
 
-    // 팩토리 메서드
+    // Factory method
     public static Order create(CustomerId customerId, List<OrderLine> lines) {
         if (lines.isEmpty()) {
             throw new EmptyOrderException();
@@ -168,7 +168,7 @@ public class Order {
         this.status = OrderStatus.CANCELLED;
     }
 
-    // 불변식 검증
+    // Invariant validation
     private void validateModifiable() {
         if (status != OrderStatus.PENDING) {
             throw new OrderNotModifiableException(id, status);
@@ -177,7 +177,7 @@ public class Order {
 
     private void validateCanConfirm() {
         if (status != OrderStatus.PENDING) {
-            throw new InvalidOrderStateException("PENDING에서만 확정 가능");
+            throw new InvalidOrderStateException("Can only confirm from PENDING state");
         }
         if (totalAmount.isLessThan(Money.of(1000))) {
             throw new MinimumOrderAmountException();
@@ -187,7 +187,7 @@ public class Order {
 ```
 
 ```java
-// Value Object: 값으로 비교, 불변
+// Value Object: compared by value, immutable
 public record Money(BigDecimal amount, Currency currency) {
 
     public static final Money ZERO = Money.of(0);
@@ -232,12 +232,12 @@ public record Money(BigDecimal amount, Currency currency) {
 ```
 
 ```java
-// Aggregate Root: 일관성 경계
-public class Order {  // Order가 Aggregate Root
+// Aggregate Root: consistency boundary
+public class Order {  // Order is the Aggregate Root
     private OrderId id;
-    private List<OrderLine> orderLines;  // OrderLine은 Order 내부에서만 관리
+    private List<OrderLine> orderLines;  // OrderLine is managed only within Order
 
-    // 외부에서는 Order를 통해서만 OrderLine에 접근
+    // External access to OrderLine is only through Order
     public void addLine(ProductId productId, int quantity, Money unitPrice) {
         OrderLine line = new OrderLine(productId, quantity, unitPrice);
         this.orderLines.add(line);
@@ -252,38 +252,38 @@ public class Order {  // Order가 Aggregate Root
 ```
 
 {{< notice style="tip" >}}
-**Domain Model의 특징**
-- **pure Java object** - 어떤 프레임워크에도 의존 안 함
-- **풍부한 도메인 로직** - getter/setter만 있으면 안 됨
-- **자기 방어** - 잘못된 상태로 만들 수 없음
-- **easy to test** - external dependencies 없이 테스트 가능
+**Characteristics of Domain Model**
+- **Pure Java object** - does not depend on any framework
+- **Rich domain logic** - must not have only getters/setters
+- **Self-defending** - cannot be put into an invalid state
+- **Easy to test** - testable without external dependencies
 {{< /notice >}}
 
 ---
 
-### 2. Domain Services (도메인 서비스) - 🟡
+### 2. Domain Services
 
-<strong>여러 도메인 객체를 조합하는 로직</strong>이 있는 곳입니다. 한 Entity에 넣기 어려운 로직을 담습니다.
+This is where <strong>logic that combines multiple domain objects</strong> resides. It contains logic that is difficult to place in a single Entity.
 
 ```
-🤔 이 로직은 어디에?
-- Order에 넣을까? Customer에 넣을까?
-→ 둘 다 아니면 Domain Service!
+Where does this logic go?
+- In Order? In Customer?
+-> If neither, then Domain Service!
 ```
 
 ```java
-// Domain Service: 여러 Aggregate를 조합
+// Domain Service: combines multiple Aggregates
 public class PricingService {
 
-    // 할인 계산 - Order와 Customer 정보 모두 필요
+    // Discount calculation - needs both Order and Customer information
     public Money calculateFinalPrice(Order order, Customer customer, DiscountPolicy policy) {
         Money basePrice = order.getTotalAmount();
 
-        // 고객 등급에 따른 할인
+        // Discount based on customer grade
         Percentage discount = policy.getDiscountFor(customer.getGrade());
         Money discounted = basePrice.applyDiscount(discount);
 
-        // VIP 추가 할인
+        // Additional VIP discount
         if (customer.isVip() && order.getTotalAmount().isGreaterThan(Money.of(100000))) {
             discounted = discounted.applyDiscount(Percentage.of(5));
         }
@@ -294,10 +294,10 @@ public class PricingService {
 ```
 
 ```java
-// Domain Service: 재고 확인 + 예약
+// Domain Service: inventory check + reservation
 public class InventoryDomainService {
 
-    // 여러 상품의 재고를 한번에 확인하고 예약
+    // Check and reserve inventory for multiple products at once
     public ReservationResult reserveInventory(Order order, InventoryRepository inventoryRepo) {
         List<ReservationItem> reservations = new ArrayList<>();
 
@@ -306,7 +306,7 @@ public class InventoryDomainService {
                 .orElseThrow(() -> new ProductNotFoundException(line.getProductId()));
 
             if (!inventory.hasEnough(line.getQuantity())) {
-                return ReservationResult.failed(line.getProductId(), "재고 부족");
+                return ReservationResult.failed(line.getProductId(), "Insufficient stock");
             }
 
             inventory.reserve(line.getQuantity());
@@ -318,10 +318,10 @@ public class InventoryDomainService {
 }
 ```
 
-**또한 Domain 레이어에는 Repository interface가 위치합니다:**
+**Additionally, Repository interfaces are located in the Domain layer:**
 
 ```java
-// Repository Interface (Domain 레이어에 정의)
+// Repository Interface (defined in the Domain layer)
 public interface OrderRepository {
     Order save(Order order);
     Optional<Order> findById(OrderId id);
@@ -338,24 +338,24 @@ public interface CustomerRepository {
 
 | Domain Service | Application Service |
 |----------------|---------------------|
-| 도메인 로직 조합 | 흐름(워크플로우) 조율 |
-| 순수한 비즈니스 규칙 | 트랜잭션, 인프라 호출 |
-| 다른 도메인 객체만 사용 | Repository, 외부 서비스 호출 |
-| "할인 금액 계산" | "주문 생성 → 저장 → 알림" |
+| Domain logic composition | Flow (workflow) orchestration |
+| Pure business rules | Transaction, infrastructure calls |
+| Uses only other domain objects | Calls Repository, external services |
+| "Calculate discount amount" | "Create order -> save -> notify" |
 {{< /notice >}}
 
 ---
 
-### 3. Application Services (애플리케이션 서비스) - 🟢
+### 3. Application Services
 
-<strong>Use Case orchestrate flow</strong>합니다. transaction management, 외부 시스템 호출 등을 담당합니다.
+<strong>Orchestrates Use Case flow</strong>. Handles transaction management, external system calls, and more.
 
 ```java
 @Service
 @Transactional
 public class OrderApplicationService {
 
-    // Repository들 (Infrastructure implementation가 주입됨)
+    // Repositories (Infrastructure implementations are injected)
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
 
@@ -363,24 +363,24 @@ public class OrderApplicationService {
     private final PricingService pricingService;
     private final InventoryDomainService inventoryService;
 
-    // 외부 서비스
+    // External services
     private final PaymentService paymentService;
     private final NotificationService notificationService;
     private final EventPublisher eventPublisher;
 
-    // Use Case: 주문 생성
+    // Use Case: create order
     public OrderDto createOrder(CreateOrderCommand command) {
-        // 1. 고객 조회
+        // 1. Look up customer
         Customer customer = customerRepository.findById(command.customerId())
             .orElseThrow(() -> new CustomerNotFoundException(command.customerId()));
 
-        // 2. 도메인 객체 생성 (Domain Model)
+        // 2. Create domain object (Domain Model)
         Order order = Order.create(
             customer.getId(),
             command.toOrderLines()
         );
 
-        // 3. 할인 적용 (Domain Service)
+        // 3. Apply discount (Domain Service)
         Money finalPrice = pricingService.calculateFinalPrice(
             order,
             customer,
@@ -388,7 +388,7 @@ public class OrderApplicationService {
         );
         order.applyDiscount(finalPrice);
 
-        // 4. 재고 예약 (Domain Service)
+        // 4. Reserve inventory (Domain Service)
         ReservationResult reservation = inventoryService.reserveInventory(
             order,
             inventoryRepository
@@ -397,57 +397,57 @@ public class OrderApplicationService {
             throw new InsufficientInventoryException(reservation.getFailedProduct());
         }
 
-        // 5. 저장 (Repository)
+        // 5. Save (Repository)
         Order savedOrder = orderRepository.save(order);
 
-        // 6. event publishing
+        // 6. Publish event
         eventPublisher.publish(new OrderCreatedEvent(savedOrder));
 
-        // 7. DTO 반환
+        // 7. Return DTO
         return OrderDto.from(savedOrder);
     }
 
-    // Use Case: 주문 확정
+    // Use Case: confirm order
     public void confirmOrder(OrderId orderId) {
-        // 1. 조회
+        // 1. Look up
         Order order = orderRepository.findById(orderId)
             .orElseThrow(() -> new OrderNotFoundException(orderId));
 
-        // 2. 결제 (외부 서비스)
+        // 2. Payment (external service)
         PaymentResult payment = paymentService.process(order.getTotalAmount());
         if (!payment.isSuccess()) {
             throw new PaymentFailedException(payment.getReason());
         }
 
-        // 3. 확정 (Domain 로직)
+        // 3. Confirm (Domain logic)
         order.confirm();
 
-        // 4. 저장
+        // 4. Save
         orderRepository.save(order);
 
-        // 5. 알림 발송 (외부 서비스)
+        // 5. Send notification (external service)
         notificationService.sendConfirmation(order);
 
-        // 6. event publishing
+        // 6. Publish event
         eventPublisher.publish(new OrderConfirmedEvent(order));
     }
 }
 ```
 
 {{< notice style="tip" >}}
-**Application Service의 역할**
-- **조율자 역할** - "무엇을" 할지 결정, "어떻게"는 Domain에 위임
-- **트랜잭션 경계** - @Transactional 적용
-- **외부 시스템 호출** - Payment, Notification 등
-- **event publishing** - domain event 발행
-- **DTO 변환** - 외부에 반환할 데이터 형태 결정
+**Role of Application Service**
+- **Orchestrator role** - decides "what" to do, delegates "how" to the Domain
+- **Transaction boundary** - applies @Transactional
+- **External system calls** - Payment, Notification, etc.
+- **Event publishing** - publishes domain events
+- **DTO conversion** - determines the data format to return externally
 {{< /notice >}}
 
 ---
 
-### 4. Infrastructure (인프라) - 🔵 가장 바깥
+### 4. Infrastructure - Outermost Layer
 
-<strong>technical details</strong>이 있는 곳입니다. UI, 데이터베이스, 외부 API 연동 등.
+This is where <strong>technical details</strong> reside. UI, database, external API integrations, and more.
 
 ```mermaid
 flowchart TB
@@ -488,7 +488,7 @@ public class OrderController {
 ```
 
 ```java
-// Repository 구현 (Infrastructure)
+// Repository implementation (Infrastructure)
 @Repository
 public class JpaOrderRepository implements OrderRepository {
 
@@ -517,7 +517,7 @@ public class JpaOrderRepository implements OrderRepository {
     }
 }
 
-// JPA Entity (Infrastructure 전용)
+// JPA Entity (Infrastructure only)
 @Entity
 @Table(name = "orders")
 public class OrderEntity {
@@ -533,7 +533,7 @@ public class OrderEntity {
 ```
 
 ```java
-// 외부 서비스 구현 (Infrastructure)
+// External service implementation (Infrastructure)
 @Component
 public class ExternalPaymentService implements PaymentService {
 
@@ -555,7 +555,7 @@ public class ExternalPaymentService implements PaymentService {
 
             return PaymentResult.from(response.getBody());
         } catch (Exception e) {
-            return PaymentResult.failed("결제 서비스 오류: " + e.getMessage());
+            return PaymentResult.failed("Payment service error: " + e.getMessage());
         }
     }
 }
@@ -568,8 +568,8 @@ public class ExternalPaymentService implements PaymentService {
 ```
 com.example.order/
 │
-├── domain/                          # 💎 + 🟡 Domain Layer
-│   ├── model/                       # Domain Model (가장 안쪽)
+├── domain/                          # Domain Layer
+│   ├── model/                       # Domain Model (innermost)
 │   │   ├── order/
 │   │   │   ├── Order.java           # Aggregate Root
 │   │   │   ├── OrderLine.java       # Entity
@@ -594,18 +594,18 @@ com.example.order/
 │       ├── OrderCreatedEvent.java
 │       └── OrderConfirmedEvent.java
 │
-├── application/                     # 🟢 Application Services
+├── application/                     # Application Services
 │   ├── service/
 │   │   └── OrderApplicationService.java
 │   ├── command/
 │   │   └── CreateOrderCommand.java
 │   ├── dto/
 │   │   └── OrderDto.java
-│   └── port/                        # 외부 서비스 Interface
+│   └── port/                        # External service interfaces
 │       ├── PaymentService.java
 │       └── NotificationService.java
 │
-└── infrastructure/                  # 🔵 Infrastructure (가장 바깥)
+└── infrastructure/                  # Infrastructure (outermost)
     ├── web/
     │   ├── OrderController.java
     │   ├── CreateOrderRequest.java
@@ -648,15 +648,15 @@ flowchart TB
 ```
 
 **Core Rules:**
-1. **Infrastructure → Application → Domain** 방향으로만 의존
-2. **Domain은 아무것에도 의존하지 않음**
-3. **Repository Interface는 Domain에, 구현은 Infrastructure에**
+1. Dependencies only flow in the direction **Infrastructure -> Application -> Domain**
+2. **Domain depends on nothing**
+3. **Repository Interface is in Domain, implementation is in Infrastructure**
 
 ---
 
 ## Comparison with Other Architectures
 
-### 클린 vs 헥사고날 vs 어니언
+### Clean vs Hexagonal vs Onion
 
 ```mermaid
 flowchart TB
@@ -682,24 +682,24 @@ flowchart TB
     end
 ```
 
-| 비교 항목 | 클린 | 헥사고날 | 어니언 |
+| Comparison | Clean | Hexagonal | Onion |
 |---------|------|---------|--------|
-| **레이어 수** | 4 | 3~4 | 4 |
-| **중심** | Entity | Core | Domain Model |
-| **강조점** | 의존성 규칙 | 외부 격리 | 도메인 순수성 |
-| **Domain Service** | Entity에 포함 | 명시적 구분 없음 | 별도 레이어 |
-| **DDD 친화성** | 보통 | 높음 | 가장 높음 |
-| **복잡도** | 높음 | 중간 | 중간 |
+| **Number of Layers** | 4 | 3-4 | 4 |
+| **Center** | Entity | Core | Domain Model |
+| **Emphasis** | Dependency rules | External isolation | Domain purity |
+| **Domain Service** | Included in Entity | No explicit distinction | Separate layer |
+| **DDD Affinity** | Moderate | High | Highest |
+| **Complexity** | High | Medium | Medium |
 
 ---
 
 ## Common Mistakes
 
-### 1. Domain에 Infrastructure 코드
+### 1. Infrastructure Code in Domain
 
 ```java
-// ❌ 잘못된 예: Domain Model에 JPA 어노테이션
-@Entity  // Infrastructure 코드!
+// ❌ Wrong: JPA annotations in Domain Model
+@Entity  // Infrastructure code!
 @Table(name = "orders")
 public class Order {
     @Id
@@ -709,15 +709,15 @@ public class Order {
     private List<OrderLine> orderLines;
 }
 
-// ✅ 올바른 예: 순수한 Domain Model
+// ✅ Correct: Pure Domain Model
 public class Order {
     private OrderId id;
     private List<OrderLine> orderLines;
 
-    // 순수한 business logic만
+    // Pure business logic only
 }
 
-// Infrastructure에 별도 JPA Entity
+// Separate JPA Entity in Infrastructure
 @Entity
 @Table(name = "orders")
 public class OrderEntity {
@@ -727,17 +727,17 @@ public class OrderEntity {
 }
 ```
 
-### 2. Application Service에 business logic
+### 2. Business Logic in Application Service
 
 ```java
-// ❌ 잘못된 예: Application Service에 비즈니스 규칙
+// ❌ Wrong: Business rules in Application Service
 @Service
 public class OrderApplicationService {
 
     public void confirmOrder(OrderId orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow();
 
-        // 이 로직은 Order 안에 있어야 함!
+        // This logic should be inside Order!
         if (order.getStatus().equals("PENDING")) {
             if (order.getTotalAmount() >= 1000) {
                 order.setStatus("CONFIRMED");
@@ -746,10 +746,10 @@ public class OrderApplicationService {
     }
 }
 
-// ✅ 올바른 예: Domain Model에 business logic
+// ✅ Correct: Business logic in Domain Model
 public class Order {
     public void confirm() {
-        validateCanConfirm();  // 규칙 검증
+        validateCanConfirm();  // Rule validation
         this.status = OrderStatus.CONFIRMED;
     }
 
@@ -767,18 +767,18 @@ public class Order {
 public class OrderApplicationService {
     public void confirmOrder(OrderId orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow();
-        order.confirm();  // Domain에 위임
+        order.confirm();  // Delegate to Domain
         orderRepository.save(order);
     }
 }
 ```
 
-### 3. Domain이 외부 서비스 직접 호출
+### 3. Domain Directly Calling External Services
 
 ```java
-// ❌ 잘못된 예: Domain Service가 외부 서비스 호출
+// ❌ Wrong: Domain Service calls external service
 public class PricingDomainService {
-    private final ExternalDiscountApi discountApi;  // 외부 API!
+    private final ExternalDiscountApi discountApi;  // External API!
 
     public Money calculatePrice(Order order) {
         Discount discount = discountApi.getDiscount(order.getCustomerId());  // Not allowed!
@@ -786,23 +786,23 @@ public class PricingDomainService {
     }
 }
 
-// ✅ 올바른 예: 필요한 정보를 파라미터로 받음
+// ✅ Correct: Receive needed information as parameters
 public class PricingDomainService {
     public Money calculatePrice(Order order, DiscountPolicy policy) {
-        // 외부 정보는 Application Service에서 조회해서 전달
+        // External info is fetched by Application Service and passed in
         Percentage discount = policy.getDiscountFor(order.getCustomerGrade());
         return order.getTotalAmount().applyDiscount(discount);
     }
 }
 
-// Application Service에서 외부 정보 조회
+// Application Service fetches external information
 @Service
 public class OrderApplicationService {
     private final DiscountClient discountClient;  // Infrastructure
 
     public OrderDto createOrder(CreateOrderCommand command) {
-        DiscountPolicy policy = discountClient.getCurrentPolicy();  // 외부 조회
-        Money finalPrice = pricingService.calculatePrice(order, policy);  // Domain에 전달
+        DiscountPolicy policy = discountClient.getCurrentPolicy();  // External lookup
+        Money finalPrice = pricingService.calculatePrice(order, policy);  // Pass to Domain
     }
 }
 ```
@@ -824,13 +824,13 @@ flowchart TB
     E2E --> INT --> UNIT
 ```
 
-### 1. Domain Model 테스트 (가장 쉬움)
+### 1. Domain Model Tests (Easiest)
 
 ```java
 class OrderTest {
 
     @Test
-    void 주문_생성_성공() {
+    void order_creation_success() {
         List<OrderLine> lines = List.of(
             new OrderLine(ProductId.of("p1"), 2, Money.of(10000))
         );
@@ -843,7 +843,7 @@ class OrderTest {
     }
 
     @Test
-    void 빈_주문은_생성할_수_없다() {
+    void empty_order_cannot_be_created() {
         assertThrows(EmptyOrderException.class,
             () -> Order.create(CustomerId.of("c1"), List.of()));
     }
@@ -852,7 +852,7 @@ class OrderTest {
 class MoneyTest {
 
     @Test
-    void 금액_더하기() {
+    void add_amounts() {
         Money a = Money.of(10000);
         Money b = Money.of(5000);
 
@@ -862,14 +862,14 @@ class MoneyTest {
     }
 
     @Test
-    void 음수_금액_불가() {
+    void negative_amount_not_allowed() {
         assertThrows(NegativeAmountException.class,
             () -> new Money(BigDecimal.valueOf(-1000), Currency.KRW));
     }
 }
 ```
 
-### 2. Domain Service 테스트
+### 2. Domain Service Tests
 
 ```java
 class PricingServiceTest {
@@ -877,7 +877,7 @@ class PricingServiceTest {
     private PricingService pricingService = new PricingService();
 
     @Test
-    void VIP_고객_10퍼센트_할인() {
+    void VIP_customer_10_percent_discount() {
         Order order = createOrderWithTotal(Money.of(100000));
         Customer vip = Customer.withGrade(Grade.VIP);
         DiscountPolicy policy = DiscountPolicy.standard();
@@ -889,7 +889,7 @@ class PricingServiceTest {
 }
 ```
 
-### 3. Application Service 테스트 (Mock 사용)
+### 3. Application Service Tests (Using Mocks)
 
 ```java
 @ExtendWith(MockitoExtension.class)
@@ -905,7 +905,7 @@ class OrderApplicationServiceTest {
     private OrderApplicationService service;
 
     @Test
-    void 주문_확정_성공() {
+    void order_confirmation_success() {
         // Given
         Order order = createPendingOrder();
         when(orderRepository.findById(any())).thenReturn(Optional.of(order));
@@ -920,10 +920,10 @@ class OrderApplicationServiceTest {
     }
 
     @Test
-    void 결제_실패시_예외() {
+    void exception_on_payment_failure() {
         Order order = createPendingOrder();
         when(orderRepository.findById(any())).thenReturn(Optional.of(order));
-        when(paymentService.process(any())).thenReturn(PaymentResult.failed("잔액 부족"));
+        when(paymentService.process(any())).thenReturn(PaymentResult.failed("Insufficient balance"));
 
         assertThrows(PaymentFailedException.class,
             () -> service.confirmOrder(order.getId()));
@@ -933,7 +933,7 @@ class OrderApplicationServiceTest {
 }
 ```
 
-### 4. Infrastructure 테스트 (통합 테스트)
+### 4. Infrastructure Tests (Integration Tests)
 
 ```java
 @DataJpaTest
@@ -950,7 +950,7 @@ class JpaOrderRepositoryTest {
     }
 
     @Test
-    void 주문_저장_및_조회() {
+    void save_and_find_order() {
         Order order = createOrder();
 
         repository.save(order);
@@ -966,29 +966,29 @@ class JpaOrderRepositoryTest {
 
 ## Trade-offs
 
-어니언 아키텍처는 도메인을 보호하는 대신, 복잡성과 개발 비용이라는 대가를 지불합니다. 프로젝트에 도입하기 전에 장단점을 명확히 이해해야 합니다.
+Onion architecture protects the domain, but at the cost of complexity and development effort. You must clearly understand the trade-offs before adopting it in a project.
 
-### 장점
+### Advantages
 
-| 장점 | 설명 |
+| Advantage | Description |
 |-----|------|
-| **도메인 보호** | business logic이 technical details에 오염되지 않음 |
-| **easy to test성** | Domain Layer를 external dependencies 없이 단위 테스트 가능 |
-| **기술 독립성** | 데이터베이스, 프레임워크 교체가 도메인에 영향 없음 |
-| **DDD 친화성** | Aggregate, Entity, Value Object 등 DDD 개념과 자연스럽게 매핑 |
-| **명확한 경계** | 레이어 간 책임이 명확하여 팀 협업 용이 |
+| **Domain protection** | Business logic is not polluted by technical details |
+| **Testability** | Domain Layer can be unit tested without external dependencies |
+| **Technology independence** | Database and framework changes do not affect the domain |
+| **DDD affinity** | Maps naturally to DDD concepts like Aggregate, Entity, Value Object |
+| **Clear boundaries** | Clear responsibilities between layers facilitate team collaboration |
 
-### 단점
+### Disadvantages
 
-| 단점 | 설명 |
+| Disadvantage | Description |
 |-----|------|
-| **초기 복잡성** | 계층형보다 파일과 interface가 많아짐 |
-| **학습 곡선** | DDD 개념과 dependency direction을 이해해야 함 |
-| **매핑 오버헤드** | Domain Entity ↔ JPA Entity 변환 코드 필요 |
-| **단순 CRUD에는 과도함** | business logic이 단순하면 오버엔지니어링 |
-| **성능 비용** | 객체 변환이 많아 미세한 성능 저하 가능 |
+| **Initial complexity** | More files and interfaces than layered |
+| **Learning curve** | Must understand DDD concepts and dependency direction |
+| **Mapping overhead** | Conversion code needed between Domain Entity and JPA Entity |
+| **Excessive for simple CRUD** | Over-engineering if business logic is simple |
+| **Performance cost** | Many object conversions can cause slight performance degradation |
 
-### 현실적 고려사항
+### Practical Considerations
 
 ```mermaid
 flowchart LR
@@ -1006,39 +1006,39 @@ flowchart LR
     Q3 -->|No| H["Hexagonal or<br>Layered recommended"]
 ```
 
-> <strong>핵심:</strong> 아키텍처의 복잡성은 <strong>해결하려는 문제의 복잡성에 비례</strong>해야 합니다. 단순한 문제에 복잡한 해결책을 적용하면, 그 복잡성 자체가 새로운 문제가 됩니다.
+> <strong>Key point:</strong> The complexity of the architecture should be <strong>proportional to the complexity of the problem you are solving</strong>. If you apply a complex solution to a simple problem, the complexity itself becomes a new problem.
 
 ---
 
 ## When Should You Use Onion Architecture?
 
-### 적합한 경우
+### Suitable Cases
 
-- ✅ DDD를 본격적으로 적용하는 프로젝트
-- ✅ 복잡한 도메인 로직이 있는 경우
-- ✅ 도메인 전문가와 협업하는 경우
-- ✅ 장기적으로 유지보수할 프로젝트
-- ✅ 비즈니스 규칙이 자주 변경되는 경우
+- Projects that fully adopt DDD
+- Cases with complex domain logic
+- Cases requiring collaboration with domain experts
+- Projects maintained long-term
+- Cases where business rules change frequently
 
-### 부적합한 경우
+### Unsuitable Cases
 
-- ❌ 단순 CRUD 애플리케이션
-- ❌ 소규모, 단기 프로젝트
-- ❌ DDD 경험이 없는 팀 → [계층형]({{< relref "/docs/ddd/concepts/architecture/layered-architecture" >}})으로 시작
-- ❌ 외부 연동이 많고 도메인이 단순한 경우 → [헥사고날]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}})
+- Simple CRUD applications
+- Small, short-term projects
+- Teams with no DDD experience -- start with [Layered Architecture]({{< relref "/docs/ddd/concepts/architecture/layered-architecture" >}})
+- Cases with many external integrations but simple domains -- use [Hexagonal]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}})
 
-### Best Practice: 어떤 시스템에 어울리는가?
+### Best Practice: Which Systems Fit?
 
-| 시스템 유형 | 적합도 | 이유 |
+| System Type | Suitability | Reason |
 |------------|-------|------|
-| **DDD 기반 프로젝트** | 매우 적합 | Aggregate, Entity, Value Object와 자연스럽게 매핑 |
-| **보험/금융 도메인** | 매우 적합 | 복잡한 비즈니스 규칙, 도메인 순수성 |
-| **예약/스케줄링 시스템** | 적합 | 복잡한 도메인 로직, 상태 관리 |
-| **재고/물류 관리** | 적합 | 비즈니스 규칙 중심, 도메인 전문가 협업 |
-| **의료 시스템** | 적합 | 규정 준수, 복잡한 도메인 |
-| **단순 조회 서비스** | 부적합 | 도메인 로직이 단순하면 과도함 |
-| **외부 연동 중심** | 부적합 | 헥사고날이 더 적합 |
-| **MVP/프로토타입** | 부적합 | 빠른 개발이 우선 |
+| **DDD-based projects** | Very suitable | Maps naturally to Aggregate, Entity, Value Object |
+| **Insurance/Finance domains** | Very suitable | Complex business rules, domain purity |
+| **Reservation/Scheduling systems** | Suitable | Complex domain logic, state management |
+| **Inventory/Logistics management** | Suitable | Business rule-centric, domain expert collaboration |
+| **Healthcare systems** | Suitable | Regulatory compliance, complex domain |
+| **Simple query services** | Unsuitable | Excessive if domain logic is simple |
+| **External integration-focused** | Unsuitable | Hexagonal is more appropriate |
+| **MVP/Prototype** | Unsuitable | Fast development takes priority |
 
 ---
 
@@ -1054,7 +1054,7 @@ flowchart LR
     A --> B --> C --> D
 ```
 
-### 1단계: Entity에 로직 넣기
+### Step 1: Add Logic to Entities
 
 ```java
 // Before: Anemic Domain
@@ -1076,10 +1076,10 @@ public class Order {
 }
 ```
 
-### 2단계: Domain Service 추출
+### Step 2: Extract Domain Services
 
 ```java
-// 여러 Entity를 조합하는 로직을 Domain Service로
+// Move logic that combines multiple Entities to a Domain Service
 public class PricingService {
     public Money calculatePrice(Order order, Customer customer) {
         // ...
@@ -1087,7 +1087,7 @@ public class PricingService {
 }
 ```
 
-### 3단계: Repository Interface 분리
+### Step 3: Separate Repository Interfaces
 
 ```java
 // domain/repository/OrderRepository.java (Interface)
@@ -1095,7 +1095,7 @@ public interface OrderRepository {
     Order save(Order order);
 }
 
-// infrastructure/persistence/JpaOrderRepository.java (구현)
+// infrastructure/persistence/JpaOrderRepository.java (implementation)
 public class JpaOrderRepository implements OrderRepository {
     // ...
 }
@@ -1105,7 +1105,7 @@ public class JpaOrderRepository implements OrderRepository {
 
 ## Next Steps
 
-- [계층형 아키텍처]({{< relref "/docs/ddd/concepts/architecture/layered-architecture" >}}) - 기본부터 시작
-- [헥사고날 아키텍처]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}}) - 외부 연동 중심
-- [클린 아키텍처]({{< relref "/docs/ddd/concepts/architecture/clean-architecture" >}}) - 엄격한 규칙
-- [CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}}) - 읽기/쓰기 분리
+- [Layered Architecture]({{< relref "/docs/ddd/concepts/architecture/layered-architecture" >}}) - Start from the basics
+- [Hexagonal Architecture]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}}) - External integration focused
+- [Clean Architecture]({{< relref "/docs/ddd/concepts/architecture/clean-architecture" >}}) - Strict rules
+- [CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}}) - Read/write separation

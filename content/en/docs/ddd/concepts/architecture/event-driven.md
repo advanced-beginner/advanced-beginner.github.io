@@ -14,28 +14,28 @@ author_url: "http://github.com/kimbenji"
 
 ---
 
-# 이벤트 기반 아키텍처 (Event-Driven Architecture)
+# Event-Driven Architecture
 
-{{< callout type="tip" title="비유: 회사 공지 시스템" >}}
-domain event를 <strong>회사 공지 시스템</strong>에 비유할 수 있습니다:
+{{< callout type="tip" title="Analogy: Company Announcement System" >}}
+You can think of domain events as a <strong>company announcement system</strong>:
 
-- **event publishing**: 인사팀에서 "신입 사원 입사" 공지를 보냅니다. 인사팀은 누가 이 공지를 볼지 모르고, 알 필요도 없습니다.
-- **이벤트 구독**: IT팀은 공지를 보고 계정을 생성하고, 총무팀은 명함을 주문하며, 교육팀은 신입 교육 일정을 잡습니다. 각 부서가 독립적으로 행동합니다.
-- **loose coupling**: 인사팀이 IT팀의 존재를 모르더라도 시스템은 작동합니다. 나중에 "환영 선물 담당 팀"이 추가되어도 인사팀은 수정할 필요가 없습니다.
+- **Event publishing**: HR sends out a "New employee has joined" announcement. HR does not know who will see this announcement, nor does it need to.
+- **Event subscription**: The IT team sees the announcement and creates an account, the General Affairs team orders business cards, and the Training team schedules onboarding. Each department acts independently.
+- **Loose coupling**: The system works even if HR does not know the IT team exists. Even if a "Welcome Gift team" is added later, HR does not need any changes.
 
-**핵심**: 발행자는 "무슨 일이 일어났다"만 알리고, 구독자들이 각자 필요한 일을 합니다.
+**Key point**: The publisher only announces "something happened," and subscribers each do what they need to do.
 {{< /callout >}}
 
-{{< callout type="info" title="TL;DR" >}}
-* domain event는 “비즈니스적으로 의미 있는 변화가 이미 발생했음”을 시스템 전체에 안전하게 전파하기 위한 설계 도구다.
-* 이를 통해 핵심 도메인 로직과 부가 관심사를 분리하고, 시스템을 점진적으로 이벤트 기반 구조로 확장할 수 있다.
+{{< callout type=”info” title=”TL;DR” >}}
+* Domain events are a design tool for safely propagating “a business-meaningful change has already occurred” throughout the entire system.
+* Through this, you can separate core domain logic from secondary concerns and gradually evolve the system into an event-driven architecture.
 {{< /callout >}}
 
-도메인에서 발생한 중요한 사건을 이벤트로 표현하고 활용하는 방법을 살펴봅니다. domain event는 비즈니스 프로세스에서 일어나는 의미 있는 변화를 포착하여 시스템 내에서 전파하고, 이를 통해 느슨하게 결합된 컴포넌트 간 통신을 가능하게 합니다. 이는 마이크로서비스 아키텍처나 이벤트 기반 시스템을 구축할 때 핵심적인 개념입니다.
+Let us explore how to express and utilize important events that occur in the domain. Domain events capture meaningful changes in business processes, propagate them throughout the system, and enable communication between loosely coupled components. This is a core concept when building microservice architectures or event-driven systems.
 
 #### What Are Domain Events?
 
-domain event는 도메인 전문가가 관심을 가지는 비즈니스적으로 의미 있는 사건입니다. 예를 들어 "주문이 확정되었다", "결제가 완료되었다", "상품이 배송되었다"와 같은 실제 비즈니스에서 중요하게 여기는 순간들을 코드로 표현한 것입니다. 이런 이벤트들은 단순히 기술적인 상태 변경이 아니라, 비즈니스 관점에서 의미 있는 일이 발생했음을 나타냅니다.
+A domain event is a business-meaningful occurrence that domain experts care about. For example, "an order was confirmed," "a payment was completed," or "a product was shipped" -- these are moments that matter in real business, expressed in code. These events are not merely technical state changes but indicate that something meaningful has happened from a business perspective.
 
 ```mermaid
 flowchart LR
@@ -56,27 +56,27 @@ flowchart LR
     EVT --> H3
 ```
 
-위 다이어그램은 하나의 domain event가 여러 핸들러에 의해 처리되는 과정을 보여줍니다. 주문이 확정되면 재고 차감, 알림 발송, 포인트 적립 등의 후속 작업이 자동으로 트리거됩니다.
+The diagram above shows how a single domain event is processed by multiple handlers. When an order is confirmed, follow-up tasks such as inventory deduction, notification delivery, and point accumulation are automatically triggered.
 
-**domain event의 주요 특징**
+**Key characteristics of domain events**
 
-domain event는 몇 가지 중요한 특징을 가지고 있습니다. 첫째, 이벤트 이름은 항상 과거형으로 명명됩니다. 이미 일어난 사실을 표현하기 때문에 "OrderConfirmed"처럼 과거형을 사용하며, "ConfirmOrder"처럼 명령형을 사용하지 않습니다. 둘째, 이벤트는 불변입니다. 일단 발행된 이벤트는 절대 변경할 수 없으며, 이벤트의 모든 데이터는 읽기 전용입니다. 셋째, 이벤트는 자기 완결적입니다. 이벤트를 처리하는 데 필요한 모든 정보를 포함하고 있어야 하며, orderId, 발생 시점, 관련 데이터 등을 담고 있습니다.
+Domain events have several important characteristics. First, event names are always in the past tense. Since they express facts that have already occurred, you use past tense like "OrderConfirmed" rather than imperative like "ConfirmOrder." Second, events are immutable. Once published, an event can never be changed, and all event data is read-only. Third, events are self-contained. They must include all information needed to process the event, such as orderId, time of occurrence, and related data.
 
-| 특성 | 설명 | 예시 |
+| Characteristic | Description | Example |
 |------|------|------|
-| **과거형 명명** | 이미 일어난 사실 | OrderConfirmed (O), ConfirmOrder (X) |
-| **불변성** | 발행 후 변경 불가 | 이벤트 데이터는 readonly |
-| **자기 완결적** | 필요한 정보 포함 | orderId, 시점, 관련 데이터 |
+| **Past tense naming** | Represents a fact that already happened | OrderConfirmed (O), ConfirmOrder (X) |
+| **Immutability** | Cannot be changed after publishing | Event data is readonly |
+| **Self-contained** | Contains all needed information | orderId, timestamp, related data |
 
 
 
 #### Event Design
 
-domain event를 설계할 때는 일관된 구조를 유지하는 것이 중요합니다. 모든 이벤트가 공통으로 가져야 하는 속성들을 베이스 클래스로 정의하면 관리와 추적이 쉬워집니다.
+When designing domain events, it is important to maintain a consistent structure. Defining common properties that all events should share as a base class makes management and tracking easier.
 
-**기본 구조 정의하기**
+**Defining the Basic Structure**
 
-모든 domain event의 기반이 되는 추상 클래스를 정의합니다. 이 클래스는 이벤트 고유 ID와 발생 시각을 자동으로 생성하여 각 이벤트를 추적할 수 있게 합니다. 이벤트 ID는 중복 처리 방지에 사용되고, 발생 시각은 이벤트 순서 파악과 디버깅에 활용됩니다.
+You define an abstract class that serves as the foundation for all domain events. This class automatically generates a unique event ID and occurrence time, allowing you to track each event. The event ID is used to prevent duplicate processing, and the occurrence time is used for determining event ordering and debugging.
 
 ```java
 public abstract class DomainEvent {
@@ -98,11 +98,11 @@ public abstract class DomainEvent {
 }
 ```
 
-**구체적인 이벤트 구현하기**
+**Implementing Concrete Events**
 
-구체적인 비즈니스 이벤트를 정의할 때는 해당 이벤트를 처리하는 데 필요한 모든 정보를 포함해야 합니다. 예를 들어 주문 확정 이벤트는 주문 ID뿐만 아니라 고객 ID, 총액, 주문 항목 정보까지 포함합니다. 이렇게 하면 event handler가 데이터베이스를 추가로 조회하지 않고도 필요한 작업을 수행할 수 있습니다.
+When defining concrete business events, you must include all information needed to process that event. For example, an order confirmed event includes not only the order ID but also the customer ID, total amount, and order line information. This way, event handlers can perform their tasks without additional database lookups.
 
-주의할 점은 도메인 엔티티 자체를 이벤트에 담지 않는다는 것입니다. 대신 이벤트 전용 스냅샷 객체를 만들어 필요한 데이터만 선별적으로 담습니다. 이렇게 하면 이벤트가 가볍고 명확해지며, 나중에 엔티티 구조가 바뀌어도 이벤트에는 영향을 주지 않습니다.
+An important point is that you do not include the domain entity itself in the event. Instead, you create event-specific snapshot objects that selectively include only the needed data. This keeps events lightweight and clear, and changes to the entity structure later will not affect the events.
 
 ```java
 public class OrderConfirmedEvent extends DomainEvent {
@@ -123,7 +123,7 @@ public class OrderConfirmedEvent extends DomainEvent {
 
     // Getters...
 
-    // 이벤트 전용 스냅샷 (불변)
+    // Event-specific snapshot (immutable)
     public record OrderLineSnapshot(
         ProductId productId,
         String productName,
@@ -142,9 +142,9 @@ public class OrderConfirmedEvent extends DomainEvent {
 }
 ```
 
-**event publishing 시점 결정하기**
+**Deciding When to Publish Events**
 
-이벤트는 적절한 시점에 발행되어야 합니다. 일반적으로 세 가지 상황에서 이벤트를 발행합니다. 첫째, 중요한 상태 변경이 완료되었을 때입니다. 예를 들어 주문 상태가 "대기중"에서 "확정됨"으로 바뀌었을 때 OrderConfirmed 이벤트를 발행합니다. 둘째, 비즈니스 규칙이 충족되었을 때입니다. 특정 조건이 만족되어 의미 있는 일이 발생했다면 이벤트로 표현합니다. 셋째, 다른 시스템이나 바운디드 컨텍스트에 알려야 할 때입니다. 외부에서 이 변화를 알아야 한다면 이벤트를 발행하여 통지합니다.
+Events must be published at the appropriate time. Generally, you publish events in three situations. First, when an important state change has been completed. For example, when the order status changes from "PENDING" to "CONFIRMED," you publish an OrderConfirmed event. Second, when a business rule has been satisfied. If certain conditions are met and something meaningful has happened, you express it as an event. Third, when other systems or bounded contexts need to be notified. If the outside world needs to know about this change, you publish an event to notify them.
 
 ```java
 public class Order extends AggregateRoot {
@@ -155,7 +155,7 @@ public class Order extends AggregateRoot {
         this.status = OrderStatus.CONFIRMED;
         this.confirmedAt = LocalDateTime.now();
 
-        // 상태 변경 후 이벤트 등록
+        // Register event after state change
         registerEvent(new OrderConfirmedEvent(this));
     }
 
@@ -180,18 +180,18 @@ public class Order extends AggregateRoot {
 }
 ```
 
-위 코드에서 주문 엔티티는 상태를 변경한 직후 적절한 이벤트를 등록합니다. 이벤트는 즉시 발행되지 않고 Aggregate에 일단 저장되며, 트랜잭션이 성공적으로 완료된 후에 실제로 발행됩니다.
+In the code above, the order entity registers the appropriate event immediately after changing its state. Events are not published immediately but are first stored in the Aggregate, and are actually published only after the transaction completes successfully.
 
 #### Event Publishing Implementation
 
-domain event를 실제로 발행하는 방법은 여러 가지가 있습니다. 각 방법은 장단점이 있으며, 프로젝트의 요구사항에 맞게 선택해야 합니다.
+There are several ways to actually publish domain events. Each method has its own trade-offs, and you should choose based on your project's requirements.
 
-**방법 1: Spring ApplicationEvent 활용**
+**Method 1: Using Spring ApplicationEvent**
 
-가장 간단한 방법은 Spring의 ApplicationEventPublisher를 사용하는 것입니다. Aggregate Root는 발생한 이벤트들을 내부 리스트에 저장하고, Repository가 저장할 때 이 이벤트들을 Spring의 이벤트 버스로 발행합니다. 이 방식은 구현이 간단하고 Spring 생태계와 잘 통합되지만, 애플리케이션 내부에서만 동작한다는 제약이 있습니다.
+The simplest approach is to use Spring's ApplicationEventPublisher. The Aggregate Root stores generated events in an internal list, and when the Repository saves, these events are published to Spring's event bus. This approach is simple to implement and integrates well with the Spring ecosystem, but it only works within the application.
 
 ```java
-// Aggregate Root 기반 클래스
+// Aggregate Root base class
 public abstract class AggregateRoot {
     @Transient
     private final List<DomainEvent> domainEvents = new ArrayList<>();
@@ -209,7 +209,7 @@ public abstract class AggregateRoot {
     }
 }
 
-// Repository에서 저장 시 발행
+// Publish when saving in Repository
 @Repository
 public class JpaOrderRepository implements OrderRepository {
     private final OrderJpaRepository jpaRepository;
@@ -220,7 +220,7 @@ public class JpaOrderRepository implements OrderRepository {
         OrderEntity entity = mapper.toEntity(order);
         jpaRepository.save(entity);
 
-        // 저장 성공 후 event publishing
+        // Publish events after successful save
         order.getDomainEvents().forEach(eventPublisher::publishEvent);
         order.clearDomainEvents();
 
@@ -229,9 +229,9 @@ public class JpaOrderRepository implements OrderRepository {
 }
 ```
 
-**방법 2: Spring Data의 @DomainEvents 활용**
+**Method 2: Using Spring Data's @DomainEvents**
 
-Spring Data JPA는 `AbstractAggregateRoot`라는 편리한 기반 클래스를 제공합니다. 이 클래스를 상속받으면 이벤트 등록과 발행이 자동으로 처리됩니다. Repository의 `save()` 메서드가 호출될 때 등록된 이벤트들이 자동으로 발행되므로, 별도의 event publishing 코드를 작성할 필요가 없습니다.
+Spring Data JPA provides a convenient base class called `AbstractAggregateRoot`. When you extend this class, event registration and publishing are handled automatically. When the Repository's `save()` method is called, registered events are automatically published, so you do not need to write separate event publishing code.
 
 ```java
 @Entity
@@ -240,17 +240,17 @@ public class OrderEntity extends AbstractAggregateRoot<OrderEntity> {
     public void confirm() {
         this.status = OrderStatus.CONFIRMED;
 
-        // AbstractAggregateRoot의 메서드
+        // Method from AbstractAggregateRoot
         registerEvent(new OrderConfirmedEvent(this.id));
     }
 }
 
-// Repository save() 호출 시 자동으로 event publishing됨
+// Events are automatically published when Repository save() is called
 ```
 
-**방법 3: Transactional Outbox Pattern**
+**Method 3: Transactional Outbox Pattern**
 
-신뢰성이 중요한 시스템에서는 Transactional Outbox Pattern을 사용합니다. 이 패턴은 이벤트 유실을 방지하기 위해 고안되었습니다. Aggregate를 저장하는 트랜잭션에서 이벤트도 함께 데이터베이스에 저장합니다. 그런 다음 별도의 스케줄러가 주기적으로 Outbox 테이블을 폴링하여 아직 발행되지 않은 이벤트들을 Kafka 같은 메시지 브로커로 발행합니다. 이렇게 하면 데이터베이스 트랜잭션이 성공하면 이벤트도 반드시 저장되므로, 이벤트 유실이 발생하지 않습니다.
+For systems where reliability is important, you use the Transactional Outbox Pattern. This pattern was designed to prevent event loss. Events are saved to the database in the same transaction that saves the Aggregate. A separate scheduler then periodically polls the Outbox table and publishes unpublished events to a message broker like Kafka. This way, if the database transaction succeeds, the events are guaranteed to be saved, so event loss does not occur.
 
 ```mermaid
 flowchart TB
@@ -271,10 +271,10 @@ flowchart TB
     PUB --> DEL
 ```
 
-이 다이어그램은 Transactional Outbox Pattern의 전체 흐름을 보여줍니다. 중요한 점은 Aggregate 저장과 Outbox 저장이 하나의 트랜잭션 안에서 일어난다는 것입니다.
+This diagram shows the full flow of the Transactional Outbox Pattern. The important point is that Aggregate saving and Outbox saving happen within a single transaction.
 
 ```java
-// Outbox 엔티티
+// Outbox entity
 @Entity
 @Table(name = "outbox_events")
 public class OutboxEvent {
@@ -288,7 +288,7 @@ public class OutboxEvent {
     private boolean published;
 }
 
-// 저장 시 Outbox에도 저장
+// Also save to Outbox when saving
 @Transactional
 public void confirmOrder(OrderId orderId) {
     Order order = orderRepository.findById(orderId).orElseThrow();
@@ -296,7 +296,7 @@ public void confirmOrder(OrderId orderId) {
 
     orderRepository.save(order);
 
-    // 같은 트랜잭션에서 Outbox 저장
+    // Save to Outbox in the same transaction
     OutboxEvent outbox = OutboxEvent.builder()
         .aggregateType("Order")
         .aggregateId(orderId.getValue())
@@ -306,7 +306,7 @@ public void confirmOrder(OrderId orderId) {
     outboxRepository.save(outbox);
 }
 
-// 별도 스케줄러가 Outbox 폴링하여 Kafka 발행
+// Separate scheduler polls Outbox and publishes to Kafka
 @Scheduled(fixedDelay = 1000)
 public void publishOutboxEvents() {
     List<OutboxEvent> events = outboxRepository.findUnpublished();
@@ -320,50 +320,50 @@ public void publishOutboxEvents() {
 
 #### Event Processing
 
-이벤트를 발행했다면 이제 이를 처리할 핸들러가 필요합니다. event processing는 동기 방식과 비동기 방식으로 나뉘며, 각각 다른 사용 사례에 적합합니다.
+Once you have published events, you need handlers to process them. Event processing is divided into synchronous and asynchronous approaches, each suited for different use cases.
 
-**동기 처리로 필수 작업 보장하기**
+**Ensuring Required Tasks with Synchronous Processing**
 
-동기 처리는 event publishing과 같은 트랜잭션 내에서 핸들러를 실행합니다. Spring의 `@TransactionalEventListener`를 사용하면 트랜잭션의 특정 단계에서 이벤트를 처리할 수 있습니다. `BEFORE_COMMIT` 단계에서 실행되는 핸들러는 주문 확정과 함께 반드시 성공해야 하는 작업에 사용됩니다. 만약 핸들러에서 예외가 발생하면 전체 트랜잭션이 롤백됩니다.
+Synchronous processing executes handlers within the same transaction as the event publishing. Using Spring's `@TransactionalEventListener`, you can process events at specific phases of the transaction. Handlers that run at the `BEFORE_COMMIT` phase are used for tasks that must succeed along with the order confirmation. If the handler throws an exception, the entire transaction is rolled back.
 
 ```java
 @Component
 public class OrderEventHandler {
 
-    // BEFORE_COMMIT: 트랜잭션 커밋 직전에 실행
-    // 주의: 핸들러 예외 시 트랜잭션이 롤백됨
+    // BEFORE_COMMIT: Runs just before transaction commit
+    // Note: Transaction is rolled back if handler throws an exception
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void handleOrderConfirmed(OrderConfirmedEvent event) {
-        // 주문 확정과 함께 반드시 성공해야 하는 로직
-        // 실패 시 전체 트랜잭션 롤백됨
+        // Logic that must succeed together with order confirmation
+        // Entire transaction rolls back on failure
         auditService.recordConfirmation(event.getOrderId());
     }
 }
 ```
 
-**TransactionPhase 선택 가이드**
+**TransactionPhase Selection Guide**
 
-Spring은 여러 TransactionPhase를 제공하며, 각각은 다른 목적으로 사용됩니다. `BEFORE_COMMIT`은 커밋 직전에 실행되며, 핸들러가 실패하면 전체 트랜잭션이 롤백됩니다. 이는 감사 기록 같은 필수 후속 작업에 적합합니다. `AFTER_COMMIT`은 커밋이 완료된 후 실행되며, 핸들러가 실패해도 이미 커밋된 트랜잭션은 롤백되지 않습니다. 이는 알림 발송이나 외부 시스템 연동처럼 실패해도 주 작업에 영향을 주지 않아야 하는 경우에 사용됩니다. `AFTER_ROLLBACK`은 트랜잭션이 롤백된 후 실행되며, 보상 트랜잭션을 구현할 때 유용합니다.
+Spring provides several TransactionPhases, each used for different purposes. `BEFORE_COMMIT` runs just before commit, and the entire transaction is rolled back if the handler fails. This is suitable for required follow-up tasks like audit logging. `AFTER_COMMIT` runs after the commit completes, and even if the handler fails, the already committed transaction is not rolled back. This is used for cases like notification delivery or external system integration where failure should not affect the main operation. `AFTER_ROLLBACK` runs after the transaction is rolled back and is useful for implementing compensating transactions.
 
-| Phase | 실행 시점 | 핸들러 실패 시 | 사용 사례 |
+| Phase | Execution Timing | On Handler Failure | Use Case |
 |-------|----------|---------------|----------|
-| **BEFORE_COMMIT** | 커밋 직전 | 전체 롤백 | 필수 후속 작업 |
-| **AFTER_COMMIT** | 커밋 완료 후 | 롤백 불가 | 알림, 외부 연동 |
-| **AFTER_ROLLBACK** | 롤백 후 | - | 보상 트랜잭션 |
+| **BEFORE_COMMIT** | Just before commit | Full rollback | Required follow-up tasks |
+| **AFTER_COMMIT** | After commit completes | No rollback possible | Notifications, external integrations |
+| **AFTER_ROLLBACK** | After rollback | - | Compensating transactions |
 
-**asynchronous processing로 시스템 분리하기**
+**Decoupling Systems with Asynchronous Processing**
 
-asynchronous processing는 event handler를 별도의 스레드나 트랜잭션에서 실행합니다. `@Async` 어노테이션을 함께 사용하면 핸들러가 비동기로 실행되어 메인 트랜잭션을 블로킹하지 않습니다. 알림 발송 같은 작업은 시간이 오래 걸릴 수 있고 실패해도 주문에 영향을 주지 않아야 하므로, asynchronous processing가 적합합니다.
+Asynchronous processing executes event handlers in a separate thread or transaction. When used together with the `@Async` annotation, handlers run asynchronously and do not block the main transaction. Tasks like notification delivery can take a long time and should not affect orders even if they fail, so asynchronous processing is appropriate.
 
 ```java
 @Component
 public class NotificationEventHandler {
 
-    // 트랜잭션 커밋 후 asynchronous processing
+    // Asynchronous processing after transaction commit
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleOrderConfirmed(OrderConfirmedEvent event) {
-        // 알림 발송 (실패해도 주문에 영향 없음)
+        // Send notification (does not affect the order even on failure)
         notificationService.sendOrderConfirmation(
             event.getCustomerId(),
             event.getOrderId()
@@ -372,12 +372,12 @@ public class NotificationEventHandler {
 }
 ```
 
-**Kafka로 마이크로서비스 간 이벤트 전달하기**
+**Delivering Events Between Microservices with Kafka**
 
-마이크로서비스 아키텍처에서는 Kafka 같은 메시지 브로커를 통해 이벤트를 전달합니다. 주문 서비스에서 발행한 이벤트를 재고 서비스, 알림 서비스 등이 구독하여 처리합니다. Kafka를 사용하면 서비스 간 loose coupling을 유지하면서도 신뢰성 있게 이벤트를 전달할 수 있습니다. Key를 주문 ID로 설정하면 같은 주문에 대한 이벤트들의 순서가 보장됩니다.
+In microservice architectures, events are delivered through message brokers like Kafka. Events published by the order service are subscribed to and processed by the inventory service, notification service, and others. Using Kafka, you can reliably deliver events while maintaining loose coupling between services. Setting the key to the order ID guarantees the ordering of events for the same order.
 
 ```java
-// event publishing
+// Event publishing
 @Component
 public class OrderEventPublisher {
     private final KafkaTemplate<String, OrderEvent> kafkaTemplate;
@@ -386,13 +386,13 @@ public class OrderEventPublisher {
     public void publishToKafka(OrderConfirmedEvent event) {
         kafkaTemplate.send(
             "order-events",
-            event.getOrderId().getValue(),  // Key: 순서 보장
+            event.getOrderId().getValue(),  // Key: ordering guarantee
             toKafkaEvent(event)
         );
     }
 }
 
-// event consumption
+// Event consumption
 @Component
 public class InventoryEventConsumer {
 
@@ -401,57 +401,57 @@ public class InventoryEventConsumer {
         OrderEvent event = record.value();
 
         if ("OrderConfirmed".equals(event.getType())) {
-            // 재고 차감
+            // Deduct inventory
             inventoryService.reserveStock(event.getOrderLines());
         }
     }
 }
 ```
 
-#### Event Design 가이드
+#### Event Design Guide
 
-좋은 이벤트를 설계하려면 적절한 정보량을 유지하는 것이 중요합니다. 너무 적으면 event consumption자가 추가 조회를 해야 하고, 너무 많으면 이벤트가 무거워지고 불필요한 결합이 생깁니다.
+To design good events, it is important to maintain an appropriate amount of information. Too little and the consumer must make additional queries; too much and the event becomes heavy with unnecessary coupling.
 
-**적절한 정보량 결정하기**
+**Determining the Right Amount of Information**
 
-이벤트에 ID만 담으면 소비자가 데이터베이스에서 상세 정보를 조회해야 합니다. 이는 데이터베이스 부하를 증가시키고 소비자를 주문 데이터베이스에 결합시킵니다. 반대로 전체 Aggregate를 담으면 이벤트가 너무 무겁고, Aggregate의 내부 구조가 외부에 노출됩니다. 적절한 방법은 event processing에 필요한 핵심 정보만 선별적으로 담는 것입니다. 주문 확정 이벤트라면 주문 ID, 고객 ID, 총액, 주문 항목 스냅샷 정도면 충분합니다.
+If you only include IDs in events, consumers must look up detailed information from the database. This increases database load and couples consumers to the order database. Conversely, including the entire Aggregate makes events too heavy and exposes the Aggregate's internal structure to the outside. The appropriate approach is to selectively include only the key information needed for event processing. For an order confirmed event, the order ID, customer ID, total amount, and order line snapshots are usually sufficient.
 
 ```java
-// ❌ 너무 적은 정보
+// ❌ Too little information
 public class OrderConfirmedEvent {
-    private OrderId orderId;  // ID만으로는 추가 조회 필요
+    private OrderId orderId;  // ID alone requires additional lookups
 }
 
-// ❌ 너무 많은 정보
+// ❌ Too much information
 public class OrderConfirmedEvent {
-    private Order order;  // 전체 Aggregate 포함
+    private Order order;  // Entire Aggregate included
 }
 
-// ✅ 적절한 정보
+// ✅ Appropriate amount of information
 public class OrderConfirmedEvent {
     private OrderId orderId;
     private CustomerId customerId;
     private Money totalAmount;
-    private List<OrderLineSnapshot> orderLines;  // 필요한 스냅샷
+    private List<OrderLineSnapshot> orderLines;  // Needed snapshots
     private Instant confirmedAt;
 }
 ```
 
-**이벤트 버전 관리하기**
+**Managing Event Versions**
 
-이벤트는 시스템이 발전하면서 변경될 수 있습니다. 하지만 이미 발행된 이벤트는 과거에 발생한 사실이므로, 스키마 변경에 신중해야 합니다. 버전 정보를 이벤트에 포함하고, 하위 호환성을 유지하는 방법을 고려해야 합니다. 새 필드를 추가할 때는 Optional로 만들어 기존 이벤트도 처리할 수 있게 합니다.
+Events can change as the system evolves. However, since already-published events represent facts that occurred in the past, you must be careful with schema changes. You should include version information in events and consider how to maintain backward compatibility. When adding new fields, make them Optional so that existing events can still be processed.
 
 ```java
-// 버전이 포함된 이벤트
+// Event with version information
 public class OrderConfirmedEventV2 extends DomainEvent {
     private static final int VERSION = 2;
 
     private OrderId orderId;
     private CustomerId customerId;
     private Money totalAmount;
-    private ShippingAddress shippingAddress;  // V2에서 추가
+    private ShippingAddress shippingAddress;  // Added in V2
 
-    // 하위 호환성을 위한 변환
+    // Conversion for backward compatibility
     public OrderConfirmedEventV1 toV1() {
         return new OrderConfirmedEventV1(orderId, customerId, totalAmount);
     }
@@ -460,82 +460,82 @@ public class OrderConfirmedEventV2 extends DomainEvent {
 
 #### Event Pattern Comparison
 
-domain event를 사용하는 세 가지 주요 패턴이 있으며, 각각 다른 목적을 가집니다. 이 패턴들을 이해하면 상황에 맞는 적절한 방식을 선택할 수 있습니다.
+There are three major patterns for using domain events, each with a different purpose. Understanding these patterns helps you choose the right approach for your situation.
 
 **Event Notification vs Event-Carried State Transfer vs Event Sourcing**
 
-Event Notification은 가장 단순한 패턴으로, "이런 일이 발생했다"는 알림만 보냅니다. 이벤트에는 ID 정도만 포함되며, 소비자가 필요한 정보를 직접 조회해야 합니다. Event-Carried State Transfer는 가장 일반적으로 사용되는 패턴으로, 이벤트에 처리에 필요한 전체 상태를 포함합니다. 소비자가 추가 조회 없이 바로 처리할 수 있어 편리합니다. Event Sourcing은 가장 복잡한 패턴으로, 모든 상태 변경을 이벤트로 저장하고 현재 상태를 이벤트 재생으로 도출합니다.
+Event Notification is the simplest pattern -- it only sends a notification that "something happened." The event includes only an ID, and consumers must look up needed information themselves. Event-Carried State Transfer is the most commonly used pattern, including the full state needed for processing in the event. It is convenient because consumers can process immediately without additional lookups. Event Sourcing is the most complex pattern, storing all state changes as events and deriving the current state by replaying events.
 
-| 패턴 | 목적 | 이벤트 내용 | 복잡도 |
+| Pattern | Purpose | Event Content | Complexity |
 |------|------|-----------|--------|
-| **Event Notification** | "이 일이 발생했음" 알림 | ID만 포함 | 낮음 |
-| **Event-Carried State Transfer** | 상태 동기화 | 전체 상태 포함 | 중간 |
-| **Event Sourcing** | 상태를 이벤트로 저장 | 변경 내역 | 높음 |
+| **Event Notification** | "This happened" notification | Contains only ID | Low |
+| **Event-Carried State Transfer** | State synchronization | Contains full state | Medium |
+| **Event Sourcing** | Store state as events | Change history | High |
 
-**패턴별 구체적 예시**
+**Concrete Examples by Pattern**
 
-각 패턴이 실제로 어떻게 구현되는지 코드로 살펴보겠습니다. Event Notification은 주문이 확정되었다는 사실만 알리고, 소비자는 필요하면 주문 서비스를 호출하여 상세 정보를 조회합니다. Event-Carried State Transfer는 주문 상세 정보를 이벤트에 모두 담아서 보내므로, 소비자가 추가 조회 없이 바로 처리할 수 있습니다. Event Sourcing은 별도 섹션에서 자세히 다룹니다.
+Let us look at how each pattern is actually implemented in code. Event Notification only announces that an order was confirmed, and consumers call the order service to look up details if needed. Event-Carried State Transfer includes all order details in the event, so consumers can process immediately without additional lookups. Event Sourcing is covered in detail in a separate section.
 
 ```java
-// 1. Event Notification (가장 단순)
-// "주문이 확정됐으니 너희가 알아서 조회해"
+// 1. Event Notification (simplest)
+// "The order was confirmed -- look it up yourself if you need details"
 public class OrderConfirmedEvent {
-    private OrderId orderId;  // ID만
-    // Consumer가 필요하면 직접 조회해야 함
+    private OrderId orderId;  // ID only
+    // Consumers must look up details themselves if needed
 }
 
-// 2. Event-Carried State Transfer (가장 일반적)
-// "주문이 확정됐고, 이게 주문 내용이야"
+// 2. Event-Carried State Transfer (most common)
+// "The order was confirmed, and here are the order details"
 public class OrderConfirmedEvent {
     private OrderId orderId;
     private CustomerId customerId;
-    private List<OrderLineSnapshot> orderLines;  // 필요한 데이터 포함
+    private List<OrderLineSnapshot> orderLines;  // Includes needed data
     private Money totalAmount;
-    // Consumer가 추가 조회 없이 처리 가능
+    // Consumer can process without additional lookups
 }
 
 // 3. Event Sourcing
-// "모든 변경을 이벤트로 저장하고, 현재 상태는 재생으로 도출"
-// → 별도 섹션에서 자세히 설명
+// "Store all changes as events, derive current state by replay"
+// -> Explained in detail in a separate section
 ```
 
-**패턴 선택 기준**
+**Pattern Selection Criteria**
 
-어떤 패턴을 선택할지는 다음과 같이 결정할 수 있습니다. 단순히 알림만 필요하다면 Event Notification을 사용합니다. 소비자가 추가 조회 없이 바로 처리해야 한다면 Event-Carried State Transfer를 사용합니다. 완전한 감사 추적이 필요하고 복잡도를 감당할 수 있다면 Event Sourcing을 고려합니다. 대부분의 경우 Event-Carried State Transfer가 적절한 선택입니다.
+You can decide which pattern to choose as follows. If you simply need notifications, use Event Notification. If consumers need to process immediately without additional lookups, use Event-Carried State Transfer. If you need complete audit trails and can handle the complexity, consider Event Sourcing. In most cases, Event-Carried State Transfer is the appropriate choice.
 
 #### Event Sourcing
 
-이벤트 소싱은 이벤트를 상태의 원본으로 사용하는 패턴입니다. 기존 방식은 현재 상태만 저장하지만, 이벤트 소싱은 모든 변경 이력을 이벤트로 저장하고 현재 상태는 이벤트를 재생하여 도출합니다.
+Event Sourcing is a pattern that uses events as the source of truth for state. The traditional approach stores only the current state, but Event Sourcing stores all change history as events and derives the current state by replaying those events.
 
 ```mermaid
 flowchart TB
     subgraph Traditional["Traditional Approach"]
         T1[Store current state only]
-        T2[(orders 테이블)]
+        T2[(orders table)]
         T1 --> T2
     end
 
     subgraph EventSourcing["Event Sourcing"]
         E1[Store all events]
-        E2[(events 테이블)]
+        E2[(events table)]
         E3[Derive current state<br>by replaying events]
         E1 --> E2
         E2 --> E3
     end
 ```
 
-**이벤트로부터 Aggregate 복원하기**
+**Restoring Aggregates from Events**
 
-이벤트 소싱에서는 Aggregate의 현재 상태를 얻기 위해 해당 Aggregate의 모든 이벤트를 순서대로 재생합니다. 각 이벤트는 `apply` 메서드를 통해 Aggregate의 상태를 변경합니다. 예를 들어 OrderCreatedEvent를 적용하면 주문 ID와 상태가 설정되고, OrderConfirmedEvent를 적용하면 상태가 CONFIRMED로 바뀝니다.
+In Event Sourcing, to get the current state of an Aggregate, you replay all of its events in order. Each event changes the Aggregate's state through the `apply` method. For example, applying OrderCreatedEvent sets the order ID and status, and applying OrderConfirmedEvent changes the status to CONFIRMED.
 
 ```java
-// 이벤트로부터 Aggregate 복원
+// Restore Aggregate from events
 public class Order {
     private OrderId id;
     private OrderStatus status;
     private List<OrderLine> orderLines;
 
-    // 이벤트 스트림으로부터 복원
+    // Restore from event stream
     public static Order fromEvents(List<DomainEvent> events) {
         Order order = new Order();
         for (DomainEvent event : events) {
@@ -587,30 +587,30 @@ public class EventSourcedOrderRepository implements OrderRepository {
 }
 ```
 
-**이벤트 소싱의 장단점**
+**Advantages and Disadvantages of Event Sourcing**
 
-이벤트 소싱은 강력한 장점을 제공하지만 복잡도도 함께 증가합니다. 장점으로는 완전한 감사 추적이 가능합니다. 모든 변경 이력이 보존되므로 "누가 언제 무엇을 했는지" 정확히 알 수 있습니다. 시간 여행도 가능합니다. 과거 특정 시점의 상태를 재현할 수 있어 디버깅이나 분석에 유용합니다. 이벤트 기반 통합에도 자연스럽게 적합합니다. 단점으로는 구현 복잡도가 증가하며, 이벤트 스키마 진화가 어렵습니다. 한번 저장된 이벤트는 변경할 수 없으므로 스키마 변경에 매우 신중해야 합니다. 쿼리 성능도 문제가 될 수 있어 보통 CQRS와 함께 사용됩니다.
+Event Sourcing provides powerful advantages but also increases complexity. Among the advantages, complete audit trails are possible. Since all change history is preserved, you can know exactly "who did what and when." Time travel is also possible. You can reproduce the state at any past point in time, which is useful for debugging and analysis. It also naturally fits event-driven integration. Among the disadvantages, implementation complexity increases, and event schema evolution is difficult. Since stored events cannot be changed, you must be very careful with schema changes. Query performance can also be an issue, so it is typically used together with CQRS.
 
-| 장점 | 단점 |
+| Advantages | Disadvantages |
 |------|------|
-| 완전한 감사 추적 | 복잡성 증가 |
-| 시간 여행 (과거 상태 재현) | 이벤트 스키마 진화 어려움 |
-| 이벤트 기반 통합에 적합 | 쿼리 성능 (CQRS 필요) |
+| Complete audit trail | Increased complexity |
+| Time travel (past state reproduction) | Difficult event schema evolution |
+| Suitable for event-driven integration | Query performance (CQRS needed) |
 
-**이벤트 저장소 선택하기**
+**Choosing an Event Store**
 
-이벤트 소싱을 구현하려면 이벤트를 저장할 저장소가 필요합니다. 여러 옵션이 있으며 각각 장단점이 있습니다. 직접 RDBMS에 구현하면 가장 간단하고 기존 데이터베이스를 활용할 수 있어 소규모 프로젝트나 학습 목적에 적합합니다. EventStoreDB는 이벤트 소싱 전용으로 설계된 데이터베이스로, 구독 기능이 내장되어 있어 전문적인 이벤트 소싱에 적합합니다. Axon Framework는 Java 생태계에서 CQRS와 통합이 잘 되어 있어 Spring 기반 프로젝트에 유용합니다. Kafka는 고성능이며 이미 사용 중이라면 이벤트 스트리밍 중심 시스템에 적합합니다.
+To implement Event Sourcing, you need a store to save events. There are several options, each with its own trade-offs. Implementing directly on an RDBMS is the simplest and allows you to use existing databases, making it suitable for small projects or learning purposes. EventStoreDB is a database designed specifically for Event Sourcing, with built-in subscription features, making it suitable for professional Event Sourcing. Axon Framework integrates well with CQRS in the Java ecosystem and is useful for Spring-based projects. Kafka offers high performance and is suitable for event streaming-centric systems if you are already using it.
 
-| 옵션 | 특징 | 적합한 경우 |
+| Option | Features | Suitable When |
 |------|------|-----------|
-| **직접 구현 (RDBMS)** | 간단, 기존 DB 활용 | 소규모, 학습 목적 |
-| **EventStoreDB** | 전용 저장소, 구독 기능 내장 | 이벤트 소싱 전문 |
-| **Axon Framework** | Java 생태계, CQRS 통합 | Spring 기반 프로젝트 |
-| **Kafka** | 고성능, 이미 사용 중이면 | 이벤트 스트리밍 중심 |
+| **Custom (RDBMS)** | Simple, leverages existing DB | Small scale, learning purposes |
+| **EventStoreDB** | Dedicated store, built-in subscriptions | Professional Event Sourcing |
+| **Axon Framework** | Java ecosystem, CQRS integration | Spring-based projects |
+| **Kafka** | High performance, if already in use | Event streaming-centric |
 
 #### CQRS and Domain Events
 
-이벤트 소싱을 사용하면 CQRS(Command Query Responsibility Segregation)가 자연스럽게 필요해집니다. 왜냐하면 이벤트 재생은 읽기 성능에 문제를 일으킬 수 있기 때문입니다.
+When you use Event Sourcing, CQRS (Command Query Responsibility Segregation) naturally becomes necessary. This is because event replaying can cause read performance issues.
 
 ```mermaid
 flowchart LR
@@ -627,23 +627,23 @@ flowchart LR
     end
 ```
 
-**CQRS가 필요한 이유**
+**Why CQRS Is Needed**
 
-이벤트 소싱에서 현재 상태를 얻으려면 모든 이벤트를 재생해야 합니다. 만약 주문 하나에 이벤트가 100개 있다면, 매 조회마다 100번의 재생이 필요해 매우 느립니다. CQRS를 적용하면 쓰기 측에서는 이벤트를 저장하고, 읽기 측에서는 이벤트를 구독하여 읽기 전용 뷰를 별도로 유지합니다. 이렇게 하면 조회는 빠르게 처리되면서도 완전한 이벤트 히스토리를 유지할 수 있습니다.
+In Event Sourcing, to get the current state, you must replay all events. If a single order has 100 events, each query requires 100 replays, which is very slow. With CQRS, the write side stores events, and the read side subscribes to events and maintains a separate read-only view. This way, queries are processed quickly while still maintaining a complete event history.
 
 ```java
-// CQRS 없이: 매번 이벤트 재생
+// Without CQRS: replay events every time
 public Order findById(OrderId id) {
     List<DomainEvent> events = eventStore.getEvents(id);
-    return Order.fromEvents(events);  // 느림!
+    return Order.fromEvents(events);  // Slow!
 }
 
-// CQRS 적용: 읽기 전용 뷰 사용
+// With CQRS: use read-only view
 public OrderView findById(OrderId id) {
-    return orderViewRepository.findById(id);  // 빠름!
+    return orderViewRepository.findById(id);  // Fast!
 }
 
-// Projection: 이벤트를 읽기 뷰로 변환
+// Projection: convert events to read views
 @EventHandler
 public void on(OrderConfirmedEvent event) {
     OrderView view = orderViewRepository.findById(event.getOrderId());
@@ -653,21 +653,21 @@ public void on(OrderConfirmedEvent event) {
 }
 ```
 
-**CQRS 도입 기준**
+**CQRS Adoption Criteria**
 
-CQRS는 복잡도를 증가시키므로 모든 프로젝트에 필요한 것은 아닙니다. 다음 조건 중 2개 이상에 해당하면 CQRS를 고려해볼 만합니다. 읽기와 쓰기 패턴이 크게 다른 경우, 읽기 성능이 중요한 경우, 이벤트 소싱을 사용하는 경우, 복잡한 조회 요구사항이 있어 다양한 뷰가 필요한 경우, 읽기와 쓰기 확장이 독립적으로 필요한 경우입니다.
+CQRS increases complexity, so it is not necessary for every project. Consider CQRS if two or more of the following conditions apply: read and write patterns differ significantly, read performance is critical, you are using Event Sourcing, complex query requirements call for diverse views, or read and write scaling needs to be independent.
 
 #### Practical Tips
 
-domain event를 실전에서 사용할 때 알아두면 유용한 몇 가지 팁을 소개합니다.
+Here are a few useful tips for using domain events in practice.
 
-**1. 이벤트 명명 규칙**
+**1. Event Naming Conventions**
 
-이벤트 이름은 일관된 규칙을 따라야 합니다. 과거형을 사용하여 이미 발생한 사실임을 명확히 하고, 도메인 용어를 사용하여 비즈니스 의미를 담습니다. 명확한 접두사를 사용하여 어떤 Aggregate와 관련된 이벤트인지 알 수 있게 합니다. 예를 들어 "Order + Confirmed = OrderConfirmed"처럼 구성합니다.
+Event names should follow consistent rules. Use past tense to clearly indicate a fact that has already occurred, and use domain terminology to convey business meaning. Use clear prefixes to indicate which Aggregate the event relates to. For example, compose them as "Order + Confirmed = OrderConfirmed."
 
-**2. 멱등성 처리하기**
+**2. Handling Idempotency**
 
-이벤트는 네트워크 오류 등으로 중복 전달될 수 있습니다. 같은 이벤트를 여러 번 받아도 결과가 동일하도록 멱등성을 보장해야 합니다. 이미 처리된 이벤트인지 확인하고, 중복이면 무시하는 방식으로 구현합니다.
+Events may be delivered more than once due to network errors. You must ensure idempotency so that receiving the same event multiple times produces the same result. Implement this by checking whether an event has already been processed and ignoring duplicates.
 
 ```java
 @Component
@@ -676,24 +676,24 @@ public class PaymentEventHandler {
 
     @KafkaListener(topics = "order-events")
     public void handle(OrderConfirmedEvent event) {
-        // 이미 처리된 이벤트인지 확인
+        // Check if event was already processed
         if (processedEvents.exists(event.getEventId())) {
-            log.info("이미 처리된 이벤트: {}", event.getEventId());
+            log.info("Already processed event: {}", event.getEventId());
             return;
         }
 
-        // business logic 처리
+        // Process business logic
         paymentService.requestPayment(event);
 
-        // 처리 완료 기록
+        // Record processing completion
         processedEvents.save(event.getEventId());
     }
 }
 ```
 
-**3. 실패 처리 전략**
+**3. Failure Handling Strategy**
 
-event processing가 실패할 수 있으므로 재시도 전략을 구현해야 합니다. Spring Kafka의 `@RetryableTopic`을 사용하면 자동으로 재시도하고, 최종 실패 시 Dead Letter Topic으로 이동시킬 수 있습니다.
+Since event processing can fail, you must implement a retry strategy. Using Spring Kafka's `@RetryableTopic`, you can automatically retry, and on final failure, move the event to a Dead Letter Topic.
 
 ```java
 @Component
@@ -705,13 +705,13 @@ public class StockEventHandler {
     )
     @KafkaListener(topics = "order-events")
     public void handle(OrderConfirmedEvent event) {
-        // 3회 재시도 후 실패 시 DLT로 이동
+        // Moves to DLT after 3 retry failures
         stockService.reserve(event.getOrderLines());
     }
 
     @DltHandler
     public void handleDlt(OrderConfirmedEvent event) {
-        // Dead Letter Topic 처리
+        // Dead Letter Topic handling
         alertService.notifyStockReservationFailed(event);
     }
 }
@@ -719,43 +719,43 @@ public class StockEventHandler {
 
 #### Pitfalls of Event-Driven Architecture
 
-domain event는 강력하지만, 잘못 사용하면 디버깅이 어려운 시스템이 됩니다. 흔히 빠지는 함정들을 알아두면 미리 예방할 수 있습니다.
+Domain events are powerful, but if used incorrectly, you end up with a system that is difficult to debug. Knowing the common pitfalls helps you prevent them.
 
-**함정 1: 이벤트 유실**
+**Pitfall 1: Event Loss**
 
-문제는 `@TransactionalEventListener(AFTER_COMMIT)`이 이벤트를 메모리에만 보관한다는 점입니다. 트랜잭션이 커밋된 후 이벤트를 발행하는데, 이 시점에 애플리케이션이 죽으면 이벤트가 유실됩니다. 데이터베이스에는 주문이 저장되었지만 이벤트는 발행되지 않아 재고 차감이나 알림 발송이 실행되지 않는 문제가 발생합니다.
+The problem is that `@TransactionalEventListener(AFTER_COMMIT)` keeps events only in memory. Events are published after the transaction commits, but if the application dies at this point, the events are lost. The order is saved in the database, but the event is never published, so inventory deduction and notification delivery never execute.
 
-해결책은 Transactional Outbox Pattern입니다. 이벤트를 메모리가 아닌 데이터베이스에 먼저 저장합니다. Aggregate 저장과 이벤트 저장이 같은 트랜잭션에서 일어나므로, 트랜잭션이 성공하면 이벤트도 반드시 저장됩니다. 별도 프로세스가 주기적으로 Outbox 테이블을 폴링하여 아직 발행되지 않은 이벤트들을 Kafka로 발행합니다.
+The solution is the Transactional Outbox Pattern. Store events in the database first, not in memory. Since Aggregate saving and event saving happen in the same transaction, if the transaction succeeds, the events are guaranteed to be saved. A separate process periodically polls the Outbox table and publishes unpublished events to Kafka.
 
 ```java
-// ❌ 이벤트 유실 가능
+// ❌ Event loss possible
 @Transactional
 public void confirmOrder(OrderId orderId) {
     Order order = orderRepository.findById(orderId);
     order.confirm();
     orderRepository.save(order);
-    // 여기서 커밋 완료
+    // Commit completes here
 
-    // 이벤트는 AFTER_COMMIT에서 발행됨
-    // 만약 이 시점에 서버가 죽으면? → 이벤트 유실!
+    // Event is published in AFTER_COMMIT
+    // What if the server dies at this point? -> Event lost!
 }
 
-// ✅ 이벤트 유실 방지
+// ✅ Prevent event loss
 @Transactional
 public void confirmOrder(OrderId orderId) {
     Order order = orderRepository.findById(orderId);
     order.confirm();
     orderRepository.save(order);
 
-    // 같은 트랜잭션에서 Outbox에 저장
+    // Save to Outbox in the same transaction
     outboxRepository.save(new OutboxEvent(
         "OrderConfirmed",
         toJson(new OrderConfirmedEvent(order))
     ));
-    // DB 트랜잭션 성공 = 이벤트 저장 보장
+    // DB transaction success = event storage guaranteed
 }
 
-// 별도 스케줄러가 Outbox 폴링하여 Kafka 발행
+// Separate scheduler polls Outbox and publishes to Kafka
 @Scheduled(fixedDelay = 1000)
 public void publishEvents() {
     List<OutboxEvent> events = outboxRepository.findUnpublished();
@@ -767,96 +767,96 @@ public void publishEvents() {
 }
 ```
 
-**함정 2: 이벤트 순서 역전**
+**Pitfall 2: Event Order Reversal**
 
-비동기 이벤트는 발행 순서와 처리 순서가 다를 수 있습니다. OrderCreated → OrderPaid → OrderShipped 순서로 발행했는데, OrderCreated → OrderShipped → OrderPaid 순서로 처리될 수 있습니다. 그러면 "결제도 안 됐는데 배송됐다"는 이상한 상태가 됩니다.
+Asynchronous events may be processed in a different order than they were published. You might publish OrderCreated -> OrderPaid -> OrderShipped, but they could be processed as OrderCreated -> OrderShipped -> OrderPaid. This results in the strange state of "shipped without payment."
 
-해결 방법은 두 가지입니다. 첫째, event handler에서 상태를 검증합니다. PAID 상태가 아니면 배송 처리를 보류하고 재시도하거나 DLT로 보냅니다. 둘째, 이벤트에 버전이나 시퀀스 번호를 포함하여 낮은 시퀀스의 이벤트는 무시합니다.
+There are two solutions. First, validate state in the event handler. If the status is not PAID, defer shipment processing and retry or send to the DLT. Second, include a version or sequence number in events and ignore events with lower sequence numbers.
 
 ```java
-// 방법 1: 상태 검증 후 처리
+// Method 1: Validate state before processing
 @KafkaListener(topics = "order-events")
 public void handleOrderShipped(OrderShippedEvent event) {
     Order order = orderRepository.findById(event.getOrderId());
 
-    // 상태 검증: PAID 상태가 아니면 처리 보류
+    // State validation: defer processing if not in PAID state
     if (order.getStatus() != OrderStatus.PAID) {
         throw new OrderNotReadyForShipmentException();
-        // 재시도 또는 DLT로 이동
+        // Retry or move to DLT
     }
 
     order.ship();
     orderRepository.save(order);
 }
 
-// 방법 2: 이벤트에 버전/시퀀스 포함
+// Method 2: Include version/sequence in events
 public class OrderEvent {
     private long sequenceNumber;  // 1, 2, 3, ...
 
-    // 낮은 시퀀스 이벤트는 무시
+    // Ignore events with lower sequence numbers
 }
 ```
 
-**함정 3: 순환 이벤트**
+**Pitfall 3: Circular Events**
 
-A 이벤트가 B를 발생시키고, B가 다시 A를 발생시키는 무한 루프가 생길 수 있습니다. 예를 들어 OrderConfirmed가 StockReserved를 발생시키고, StockReserved가 다시 OrderUpdated를 발생시키고, OrderUpdated가 또 StockReserved를 발생시키는 식입니다.
+An infinite loop can occur where event A triggers B, and B triggers A again. For example, OrderConfirmed triggers StockReserved, StockReserved triggers OrderUpdated, and OrderUpdated triggers StockReserved again.
 
-해결책은 이벤트 체인을 추적하는 것입니다. 각 이벤트에 correlationId(최초 이벤트 ID), causationId(이 이벤트를 발생시킨 이벤트 ID), depth(이벤트 체인 깊이)를 포함합니다. 깊이가 일정 수준을 넘어가면 체인을 중단합니다.
+The solution is to track the event chain. Include correlationId (original event ID), causationId (ID of the event that triggered this one), and depth (event chain depth) in each event. Stop the chain when the depth exceeds a certain level.
 
 ```java
 public abstract class DomainEvent {
-    private String correlationId;  // 최초 이벤트 ID
-    private String causationId;    // 이 이벤트를 발생시킨 이벤트 ID
-    private int depth;             // 이벤트 체인 깊이
+    private String correlationId;  // Original event ID
+    private String causationId;    // ID of the event that triggered this one
+    private int depth;             // Event chain depth
 
     public boolean isMaxDepthReached() {
-        return depth > 10;  // 최대 깊이 제한
+        return depth > 10;  // Maximum depth limit
     }
 }
 ```
 
-**함정 4: 이벤트 스키마 변경**
+**Pitfall 4: Event Schema Changes**
 
-이벤트 구조를 변경하면 기존 Consumer가 깨질 수 있습니다. v1에서 `amount` 필드를 사용했는데 v2에서 `totalAmount`와 `discountAmount`로 나눈다면, 기존 Consumer가 `amount`를 찾다가 실패합니다.
+Changing the event structure can break existing Consumers. If v1 used an `amount` field and v2 splits it into `totalAmount` and `discountAmount`, existing Consumers will fail trying to find `amount`.
 
-해결책은 하위 호환성을 유지하는 것입니다. 필드를 추가하는 것은 괜찮지만 Optional로 처리합니다. 기존 필드는 유지하고 새 필드를 추가하여 두 방식 모두 작동하게 합니다. 필드 삭제나 타입 변경이 필요하면 새 이벤트 타입을 정의합니다.
+The solution is to maintain backward compatibility. Adding fields is fine but handle them as Optional. Keep existing fields and add new fields so both approaches work. If you need to delete fields or change types, define a new event type.
 
 ```java
-// 필드 추가는 OK (Optional로 처리)
+// Adding fields is OK (handle as Optional)
 public class OrderConfirmedEvent {
     private String orderId;
-    private Money amount;           // 기존 필드 유지
-    private Money totalAmount;      // 새 필드 추가
-    private Money discountAmount;   // 새 필드 추가
+    private Money amount;           // Keep existing field
+    private Money totalAmount;      // Add new field
+    private Money discountAmount;   // Add new field
 
-    // 하위 호환성: 기존 필드로도 접근 가능
+    // Backward compatibility: accessible via existing field too
     public Money getAmount() {
         return amount != null ? amount : totalAmount;
     }
 }
 
-// 필드 삭제나 타입 변경이 필요하면 새 이벤트 타입 정의
+// If field deletion or type change is needed, define a new event type
 // OrderConfirmedEventV2
 ```
 
 #### Event Debugging Tips
 
-이벤트 기반 시스템은 흐름 추적이 어렵습니다. 디버깅을 쉽게 하려면 모든 이벤트에 추적 정보를 포함해야 합니다. eventId는 각 이벤트를 고유하게 식별하고, correlationId는 같은 요청에서 발생한 모든 이벤트를 연결하며, occurredAt는 발생 시각을 기록하고, aggregateId와 aggregateType은 어떤 Aggregate에서 발생했는지 알려줍니다.
+Event-driven systems are difficult to trace. To make debugging easier, you must include tracking information in all events. The eventId uniquely identifies each event, correlationId links all events from the same request, occurredAt records the time of occurrence, and aggregateId and aggregateType indicate which Aggregate the event originated from.
 
 ```java
 public abstract class DomainEvent {
-    private String eventId;         // 유니크 ID
-    private String correlationId;   // 요청 추적 ID (같은 요청의 모든 이벤트)
-    private Instant occurredAt;     // 발생 시각
-    private String aggregateId;     // 어떤 Aggregate에서 발생했는지
-    private String aggregateType;   // Order, Payment 등
+    private String eventId;         // Unique ID
+    private String correlationId;   // Request tracking ID (all events from the same request)
+    private Instant occurredAt;     // Time of occurrence
+    private String aggregateId;     // Which Aggregate it originated from
+    private String aggregateType;   // Order, Payment, etc.
 }
 ```
 
-로그를 작성할 때는 항상 이 정보들을 포함합니다. 그러면 로그에서 correlationId로 검색하여 하나의 요청이 발생시킨 모든 이벤트 흐름을 추적할 수 있습니다.
+Always include this information when writing logs. Then you can search by correlationId in the logs to trace the entire event flow triggered by a single request.
 
 ```java
-log.info("event processing 시작: eventId={}, correlationId={}, type={}",
+log.info("Event processing started: eventId={}, correlationId={}, type={}",
     event.getEventId(),
     event.getCorrelationId(),
     event.getClass().getSimpleName());
@@ -864,98 +864,98 @@ log.info("event processing 시작: eventId={}, correlationId={}, type={}",
 
 #### Real Schema Evolution Cases
 
-이벤트 스키마 변경은 신중해야 합니다. 실제 사례를 통해 안전한 변경과 위험한 변경을 구분하는 법을 배워봅시다.
+Event schema changes must be approached carefully. Let us learn to distinguish safe changes from dangerous ones through real examples.
 
-**사례 1: 필드 추가 (안전)**
+**Case 1: Adding Fields (Safe)**
 
-필드를 추가하는 것은 비교적 안전합니다. 기존 Consumer는 새 필드를 무시하고 계속 작동하며, 새 Consumer는 새 필드를 활용할 수 있습니다. 단, 새 필드는 null을 허용해야 하고, 기본값을 제공하는 것이 좋습니다.
+Adding fields is relatively safe. Existing Consumers ignore the new fields and continue working, while new Consumers can leverage the new fields. However, new fields must allow null and should ideally provide default values.
 
 ```java
-// v1: 초기 버전
+// v1: Initial version
 public class OrderConfirmedEvent {
     private String orderId;
     private BigDecimal amount;
 }
 
-// v2: 할인 정보 추가 필요
+// v2: Need to add discount information
 public class OrderConfirmedEvent {
     private String orderId;
     private BigDecimal amount;
-    private BigDecimal discountAmount;  // 새 필드 (null 허용)
+    private BigDecimal discountAmount;  // New field (null allowed)
 
-    // 하위 호환성: 기존 이벤트는 discountAmount가 null
+    // Backward compatibility: discountAmount is null for existing events
     public BigDecimal getDiscountAmount() {
         return discountAmount != null ? discountAmount : BigDecimal.ZERO;
     }
 }
 ```
 
-**사례 2: 필드 이름 변경 (위험)**
+**Case 2: Renaming Fields (Dangerous)**
 
-필드명을 직접 변경하면 기존 Consumer가 모두 깨집니다. 대신 두 필드를 모두 유지하여 하위 호환성을 보장합니다. 기존 필드는 @Deprecated로 표시하여 점진적으로 마이그레이션할 수 있게 합니다.
+Directly renaming a field will break all existing Consumers. Instead, keep both fields to ensure backward compatibility. Mark the existing field with @Deprecated to allow gradual migration.
 
 ```java
-// ❌ 위험: 필드명 직접 변경
+// ❌ Dangerous: Direct field rename
 // v1: amount
 // v2: totalAmount
-// → 기존 Consumer 전부 깨짐!
+// -> All existing Consumers break!
 
-// ✅ 안전: 두 필드 모두 유지
+// ✅ Safe: Keep both fields
 public class OrderConfirmedEvent {
     private String orderId;
 
     @Deprecated
-    private BigDecimal amount;       // 기존 필드 유지
+    private BigDecimal amount;       // Keep existing field
 
-    private BigDecimal totalAmount;  // 새 필드
+    private BigDecimal totalAmount;  // New field
 
-    // 새 Consumer는 totalAmount 사용
+    // New Consumers use totalAmount
     public BigDecimal getTotalAmount() {
         return totalAmount != null ? totalAmount : amount;
     }
 
-    // 기존 Consumer 호환성
+    // Existing Consumer compatibility
     public BigDecimal getAmount() {
         return amount != null ? amount : totalAmount;
     }
 }
 ```
 
-**사례 3: 타입 변경 (가장 위험)**
+**Case 3: Type Changes (Most Dangerous)**
 
-타입을 변경하는 것은 가장 위험합니다. 역직렬화가 실패하여 시스템이 멈출 수 있습니다. 타입 변경이 필요하면 새 이벤트 타입을 정의하고, Consumer가 두 버전을 모두 처리하도록 구현합니다.
+Changing types is the most dangerous. Deserialization can fail and bring the system to a halt. If a type change is needed, define a new event type and implement Consumers to handle both versions.
 
 ```java
-// ❌ 절대 하면 안 됨: 타입 변경
+// ❌ Never do this: Type change
 // v1: String orderId
 // v2: Long orderId
-// → 역직렬화 실패!
+// -> Deserialization failure!
 
-// ✅ 해결: 새 이벤트 타입 정의
+// ✅ Solution: Define a new event type
 public class OrderConfirmedEventV2 {
-    private Long orderId;  // 새 타입
+    private Long orderId;  // New type
 
-    // 마이그레이션 핸들러
+    // Migration handler
     public static OrderConfirmedEventV2 fromV1(OrderConfirmedEvent v1) {
         return new OrderConfirmedEventV2(Long.parseLong(v1.getOrderId()));
     }
 }
 
-// Consumer는 두 버전 모두 처리
+// Consumer handles both versions
 @KafkaListener(topics = "order-events")
 public void handle(ConsumerRecord<String, JsonNode> record) {
     int version = record.value().get("version").asInt();
     if (version == 1) {
-        // V1 처리
+        // Handle V1
     } else {
-        // V2 처리
+        // Handle V2
     }
 }
 ```
 
-**스키마 진화 체크리스트**
+**Schema Evolution Checklist**
 
-안전한 변경으로는 새 필드 추가(Optional), 필드에 기본값 추가, 새 이벤트 타입 추가가 있습니다. 위험한 변경으로는 필드명 변경, 필드 타입 변경, 필수 필드로 변경이 있으며 마이그레이션 전략이 필요합니다. 절대 하면 안 되는 변경으로는 기존 필드 삭제, 기존 이벤트 타입 삭제, 이벤트 의미 변경이 있습니다.
+Safe changes include adding new fields (Optional), adding default values to fields, and adding new event types. Dangerous changes include renaming fields, changing field types, and making fields required -- these need a migration strategy. Changes you must never make include deleting existing fields, deleting existing event types, and changing event semantics.
 
 ---
 
@@ -963,49 +963,49 @@ public void handle(ConsumerRecord<String, JsonNode> record) {
 
 **Suitable Cases**
 
-- ✅ 마이크로서비스 간 통신이 필요한 경우
-- ✅ loose coupling이 중요한 경우
-- ✅ asynchronous processing가 적합한 워크플로우
-- ✅ 감사 추적이 필요한 시스템
-- ✅ 확장성이 중요한 대규모 시스템
+- When communication between microservices is needed
+- When loose coupling is important
+- Workflows where asynchronous processing is appropriate
+- Systems requiring audit trails
+- Large-scale systems where scalability is important
 
 **Unsuitable Cases**
 
-- ❌ 동기적 응답이 필수인 경우
-- ❌ 디버깅 복잡도를 감당할 수 없는 팀
-- ❌ 트랜잭션 일관성이 절대적으로 필요한 경우
-- ❌ 소규모 모놀리식 시스템
+- When synchronous responses are mandatory
+- Teams that cannot handle debugging complexity
+- When absolute transactional consistency is required
+- Small monolithic systems
 
 **Best Practice: Which Systems Fit?**
 
-| 시스템 유형 | 적합도 | 이유 |
+| System Type | Suitability | Reason |
 |------------|-------|------|
-| **마이크로서비스** | 매우 적합 | 서비스 간 loose coupling, 독립적 배포 |
-| **이커머스** | 매우 적합 | 주문→결제→배송→알림 파이프라인 |
-| **알림 시스템** | 적합 | 비동기 발송, 재시도 가능 |
-| **실시간 데이터 파이프라인** | 적합 | 스트림 처리, 확장성 |
-| **감사/로깅 시스템** | 적합 | 모든 변경 이력 추적 |
-| **IoT 데이터 수집** | 적합 | 대량 event processing |
-| **결제 시스템** | 부분 적합 | 실패 처리 복잡, 보상 트랜잭션 필요 |
-| **실시간 게임** | 부적합 | 저지연 동기 응답 필요 |
-| **단순 CRUD** | 부적합 | 복잡도 대비 이점 없음 |
+| **Microservices** | Very suitable | Loose coupling between services, independent deployment |
+| **E-commerce** | Very suitable | Order -> Payment -> Shipping -> Notification pipeline |
+| **Notification systems** | Suitable | Asynchronous delivery, retryable |
+| **Real-time data pipelines** | Suitable | Stream processing, scalability |
+| **Audit/Logging systems** | Suitable | Tracking all change history |
+| **IoT data collection** | Suitable | High-volume event processing |
+| **Payment systems** | Partially suitable | Complex failure handling, compensating transactions needed |
+| **Real-time games** | Unsuitable | Low-latency synchronous responses needed |
+| **Simple CRUD** | Unsuitable | No benefit relative to complexity |
 
 ---
 
 #### Summary
 
-domain event는 비즈니스적으로 의미 있는 사건을 코드로 표현한 것입니다. 이벤트 패턴으로는 Notification, State Transfer, Sourcing이 있으며 각각 다른 목적을 가집니다. Outbox 패턴을 사용하면 이벤트 유실을 방지할 수 있고, CQRS는 이벤트 소싱의 쿼리 성능 문제를 해결합니다. 스키마 진화 시에는 하위 호환성 유지가 필수입니다.
+Domain events are business-meaningful occurrences expressed in code. Event patterns include Notification, State Transfer, and Sourcing, each serving a different purpose. Using the Outbox pattern prevents event loss, and CQRS solves the query performance issues of Event Sourcing. When evolving schemas, maintaining backward compatibility is essential.
 
-| 개념 | 핵심 |
+| Concept | Key Point |
 |------|------|
-| **domain event** | 비즈니스적으로 의미 있는 사건 |
-| **이벤트 패턴** | Notification / State Transfer / Sourcing |
-| **Outbox 패턴** | 이벤트 유실 방지 |
-| **CQRS** | 이벤트 소싱의 쿼리 성능 해결 |
-| **스키마 진화** | 하위 호환성 유지 필수 |
+| **Domain Event** | Business-meaningful occurrence |
+| **Event Patterns** | Notification / State Transfer / Sourcing |
+| **Outbox Pattern** | Prevents event loss |
+| **CQRS** | Solves Event Sourcing query performance |
+| **Schema Evolution** | Backward compatibility is essential |
 
 #### Next Steps
 
-- [CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}}) - 이벤트 기반 시스템과 잘 어울리는 패턴
-- [실습 예제]({{< relref "/docs/ddd/examples" >}}) - Spring Boot로 구현하는 주문 도메인
-- [Kafka 핵심 구성요소]({{< relref "/docs/kafka/concepts/core-components" >}}) - 이벤트 기반 아키텍처의 메시지 브로커로 사용되는 Kafka의 구성요소
+- [CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}}) - A pattern that pairs well with event-driven systems
+- [Hands-on Examples]({{< relref "/docs/ddd/examples" >}}) - Implementing an order domain with Spring Boot
+- [Kafka Core Components]({{< relref "/docs/kafka/concepts/core-components" >}}) - Components of Kafka used as a message broker in event-driven architecture

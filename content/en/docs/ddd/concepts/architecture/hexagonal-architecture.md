@@ -657,7 +657,7 @@ Let us examine the key benefits of hexagonal architecture with concrete examples
 Since you only need to Mock Ports, testing becomes very simple. You can perfectly test business logic without databases or external APIs.
 
 ```java
-// Port만 Mock하면 됩니다
+// Just Mock the Ports
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
 
@@ -670,7 +670,7 @@ class OrderServiceTest {
     private OrderService orderService;
 
     @Test
-    void 주문_생성_성공() {
+    void order_creation_success() {
         // Given
         when(inventoryPort.isAvailable(any(), anyInt())).thenReturn(true);
 
@@ -691,7 +691,7 @@ class OrderServiceTest {
 
 The test above verifies OrderService logic without actual databases or external services. Since Ports are replaced with Mocks, test writing is simple and execution is fast.
 
-**2. technology replacement가 쉬워집니다**
+**2. Technology Replacement Becomes Easy**
 
 Since you only need to replace Adapters, you can easily change the technology stack. The Application Core does not need any changes.
 
@@ -712,10 +712,10 @@ flowchart LR
     Before -->|"Replace Adapter only"| After
 ```
 
-예를 들어, MySQL에서 MongoDB로 데이터베이스를 변경해도 OrderService 코드는 전혀 변경할 필요가 없습니다. SaveOrderPort interface도 그대로이고, 단지 MongoOrderAdapter라는 새로운 Adapter만 작성하면 됩니다.
+For example, even if you change the database from MySQL to MongoDB, the OrderService code does not need any changes. The SaveOrderPort interface remains the same, and you simply write a new MongoOrderAdapter.
 
 ```java
-// MySQL에서 MongoDB로 변경해도 Service 코드 변경 없음!
+// No Service code changes needed even when switching from MySQL to MongoDB!
 
 // Before: MySQL Adapter
 @Repository
@@ -724,7 +724,7 @@ public class MySqlOrderAdapter implements SaveOrderPort {
     // ...
 }
 
-// After: MongoDB Adapter (새로 추가)
+// After: MongoDB Adapter (newly added)
 @Repository
 public class MongoOrderAdapter implements SaveOrderPort {
     private final OrderMongoRepository mongoRepository;
@@ -734,7 +734,7 @@ public class MongoOrderAdapter implements SaveOrderPort {
 
 **3. Adding External Integrations Becomes Easy**
 
-새로운 알림 채널을 추가하고 싶다면 Adapter만 추가하면 됩니다. Application Core는 SendNotificationPort interface만 알고 있으므로, 어떤 Adapter를 사용하는지 상관하지 않습니다.
+If you want to add a new notification channel, you just add an Adapter. Since the Application Core only knows the SendNotificationPort interface, it does not care which Adapter is used.
 
 ```mermaid
 flowchart LR
@@ -764,10 +764,10 @@ Hexagonal architecture provides flexibility, but at a cost.
 {{< callout type="warning" title="Hexagonal Architecture Trade-offs" >}}
 | Advantage | Cost |
 |------|------|
-| easy to test성 | Port/Adapter interface 작성 필요 |
-| technology replacement 유연성 | 초기 설계에 더 많은 시간 소요 |
-| 외부 연동 격리 | 파일 수 증가 (interface + implementation) |
-| 명확한 dependency direction | 팀 전체가 패턴을 이해해야 함 |
+| Testability | Need to write Port/Adapter interfaces |
+| Technology replacement flexibility | More time needed for initial design |
+| External integration isolation | Increased number of files (interface + implementation) |
+| Clear dependency direction | Entire team must understand the pattern |
 {{< /callout >}}
 
 **When Are the Costs Justified?**
@@ -827,16 +827,16 @@ Let us look at common mistakes when applying hexagonal architecture.
 
 **1. Direct Dependency Without Ports**
 
-Port 없이 Service가 Repository implementation를 직접 의존하면 헥사고날의 이점을 잃게 됩니다. 항상 interface(Port)를 통해 의존해야 합니다.
+If a Service directly depends on a Repository implementation without a Port, you lose the benefits of hexagonal architecture. You must always depend through interfaces (Ports).
 
 ```java
-// ❌ 잘못된 예: Service가 Repository implementation를 직접 의존
+// ❌ Wrong: Service directly depends on Repository implementation
 @Service
 public class OrderService {
     private final OrderJpaRepository jpaRepository;  // Concrete class!
 }
 
-// ✅ 올바른 예: Port(interface)에 의존
+// ✅ Correct: Depend on Port (interface)
 @Service
 public class OrderService {
     private final SaveOrderPort saveOrderPort;  // interface!
@@ -845,17 +845,17 @@ public class OrderService {
 
 If you depend on concrete classes, Service code must be modified when switching JPA to another technology later. If you depend on Ports, you only need to replace Adapters.
 
-**2. Adapter에 business logic**
+**2. Business Logic in Adapters**
 
-Adapter는 단순히 변환만 담당해야 합니다. business logic을 Adapter에 넣으면 안 됩니다.
+Adapters should only handle conversion. You must not put business logic in Adapters.
 
 ```java
-// ❌ 잘못된 예: Controller에 business logic
+// ❌ Wrong: Business logic in Controller
 @RestController
 public class OrderController {
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestBody OrderRequest request) {
-        // business logic이 Controller에!
+        // Business logic in the Controller!
         if (request.getTotal() > 100000) {
             request.setDiscount(0.1);
         }
@@ -880,7 +880,7 @@ Controllers should only be responsible for converting HTTP requests to Commands,
 
 **3. Domain Depends on Ports**
 
-Domain은 완전히 순수해야 하며, Port에도 의존하면 안 됩니다. Domain은 business logic만 담고 있어야 합니다.
+The Domain must be completely pure and must not depend even on Ports. The Domain should contain only business logic.
 
 ```java
 // ❌ Wrong: Entity uses Port
@@ -934,13 +934,13 @@ flowchart TB
 
 **1. Domain Test (Pure Unit Test)**
 
-Domain은 external dependencies이 없으므로 가장 간단하게 테스트할 수 있습니다. pure Java object이므로 테스트 실행 속도도 빠릅니다.
+Since the Domain has no external dependencies, it is the simplest to test. As pure Java objects, test execution is also fast.
 
 ```java
 class OrderTest {
 
     @Test
-    void 주문_확정_성공() {
+    void order_confirmation_success() {
         // Given
         Order order = Order.create(
             CustomerId.of("c1"),
@@ -955,7 +955,7 @@ class OrderTest {
     }
 
     @Test
-    void 이미_확정된_주문은_다시_확정할_수_없다() {
+    void already_confirmed_order_cannot_be_confirmed_again() {
         Order order = createConfirmedOrder();
 
         assertThrows(IllegalStateException.class, () -> order.confirm());
@@ -965,7 +965,7 @@ class OrderTest {
 
 **2. Application Service Test (Port Mock)**
 
-Application Service는 Port를 Mock으로 대체하여 테스트합니다. 실제 데이터베이스나 외부 서비스 없이 business logic을 검증할 수 있습니다.
+The Application Service is tested by replacing Ports with Mocks. You can verify business logic without actual databases or external services.
 
 ```java
 @ExtendWith(MockitoExtension.class)
@@ -980,7 +980,7 @@ class OrderServiceTest {
     private OrderService orderService;
 
     @Test
-    void 재고_부족시_주문_실패() {
+    void order_fails_when_inventory_insufficient() {
         // Given
         when(inventoryPort.isAvailable(any(), anyInt())).thenReturn(false);
 
@@ -1002,7 +1002,7 @@ class OrderServiceTest {
 Since Adapters communicate with actual external systems, perform integration tests. Using Spring Boot test tools is convenient.
 
 ```java
-// Persistence Adapter 테스트
+// Persistence Adapter test
 @DataJpaTest
 class OrderPersistenceAdapterTest {
 
@@ -1017,7 +1017,7 @@ class OrderPersistenceAdapterTest {
     }
 
     @Test
-    void 주문_저장_및_조회() {
+    void save_and_load_order() {
         // Given
         Order order = createOrder();
 
@@ -1030,7 +1030,7 @@ class OrderPersistenceAdapterTest {
     }
 }
 
-// Web Adapter 테스트
+// Web Adapter test
 @WebMvcTest(OrderController.class)
 class OrderControllerTest {
 
@@ -1041,7 +1041,7 @@ class OrderControllerTest {
     private CreateOrderUseCase createOrderUseCase;
 
     @Test
-    void 주문_생성_API() throws Exception {
+    void create_order_API() throws Exception {
         when(createOrderUseCase.execute(any()))
             .thenReturn(OrderId.of("order-123"));
 
@@ -1062,28 +1062,28 @@ Hexagonal architecture is not suitable for every project. Choose based on your p
 
 **Suitable Cases**
 
-헥사고날 아키텍처는 다음과 같은 상황에서 특히 유용합니다. 외부 시스템 연동이 많은 경우, 예를 들어 여러 데이터베이스, REST API, 메시지 큐를 사용하는 프로젝트에 적합합니다. 마이크로서비스 아키텍처에서도 각 서비스의 경계를 명확히 하는 데 도움이 됩니다.
+Hexagonal architecture is particularly useful in the following situations. When there are many external system integrations -- for example, projects using multiple databases, REST APIs, and message queues. It also helps clearly define the boundaries of each service in microservice architectures.
 
-기술 변경 가능성이 있는 경우, 예를 들어 나중에 데이터베이스를 바꾸거나 메시징 시스템을 변경할 가능성이 있다면 헥사고날이 좋습니다. 팀이 테스트를 중요하게 여기는 경우에도 적합합니다. 레거시 시스템과 통합해야 할 때도 Port와 Adapter로 깔끔하게 분리할 수 있어 유용합니다.
+When there is a possibility of technology changes -- for example, if you might switch databases or change messaging systems later, hexagonal is a good fit. It is also suitable when the team values testing. When integrating with legacy systems, Ports and Adapters allow for clean separation.
 
 **Unsuitable Cases**
 
-반면, 다음과 같은 상황에서는 헥사고날이 과할 수 있습니다. 소규모 단기 프로젝트에서는 오버엔지니어링이 될 수 있습니다. 팀이 패턴에 익숙하지 않을 때는 계층형으로 시작하는 것이 좋습니다.
+On the other hand, hexagonal may be excessive in the following situations. For small, short-term projects, it can be over-engineering. When the team is not familiar with the pattern, it is better to start with layered architecture.
 
-단순 CRUD 애플리케이션에서는 헥사고날의 이점을 누리기 어렵습니다. 외부 연동이 거의 없는 프로젝트에서도 불필요한 복잡도만 증가시킬 수 있습니다.
+For simple CRUD applications, it is hard to benefit from hexagonal. For projects with almost no external integrations, it can only add unnecessary complexity.
 
 **Best Practice: Which Systems Fit?**
 
-| 시스템 유형 | 적합도 | 이유 |
+| System Type | Suitability | Reason |
 |------------|-------|------|
-| **마이크로서비스** | 매우 적합 | 서비스 경계 명확화, 독립적 배포 |
-| **이커머스 플랫폼** | 매우 적합 | 결제/배송/재고 등 다양한 외부 연동 |
-| **레거시 통합** | 적합 | ACL로 레거시 격리 가능 |
-| **API Gateway** | 적합 | 다양한 백엔드 서비스 연동 |
-| **IoT 시스템** | 적합 | 다양한 프로토콜과 디바이스 연동 |
-| **단순 CRUD** | 부적합 | 계층형으로 충분 |
-| **소규모 MVP** | 부적합 | 오버엔지니어링 |
-| **외부 연동 없음** | 부적합 | 계층형 권장 |
+| **Microservices** | Very suitable | Clear service boundaries, independent deployment |
+| **E-commerce Platform** | Very suitable | Various external integrations such as payment/shipping/inventory |
+| **Legacy Integration** | Suitable | Can isolate legacy with ACL |
+| **API Gateway** | Suitable | Various backend service integrations |
+| **IoT Systems** | Suitable | Various protocol and device integrations |
+| **Simple CRUD** | Unsuitable | Layered is sufficient |
+| **Small MVP** | Unsuitable | Over-engineering |
+| **No External Integrations** | Unsuitable | Layered recommended |
 
 ---
 
@@ -1102,11 +1102,11 @@ flowchart LR
 
 **Step 1: Move Repository Interface to Domain**
 
-먼저 Repository interface를 Infrastructure에서 Domain으로 이동합니다.
+First, move the Repository interface from Infrastructure to Domain.
 
 ```java
-// Before: Infrastructure에 있던 Repository
-// After: Domain에 interface 정의
+// Before: Repository in Infrastructure
+// After: Interface defined in Domain
 public interface OrderRepository {
     void save(Order order);
     Optional<Order> findById(OrderId id);
@@ -1119,7 +1119,7 @@ Split Repository into SaveOrderPort and LoadOrderPort for more clarity.
 
 ```java
 // Before: OrderRepository
-// After: SaveOrderPort, LoadOrderPort 분리
+// After: Split into SaveOrderPort, LoadOrderPort
 public interface SaveOrderPort {
     void save(Order order);
 }
@@ -1129,9 +1129,9 @@ public interface LoadOrderPort {
 }
 ```
 
-**3단계: Adapter package structure 정리**
+**Step 3: Organize Adapter Package Structure**
 
-마지막으로 package structure를 헥사고날 스타일로 정리합니다.
+Finally, reorganize the package structure into the hexagonal style.
 
 ```
 // Before
@@ -1160,9 +1160,9 @@ com.example.order/
 {{< callout type="info" title="Hexagonal Architecture Key Summary" >}}
 | Concept | Description | Example |
 |------|------|------|
-| **Port** | 연결 규격 (interface) | `SaveOrderPort`, `SendNotificationPort` |
-| **Adapter** | 연결 장치 (implementation) | `JpaOrderAdapter`, `EmailAdapter` |
-| **Core** | 순수 business logic | `OrderService`, `Order` |
+| **Port** | Connection spec (interface) | `SaveOrderPort`, `SendNotificationPort` |
+| **Adapter** | Connector (implementation) | `JpaOrderAdapter`, `EmailAdapter` |
+| **Core** | Pure business logic | `OrderService`, `Order` |
 | **Driving** | Things that call me | Controller, Kafka Listener |
 | **Driven** | Things I call | Repository impl, API Client |
 
@@ -1173,6 +1173,6 @@ com.example.order/
 
 #### Next Steps
 
-- [클린 아키텍처]({{< relref "/docs/ddd/concepts/architecture/clean-architecture" >}}) - 더 엄격한 의존성 규칙
-- [어니언 아키텍처]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}}) - domain model 중심
-- [CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}}) - 읽기/쓰기 분리
+- [Clean Architecture]({{< relref "/docs/ddd/concepts/architecture/clean-architecture" >}}) - Stricter dependency rules
+- [Onion Architecture]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}}) - Domain model centered
+- [CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}}) - Read/write separation
