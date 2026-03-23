@@ -67,49 +67,49 @@ Spark 도입을 고려할 때는 데이터 규모와 처리 복잡도를 기준�
 
 이 가이드는 Java/Spring 개발자가 Spark를 실무에 적용할 수 있도록 단계별로 구성되어 있습니다.
 
-**[Quick Start](quick-start/)**
+**[Quick Start]({{< relref "/docs/spark/quick-start" >}})**
 5분 만에 Spark 애플리케이션을 실행해봅니다. 개념보다 먼저 동작하는 코드를 확인하세요.
 
-**[개념 이해](concepts/)**
+**[개념 이해]({{< relref "/docs/spark/concepts" >}})**
 
 Spark의 핵심 원리를 **Java/Spring 개발자의 관점**에서 설명합니다. 아래 표는 각 개념 문서에서 다루는 주제와 학습 내용을 정리한 것입니다:
 
 | 주제 | 배우는 것 |
 |------|----------|
-| [아키텍처](concepts/architecture/) | Driver, Executor, Cluster Manager의 역할과 동작 원리 |
-| [RDD 기초](concepts/rdd/) | Spark의 기본 추상화, 분산 컬렉션의 개념 |
-| [DataFrame과 Dataset](concepts/dataframe-dataset/) | 타입 안전한 분산 데이터 처리의 현대적 API |
-| [Spark SQL](concepts/spark-sql/) | SQL로 분산 데이터 쿼리하기 |
-| [Transformation과 Action](concepts/transformations-actions/) | 지연 평가와 즉시 실행의 차이 |
-| [파티셔닝과 셔플](concepts/partitioning/) | 분산 처리의 핵심, 데이터 분배 전략 |
-| [캐싱과 영속성](concepts/caching/) | 인메모리 처리의 활용법 |
-| [Structured Streaming](concepts/structured-streaming/) | 실시간 스트림 데이터 처리 |
-| [MLlib](concepts/mllib/) | 분산 환경에서의 머신러닝 |
-| [성능 튜닝](concepts/tuning/) | 메모리, 파티션, 셔플 최적화 |
-| [배포와 클러스터 관리](concepts/deployment/) | Standalone, YARN, Kubernetes 환경 구성 |
+| [아키텍처]({{< relref "/docs/spark/concepts/architecture" >}}) | Driver, Executor, Cluster Manager의 역할과 동작 원리 |
+| [RDD 기초]({{< relref "/docs/spark/concepts/rdd" >}}) | Spark의 기본 추상화, 분산 컬렉션의 개념 |
+| [DataFrame과 Dataset]({{< relref "/docs/spark/concepts/dataframe-dataset" >}}) | 타입 안전한 분산 데이터 처리의 현대적 API |
+| [Spark SQL]({{< relref "/docs/spark/concepts/spark-sql" >}}) | SQL로 분산 데이터 쿼리하기 |
+| [Transformation과 Action]({{< relref "/docs/spark/concepts/transformations-actions" >}}) | 지연 평가와 즉시 실행의 차이 |
+| [파티셔닝과 셔플]({{< relref "/docs/spark/concepts/partitioning" >}}) | 분산 처리의 핵심, 데이터 분배 전략 |
+| [캐싱과 영속성]({{< relref "/docs/spark/concepts/caching" >}}) | 인메모리 처리의 활용법 |
+| [Structured Streaming]({{< relref "/docs/spark/concepts/structured-streaming" >}}) | 실시간 스트림 데이터 처리 |
+| [MLlib]({{< relref "/docs/spark/concepts/mllib" >}}) | 분산 환경에서의 머신러닝 |
+| [성능 튜닝]({{< relref "/docs/spark/concepts/tuning" >}}) | 메모리, 파티션, 셔플 최적화 |
+| [배포와 클러스터 관리]({{< relref "/docs/spark/concepts/deployment" >}}) | Standalone, YARN, Kubernetes 환경 구성 |
 
 이 개념들을 순서대로 학습하면 Spark의 내부 동작을 체계적으로 이해할 수 있습니다.
 
-**[실습 예제](examples/)**
+**[실습 예제]({{< relref "/docs/spark/examples" >}})**
 
 Spring Boot 기반의 실행 가능한 예제 코드입니다. 환경 설정부터 기본 데이터 처리까지 실습을 통해 학습합니다:
 
-- [환경 설정](examples/setup/) - Java/Spring Boot와 Spark 통합 환경 구성
-- [기본 예제](examples/basic/) - 데이터 로딩, 변환, 집계의 기초
+- [환경 설정]({{< relref "/docs/spark/examples/setup" >}}) - Java/Spring Boot와 Spark 통합 환경 구성
+- [기본 예제]({{< relref "/docs/spark/examples/basic" >}}) - 데이터 로딩, 변환, 집계의 기초
 
-**[How-To Guide](howto/)**
+**[How-To Guide]({{< relref "/docs/spark/howto" >}})**
 
 특정 문제를 해결하기 위한 단계별 가이드입니다:
-- [OutOfMemoryError 해결하기](howto/oom-troubleshooting/) - 메모리 부족 오류 진단 및 해결
-- [데이터 스큐 해결하기](howto/data-skew/) - 파티션 불균형 해결
-- [셔플 최적화하기](howto/shuffle-optimization/) - 네트워크 I/O 최소화
+- [OutOfMemoryError 해결하기]({{< relref "/docs/spark/howto/oom-troubleshooting" >}}) - 메모리 부족 오류 진단 및 해결
+- [데이터 스큐 해결하기]({{< relref "/docs/spark/howto/data-skew" >}}) - 파티션 불균형 해결
+- [셔플 최적화하기]({{< relref "/docs/spark/howto/shuffle-optimization" >}}) - 네트워크 I/O 최소화
 
-**[부록](appendix/)**
+**[부록]({{< relref "/docs/spark/appendix" >}})**
 
 학습 중 참고할 수 있는 보조 자료입니다:
-- [용어 사전](appendix/glossary/) - Spark 용어 빠른 참조
-- [FAQ](appendix/faq/) - 자주 묻는 질문
-- [참고 자료](appendix/references/) - 공식 문서 및 추가 학습 자료
+- [용어 사전]({{< relref "/docs/spark/appendix/glossary" >}}) - Spark 용어 빠른 참조
+- [FAQ]({{< relref "/docs/spark/appendix/faq" >}}) - 자주 묻는 질문
+- [참고 자료]({{< relref "/docs/spark/appendix/references" >}}) - 공식 문서 및 추가 학습 자료
 
 ## Spark vs Hadoop MapReduce
 

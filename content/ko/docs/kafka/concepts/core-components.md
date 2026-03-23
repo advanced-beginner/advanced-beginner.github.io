@@ -424,7 +424,7 @@ kafka-console-consumer.sh --bootstrap-server localhost:9092 \
 
 이 문서에서는 Kafka의 다섯 가지 핵심 구성요소를 살펴보았습니다. 각 구성요소의 역할과 동작 원리를 이해했다면, 다음 단계로 메시지가 Producer에서 Consumer까지 전달되는 전체 흐름을 더 자세히 살펴볼 수 있습니다. Consumer Group과 Offset 관리, Replication 메커니즘도 실제 운영에서 중요한 주제입니다.
 
-- [메시지 흐름](message-flow/) - Producer에서 Consumer까지 메시지가 전달되는 전체 과정을 단계별로 추적합니다
-- [Consumer Group과 Offset](consumer-group/) - 병렬 처리와 Offset 관리의 세부 사항을 학습합니다
-- [실습 예제](../examples/basic/) - 이론을 바탕으로 직접 코드를 작성하고 동작을 확인합니다
+- [메시지 흐름]({{< relref "/docs/kafka/concepts/message-flow" >}}) - Producer에서 Consumer까지 메시지가 전달되는 전체 과정을 단계별로 추적합니다
+- [Consumer Group과 Offset]({{< relref "/docs/kafka/concepts/consumer-group" >}}) - 병렬 처리와 Offset 관리의 세부 사항을 학습합니다
+- [실습 예제]({{< relref "/docs/kafka/examples/basic" >}}) - 이론을 바탕으로 직접 코드를 작성하고 동작을 확인합니다
 - [도메인 이벤트 기반 아키텍처]({{< relref "/docs/ddd/concepts/architecture/event-driven" >}}) - Kafka의 구성요소가 DDD 이벤트 아키텍처에서 어떻게 활용되는지 살펴봅니다

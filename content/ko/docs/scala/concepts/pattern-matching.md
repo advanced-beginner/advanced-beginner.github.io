@@ -367,7 +367,7 @@ val int: Elem[Array[Int]] = 1       // Int
 val str: Elem[List[String]] = "hi"  // String
 ```
 
-> 💡 Match Types는 고급 기능으로, 타입 레벨 프로그래밍에 사용됩니다. 자세한 내용은 [고급 타입](type-system-advanced/)을 참조하세요.
+> 💡 Match Types는 고급 기능으로, 타입 레벨 프로그래밍에 사용됩니다. 자세한 내용은 [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}})을 참조하세요.
 
 #### 패턴 매칭이 사용되는 곳
 

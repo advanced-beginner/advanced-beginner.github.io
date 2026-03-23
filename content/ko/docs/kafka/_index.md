@@ -39,33 +39,33 @@ Kafka는 이런 문제들을 해결하면서도 <strong>메시지 유실 없이<
 
 ## 이 가이드에서 다루는 것
 
-### [Quick Start](quick-start/)
+### [Quick Start]({{< relref "/docs/kafka/quick-start" >}})
 5분 만에 Kafka 메시지를 보내고 받아봅니다. 개념보다 먼저 동작하는 코드를 확인하세요.
 
-### [개념 이해](concepts/)
+### [개념 이해]({{< relref "/docs/kafka/concepts" >}})
 단순히 "이렇게 쓰세요"가 아닌, **왜 이렇게 동작하는지** 원리를 설명합니다.
 
 | 주제 | 배우는 것 |
 |------|----------|
-| [핵심 구성요소](concepts/core-components/) | Broker, Topic, Partition, Producer, Consumer의 역할과 관계 |
-| [메시지 흐름](concepts/message-flow/) | 메시지가 Producer에서 Consumer까지 도달하는 전체 과정 |
-| [Consumer Group과 Offset](concepts/consumer-group/) | 병렬 처리와 메시지 위치 관리의 핵심 |
-| [복제와 장애 대응](concepts/replication/) | 데이터 유실 없이 장애를 견디는 방법 |
-| [트랜잭션](concepts/transactions/) | exactly-once 처리를 보장하는 방법 |
-| [에러 처리](concepts/error-handling/) | 실무에서 마주치는 오류 상황과 해결 패턴 |
-| [성능 튜닝](concepts/producer-tuning/) | Producer/Consumer 최적화 전략 |
-| [모니터링](concepts/monitoring/) | 운영 환경에서 Kafka 상태 파악하기 |
+| [핵심 구성요소]({{< relref "/docs/kafka/concepts/core-components" >}}) | Broker, Topic, Partition, Producer, Consumer의 역할과 관계 |
+| [메시지 흐름]({{< relref "/docs/kafka/concepts/message-flow" >}}) | 메시지가 Producer에서 Consumer까지 도달하는 전체 과정 |
+| [Consumer Group과 Offset]({{< relref "/docs/kafka/concepts/consumer-group" >}}) | 병렬 처리와 메시지 위치 관리의 핵심 |
+| [복제와 장애 대응]({{< relref "/docs/kafka/concepts/replication" >}}) | 데이터 유실 없이 장애를 견디는 방법 |
+| [트랜잭션]({{< relref "/docs/kafka/concepts/transactions" >}}) | exactly-once 처리를 보장하는 방법 |
+| [에러 처리]({{< relref "/docs/kafka/concepts/error-handling" >}}) | 실무에서 마주치는 오류 상황과 해결 패턴 |
+| [성능 튜닝]({{< relref "/docs/kafka/concepts/producer-tuning" >}}) | Producer/Consumer 최적화 전략 |
+| [모니터링]({{< relref "/docs/kafka/concepts/monitoring" >}}) | 운영 환경에서 Kafka 상태 파악하기 |
 
-### [실습 예제](examples/)
+### [실습 예제]({{< relref "/docs/kafka/examples" >}})
 Spring Boot 기반의 실행 가능한 예제 코드입니다.
 
-- [환경 설정](examples/setup/) - Docker로 Kafka 클러스터 구성
-- [기본 예제](examples/basic/) - Producer/Consumer 구현
-- [주문 시스템](examples/order-system/) - 실제 비즈니스 시나리오 예제
+- [환경 설정]({{< relref "/docs/kafka/examples/setup" >}}) - Docker로 Kafka 클러스터 구성
+- [기본 예제]({{< relref "/docs/kafka/examples/basic" >}}) - Producer/Consumer 구현
+- [주문 시스템]({{< relref "/docs/kafka/examples/order-system" >}}) - 실제 비즈니스 시나리오 예제
 
-### [부록](appendix/)
-- [용어 사전](appendix/glossary/) - Kafka 용어 빠른 참조
-- [참고 자료](appendix/references/) - 공식 문서 및 추가 학습 자료
+### [부록]({{< relref "/docs/kafka/appendix" >}})
+- [용어 사전]({{< relref "/docs/kafka/appendix/glossary" >}}) - Kafka 용어 빠른 참조
+- [참고 자료]({{< relref "/docs/kafka/appendix/references" >}}) - 공식 문서 및 추가 학습 자료
 
 ## 선수 지식
 

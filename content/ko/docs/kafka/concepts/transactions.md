@@ -17,7 +17,7 @@ author_url: "http://github.com/kimbenji"
 
 **대상 독자**: 메시지 전달 보장이 중요한 시스템을 개발하는 개발자
 
-**선수 지식**: [심화 개념](advanced-concepts/)의 acks, Idempotent Producer 개념
+**선수 지식**: [심화 개념]({{< relref "/docs/kafka/concepts/advanced-concepts" >}})의 acks, Idempotent Producer 개념
 
 **소요 시간**: 약 25-30분
 
@@ -107,7 +107,7 @@ Idempotent Producer는 Producer에서 Broker로의 중복을 방지합니다. Tr
 
 #### Idempotent Producer 복습
 
-[심화 개념](advanced-concepts/#idempotent-producer-멱등성-프로듀서)에서 다뤘지만, EOS의 기반이므로 다시 정리합니다.
+[심화 개념]({{< relref "/docs/kafka/concepts/advanced-concepts#idempotent-producer-멱등성-프로듀서" >}})에서 다뤘지만, EOS의 기반이므로 다시 정리합니다.
 
 ```java
 // Producer 설정
@@ -408,4 +408,4 @@ Idempotent Producer는 단일 Partition에서 중복을 방지하고 Kafka 3.0�
 
 #### 다음 단계
 
-- [Producer 튜닝](producer-tuning/) - 성능 최적화 설정
+- [Producer 튜닝]({{< relref "/docs/kafka/concepts/producer-tuning" >}}) - 성능 최적화 설정

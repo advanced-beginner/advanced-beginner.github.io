@@ -12,7 +12,7 @@ weight: 3
 {{< callout type="info" title="이 가이드의 범위" >}}
 **다루는 내용**: Reindex API를 활용한 무중단 매핑 변경, Alias 전환 전략, 검증 방법
 
-**다루지 않는 내용**: 대규모 인덱스 재구축은 [인덱스 재구축](../index-rebuild/)을, 클러스터 수준 변경은 [클러스터 확장](../cluster-scaling/)을 참조하세요.
+**다루지 않는 내용**: 대규모 인덱스 재구축은 [인덱스 재구축]({{< relref "/docs/elasticsearch/howto/index-rebuild" >}})을, 클러스터 수준 변경은 [클러스터 확장]({{< relref "/docs/elasticsearch/howto/cluster-scaling" >}})을 참조하세요.
 {{< /callout >}}
 
 {{< callout type="tip" title="TL;DR" >}}
@@ -409,6 +409,6 @@ curl -X DELETE "localhost:9200/products-v2"
 
 ## 관련 문서
 
-- [인덱스 재구축](../index-rebuild/) - 대규모 인덱스 재구축 전략
-- [클러스터 확장](../cluster-scaling/) - 클러스터 수준 확장
-- [느린 쿼리 최적화](../slow-query-optimization/) - 쿼리 성능 개선
+- [인덱스 재구축]({{< relref "/docs/elasticsearch/howto/index-rebuild" >}}) - 대규모 인덱스 재구축 전략
+- [클러스터 확장]({{< relref "/docs/elasticsearch/howto/cluster-scaling" >}}) - 클러스터 수준 확장
+- [느린 쿼리 최적화]({{< relref "/docs/elasticsearch/howto/slow-query-optimization" >}}) - 쿼리 성능 개선

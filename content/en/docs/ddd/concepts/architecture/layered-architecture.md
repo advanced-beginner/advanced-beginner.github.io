@@ -11,11 +11,11 @@ author_url: "http://github.com/kimbenji"
 > **Prerequisites**: Basic understanding of Spring Boot MVC patterns
 > **Estimated Time**: About 15 minutes
 
-가장 기본적이고 널리 사용되는 아키텍처 패턴입니다. **처음 아키텍처를 배운다면 여기서 시작하세요.** 계층형 아키텍처는 소프트웨어를 수평으로 나누어 각 계층이 명확한 역할을 가지도록 구성합니다. 각 계층은 위에서 아래로만 호출할 수 있다는 단순하지만 강력한 규칙을 따릅니다.
+The most basic and widely used architecture pattern. **If you are learning architecture for the first time, start here.** Layered architecture divides software horizontally so each layer has a clear role. It follows the simple but powerful rule that each layer can only call the layer below it.
 
 #### One-Line Summary
 
-코드를 4개 층으로 나누고, 위에서 아래로만 호출한다는 원칙을 기본으로 합니다. 이렇게 하면 각 층이 자신의 책임에 집중할 수 있고, 코드의 구조를 이해하기 쉬워집니다.
+The fundamental principle is dividing code into 4 layers and calling only from top to bottom. This allows each layer to focus on its responsibilities, making the code structure easy to understand.
 
 ```mermaid
 flowchart TB
@@ -34,19 +34,19 @@ flowchart TB
 
 #### Why Divide Into Layers?
 
-계층으로 나누는 이유는 복잡한 시스템을 관리 가능한 단위로 분리하기 위함입니다. 각 계층이 자신만의 책임을 가지면, 코드 변경 시 영향 범위를 예측하기 쉽고, 팀원들 간의 협업도 원활해집니다.
+The reason for dividing into layers is to separate complex systems into manageable units. When each layer has its own responsibility, it is easy to predict the impact of code changes, and collaboration between team members becomes smoother.
 
-{{< callout type="tip" title="비유: 회사 조직도" >}}
-회사에서 일하는 방식을 생각해보세요:
+{{< callout type="tip" title="Analogy: Company Organization" >}}
+Think about how work is done in a company:
 
-| 회사 조직 | 소프트웨어 계층 | 역할 |
+| Company Organization | Software Layer | Role |
 |----------|---------------|------|
-| **고객 응대팀** | Presentation | 고객이 무엇을 원하는지 파악 |
-| **기획팀** | Application | 어떤 순서로 처리할지 조율 |
-| **개발팀** | Domain | 실제 핵심 기능 개발 |
-| **인프라팀** | Infrastructure | 서버, DB 같은 기반 관리 |
+| **Customer Service** | Presentation | Understanding what the customer wants |
+| **Planning Team** | Application | Coordinating processing order |
+| **Development Team** | Domain | Developing core features |
+| **Infrastructure Team** | Infrastructure | Managing servers, DBs, etc. |
 
-각 팀이 자기 역할에 집중하니까 효율적이죠? **소프트웨어도 마찬가지입니다.**
+Each team is efficient because they focus on their role, right? **The same applies to software.**
 {{< /callout >}}
 
 ```mermaid
@@ -63,40 +63,40 @@ flowchart TB
     DEV -->|"Use infrastructure"| INFRA
 ```
 
-각 팀이 명확한 역할을 가지고 있어서 문제가 생겼을 때 어디를 고쳐야 할지 바로 알 수 있습니다. 소프트웨어 계층도 이와 같은 원리로 동작합니다.
+Each team has a clear role, so when problems arise, you immediately know where to fix. Software layers operate on the same principle.
 
 ---
 
 #### 4 Layers in Detail
 
-계층형 아키텍처는 크게 4개의 계층으로 구성됩니다. 각 계층은 명확히 구분되며, 상위 계층은 하위 계층만 호출할 수 있습니다.
+Layered architecture consists of four major layers. Each layer is clearly distinguished, and upper layers can only call lower layers.
 
-**1. Presentation Layer (표현 계층)**
+**1. Presentation Layer**
 
-표현 계층은 사용자와 소통하는 창구입니다. 사용자 입력을 받고, 결과를 보여주는 역할을 담당합니다. HTTP 요청을 처리하거나 화면 입력을 받아들이고, JSON 응답이나 HTML 페이지로 결과를 전달합니다. 또한 입력 형식이 올바른지 검증하는 역할도 수행합니다.
+The presentation layer is the gateway for communicating with users. It receives user input and displays results. It processes HTTP requests or accepts screen input and delivers results as JSON responses or HTML pages. It also validates that input formats are correct.
 
-사용자는 이 계층을 통해서만 시스템과 상호작용합니다. 사용자가 버튼을 클릭하거나 폼을 제출하면, 표현 계층이 이를 받아서 적절한 형태로 변환한 뒤 하위 계층에 전달합니다.
+Users interact with the system only through this layer. When a user clicks a button or submits a form, the presentation layer receives it, converts it to an appropriate format, and passes it to the lower layer.
 
 ```java
-// Presentation Layer 예시: Controller
+// Presentation Layer example: Controller
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
 
-    private final OrderService orderService;  // Application Layer 호출
+    private final OrderService orderService;  // Application Layer call
 
-    // 사용자 요청 받기
+    // Receive user request
     @PostMapping
     public ResponseEntity<OrderResponse> createOrder(
             @Valid @RequestBody CreateOrderRequest request) {
 
-        // 1. 요청 데이터를 Application Layer에 전달
+        // 1. Pass request data to Application Layer
         OrderDto result = orderService.createOrder(
             request.getCustomerId(),
             request.getItems()
         );
 
-        // 2. 결과를 사용자에게 응답
+        // 2. Return result to user
         return ResponseEntity.ok(OrderResponse.from(result));
     }
 
@@ -107,7 +107,7 @@ public class OrderController {
     }
 }
 
-// 요청/응답 객체 (DTO)
+// Request/Response objects (DTO)
 public record CreateOrderRequest(
     String customerId,
     List<OrderItemRequest> items
@@ -124,35 +124,35 @@ public record OrderResponse(
 }
 ```
 
-위 코드에서 OrderController는 HTTP 요청을 받아서 OrderService에게 전달하고, 그 결과를 다시 HTTP 응답으로 변환합니다. 이 계층은 HTTP라는 전송 프로토콜의 세부사항만 알고 있으며, 비즈니스 로직은 전혀 포함하지 않습니다.
+In the code above, OrderController receives HTTP requests, passes them to OrderService, and converts the results back to HTTP responses. This layer only knows about the HTTP transport protocol details and contains no business logic.
 
 {{< notice style="warning" >}}
-**흔한 실수: Presentation에 비즈니스 로직 넣기**
+**Common Mistake: Putting Business Logic in Presentation**
 
 ```java
-// ❌ 잘못된 예: Controller에서 할인 계산
+// ❌ Wrong: Discount calculation in Controller
 @PostMapping
 public ResponseEntity<OrderResponse> createOrder(...) {
-    // 이런 로직은 여기 있으면 안 됨!
+    // This logic should not be here!
     if (request.getTotalAmount() > 100000) {
         request.setDiscount(0.1);  // 10% 할인
     }
 }
 ```
 
-비즈니스 로직은 Domain Layer에 있어야 합니다.
+Business logic should be in the Domain Layer.
 {{< /notice >}}
 
-**2. Application Layer (응용 계층)**
+**2. Application Layer**
 
-응용 계층은 업무 흐름을 조율하는 지휘자입니다. 이 계층은 "무엇을" 할지 결정하지만, "어떻게" 할지는 Domain Layer에게 맡깁니다. 어떤 순서로 처리할지 결정하고, 트랜잭션을 관리하며, Domain Layer의 객체들을 조합해서 사용합니다.
+The application layer is the conductor that orchestrates business flows. This layer decides "what" to do but leaves "how" to do it to the Domain Layer. It decides the processing order, manages transactions, and combines Domain Layer objects.
 
-예를 들어, 주문을 생성할 때는 고객 정보를 조회하고, 주문 객체를 만들고, 저장하고, 알림을 보내는 일련의 흐름을 조율합니다. 각 단계에서 실제 비즈니스 규칙이 적용되는 것은 Domain 객체가 처리하지만, 이 흐름을 어떤 순서로 실행할지는 Application Layer가 결정합니다.
+For example, when creating an order, it orchestrates the flow of retrieving customer information, creating the order object, saving it, and sending notifications. While Domain objects handle the actual business rules at each step, the Application Layer decides the execution order.
 
 ```java
-// Application Layer 예시: Service
+// Application Layer example: Service
 @Service
-@Transactional  // 트랜잭션 관리는 여기서
+@Transactional  // Transaction management here
 public class OrderService {
 
     private final OrderRepository orderRepository;
@@ -160,64 +160,64 @@ public class OrderService {
     private final PaymentService paymentService;
     private final NotificationService notificationService;
 
-    // 주문 생성 "흐름"을 조율
+    // Orchestrate order creation "flow"
     public OrderDto createOrder(String customerId, List<OrderItemDto> items) {
 
-        // 1. 고객 조회
+        // 1. Retrieve customer
         Customer customer = customerRepository.findById(customerId)
             .orElseThrow(() -> new CustomerNotFoundException(customerId));
 
-        // 2. 주문 생성 (비즈니스 로직은 Order 객체 안에)
+        // 2. Create order (business logic inside Order object)
         Order order = Order.create(customer.getId(), toOrderLines(items));
 
-        // 3. 저장
+        // 3. Save
         orderRepository.save(order);
 
-        // 4. 알림 발송
+        // 4. Send notification
         notificationService.sendOrderCreatedNotification(order);
 
-        // 5. 결과 반환
+        // 5. Return result
         return OrderDto.from(order);
     }
 
-    // 주문 확정 "흐름"
+    // Order confirmation "flow"
     public void confirmOrder(String orderId) {
-        // 1. 주문 조회
+        // 1. Retrieve order
         Order order = orderRepository.findById(orderId)
             .orElseThrow(() -> new OrderNotFoundException(orderId));
 
-        // 2. 결제 처리
+        // 2. Process payment
         paymentService.processPayment(order.getTotalAmount());
 
-        // 3. 주문 확정 (비즈니스 로직은 Order 안에)
+        // 3. Confirm order (business logic inside Order)
         order.confirm();
 
-        // 4. 저장
+        // 4. Save
         orderRepository.save(order);
     }
 }
 ```
 
-위 코드는 주문 생성과 확정이라는 비즈니스 프로세스의 흐름을 정의합니다. 각 단계를 순서대로 실행하며, 실제 비즈니스 규칙은 Order 객체의 create()나 confirm() 메서드가 처리합니다.
+The code above defines the flow of order creation and confirmation business processes. Each step is executed in order, while the actual business rules are handled by the Order object's create() and confirm() methods.
 
 {{< notice style="tip" >}}
-**Application vs Domain의 차이**
+**Difference Between Application and Domain**
 
 ```java
-// Application Layer: "흐름" 조율
+// Application Layer: Orchestrate "flow"
 public void confirmOrder(String orderId) {
     Order order = orderRepository.findById(orderId);
     paymentService.processPayment(order.getTotalAmount());
-    order.confirm();  // Domain에게 "확정해"라고 요청
+    order.confirm();  // Request Domain to "confirm"
     orderRepository.save(order);
 }
 
-// Domain Layer: "규칙" 적용
+// Domain Layer: Apply "rules"
 public class Order {
     public void confirm() {
-        // 비즈니스 규칙: PENDING 상태에서만 확정 가능
+        // Business rule: Can only confirm in PENDING state
         if (this.status != OrderStatus.PENDING) {
-            throw new IllegalStateException("확정할 수 없는 상태입니다");
+            throw new IllegalStateException("Cannot be confirmed in this state");
         }
         this.status = OrderStatus.CONFIRMED;
     }
@@ -225,14 +225,14 @@ public class Order {
 ```
 {{< /notice >}}
 
-**3. Domain Layer (도메인 계층)**
+**3. Domain Layer**
 
-도메인 계층은 비즈니스 규칙의 심장입니다. 가장 중요한 계층으로, 여기에 "진짜 비즈니스 로직"이 있습니다. 비즈니스 규칙을 표현하고, 데이터의 일관성을 유지하며, 도메인 개념을 표현합니다.
+The domain layer is the heart of business rules. It is the most important layer, where the "real business logic" resides. It expresses business rules, maintains data consistency, and represents domain concepts.
 
-예를 들어, "VIP 고객은 10% 할인"이라는 규칙, "주문 금액은 0원 이상"이라는 제약, "주문 상태가 PENDING일 때만 수정 가능"이라는 불변식 등이 모두 이 계층에 있습니다. Order, Customer, Product 같은 도메인 개념도 이 계층에서 클래스로 표현됩니다.
+For example, rules like "VIP customers get 10% discount," constraints like "order amount must be 0 or more," and invariants like "orders can only be modified in PENDING state" all reside in this layer. Domain concepts like Order, Customer, and Product are also represented as classes in this layer.
 
 ```java
-// Domain Layer 예시: Entity
+// Domain Layer example: Entity
 public class Order {
     private OrderId id;
     private CustomerId customerId;
@@ -240,11 +240,11 @@ public class Order {
     private OrderStatus status;
     private Money totalAmount;
 
-    // 생성 메서드: 비즈니스 규칙 적용
+    // Factory method: Apply business rules
     public static Order create(CustomerId customerId, List<OrderLine> lines) {
-        // 규칙: 주문에는 최소 1개 상품이 있어야 함
+        // Rule: Order must have at least 1 item
         if (lines.isEmpty()) {
-            throw new IllegalArgumentException("주문에는 최소 1개 상품이 필요합니다");
+            throw new IllegalArgumentException("An order requires at least 1 item");
         }
 
         Order order = new Order();
@@ -257,12 +257,12 @@ public class Order {
         return order;
     }
 
-    // 비즈니스 로직: 상품 추가
+    // Business logic: Add item
     public void addItem(OrderLine line) {
-        // 규칙: PENDING 상태에서만 상품 추가 가능
+        // Rule: Items can only be added in PENDING state
         validateModifiable();
 
-        // 규칙: 같은 상품이면 수량만 증가
+        // Rule: If same product, only increase quantity
         orderLines.stream()
             .filter(existing -> existing.isSameProduct(line))
             .findFirst()
@@ -274,34 +274,34 @@ public class Order {
         calculateTotal();
     }
 
-    // 비즈니스 로직: 주문 확정
+    // Business logic: Confirm order
     public void confirm() {
-        // 규칙: PENDING 상태에서만 확정 가능
+        // Rule: Can only confirm in PENDING state
         if (this.status != OrderStatus.PENDING) {
             throw new IllegalStateException(
-                "주문을 확정할 수 없습니다. 현재 상태: " + status
+                "Cannot confirm order. Current state: " + status
             );
         }
 
-        // 규칙: 최소 주문 금액 체크
+        // Rule: Check minimum order amount
         if (this.totalAmount.isLessThan(Money.of(1000))) {
-            throw new IllegalStateException("최소 주문 금액은 1,000원입니다");
+            throw new IllegalStateException("Minimum order amount is 1,000 won");
         }
 
         this.status = OrderStatus.CONFIRMED;
     }
 
-    // 비즈니스 로직: 주문 취소
+    // Business logic: Cancel order
     public void cancel() {
-        // 규칙: 배송 시작 전에만 취소 가능
+        // Rule: Can only cancel before shipping starts
         if (this.status == OrderStatus.SHIPPED) {
-            throw new IllegalStateException("배송이 시작된 주문은 취소할 수 없습니다");
+            throw new IllegalStateException("Orders that have started shipping cannot be cancelled");
         }
 
         this.status = OrderStatus.CANCELLED;
     }
 
-    // 내부 로직
+    // Internal logic
     private void calculateTotal() {
         this.totalAmount = orderLines.stream()
             .map(OrderLine::getAmount)
@@ -310,13 +310,13 @@ public class Order {
 
     private void validateModifiable() {
         if (this.status != OrderStatus.PENDING) {
-            throw new IllegalStateException("수정할 수 없는 상태입니다");
+            throw new IllegalStateException("Cannot be modified in this state");
         }
     }
 }
 ```
 
-위 코드에서 Order 클래스는 주문과 관련된 모든 비즈니스 규칙을 캡슐화하고 있습니다. 외부에서는 Order의 public 메서드를 통해서만 상태를 변경할 수 있으며, 각 메서드는 비즈니스 규칙을 검증한 후에만 상태를 변경합니다.
+In the code above, the Order class encapsulates all business rules related to orders. Externally, state can only be changed through Order's public methods, and each method only changes state after validating business rules.
 
 ```java
 // Domain Layer: Value Object
@@ -325,9 +325,9 @@ public record Money(BigDecimal amount) {
     public static final Money ZERO = new Money(BigDecimal.ZERO);
 
     public Money {
-        // 불변식: 금액은 0 이상
+        // Invariant: Amount must be 0 or more
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("금액은 0 이상이어야 합니다");
+            throw new IllegalArgumentException("Amount must be 0 or more");
         }
     }
 
@@ -349,44 +349,44 @@ public record Money(BigDecimal amount) {
 }
 ```
 
-Money는 값 객체(Value Object)의 예시입니다. 불변이며, 값으로 비교되고, 자신의 불변식(금액은 0 이상)을 스스로 검증합니다.
+Money is an example of a Value Object. It is immutable, compared by value, and self-validates its invariant (amount must be 0 or more).
 
 {{< notice style="warning" >}}
-**흔한 실수: 빈약한 도메인 (Anemic Domain)**
+**Common Mistake: Anemic Domain**
 
 ```java
-// ❌ 잘못된 예: 로직 없이 데이터만 있는 Entity
+// ❌ Wrong: Entity with only data and no logic
 public class Order {
     private String id;
     private String status;
     private BigDecimal total;
 
-    // getter, setter만 있음...
+    // Only getters and setters...
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 }
 
-// 로직이 Service에 있음
+// Logic is in Service
 public class OrderService {
     public void confirm(Order order) {
         if (order.getStatus().equals("PENDING")) {
-            order.setStatus("CONFIRMED");  // 이러면 안 됨!
+            order.setStatus("CONFIRMED");  // Should not do this!
         }
     }
 }
 ```
 
-비즈니스 로직은 Entity 안에 있어야 합니다!
+Business logic should be inside the Entity!
 {{< /notice >}}
 
-**4. Infrastructure Layer (인프라 계층)**
+**4. Infrastructure Layer**
 
-인프라 계층은 기술적 세부사항을 처리합니다. 데이터베이스 접근, 외부 API 호출, 메시지 발송, 파일 저장 등 외부 시스템과의 모든 통신을 담당합니다. JPA, MyBatis, REST Client, Kafka, Email 같은 기술적인 도구들이 이 계층에 위치합니다.
+The infrastructure layer handles technical details. It is responsible for all communication with external systems including database access, external API calls, message sending, and file storage. Technical tools like JPA, MyBatis, REST Client, Kafka, and Email reside in this layer.
 
-이 계층의 구현체는 Domain Layer의 인터페이스를 구현합니다. 예를 들어, OrderRepository 인터페이스는 Domain Layer에 정의되어 있고, JpaOrderRepository 구현체는 Infrastructure Layer에 있습니다.
+Implementations in this layer implement Domain Layer interfaces. For example, the OrderRepository interface is defined in the Domain Layer, while the JpaOrderRepository implementation is in the Infrastructure Layer.
 
 ```java
-// Infrastructure Layer: Repository 구현
+// Infrastructure Layer: Repository implementation
 @Repository
 public class JpaOrderRepository implements OrderRepository {
 
@@ -395,20 +395,20 @@ public class JpaOrderRepository implements OrderRepository {
 
     @Override
     public void save(Order order) {
-        // Domain → JPA Entity 변환
+        // Domain -> JPA Entity conversion
         OrderEntity entity = mapper.toEntity(order);
         jpaRepository.save(entity);
     }
 
     @Override
     public Optional<Order> findById(OrderId id) {
-        // JPA Entity → Domain 변환
+        // JPA Entity -> Domain conversion
         return jpaRepository.findById(id.getValue())
             .map(mapper::toDomain);
     }
 }
 
-// JPA Entity (Infrastructure 전용)
+// JPA Entity (Infrastructure only)
 @Entity
 @Table(name = "orders")
 public class OrderEntity {
@@ -421,14 +421,14 @@ public class OrderEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderLineEntity> orderLines;
 
-    // getter, setter (Infrastructure에서만 사용)
+    // getter, setter (used only in Infrastructure)
 }
 ```
 
-위 코드는 Domain의 Order 객체를 데이터베이스에 저장하기 위해 JPA Entity로 변환하는 역할을 합니다. Domain Layer는 데이터베이스 기술에 대해 전혀 알지 못하며, 단지 OrderRepository 인터페이스만 사용합니다.
+The code above converts Domain Order objects into JPA Entities for database storage. The Domain Layer knows nothing about database technology and only uses the OrderRepository interface.
 
 ```java
-// Infrastructure Layer: 외부 API 연동
+// Infrastructure Layer: External API integration
 @Component
 public class PaymentGatewayClient implements PaymentService {
 
@@ -449,17 +449,17 @@ public class PaymentGatewayClient implements PaymentService {
 }
 ```
 
-외부 결제 API와의 통신도 Infrastructure Layer에서 처리됩니다. Domain Layer는 PaymentService 인터페이스만 알고 있으며, 실제로 어떤 결제 시스템을 사용하는지는 모릅니다.
+Communication with external payment APIs is also handled in the Infrastructure Layer. The Domain Layer only knows the PaymentService interface and does not know which payment system is actually used.
 
 ---
 
 #### Package Structure
 
-계층형 아키텍처를 Java 프로젝트에 적용할 때는 패키지 구조가 중요합니다. 각 계층을 별도의 패키지로 분리하여 물리적으로도 계층이 명확히 구분되도록 합니다.
+When applying layered architecture to a Java project, package structure is important. Separate each layer into distinct packages so layers are clearly distinguished physically as well.
 
-**기본 구조**
+**Basic Structure**
 
-아래는 주문 도메인을 계층형으로 구성한 패키지 구조입니다. 각 계층이 독립된 패키지로 분리되어 있어, 코드를 읽는 사람이 어떤 계층에 속하는지 쉽게 파악할 수 있습니다.
+Below is the package structure for the order domain organized in layers. Each layer is separated into independent packages, making it easy for code readers to identify which layer a class belongs to.
 
 ```
 com.example.order/
@@ -489,11 +489,11 @@ com.example.order/
         └── PaymentGatewayClient.java
 ```
 
-presentation 패키지에는 컨트롤러와 DTO가 있고, application 패키지에는 서비스와 애플리케이션 DTO가 있으며, domain 패키지에는 엔티티와 값 객체가 있고, infrastructure 패키지에는 Repository 구현체와 외부 연동 코드가 있습니다.
+The presentation package contains controllers and DTOs, the application package contains services and application DTOs, the domain package contains entities and value objects, and the infrastructure package contains Repository implementations and external integration code.
 
-**의존성 방향**
+**Dependency Direction**
 
-의존성 방향은 항상 위에서 아래로만 향합니다. 아래 다이어그램에서 화살표는 의존성 방향을 나타냅니다. presentation은 application을 의존하고, application은 domain을 의존하며, infrastructure도 domain을 의존합니다. 하지만 domain은 아무것도 의존하지 않습니다.
+Dependencies always point from top to bottom only. In the diagram below, arrows indicate dependency direction. Presentation depends on application, application depends on domain, and infrastructure also depends on domain. But domain depends on nothing.
 
 ```mermaid
 flowchart TB
@@ -507,17 +507,17 @@ flowchart TB
     I --> D
 ```
 
-이렇게 하면 domain 계층이 가장 안정적인 계층이 되며, 기술적 변경(예: JPA에서 MyBatis로 변경)이 domain에 영향을 주지 않습니다.
+This makes the domain layer the most stable layer, and technical changes (e.g., switching from JPA to MyBatis) do not affect the domain.
 
 ---
 
 #### Dependency Inversion (DIP)
 
-"Domain이 Infrastructure에 의존하지 않는다"는 말이 이상하게 들릴 수 있습니다. Repository를 사용하는데 어떻게 의존하지 않을 수 있을까요? 비밀은 인터페이스에 있습니다.
+"Domain does not depend on Infrastructure" may sound strange. How can it not depend when using a Repository? The secret lies in interfaces.
 
-**비밀: 인터페이스**
+**The Secret: Interfaces**
 
-Domain Layer에 Repository 인터페이스를 정의하고, Infrastructure Layer에서 그것을 구현합니다. 이렇게 하면 Domain은 구체적인 구현을 알 필요가 없고, 인터페이스만 사용하면 됩니다.
+Define Repository interfaces in the Domain Layer, and implement them in the Infrastructure Layer. This way, Domain does not need to know about specific implementations and only uses interfaces.
 
 ```mermaid
 flowchart LR
@@ -534,113 +534,113 @@ flowchart LR
     JR -->|"implements"| RI
 ```
 
-위 다이어그램에서 Order는 OrderRepository 인터페이스를 사용하고, JpaOrderRepository는 그 인터페이스를 구현합니다. 의존성 방향이 역전되어 있습니다.
+In the diagram above, Order uses the OrderRepository interface, and JpaOrderRepository implements that interface. The dependency direction is inverted.
 
 ```java
-// Domain Layer: 인터페이스 정의
+// Domain Layer: Interface definition
 public interface OrderRepository {
     void save(Order order);
     Optional<Order> findById(OrderId id);
 }
 
-// Domain Layer: Service는 인터페이스만 사용
+// Domain Layer: Service uses only interfaces
 @Service
 public class OrderService {
-    private final OrderRepository orderRepository;  // 인터페이스 타입
+    private final OrderRepository orderRepository;  // Interface type
 
     public void createOrder(...) {
-        orderRepository.save(order);  // 구체적 구현을 모름
+        orderRepository.save(order);  // Does not know specific implementation
     }
 }
 
-// Infrastructure Layer: 인터페이스 구현
+// Infrastructure Layer: Interface implementation
 @Repository
 public class JpaOrderRepository implements OrderRepository {
-    // JPA 사용하여 구현
+    // Implemented using JPA
 }
 ```
 
-이렇게 하면 Domain은 OrderRepository 인터페이스만 알면 되고, JPA를 MyBatis로 바꿔도 Domain 코드는 변경할 필요가 없습니다. 테스트할 때도 가짜(Mock) Repository를 사용할 수 있어 편리합니다.
+This way, Domain only needs to know the OrderRepository interface, and even if JPA is replaced with MyBatis, no Domain code needs to change. It is also convenient for testing, as you can use Mock Repositories.
 
 ---
 
 #### Pros and Cons of Layered
 
-계층형 아키텍처는 간단하고 직관적이지만, 몇 가지 장단점이 있습니다. 프로젝트의 특성에 따라 장점이 단점보다 클 수도 있고, 그 반대일 수도 있습니다.
+Layered architecture is simple and intuitive but has some pros and cons. Depending on project characteristics, advantages may outweigh disadvantages or vice versa.
 
-**장점**
+**Advantages**
 
-계층형 아키텍처의 장점은 주로 이해하기 쉽고 적용하기 쉽다는 데 있습니다. 아래 표는 주요 장점을 정리한 것입니다.
+The advantages of layered architecture mainly lie in being easy to understand and apply. The table below summarizes the key advantages.
 
-| 장점 | 설명 |
+| Advantage | Description |
 |------|------|
-| **쉬운 이해** | 직관적인 위→아래 흐름 |
-| **명확한 역할** | 각 계층이 뭘 하는지 분명 |
-| **빠른 시작** | 복잡한 설정 없이 바로 적용 가능 |
-| **팀 협업** | "너는 Controller, 나는 Service" 분업 가능 |
+| **Easy to understand** | Intuitive top-down flow |
+| **Clear roles** | Each layer's purpose is obvious |
+| **Quick start** | Can be applied immediately without complex setup |
+| **Team collaboration** | Division of labor: "you handle Controller, I handle Service" |
 
-직관적인 위에서 아래로의 흐름 덕분에 신입 개발자도 쉽게 이해할 수 있습니다. 각 계층의 역할이 명확하게 정의되어 있어서, 어디에 어떤 코드를 작성해야 할지 고민할 필요가 적습니다. 복잡한 설정이나 추가 도구 없이 바로 적용할 수 있어 프로젝트 초기에 빠르게 시작할 수 있습니다. 팀 협업 시에도 각자 담당 계층을 나누어 작업할 수 있어 효율적입니다.
+Thanks to the intuitive top-to-bottom flow, even new developers can easily understand it. With clearly defined roles for each layer, there is less need to worry about where to write code. It can be applied immediately without complex configuration or additional tools, enabling quick project starts. Team collaboration is also efficient as members can divide work by layer.
 
-**단점**
+**Disadvantages**
 
-하지만 계층형 아키텍처에도 몇 가지 단점이 있습니다. 특히 프로젝트가 커지면서 이런 단점들이 부담이 될 수 있습니다.
+However, layered architecture has some disadvantages. These drawbacks can become burdensome as projects grow.
 
-| 단점 | 설명 |
+| Disadvantage | Description |
 |------|------|
-| **계층 통과 강제** | 단순한 조회도 모든 계층 거쳐야 함 |
-| **기술 의존성** | Infrastructure 변경이 Domain에 영향 줄 수 있음 |
-| **테스트 어려움** | Mock 없이는 테스트하기 어려움 |
+| **Forced layer traversal** | Even simple queries must pass through all layers |
+| **Technology dependency** | Infrastructure changes can affect Domain |
+| **Testing difficulty** | Difficult to test without Mocks |
 
-단순한 데이터 조회조차 모든 계층을 거쳐야 하므로 불필요한 코드가 생길 수 있습니다. Domain Entity에 JPA 어노테이션을 직접 붙이는 경우 기술 의존성이 생겨 나중에 변경하기 어려워집니다. 테스트할 때 하위 계층을 모두 Mock 처리해야 하므로 테스트 코드 작성이 번거로울 수 있습니다.
+Even simple data retrieval must pass through all layers, potentially creating unnecessary code. Attaching JPA annotations directly to Domain Entities creates technology dependencies that make future changes difficult. Testing can be cumbersome as all lower layers must be mocked.
 
 ---
 
 #### Common Mistakes
 
-계층형 아키텍처를 적용할 때 자주 발생하는 실수들을 알아보겠습니다. 이런 실수를 피하면 더 깔끔한 코드를 작성할 수 있습니다.
+Let us look at common mistakes when applying layered architecture. Avoiding these mistakes leads to cleaner code.
 
-**1. 계층 건너뛰기**
+**1. Layer Skipping**
 
-계층을 건너뛰는 것은 계층형 아키텍처의 핵심 원칙을 위반하는 것입니다. 각 계층은 바로 아래 계층만 호출해야 하며, 계층을 건너뛰면 안 됩니다.
+Skipping layers violates the core principle of layered architecture. Each layer should only call the layer directly below it; layers should not be skipped.
 
 ```java
-// ❌ Controller에서 Repository 직접 접근
+// ❌ Controller directly accessing Repository
 @RestController
 public class OrderController {
     @Autowired
-    private OrderRepository orderRepository;  // Application Layer 건너뜀!
+    private OrderRepository orderRepository;  // Application Layer skipped!
 
     @GetMapping("/{id}")
     public Order getOrder(@PathVariable String id) {
-        return orderRepository.findById(id);  // 검증, 변환 없이 바로 반환
+        return orderRepository.findById(id);  // Returns directly without validation or conversion
     }
 }
 ```
 
-위 코드는 Controller가 Repository를 직접 호출하여 Application Layer를 건너뜁니다. 이렇게 하면 비즈니스 로직을 적용할 기회가 없고, 계층 간 책임이 모호해집니다.
+The code above has the Controller directly calling the Repository, skipping the Application Layer. This eliminates opportunities to apply business logic and blurs responsibilities between layers.
 
 ```java
-// ✅ 올바른 방법: Application Layer 통과
+// ✅ Correct approach: Pass through Application Layer
 @RestController
 public class OrderController {
     private final OrderService orderService;  // Application Layer
 
     @GetMapping("/{id}")
     public OrderResponse getOrder(@PathVariable String id) {
-        OrderDto dto = orderService.getOrder(id);  // Service 통과
+        OrderDto dto = orderService.getOrder(id);  // Pass through Service
         return OrderResponse.from(dto);
     }
 }
 ```
 
-올바른 방법은 Controller가 Service를 호출하고, Service가 Repository를 호출하는 것입니다. 이렇게 하면 각 계층이 자신의 역할을 수행할 수 있습니다.
+The correct approach is for Controller to call Service, and Service to call Repository. This allows each layer to fulfill its role.
 
-**2. Domain에 기술적 코드**
+**2. Technical Code in Domain**
 
-Domain Entity에 JPA나 Spring 같은 프레임워크 어노테이션을 붙이는 것은 Domain을 기술에 종속시키는 것입니다. 순수한 Domain 모델을 유지하려면 Infrastructure에 별도 Entity를 만들어야 합니다.
+Attaching framework annotations like JPA or Spring to Domain Entities ties the Domain to technology. To maintain a pure Domain model, create separate Entities in Infrastructure.
 
 ```java
-// ❌ Domain Entity에 JPA 어노테이션
+// ❌ JPA annotations on Domain Entity
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -653,16 +653,16 @@ public class Order {
 }
 ```
 
-위 코드는 Domain Entity가 JPA에 직접 의존하고 있습니다. 나중에 JPA를 다른 기술로 바꾸려면 Domain 코드를 모두 수정해야 합니다.
+The code above has the Domain Entity directly depending on JPA. If you want to switch JPA to another technology later, all Domain code must be modified.
 
-순수한 Domain 모델을 유지하려면 Domain에는 순수 Java 객체만 두고, Infrastructure에 별도로 JPA Entity를 만들어야 합니다. 그리고 Mapper를 사용해 Domain 객체와 JPA Entity를 변환합니다.
+To maintain a pure Domain model, keep only pure Java objects in Domain and create separate JPA Entities in Infrastructure. Then use Mappers to convert between Domain objects and JPA Entities.
 
-**3. 순환 의존**
+**3. Circular Dependencies**
 
-순환 의존은 두 개 이상의 Service가 서로를 의존할 때 발생합니다. 이는 컴파일 오류를 일으키거나 런타임에 문제를 발생시킬 수 있습니다.
+Circular dependencies occur when two or more Services depend on each other. This can cause compile errors or runtime problems.
 
 ```java
-// ❌ 순환 의존
+// ❌ Circular dependency
 // OrderService → PaymentService → OrderService
 
 @Service
@@ -672,14 +672,14 @@ public class OrderService {
 
 @Service
 public class PaymentService {
-    private final OrderService orderService;  // 순환!
+    private final OrderService orderService;  // Circular!
 }
 ```
 
-위 코드는 OrderService와 PaymentService가 서로를 의존하여 순환 구조를 만듭니다. 이런 구조는 코드를 이해하기 어렵게 만들고, 테스트도 힘들어집니다.
+The code above creates a circular structure where OrderService and PaymentService depend on each other. This structure makes code hard to understand and testing difficult.
 
 ```java
-// ✅ 이벤트로 해결
+// ✅ Resolve with events
 @Service
 public class OrderService {
     private final EventPublisher eventPublisher;
@@ -694,22 +694,22 @@ public class OrderService {
 public class PaymentEventHandler {
     @EventListener
     public void onOrderConfirmed(OrderConfirmedEvent event) {
-        // 결제 처리
+        // Process payment
     }
 }
 ```
 
-순환 의존을 해결하는 좋은 방법은 이벤트를 사용하는 것입니다. OrderService는 이벤트를 발행하고, PaymentEventHandler가 그 이벤트를 받아서 처리합니다. 이렇게 하면 두 서비스가 직접 의존하지 않게 됩니다.
+A good way to resolve circular dependencies is using events. OrderService publishes an event, and PaymentEventHandler receives and processes that event. This way, the two services do not directly depend on each other.
 
 ---
 
 #### Testing Strategy
 
-계층형 아키텍처에서는 각 계층을 독립적으로 테스트할 수 있습니다. 계층별로 적합한 테스트 방법이 다릅니다.
+In layered architecture, each layer can be tested independently. The appropriate testing method varies by layer.
 
-**1. Domain Layer 테스트 (가장 쉬움)**
+**1. Domain Layer Test (Easiest)**
 
-Domain Layer는 외부 의존성이 없으므로 순수 로직만 테스트하면 됩니다. Mock도 필요 없고, 테스트 실행 속도도 빠릅니다.
+Since the Domain Layer has no external dependencies, you only need to test pure logic. No Mocks needed, and test execution is fast.
 
 ```java
 class OrderTest {
@@ -747,11 +747,11 @@ class OrderTest {
 }
 ```
 
-위 테스트들은 모두 순수한 단위 테스트입니다. 데이터베이스나 외부 서비스 없이 Order 클래스의 로직만 검증합니다.
+All the tests above are pure unit tests. They verify only the Order class logic without databases or external services.
 
-**2. Application Layer 테스트 (Mock 사용)**
+**2. Application Layer Test (Using Mocks)**
 
-Application Layer는 여러 하위 계층을 조합하므로 Mock을 사용해서 테스트합니다. Repository나 외부 서비스를 Mock으로 대체하여 빠르게 테스트할 수 있습니다.
+Since the Application Layer combines multiple lower layers, test with Mocks. Replace Repositories and external services with Mocks for fast testing.
 
 ```java
 @ExtendWith(MockitoExtension.class)
@@ -785,11 +785,11 @@ class OrderServiceTest {
 }
 ```
 
-위 테스트는 OrderService의 흐름 조율 로직을 검증합니다. Repository와 NotificationService를 Mock으로 대체하여 실제 데이터베이스나 알림 서비스 없이 테스트합니다.
+The test above verifies OrderService's flow orchestration logic. It replaces Repository and NotificationService with Mocks to test without an actual database or notification service.
 
-**3. Infrastructure Layer 테스트 (통합 테스트)**
+**3. Infrastructure Layer Test (Integration Test)**
 
-Infrastructure Layer는 실제 데이터베이스나 외부 시스템과 통신하므로 통합 테스트를 수행합니다. Spring Boot의 @DataJpaTest 같은 도구를 사용하면 편리합니다.
+Since the Infrastructure Layer communicates with actual databases and external systems, perform integration tests. Using Spring Boot tools like @DataJpaTest is convenient.
 
 ```java
 @DataJpaTest
@@ -821,61 +821,61 @@ class JpaOrderRepositoryTest {
 }
 ```
 
-위 테스트는 실제 JPA와 데이터베이스(보통 H2 같은 인메모리 DB)를 사용하여 Repository 구현체가 제대로 동작하는지 검증합니다.
+The test above uses actual JPA and a database (usually an in-memory DB like H2) to verify that the Repository implementation works correctly.
 
 ---
 
 #### When Should You Use Layered?
 
-계층형 아키텍처는 모든 상황에 적합한 것은 아닙니다. 프로젝트의 특성과 팀의 상황에 따라 적합성이 다릅니다.
+Layered architecture is not suitable for all situations. Suitability varies depending on project characteristics and team circumstances.
 
-**적합한 경우**
+**Suitable Cases**
 
-계층형 아키텍처는 다음과 같은 상황에서 특히 잘 동작합니다. 프로젝트 초기 단계에서는 복잡한 아키텍처보다 간단한 계층형이 더 적합할 수 있습니다. 팀이 아키텍처 패턴 경험이 적을 때도 이해하기 쉬운 계층형이 좋습니다.
+Layered architecture works particularly well in the following situations. In early project stages, simple layered may be more suitable than complex architecture. When the team has little architecture pattern experience, easy-to-understand layered is also good.
 
-비즈니스 로직이 복잡하지 않고 단순한 CRUD 위주의 애플리케이션이라면 계층형으로 충분합니다. 빠른 개발이 필요한 MVP나 프로토타입에도 적합합니다.
+If business logic is not complex and the application is mainly simple CRUD, layered is sufficient. It is also suitable for MVPs and prototypes that need rapid development.
 
-**부적합한 경우**
+**Unsuitable Cases**
 
-반면, 다음과 같은 상황에서는 계층형이 부적합할 수 있습니다. 외부 시스템 연동이 많은 경우에는 헥사고날 아키텍처를 고려하는 것이 좋습니다. 복잡한 도메인 로직이 있는 경우에는 어니언 아키텍처가 더 적합할 수 있습니다.
+On the other hand, layered may be unsuitable in the following situations. When there are many external system integrations, consider hexagonal architecture. When there is complex domain logic, onion architecture may be more suitable.
 
-대규모 팀이나 장기 프로젝트에서는 클린 아키텍처 같은 더 엄격한 규칙이 필요할 수 있습니다.
+For large teams or long-term projects, stricter rules like clean architecture may be needed.
 
-**Best Practice: 어떤 시스템에 어울리는가?**
+**Best Practice: Which Systems Fit?**
 
-| 시스템 유형 | 적합도 | 이유 |
+| System Type | Fit | Reason |
 |------------|-------|------|
-| **스타트업 MVP** | 매우 적합 | 빠른 개발, 낮은 러닝커브 |
-| **내부 관리 도구** | 적합 | 적당한 복잡도, 유지보수 용이 |
-| **간단한 REST API** | 적합 | CRUD 중심, 명확한 계층 구분 |
-| **모놀리식 시작점** | 적합 | 나중에 헥사고날로 진화 가능 |
-| **외부 연동 많은 시스템** | 부적합 | 헥사고날 권장 |
-| **복잡한 도메인** | 부적합 | 어니언/클린 권장 |
-| **대규모 엔터프라이즈** | 부적합 | 더 엄격한 규칙 필요 |
+| **Startup MVP** | Very suitable | Rapid development, low learning curve |
+| **Internal Admin Tool** | Suitable | Moderate complexity, easy maintenance |
+| **Simple REST API** | Suitable | CRUD-focused, clear layer separation |
+| **Monolith Starting Point** | Suitable | Can evolve to hexagonal later |
+| **Systems with Many Integrations** | Unsuitable | Hexagonal recommended |
+| **Complex Domain** | Unsuitable | Onion/Clean recommended |
+| **Large Enterprise** | Unsuitable | Stricter rules needed |
 
 ---
 
 #### Key Summary
 
-{{< callout type="info" title="계층형 아키텍처 핵심 정리" >}}
-| 계층 | 역할 | 예시 |
+{{< callout type="info" title="Layered Architecture Key Summary" >}}
+| Layer | Role | Example |
 |------|------|------|
-| **Presentation** | 사용자 요청/응답 처리 | Controller, Request/Response DTO |
-| **Application** | 비즈니스 흐름 조율 | Service (트랜잭션 관리) |
-| **Domain** | 핵심 비즈니스 규칙 | Entity, Value Object |
-| **Infrastructure** | 기술적 세부사항 | Repository 구현, 외부 API |
+| **Presentation** | User request/response handling | Controller, Request/Response DTO |
+| **Application** | Business flow orchestration | Service (transaction management) |
+| **Domain** | Core business rules | Entity, Value Object |
+| **Infrastructure** | Technical details | Repository impl, external API |
 
-**핵심 규칙:**
-1. 위에서 아래로만 호출 (Presentation → Application → Domain)
-2. Domain은 아무것도 의존하지 않음 (순수한 비즈니스 로직)
-3. Repository 인터페이스는 Domain에, 구현은 Infrastructure에
+**Core Rules:**
+1. Call only from top to bottom (Presentation -> Application -> Domain)
+2. Domain depends on nothing (pure business logic)
+3. Repository interfaces in Domain, implementations in Infrastructure
 {{< /callout >}}
 
 ---
 
 #### Evolving to the Next Level
 
-계층형이 익숙해지면, 필요에 따라 더 발전된 패턴으로 이동할 수 있습니다. 점진적으로 개선해 나가는 것이 좋습니다.
+Once you are comfortable with layered, you can move to more advanced patterns as needed. Gradual improvement is recommended.
 
 ```mermaid
 flowchart LR
@@ -887,9 +887,9 @@ flowchart LR
     B -->|"2. Introduce Port/Adapter"| C
 ```
 
-**1단계: Repository Interface를 Domain으로 이동**
+**Step 1: Move Repository Interface to Domain**
 
-먼저 Repository 인터페이스를 Infrastructure에서 Domain으로 이동합니다. 이렇게 하면 Domain이 Infrastructure에 의존하지 않게 됩니다.
+First, move the Repository interface from Infrastructure to Domain. This prevents Domain from depending on Infrastructure.
 
 ```java
 // Before: Infrastructure에 있던 것을
@@ -902,9 +902,9 @@ public interface OrderRepository {
 }
 ```
 
-**2단계: 더 많은 외부 연동을 Interface로 추상화**
+**Step 2: Abstract More External Integrations as Interfaces**
 
-외부 서비스 연동을 모두 인터페이스로 추상화합니다. 이 과정을 거치면 자연스럽게 헥사고날 아키텍처로 발전합니다.
+Abstract all external service integrations as interfaces. Going through this process naturally evolves into hexagonal architecture.
 
 ---
 

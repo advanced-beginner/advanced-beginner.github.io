@@ -397,6 +397,6 @@ spring:
 
 ## 관련 문서
 
-- [핵심 구성요소 - Producer](../concepts/core-components/#producer의-역할과-동작-원리) - Producer 동작 원리
-- [Consumer Lag 트러블슈팅](consumer-lag-troubleshooting/) - Consumer 측 최적화
-- [에러 처리 패턴](../concepts/error-handling/) - 프로덕션 에러 처리 전략
+- [핵심 구성요소 - Producer]({{< relref "/docs/kafka/concepts/core-components#producer의-역할과-동작-원리" >}}) - Producer 동작 원리
+- [Consumer Lag 트러블슈팅]({{< relref "/docs/kafka/howto/consumer-lag-troubleshooting" >}}) - Consumer 측 최적화
+- [에러 처리 패턴]({{< relref "/docs/kafka/concepts/error-handling" >}}) - 프로덕션 에러 처리 전략

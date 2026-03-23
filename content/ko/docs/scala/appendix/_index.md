@@ -14,10 +14,10 @@ Scala 학습에 도움이 되는 참고 자료입니다. 용어 사전, 버전 �
 
 | 문서 | 설명 |
 |------|------|
-| [용어 사전](glossary/) | Scala 핵심 용어 정의 |
-| [버전 비교](version-comparison/) | Scala 2 vs Scala 3 차이점 요약 |
-| [FAQ](faq/) | 자주 묻는 질문과 답변 |
-| [참고 자료](references/) | 공식 문서, 서적, 강의 링크 |
+| [용어 사전]({{< relref "/docs/scala/appendix/glossary" >}}) | Scala 핵심 용어 정의 |
+| [버전 비교]({{< relref "/docs/scala/appendix/version-comparison" >}}) | Scala 2 vs Scala 3 차이점 요약 |
+| [FAQ]({{< relref "/docs/scala/appendix/faq" >}}) | 자주 묻는 질문과 답변 |
+| [참고 자료]({{< relref "/docs/scala/appendix/references" >}}) | 공식 문서, 서적, 강의 링크 |
 
 #### 빠른 참조
 

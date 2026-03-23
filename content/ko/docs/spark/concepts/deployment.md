@@ -18,7 +18,7 @@ author:
 **대상 독자**: Spark 클러스터를 운영하는 DevOps/플랫폼 엔지니어
 
 **선수 지식**:
-- [아키텍처](architecture/) 문서의 Driver/Executor 개념
+- [아키텍처]({{< relref "/docs/spark/concepts/architecture" >}}) 문서의 Driver/Executor 개념
 - Docker/Kubernetes 기초 (K8s 배포 시)
 - Hadoop YARN 기초 (YARN 배포 시)
 
@@ -538,5 +538,5 @@ gcloud dataproc clusters create spark-cluster \
 
 ## 다음 단계
 
-- [FAQ](../appendix/faq/) - 운영 중 자주 발생하는 문제
-- [참고 자료](../appendix/references/) - 추가 학습 자료
+- [FAQ]({{< relref "/docs/spark/appendix/faq" >}}) - 운영 중 자주 발생하는 문제
+- [참고 자료]({{< relref "/docs/spark/appendix/references" >}}) - 추가 학습 자료

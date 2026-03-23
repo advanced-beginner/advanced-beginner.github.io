@@ -114,7 +114,7 @@ docker-compose up -d
 {{< /tab >}}
 {{< /tabs >}}
 
-`docker-compose.yml` 파일이 없다면 [환경 구성 가이드](../examples/setup/)에서 내용을 확인하고 `docker/docker-compose.yml`로 저장하세요.
+`docker-compose.yml` 파일이 없다면 [환경 구성 가이드]({{< relref "/docs/kafka/examples/setup" >}})에서 내용을 확인하고 `docker/docker-compose.yml`로 저장하세요.
 
 ### 실행 확인
 
@@ -461,6 +461,6 @@ Quick Start를 완료했다면 다음 단계로 진행하세요:
 
 | 목표 | 추천 문서 |
 |------|----------|
-| Kafka 개념 이해하기 | [핵심 구성요소](../concepts/core-components/) |
-| 더 복잡한 예제 실습하기 | [Spring Kafka로 Producer/Consumer 구현하기](../examples/basic/) |
-| 프로덕션 설정 알아보기 | [환경 구성](../examples/setup/) |
+| Kafka 개념 이해하기 | [핵심 구성요소]({{< relref "/docs/kafka/concepts/core-components" >}}) |
+| 더 복잡한 예제 실습하기 | [Spring Kafka로 Producer/Consumer 구현하기]({{< relref "/docs/kafka/examples/basic" >}}) |
+| 프로덕션 설정 알아보기 | [환경 구성]({{< relref "/docs/kafka/examples/setup" >}}) |

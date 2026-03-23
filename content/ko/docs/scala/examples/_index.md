@@ -14,11 +14,11 @@ weight: 3
 
 | 예제 | 설명 | 난이도 |
 |------|------|--------|
-| [환경 설정](setup/) | sbt, IDE 설정 상세 가이드 | 입문 |
-| [기본 예제](basic/) | 핵심 개념 활용 종합 예제 | 초급 |
-| [Scala 2 vs 3 비교](scala2-vs-scala3/) | 버전별 코드 비교 | 중급 |
-| [Spark 연동](spark-integration/) | Apache Spark와 Scala 활용 | 중급 |
-| [실무 프로젝트](practical-project/) | REST API, 데이터 파이프라인 | 고급 |
+| [환경 설정]({{< relref "/docs/scala/examples/setup" >}}) | sbt, IDE 설정 상세 가이드 | 입문 |
+| [기본 예제]({{< relref "/docs/scala/examples/basic" >}}) | 핵심 개념 활용 종합 예제 | 초급 |
+| [Scala 2 vs 3 비교]({{< relref "/docs/scala/examples/scala2-vs-scala3" >}}) | 버전별 코드 비교 | 중급 |
+| [Spark 연동]({{< relref "/docs/scala/examples/spark-integration" >}}) | Apache Spark와 Scala 활용 | 중급 |
+| [실무 프로젝트]({{< relref "/docs/scala/examples/practical-project" >}}) | REST API, 데이터 파이프라인 | 고급 |
 
 #### 예제 프로젝트 구조
 

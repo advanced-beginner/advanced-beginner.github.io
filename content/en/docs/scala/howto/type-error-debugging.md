@@ -306,7 +306,7 @@ General type annotation strategies:
 | Empty collections | Use `List.empty[Type]` |
 | Inference failure during method chaining | Add type annotations on intermediate results |
 | Lambda parameters | Use `(x: Type) => ...` explicitly |
-| Generic method calls | Specify type arguments: `method[Type]({{< relref "/docs/scala/howto/..." >}})` |
+| Generic method calls | Specify type arguments: `method[Type](...)` |
 
 ```scala
 // When the compiler fails to infer types

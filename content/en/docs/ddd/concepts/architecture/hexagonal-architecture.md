@@ -11,11 +11,11 @@ author_url: "http://github.com/kimbenji"
 > **Prerequisites**: Understanding the limitations of [Layered Architecture]({{< relref "/docs/ddd/concepts/architecture/layered-architecture" >}})
 > **Estimated Time**: About 20 minutes
 
-**Ports and Adapters** 패턴이라고도 불립니다. 애플리케이션의 핵심을 외부 세계로부터 완전히 격리시키는 아키텍처입니다. 헥사고날 아키텍처의 핵심 아이디어는 비즈니스 로직을 중심에 두고, 외부와의 모든 상호작용을 Port와 Adapter를 통해 처리한다는 것입니다. 이렇게 하면 외부 기술이 바뀌어도 핵심 비즈니스 로직은 영향을 받지 않습니다.
+Also known as the **Ports and Adapters** pattern. An architecture that completely isolates the application core from the external world. The core idea of hexagonal architecture is to place business logic at the center and handle all external interactions through Ports and Adapters. This way, even if external technologies change, core business logic remains unaffected.
 
 #### One-Line Summary
 
-애플리케이션은 육각형 안에 있고, 외부와의 모든 연결은 Port와 Adapter로 처리합니다. 이를 통해 비즈니스 로직과 기술적 세부사항을 완벽하게 분리할 수 있습니다.
+The application sits inside the hexagon, and all external connections are handled through Ports and Adapters. This allows you to perfectly separate business logic from technical details.
 
 ```mermaid
 flowchart TB
@@ -55,16 +55,16 @@ flowchart TB
 
 #### Why "Hexagonal"?
 
-헥사고날이라는 이름은 6개의 면이 중요해서가 아니라, 여러 방향에서 애플리케이션에 연결할 수 있다는 의미를 담고 있습니다. 계층형 아키텍처의 "위에서 아래로"라는 일방향 흐름과 달리, 헥사고날은 "안쪽과 바깥쪽"이라는 관점을 제시합니다.
+The hexagonal name does not mean 6 sides are important, but rather conveys that the application can be connected from multiple directions. Unlike the one-way flow of "top to bottom" in layered architecture, hexagonal presents the perspective of "inside and outside."
 
-{{< callout type="tip" title="비유: 스마트폰과 어댑터" >}}
-스마트폰을 생각해보세요. 스마트폰 자체는 어떤 충전기를 쓰는지 모릅니다.
+{{< callout type="tip" title="Analogy: Smartphone and Adapters" >}}
+Think about a smartphone. The smartphone itself does not know which charger it uses.
 
-- **스마트폰(Core)**: 통화, 앱 실행 등 핵심 기능만 담당
-- **충전 포트(Port)**: "전원을 공급받고 싶어"라는 인터페이스
-- **어댑터**: C타입, 무선 충전, USB 등 다양한 방식으로 연결
+- **Smartphone (Core)**: Handles only core functions like calls and app execution
+- **충전 포트(Port)**: "전원을 공급받고 싶어"라는 interface
+- **Adapter**: Connects via various methods like USB-C, wireless charging, USB
 
-충전 방식이 바뀌어도 폰의 기능은 그대로입니다. **어댑터만 바꾸면 다양한 장치와 연결할 수 있습니다.**
+Even if the charging method changes, the phone's functions remain the same. **Just changing the adapter lets you connect to various devices.**
 {{< /callout >}}
 
 ```mermaid
@@ -94,19 +94,19 @@ flowchart TB
     SPEAKER <--> BT <--> Phone
 ```
 
-소프트웨어도 마찬가지입니다. 핵심 비즈니스 로직은 어떤 데이터베이스를 쓰는지, 어떤 UI 프레임워크를 쓰는지 알 필요가 없습니다. 이 모든 기술적 선택은 Adapter를 통해 격리됩니다.
+The same applies to software. Core business logic does not need to know which database or UI framework is used. All these technical choices are isolated through Adapters.
 
-육각형이라는 형태는 실제로 6개 면이 중요한 게 아니라, "여러 방향에서 연결할 수 있다"는 의미를 시각적으로 표현한 것입니다. 계층형의 "위→아래" 대신 "안↔밖" 관점으로 사고를 전환하는 것이 핵심입니다.
+The hexagonal shape does not mean 6 sides are important, but visually represents "can be connected from multiple directions." The key is shifting thinking from the layered "top->bottom" to an "inside<->outside" perspective.
 
 ---
 
 #### Three Core Concepts
 
-헥사고날 아키텍처를 이해하려면 Port, Adapter, Application Core 세 가지 개념을 알아야 합니다. 이 세 가지가 어떻게 협력하는지 이해하면 헥사고날 아키텍처의 전체 그림이 보입니다.
+To understand hexagonal architecture, you need to know three concepts: Port, Adapter, and Application Core. Understanding how these three collaborate reveals the full picture of hexagonal architecture.
 
-**1. Port (포트) - "연결 규격"**
+**1. Port - "Connection Spec"**
 
-Port는 인터페이스입니다. 외부와 연결되는 "규격"을 정의합니다. Port에는 두 종류가 있습니다. Inbound Port는 외부에서 애플리케이션으로 들어오는 요청을 정의하고, Outbound Port는 애플리케이션에서 외부로 나가는 요청을 정의합니다.
+A Port is an interface. It defines the "specification" for connecting with the outside. There are two types of Ports. Inbound Ports define incoming requests from external to application, and Outbound Ports define outgoing requests from application to external.
 
 ```mermaid
 flowchart LR
@@ -124,32 +124,32 @@ flowchart LR
     OutboundPorts --> EXT2["External System"]
 ```
 
-<strong>두 종류의 Port</strong>를 이해하는 것이 중요합니다. 아래 표는 각 Port의 특성을 정리한 것입니다.
+Understanding the <strong>two types of Ports</strong> is important. The table below summarizes each Port's characteristics.
 
-| Port 종류 | 방향 | 역할 | 예시 |
+| Port Type | Direction | Role | Example |
 |----------|------|------|------|
-| **Inbound Port** | 외부 → 애플리케이션 | "나한테 이렇게 요청해" | `CreateOrderUseCase` |
-| **Outbound Port** | 애플리케이션 → 외부 | "나는 이것만 필요해" | `SaveOrderPort` |
+| **Inbound Port** | External -> Application | "Request me like this" | `CreateOrderUseCase` |
+| **Outbound Port** | Application -> External | "I only need this" | `SaveOrderPort` |
 
-Inbound Port는 외부에서 애플리케이션을 어떻게 호출할 수 있는지 정의합니다. 예를 들어, "주문을 생성하려면 이런 정보가 필요해"라고 명시합니다. Outbound Port는 애플리케이션이 외부에 무엇을 요청하는지 정의합니다. "나는 주문을 저장하고 싶어"라고 명시하지만, 어떤 데이터베이스에 어떻게 저장하는지는 알 필요가 없습니다.
+Inbound Ports define how the application can be called from outside. For example, it specifies "you need this information to create an order." Outbound Ports define what the application requests from the outside. It specifies "I want to save an order" but does not need to know which database or how to store it.
 
 ```java
-// Inbound Port: "외부에서 나를 이렇게 호출해"
+// Inbound Port: "Call me like this from outside"
 public interface CreateOrderUseCase {
     OrderId createOrder(CreateOrderCommand command);
 }
 
-// Outbound Port: "나는 주문을 저장하고 싶어"
+// Outbound Port: "I want to save an order"
 public interface SaveOrderPort {
     void save(Order order);
 }
 ```
 
-이렇게 Port를 인터페이스로 정의하면, 구체적인 구현체가 무엇인지 몰라도 됩니다. 나중에 MySQL을 MongoDB로 바꾸거나, REST API를 gRPC로 바꿔도 Port는 변경할 필요가 없습니다.
+By defining Ports as interfaces, you do not need to know what the specific implementation is. Even if you later switch MySQL to MongoDB or REST API to gRPC, the Ports do not need to change.
 
-**2. Adapter (어댑터) - "연결 장치"**
+**2. Adapter - "Connector"**
 
-Adapter는 구현체입니다. Port 규격에 맞춰 실제 연결을 담당합니다. Adapter에도 두 종류가 있습니다. Driving Adapter는 애플리케이션을 호출하고, Driven Adapter는 애플리케이션이 호출합니다.
+An Adapter is an implementation. It handles the actual connection according to the Port specification. There are also two types of Adapters. Driving Adapters call the application, and Driven Adapters are called by the application.
 
 ```mermaid
 flowchart LR
@@ -166,20 +166,20 @@ flowchart LR
     end
 ```
 
-<strong>두 종류의 Adapter</strong>를 구분하는 것이 중요합니다. 아래 표는 각 Adapter의 특성을 정리한 것입니다.
+Distinguishing the <strong>two types of Adapters</strong> is important. The table below summarizes each Adapter's characteristics.
 
-| Adapter 종류 | 다른 이름 | 역할 | 예시 |
+| Adapter Type | Other Name | Role | Example |
 |-------------|----------|------|------|
-| **Driving Adapter** | Primary Adapter | 애플리케이션을 호출 | Controller, CLI |
-| **Driven Adapter** | Secondary Adapter | 애플리케이션이 호출 | Repository 구현, API Client |
+| **Driving Adapter** | Primary Adapter | Calls the application | Controller, CLI |
+| **Driven Adapter** | Secondary Adapter | Called by the application | Repository impl, API Client |
 
-Driving Adapter는 외부 요청을 받아서 애플리케이션에 전달하는 역할을 합니다. 예를 들어, HTTP Controller는 HTTP 요청을 받아서 Inbound Port 형식으로 변환합니다. Driven Adapter는 애플리케이션의 요청을 외부 시스템에 전달합니다. 예를 들어, JPA Repository는 애플리케이션의 저장 요청을 데이터베이스 쿼리로 변환합니다.
+Driving Adapters receive external requests and pass them to the application. For example, an HTTP Controller receives HTTP requests and converts them to Inbound Port format. Driven Adapters pass application requests to external systems. For example, a JPA Repository converts application save requests into database queries.
 
 ```java
-// Driving Adapter: 외부 요청을 받아서 애플리케이션에 전달
+// Driving Adapter: Receive external requests and pass to application
 @RestController
 public class OrderController {
-    private final CreateOrderUseCase createOrderUseCase;  // Port 사용
+    private final CreateOrderUseCase createOrderUseCase;  // Uses Port
 
     @PostMapping("/orders")
     public ResponseEntity<String> createOrder(@RequestBody OrderRequest request) {
@@ -188,7 +188,7 @@ public class OrderController {
     }
 }
 
-// Driven Adapter: 애플리케이션의 요청을 외부 시스템에 전달
+// Driven Adapter: Pass application requests to external systems
 @Repository
 public class OrderPersistenceAdapter implements SaveOrderPort {
     private final OrderJpaRepository jpaRepository;
@@ -201,17 +201,17 @@ public class OrderPersistenceAdapter implements SaveOrderPort {
 }
 ```
 
-위 코드에서 OrderController는 HTTP 요청을 받아 CreateOrderUseCase를 호출하고, OrderPersistenceAdapter는 SaveOrderPort를 구현하여 데이터베이스에 저장합니다. 중요한 점은 애플리케이션 코어는 이 Adapter들의 존재를 전혀 모른다는 것입니다.
+In the code above, OrderController receives HTTP requests and calls CreateOrderUseCase, while OrderPersistenceAdapter implements SaveOrderPort to save to the database. The important point is that the application core is completely unaware of these Adapters.
 
-**3. Application Core - "비즈니스 심장"**
+**3. Application Core - "Business Heart"**
 
-육각형 안에는 순수한 비즈니스 로직만 있습니다. Application Core는 Application Layer와 Domain Layer로 구성됩니다. Application Layer는 비즈니스 프로세스의 흐름을 조율하고, Domain Layer는 핵심 비즈니스 규칙을 담고 있습니다.
+Inside the hexagon, there is only pure business logic. Application Core는 Application Layer와 Domain Layer로 구성됩니다. Application Layer는 비즈니스 프로세스의 orchestrate flow하고, Domain Layer는 core business 규칙을 담고 있습니다.
 
 ```mermaid
 flowchart TB
     subgraph Core["Application Core"]
         subgraph App["Application Layer"]
-            AS["Application Service<br>(Use Case 구현)"]
+            AS["Application Service<br>(Use Case impl)"]
         end
 
         subgraph Domain["Domain Layer"]
@@ -224,13 +224,13 @@ flowchart TB
     end
 ```
 
-Application Core는 외부 세계에 대해 아무것도 알지 못합니다. HTTP가 무엇인지, JPA가 무엇인지, Kafka가 무엇인지 모릅니다. 오직 Port 인터페이스만 알고 있으며, 순수한 비즈니스 로직에만 집중합니다.
+The Application Core knows nothing about the external world. HTTP가 무엇인지, JPA가 무엇인지, Kafka가 무엇인지 모릅니다. 오직 Port interface만 알고 있으며, 순수한 business logic에만 집중합니다.
 
 ---
 
 #### Full Structure at a Glance
 
-헥사고날 아키텍처의 모든 요소가 어떻게 협력하는지 전체 그림을 보겠습니다. 외부 세계, Driving Adapters, Inbound Ports, Application Core, Outbound Ports, Driven Adapters가 어떻게 연결되는지 이해하면 헥사고날의 핵심을 파악할 수 있습니다.
+헥사고날 아키텍처의 모든 요소가 어떻게 협력하는지 전체 그림을 보겠습니다. external world, Driving Adapters, Inbound Ports, Application Core, Outbound Ports, Driven Adapters가 어떻게 연결되는지 이해하면 헥사고날의 핵심을 파악할 수 있습니다.
 
 ```mermaid
 flowchart TB
@@ -282,17 +282,17 @@ flowchart TB
     NA --> MAIL
 ```
 
-위 다이어그램에서 화살표의 방향에 주목하세요. 의존성은 항상 바깥에서 안으로만 향합니다. Application Core는 외부를 전혀 모르며, Port 인터페이스만 사용합니다.
+위 다이어그램에서 화살표의 방향에 주목하세요. 의존성은 항상 바깥에서 안으로만 향합니다. Application Core는 외부를 전혀 모르며, Port interface만 사용합니다.
 
 ---
 
 #### Understanding Through Code
 
-이제 실제 코드로 헥사고날 아키텍처를 구현해보겠습니다. Port 정의, Application Service 구현, Adapter 구현 순서로 진행합니다.
+Now let us implement hexagonal architecture with actual code. We will proceed in the order of Port definition, Application Service implementation, and Adapter implementation.
 
-**1단계: Port 정의하기**
+**Step 1: Define Ports**
 
-먼저 애플리케이션의 경계를 Port로 정의합니다. Inbound Port는 외부에서 호출할 수 있는 유스케이스를 정의하고, Outbound Port는 애플리케이션이 필요로 하는 외부 서비스를 정의합니다.
+First, define the application boundaries with Ports. Inbound Ports define use cases that can be called from outside, and Outbound Ports define external services that the application needs.
 
 ```java
 // === Inbound Ports ===
@@ -314,7 +314,7 @@ public interface GetOrderQuery {
 }
 ```
 
-Inbound Port는 애플리케이션이 제공하는 기능을 명확히 정의합니다. 각 유스케이스는 하나의 비즈니스 목적을 가지고 있으며, 외부에서는 이 인터페이스만 보고 애플리케이션을 호출할 수 있습니다.
+Inbound Port는 애플리케이션이 제공하는 기능을 명확히 정의합니다. 각 유스케이스는 하나의 비즈니스 목적을 가지고 있으며, 외부에서는 이 interface만 보고 애플리케이션을 호출할 수 있습니다.
 
 ```java
 // === Outbound Ports ===
@@ -342,24 +342,24 @@ public interface CheckInventoryPort {
 }
 ```
 
-Outbound Port는 애플리케이션이 필요로 하는 외부 서비스를 정의합니다. 데이터베이스, 메시지 큐, 외부 API 등 모든 외부 시스템과의 통신은 이 Port를 통해 이루어집니다.
+Outbound Ports define external services the application needs. All communication with external systems including databases, message queues, and external APIs is done through these Ports.
 
-**2단계: Application Service 구현하기**
+**Step 2: Implement Application Service**
 
-Application Service는 Inbound Port를 구현하고 Outbound Port를 사용합니다. 비즈니스 흐름을 조율하며, Domain 객체를 조합하여 유스케이스를 완성합니다.
+Application Service는 Inbound Port를 구현하고 Outbound Port를 사용합니다. 비즈니스 orchestrate flow하며, Domain 객체를 조합하여 유스케이스를 완성합니다.
 
 ```java
 @Service
 @Transactional
 public class OrderService implements CreateOrderUseCase, ConfirmOrderUseCase {
 
-    // Outbound Ports (인터페이스)만 의존
+    // Outbound Ports (interface)만 의존
     private final SaveOrderPort saveOrderPort;
     private final LoadOrderPort loadOrderPort;
     private final SendNotificationPort notificationPort;
     private final CheckInventoryPort inventoryPort;
 
-    // 생성자 주입
+    // Constructor injection
     public OrderService(
             SaveOrderPort saveOrderPort,
             LoadOrderPort loadOrderPort,
@@ -373,20 +373,20 @@ public class OrderService implements CreateOrderUseCase, ConfirmOrderUseCase {
 
     @Override
     public OrderId execute(CreateOrderCommand command) {
-        // 1. 재고 확인 (Outbound Port 사용)
+        // 1. Check inventory (using Outbound Port)
         for (OrderLineCommand line : command.getLines()) {
             if (!inventoryPort.isAvailable(line.getProductId(), line.getQuantity())) {
                 throw new InsufficientInventoryException(line.getProductId());
             }
         }
 
-        // 2. 주문 생성 (Domain Logic)
+        // 2. Create order (Domain Logic)
         Order order = Order.create(
             command.getCustomerId(),
             command.toOrderLines()
         );
 
-        // 3. 저장 (Outbound Port 사용)
+        // 3. Save (using Outbound Port)
         saveOrderPort.save(order);
 
         return order.getId();
@@ -394,27 +394,27 @@ public class OrderService implements CreateOrderUseCase, ConfirmOrderUseCase {
 
     @Override
     public void execute(OrderId orderId) {
-        // 1. 주문 조회 (Outbound Port 사용)
+        // 1. Retrieve order (using Outbound Port)
         Order order = loadOrderPort.loadById(orderId);
 
-        // 2. 주문 확정 (Domain Logic)
+        // 2. Confirm order (Domain Logic)
         order.confirm();
 
-        // 3. 저장 (Outbound Port 사용)
+        // 3. Save (using Outbound Port)
         saveOrderPort.save(order);
 
-        // 4. 알림 발송 (Outbound Port 사용)
+        // 4. Send notification (using Outbound Port)
         notificationPort.sendOrderConfirmation(order);
     }
 }
 ```
 
-위 코드에서 OrderService는 구체적인 구현체가 아닌 Port 인터페이스만 의존하고 있습니다. SaveOrderPort가 JPA인지 MongoDB인지, SendNotificationPort가 이메일인지 SMS인지 전혀 모릅니다. 이것이 헥사고날 아키텍처의 핵심입니다.
+위 코드에서 OrderService는 구체적인 implementation가 아닌 Port interface만 의존하고 있습니다. SaveOrderPort가 JPA인지 MongoDB인지, SendNotificationPort가 이메일인지 SMS인지 전혀 모릅니다. 이것이 헥사고날 아키텍처의 핵심입니다.
 
 {{< notice style="tip" >}}
-**핵심 포인트**
+**Key Point**
 
-Application Service는 **Port(인터페이스)만 알고 있습니다:**
+Application Service는 **Port(interface)만 알고 있습니다:**
 - `SaveOrderPort` ← JPA인지 MongoDB인지 모름
 - `SendNotificationPort` ← 이메일인지 SMS인지 모름
 - `CheckInventoryPort` ← 내부 DB인지 외부 API인지 모름
@@ -422,9 +422,9 @@ Application Service는 **Port(인터페이스)만 알고 있습니다:**
 그래서 **외부 기술이 바뀌어도 이 코드는 변경할 필요가 없습니다!**
 {{< /notice >}}
 
-**3단계: Driving Adapter 구현하기**
+**Step 3: Implement Driving Adapters**
 
-Driving Adapter는 외부 요청을 받아서 Inbound Port를 호출합니다. 예를 들어, Web Adapter는 HTTP 요청을 받아 Command 객체로 변환한 뒤 Use Case를 실행합니다.
+Driving Adapters receive external requests and call Inbound Ports. For example, a Web Adapter receives HTTP requests, converts them to Command objects, then executes Use Cases.
 
 ```java
 // === Web Adapter (Driving) ===
@@ -440,13 +440,13 @@ public class OrderController {
     public ResponseEntity<OrderIdResponse> createOrder(
             @Valid @RequestBody CreateOrderRequest request) {
 
-        // Request → Command 변환
+        // Convert Request -> Command
         CreateOrderCommand command = request.toCommand();
 
-        // Use Case 실행
+        // Execute Use Case
         OrderId orderId = createOrderUseCase.execute(command);
 
-        // Response 생성
+        // Create Response
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(new OrderIdResponse(orderId.getValue()));
@@ -466,7 +466,7 @@ public class OrderController {
 }
 ```
 
-OrderController는 HTTP라는 전송 프로토콜의 세부사항만 다룹니다. HTTP 요청을 받고, Command로 변환하고, Use Case를 호출하고, 결과를 HTTP 응답으로 변환하는 것이 전부입니다.
+OrderController only handles the details of the HTTP transport protocol. All it does is receive HTTP requests, convert to Commands, call Use Cases, and convert results to HTTP responses.
 
 ```java
 // === Message Adapter (Driving) ===
@@ -477,17 +477,17 @@ public class OrderEventListener {
 
     @KafkaListener(topics = "payment-completed")
     public void onPaymentCompleted(PaymentCompletedEvent event) {
-        // 결제 완료 시 자동으로 주문 확정
+        // Automatically confirm order when payment completes
         confirmOrderUseCase.execute(OrderId.of(event.getOrderId()));
     }
 }
 ```
 
-Message Adapter는 Kafka 메시지를 받아서 Use Case를 호출합니다. 애플리케이션 코어는 Kafka를 전혀 모르며, 단지 Inbound Port를 통해 호출될 뿐입니다.
+The Message Adapter receives Kafka messages and calls Use Cases. The application core does not know about Kafka at all; it is simply called through Inbound Ports.
 
-**4단계: Driven Adapter 구현하기**
+**Step 4: Implement Driven Adapters**
 
-Driven Adapter는 Outbound Port를 구현하여 외부 시스템과 통신합니다. 예를 들어, Persistence Adapter는 SaveOrderPort를 구현하여 데이터베이스에 저장하는 기술적 세부사항을 처리합니다.
+Driven Adapter는 Outbound Port를 구현하여 외부 시스템과 통신합니다. 예를 들어, Persistence Adapter는 SaveOrderPort를 구현하여 데이터베이스에 저장하는 technical details을 처리합니다.
 
 ```java
 // === Persistence Adapter (Driven) ===
@@ -517,7 +517,7 @@ public class OrderPersistenceAdapter implements SaveOrderPort, LoadOrderPort {
 }
 ```
 
-OrderPersistenceAdapter는 JPA를 사용하여 데이터베이스에 접근합니다. Domain 객체를 JPA Entity로 변환하고, 반대로 JPA Entity를 Domain 객체로 변환하는 역할을 담당합니다.
+OrderPersistenceAdapter accesses the database using JPA. It is responsible for converting Domain objects to JPA Entities and vice versa.
 
 ```java
 // === Notification Adapter (Driven) ===
@@ -530,15 +530,15 @@ public class EmailNotificationAdapter implements SendNotificationPort {
     public void sendOrderConfirmation(Order order) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(order.getCustomerEmail());
-        message.setSubject("주문이 확정되었습니다");
-        message.setText("주문번호: " + order.getId().getValue());
+        message.setSubject("Your order has been confirmed");
+        message.setText("Order number: " + order.getId().getValue());
 
         mailSender.send(message);
     }
 }
 ```
 
-EmailNotificationAdapter는 이메일을 발송합니다. 나중에 SMS로 바꾸고 싶다면 SmsNotificationAdapter를 새로 만들어 SendNotificationPort를 구현하면 됩니다. Application Service 코드는 전혀 변경할 필요가 없습니다.
+EmailNotificationAdapter sends emails. If you want to switch to SMS later, simply create a new SmsNotificationAdapter that implements SendNotificationPort. No Application Service code changes are needed.
 
 ```java
 // === External API Adapter (Driven) ===
@@ -562,13 +562,13 @@ public class InventoryApiAdapter implements CheckInventoryPort {
 }
 ```
 
-InventoryApiAdapter는 외부 재고 관리 서비스와 통신합니다. Application Core는 재고가 내부 데이터베이스에 있는지 외부 API에서 가져오는지 전혀 모릅니다.
+InventoryApiAdapter communicates with an external inventory management service. The Application Core has no idea whether inventory is in an internal database or fetched from an external API.
 
 ---
 
 #### Package Structure
 
-헥사고날 아키텍처를 패키지로 표현하면 다음과 같습니다. adapter 패키지는 in과 out으로 나뉘며, application 패키지에는 port와 service가 있고, domain 패키지에는 순수한 도메인 모델이 있습니다.
+헥사고날 아키텍처를 패키지로 표현하면 다음과 같습니다. adapter 패키지는 in과 out으로 나뉘며, application 패키지에는 port와 service가 있고, domain 패키지에는 순수한 domain model이 있습니다.
 
 ```
 com.example.order/
@@ -615,13 +615,13 @@ com.example.order/
     └── Money.java
 ```
 
-이 구조에서 adapter 패키지는 가장 바깥쪽에 있고, application과 domain 패키지는 안쪽에 있습니다. 의존성은 항상 바깥에서 안으로만 향합니다.
+In this structure, the adapter package is on the outermost layer, while application and domain packages are inside. Dependencies always point from outside to inside only.
 
 ---
 
 #### Dependency Direction
 
-헥사고날 아키텍처의 핵심은 의존성 방향입니다. 모든 의존성은 Adapter에서 Port로, Port에서 Core로 향합니다. Core는 아무것도 의존하지 않습니다.
+헥사고날 아키텍처의 핵심은 dependency direction입니다. 모든 의존성은 Adapter에서 Port로, Port에서 Core로 향합니다. Core는 아무것도 의존하지 않습니다.
 
 ```mermaid
 flowchart TB
@@ -642,19 +642,19 @@ flowchart TB
     APP --> DOM
 ```
 
-**핵심 규칙:**
+**Core Rules:**
 
-의존성 규칙을 엄격히 지키는 것이 헥사고날 아키텍처의 핵심입니다. 첫째, Adapter는 Port를 구현하고 Port에 의존합니다. 둘째, Application Core는 Adapter를 전혀 모릅니다. 셋째, Domain은 아무것도 의존하지 않으며 순수한 비즈니스 로직만 담고 있습니다.
+의존성 규칙을 엄격히 지키는 것이 헥사고날 아키텍처의 핵심입니다. 첫째, Adapter는 Port를 구현하고 Port에 의존합니다. 둘째, Application Core는 Adapter를 전혀 모릅니다. 셋째, Domain은 아무것도 의존하지 않으며 순수한 business logic만 담고 있습니다.
 
 ---
 
 #### 헥사고날의 장점
 
-헥사고날 아키텍처가 제공하는 주요 이점을 구체적인 예시와 함께 살펴보겠습니다.
+Let us examine the key benefits of hexagonal architecture with concrete examples.
 
-**1. 테스트가 쉬워집니다**
+**1. Testing Becomes Easy**
 
-Port만 Mock하면 되므로 테스트가 매우 간단해집니다. 데이터베이스나 외부 API 없이도 비즈니스 로직을 완벽하게 테스트할 수 있습니다.
+Port만 Mock하면 되므로 테스트가 매우 간단해집니다. 데이터베이스나 외부 API 없이도 business logic을 완벽하게 테스트할 수 있습니다.
 
 ```java
 // Port만 Mock하면 됩니다
@@ -689,11 +689,11 @@ class OrderServiceTest {
 }
 ```
 
-위 테스트는 실제 데이터베이스나 외부 서비스 없이 OrderService의 로직을 검증합니다. Port를 Mock으로 대체하면 되므로 테스트 작성이 간단하고 실행 속도도 빠릅니다.
+The test above verifies OrderService logic without actual databases or external services. Since Ports are replaced with Mocks, test writing is simple and execution is fast.
 
-**2. 기술 교체가 쉬워집니다**
+**2. technology replacement가 쉬워집니다**
 
-Adapter만 교체하면 되므로 기술 스택을 쉽게 변경할 수 있습니다. Application Core는 전혀 변경할 필요가 없습니다.
+Since you only need to replace Adapters, you can easily change the technology stack. The Application Core does not need any changes.
 
 ```mermaid
 flowchart LR
@@ -712,7 +712,7 @@ flowchart LR
     Before -->|"Replace Adapter only"| After
 ```
 
-예를 들어, MySQL에서 MongoDB로 데이터베이스를 변경해도 OrderService 코드는 전혀 변경할 필요가 없습니다. SaveOrderPort 인터페이스도 그대로이고, 단지 MongoOrderAdapter라는 새로운 Adapter만 작성하면 됩니다.
+예를 들어, MySQL에서 MongoDB로 데이터베이스를 변경해도 OrderService 코드는 전혀 변경할 필요가 없습니다. SaveOrderPort interface도 그대로이고, 단지 MongoOrderAdapter라는 새로운 Adapter만 작성하면 됩니다.
 
 ```java
 // MySQL에서 MongoDB로 변경해도 Service 코드 변경 없음!
@@ -732,9 +732,9 @@ public class MongoOrderAdapter implements SaveOrderPort {
 }
 ```
 
-**3. 외부 연동 추가가 쉬워집니다**
+**3. Adding External Integrations Becomes Easy**
 
-새로운 알림 채널을 추가하고 싶다면 Adapter만 추가하면 됩니다. Application Core는 SendNotificationPort 인터페이스만 알고 있으므로, 어떤 Adapter를 사용하는지 상관하지 않습니다.
+새로운 알림 채널을 추가하고 싶다면 Adapter만 추가하면 됩니다. Application Core는 SendNotificationPort interface만 알고 있으므로, 어떤 Adapter를 사용하는지 상관하지 않습니다.
 
 ```mermaid
 flowchart LR
@@ -753,38 +753,38 @@ flowchart LR
     Before -->|"Add Adapter only"| After
 ```
 
-이메일만 지원하던 것을 SMS와 푸시 알림으로 확장하려면 SmsAdapter와 PushAdapter를 추가하면 됩니다. Application Service는 여전히 SendNotificationPort만 호출하므로 코드 변경이 없습니다.
+To extend from email-only to SMS and push notifications, just add SmsAdapter and PushAdapter. The Application Service still only calls SendNotificationPort, so no code changes are needed.
 
 ---
 
 #### Trade-offs
 
-헥사고날 아키텍처는 유연성을 제공하지만, 그에 따른 비용도 있습니다.
+Hexagonal architecture provides flexibility, but at a cost.
 
-{{< callout type="warning" title="헥사고날 아키텍처의 트레이드오프" >}}
-| 장점 | 비용 |
+{{< callout type="warning" title="Hexagonal Architecture Trade-offs" >}}
+| Advantage | Cost |
 |------|------|
-| 테스트 용이성 | Port/Adapter 인터페이스 작성 필요 |
-| 기술 교체 유연성 | 초기 설계에 더 많은 시간 소요 |
-| 외부 연동 격리 | 파일 수 증가 (인터페이스 + 구현체) |
-| 명확한 의존성 방향 | 팀 전체가 패턴을 이해해야 함 |
+| easy to test성 | Port/Adapter interface 작성 필요 |
+| technology replacement 유연성 | 초기 설계에 더 많은 시간 소요 |
+| 외부 연동 격리 | 파일 수 증가 (interface + implementation) |
+| 명확한 dependency direction | 팀 전체가 패턴을 이해해야 함 |
 {{< /callout >}}
 
-**언제 비용이 정당화되는가?**
+**When Are the Costs Justified?**
 
-헥사고날의 복잡성은 **외부 시스템 변경 가능성이 높을 때** 정당화됩니다:
-- 데이터베이스를 MySQL에서 PostgreSQL로 바꿀 가능성이 있다면 → 가치 있음
-- 평생 MySQL만 쓸 것이 확실하다면 → 과도한 추상화일 수 있음
+The complexity of hexagonal is justified **when the possibility of external system changes is high**:
+- If there is a possibility of switching the database from MySQL to PostgreSQL -> Worth it
+- If you are certain you will use MySQL forever -> May be excessive abstraction
 
 ---
 
 #### Comparison with Layered
 
-계층형 아키텍처와 헥사고날 아키텍처는 비슷하지만 중요한 차이가 있습니다. 관점의 차이를 먼저 살펴보겠습니다.
+Layered and hexagonal architectures are similar but have important differences. Let us first examine the difference in perspective.
 
-**관점의 차이**
+**Difference in Perspective**
 
-계층형은 위에서 아래로의 수직 구조를 강조하는 반면, 헥사고날은 안쪽과 바깥쪽의 방사형 구조를 강조합니다.
+Layered emphasizes a vertical top-to-bottom structure, while hexagonal emphasizes a radial inside-outside structure.
 
 ```mermaid
 flowchart TB
@@ -804,58 +804,58 @@ flowchart TB
     end
 ```
 
-**상세 비교**
+**Detailed Comparison**
 
-아래 표는 계층형과 헥사고날의 주요 차이점을 정리한 것입니다.
+The table below summarizes the key differences between layered and hexagonal.
 
-| 관점 | 계층형 | 헥사고날 |
+| Perspective | Layered | Hexagonal |
 |------|--------|----------|
-| **구조** | 수직 계층 (4층) | 안쪽/바깥쪽 |
-| **의존성** | 위에서 아래로 | 바깥에서 안으로 |
-| **Infrastructure** | 맨 아래 계층 | 바깥쪽 Adapter |
-| **강조점** | 계층 분리 | 외부 격리 |
-| **테스트** | Mock 필요 | Port Mock만 |
-| **적합한 상황** | 단순한 프로젝트 | 외부 연동 많은 프로젝트 |
+| **Structure** | Vertical layers (4) | Inside/Outside |
+| **Dependencies** | Top to bottom | Outside to inside |
+| **Infrastructure** | Bottom layer | Outer Adapter |
+| **Emphasis** | Layer separation | External isolation |
+| **Test** | Mock needed | Port Mock only |
+| **Suitable For** | Simple projects | Projects with many integrations |
 
-계층형은 간단하고 직관적이지만, 외부 시스템과의 연동이 많아지면 헥사고날이 더 적합합니다. 헥사고날은 Port와 Adapter를 명시적으로 분리하여 외부 변경에 더 유연하게 대응할 수 있습니다.
+Layered is simple and intuitive, but as external system integrations increase, hexagonal becomes more suitable. Hexagonal explicitly separates Ports and Adapters, enabling more flexible responses to external changes.
 
 ---
 
 #### Common Mistakes
 
-헥사고날 아키텍처를 적용할 때 자주 발생하는 실수들을 알아보겠습니다.
+Let us look at common mistakes when applying hexagonal architecture.
 
-**1. Port 없이 직접 의존**
+**1. Direct Dependency Without Ports**
 
-Port 없이 Service가 Repository 구현체를 직접 의존하면 헥사고날의 이점을 잃게 됩니다. 항상 인터페이스(Port)를 통해 의존해야 합니다.
+Port 없이 Service가 Repository implementation를 직접 의존하면 헥사고날의 이점을 잃게 됩니다. 항상 interface(Port)를 통해 의존해야 합니다.
 
 ```java
-// ❌ 잘못된 예: Service가 Repository 구현체를 직접 의존
+// ❌ 잘못된 예: Service가 Repository implementation를 직접 의존
 @Service
 public class OrderService {
-    private final OrderJpaRepository jpaRepository;  // 구체 클래스!
+    private final OrderJpaRepository jpaRepository;  // Concrete class!
 }
 
-// ✅ 올바른 예: Port(인터페이스)에 의존
+// ✅ 올바른 예: Port(interface)에 의존
 @Service
 public class OrderService {
-    private final SaveOrderPort saveOrderPort;  // 인터페이스!
+    private final SaveOrderPort saveOrderPort;  // interface!
 }
 ```
 
-구체 클래스에 의존하면 나중에 JPA를 다른 기술로 바꿀 때 Service 코드도 수정해야 합니다. Port에 의존하면 Adapter만 교체하면 됩니다.
+If you depend on concrete classes, Service code must be modified when switching JPA to another technology later. If you depend on Ports, you only need to replace Adapters.
 
-**2. Adapter에 비즈니스 로직**
+**2. Adapter에 business logic**
 
-Adapter는 단순히 변환만 담당해야 합니다. 비즈니스 로직을 Adapter에 넣으면 안 됩니다.
+Adapter는 단순히 변환만 담당해야 합니다. business logic을 Adapter에 넣으면 안 됩니다.
 
 ```java
-// ❌ 잘못된 예: Controller에 비즈니스 로직
+// ❌ 잘못된 예: Controller에 business logic
 @RestController
 public class OrderController {
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestBody OrderRequest request) {
-        // 비즈니스 로직이 Controller에!
+        // business logic이 Controller에!
         if (request.getTotal() > 100000) {
             request.setDiscount(0.1);
         }
@@ -863,63 +863,63 @@ public class OrderController {
     }
 }
 
-// ✅ 올바른 예: Controller는 요청/응답만
+// ✅ Correct: Controller handles only request/response
 @RestController
 public class OrderController {
     private final CreateOrderUseCase useCase;
 
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestBody OrderRequest request) {
-        OrderId orderId = useCase.execute(request.toCommand());  // 위임
+        OrderId orderId = useCase.execute(request.toCommand());  // Delegate
         return ResponseEntity.ok(new OrderIdResponse(orderId));
     }
 }
 ```
 
-Controller는 HTTP 요청을 Command로 변환하고, Use Case를 호출하고, 결과를 HTTP 응답으로 변환하는 것만 담당해야 합니다.
+Controllers should only be responsible for converting HTTP requests to Commands, calling Use Cases, and converting results to HTTP responses.
 
-**3. Domain이 Port에 의존**
+**3. Domain Depends on Ports**
 
-Domain은 완전히 순수해야 하며, Port에도 의존하면 안 됩니다. Domain은 비즈니스 로직만 담고 있어야 합니다.
+Domain은 완전히 순수해야 하며, Port에도 의존하면 안 됩니다. Domain은 business logic만 담고 있어야 합니다.
 
 ```java
-// ❌ 잘못된 예: Entity가 Port 사용
+// ❌ Wrong: Entity uses Port
 public class Order {
-    private final SaveOrderPort saveOrderPort;  // Domain이 Port에 의존!
+    private final SaveOrderPort saveOrderPort;  // Domain depends on Port!
 
     public void confirm() {
         this.status = CONFIRMED;
-        saveOrderPort.save(this);  // 안 됨!
+        saveOrderPort.save(this);  // Not allowed!
     }
 }
 
-// ✅ 올바른 예: Domain은 순수하게
+// ✅ Correct: Domain stays pure
 public class Order {
     public void confirm() {
-        this.status = CONFIRMED;  // 상태 변경만
+        this.status = CONFIRMED;  // State change only
     }
 }
 
-// Application Service에서 저장
+// Save in Application Service
 @Service
 public class OrderService {
     public void confirmOrder(OrderId id) {
         Order order = loadOrderPort.loadById(id);
         order.confirm();
-        saveOrderPort.save(order);  // Service에서 저장
+        saveOrderPort.save(order);  // Save in Service
     }
 }
 ```
 
-Domain Entity는 상태 변경만 담당하고, 저장은 Application Service가 Port를 통해 처리합니다.
+Domain Entities only handle state changes, while saving is handled by the Application Service through Ports.
 
 ---
 
 #### Testing Strategy
 
-헥사고날 아키텍처에서는 테스트 피라미드를 따라 각 레벨을 테스트합니다.
+In hexagonal architecture, test each level following the test pyramid.
 
-**테스트 레벨별 전략**
+**Strategy by Test Level**
 
 ```mermaid
 flowchart TB
@@ -932,9 +932,9 @@ flowchart TB
     E2E --> INT --> UNIT
 ```
 
-**1. Domain 테스트 (순수 단위 테스트)**
+**1. Domain Test (Pure Unit Test)**
 
-Domain은 외부 의존성이 없으므로 가장 간단하게 테스트할 수 있습니다. 순수한 Java 객체이므로 테스트 실행 속도도 빠릅니다.
+Domain은 external dependencies이 없으므로 가장 간단하게 테스트할 수 있습니다. pure Java object이므로 테스트 실행 속도도 빠릅니다.
 
 ```java
 class OrderTest {
@@ -963,9 +963,9 @@ class OrderTest {
 }
 ```
 
-**2. Application Service 테스트 (Port Mock)**
+**2. Application Service Test (Port Mock)**
 
-Application Service는 Port를 Mock으로 대체하여 테스트합니다. 실제 데이터베이스나 외부 서비스 없이 비즈니스 로직을 검증할 수 있습니다.
+Application Service는 Port를 Mock으로 대체하여 테스트합니다. 실제 데이터베이스나 외부 서비스 없이 business logic을 검증할 수 있습니다.
 
 ```java
 @ExtendWith(MockitoExtension.class)
@@ -997,9 +997,9 @@ class OrderServiceTest {
 }
 ```
 
-**3. Adapter 테스트 (통합 테스트)**
+**3. Adapter Test (Integration Test)**
 
-Adapter는 실제 외부 시스템과 통신하므로 통합 테스트를 수행합니다. Spring Boot의 테스트 도구를 사용하면 편리합니다.
+Since Adapters communicate with actual external systems, perform integration tests. Using Spring Boot test tools is convenient.
 
 ```java
 // Persistence Adapter 테스트
@@ -1058,21 +1058,21 @@ class OrderControllerTest {
 
 #### When Should You Use Hexagonal?
 
-헥사고날 아키텍처는 모든 프로젝트에 적합한 것은 아닙니다. 프로젝트의 특성을 고려하여 선택해야 합니다.
+Hexagonal architecture is not suitable for every project. Choose based on your project characteristics.
 
-**적합한 경우**
+**Suitable Cases**
 
 헥사고날 아키텍처는 다음과 같은 상황에서 특히 유용합니다. 외부 시스템 연동이 많은 경우, 예를 들어 여러 데이터베이스, REST API, 메시지 큐를 사용하는 프로젝트에 적합합니다. 마이크로서비스 아키텍처에서도 각 서비스의 경계를 명확히 하는 데 도움이 됩니다.
 
 기술 변경 가능성이 있는 경우, 예를 들어 나중에 데이터베이스를 바꾸거나 메시징 시스템을 변경할 가능성이 있다면 헥사고날이 좋습니다. 팀이 테스트를 중요하게 여기는 경우에도 적합합니다. 레거시 시스템과 통합해야 할 때도 Port와 Adapter로 깔끔하게 분리할 수 있어 유용합니다.
 
-**부적합한 경우**
+**Unsuitable Cases**
 
 반면, 다음과 같은 상황에서는 헥사고날이 과할 수 있습니다. 소규모 단기 프로젝트에서는 오버엔지니어링이 될 수 있습니다. 팀이 패턴에 익숙하지 않을 때는 계층형으로 시작하는 것이 좋습니다.
 
 단순 CRUD 애플리케이션에서는 헥사고날의 이점을 누리기 어렵습니다. 외부 연동이 거의 없는 프로젝트에서도 불필요한 복잡도만 증가시킬 수 있습니다.
 
-**Best Practice: 어떤 시스템에 어울리는가?**
+**Best Practice: Which Systems Fit?**
 
 | 시스템 유형 | 적합도 | 이유 |
 |------------|-------|------|
@@ -1089,7 +1089,7 @@ class OrderControllerTest {
 
 #### Transitioning from Layered to Hexagonal
 
-기존 계층형 아키텍처를 헥사고날로 점진적으로 전환할 수 있습니다. 한 번에 모든 것을 바꿀 필요는 없습니다.
+You can gradually transition from layered to hexagonal architecture. There is no need to change everything at once.
 
 ```mermaid
 flowchart LR
@@ -1100,22 +1100,22 @@ flowchart LR
     A --> B --> C
 ```
 
-**1단계: Repository Interface를 Domain으로**
+**Step 1: Move Repository Interface to Domain**
 
-먼저 Repository 인터페이스를 Infrastructure에서 Domain으로 이동합니다.
+먼저 Repository interface를 Infrastructure에서 Domain으로 이동합니다.
 
 ```java
 // Before: Infrastructure에 있던 Repository
-// After: Domain에 인터페이스 정의
+// After: Domain에 interface 정의
 public interface OrderRepository {
     void save(Order order);
     Optional<Order> findById(OrderId id);
 }
 ```
 
-**2단계: Port 네이밍으로 변경**
+**Step 2: Change to Port Naming**
 
-Repository를 SaveOrderPort와 LoadOrderPort로 분리하여 더 명확하게 만듭니다.
+Split Repository into SaveOrderPort and LoadOrderPort for more clarity.
 
 ```java
 // Before: OrderRepository
@@ -1129,9 +1129,9 @@ public interface LoadOrderPort {
 }
 ```
 
-**3단계: Adapter 패키지 구조 정리**
+**3단계: Adapter package structure 정리**
 
-마지막으로 패키지 구조를 헥사고날 스타일로 정리합니다.
+마지막으로 package structure를 헥사고날 스타일로 정리합니다.
 
 ```
 // Before
@@ -1157,16 +1157,16 @@ com.example.order/
 
 #### Key Summary
 
-{{< callout type="info" title="헥사고날 아키텍처 핵심 정리" >}}
-| 개념 | 설명 | 예시 |
+{{< callout type="info" title="Hexagonal Architecture Key Summary" >}}
+| Concept | Description | Example |
 |------|------|------|
-| **Port** | 연결 규격 (인터페이스) | `SaveOrderPort`, `SendNotificationPort` |
-| **Adapter** | 연결 장치 (구현체) | `JpaOrderAdapter`, `EmailAdapter` |
-| **Core** | 순수 비즈니스 로직 | `OrderService`, `Order` |
-| **Driving** | 나를 호출하는 것 | Controller, Kafka Listener |
-| **Driven** | 내가 호출하는 것 | Repository 구현, API Client |
+| **Port** | 연결 규격 (interface) | `SaveOrderPort`, `SendNotificationPort` |
+| **Adapter** | 연결 장치 (implementation) | `JpaOrderAdapter`, `EmailAdapter` |
+| **Core** | 순수 business logic | `OrderService`, `Order` |
+| **Driving** | Things that call me | Controller, Kafka Listener |
+| **Driven** | Things I call | Repository impl, API Client |
 
-<strong>기억할 것:</strong> 의존성은 항상 <strong>바깥 → 안쪽</strong>으로만 향합니다. Application Core는 외부 기술을 전혀 모릅니다.
+<strong>Remember:</strong> Dependencies always point from <strong>outside -> inside</strong> only. The Application Core knows nothing about external technologies.
 {{< /callout >}}
 
 ---
@@ -1174,5 +1174,5 @@ com.example.order/
 #### Next Steps
 
 - [클린 아키텍처]({{< relref "/docs/ddd/concepts/architecture/clean-architecture" >}}) - 더 엄격한 의존성 규칙
-- [어니언 아키텍처]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}}) - 도메인 모델 중심
+- [어니언 아키텍처]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}}) - domain model 중심
 - [CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}}) - 읽기/쓰기 분리

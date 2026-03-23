@@ -14,20 +14,20 @@ Spring Boot 기반의 실행 가능한 예제 코드입니다.
 
 ## 예제 목록
 
-### [환경 설정](setup/)
+### [환경 설정]({{< relref "/docs/elasticsearch/examples/setup" >}})
 Docker로 Elasticsearch + Kibana를 구성하고, Spring Boot 프로젝트를 설정합니다.
 
-### [기본 예제](basic/)
+### [기본 예제]({{< relref "/docs/elasticsearch/examples/basic" >}})
 Spring Data Elasticsearch를 사용한 Document CRUD와 기본 검색을 구현합니다.
 
-### [상품 검색 시스템](product-search/)
+### [상품 검색 시스템]({{< relref "/docs/elasticsearch/examples/product-search" >}})
 실제 서비스에 가까운 상품 검색 기능을 구현합니다:
 - 한글 형태소 분석 (nori)
 - 자동완성
 - 필터 + 검색 조합
 - 검색 결과 하이라이팅
 
-### [로그 분석 시스템](log-analysis/)
+### [로그 분석 시스템]({{< relref "/docs/elasticsearch/examples/log-analysis" >}})
 애플리케이션 로그를 수집, 저장, 분석하는 시스템을 구현합니다:
 - Logback → Elasticsearch 직접 전송
 - 에러 로그 검색 및 요청 추적

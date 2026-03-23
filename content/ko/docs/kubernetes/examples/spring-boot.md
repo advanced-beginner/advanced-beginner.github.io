@@ -410,6 +410,6 @@ Spring Boot 배포를 완료했다면 다음 단계로 진행하세요:
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 문제 해결 | [Pod 트러블슈팅](../howto/pod-troubleshooting/) |
-| 자동 스케일링 | [스케일링](../concepts/scaling/) |
-| 리소스 최적화 | [리소스 최적화](../howto/resource-optimization/) |
+| 문제 해결 | [Pod 트러블슈팅]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) |
+| 자동 스케일링 | [스케일링]({{< relref "/docs/kubernetes/concepts/scaling" >}}) |
+| 리소스 최적화 | [리소스 최적화]({{< relref "/docs/kubernetes/howto/resource-optimization" >}}) |

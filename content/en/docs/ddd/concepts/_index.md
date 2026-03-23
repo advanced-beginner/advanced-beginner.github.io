@@ -20,7 +20,7 @@ DDD's core consists of two levels of patterns: strategic design and tactical des
 
 #### Design Patterns
 
-Starting from strategic design patterns and progressively moving to tactical design patterns is an effective learning sequence. [Strategic Design]({{< relref "/docs/ddd/concepts/strategic-design" >}}) covers Subdomain, Bounded Context, Context Mapping, and Ubiquitous Language, while [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design" >}}) teaches Entity, Value Object, Repository, Domain Service, and Specification patterns. [Aggregate Deep Dive]({{< relref "/docs/ddd/concepts/aggregate" >}}) covers Aggregate design principles, transaction boundaries, and how to determine appropriate size, and [Domain Events]({{< relref "/docs/ddd/concepts" >}}) explores event-driven architecture and Event Sourcing.
+Starting from strategic design patterns and progressively moving to tactical design patterns is an effective learning sequence. [Strategic Design]({{< relref "/docs/ddd/concepts/strategic-design" >}}) covers Subdomain, Bounded Context, Context Mapping, and Ubiquitous Language, while [Tactical Design]({{< relref "/docs/ddd/concepts/tactical-design" >}}) teaches Entity, Value Object, Repository, Domain Service, and Specification patterns. [Aggregate Deep Dive]({{< relref "/docs/ddd/concepts/aggregate" >}}) covers Aggregate design principles, transaction boundaries, and how to determine appropriate size, [Domain Events]({{< relref "/docs/ddd/concepts/architecture/event-driven" >}}) explores event-driven architecture and Event Sourcing, and [Domain Model Patterns]({{< relref "/docs/ddd/concepts/domain-model-patterns" >}}) covers auxiliary patterns like Specification, Policy, Module, Builder, and Null Object.
 
 #### Architecture
 

@@ -17,8 +17,8 @@ related_concepts:
 
 {{< callout type="info" title="선수 개념" >}}
 이 문서를 읽기 전에 다음 개념을 먼저 이해하세요:
-- [Query DSL](query-dsl/) - match, bool 쿼리 기본
-- [데이터 모델링](data-modeling/) - Analyzer 동작 원리
+- [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) - match, bool 쿼리 기본
+- [데이터 모델링]({{< relref "/docs/elasticsearch/concepts/data-modeling" >}}) - Analyzer 동작 원리
 {{< /callout >}}
 
 **소요 시간**: 약 25-30분
@@ -389,7 +389,7 @@ graph LR
 ### 1. 동의어 처리
 
 동의어 처리를 위해 커스텀 Analyzer를 설정합니다.
-→ [Analyzer 기본 개념](data-modeling/#분석기-analyzer-설정)
+→ [Analyzer 기본 개념]({{< relref "/docs/elasticsearch/concepts/data-modeling#분석기-analyzer-설정" >}})
 
 ```json
 PUT /products
@@ -539,6 +539,6 @@ function_score에서 `max_boost` 사용:
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 데이터 분석 | [집계](aggregations/) |
-| 실전 구현 | [상품 검색 시스템](../examples/product-search/) |
-| 성능 최적화 | [성능 튜닝](performance-tuning/) |
+| 데이터 분석 | [집계]({{< relref "/docs/elasticsearch/concepts/aggregations" >}}) |
+| 실전 구현 | [상품 검색 시스템]({{< relref "/docs/elasticsearch/examples/product-search" >}}) |
+| 성능 최적화 | [성능 튜닝]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) |

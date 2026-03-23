@@ -309,6 +309,6 @@ Job과 CronJob을 이해했다면 다음 단계로 진행하세요:
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 네트워크 정책 | [NetworkPolicy](network-policy/) |
-| 리소스 격리 | [Namespace](namespace/) |
-| 접근 권한 관리 | [RBAC](rbac/) |
+| 네트워크 정책 | [NetworkPolicy]({{< relref "/docs/kubernetes/concepts/network-policy" >}}) |
+| 리소스 격리 | [Namespace]({{< relref "/docs/kubernetes/concepts/namespace" >}}) |
+| 접근 권한 관리 | [RBAC]({{< relref "/docs/kubernetes/concepts/rbac" >}}) |

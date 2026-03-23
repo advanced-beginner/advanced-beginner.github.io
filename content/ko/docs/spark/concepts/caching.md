@@ -18,7 +18,7 @@ author:
 **대상 독자**: 반복 연산 최적화가 필요한 데이터 엔지니어
 
 **선수 지식**:
-- [Transformation과 Action](transformations-actions/) 지연 평가 이해
+- [Transformation과 Action]({{< relref "/docs/spark/concepts/transformations-actions" >}}) 지연 평가 이해
 - JVM 메모리 구조 기초
 
 **소요 시간**: 약 25-30분
@@ -459,13 +459,13 @@ Dataset<Row> filtered = df.filter(...);  // df가 캐시됨
 
 ## 다음 단계
 
-- [Structured Streaming](structured-streaming/) - 실시간 데이터 처리
-- [성능 튜닝](tuning/) - 전체 성능 최적화
+- [Structured Streaming]({{< relref "/docs/spark/concepts/structured-streaming" >}}) - 실시간 데이터 처리
+- [성능 튜닝]({{< relref "/docs/spark/concepts/tuning" >}}) - 전체 성능 최적화
 
 ## 관련 문서
 
-- [Transformation과 Action](transformations-actions/) - 지연 평가와 캐싱의 관계
-- [파티셔닝과 셔플](partitioning/) - 캐시 전 파티션 최적화
-- [RDD 기초](rdd/) - RDD 수준의 persist/cache
-- [MLlib](mllib/) - 머신러닝에서의 캐싱 활용
-- [용어 사전](../appendix/glossary/) - Persist, Storage Level 용어 정의
+- [Transformation과 Action]({{< relref "/docs/spark/concepts/transformations-actions" >}}) - 지연 평가와 캐싱의 관계
+- [파티셔닝과 셔플]({{< relref "/docs/spark/concepts/partitioning" >}}) - 캐시 전 파티션 최적화
+- [RDD 기초]({{< relref "/docs/spark/concepts/rdd" >}}) - RDD 수준의 persist/cache
+- [MLlib]({{< relref "/docs/spark/concepts/mllib" >}}) - 머신러닝에서의 캐싱 활용
+- [용어 사전]({{< relref "/docs/spark/appendix/glossary" >}}) - Persist, Storage Level 용어 정의

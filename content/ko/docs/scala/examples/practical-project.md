@@ -604,7 +604,7 @@ ValidatedNec는 NonEmptyChain에 오류를 수집합니다. mapN은 모든 검�
 
 실무 프로젝트 예제를 학습했다면 다음 주제들로 학습을 이어가세요.
 
-- [Spark 연동](spark-integration/) - 대규모 데이터 처리
-- [함수형 패턴](../concepts/functional-patterns/) - Cats, ZIO 활용
-- [동시성](../concepts/concurrency/) - Future, IO 심화
+- [Spark 연동]({{< relref "/docs/scala/examples/spark-integration" >}}) - 대규모 데이터 처리
+- [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) - Cats, ZIO 활용
+- [동시성]({{< relref "/docs/scala/concepts/concurrency" >}}) - Future, IO 심화
 

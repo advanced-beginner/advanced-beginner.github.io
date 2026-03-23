@@ -99,7 +99,7 @@ Scala를 처음 배우는 분께 추천하는 서적입니다.
 
 **Cats: 타입 클래스 실전 활용**
 
-[Type Classes](../concepts/type-classes/)에서 배운 패턴이 Cats에서 실제로 어떻게 사용되는지 살펴봅니다.
+[Type Classes]({{< relref "/docs/scala/concepts/type-classes" >}})에서 배운 패턴이 Cats에서 실제로 어떻게 사용되는지 살펴봅니다.
 
 ```scala
 // 이 가이드에서 배운 타입 클래스 패턴
@@ -127,11 +127,11 @@ List(Order(100, 2), Order(200, 3)).combineAll
 // Order(300, 5)
 ```
 
-**연결 개념:** [Type Classes](../concepts/type-classes/), [Implicits/Given](../concepts/implicits/)
+**연결 개념:** [Type Classes]({{< relref "/docs/scala/concepts/type-classes" >}}), [Implicits/Given]({{< relref "/docs/scala/concepts/implicits" >}})
 
 **ZIO: 함수형 효과 시스템**
 
-[Higher-Order Functions](../concepts/higher-order-functions/)과 [For Comprehensions](../concepts/for-comprehensions/)이 ZIO에서 빛을 발합니다.
+[Higher-Order Functions]({{< relref "/docs/scala/concepts/higher-order-functions" >}})과 [For Comprehensions]({{< relref "/docs/scala/concepts/for-comprehensions" >}})이 ZIO에서 빛을 발합니다.
 
 ```scala
 import zio.*
@@ -151,11 +151,11 @@ yield ()
 // Unsafe.unsafe { implicit u => Runtime.default.unsafe.run(program) }
 ```
 
-**연결 개념:** [For Comprehensions](../concepts/for-comprehensions/), [Functional Patterns](../concepts/functional-patterns/)
+**연결 개념:** [For Comprehensions]({{< relref "/docs/scala/concepts/for-comprehensions" >}}), [Functional Patterns]({{< relref "/docs/scala/concepts/functional-patterns" >}})
 
 **http4s: 함수형 HTTP**
 
-[Pattern Matching](../concepts/pattern-matching/)과 [Case Classes](../concepts/case-classes/)가 라우팅에 활용됩니다.
+[Pattern Matching]({{< relref "/docs/scala/concepts/pattern-matching" >}})과 [Case Classes]({{< relref "/docs/scala/concepts/case-classes" >}})가 라우팅에 활용됩니다.
 
 ```scala
 import org.http4s.*
@@ -174,11 +174,11 @@ val routes = HttpRoutes.of[IO] {
 }
 ```
 
-**연결 개념:** [Pattern Matching](../concepts/pattern-matching/), [Case Classes](../concepts/case-classes/)
+**연결 개념:** [Pattern Matching]({{< relref "/docs/scala/concepts/pattern-matching" >}}), [Case Classes]({{< relref "/docs/scala/concepts/case-classes" >}})
 
 **Circe: JSON 타입 클래스**
 
-[Type Classes](../concepts/type-classes/)와 [Generics](../concepts/generics/)가 JSON 변환에 사용됩니다.
+[Type Classes]({{< relref "/docs/scala/concepts/type-classes" >}})와 [Generics]({{< relref "/docs/scala/concepts/generics" >}})가 JSON 변환에 사용됩니다.
 
 ```scala
 import io.circe.*
@@ -196,7 +196,7 @@ user.asJson.noSpaces  // {"name":"Alice","age":30}
 // Right(User("Bob", 25))
 ```
 
-**연결 개념:** [Case Classes](../concepts/case-classes/), [Type Classes](../concepts/type-classes/)
+**연결 개념:** [Case Classes]({{< relref "/docs/scala/concepts/case-classes" >}}), [Type Classes]({{< relref "/docs/scala/concepts/type-classes" >}})
 
 **다음 학습 방향**
 

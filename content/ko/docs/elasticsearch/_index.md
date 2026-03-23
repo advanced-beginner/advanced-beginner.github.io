@@ -97,40 +97,40 @@ Elasticsearch만이 유일한 선택지는 아닙니다:
 
 ## 이 가이드에서 다루는 것
 
-### [Quick Start](quick-start/)
+### [Quick Start]({{< relref "/docs/elasticsearch/quick-start" >}})
 5분 만에 Elasticsearch에 데이터를 넣고 검색해봅니다. 개념보다 먼저 동작하는 것을 확인하세요.
 
-### [개념 이해](concepts/)
+### [개념 이해]({{< relref "/docs/elasticsearch/concepts" >}})
 단순히 "이렇게 쓰세요"가 아닌, **왜 이렇게 동작하는지** 원리를 설명합니다.
 
 | 주제 | 배우는 것 |
 |------|----------|
-| [핵심 구성요소](concepts/core-components/) | Cluster, Node, Index, Document, Shard의 역할과 관계 |
-| [데이터 모델링](concepts/data-modeling/) | Mapping, Field Type, Analyzer 설계 |
-| [Query DSL](concepts/query-dsl/) | Match, Term, Bool 등 검색 쿼리 작성법 |
-| [검색 관련성](concepts/search-relevance/) | Score, BM25, Boosting으로 검색 품질 높이기 |
-| [집계](concepts/aggregations/) | Bucket, Metric 집계로 데이터 분석하기 |
-| [인덱싱 전략](concepts/indexing/) | Bulk 인덱싱, Refresh, ILM 설정 |
-| [클러스터 관리](concepts/cluster-management/) | 노드 구성, 샤드 할당, 상태 모니터링 |
-| [성능 튜닝](concepts/performance-tuning/) | 쿼리 최적화, 캐싱, JVM 설정 |
-| [고가용성](concepts/high-availability/) | Replica, Snapshot, 장애 대응 |
+| [핵심 구성요소]({{< relref "/docs/elasticsearch/concepts/core-components" >}}) | Cluster, Node, Index, Document, Shard의 역할과 관계 |
+| [데이터 모델링]({{< relref "/docs/elasticsearch/concepts/data-modeling" >}}) | Mapping, Field Type, Analyzer 설계 |
+| [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) | Match, Term, Bool 등 검색 쿼리 작성법 |
+| [검색 관련성]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) | Score, BM25, Boosting으로 검색 품질 높이기 |
+| [집계]({{< relref "/docs/elasticsearch/concepts/aggregations" >}}) | Bucket, Metric 집계로 데이터 분석하기 |
+| [인덱싱 전략]({{< relref "/docs/elasticsearch/concepts/indexing" >}}) | Bulk 인덱싱, Refresh, ILM 설정 |
+| [클러스터 관리]({{< relref "/docs/elasticsearch/concepts/cluster-management" >}}) | 노드 구성, 샤드 할당, 상태 모니터링 |
+| [성능 튜닝]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) | 쿼리 최적화, 캐싱, JVM 설정 |
+| [고가용성]({{< relref "/docs/elasticsearch/concepts/high-availability" >}}) | Replica, Snapshot, 장애 대응 |
 
-### [실습 예제](examples/)
+### [실습 예제]({{< relref "/docs/elasticsearch/examples" >}})
 Spring Boot 기반의 실행 가능한 예제 코드입니다.
 
-- [환경 설정](examples/setup/) - Docker로 Elasticsearch + Kibana 구성
-- [기본 예제](examples/basic/) - Document CRUD와 기본 검색 구현
-- [상품 검색 시스템](examples/product-search/) - 한글 검색, 자동완성, 필터링 구현
+- [환경 설정]({{< relref "/docs/elasticsearch/examples/setup" >}}) - Docker로 Elasticsearch + Kibana 구성
+- [기본 예제]({{< relref "/docs/elasticsearch/examples/basic" >}}) - Document CRUD와 기본 검색 구현
+- [상품 검색 시스템]({{< relref "/docs/elasticsearch/examples/product-search" >}}) - 한글 검색, 자동완성, 필터링 구현
 
-### [How-To Guide](howto/)
+### [How-To Guide]({{< relref "/docs/elasticsearch/howto" >}})
 특정 문제를 해결하기 위한 단계별 가이드입니다:
-- [느린 쿼리 최적화](howto/slow-query-optimization/) - 검색 응답 시간이 느릴 때 대응
-- [메모리 문제 해결](howto/memory-troubleshooting/) - OOM, GC 문제 진단 및 해결
+- [느린 쿼리 최적화]({{< relref "/docs/elasticsearch/howto/slow-query-optimization" >}}) - 검색 응답 시간이 느릴 때 대응
+- [메모리 문제 해결]({{< relref "/docs/elasticsearch/howto/memory-troubleshooting" >}}) - OOM, GC 문제 진단 및 해결
 
-### [부록](appendix/)
-- [용어 사전](appendix/glossary/) - Elasticsearch 용어 빠른 참조
-- [FAQ](appendix/faq/) - 자주 묻는 질문
-- [참고 자료](appendix/references/) - 공식 문서 및 추가 학습 자료
+### [부록]({{< relref "/docs/elasticsearch/appendix" >}})
+- [용어 사전]({{< relref "/docs/elasticsearch/appendix/glossary" >}}) - Elasticsearch 용어 빠른 참조
+- [FAQ]({{< relref "/docs/elasticsearch/appendix/faq" >}}) - 자주 묻는 질문
+- [참고 자료]({{< relref "/docs/elasticsearch/appendix/references" >}}) - 공식 문서 및 추가 학습 자료
 
 ## 선수 지식
 

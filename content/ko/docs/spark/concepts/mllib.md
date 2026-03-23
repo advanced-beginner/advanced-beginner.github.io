@@ -18,7 +18,7 @@ author:
 **대상 독자**: 대규모 데이터에서 머신러닝을 수행하려는 ML 엔지니어
 
 **선수 지식**:
-- [DataFrame과 Dataset](dataframe-dataset/) API
+- [DataFrame과 Dataset]({{< relref "/docs/spark/concepts/dataframe-dataset" >}}) API
 - 머신러닝 기본 개념 (분류, 회귀, 클러스터링)
 - 특성 공학(Feature Engineering) 기초
 
@@ -588,5 +588,5 @@ public class ChurnPrediction {
 
 ## 다음 단계
 
-- [성능 튜닝](tuning/) - ML 워크로드 최적화
-- [배포](deployment/) - 모델 서빙과 배치 예측
+- [성능 튜닝]({{< relref "/docs/spark/concepts/tuning" >}}) - ML 워크로드 최적화
+- [배포]({{< relref "/docs/spark/concepts/deployment" >}}) - 모델 서빙과 배치 예측

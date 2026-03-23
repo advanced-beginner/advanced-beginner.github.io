@@ -12,7 +12,7 @@ weight: 4
 {{< callout type="info" title="이 가이드의 범위" >}}
 **다루는 내용**: _reindex API, Snapshot/Restore, Logstash 비교, 대용량 처리 전략, 성능 최적화
 
-**다루지 않는 내용**: 단순 매핑 변경은 [매핑 마이그레이션](../mapping-migration/)을, 클러스터 확장은 [클러스터 확장](../cluster-scaling/)을 참조하세요.
+**다루지 않는 내용**: 단순 매핑 변경은 [매핑 마이그레이션]({{< relref "/docs/elasticsearch/howto/mapping-migration" >}})을, 클러스터 확장은 [클러스터 확장]({{< relref "/docs/elasticsearch/howto/cluster-scaling" >}})을 참조하세요.
 {{< /callout >}}
 
 {{< callout type="tip" title="TL;DR" >}}
@@ -430,6 +430,6 @@ curl -X PUT "localhost:9200/products-v1/_settings" -H 'Content-Type: application
 
 ## 관련 문서
 
-- [매핑 마이그레이션](../mapping-migration/) - 매핑 변경 시 무중단 마이그레이션
-- [클러스터 확장](../cluster-scaling/) - 클러스터 수준 확장
-- [메모리 문제 해결](../memory-troubleshooting/) - 재구축 중 메모리 문제 대응
+- [매핑 마이그레이션]({{< relref "/docs/elasticsearch/howto/mapping-migration" >}}) - 매핑 변경 시 무중단 마이그레이션
+- [클러스터 확장]({{< relref "/docs/elasticsearch/howto/cluster-scaling" >}}) - 클러스터 수준 확장
+- [메모리 문제 해결]({{< relref "/docs/elasticsearch/howto/memory-troubleshooting" >}}) - 재구축 중 메모리 문제 대응

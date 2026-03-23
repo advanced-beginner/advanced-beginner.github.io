@@ -141,14 +141,14 @@ Golden Signals 외에 자주 사용되는 방법론입니다.
 
 ### 신호별 심화
 
-1. [Latency](latency/) - 지연시간 측정 전략 (P50, P95, P99)
-2. [Traffic](traffic/) - 트래픽/처리량 모니터링
-3. [Errors](errors/) - 에러율 정의와 분류
-4. [Saturation](saturation/) - 포화도(리소스 사용률)
+1. [Latency]({{< relref "/docs/observability/concepts/golden-signals/latency" >}}) - 지연시간 측정 전략 (P50, P95, P99)
+2. [Traffic]({{< relref "/docs/observability/concepts/golden-signals/traffic" >}}) - 트래픽/처리량 모니터링
+3. [Errors]({{< relref "/docs/observability/concepts/golden-signals/errors" >}}) - 에러율 정의와 분류
+4. [Saturation]({{< relref "/docs/observability/concepts/golden-signals/saturation" >}}) - 포화도(리소스 사용률)
 
 ### 서비스 유형별 적용
 
-5. [서비스 유형별 적용](by-service-type/) - 웹 API, Kafka, DB별 가이드
+5. [서비스 유형별 적용]({{< relref "/docs/observability/concepts/golden-signals/by-service-type" >}}) - 웹 API, Kafka, DB별 가이드
 
 ---
 
@@ -259,8 +259,8 @@ graph TD
 
 | 문서 | 내용 |
 |------|------|
-| [Latency](latency/) | P50/P95/P99 측정, SLA 설정 |
-| [Traffic](traffic/) | RPS, 처리량 모니터링 |
-| [Errors](errors/) | 에러 분류, 에러 버짓 |
-| [Saturation](saturation/) | 리소스 병목 감지 |
-| [서비스 유형별 적용](by-service-type/) | API, Kafka, DB 맞춤 지표 |
+| [Latency]({{< relref "/docs/observability/concepts/golden-signals/latency" >}}) | P50/P95/P99 측정, SLA 설정 |
+| [Traffic]({{< relref "/docs/observability/concepts/golden-signals/traffic" >}}) | RPS, 처리량 모니터링 |
+| [Errors]({{< relref "/docs/observability/concepts/golden-signals/errors" >}}) | 에러 분류, 에러 버짓 |
+| [Saturation]({{< relref "/docs/observability/concepts/golden-signals/saturation" >}}) | 리소스 병목 감지 |
+| [서비스 유형별 적용]({{< relref "/docs/observability/concepts/golden-signals/by-service-type" >}}) | API, Kafka, DB 맞춤 지표 |

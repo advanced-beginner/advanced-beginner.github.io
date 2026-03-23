@@ -360,8 +360,8 @@ Kafka 클러스터의 메타데이터를 관리하는 외부 서비스입니다.
 
 #### 다음 단계
 
-- [개념 이해](../concepts/) - Kafka 핵심 개념
-- [Quick Start](../quick-start/) - 빠른 시작 가이드
-- [마이크로서비스 예제](../examples/microservices/) - 멀티 서비스 이벤트 흐름
-- [참고 자료](references/) - 공식 문서, 블로그
-- [FAQ](faq/) - 자주 묻는 질문
+- [개념 이해]({{< relref "/docs/kafka/concepts" >}}) - Kafka 핵심 개념
+- [Quick Start]({{< relref "/docs/kafka/quick-start" >}}) - 빠른 시작 가이드
+- [마이크로서비스 예제]({{< relref "/docs/kafka/examples/microservices" >}}) - 멀티 서비스 이벤트 흐름
+- [참고 자료]({{< relref "/docs/kafka/appendix/references" >}}) - 공식 문서, 블로그
+- [FAQ]({{< relref "/docs/kafka/appendix/faq" >}}) - 자주 묻는 질문

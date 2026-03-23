@@ -366,5 +366,5 @@ System.out.println("실행 시간: " + duration + "ms");
 
 ## 다음 단계
 
-- [데이터 스큐 해결하기](data-skew/) - 파티션 불균형 해결
-- [성능 튜닝](../concepts/tuning/) - 전체 성능 최적화
+- [데이터 스큐 해결하기]({{< relref "/docs/spark/howto/data-skew" >}}) - 파티션 불균형 해결
+- [성능 튜닝]({{< relref "/docs/spark/concepts/tuning" >}}) - 전체 성능 최적화

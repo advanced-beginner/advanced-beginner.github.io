@@ -12,7 +12,7 @@ Elasticsearch 클러스터를 안전하게 확장하는 방법을 안내합니�
 {{< callout type="info" title="이 가이드의 범위" >}}
 **다루는 내용**: 데이터 노드 추가, 역할별 노드 분리, Hot-Warm-Cold 아키텍처, 확장 후 검증
 
-**다루지 않는 내용**: 쿼리 수준 성능 최적화는 [느린 쿼리 최적화](../slow-query-optimization/)를, 메모리 문제는 [메모리 문제 해결](../memory-troubleshooting/)을 참조하세요.
+**다루지 않는 내용**: 쿼리 수준 성능 최적화는 [느린 쿼리 최적화]({{< relref "/docs/elasticsearch/howto/slow-query-optimization" >}})를, 메모리 문제는 [메모리 문제 해결]({{< relref "/docs/elasticsearch/howto/memory-troubleshooting" >}})을 참조하세요.
 {{< /callout >}}
 
 {{< callout type="tip" title="TL;DR" >}}
@@ -473,6 +473,6 @@ curl -X GET "localhost:9200/_cat/master?v"
 
 ## 관련 문서
 
-- [매핑 마이그레이션](../mapping-migration/) - 무중단 매핑 변경
-- [인덱스 재구축](../index-rebuild/) - 대용량 인덱스 재구축
-- [메모리 문제 해결](../memory-troubleshooting/) - 확장 후 메모리 문제 대응
+- [매핑 마이그레이션]({{< relref "/docs/elasticsearch/howto/mapping-migration" >}}) - 무중단 매핑 변경
+- [인덱스 재구축]({{< relref "/docs/elasticsearch/howto/index-rebuild" >}}) - 대용량 인덱스 재구축
+- [메모리 문제 해결]({{< relref "/docs/elasticsearch/howto/memory-troubleshooting" >}}) - 확장 후 메모리 문제 대응

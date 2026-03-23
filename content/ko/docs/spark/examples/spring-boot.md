@@ -20,7 +20,7 @@ author:
 | 구분 | 내용 |
 |------|------|
 | **대상 독자** | Spring Boot 애플리케이션에 Spark를 통합하려는 백엔드 개발자 |
-| **선수 지식** | Spring Boot 기초, [환경 설정](setup/) 완료, Spark DataFrame API |
+| **선수 지식** | Spring Boot 기초, [환경 설정]({{< relref "/docs/spark/examples/setup" >}}) 완료, Spark DataFrame API |
 | **학습 목표** | Spring Boot에서 Spark를 활용한 데이터 분석 API를 구현할 수 있다 |
 | **예상 소요 시간** | 약 40분 |
 
@@ -735,6 +735,6 @@ val result = df
 
 ## 관련 문서
 
-- [환경 설정](setup/) - 기본 프로젝트 구성
-- [모니터링](monitoring/) - 운영 모니터링 설정
-- [성능 튜닝](../concepts/tuning/) - 최적화 전략
+- [환경 설정]({{< relref "/docs/spark/examples/setup" >}}) - 기본 프로젝트 구성
+- [모니터링]({{< relref "/docs/spark/examples/monitoring" >}}) - 운영 모니터링 설정
+- [성능 튜닝]({{< relref "/docs/spark/concepts/tuning" >}}) - 최적화 전략

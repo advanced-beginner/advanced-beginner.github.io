@@ -69,7 +69,7 @@ docker-compose up -d
 ```
 
 > **docker-compose.yml이 없다면?**
-> [환경 구성 가이드](../examples/setup/)에서 파일 내용을 확인하세요.
+> [환경 구성 가이드]({{< relref "/docs/elasticsearch/examples/setup" >}})에서 파일 내용을 확인하세요.
 
 정상 실행 확인:
 
@@ -347,6 +347,6 @@ Quick Start를 완료했다면, 다음 단계로 진행하세요:
 
 | 목표 | 추천 문서 |
 |------|----------|
-| Elasticsearch 구조 이해 | [핵심 구성요소](../concepts/core-components/) |
-| 스키마 설계 배우기 | [데이터 모델링](../concepts/data-modeling/) |
-| Spring Boot 연동 | [환경 설정](../examples/setup/) |
+| Elasticsearch 구조 이해 | [핵심 구성요소]({{< relref "/docs/elasticsearch/concepts/core-components" >}}) |
+| 스키마 설계 배우기 | [데이터 모델링]({{< relref "/docs/elasticsearch/concepts/data-modeling" >}}) |
+| Spring Boot 연동 | [환경 설정]({{< relref "/docs/elasticsearch/examples/setup" >}}) |

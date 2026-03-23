@@ -13,13 +13,13 @@ author_url: "http://github.com/kimbenji"
 
 # 어니언 아키텍처 (Onion Architecture)
 
-Jeffrey Palermo가 2008년에 제안한 아키텍처입니다. <strong>도메인 모델을 가장 중심</strong>에 두고, 양파처럼 겹겹이 감싸는 구조입니다.
+Jeffrey Palermo가 2008년에 제안한 아키텍처입니다. <strong>domain model을 가장 중심</strong>에 두고, 양파처럼 겹겹이 감싸는 구조입니다.
 
-어니언 아키텍처는 전통적인 계층형 아키텍처의 한계에서 출발합니다. 계층형 아키텍처에서는 상위 계층이 하위 계층에 의존하므로, 데이터베이스 계층의 변경이 서비스 계층에 연쇄적인 영향을 미칩니다. 반면 어니언 아키텍처에서는 <strong>도메인 모델이 어떤 것에도 의존하지 않고</strong>, 인프라스트럭처가 도메인에 의존하는 방향으로 설계합니다. 이를 통해 도메인 로직은 데이터베이스, 프레임워크, 외부 서비스의 변화와 무관하게 순수한 비즈니스 규칙만을 표현할 수 있습니다. DDD(Domain-Driven Design)와 특히 잘 어울리는 이유도 여기에 있습니다.
+어니언 아키텍처는 전통적인 계층형 아키텍처의 한계에서 출발합니다. 계층형 아키텍처에서는 상위 계층이 하위 계층에 의존하므로, 데이터베이스 계층의 변경이 서비스 계층에 연쇄적인 영향을 미칩니다. 반면 어니언 아키텍처에서는 <strong>domain model이 어떤 것에도 의존하지 않고</strong>, 인프라스트럭처가 도메인에 의존하는 방향으로 설계합니다. 이를 통해 도메인 로직은 데이터베이스, 프레임워크, 외부 서비스의 변화와 무관하게 순수한 비즈니스 규칙만을 표현할 수 있습니다. DDD(Domain-Driven Design)와 특히 잘 어울리는 이유도 여기에 있습니다.
 
 ## One-Line Summary
 
-> **도메인 모델이 왕이다. 나머지는 모두 도메인을 섬긴다.**
+> **domain model이 왕이다. 나머지는 모두 도메인을 섬긴다.**
 
 ```mermaid
 flowchart TB
@@ -50,12 +50,12 @@ flowchart TB
 
 | 양파 층 | 소프트웨어 층 | 특징 |
 |--------|-------------|------|
-| 바깥 껍질 (버리는 부분) | **Infrastructure** | 교체 가능, 기술적 세부사항 |
+| 바깥 껍질 (버리는 부분) | **Infrastructure** | 교체 가능, technical details |
 | 바깥쪽 | **Application Services** | 흐름 조율 |
 | 안쪽 | **Domain Services** | 도메인 로직 조합 |
 | 💎 **핵심** (가장 단단함) | **Domain Model** | 절대 바뀌지 않는 비즈니스 규칙 |
 
-<strong>핵심 아이디어:</strong> 도메인 모델은 가장 안쪽에서 <strong>아무것에도 의존하지 않습니다</strong>. 바깥 껍질(Infrastructure)은 언제든 벗겨내고 교체할 수 있지만, 핵심은 그대로 유지됩니다.
+<strong>핵심 아이디어:</strong> domain model은 가장 안쪽에서 <strong>아무것에도 의존하지 않습니다</strong>. 바깥 껍질(Infrastructure)은 언제든 벗겨내고 교체할 수 있지만, 핵심은 그대로 유지됩니다.
 {{< /callout >}}
 
 아래 다이어그램은 양파의 층 구조를 시각적으로 표현한 것입니다:
@@ -107,15 +107,15 @@ flowchart LR
 **어니언이 DDD에 더 적합한 이유:**
 - Domain Model과 Domain Service를 명확히 분리
 - Aggregate, Entity, Value Object 개념이 자연스럽게 들어감
-- Repository 인터페이스가 Domain에 위치
+- Repository interface가 Domain에 위치
 
 ---
 
 ## 4 Layers in Detail
 
-### 1. Domain Model (도메인 모델) - 💎 가장 안쪽
+### 1. Domain Model (domain model) - 💎 가장 안쪽
 
-<strong>핵심 비즈니스 개념과 규칙</strong>이 있는 곳입니다.
+<strong>core business 개념과 규칙</strong>이 있는 곳입니다.
 
 ```mermaid
 flowchart TB
@@ -123,7 +123,7 @@ flowchart TB
         E["Entity<br>(식별성 있는 객체)"]
         VO["Value Object<br>(값으로 비교)"]
         AGG["Aggregate<br>(일관성 경계)"]
-        DE["Domain Event<br>(도메인 이벤트)"]
+        DE["Domain Event<br>(domain event)"]
     end
 ```
 
@@ -151,7 +151,7 @@ public class Order {
         return order;
     }
 
-    // 비즈니스 로직
+    // business logic
     public void addLine(OrderLine line) {
         validateModifiable();
         this.orderLines.add(line);
@@ -253,10 +253,10 @@ public class Order {  // Order가 Aggregate Root
 
 {{< notice style="tip" >}}
 **Domain Model의 특징**
-- **순수한 Java 객체** - 어떤 프레임워크에도 의존 안 함
+- **pure Java object** - 어떤 프레임워크에도 의존 안 함
 - **풍부한 도메인 로직** - getter/setter만 있으면 안 됨
 - **자기 방어** - 잘못된 상태로 만들 수 없음
-- **테스트 용이** - 외부 의존성 없이 테스트 가능
+- **easy to test** - external dependencies 없이 테스트 가능
 {{< /notice >}}
 
 ---
@@ -318,7 +318,7 @@ public class InventoryDomainService {
 }
 ```
 
-**또한 Domain 레이어에는 Repository 인터페이스가 위치합니다:**
+**또한 Domain 레이어에는 Repository interface가 위치합니다:**
 
 ```java
 // Repository Interface (Domain 레이어에 정의)
@@ -348,14 +348,14 @@ public interface CustomerRepository {
 
 ### 3. Application Services (애플리케이션 서비스) - 🟢
 
-<strong>Use Case 흐름을 조율</strong>합니다. 트랜잭션 관리, 외부 시스템 호출 등을 담당합니다.
+<strong>Use Case orchestrate flow</strong>합니다. transaction management, 외부 시스템 호출 등을 담당합니다.
 
 ```java
 @Service
 @Transactional
 public class OrderApplicationService {
 
-    // Repository들 (Infrastructure 구현체가 주입됨)
+    // Repository들 (Infrastructure implementation가 주입됨)
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
 
@@ -400,7 +400,7 @@ public class OrderApplicationService {
         // 5. 저장 (Repository)
         Order savedOrder = orderRepository.save(order);
 
-        // 6. 이벤트 발행
+        // 6. event publishing
         eventPublisher.publish(new OrderCreatedEvent(savedOrder));
 
         // 7. DTO 반환
@@ -428,7 +428,7 @@ public class OrderApplicationService {
         // 5. 알림 발송 (외부 서비스)
         notificationService.sendConfirmation(order);
 
-        // 6. 이벤트 발행
+        // 6. event publishing
         eventPublisher.publish(new OrderConfirmedEvent(order));
     }
 }
@@ -439,7 +439,7 @@ public class OrderApplicationService {
 - **조율자 역할** - "무엇을" 할지 결정, "어떻게"는 Domain에 위임
 - **트랜잭션 경계** - @Transactional 적용
 - **외부 시스템 호출** - Payment, Notification 등
-- **이벤트 발행** - 도메인 이벤트 발행
+- **event publishing** - domain event 발행
 - **DTO 변환** - 외부에 반환할 데이터 형태 결정
 {{< /notice >}}
 
@@ -447,7 +447,7 @@ public class OrderApplicationService {
 
 ### 4. Infrastructure (인프라) - 🔵 가장 바깥
 
-<strong>기술적 세부사항</strong>이 있는 곳입니다. UI, 데이터베이스, 외부 API 연동 등.
+<strong>technical details</strong>이 있는 곳입니다. UI, 데이터베이스, 외부 API 연동 등.
 
 ```mermaid
 flowchart TB
@@ -647,7 +647,7 @@ flowchart TB
     REPO_IMPL -->|"implements"| RI
 ```
 
-**핵심 규칙:**
+**Core Rules:**
 1. **Infrastructure → Application → Domain** 방향으로만 의존
 2. **Domain은 아무것에도 의존하지 않음**
 3. **Repository Interface는 Domain에, 구현은 Infrastructure에**
@@ -714,7 +714,7 @@ public class Order {
     private OrderId id;
     private List<OrderLine> orderLines;
 
-    // 순수한 비즈니스 로직만
+    // 순수한 business logic만
 }
 
 // Infrastructure에 별도 JPA Entity
@@ -727,7 +727,7 @@ public class OrderEntity {
 }
 ```
 
-### 2. Application Service에 비즈니스 로직
+### 2. Application Service에 business logic
 
 ```java
 // ❌ 잘못된 예: Application Service에 비즈니스 규칙
@@ -746,7 +746,7 @@ public class OrderApplicationService {
     }
 }
 
-// ✅ 올바른 예: Domain Model에 비즈니스 로직
+// ✅ 올바른 예: Domain Model에 business logic
 public class Order {
     public void confirm() {
         validateCanConfirm();  // 규칙 검증
@@ -781,7 +781,7 @@ public class PricingDomainService {
     private final ExternalDiscountApi discountApi;  // 외부 API!
 
     public Money calculatePrice(Order order) {
-        Discount discount = discountApi.getDiscount(order.getCustomerId());  // 안 됨!
+        Discount discount = discountApi.getDiscount(order.getCustomerId());  // Not allowed!
         return order.getTotalAmount().applyDiscount(discount);
     }
 }
@@ -811,7 +811,7 @@ public class OrderApplicationService {
 
 ## Testing Strategy
 
-### 레이어별 테스트
+### Testing by layer
 
 ```mermaid
 flowchart TB
@@ -972,8 +972,8 @@ class JpaOrderRepositoryTest {
 
 | 장점 | 설명 |
 |-----|------|
-| **도메인 보호** | 비즈니스 로직이 기술적 세부사항에 오염되지 않음 |
-| **테스트 용이성** | Domain Layer를 외부 의존성 없이 단위 테스트 가능 |
+| **도메인 보호** | business logic이 technical details에 오염되지 않음 |
+| **easy to test성** | Domain Layer를 external dependencies 없이 단위 테스트 가능 |
 | **기술 독립성** | 데이터베이스, 프레임워크 교체가 도메인에 영향 없음 |
 | **DDD 친화성** | Aggregate, Entity, Value Object 등 DDD 개념과 자연스럽게 매핑 |
 | **명확한 경계** | 레이어 간 책임이 명확하여 팀 협업 용이 |
@@ -982,10 +982,10 @@ class JpaOrderRepositoryTest {
 
 | 단점 | 설명 |
 |-----|------|
-| **초기 복잡성** | 계층형보다 파일과 인터페이스가 많아짐 |
-| **학습 곡선** | DDD 개념과 의존성 방향을 이해해야 함 |
+| **초기 복잡성** | 계층형보다 파일과 interface가 많아짐 |
+| **학습 곡선** | DDD 개념과 dependency direction을 이해해야 함 |
 | **매핑 오버헤드** | Domain Entity ↔ JPA Entity 변환 코드 필요 |
-| **단순 CRUD에는 과도함** | 비즈니스 로직이 단순하면 오버엔지니어링 |
+| **단순 CRUD에는 과도함** | business logic이 단순하면 오버엔지니어링 |
 | **성능 비용** | 객체 변환이 많아 미세한 성능 저하 가능 |
 
 ### 현실적 고려사항

@@ -327,6 +327,6 @@ NetworkPolicy를 이해했다면 다음 단계로 진행하세요:
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 리소스 격리 | [Namespace](namespace/) |
-| 접근 권한 관리 | [RBAC](rbac/) |
-| 상태 유지 워크로드 | [StatefulSet](statefulset/) |
+| 리소스 격리 | [Namespace]({{< relref "/docs/kubernetes/concepts/namespace" >}}) |
+| 접근 권한 관리 | [RBAC]({{< relref "/docs/kubernetes/concepts/rbac" >}}) |
+| 상태 유지 워크로드 | [StatefulSet]({{< relref "/docs/kubernetes/concepts/statefulset" >}}) |

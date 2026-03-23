@@ -57,10 +57,10 @@ Scala는 Java와 100% 호환되면서도 더 안전하고 표현력 있는 코�
 
 이 가이드는 기초부터 고급까지 단계별로 Scala를 학습할 수 있도록 구성되어 있습니다.
 
-**[Quick Start](quick-start/)**
+**[Quick Start]({{< relref "/docs/scala/quick-start" >}})**
 5분 만에 Scala를 설치하고 첫 번째 프로그램을 실행합니다.
 
-**[개념 이해](concepts/)**
+**[개념 이해]({{< relref "/docs/scala/concepts" >}})**
 
 Scala의 핵심 개념을 기초, 중급, 고급으로 분류하여 단계별로 학습합니다.
 
@@ -68,55 +68,55 @@ Scala의 핵심 개념을 기초, 중급, 고급으로 분류하여 단계별로
 
 | 주제 | 배우는 것 |
 |------|----------|
-| [기본 문법](concepts/basics/) | 변수, 상수, 기본 타입, 타입 추론 |
-| [제어 구조](concepts/control-structures/) | if, for, while, match 표현식 |
-| [함수와 메서드](concepts/functions-methods/) | def, 람다, 기본값, 가변 인자 |
-| [클래스와 객체](concepts/classes-objects/) | class, object, trait, enum |
-| [케이스 클래스](concepts/case-classes/) | 불변 데이터 모델링 |
-| [패턴 매칭](concepts/pattern-matching/) | match 표현식의 강력한 활용 |
+| [기본 문법]({{< relref "/docs/scala/concepts/basics" >}}) | 변수, 상수, 기본 타입, 타입 추론 |
+| [제어 구조]({{< relref "/docs/scala/concepts/control-structures" >}}) | if, for, while, match 표현식 |
+| [함수와 메서드]({{< relref "/docs/scala/concepts/functions-methods" >}}) | def, 람다, 기본값, 가변 인자 |
+| [클래스와 객체]({{< relref "/docs/scala/concepts/classes-objects" >}}) | class, object, trait, enum |
+| [케이스 클래스]({{< relref "/docs/scala/concepts/case-classes" >}}) | 불변 데이터 모델링 |
+| [패턴 매칭]({{< relref "/docs/scala/concepts/pattern-matching" >}}) | match 표현식의 강력한 활용 |
 
 **중급:**
 
 | 주제 | 배우는 것 |
 |------|----------|
-| [컬렉션](concepts/collections/) | List, Set, Map, Seq, Vector |
-| [고차 함수](concepts/higher-order-functions/) | map, filter, fold, 커링 |
-| [제네릭](concepts/generics/) | 타입 매개변수, 타입 경계 |
-| [For Comprehension](concepts/for-comprehensions/) | 모나딕 연산의 우아한 표현 |
-| [Implicit/Given](concepts/implicits/) | 암시적 변환과 문맥적 추상화 |
+| [컬렉션]({{< relref "/docs/scala/concepts/collections" >}}) | List, Set, Map, Seq, Vector |
+| [고차 함수]({{< relref "/docs/scala/concepts/higher-order-functions" >}}) | map, filter, fold, 커링 |
+| [제네릭]({{< relref "/docs/scala/concepts/generics" >}}) | 타입 매개변수, 타입 경계 |
+| [For Comprehension]({{< relref "/docs/scala/concepts/for-comprehensions" >}}) | 모나딕 연산의 우아한 표현 |
+| [Implicit/Given]({{< relref "/docs/scala/concepts/implicits" >}}) | 암시적 변환과 문맥적 추상화 |
 
 **고급:**
 
 | 주제 | 배우는 것 |
 |------|----------|
-| [타입 클래스](concepts/type-classes/) | Ad-hoc 다형성 패턴 |
-| [공변성/반공변성](concepts/variance/) | 제네릭 타입의 변성 |
-| [고급 타입](concepts/type-system-advanced/) | Union, Intersection, Match Types |
-| [매크로](concepts/macros-metaprogramming/) | 컴파일 타임 메타프로그래밍 |
-| [동시성](concepts/concurrency/) | Future, Promise, ExecutionContext |
-| [함수형 패턴](concepts/functional-patterns/) | Functor, Monad, 참조 투명성 |
+| [타입 클래스]({{< relref "/docs/scala/concepts/type-classes" >}}) | Ad-hoc 다형성 패턴 |
+| [공변성/반공변성]({{< relref "/docs/scala/concepts/variance" >}}) | 제네릭 타입의 변성 |
+| [고급 타입]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) | Union, Intersection, Match Types |
+| [매크로]({{< relref "/docs/scala/concepts/macros-metaprogramming" >}}) | 컴파일 타임 메타프로그래밍 |
+| [동시성]({{< relref "/docs/scala/concepts/concurrency" >}}) | Future, Promise, ExecutionContext |
+| [함수형 패턴]({{< relref "/docs/scala/concepts/functional-patterns" >}}) | Functor, Monad, 참조 투명성 |
 
-**[실습 예제](examples/)**
+**[실습 예제]({{< relref "/docs/scala/examples" >}})**
 
 sbt 기반의 실행 가능한 예제 프로젝트입니다. 배운 개념을 실제 코드로 확인하세요.
 
-- [환경 설정](examples/setup/) - sbt, IDE 설정
-- [기본 예제](examples/basic/) - 핵심 개념 활용 예제
-- [Scala 2 vs 3 비교](examples/scala2-vs-scala3/) - 버전별 코드 비교
+- [환경 설정]({{< relref "/docs/scala/examples/setup" >}}) - sbt, IDE 설정
+- [기본 예제]({{< relref "/docs/scala/examples/basic" >}}) - 핵심 개념 활용 예제
+- [Scala 2 vs 3 비교]({{< relref "/docs/scala/examples/scala2-vs-scala3" >}}) - 버전별 코드 비교
 
-**[How-To Guide](howto/)**
+**[How-To Guide]({{< relref "/docs/scala/howto" >}})**
 
 특정 문제를 해결하기 위한 단계별 가이드입니다:
-- [Implicit/Given 디버깅](howto/implicit-debugging/) - 암시적 값을 찾지 못할 때 진단
-- [Future 에러 처리](howto/future-error-handling/) - 비동기 코드에서 예외 처리
+- [Implicit/Given 디버깅]({{< relref "/docs/scala/howto/implicit-debugging" >}}) - 암시적 값을 찾지 못할 때 진단
+- [Future 에러 처리]({{< relref "/docs/scala/howto/future-error-handling" >}}) - 비동기 코드에서 예외 처리
 
-**[부록](appendix/)**
+**[부록]({{< relref "/docs/scala/appendix" >}})**
 
 용어 사전, 버전 비교, FAQ 등 학습에 도움이 되는 참고 자료입니다.
-- [용어 사전](appendix/glossary/) - Scala 용어 빠른 참조
-- [버전 비교](appendix/version-comparison/) - Scala 2 vs 3 차이점 요약
-- [FAQ](appendix/faq/) - 자주 묻는 질문
-- [참고 자료](appendix/references/) - 공식 문서 및 추가 학습 자료
+- [용어 사전]({{< relref "/docs/scala/appendix/glossary" >}}) - Scala 용어 빠른 참조
+- [버전 비교]({{< relref "/docs/scala/appendix/version-comparison" >}}) - Scala 2 vs 3 차이점 요약
+- [FAQ]({{< relref "/docs/scala/appendix/faq" >}}) - 자주 묻는 질문
+- [참고 자료]({{< relref "/docs/scala/appendix/references" >}}) - 공식 문서 및 추가 학습 자료
 
 #### 바로 시작하기
 

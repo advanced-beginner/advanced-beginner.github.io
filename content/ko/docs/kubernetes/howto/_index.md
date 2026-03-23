@@ -34,19 +34,19 @@ flowchart TD
 
 | 증상 | 추천 가이드 |
 |------|------------|
-| Pod가 시작 안 됨, CrashLoopBackOff | [Pod 트러블슈팅](pod-troubleshooting/) |
-| 느린 응답, OOMKilled, CPU 스로틀링 | [리소스 최적화](resource-optimization/) |
-| Service/Ingress 연결 실패, DNS 오류 | [네트워크 트러블슈팅](network-troubleshooting/) |
-| 오류 원인 파악, 로그 분석 | [로그 수집 및 분석](logging-guide/) |
+| Pod가 시작 안 됨, CrashLoopBackOff | [Pod 트러블슈팅]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) |
+| 느린 응답, OOMKilled, CPU 스로틀링 | [리소스 최적화]({{< relref "/docs/kubernetes/howto/resource-optimization" >}}) |
+| Service/Ingress 연결 실패, DNS 오류 | [네트워크 트러블슈팅]({{< relref "/docs/kubernetes/howto/network-troubleshooting" >}}) |
+| 오류 원인 파악, 로그 분석 | [로그 수집 및 분석]({{< relref "/docs/kubernetes/howto/logging-guide" >}}) |
 
 ## 가이드 목록
 
 | 가이드 | 상황 | 예상 시간 |
 |--------|------|----------|
-| [Pod 트러블슈팅](pod-troubleshooting/) | Pod가 시작되지 않거나 비정상 종료될 때 | 30분 |
-| [리소스 최적화](resource-optimization/) | 적절한 CPU/메모리 설정을 찾고 싶을 때 | 45분 |
-| [네트워크 트러블슈팅](network-troubleshooting/) | Service나 Ingress가 연결되지 않을 때 | 30분 |
-| [로그 수집 및 분석](logging-guide/) | 효과적으로 로그를 수집하고 분석할 때 | 25분 |
+| [Pod 트러블슈팅]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) | Pod가 시작되지 않거나 비정상 종료될 때 | 30분 |
+| [리소스 최적화]({{< relref "/docs/kubernetes/howto/resource-optimization" >}}) | 적절한 CPU/메모리 설정을 찾고 싶을 때 | 45분 |
+| [네트워크 트러블슈팅]({{< relref "/docs/kubernetes/howto/network-troubleshooting" >}}) | Service나 Ingress가 연결되지 않을 때 | 30분 |
+| [로그 수집 및 분석]({{< relref "/docs/kubernetes/howto/logging-guide" >}}) | 효과적으로 로그를 수집하고 분석할 때 | 25분 |
 
 ## How-To Guide 사용법
 

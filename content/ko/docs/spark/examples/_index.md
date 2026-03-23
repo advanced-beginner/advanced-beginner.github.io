@@ -13,7 +13,7 @@ Spark를 실제로 사용해보는 예제 코드입니다. 각 예제는 독립�
 
 ## 예제 목록
 
-**[환경 설정](setup/)**
+**[환경 설정]({{< relref "/docs/spark/examples/setup" >}})**
 
 Java/Spring Boot와 Spark를 통합하는 프로젝트 환경을 구성합니다.
 
@@ -22,7 +22,7 @@ Java/Spring Boot와 Spark를 통합하는 프로젝트 환경을 구성합니다
 - Spring Boot와 Spark 통합 시 주의사항
 - 로깅 충돌 해결
 
-**[기본 예제](basic/)**
+**[기본 예제]({{< relref "/docs/spark/examples/basic" >}})**
 
 Spark의 핵심 기능을 활용하는 기본 예제들입니다.
 
@@ -33,7 +33,7 @@ Spark의 핵심 기능을 활용하는 기본 예제들입니다.
 - SQL 쿼리
 - **실제 공개 데이터셋 예제** (NYC Taxi, Kaggle)
 
-**[모니터링 설정](monitoring/)**
+**[모니터링 설정]({{< relref "/docs/spark/examples/monitoring" >}})**
 
 프로덕션 환경에서 Spark 애플리케이션을 안정적으로 운영하기 위한 모니터링 설정입니다.
 
@@ -43,7 +43,7 @@ Spark의 핵심 기능을 활용하는 기본 예제들입니다.
 - 구조화된 로깅 (Log4j2, JSON)
 - 알림 설정
 
-**[Spring Boot 통합](spring-boot/)**
+**[Spring Boot 통합]({{< relref "/docs/spark/examples/spring-boot" >}})**
 
 Java/Spring 개발자를 위한 Spark와 Spring Boot 통합 패턴입니다.
 
@@ -53,7 +53,7 @@ Java/Spring 개발자를 위한 Spark와 Spring Boot 통합 패턴입니다.
 - 통합 테스트 작성
 - Java vs Scala 비교
 
-**[ETL 파이프라인](etl-pipeline/)**
+**[ETL 파이프라인]({{< relref "/docs/spark/examples/etl-pipeline" >}})**
 
 프로덕션 환경에서 사용 가능한 완전한 ETL 파이프라인 예제입니다.
 
@@ -63,7 +63,7 @@ Java/Spring 개발자를 위한 Spark와 Spring Boot 통합 패턴입니다.
 - 에러 처리 및 재시도 로직
 - Spring 스케줄링 통합
 
-**[Delta Lake 통합](delta-lake/)**
+**[Delta Lake 통합]({{< relref "/docs/spark/examples/delta-lake" >}})**
 
 ACID 트랜잭션과 시간 여행 기능을 갖춘 데이터 레이크를 구축합니다.
 
@@ -127,6 +127,6 @@ configurations.all {
 
 예제를 완료했다면:
 
-- [성능 튜닝](../concepts/tuning/) - 코드 최적화 전략
-- [배포](../concepts/deployment/) - 프로덕션 배포
-- [부록](../appendix/) - 용어 사전, FAQ
+- [성능 튜닝]({{< relref "/docs/spark/concepts/tuning" >}}) - 코드 최적화 전략
+- [배포]({{< relref "/docs/spark/concepts/deployment" >}}) - 프로덕션 배포
+- [부록]({{< relref "/docs/spark/appendix" >}}) - 용어 사전, FAQ

@@ -386,6 +386,6 @@ curl -X GET "localhost:9200/_cat/indices?v"
 
 ## 관련 문서
 
-- [Query DSL](../concepts/query-dsl/) - 쿼리 유형별 특징
-- [성능 튜닝](../concepts/performance-tuning/) - 클러스터 수준 튜닝
-- [메모리 문제 해결](memory-troubleshooting/) - OOM 발생 시 대응
+- [Query DSL]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) - 쿼리 유형별 특징
+- [성능 튜닝]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) - 클러스터 수준 튜닝
+- [메모리 문제 해결]({{< relref "/docs/elasticsearch/howto/memory-troubleshooting" >}}) - OOM 발생 시 대응

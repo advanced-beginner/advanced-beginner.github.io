@@ -16,18 +16,18 @@ bookCollapseSection: true
 
 | 가이드 | 설명 | 난이도 | 소요 시간 |
 |--------|------|--------|----------|
-| [느린 쿼리 최적화](./slow-query-optimization/) | 검색 응답 시간이 느릴 때 진단하고 개선하는 방법 | 중급 | 15-30분 |
-| [메모리 문제 해결](./memory-troubleshooting/) | OOM, GC 문제가 발생할 때 대응하는 방법 | 중급 | 20-40분 |
+| [느린 쿼리 최적화]({{< relref "/docs/elasticsearch/howto/slow-query-optimization" >}}) | 검색 응답 시간이 느릴 때 진단하고 개선하는 방법 | 중급 | 15-30분 |
+| [메모리 문제 해결]({{< relref "/docs/elasticsearch/howto/memory-troubleshooting" >}}) | OOM, GC 문제가 발생할 때 대응하는 방법 | 중급 | 20-40분 |
 
 ## 인덱스 관리
 
 | 가이드 | 설명 | 난이도 | 소요 시간 |
 |--------|------|--------|----------|
-| [매핑 마이그레이션](./mapping-migration/) | 다운타임 없이 인덱스 매핑을 변경하는 방법 | 중급 | 20-40분 |
-| [인덱스 재구축](./index-rebuild/) | 대용량 인덱스를 효율적으로 재구축하는 방법 | 중급 | 30-60분 |
+| [매핑 마이그레이션]({{< relref "/docs/elasticsearch/howto/mapping-migration" >}}) | 다운타임 없이 인덱스 매핑을 변경하는 방법 | 중급 | 20-40분 |
+| [인덱스 재구축]({{< relref "/docs/elasticsearch/howto/index-rebuild" >}}) | 대용량 인덱스를 효율적으로 재구축하는 방법 | 중급 | 30-60분 |
 
 ## 클러스터 운영
 
 | 가이드 | 설명 | 난이도 | 소요 시간 |
 |--------|------|--------|----------|
-| [클러스터 확장](./cluster-scaling/) | Elasticsearch 클러스터를 안전하게 확장하는 방법 | 고급 | 30-60분 |
+| [클러스터 확장]({{< relref "/docs/elasticsearch/howto/cluster-scaling" >}}) | Elasticsearch 클러스터를 안전하게 확장하는 방법 | 고급 | 30-60분 |

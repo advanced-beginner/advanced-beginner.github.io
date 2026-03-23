@@ -451,6 +451,6 @@ Deployment를 이해했다면 다음 단계로 진행하세요:
 
 | 목표 | 추천 문서 |
 |------|----------|
-| Pod에 접근하기 | [Service](service/) |
-| 자동 스케일링 | [스케일링](scaling/) |
-| 헬스 체크 설정 | [헬스 체크](health-checks/) |
+| Pod에 접근하기 | [Service]({{< relref "/docs/kubernetes/concepts/service" >}}) |
+| 자동 스케일링 | [스케일링]({{< relref "/docs/kubernetes/concepts/scaling" >}}) |
+| 헬스 체크 설정 | [헬스 체크]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) |

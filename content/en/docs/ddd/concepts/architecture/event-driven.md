@@ -17,25 +17,25 @@ author_url: "http://github.com/kimbenji"
 # 이벤트 기반 아키텍처 (Event-Driven Architecture)
 
 {{< callout type="tip" title="비유: 회사 공지 시스템" >}}
-도메인 이벤트를 <strong>회사 공지 시스템</strong>에 비유할 수 있습니다:
+domain event를 <strong>회사 공지 시스템</strong>에 비유할 수 있습니다:
 
-- **이벤트 발행**: 인사팀에서 "신입 사원 입사" 공지를 보냅니다. 인사팀은 누가 이 공지를 볼지 모르고, 알 필요도 없습니다.
+- **event publishing**: 인사팀에서 "신입 사원 입사" 공지를 보냅니다. 인사팀은 누가 이 공지를 볼지 모르고, 알 필요도 없습니다.
 - **이벤트 구독**: IT팀은 공지를 보고 계정을 생성하고, 총무팀은 명함을 주문하며, 교육팀은 신입 교육 일정을 잡습니다. 각 부서가 독립적으로 행동합니다.
-- **느슨한 결합**: 인사팀이 IT팀의 존재를 모르더라도 시스템은 작동합니다. 나중에 "환영 선물 담당 팀"이 추가되어도 인사팀은 수정할 필요가 없습니다.
+- **loose coupling**: 인사팀이 IT팀의 존재를 모르더라도 시스템은 작동합니다. 나중에 "환영 선물 담당 팀"이 추가되어도 인사팀은 수정할 필요가 없습니다.
 
 **핵심**: 발행자는 "무슨 일이 일어났다"만 알리고, 구독자들이 각자 필요한 일을 합니다.
 {{< /callout >}}
 
 {{< callout type="info" title="TL;DR" >}}
-* 도메인 이벤트는 “비즈니스적으로 의미 있는 변화가 이미 발생했음”을 시스템 전체에 안전하게 전파하기 위한 설계 도구다.
+* domain event는 “비즈니스적으로 의미 있는 변화가 이미 발생했음”을 시스템 전체에 안전하게 전파하기 위한 설계 도구다.
 * 이를 통해 핵심 도메인 로직과 부가 관심사를 분리하고, 시스템을 점진적으로 이벤트 기반 구조로 확장할 수 있다.
 {{< /callout >}}
 
-도메인에서 발생한 중요한 사건을 이벤트로 표현하고 활용하는 방법을 살펴봅니다. 도메인 이벤트는 비즈니스 프로세스에서 일어나는 의미 있는 변화를 포착하여 시스템 내에서 전파하고, 이를 통해 느슨하게 결합된 컴포넌트 간 통신을 가능하게 합니다. 이는 마이크로서비스 아키텍처나 이벤트 기반 시스템을 구축할 때 핵심적인 개념입니다.
+도메인에서 발생한 중요한 사건을 이벤트로 표현하고 활용하는 방법을 살펴봅니다. domain event는 비즈니스 프로세스에서 일어나는 의미 있는 변화를 포착하여 시스템 내에서 전파하고, 이를 통해 느슨하게 결합된 컴포넌트 간 통신을 가능하게 합니다. 이는 마이크로서비스 아키텍처나 이벤트 기반 시스템을 구축할 때 핵심적인 개념입니다.
 
 #### What Are Domain Events?
 
-도메인 이벤트는 도메인 전문가가 관심을 가지는 비즈니스적으로 의미 있는 사건입니다. 예를 들어 "주문이 확정되었다", "결제가 완료되었다", "상품이 배송되었다"와 같은 실제 비즈니스에서 중요하게 여기는 순간들을 코드로 표현한 것입니다. 이런 이벤트들은 단순히 기술적인 상태 변경이 아니라, 비즈니스 관점에서 의미 있는 일이 발생했음을 나타냅니다.
+domain event는 도메인 전문가가 관심을 가지는 비즈니스적으로 의미 있는 사건입니다. 예를 들어 "주문이 확정되었다", "결제가 완료되었다", "상품이 배송되었다"와 같은 실제 비즈니스에서 중요하게 여기는 순간들을 코드로 표현한 것입니다. 이런 이벤트들은 단순히 기술적인 상태 변경이 아니라, 비즈니스 관점에서 의미 있는 일이 발생했음을 나타냅니다.
 
 ```mermaid
 flowchart LR
@@ -56,11 +56,11 @@ flowchart LR
     EVT --> H3
 ```
 
-위 다이어그램은 하나의 도메인 이벤트가 여러 핸들러에 의해 처리되는 과정을 보여줍니다. 주문이 확정되면 재고 차감, 알림 발송, 포인트 적립 등의 후속 작업이 자동으로 트리거됩니다.
+위 다이어그램은 하나의 domain event가 여러 핸들러에 의해 처리되는 과정을 보여줍니다. 주문이 확정되면 재고 차감, 알림 발송, 포인트 적립 등의 후속 작업이 자동으로 트리거됩니다.
 
-**도메인 이벤트의 주요 특징**
+**domain event의 주요 특징**
 
-도메인 이벤트는 몇 가지 중요한 특징을 가지고 있습니다. 첫째, 이벤트 이름은 항상 과거형으로 명명됩니다. 이미 일어난 사실을 표현하기 때문에 "OrderConfirmed"처럼 과거형을 사용하며, "ConfirmOrder"처럼 명령형을 사용하지 않습니다. 둘째, 이벤트는 불변입니다. 일단 발행된 이벤트는 절대 변경할 수 없으며, 이벤트의 모든 데이터는 읽기 전용입니다. 셋째, 이벤트는 자기 완결적입니다. 이벤트를 처리하는 데 필요한 모든 정보를 포함하고 있어야 하며, orderId, 발생 시점, 관련 데이터 등을 담고 있습니다.
+domain event는 몇 가지 중요한 특징을 가지고 있습니다. 첫째, 이벤트 이름은 항상 과거형으로 명명됩니다. 이미 일어난 사실을 표현하기 때문에 "OrderConfirmed"처럼 과거형을 사용하며, "ConfirmOrder"처럼 명령형을 사용하지 않습니다. 둘째, 이벤트는 불변입니다. 일단 발행된 이벤트는 절대 변경할 수 없으며, 이벤트의 모든 데이터는 읽기 전용입니다. 셋째, 이벤트는 자기 완결적입니다. 이벤트를 처리하는 데 필요한 모든 정보를 포함하고 있어야 하며, orderId, 발생 시점, 관련 데이터 등을 담고 있습니다.
 
 | 특성 | 설명 | 예시 |
 |------|------|------|
@@ -72,11 +72,11 @@ flowchart LR
 
 #### Event Design
 
-도메인 이벤트를 설계할 때는 일관된 구조를 유지하는 것이 중요합니다. 모든 이벤트가 공통으로 가져야 하는 속성들을 베이스 클래스로 정의하면 관리와 추적이 쉬워집니다.
+domain event를 설계할 때는 일관된 구조를 유지하는 것이 중요합니다. 모든 이벤트가 공통으로 가져야 하는 속성들을 베이스 클래스로 정의하면 관리와 추적이 쉬워집니다.
 
 **기본 구조 정의하기**
 
-모든 도메인 이벤트의 기반이 되는 추상 클래스를 정의합니다. 이 클래스는 이벤트 고유 ID와 발생 시각을 자동으로 생성하여 각 이벤트를 추적할 수 있게 합니다. 이벤트 ID는 중복 처리 방지에 사용되고, 발생 시각은 이벤트 순서 파악과 디버깅에 활용됩니다.
+모든 domain event의 기반이 되는 추상 클래스를 정의합니다. 이 클래스는 이벤트 고유 ID와 발생 시각을 자동으로 생성하여 각 이벤트를 추적할 수 있게 합니다. 이벤트 ID는 중복 처리 방지에 사용되고, 발생 시각은 이벤트 순서 파악과 디버깅에 활용됩니다.
 
 ```java
 public abstract class DomainEvent {
@@ -100,7 +100,7 @@ public abstract class DomainEvent {
 
 **구체적인 이벤트 구현하기**
 
-구체적인 비즈니스 이벤트를 정의할 때는 해당 이벤트를 처리하는 데 필요한 모든 정보를 포함해야 합니다. 예를 들어 주문 확정 이벤트는 주문 ID뿐만 아니라 고객 ID, 총액, 주문 항목 정보까지 포함합니다. 이렇게 하면 이벤트 핸들러가 데이터베이스를 추가로 조회하지 않고도 필요한 작업을 수행할 수 있습니다.
+구체적인 비즈니스 이벤트를 정의할 때는 해당 이벤트를 처리하는 데 필요한 모든 정보를 포함해야 합니다. 예를 들어 주문 확정 이벤트는 주문 ID뿐만 아니라 고객 ID, 총액, 주문 항목 정보까지 포함합니다. 이렇게 하면 event handler가 데이터베이스를 추가로 조회하지 않고도 필요한 작업을 수행할 수 있습니다.
 
 주의할 점은 도메인 엔티티 자체를 이벤트에 담지 않는다는 것입니다. 대신 이벤트 전용 스냅샷 객체를 만들어 필요한 데이터만 선별적으로 담습니다. 이렇게 하면 이벤트가 가볍고 명확해지며, 나중에 엔티티 구조가 바뀌어도 이벤트에는 영향을 주지 않습니다.
 
@@ -142,7 +142,7 @@ public class OrderConfirmedEvent extends DomainEvent {
 }
 ```
 
-**이벤트 발행 시점 결정하기**
+**event publishing 시점 결정하기**
 
 이벤트는 적절한 시점에 발행되어야 합니다. 일반적으로 세 가지 상황에서 이벤트를 발행합니다. 첫째, 중요한 상태 변경이 완료되었을 때입니다. 예를 들어 주문 상태가 "대기중"에서 "확정됨"으로 바뀌었을 때 OrderConfirmed 이벤트를 발행합니다. 둘째, 비즈니스 규칙이 충족되었을 때입니다. 특정 조건이 만족되어 의미 있는 일이 발생했다면 이벤트로 표현합니다. 셋째, 다른 시스템이나 바운디드 컨텍스트에 알려야 할 때입니다. 외부에서 이 변화를 알아야 한다면 이벤트를 발행하여 통지합니다.
 
@@ -184,7 +184,7 @@ public class Order extends AggregateRoot {
 
 #### Event Publishing Implementation
 
-도메인 이벤트를 실제로 발행하는 방법은 여러 가지가 있습니다. 각 방법은 장단점이 있으며, 프로젝트의 요구사항에 맞게 선택해야 합니다.
+domain event를 실제로 발행하는 방법은 여러 가지가 있습니다. 각 방법은 장단점이 있으며, 프로젝트의 요구사항에 맞게 선택해야 합니다.
 
 **방법 1: Spring ApplicationEvent 활용**
 
@@ -220,7 +220,7 @@ public class JpaOrderRepository implements OrderRepository {
         OrderEntity entity = mapper.toEntity(order);
         jpaRepository.save(entity);
 
-        // 저장 성공 후 이벤트 발행
+        // 저장 성공 후 event publishing
         order.getDomainEvents().forEach(eventPublisher::publishEvent);
         order.clearDomainEvents();
 
@@ -231,7 +231,7 @@ public class JpaOrderRepository implements OrderRepository {
 
 **방법 2: Spring Data의 @DomainEvents 활용**
 
-Spring Data JPA는 `AbstractAggregateRoot`라는 편리한 기반 클래스를 제공합니다. 이 클래스를 상속받으면 이벤트 등록과 발행이 자동으로 처리됩니다. Repository의 `save()` 메서드가 호출될 때 등록된 이벤트들이 자동으로 발행되므로, 별도의 이벤트 발행 코드를 작성할 필요가 없습니다.
+Spring Data JPA는 `AbstractAggregateRoot`라는 편리한 기반 클래스를 제공합니다. 이 클래스를 상속받으면 이벤트 등록과 발행이 자동으로 처리됩니다. Repository의 `save()` 메서드가 호출될 때 등록된 이벤트들이 자동으로 발행되므로, 별도의 event publishing 코드를 작성할 필요가 없습니다.
 
 ```java
 @Entity
@@ -245,7 +245,7 @@ public class OrderEntity extends AbstractAggregateRoot<OrderEntity> {
     }
 }
 
-// Repository save() 호출 시 자동으로 이벤트 발행됨
+// Repository save() 호출 시 자동으로 event publishing됨
 ```
 
 **방법 3: Transactional Outbox Pattern**
@@ -320,11 +320,11 @@ public void publishOutboxEvents() {
 
 #### Event Processing
 
-이벤트를 발행했다면 이제 이를 처리할 핸들러가 필요합니다. 이벤트 처리는 동기 방식과 비동기 방식으로 나뉘며, 각각 다른 사용 사례에 적합합니다.
+이벤트를 발행했다면 이제 이를 처리할 핸들러가 필요합니다. event processing는 동기 방식과 비동기 방식으로 나뉘며, 각각 다른 사용 사례에 적합합니다.
 
 **동기 처리로 필수 작업 보장하기**
 
-동기 처리는 이벤트 발행과 같은 트랜잭션 내에서 핸들러를 실행합니다. Spring의 `@TransactionalEventListener`를 사용하면 트랜잭션의 특정 단계에서 이벤트를 처리할 수 있습니다. `BEFORE_COMMIT` 단계에서 실행되는 핸들러는 주문 확정과 함께 반드시 성공해야 하는 작업에 사용됩니다. 만약 핸들러에서 예외가 발생하면 전체 트랜잭션이 롤백됩니다.
+동기 처리는 event publishing과 같은 트랜잭션 내에서 핸들러를 실행합니다. Spring의 `@TransactionalEventListener`를 사용하면 트랜잭션의 특정 단계에서 이벤트를 처리할 수 있습니다. `BEFORE_COMMIT` 단계에서 실행되는 핸들러는 주문 확정과 함께 반드시 성공해야 하는 작업에 사용됩니다. 만약 핸들러에서 예외가 발생하면 전체 트랜잭션이 롤백됩니다.
 
 ```java
 @Component
@@ -351,15 +351,15 @@ Spring은 여러 TransactionPhase를 제공하며, 각각은 다른 목적으로
 | **AFTER_COMMIT** | 커밋 완료 후 | 롤백 불가 | 알림, 외부 연동 |
 | **AFTER_ROLLBACK** | 롤백 후 | - | 보상 트랜잭션 |
 
-**비동기 처리로 시스템 분리하기**
+**asynchronous processing로 시스템 분리하기**
 
-비동기 처리는 이벤트 핸들러를 별도의 스레드나 트랜잭션에서 실행합니다. `@Async` 어노테이션을 함께 사용하면 핸들러가 비동기로 실행되어 메인 트랜잭션을 블로킹하지 않습니다. 알림 발송 같은 작업은 시간이 오래 걸릴 수 있고 실패해도 주문에 영향을 주지 않아야 하므로, 비동기 처리가 적합합니다.
+asynchronous processing는 event handler를 별도의 스레드나 트랜잭션에서 실행합니다. `@Async` 어노테이션을 함께 사용하면 핸들러가 비동기로 실행되어 메인 트랜잭션을 블로킹하지 않습니다. 알림 발송 같은 작업은 시간이 오래 걸릴 수 있고 실패해도 주문에 영향을 주지 않아야 하므로, asynchronous processing가 적합합니다.
 
 ```java
 @Component
 public class NotificationEventHandler {
 
-    // 트랜잭션 커밋 후 비동기 처리
+    // 트랜잭션 커밋 후 asynchronous processing
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleOrderConfirmed(OrderConfirmedEvent event) {
@@ -374,10 +374,10 @@ public class NotificationEventHandler {
 
 **Kafka로 마이크로서비스 간 이벤트 전달하기**
 
-마이크로서비스 아키텍처에서는 Kafka 같은 메시지 브로커를 통해 이벤트를 전달합니다. 주문 서비스에서 발행한 이벤트를 재고 서비스, 알림 서비스 등이 구독하여 처리합니다. Kafka를 사용하면 서비스 간 느슨한 결합을 유지하면서도 신뢰성 있게 이벤트를 전달할 수 있습니다. Key를 주문 ID로 설정하면 같은 주문에 대한 이벤트들의 순서가 보장됩니다.
+마이크로서비스 아키텍처에서는 Kafka 같은 메시지 브로커를 통해 이벤트를 전달합니다. 주문 서비스에서 발행한 이벤트를 재고 서비스, 알림 서비스 등이 구독하여 처리합니다. Kafka를 사용하면 서비스 간 loose coupling을 유지하면서도 신뢰성 있게 이벤트를 전달할 수 있습니다. Key를 주문 ID로 설정하면 같은 주문에 대한 이벤트들의 순서가 보장됩니다.
 
 ```java
-// 이벤트 발행
+// event publishing
 @Component
 public class OrderEventPublisher {
     private final KafkaTemplate<String, OrderEvent> kafkaTemplate;
@@ -392,7 +392,7 @@ public class OrderEventPublisher {
     }
 }
 
-// 이벤트 소비
+// event consumption
 @Component
 public class InventoryEventConsumer {
 
@@ -410,11 +410,11 @@ public class InventoryEventConsumer {
 
 #### Event Design 가이드
 
-좋은 이벤트를 설계하려면 적절한 정보량을 유지하는 것이 중요합니다. 너무 적으면 이벤트 소비자가 추가 조회를 해야 하고, 너무 많으면 이벤트가 무거워지고 불필요한 결합이 생깁니다.
+좋은 이벤트를 설계하려면 적절한 정보량을 유지하는 것이 중요합니다. 너무 적으면 event consumption자가 추가 조회를 해야 하고, 너무 많으면 이벤트가 무거워지고 불필요한 결합이 생깁니다.
 
 **적절한 정보량 결정하기**
 
-이벤트에 ID만 담으면 소비자가 데이터베이스에서 상세 정보를 조회해야 합니다. 이는 데이터베이스 부하를 증가시키고 소비자를 주문 데이터베이스에 결합시킵니다. 반대로 전체 Aggregate를 담으면 이벤트가 너무 무겁고, Aggregate의 내부 구조가 외부에 노출됩니다. 적절한 방법은 이벤트 처리에 필요한 핵심 정보만 선별적으로 담는 것입니다. 주문 확정 이벤트라면 주문 ID, 고객 ID, 총액, 주문 항목 스냅샷 정도면 충분합니다.
+이벤트에 ID만 담으면 소비자가 데이터베이스에서 상세 정보를 조회해야 합니다. 이는 데이터베이스 부하를 증가시키고 소비자를 주문 데이터베이스에 결합시킵니다. 반대로 전체 Aggregate를 담으면 이벤트가 너무 무겁고, Aggregate의 내부 구조가 외부에 노출됩니다. 적절한 방법은 event processing에 필요한 핵심 정보만 선별적으로 담는 것입니다. 주문 확정 이벤트라면 주문 ID, 고객 ID, 총액, 주문 항목 스냅샷 정도면 충분합니다.
 
 ```java
 // ❌ 너무 적은 정보
@@ -460,7 +460,7 @@ public class OrderConfirmedEventV2 extends DomainEvent {
 
 #### Event Pattern Comparison
 
-도메인 이벤트를 사용하는 세 가지 주요 패턴이 있으며, 각각 다른 목적을 가집니다. 이 패턴들을 이해하면 상황에 맞는 적절한 방식을 선택할 수 있습니다.
+domain event를 사용하는 세 가지 주요 패턴이 있으며, 각각 다른 목적을 가집니다. 이 패턴들을 이해하면 상황에 맞는 적절한 방식을 선택할 수 있습니다.
 
 **Event Notification vs Event-Carried State Transfer vs Event Sourcing**
 
@@ -659,7 +659,7 @@ CQRS는 복잡도를 증가시키므로 모든 프로젝트에 필요한 것은 
 
 #### Practical Tips
 
-도메인 이벤트를 실전에서 사용할 때 알아두면 유용한 몇 가지 팁을 소개합니다.
+domain event를 실전에서 사용할 때 알아두면 유용한 몇 가지 팁을 소개합니다.
 
 **1. 이벤트 명명 규칙**
 
@@ -682,7 +682,7 @@ public class PaymentEventHandler {
             return;
         }
 
-        // 비즈니스 로직 처리
+        // business logic 처리
         paymentService.requestPayment(event);
 
         // 처리 완료 기록
@@ -693,7 +693,7 @@ public class PaymentEventHandler {
 
 **3. 실패 처리 전략**
 
-이벤트 처리가 실패할 수 있으므로 재시도 전략을 구현해야 합니다. Spring Kafka의 `@RetryableTopic`을 사용하면 자동으로 재시도하고, 최종 실패 시 Dead Letter Topic으로 이동시킬 수 있습니다.
+event processing가 실패할 수 있으므로 재시도 전략을 구현해야 합니다. Spring Kafka의 `@RetryableTopic`을 사용하면 자동으로 재시도하고, 최종 실패 시 Dead Letter Topic으로 이동시킬 수 있습니다.
 
 ```java
 @Component
@@ -719,7 +719,7 @@ public class StockEventHandler {
 
 #### Pitfalls of Event-Driven Architecture
 
-도메인 이벤트는 강력하지만, 잘못 사용하면 디버깅이 어려운 시스템이 됩니다. 흔히 빠지는 함정들을 알아두면 미리 예방할 수 있습니다.
+domain event는 강력하지만, 잘못 사용하면 디버깅이 어려운 시스템이 됩니다. 흔히 빠지는 함정들을 알아두면 미리 예방할 수 있습니다.
 
 **함정 1: 이벤트 유실**
 
@@ -771,7 +771,7 @@ public void publishEvents() {
 
 비동기 이벤트는 발행 순서와 처리 순서가 다를 수 있습니다. OrderCreated → OrderPaid → OrderShipped 순서로 발행했는데, OrderCreated → OrderShipped → OrderPaid 순서로 처리될 수 있습니다. 그러면 "결제도 안 됐는데 배송됐다"는 이상한 상태가 됩니다.
 
-해결 방법은 두 가지입니다. 첫째, 이벤트 핸들러에서 상태를 검증합니다. PAID 상태가 아니면 배송 처리를 보류하고 재시도하거나 DLT로 보냅니다. 둘째, 이벤트에 버전이나 시퀀스 번호를 포함하여 낮은 시퀀스의 이벤트는 무시합니다.
+해결 방법은 두 가지입니다. 첫째, event handler에서 상태를 검증합니다. PAID 상태가 아니면 배송 처리를 보류하고 재시도하거나 DLT로 보냅니다. 둘째, 이벤트에 버전이나 시퀀스 번호를 포함하여 낮은 시퀀스의 이벤트는 무시합니다.
 
 ```java
 // 방법 1: 상태 검증 후 처리
@@ -856,7 +856,7 @@ public abstract class DomainEvent {
 로그를 작성할 때는 항상 이 정보들을 포함합니다. 그러면 로그에서 correlationId로 검색하여 하나의 요청이 발생시킨 모든 이벤트 흐름을 추적할 수 있습니다.
 
 ```java
-log.info("이벤트 처리 시작: eventId={}, correlationId={}, type={}",
+log.info("event processing 시작: eventId={}, correlationId={}, type={}",
     event.getEventId(),
     event.getCorrelationId(),
     event.getClass().getSimpleName());
@@ -961,31 +961,31 @@ public void handle(ConsumerRecord<String, JsonNode> record) {
 
 #### When Should You Use Event-Driven Architecture?
 
-**적합한 경우**
+**Suitable Cases**
 
 - ✅ 마이크로서비스 간 통신이 필요한 경우
-- ✅ 느슨한 결합이 중요한 경우
-- ✅ 비동기 처리가 적합한 워크플로우
+- ✅ loose coupling이 중요한 경우
+- ✅ asynchronous processing가 적합한 워크플로우
 - ✅ 감사 추적이 필요한 시스템
 - ✅ 확장성이 중요한 대규모 시스템
 
-**부적합한 경우**
+**Unsuitable Cases**
 
 - ❌ 동기적 응답이 필수인 경우
 - ❌ 디버깅 복잡도를 감당할 수 없는 팀
 - ❌ 트랜잭션 일관성이 절대적으로 필요한 경우
 - ❌ 소규모 모놀리식 시스템
 
-**Best Practice: 어떤 시스템에 어울리는가?**
+**Best Practice: Which Systems Fit?**
 
 | 시스템 유형 | 적합도 | 이유 |
 |------------|-------|------|
-| **마이크로서비스** | 매우 적합 | 서비스 간 느슨한 결합, 독립적 배포 |
+| **마이크로서비스** | 매우 적합 | 서비스 간 loose coupling, 독립적 배포 |
 | **이커머스** | 매우 적합 | 주문→결제→배송→알림 파이프라인 |
 | **알림 시스템** | 적합 | 비동기 발송, 재시도 가능 |
 | **실시간 데이터 파이프라인** | 적합 | 스트림 처리, 확장성 |
 | **감사/로깅 시스템** | 적합 | 모든 변경 이력 추적 |
-| **IoT 데이터 수집** | 적합 | 대량 이벤트 처리 |
+| **IoT 데이터 수집** | 적합 | 대량 event processing |
 | **결제 시스템** | 부분 적합 | 실패 처리 복잡, 보상 트랜잭션 필요 |
 | **실시간 게임** | 부적합 | 저지연 동기 응답 필요 |
 | **단순 CRUD** | 부적합 | 복잡도 대비 이점 없음 |
@@ -994,11 +994,11 @@ public void handle(ConsumerRecord<String, JsonNode> record) {
 
 #### Summary
 
-도메인 이벤트는 비즈니스적으로 의미 있는 사건을 코드로 표현한 것입니다. 이벤트 패턴으로는 Notification, State Transfer, Sourcing이 있으며 각각 다른 목적을 가집니다. Outbox 패턴을 사용하면 이벤트 유실을 방지할 수 있고, CQRS는 이벤트 소싱의 쿼리 성능 문제를 해결합니다. 스키마 진화 시에는 하위 호환성 유지가 필수입니다.
+domain event는 비즈니스적으로 의미 있는 사건을 코드로 표현한 것입니다. 이벤트 패턴으로는 Notification, State Transfer, Sourcing이 있으며 각각 다른 목적을 가집니다. Outbox 패턴을 사용하면 이벤트 유실을 방지할 수 있고, CQRS는 이벤트 소싱의 쿼리 성능 문제를 해결합니다. 스키마 진화 시에는 하위 호환성 유지가 필수입니다.
 
 | 개념 | 핵심 |
 |------|------|
-| **도메인 이벤트** | 비즈니스적으로 의미 있는 사건 |
+| **domain event** | 비즈니스적으로 의미 있는 사건 |
 | **이벤트 패턴** | Notification / State Transfer / Sourcing |
 | **Outbox 패턴** | 이벤트 유실 방지 |
 | **CQRS** | 이벤트 소싱의 쿼리 성능 해결 |

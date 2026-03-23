@@ -20,7 +20,7 @@ author:
 | 구분 | 내용 |
 |------|------|
 | **대상 독자** | Spark 애플리케이션을 운영하는 DevOps/데이터 엔지니어 |
-| **선수 지식** | Spark 기본 동작, [기본 예제](basic/) 완료, Prometheus/Grafana 경험 (선택) |
+| **선수 지식** | Spark 기본 동작, [기본 예제]({{< relref "/docs/spark/examples/basic" >}}) 완료, Prometheus/Grafana 경험 (선택) |
 | **학습 목표** | Spark 애플리케이션의 상태를 모니터링하고 문제를 진단할 수 있다 |
 | **예상 소요 시간** | 약 35분 |
 
@@ -541,6 +541,6 @@ public class WeeklyReportGenerator {
 
 ## 관련 문서
 
-- [성능 튜닝](../concepts/tuning/) - 모니터링 결과를 기반으로 최적화
-- [FAQ - 디버깅 가이드](../appendix/faq/#spark-ui-활용-디버깅-가이드) - 문제 해결
-- [아키텍처](../concepts/architecture/) - 메모리 모델 이해
+- [성능 튜닝]({{< relref "/docs/spark/concepts/tuning" >}}) - 모니터링 결과를 기반으로 최적화
+- [FAQ - 디버깅 가이드]({{< relref "/docs/spark/appendix/faq#spark-ui-활용-디버깅-가이드" >}}) - 문제 해결
+- [아키텍처]({{< relref "/docs/spark/concepts/architecture" >}}) - 메모리 모델 이해

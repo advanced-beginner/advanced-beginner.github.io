@@ -13,7 +13,7 @@ author:
 
 ## 가이드 목록
 
-**[OutOfMemoryError 해결하기](oom-troubleshooting/)**
+**[OutOfMemoryError 해결하기]({{< relref "/docs/spark/howto/oom-troubleshooting" >}})**
 
 Spark에서 가장 흔히 발생하는 메모리 부족 오류를 진단하고 해결합니다.
 
@@ -21,7 +21,7 @@ Spark에서 가장 흔히 발생하는 메모리 부족 오류를 진단하고 �
 - 메모리 설정 최적화
 - 파티션 크기 조정
 
-**[데이터 스큐 해결하기](data-skew/)**
+**[데이터 스큐 해결하기]({{< relref "/docs/spark/howto/data-skew" >}})**
 
 특정 파티션에 데이터가 집중되어 발생하는 성능 저하를 해결합니다.
 
@@ -29,7 +29,7 @@ Spark에서 가장 흔히 발생하는 메모리 부족 오류를 진단하고 �
 - Salting 기법
 - AQE 스큐 조인 활성화
 
-**[셔플 최적화하기](shuffle-optimization/)**
+**[셔플 최적화하기]({{< relref "/docs/spark/howto/shuffle-optimization" >}})**
 
 네트워크 I/O를 줄여 Spark 작업 성능을 개선합니다.
 
@@ -46,4 +46,4 @@ Spark에서 가장 흔히 발생하는 메모리 부족 오류를 진단하고 �
 3. **단계별 해결**: 명령어와 코드 포함
 4. **검증**: 문제가 해결되었는지 확인하는 방법
 
-문제 해결 중 막히는 부분이 있다면 [FAQ](../appendix/faq/)를 참고하세요.
+문제 해결 중 막히는 부분이 있다면 [FAQ]({{< relref "/docs/spark/appendix/faq" >}})를 참고하세요.

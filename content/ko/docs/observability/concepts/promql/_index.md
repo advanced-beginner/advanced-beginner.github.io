@@ -40,18 +40,18 @@ PromQL(Prometheus Query Language)은 Prometheus에서 시계열 데이터를 조
 
 ### 기초 (1시간)
 
-1. [기본 문법](syntax-basics/) - 셀렉터, 레이블 매칭, 시간 범위
-2. [집계 연산자](aggregation-operators/) - sum, avg, count, topk, by/without
+1. [기본 문법]({{< relref "/docs/observability/concepts/promql/syntax-basics" >}}) - 셀렉터, 레이블 매칭, 시간 범위
+2. [집계 연산자]({{< relref "/docs/observability/concepts/promql/aggregation-operators" >}}) - sum, avg, count, topk, by/without
 
 ### 실전 활용 (2시간)
 
-3. [rate와 increase](rate-and-increase/) - Counter 메트릭 처리의 핵심
-4. [histogram_quantile](histogram-quantile/) - P50/P95/P99 백분위 계산
+3. [rate와 increase]({{< relref "/docs/observability/concepts/promql/rate-and-increase" >}}) - Counter 메트릭 처리의 핵심
+4. [histogram_quantile]({{< relref "/docs/observability/concepts/promql/histogram-quantile" >}}) - P50/P95/P99 백분위 계산
 
 ### 고급 (1시간)
 
-5. [Recording Rules](recording-rules/) - 복잡한 쿼리 사전 계산
-6. [Alerting Rules](alerting-rules/) - 알림 규칙 작성법
+5. [Recording Rules]({{< relref "/docs/observability/concepts/promql/recording-rules" >}}) - 복잡한 쿼리 사전 계산
+6. [Alerting Rules]({{< relref "/docs/observability/concepts/promql/alerting-rules" >}}) - 알림 규칙 작성법
 
 ## 빠른 참조
 

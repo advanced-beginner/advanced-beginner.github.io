@@ -442,6 +442,6 @@ docker run -d \
 
 ## 관련 문서
 
-- [클러스터 관리](../concepts/cluster-management/) - 노드 구성 및 모니터링
-- [성능 튜닝](../concepts/performance-tuning/) - 전체적인 성능 최적화
-- [느린 쿼리 최적화](slow-query-optimization/) - 쿼리 수준 최적화
+- [클러스터 관리]({{< relref "/docs/elasticsearch/concepts/cluster-management" >}}) - 노드 구성 및 모니터링
+- [성능 튜닝]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) - 전체적인 성능 최적화
+- [느린 쿼리 최적화]({{< relref "/docs/elasticsearch/howto/slow-query-optimization" >}}) - 쿼리 수준 최적화

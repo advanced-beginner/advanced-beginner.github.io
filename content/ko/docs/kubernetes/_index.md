@@ -63,43 +63,43 @@ Kubernetes 도입은 팀의 규모, 서비스 복잡도, 운영 역량을 고려
 
 이 가이드는 백엔드 개발자가 Kubernetes를 실무에 적용할 수 있도록 단계별로 구성되어 있습니다.
 
-**[Quick Start](quick-start/)**
+**[Quick Start]({{< relref "/docs/kubernetes/quick-start" >}})**
 5분 만에 Kubernetes에 애플리케이션을 배포해봅니다. 개념보다 먼저 동작하는 환경을 확인하세요.
 
-**[개념 이해](concepts/)**
+**[개념 이해]({{< relref "/docs/kubernetes/concepts" >}})**
 
 Kubernetes의 핵심 원리를 **백엔드 개발자의 관점**에서 설명합니다.
 
 | 주제 | 배우는 것 |
 |------|----------|
-| [아키텍처](concepts/architecture/) | Control Plane, Worker Node의 구성요소와 역할 |
-| [Pod](concepts/pod/) | Kubernetes의 최소 배포 단위, 컨테이너 그룹화 |
-| [Deployment](concepts/deployment/) | 애플리케이션 배포와 업데이트 전략 |
-| [Service](concepts/service/) | Pod에 대한 네트워크 접근과 로드 밸런싱 |
-| [ConfigMap과 Secret](concepts/configmap-secret/) | 설정과 민감 정보의 분리 관리 |
-| [Volume과 스토리지](concepts/storage/) | 영구 데이터 저장과 PV/PVC |
-| [네트워킹](concepts/networking/) | 클러스터 내/외부 통신과 Ingress |
-| [리소스 관리](concepts/resources/) | CPU/메모리 요청과 제한 |
-| [스케일링](concepts/scaling/) | HPA, VPA를 통한 자동 스케일링 |
-| [헬스 체크](concepts/health-checks/) | Liveness, Readiness, Startup Probe |
+| [아키텍처]({{< relref "/docs/kubernetes/concepts/architecture" >}}) | Control Plane, Worker Node의 구성요소와 역할 |
+| [Pod]({{< relref "/docs/kubernetes/concepts/pod" >}}) | Kubernetes의 최소 배포 단위, 컨테이너 그룹화 |
+| [Deployment]({{< relref "/docs/kubernetes/concepts/deployment" >}}) | 애플리케이션 배포와 업데이트 전략 |
+| [Service]({{< relref "/docs/kubernetes/concepts/service" >}}) | Pod에 대한 네트워크 접근과 로드 밸런싱 |
+| [ConfigMap과 Secret]({{< relref "/docs/kubernetes/concepts/configmap-secret" >}}) | 설정과 민감 정보의 분리 관리 |
+| [Volume과 스토리지]({{< relref "/docs/kubernetes/concepts/storage" >}}) | 영구 데이터 저장과 PV/PVC |
+| [네트워킹]({{< relref "/docs/kubernetes/concepts/networking" >}}) | 클러스터 내/외부 통신과 Ingress |
+| [리소스 관리]({{< relref "/docs/kubernetes/concepts/resources" >}}) | CPU/메모리 요청과 제한 |
+| [스케일링]({{< relref "/docs/kubernetes/concepts/scaling" >}}) | HPA, VPA를 통한 자동 스케일링 |
+| [헬스 체크]({{< relref "/docs/kubernetes/concepts/health-checks" >}}) | Liveness, Readiness, Startup Probe |
 
-**[실습 예제](examples/)**
+**[실습 예제]({{< relref "/docs/kubernetes/examples" >}})**
 
 실행 가능한 예제로 실습합니다:
-- [환경 설정](examples/setup/) - 로컬 Kubernetes 환경 구성 (Minikube, Kind)
-- [기본 예제](examples/basic/) - Pod, Deployment, Service 실습
-- [Spring Boot 배포](examples/spring-boot/) - Spring Boot 애플리케이션 Kubernetes 배포
+- [환경 설정]({{< relref "/docs/kubernetes/examples/setup" >}}) - 로컬 Kubernetes 환경 구성 (Minikube, Kind)
+- [기본 예제]({{< relref "/docs/kubernetes/examples/basic" >}}) - Pod, Deployment, Service 실습
+- [Spring Boot 배포]({{< relref "/docs/kubernetes/examples/spring-boot" >}}) - Spring Boot 애플리케이션 Kubernetes 배포
 
-**[How-To Guide](howto/)**
+**[How-To Guide]({{< relref "/docs/kubernetes/howto" >}})**
 
 특정 문제를 해결하기 위한 단계별 가이드입니다:
-- [Pod 트러블슈팅](howto/pod-troubleshooting/) - Pod가 시작되지 않을 때 진단
-- [리소스 최적화](howto/resource-optimization/) - 적절한 리소스 설정 찾기
+- [Pod 트러블슈팅]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) - Pod가 시작되지 않을 때 진단
+- [리소스 최적화]({{< relref "/docs/kubernetes/howto/resource-optimization" >}}) - 적절한 리소스 설정 찾기
 
-**[부록](appendix/)**
-- [용어 사전](appendix/glossary/) - Kubernetes 용어 빠른 참조
-- [FAQ](appendix/faq/) - 자주 묻는 질문
-- [참고 자료](appendix/references/) - 공식 문서 및 추가 학습 자료
+**[부록]({{< relref "/docs/kubernetes/appendix" >}})**
+- [용어 사전]({{< relref "/docs/kubernetes/appendix/glossary" >}}) - Kubernetes 용어 빠른 참조
+- [FAQ]({{< relref "/docs/kubernetes/appendix/faq" >}}) - 자주 묻는 질문
+- [참고 자료]({{< relref "/docs/kubernetes/appendix/references" >}}) - 공식 문서 및 추가 학습 자료
 
 ## Docker vs Kubernetes
 

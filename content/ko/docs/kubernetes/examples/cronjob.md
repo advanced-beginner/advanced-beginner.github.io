@@ -411,6 +411,6 @@ CronJob 실습을 완료했다면 다음 단계로 진행하세요:
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 상태 관리 | [StatefulSet 실습](../examples/statefulset/) |
-| 접근 제어 | [RBAC 설정 실습](../examples/rbac/) |
-| 문제 해결 | [Pod 트러블슈팅](../howto/pod-troubleshooting/) |
+| 상태 관리 | [StatefulSet 실습]({{< relref "/docs/kubernetes/examples/statefulset" >}}) |
+| 접근 제어 | [RBAC 설정 실습]({{< relref "/docs/kubernetes/examples/rbac" >}}) |
+| 문제 해결 | [Pod 트러블슈팅]({{< relref "/docs/kubernetes/howto/pod-troubleshooting" >}}) |

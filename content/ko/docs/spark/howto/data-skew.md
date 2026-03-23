@@ -315,5 +315,5 @@ result.groupBy(spark_partition_id())
 
 ## 다음 단계
 
-- [셔플 최적화하기](shuffle-optimization/) - 셔플 I/O 최소화
-- [성능 튜닝](../concepts/tuning/) - 전체 성능 최적화
+- [셔플 최적화하기]({{< relref "/docs/spark/howto/shuffle-optimization" >}}) - 셔플 I/O 최소화
+- [성능 튜닝]({{< relref "/docs/spark/concepts/tuning" >}}) - 전체 성능 최적화

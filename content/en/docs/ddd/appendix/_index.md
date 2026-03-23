@@ -22,6 +22,7 @@ The appendix is not meant to be read in order, but rather as **reference materia
 | [Glossary]({{< relref "/docs/ddd/appendix/glossary" >}}) | 30+ DDD core terminology definitions | Quick reference when terms are confusing |
 | [FAQ]({{< relref "/docs/ddd/appendix/faq" >}}) | Common questions and answers from practice | When judgment is needed during adoption/implementation |
 | [References]({{< relref "/docs/ddd/appendix/references" >}}) | Recommended books, articles, presentations | When you want to learn more deeply |
+| [DDD Debate]({{< relref "/docs/ddd/appendix/ddd-debate" >}}) | Pro vs skeptic debate on DDD adoption | When weighing DDD trade-offs for your project |
 
 ## What This Section Does NOT Cover
 

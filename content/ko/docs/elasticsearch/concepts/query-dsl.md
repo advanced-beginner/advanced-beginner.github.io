@@ -14,7 +14,7 @@ lastmod: 2026-01-15
 {{< /callout >}}
 
 **대상 독자**: Elasticsearch 기본 개념을 이해한 개발자
-**선수 지식**: [핵심 구성요소](core-components/), JSON 기본 문법
+**선수 지식**: [핵심 구성요소]({{< relref "/docs/elasticsearch/concepts/core-components" >}}), JSON 기본 문법
 
 **소요 시간**: 약 25-30분
 
@@ -659,6 +659,6 @@ GET /products/_search
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 검색 품질 개선 | [검색 관련성](search-relevance/) |
-| 데이터 분석 | [집계](aggregations/) |
-| 실습 | [기본 예제](../examples/basic/) |
+| 검색 품질 개선 | [검색 관련성]({{< relref "/docs/elasticsearch/concepts/search-relevance" >}}) |
+| 데이터 분석 | [집계]({{< relref "/docs/elasticsearch/concepts/aggregations" >}}) |
+| 실습 | [기본 예제]({{< relref "/docs/elasticsearch/examples/basic" >}}) |

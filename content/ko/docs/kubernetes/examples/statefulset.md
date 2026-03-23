@@ -308,6 +308,6 @@ StatefulSet 실습을 완료했다면 다음 단계로 진행하세요:
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 접근 제어 | [RBAC 설정 실습](../examples/rbac/) |
-| 주기적 작업 | [CronJob 실습](../examples/cronjob/) |
-| 리소스 관리 | [리소스 관리](../concepts/resources/) |
+| 접근 제어 | [RBAC 설정 실습]({{< relref "/docs/kubernetes/examples/rbac" >}}) |
+| 주기적 작업 | [CronJob 실습]({{< relref "/docs/kubernetes/examples/cronjob" >}}) |
+| 리소스 관리 | [리소스 관리]({{< relref "/docs/kubernetes/concepts/resources" >}}) |

@@ -421,6 +421,6 @@ PUT /_cluster/settings
 
 | 목표 | 추천 문서 |
 |------|----------|
-| 검색 최적화 | [성능 튜닝](performance-tuning/) |
-| 장애 대응 | [고가용성](high-availability/) |
-| 실전 구현 | [상품 검색 시스템](../examples/product-search/) |
+| 검색 최적화 | [성능 튜닝]({{< relref "/docs/elasticsearch/concepts/performance-tuning" >}}) |
+| 장애 대응 | [고가용성]({{< relref "/docs/elasticsearch/concepts/high-availability" >}}) |
+| 실전 구현 | [상품 검색 시스템]({{< relref "/docs/elasticsearch/examples/product-search" >}}) |
