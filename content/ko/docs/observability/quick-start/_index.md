@@ -29,9 +29,6 @@ graph LR
     A["Step 1<br>환경 준비"] --> B["Step 2<br>스택 실행"]
     B --> C["Step 3<br>메트릭 확인"]
     C --> D["Step 4<br>대시보드 구성"]
-
-    style A fill:#e1f5fe
-    style D fill:#c8e6c9
 ```
 
 ---

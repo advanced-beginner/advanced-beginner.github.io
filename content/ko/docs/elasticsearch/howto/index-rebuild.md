@@ -79,12 +79,6 @@ flowchart TD
     C -->|변환 없음| G["_reindex API"]
     D -->|100GB 이하| H["_reindex API<br>+ Remote"]
     D -->|100GB 이상| I["Snapshot /<br>Restore"]
-
-    style E fill:#e8f5e9,stroke:#4caf50
-    style F fill:#fff3e0,stroke:#ff9800
-    style G fill:#e8f5e9,stroke:#4caf50
-    style H fill:#e8f5e9,stroke:#4caf50
-    style I fill:#e3f2fd,stroke:#2196f3
 ```
 
 ### 방법별 비교

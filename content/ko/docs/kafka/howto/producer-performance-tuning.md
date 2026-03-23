@@ -25,10 +25,6 @@ flowchart TB
     T[처리량<br>Throughput] <--> L[지연 시간<br>Latency]
     L <--> D[안정성<br>Durability]
     D <--> T
-
-    style T fill:#e1f5fe
-    style L fill:#fff3e0
-    style D fill:#e8f5e9
 ```
 
 | 요소 | 설명 | 최적화 방향 |

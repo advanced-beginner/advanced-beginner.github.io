@@ -91,7 +91,6 @@ flowchart TD
     C --> E["guava 31.0"]
     D -.- F["충돌!<br>어떤 버전을 사용할까?"]
     E -.- F
-    style F fill:#fff3cd,stroke:#ffc107
 ```
 
 ### 1.2 sbt의 기본 해결 전략

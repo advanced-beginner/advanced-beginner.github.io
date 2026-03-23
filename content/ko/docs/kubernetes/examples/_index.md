@@ -35,13 +35,6 @@ flowchart TD
     A -->|완료 후| B
     B -->|완료 후| C
     C -->|완료 후| D
-
-    style A fill:#90EE90
-    style B fill:#87CEEB
-    style C fill:#DDA0DD
-    style D fill:#FFD700
-    style E fill:#FFA07A
-    style F fill:#98FB98
 ```
 
 | 당신의 상황 | 추천 예제 | 배우는 것 |

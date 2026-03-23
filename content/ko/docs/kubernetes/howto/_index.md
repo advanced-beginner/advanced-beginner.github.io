@@ -30,11 +30,6 @@ flowchart TD
     B --> B1["사용량 측정<br>requests/limits 조정"]
     C --> C1["연결 흐름 진단<br>Service/DNS/Ingress"]
     D --> D1["kubectl logs 활용<br>패턴 분석"]
-
-    style A fill:#f9f,stroke:#333
-    style B fill:#bbf,stroke:#333
-    style C fill:#bfb,stroke:#333
-    style D fill:#fbf,stroke:#333
 ```
 
 | 증상 | 추천 가이드 |

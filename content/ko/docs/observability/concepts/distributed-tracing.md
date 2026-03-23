@@ -382,6 +382,10 @@ groups:
 
 ---
 
+## 관련 문서
+
+- [Elasticsearch Query DSL로 트레이스 검색]({{< relref "/docs/elasticsearch/concepts/query-dsl" >}}) - 트레이스 데이터를 Elasticsearch에 저장한 경우 Query DSL로 검색하는 방법
+
 ## 다음 단계
 
 | 추천 순서 | 문서 | 배우는 것 |
