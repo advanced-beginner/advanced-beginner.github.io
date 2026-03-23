@@ -25,14 +25,22 @@ flowchart TD
     Q2 -->|조금 있다| Q3{실제 앱을<br>배포하고 싶다}
 
     Q3 -->|예| C[Spring Boot 배포]
-    Q3 -->|아니오| B
+    Q3 -->|아니오| Q4{상태 관리 /<br>운영이 필요하다}
+
+    Q4 -->|상태 관리| D[StatefulSet 실습]
+    Q4 -->|접근 제어| E[RBAC 설정]
+    Q4 -->|스케줄링| F[CronJob 실습]
 
     A -->|완료 후| B
     B -->|완료 후| C
+    C -->|완료 후| D
 
     style A fill:#90EE90
     style B fill:#87CEEB
     style C fill:#DDA0DD
+    style D fill:#FFD700
+    style E fill:#FFA07A
+    style F fill:#98FB98
 ```
 
 | 당신의 상황 | 추천 예제 | 배우는 것 |
@@ -40,6 +48,9 @@ flowchart TD
 | Kubernetes가 처음이다 | [환경 설정](setup/) → [기본 예제](basic/) | 클러스터 구축, Pod/Service 기초 |
 | 개념은 알지만 실습이 부족하다 | [기본 예제](basic/) | Pod, Deployment, Service 직접 실행 |
 | 실제 앱을 배포하고 싶다 | [Spring Boot 배포](spring-boot/) | ConfigMap, Secret, Probe 적용 |
+| 상태를 유지하는 앱이 필요하다 | [StatefulSet 실습](statefulset/) | PVC 템플릿, Headless Service |
+| 접근 권한을 관리하고 싶다 | [RBAC 설정 실습](rbac/) | Role, ServiceAccount, RoleBinding |
+| 주기적 작업을 자동화하고 싶다 | [CronJob 실습](cronjob/) | 스케줄링, 동시 실행 정책 |
 
 #### 예제 목록
 
@@ -48,6 +59,9 @@ flowchart TD
 | [환경 설정](setup/) | ⭐ 입문 | 30분 | Minikube, Kind 등 로컬 환경 구성 |
 | [기본 예제](basic/) | ⭐⭐ 기초 | 60분 | Pod, Deployment, Service 실습 |
 | [Spring Boot 배포](spring-boot/) | ⭐⭐⭐ 중급 | 90분 | 실제 애플리케이션 배포 |
+| [StatefulSet 실습](statefulset/) | ⭐⭐⭐ 중급 | 60분 | MySQL StatefulSet, PVC, Headless Service |
+| [RBAC 설정 실습](rbac/) | ⭐⭐⭐ 중급 | 45분 | Role, ServiceAccount, 네임스페이스별 접근 제어 |
+| [CronJob 실습](cronjob/) | ⭐⭐⭐ 중급 | 45분 | 주기적 백업, 동시 실행 정책, 알림 설정 |
 
 #### 예제 실행 전 준비사항
 
