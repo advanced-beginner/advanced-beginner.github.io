@@ -390,4 +390,4 @@ com.example
 
 ## 다음 단계
 
-- [주문 도메인](order-domain/) - Aggregate, Entity, Value Object 구현
+- [주문 도메인]({{< relref "/docs/ddd/examples/order-domain" >}}) - Aggregate, Entity, Value Object 구현

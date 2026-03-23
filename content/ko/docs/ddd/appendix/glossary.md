@@ -9,7 +9,7 @@ author_url: "http://github.com/kimbenji"
 
 # DDD 용어 사전
 
-Domain-Driven Design의 핵심 용어를 정리합니다. 상세 설명은 [개념 이해](../concepts/) 섹션을 참고하세요.
+Domain-Driven Design의 핵심 용어를 정리합니다. 상세 설명은 [개념 이해]({{< relref "/docs/ddd/concepts" >}}) 섹션을 참고하세요.
 
 > **TL;DR**
 >
@@ -19,7 +19,7 @@ Domain-Driven Design의 핵심 용어를 정리합니다. 상세 설명은 [개�
 
 ## 전략적 설계 (Strategic Design)
 
-> 📖 자세한 내용: [전략적 설계](../concepts/strategic-design/)
+> 📖 자세한 내용: [전략적 설계]({{< relref "/docs/ddd/concepts/strategic-design" >}})
 
 ### Bounded Context (경계된 컨텍스트)
 
@@ -35,7 +35,7 @@ Domain-Driven Design의 핵심 용어를 정리합니다. 상세 설명은 [개�
 - 판매 Context의 "Product" = 가격, 프로모션
 - 재고 Context의 "Product" = 수량, 창고 위치
 
-📖 [전략적 설계 상세](../concepts/strategic-design/#bounded-context)
+📖 [전략적 설계 상세]({{< relref "/docs/ddd/concepts/strategic-design#bounded-context" >}})
 
 ---
 
@@ -54,7 +54,7 @@ Domain-Driven Design의 핵심 용어를 정리합니다. 상세 설명은 [개�
 | **Open Host Service** | 표준 API 공개 | 다수 소비자 |
 | **Published Language** | 표준 데이터 형식 사용 | [Domain Event](#domain-event-도메인-이벤트) 통합 |
 
-📖 [전략적 설계 상세](../concepts/strategic-design/#context-mapping)
+📖 [전략적 설계 상세]({{< relref "/docs/ddd/concepts/strategic-design#context-mapping" >}})
 
 ---
 
@@ -74,7 +74,7 @@ Domain-Driven Design의 핵심 용어를 정리합니다. 상세 설명은 [개�
 테스트: @Test void 주문_확정_시_상태가_CONFIRMED로_변경된다()
 ```
 
-📖 [전략적 설계 상세](../concepts/strategic-design/#ubiquitous-language)
+📖 [전략적 설계 상세]({{< relref "/docs/ddd/concepts/strategic-design#ubiquitous-language" >}})
 
 ---
 
@@ -88,7 +88,7 @@ Domain-Driven Design의 핵심 용어를 정리합니다. 상세 설명은 [개�
 - 외부에 위임하면 안 됨
 - [Aggregate](#aggregate-집합체)로 모델링하여 복잡성 관리
 
-📖 [전략적 설계 상세](../concepts/strategic-design/#domain-types)
+📖 [전략적 설계 상세]({{< relref "/docs/ddd/concepts/strategic-design#domain-types" >}})
 
 ---
 
@@ -122,7 +122,7 @@ Domain-Driven Design의 핵심 용어를 정리합니다. 상세 설명은 [개�
 
 ## 전술적 설계 (Tactical Design)
 
-> 📖 자세한 내용: [전술적 설계](../concepts/tactical-design/)
+> 📖 자세한 내용: [전술적 설계]({{< relref "/docs/ddd/concepts/tactical-design" >}})
 
 ### Entity (엔티티)
 
@@ -145,7 +145,7 @@ public boolean equals(Object o) {
 }
 ```
 
-📖 [전술적 설계 상세](../concepts/tactical-design/#entity) | [주문 도메인 예제](../examples/order-domain/)
+📖 [전술적 설계 상세]({{< relref "/docs/ddd/concepts/tactical-design#entity" >}}) | [주문 도메인 예제]({{< relref "/docs/ddd/examples/order-domain" >}})
 
 ---
 
@@ -169,7 +169,7 @@ public record Money(BigDecimal amount, Currency currency) {
 }
 ```
 
-📖 [전술적 설계 상세](../concepts/tactical-design/#value-object) | [주문 도메인 예제](../examples/order-domain/#value-object)
+📖 [전술적 설계 상세]({{< relref "/docs/ddd/concepts/tactical-design#value-object" >}}) | [주문 도메인 예제]({{< relref "/docs/ddd/examples/order-domain#value-object" >}})
 
 ---
 
@@ -189,7 +189,7 @@ public record Money(BigDecimal amount, Currency currency) {
 
 **관련 용어:** [Entity](#entity-엔티티), [Value Object](#value-object-값-객체), [Repository](#repository-리포지토리)
 
-📖 [Aggregate 상세](../concepts/aggregate/) | [Aggregate 패턴](../concepts/aggregate-patterns/)
+📖 [Aggregate 상세]({{< relref "/docs/ddd/concepts/aggregate" >}}) | [Aggregate 패턴]({{< relref "/docs/ddd/concepts/aggregate-patterns" >}})
 
 ---
 
@@ -215,7 +215,7 @@ public class Order extends AggregateRoot<OrderId> {
 }
 ```
 
-📖 [Aggregate 상세](../concepts/aggregate/#aggregate-root) | [주문 도메인 예제](../examples/order-domain/)
+📖 [Aggregate 상세]({{< relref "/docs/ddd/concepts/aggregate#aggregate-root" >}}) | [주문 도메인 예제]({{< relref "/docs/ddd/examples/order-domain" >}})
 
 ---
 
@@ -240,7 +240,7 @@ public interface OrderRepository {
 public class JpaOrderRepository implements OrderRepository { }
 ```
 
-📖 [전술적 설계 상세](../concepts/tactical-design/#repository)
+📖 [전술적 설계 상세]({{< relref "/docs/ddd/concepts/tactical-design#repository" >}})
 
 ---
 
@@ -264,7 +264,7 @@ public class DiscountCalculator {
 }
 ```
 
-📖 [전술적 설계 상세](../concepts/tactical-design/#domain-service)
+📖 [전술적 설계 상세]({{< relref "/docs/ddd/concepts/tactical-design#domain-service" >}})
 
 ---
 
@@ -290,7 +290,7 @@ public class OrderConfirmedEvent extends DomainEvent {
 }
 ```
 
-📖 [도메인 이벤트 상세](../concepts/domain-events/) | [Event Sourcing 실습](../examples/event-sourcing/)
+📖 [도메인 이벤트 상세]({{< relref "/docs/ddd/concepts/architecture/event-driven" >}}) | [Event Sourcing 실습]({{< relref "/docs/ddd/examples/event-sourcing" >}})
 
 ---
 
@@ -303,7 +303,7 @@ public class OrderConfirmedEvent extends DomainEvent {
 - 다른 서비스 조회가 필요할 때
 - 여러 생성 방식이 있을 때
 
-📖 [전술적 설계 상세](../concepts/tactical-design/#factory)
+📖 [전술적 설계 상세]({{< relref "/docs/ddd/concepts/tactical-design#factory" >}})
 
 ---
 
@@ -331,7 +331,7 @@ public class Order {
 }
 ```
 
-📖 [Aggregate 상세](../../concepts/aggregate/#invariant)
+📖 [Aggregate 상세]({{< relref "/docs/ddd/concepts/aggregate#invariant" >}})
 
 ---
 
@@ -353,7 +353,7 @@ public class OrderEntity {
 }
 ```
 
-📖 [Aggregate 실전 패턴](../../concepts/aggregate-patterns/#optimistic-locking)
+📖 [Aggregate 실전 패턴]({{< relref "/docs/ddd/concepts/aggregate-patterns#optimistic-locking" >}})
 
 ---
 
@@ -381,7 +381,7 @@ public class Order {
 }
 ```
 
-📖 [Aggregate 실전 패턴](../../concepts/aggregate-patterns/#reconstitute)
+📖 [Aggregate 실전 패턴]({{< relref "/docs/ddd/concepts/aggregate-patterns#reconstitute" >}})
 
 ---
 
@@ -407,7 +407,7 @@ public class OrderService {
 }
 ```
 
-📖 [애플리케이션 계층 실습](../examples/application-layer/)
+📖 [애플리케이션 계층 실습]({{< relref "/docs/ddd/examples/application-layer" >}})
 
 > **전술적 설계 핵심 포인트**
 >
@@ -422,7 +422,7 @@ public class OrderService {
 
 ## 아키텍처 패턴
 
-> 📖 자세한 내용: [아키텍처 개요](../concepts/architecture/)
+> 📖 자세한 내용: [아키텍처 개요]({{< relref "/docs/ddd/concepts/architecture" >}})
 
 ### Layered Architecture (계층형 아키텍처)
 
@@ -442,7 +442,7 @@ public class OrderService {
 
 **관련 용어:** [Application Service](#application-service-애플리케이션-서비스), [Repository](#repository-리포지토리)
 
-📖 [계층형 아키텍처 상세](../concepts/layered-architecture/)
+📖 [계층형 아키텍처 상세]({{< relref "/docs/ddd/concepts/architecture/layered-architecture" >}})
 
 ---
 
@@ -470,7 +470,7 @@ public class OrderService {
 
 **관련 패턴:** [Layered Architecture](#layered-architecture-계층형-아키텍처), Clean Architecture, Onion Architecture
 
-📖 [헥사고날 아키텍처 상세](../concepts/hexagonal-architecture/) | [Clean Architecture](../concepts/clean-architecture/)
+📖 [헥사고날 아키텍처 상세]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}}) | [Clean Architecture]({{< relref "/docs/ddd/concepts/architecture/clean-architecture" >}})
 
 ---
 
@@ -484,7 +484,7 @@ public class OrderService {
 
 **관련 용어:** [Adapter](#adapter-어댑터), [Hexagonal Architecture](#hexagonal-architecture-헥사고날-아키텍처)
 
-📖 [헥사고날 아키텍처 상세](../../concepts/hexagonal-architecture/#port)
+📖 [헥사고날 아키텍처 상세]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture#port" >}})
 
 ---
 
@@ -511,7 +511,7 @@ public class OrderController {
 }
 ```
 
-📖 [헥사고날 아키텍처 상세](../../concepts/hexagonal-architecture/#adapter)
+📖 [헥사고날 아키텍처 상세]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture#adapter" >}})
 
 ---
 
@@ -529,7 +529,7 @@ public class OrderController {
 
 **관련 패턴:** [Hexagonal Architecture](#hexagonal-architecture-헥사고날-아키텍처), [Onion Architecture](#onion-architecture-어니언-아키텍처)
 
-📖 [클린 아키텍처 상세](../../concepts/clean-architecture/)
+📖 [클린 아키텍처 상세]({{< relref "/docs/ddd/concepts/architecture/clean-architecture" >}})
 
 ---
 
@@ -548,7 +548,7 @@ public class OrderController {
 - DDD와 가장 잘 어울리는 아키텍처
 - [Repository](#repository-리포지토리) 인터페이스는 Domain에 위치
 
-📖 [어니언 아키텍처 상세](../../concepts/onion-architecture/)
+📖 [어니언 아키텍처 상세]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}})
 
 ---
 
@@ -568,7 +568,7 @@ Infrastructure (저수준) → JpaOrderRepository (구현)
 - 구현체 교체 용이 (JPA → MyBatis)
 - 테스트 용이 (Mock 주입)
 
-📖 [헥사고날 아키텍처](../../concepts/hexagonal-architecture/) | [어니언 아키텍처](../../concepts/onion-architecture/)
+📖 [헥사고날 아키텍처]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}}) | [어니언 아키텍처]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}})
 
 ---
 
@@ -591,7 +591,7 @@ flowchart LR
 
 **관련 패턴:** [Event Sourcing](#event-sourcing-이벤트-소싱)과 함께 사용하면 Read Model을 [Domain Event](#domain-event-도메인-이벤트)로 동기화
 
-📖 [CQRS 상세](../concepts/cqrs/)
+📖 [CQRS 상세]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}})
 
 ---
 
@@ -613,7 +613,7 @@ flowchart LR
 
 **관련 패턴:** [CQRS](#cqrs-command-query-responsibility-segregation), [Domain Event](#domain-event-도메인-이벤트)
 
-📖 [Event Sourcing 실습](../examples/event-sourcing/) - EventStore, 스냅샷, 시간 여행 구현
+📖 [Event Sourcing 실습]({{< relref "/docs/ddd/examples/event-sourcing" >}}) - EventStore, 스냅샷, 시간 여행 구현
 
 > **아키텍처 패턴 핵심 포인트**
 >
@@ -626,7 +626,7 @@ flowchart LR
 
 ## 안티패턴
 
-> 📖 자세한 내용: [안티패턴과 함정](../../concepts/anti-patterns/)
+> 📖 자세한 내용: [안티패턴과 함정]({{< relref "/docs/ddd/concepts/anti-patterns" >}})
 
 ### Anemic Domain Model (빈약한 도메인 모델)
 
@@ -639,7 +639,7 @@ flowchart LR
 
 **해결책:** 비즈니스 로직을 [Entity](#entity-엔티티)와 [Aggregate](#aggregate-집합체)로 이동
 
-📖 [안티패턴 상세](../../concepts/anti-patterns/#anemic-domain-model)
+📖 [안티패턴 상세]({{< relref "/docs/ddd/concepts/anti-patterns#anemic-domain-model" >}})
 
 ---
 
@@ -654,7 +654,7 @@ flowchart LR
 
 **해결책:** ID 참조로 분리, 작은 Aggregate 유지
 
-📖 [안티패턴 상세](../../concepts/anti-patterns/#god-aggregate)
+📖 [안티패턴 상세]({{< relref "/docs/ddd/concepts/anti-patterns#god-aggregate" >}})
 
 ---
 
@@ -669,7 +669,7 @@ flowchart LR
 
 **해결책:** 명확한 경계를 찾아 Context 분리
 
-📖 [안티패턴 상세](../../concepts/anti-patterns/#big-ball-of-mud)
+📖 [안티패턴 상세]({{< relref "/docs/ddd/concepts/anti-patterns#big-ball-of-mud" >}})
 
 ---
 
@@ -692,7 +692,7 @@ public void createOrder(String customerId, String email, int amount)
 public void createOrder(CustomerId customerId, Email email, Money amount)
 ```
 
-📖 [안티패턴 상세](../../concepts/anti-patterns/#primitive-obsession)
+📖 [안티패턴 상세]({{< relref "/docs/ddd/concepts/anti-patterns#primitive-obsession" >}})
 
 ---
 
@@ -707,13 +707,13 @@ public void createOrder(CustomerId customerId, Email email, Money amount)
 
 **해결책:** 로직을 도메인 계층으로 이동, Controller는 얇게 유지
 
-📖 [안티패턴 상세](../../concepts/anti-patterns/#smart-ui)
+📖 [안티패턴 상세]({{< relref "/docs/ddd/concepts/anti-patterns#smart-ui" >}})
 
 ---
 
 ## 테스트 패턴
 
-> 📖 자세한 내용: [테스트 전략](../../concepts/testing/)
+> 📖 자세한 내용: [테스트 전략]({{< relref "/docs/ddd/concepts/testing" >}})
 
 ### Test Pyramid (테스트 피라미드)
 
@@ -724,7 +724,7 @@ public void createOrder(CustomerId customerId, Email email, Money amount)
 - **통합 테스트** (중간): Repository, 외부 연동 - 중간 속도
 - **E2E 테스트** (가장 적음): 전체 시나리오 - 느림, 비용 높음
 
-📖 [테스트 전략 상세](../../concepts/testing/#test-pyramid)
+📖 [테스트 전략 상세]({{< relref "/docs/ddd/concepts/testing#test-pyramid" >}})
 
 ---
 
@@ -747,7 +747,7 @@ public class OrderFixtures {
 }
 ```
 
-📖 [테스트 전략 상세](../../concepts/testing/#test-fixture)
+📖 [테스트 전략 상세]({{< relref "/docs/ddd/concepts/testing#test-fixture" >}})
 
 ---
 
@@ -764,7 +764,7 @@ Order order = OrderBuilder.anOrder()
     .build();
 ```
 
-📖 [테스트 전략 상세](../../concepts/testing/#test-builder)
+📖 [테스트 전략 상세]({{< relref "/docs/ddd/concepts/testing#test-builder" >}})
 
 ---
 
@@ -796,7 +796,7 @@ Order order = OrderBuilder.anOrder()
 
 **관련 개념:** [Saga](#saga-사가)
 
-📖 [도메인 이벤트 상세](../../concepts/domain-events/)
+📖 [도메인 이벤트 상세]({{< relref "/docs/ddd/concepts/architecture/event-driven" >}})
 
 ---
 
@@ -812,7 +812,7 @@ Order order = OrderBuilder.anOrder()
 - 분산 트랜잭션 필요
 - 여러 Aggregate의 결과적 일관성 달성
 
-📖 [도메인 이벤트 상세](../../concepts/domain-events/#saga)
+📖 [도메인 이벤트 상세]({{< relref "/docs/ddd/concepts/architecture/event-driven#saga" >}})
 
 ---
 
@@ -840,7 +840,7 @@ Order order = OrderBuilder.anOrder()
 
 ## 다음 단계
 
-- [개념 이해](../concepts/) - 전략적/전술적 설계, 아키텍처
-- [실습 예제](../examples/) - Spring Boot 기반 구현
-- [참고 자료](references/) - 도서, 아티클, 발표 자료
-- [FAQ](faq/) - 자주 묻는 질문
+- [개념 이해]({{< relref "/docs/ddd/concepts" >}}) - 전략적/전술적 설계, 아키텍처
+- [실습 예제]({{< relref "/docs/ddd/examples" >}}) - Spring Boot 기반 구현
+- [참고 자료]({{< relref "/docs/ddd/appendix/references" >}}) - 도서, 아티클, 발표 자료
+- [FAQ]({{< relref "/docs/ddd/appendix/faq" >}}) - 자주 묻는 질문

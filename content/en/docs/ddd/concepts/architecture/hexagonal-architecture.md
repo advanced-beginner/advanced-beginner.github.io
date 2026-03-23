@@ -1,39 +1,39 @@
 ---
-title: 헥사고날 아키텍처
-description: "헥사고날 아키텍처의 작동 원리와 포트/어댑터 구조를 설명합니다."
+title: Hexagonal Architecture
+description: "Explains the workings of hexagonal architecture and the port/adapter structure."
 weight: 2
 lastmod: "2026-01-15"
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
 
-> **대상 독자**: 테스트 용이성과 외부 의존성 교체를 고려하는 개발자
-> **선수 지식**: [계층형 아키텍처]({{< relref "/docs/ddd/concepts/architecture/layered-architecture" >}})의 한계 이해
-> **소요 시간**: 약 20분
+> **Target Audience**: Developers considering testability and external dependency replacement
+> **Prerequisites**: Understanding the limitations of [Layered Architecture]({{< relref "/docs/ddd/concepts/architecture/layered-architecture" >}})
+> **Estimated Time**: About 20 minutes
 
 **Ports and Adapters** 패턴이라고도 불립니다. 애플리케이션의 핵심을 외부 세계로부터 완전히 격리시키는 아키텍처입니다. 헥사고날 아키텍처의 핵심 아이디어는 비즈니스 로직을 중심에 두고, 외부와의 모든 상호작용을 Port와 Adapter를 통해 처리한다는 것입니다. 이렇게 하면 외부 기술이 바뀌어도 핵심 비즈니스 로직은 영향을 받지 않습니다.
 
-#### 한 줄 요약
+#### One-Line Summary
 
 애플리케이션은 육각형 안에 있고, 외부와의 모든 연결은 Port와 Adapter로 처리합니다. 이를 통해 비즈니스 로직과 기술적 세부사항을 완벽하게 분리할 수 있습니다.
 
 ```mermaid
 flowchart TB
-    subgraph External["외부 세계"]
+    subgraph External["External World"]
         WEB["Web"]
         CLI["CLI"]
         DB[("Database")]
         API["External API"]
     end
 
-    subgraph Adapters["Adapters (연결 장치)"]
+    subgraph Adapters["Adapters (Connectors)"]
         WA["Web Adapter"]
         CA["CLI Adapter"]
         PA["Persistence Adapter"]
         EA["External API Adapter"]
     end
 
-    subgraph Ports["Ports (연결 규격)"]
+    subgraph Ports["Ports (Connection Specs)"]
         IP["Inbound Port"]
         OP["Outbound Port"]
     end
@@ -53,7 +53,7 @@ flowchart TB
 
 ---
 
-#### 왜 "헥사고날(육각형)"인가요?
+#### Why "Hexagonal"?
 
 헥사고날이라는 이름은 6개의 면이 중요해서가 아니라, 여러 방향에서 애플리케이션에 연결할 수 있다는 의미를 담고 있습니다. 계층형 아키텍처의 "위에서 아래로"라는 일방향 흐름과 달리, 헥사고날은 "안쪽과 바깥쪽"이라는 관점을 제시합니다.
 
@@ -69,23 +69,23 @@ flowchart TB
 
 ```mermaid
 flowchart TB
-    subgraph Phone["스마트폰 (Core)"]
-        OS["운영체제"]
-        APP["앱"]
+    subgraph Phone["Smartphone (Core)"]
+        OS["OS"]
+        APP["Apps"]
     end
 
-    subgraph Adapters["연결 장치들"]
-        CHG["충전 어댑터"]
-        HDMI["HDMI 어댑터"]
-        USB["USB 어댑터"]
-        BT["블루투스"]
+    subgraph Adapters["Connectors"]
+        CHG["Charging Adapter"]
+        HDMI["HDMI Adapter"]
+        USB["USB Adapter"]
+        BT["Bluetooth"]
     end
 
-    subgraph External["외부 장치"]
-        POWER["전원"]
+    subgraph External["External Devices"]
+        POWER["Power"]
         TV["TV"]
-        PC["컴퓨터"]
-        SPEAKER["스피커"]
+        PC["Computer"]
+        SPEAKER["Speaker"]
     end
 
     POWER --> CHG --> Phone
@@ -100,7 +100,7 @@ flowchart TB
 
 ---
 
-#### 핵심 개념 3가지
+#### Three Core Concepts
 
 헥사고날 아키텍처를 이해하려면 Port, Adapter, Application Core 세 가지 개념을 알아야 합니다. 이 세 가지가 어떻게 협력하는지 이해하면 헥사고날 아키텍처의 전체 그림이 보입니다.
 
@@ -110,18 +110,18 @@ Port는 인터페이스입니다. 외부와 연결되는 "규격"을 정의합�
 
 ```mermaid
 flowchart LR
-    subgraph InboundPorts["Inbound Ports (들어오는 요청)"]
+    subgraph InboundPorts["Inbound Ports (Incoming Requests)"]
         IP1["CreateOrderUseCase"]
         IP2["GetOrderQuery"]
     end
 
-    subgraph OutboundPorts["Outbound Ports (나가는 요청)"]
+    subgraph OutboundPorts["Outbound Ports (Outgoing Requests)"]
         OP1["SaveOrderPort"]
         OP2["SendNotificationPort"]
     end
 
-    EXT1["외부 요청"] --> InboundPorts
-    OutboundPorts --> EXT2["외부 시스템"]
+    EXT1["External Request"] --> InboundPorts
+    OutboundPorts --> EXT2["External System"]
 ```
 
 <strong>두 종류의 Port</strong>를 이해하는 것이 중요합니다. 아래 표는 각 Port의 특성을 정리한 것입니다.
@@ -153,14 +153,14 @@ Adapter는 구현체입니다. Port 규격에 맞춰 실제 연결을 담당합�
 
 ```mermaid
 flowchart LR
-    subgraph Driving["Driving Adapters (나를 호출)"]
+    subgraph Driving["Driving Adapters (Call me)"]
         WA["Web Adapter<br>(Controller)"]
         CA["CLI Adapter"]
         MA["Message Adapter<br>(Kafka Listener)"]
     end
 
-    subgraph Driven["Driven Adapters (내가 호출)"]
-        PA["Persistence Adapter<br>(Repository 구현)"]
+    subgraph Driven["Driven Adapters (I call)"]
+        PA["Persistence Adapter<br>(Repository Impl)"]
         NA["Notification Adapter<br>(Email, SMS)"]
         EA["External API Adapter"]
     end
@@ -228,13 +228,13 @@ Application Core는 외부 세계에 대해 아무것도 알지 못합니다. HT
 
 ---
 
-#### 전체 구조 한눈에 보기
+#### Full Structure at a Glance
 
 헥사고날 아키텍처의 모든 요소가 어떻게 협력하는지 전체 그림을 보겠습니다. 외부 세계, Driving Adapters, Inbound Ports, Application Core, Outbound Ports, Driven Adapters가 어떻게 연결되는지 이해하면 헥사고날의 핵심을 파악할 수 있습니다.
 
 ```mermaid
 flowchart TB
-    subgraph External["외부 세계"]
+    subgraph External["External World"]
         WEB["Web Client"]
         MSG["Kafka"]
         DB[("MySQL")]
@@ -286,7 +286,7 @@ flowchart TB
 
 ---
 
-#### 코드로 이해하기
+#### Understanding Through Code
 
 이제 실제 코드로 헥사고날 아키텍처를 구현해보겠습니다. Port 정의, Application Service 구현, Adapter 구현 순서로 진행합니다.
 
@@ -566,7 +566,7 @@ InventoryApiAdapter는 외부 재고 관리 서비스와 통신합니다. Applic
 
 ---
 
-#### 패키지 구조
+#### Package Structure
 
 헥사고날 아키텍처를 패키지로 표현하면 다음과 같습니다. adapter 패키지는 in과 out으로 나뉘며, application 패키지에는 port와 service가 있고, domain 패키지에는 순수한 도메인 모델이 있습니다.
 
@@ -619,7 +619,7 @@ com.example.order/
 
 ---
 
-#### 의존성 방향
+#### Dependency Direction
 
 헥사고날 아키텍처의 핵심은 의존성 방향입니다. 모든 의존성은 Adapter에서 Port로, Port에서 Core로 향합니다. Core는 아무것도 의존하지 않습니다.
 
@@ -636,9 +636,9 @@ flowchart TB
         DOM["Domain"]
     end
 
-    DA -->|"구현"| PORT
-    DRA -->|"구현"| PORT
-    APP -->|"사용"| PORT
+    DA -->|"implements"| PORT
+    DRA -->|"implements"| PORT
+    APP -->|"uses"| PORT
     APP --> DOM
 ```
 
@@ -697,19 +697,19 @@ Adapter만 교체하면 되므로 기술 스택을 쉽게 변경할 수 있습�
 
 ```mermaid
 flowchart LR
-    subgraph Before["MySQL 사용"]
+    subgraph Before["Using MySQL"]
         APP1["OrderService"]
         PORT1["SaveOrderPort"]
         MYSQL["MySQL Adapter"]
     end
 
-    subgraph After["MongoDB로 변경"]
-        APP2["OrderService<br>(변경 없음!)"]
-        PORT2["SaveOrderPort<br>(변경 없음!)"]
-        MONGO["MongoDB Adapter<br>(새로 작성)"]
+    subgraph After["Changed to MongoDB"]
+        APP2["OrderService<br>(No change!)"]
+        PORT2["SaveOrderPort<br>(No change!)"]
+        MONGO["MongoDB Adapter<br>(Newly written)"]
     end
 
-    Before -->|"Adapter만 교체"| After
+    Before -->|"Replace Adapter only"| After
 ```
 
 예를 들어, MySQL에서 MongoDB로 데이터베이스를 변경해도 OrderService 코드는 전혀 변경할 필요가 없습니다. SaveOrderPort 인터페이스도 그대로이고, 단지 MongoOrderAdapter라는 새로운 Adapter만 작성하면 됩니다.
@@ -738,26 +738,26 @@ public class MongoOrderAdapter implements SaveOrderPort {
 
 ```mermaid
 flowchart LR
-    subgraph Before["이메일만"]
+    subgraph Before["Email only"]
         SN1["SendNotificationPort"]
         EMAIL["EmailAdapter"]
     end
 
-    subgraph After["이메일 + SMS + 푸시"]
+    subgraph After["Email + SMS + Push"]
         SN2["SendNotificationPort"]
         EMAIL2["EmailAdapter"]
         SMS["SmsAdapter"]
         PUSH["PushAdapter"]
     end
 
-    Before -->|"Adapter만 추가"| After
+    Before -->|"Add Adapter only"| After
 ```
 
 이메일만 지원하던 것을 SMS와 푸시 알림으로 확장하려면 SmsAdapter와 PushAdapter를 추가하면 됩니다. Application Service는 여전히 SendNotificationPort만 호출하므로 코드 변경이 없습니다.
 
 ---
 
-#### 트레이드오프
+#### Trade-offs
 
 헥사고날 아키텍처는 유연성을 제공하지만, 그에 따른 비용도 있습니다.
 
@@ -778,7 +778,7 @@ flowchart LR
 
 ---
 
-#### 계층형과의 비교
+#### Comparison with Layered
 
 계층형 아키텍처와 헥사고날 아키텍처는 비슷하지만 중요한 차이가 있습니다. 관점의 차이를 먼저 살펴보겠습니다.
 
@@ -788,7 +788,7 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-    subgraph Layered["계층형: 위→아래"]
+    subgraph Layered["Layered: Top→Bottom"]
         L1["Presentation"]
         L2["Application"]
         L3["Domain"]
@@ -796,7 +796,7 @@ flowchart TB
         L1 --> L2 --> L3 --> L4
     end
 
-    subgraph Hex["헥사고날: 안↔밖"]
+    subgraph Hex["Hexagonal: Inside↔Outside"]
         H1["Adapter"]
         H2["Port"]
         H3["Core"]
@@ -821,7 +821,7 @@ flowchart TB
 
 ---
 
-#### 흔한 실수들
+#### Common Mistakes
 
 헥사고날 아키텍처를 적용할 때 자주 발생하는 실수들을 알아보겠습니다.
 
@@ -915,7 +915,7 @@ Domain Entity는 상태 변경만 담당하고, 저장은 Application Service가
 
 ---
 
-#### 테스트 전략
+#### Testing Strategy
 
 헥사고날 아키텍처에서는 테스트 피라미드를 따라 각 레벨을 테스트합니다.
 
@@ -923,8 +923,8 @@ Domain Entity는 상태 변경만 담당하고, 저장은 Application Service가
 
 ```mermaid
 flowchart TB
-    subgraph Tests["테스트 피라미드"]
-        E2E["E2E Test<br>(전체 통합)"]
+    subgraph Tests["Test Pyramid"]
+        E2E["E2E Test<br>(Full Integration)"]
         INT["Integration Test<br>(Adapter)"]
         UNIT["Unit Test<br>(Domain + Service)"]
     end
@@ -1056,7 +1056,7 @@ class OrderControllerTest {
 
 ---
 
-#### 언제 헥사고날을 사용하나요?
+#### When Should You Use Hexagonal?
 
 헥사고날 아키텍처는 모든 프로젝트에 적합한 것은 아닙니다. 프로젝트의 특성을 고려하여 선택해야 합니다.
 
@@ -1087,15 +1087,15 @@ class OrderControllerTest {
 
 ---
 
-#### 계층형에서 헥사고날로 전환하기
+#### Transitioning from Layered to Hexagonal
 
 기존 계층형 아키텍처를 헥사고날로 점진적으로 전환할 수 있습니다. 한 번에 모든 것을 바꿀 필요는 없습니다.
 
 ```mermaid
 flowchart LR
-    A["1단계<br>Repository Interface 추출"]
-    B["2단계<br>Port 패턴 적용"]
-    C["3단계<br>Adapter 분리"]
+    A["Step 1<br>Extract Repository Interface"]
+    B["Step 2<br>Apply Port Pattern"]
+    C["Step 3<br>Separate Adapters"]
 
     A --> B --> C
 ```
@@ -1155,7 +1155,7 @@ com.example.order/
 
 ---
 
-#### 핵심 요약
+#### Key Summary
 
 {{< callout type="info" title="헥사고날 아키텍처 핵심 정리" >}}
 | 개념 | 설명 | 예시 |
@@ -1171,7 +1171,7 @@ com.example.order/
 
 ---
 
-#### 다음 단계
+#### Next Steps
 
 - [클린 아키텍처]({{< relref "/docs/ddd/concepts/architecture/clean-architecture" >}}) - 더 엄격한 의존성 규칙
 - [어니언 아키텍처]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}}) - 도메인 모델 중심

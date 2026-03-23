@@ -13,7 +13,7 @@ author_url: "http://github.com/kimbenji"
 > **이 섹션의 목적**: DDD의 핵심 개념과 패턴을 "왜" 그리고 "무엇"인지 설명
 
 {{< callout type="info" title="설명 문서란?" >}}
-이 섹션은 <strong>개념 이해</strong>를 목적으로 합니다. "어떻게 구현하는가"보다 "왜 이렇게 설계하는가"에 집중합니다. 실제 구현 방법은 [실습 예제](../examples/)를, 특정 문제 해결 방법은 [How-To Guide](../howto/)를 참고하세요.
+이 섹션은 <strong>개념 이해</strong>를 목적으로 합니다. "어떻게 구현하는가"보다 "왜 이렇게 설계하는가"에 집중합니다. 실제 구현 방법은 [실습 예제]({{< relref "/docs/ddd/examples" >}})를, 특정 문제 해결 방법은 [How-To Guide]({{< relref "/docs/ddd/howto" >}})를 참고하세요.
 {{< /callout >}}
 
 ## DDD를 왜 배워야 하는가?
@@ -44,11 +44,11 @@ DDD는 <strong>전략적 설계</strong>와 <strong>전술적 설계</strong>라
 
 | 문서 | 핵심 질문 | 배우는 것 |
 |------|----------|----------|
-| [전략적 설계](strategic-design/) | "시스템을 어떻게 나눌 것인가?" | Subdomain, Bounded Context, Context Mapping, Ubiquitous Language |
-| [전술적 설계](tactical-design/) | "경계 안에서 무엇을 만들 것인가?" | Entity, Value Object, Repository, Domain Service, Factory |
-| [Aggregate 심화](aggregate/) | "일관성 경계를 어떻게 정할 것인가?" | Aggregate Root, 트랜잭션 경계, 크기 결정 원칙 |
-| [Aggregate 실전 패턴](aggregate-patterns/) | "Aggregate를 실전에서 어떻게 최적화하는가?" | 구현 최적화, 이벤트 활용 패턴 |
-| [도메인 모델 패턴](domain-model-patterns/) | "빌딩 블록 너머의 도메인 로직을 어떻게 구조화하는가?" | Specification, Policy, Module, Builder, Null Object |
+| [전략적 설계]({{< relref "/docs/ddd/concepts/strategic-design" >}}) | "시스템을 어떻게 나눌 것인가?" | Subdomain, Bounded Context, Context Mapping, Ubiquitous Language |
+| [전술적 설계]({{< relref "/docs/ddd/concepts/tactical-design" >}}) | "경계 안에서 무엇을 만들 것인가?" | Entity, Value Object, Repository, Domain Service, Factory |
+| [Aggregate 심화]({{< relref "/docs/ddd/concepts/aggregate" >}}) | "일관성 경계를 어떻게 정할 것인가?" | Aggregate Root, 트랜잭션 경계, 크기 결정 원칙 |
+| [Aggregate 실전 패턴]({{< relref "/docs/ddd/concepts/aggregate-patterns" >}}) | "Aggregate를 실전에서 어떻게 최적화하는가?" | 구현 최적화, 이벤트 활용 패턴 |
+| [도메인 모델 패턴]({{< relref "/docs/ddd/concepts/domain-model-patterns" >}}) | "빌딩 블록 너머의 도메인 로직을 어떻게 구조화하는가?" | Specification, Policy, Module, Builder, Null Object |
 
 ### 2단계: 아키텍처
 
@@ -56,9 +56,9 @@ DDD는 <strong>전략적 설계</strong>와 <strong>전술적 설계</strong>라
 
 | 문서 | 핵심 질문 | 트레이드오프 |
 |------|----------|------------|
-| [아키텍처 패턴](architecture/) | "어떤 구조로 코드를 배치할 것인가?" | 복잡도 vs 유연성 비교 분석 |
-| [이벤트 기반 아키텍처](architecture/event-driven/) | "경계 간 통신을 어떻게 할 것인가?" | 결합도 vs 추적 가능성 |
-| [CQRS](architecture/cqrs/) | "읽기와 쓰기를 분리할 것인가?" | 단순함 vs 확장성 |
+| [아키텍처 패턴]({{< relref "/docs/ddd/concepts/architecture" >}}) | "어떤 구조로 코드를 배치할 것인가?" | 복잡도 vs 유연성 비교 분석 |
+| [이벤트 기반 아키텍처]({{< relref "/docs/ddd/concepts/architecture/event-driven" >}}) | "경계 간 통신을 어떻게 할 것인가?" | 결합도 vs 추적 가능성 |
+| [CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}}) | "읽기와 쓰기를 분리할 것인가?" | 단순함 vs 확장성 |
 
 ### 3단계: 품질
 
@@ -66,8 +66,8 @@ DDD를 지속적으로 유지하려면 테스트와 리팩토링이 필수입니
 
 | 문서 | 핵심 질문 | 배우는 것 |
 |------|----------|----------|
-| [테스트 전략](testing/) | "도메인 로직을 어떻게 검증할 것인가?" | 단위 테스트, 통합 테스트, 테스트 피라미드 |
-| [안티패턴과 함정](anti-patterns/) | "흔히 저지르는 실수는 무엇인가?" | Anemic Domain Model, Big Ball of Mud, 과도한 추상화 |
+| [테스트 전략]({{< relref "/docs/ddd/concepts/testing" >}}) | "도메인 로직을 어떻게 검증할 것인가?" | 단위 테스트, 통합 테스트, 테스트 피라미드 |
+| [안티패턴과 함정]({{< relref "/docs/ddd/concepts/anti-patterns" >}}) | "흔히 저지르는 실수는 무엇인가?" | Anemic Domain Model, Big Ball of Mud, 과도한 추상화 |
 
 ## 개념 간 관계
 
@@ -129,7 +129,7 @@ flowchart TB
 
 ## 다음 단계
 
-- **DDD가 처음이라면**: [전략적 설계](strategic-design/)부터 시작하세요
-- **구현 패턴이 궁금하다면**: [전술적 설계](tactical-design/)를 먼저 훑어보세요
-- **Specification, Policy 등 심화 패턴이 궁금하다면**: [도메인 모델 패턴](domain-model-patterns/)을 참고하세요
-- **아키텍처 선택이 고민이라면**: [아키텍처 패턴 비교](architecture/)를 참고하세요
+- **DDD가 처음이라면**: [전략적 설계]({{< relref "/docs/ddd/concepts/strategic-design" >}})부터 시작하세요
+- **구현 패턴이 궁금하다면**: [전술적 설계]({{< relref "/docs/ddd/concepts/tactical-design" >}})를 먼저 훑어보세요
+- **Specification, Policy 등 심화 패턴이 궁금하다면**: [도메인 모델 패턴]({{< relref "/docs/ddd/concepts/domain-model-patterns" >}})을 참고하세요
+- **아키텍처 선택이 고민이라면**: [아키텍처 패턴 비교]({{< relref "/docs/ddd/concepts/architecture" >}})를 참고하세요

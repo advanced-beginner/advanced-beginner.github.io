@@ -9,7 +9,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **대상 독자**: DDD 개념을 이해하고 실제 코드로 구현해보고 싶은 개발자
-> **선수 지식**: [Quick Start](../quick-start/)와 [개념 이해](../concepts/) 섹션의 전술적 설계
+> **선수 지식**: [Quick Start]({{< relref "/docs/ddd/quick-start" >}})와 [개념 이해]({{< relref "/docs/ddd/concepts" >}}) 섹션의 전술적 설계
 > **이 섹션의 목적**: 주문 도메인을 통해 DDD 패턴을 실제 Spring Boot 코드로 구현
 
 {{< callout type="warning" title="실습 전 준비사항" >}}
@@ -27,10 +27,10 @@ author_url: "http://github.com/kimbenji"
 
 | 단계 | 문서 | 배우는 것 | 소요 시간 |
 |------|------|----------|----------|
-| 1 | [프로젝트 설정](setup/) | 프로젝트 구조, 의존성 구성 | 약 15분 |
-| 2 | [주문 도메인](order-domain/) | Aggregate, Entity, Value Object 구현 | 약 40분 |
-| 3 | [애플리케이션 계층](application-layer/) | Use Case, 도메인 서비스 구현 | 약 30분 |
-| 4 | [Event Sourcing 실습](event-sourcing/) | 이벤트 저장, 스냅샷, 시간 여행 | 약 45분 |
+| 1 | [프로젝트 설정]({{< relref "/docs/ddd/examples/setup" >}}) | 프로젝트 구조, 의존성 구성 | 약 15분 |
+| 2 | [주문 도메인]({{< relref "/docs/ddd/examples/order-domain" >}}) | Aggregate, Entity, Value Object 구현 | 약 40분 |
+| 3 | [애플리케이션 계층]({{< relref "/docs/ddd/examples/application-layer" >}}) | Use Case, 도메인 서비스 구현 | 약 30분 |
+| 4 | [Event Sourcing 실습]({{< relref "/docs/ddd/examples/event-sourcing" >}}) | 이벤트 저장, 스냅샷, 시간 여행 | 약 45분 |
 
 ## 완성 후 결과물
 

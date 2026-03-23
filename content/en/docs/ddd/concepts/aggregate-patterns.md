@@ -353,5 +353,5 @@ public class Order {
 
 ## Next Steps
 
-- [Domain Events]({{< relref "/docs/ddd/concepts/domain-events" >}}) - Event-based integration
+- [Domain Events]({{< relref "/docs/ddd/concepts" >}}) - Event-based integration
 - [Anti-Patterns]({{< relref "/docs/ddd/concepts/anti-patterns" >}}) - Common mistakes to avoid

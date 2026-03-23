@@ -290,7 +290,7 @@ public class OrderConfirmedEvent extends DomainEvent {
 }
 ```
 
-For details: [Domain Events]({{< relref "/docs/ddd/concepts/domain-events" >}}) | [Event Sourcing Example]({{< relref "/docs/ddd/examples/event-sourcing" >}})
+For details: [Domain Events]({{< relref "/docs/ddd/concepts" >}}) | [Event Sourcing Example]({{< relref "/docs/ddd/examples/event-sourcing" >}})
 
 ---
 
@@ -364,7 +364,7 @@ For details: [Application Layer Example]({{< relref "/docs/ddd/examples/applicat
 
 **Related Terms:** [Application Service](#application-service), [Repository](#repository)
 
-For details: [Layered Architecture]({{< relref "/docs/ddd/concepts/layered-architecture" >}})
+For details: [Layered Architecture]({{< relref "/docs/ddd/concepts" >}})
 
 ---
 
@@ -392,7 +392,7 @@ For details: [Layered Architecture]({{< relref "/docs/ddd/concepts/layered-archi
 
 **Related Patterns:** [Layered Architecture](#layered-architecture), Clean Architecture, Onion Architecture
 
-For details: [Hexagonal Architecture]({{< relref "/docs/ddd/concepts/hexagonal-architecture" >}}) | [Clean Architecture]({{< relref "/docs/ddd/concepts/clean-architecture" >}})
+For details: [Hexagonal Architecture]({{< relref "/docs/ddd/concepts" >}}) | [Clean Architecture]({{< relref "/docs/ddd/concepts" >}})
 
 ---
 
@@ -415,7 +415,7 @@ flowchart LR
 
 **Related Patterns:** When used with [Event Sourcing](#event-sourcing), synchronize Read Model with [Domain Events](#domain-event)
 
-For details: [CQRS]({{< relref "/docs/ddd/concepts/cqrs" >}})
+For details: [CQRS]({{< relref "/docs/ddd/concepts" >}})
 
 ---
 

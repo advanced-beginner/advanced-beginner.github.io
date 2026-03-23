@@ -327,5 +327,5 @@ public void confirmOrder(OrderId orderId) {
 ## Next Steps
 
 - [Aggregate Deep Dive]({{< relref "/docs/ddd/concepts/aggregate" >}}) - More detailed design principles and patterns
-- [Domain Events]({{< relref "/docs/ddd/concepts/domain-events" >}}) - Communication methods between Aggregates
+- [Domain Events]({{< relref "/docs/ddd/concepts" >}}) - Communication methods between Aggregates
 - [Order Domain Example]({{< relref "/docs/ddd/examples/order-domain" >}}) - Actual implementation examples

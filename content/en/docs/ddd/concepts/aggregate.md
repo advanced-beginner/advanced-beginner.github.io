@@ -651,4 +651,4 @@ Should this Entity be included in the Aggregate?
 ## Next Steps
 
 - [Aggregate Practical Patterns]({{< relref "/docs/ddd/concepts/aggregate-patterns" >}}) - Implementation patterns, anti-patterns, and decision guides
-- [Domain Events]({{< relref "/docs/ddd/concepts/domain-events" >}}) - Event-based integration
+- [Domain Events]({{< relref "/docs/ddd/concepts" >}}) - Event-based integration

@@ -8,7 +8,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **대상 독자**: 복잡한 조회 요구사항이나 성능 최적화가 필요한 시스템을 설계하는 개발자
-> **선수 지식**: [이벤트 기반 아키텍처](event-driven/) 또는 이벤트 기반 아키텍처 기본 개념
+> **선수 지식**: [이벤트 기반 아키텍처]({{< relref "/docs/ddd/concepts/architecture/event-driven" >}}) 또는 이벤트 기반 아키텍처 기본 개념
 > **소요 시간**: 약 35분
 > **핵심 질문**: "언제 읽기와 쓰기 모델을 분리해야 하는가?"
 
@@ -653,5 +653,5 @@ Command Controller는 POST, PUT, DELETE 같은 쓰기 작업을 처리하고, �
 
 #### 다음 단계
 
-- [테스트 전략](testing/) - CQRS 시스템 테스트
-- [안티패턴](anti-patterns/) - CQRS 적용 시 흔한 실수
+- [테스트 전략]({{< relref "/docs/ddd/concepts/testing" >}}) - CQRS 시스템 테스트
+- [안티패턴]({{< relref "/docs/ddd/concepts/anti-patterns" >}}) - CQRS 적용 시 흔한 실수

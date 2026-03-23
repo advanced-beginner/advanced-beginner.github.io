@@ -14,7 +14,7 @@ author_url: "http://github.com/kimbenji"
 > **이 문서를 읽으면**: DDD의 핵심 개념과 기존 방식과의 차이점을 이해하고, 프로젝트에 DDD 적용 여부를 판단할 수 있습니다
 
 {{< callout type="info" title="이 문서의 목적" >}}
-이 문서는 <strong>튜토리얼이 아닌 개요 문서</strong>입니다. DDD의 핵심 개념을 빠르게 훑어보고 전체 그림을 파악하는 것이 목적입니다. 실제 코드를 작성하는 단계별 실습은 [실습 예제](../examples/) 섹션을 참고하세요.
+이 문서는 <strong>튜토리얼이 아닌 개요 문서</strong>입니다. DDD의 핵심 개념을 빠르게 훑어보고 전체 그림을 파악하는 것이 목적입니다. 실제 코드를 작성하는 단계별 실습은 [실습 예제]({{< relref "/docs/ddd/examples" >}}) 섹션을 참고하세요.
 {{< /callout >}}
 
 {{< callout type="tip" title="TL;DR" >}}
@@ -335,4 +335,4 @@ order.cancel(reason);
 
 ## 다음 단계
 
-핵심 개념을 이해했다면 이제 깊이 있게 살펴봅시다. Quick Start에서 시작하여 [전략적 설계](../concepts/strategic-design/)에서 Bounded Context와 Context Mapping을 배우고, [전술적 설계](../concepts/tactical-design/)에서 Entity, Value Object, Aggregate 패턴을 학습한 후, [아키텍처](../concepts/architecture/)에서 Hexagonal과 Clean Architecture를 익히고 실습 예제로 마무리하는 것이 권장 학습 경로입니다.
+핵심 개념을 이해했다면 이제 깊이 있게 살펴봅시다. Quick Start에서 시작하여 [전략적 설계]({{< relref "/docs/ddd/concepts/strategic-design" >}})에서 Bounded Context와 Context Mapping을 배우고, [전술적 설계]({{< relref "/docs/ddd/concepts/tactical-design" >}})에서 Entity, Value Object, Aggregate 패턴을 학습한 후, [아키텍처]({{< relref "/docs/ddd/concepts/architecture" >}})에서 Hexagonal과 Clean Architecture를 익히고 실습 예제로 마무리하는 것이 권장 학습 경로입니다.

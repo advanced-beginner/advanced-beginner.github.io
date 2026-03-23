@@ -787,6 +787,6 @@ class OrderTest {
 
 ## Next Steps
 
-- [CQRS]({{< relref "/docs/ddd/concepts/cqrs" >}}) - Command and Query separation
-- [Domain Events]({{< relref "/docs/ddd/concepts/domain-events" >}}) - Event publishing and subscribing
+- [CQRS]({{< relref "/docs/ddd/concepts" >}}) - Command and Query separation
+- [Domain Events]({{< relref "/docs/ddd/concepts" >}}) - Event publishing and subscribing
 - [Kafka Integration]({{< relref "/docs/kafka/examples/microservices" >}}) - External event publishing

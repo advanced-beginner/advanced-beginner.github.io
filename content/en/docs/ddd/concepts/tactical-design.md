@@ -1268,4 +1268,4 @@ When designing Domain Services, check if the logic doesn't belong to a specific 
 #### Next Steps
 
 - [Aggregate Deep Dive]({{< relref "/docs/ddd/concepts/aggregate" >}}) - Aggregate design principles and transaction boundaries
-- [Domain Events]({{< relref "/docs/ddd/concepts/domain-events" >}}) - Event-driven design
+- [Domain Events]({{< relref "/docs/ddd/concepts" >}}) - Event-driven design

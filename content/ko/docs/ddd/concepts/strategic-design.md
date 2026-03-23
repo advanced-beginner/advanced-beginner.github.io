@@ -8,7 +8,7 @@ author_url: "http://github.com/kimbenji"
 ---
 
 > **대상 독자**: DDD의 큰 그림을 이해하고 싶은 아키텍트 및 시니어 개발자
-> **선수 지식**: [Quick Start](../quick-start/)를 읽었거나 DDD 기본 개념에 대한 이해
+> **선수 지식**: [Quick Start]({{< relref "/docs/ddd/quick-start" >}})를 읽었거나 DDD 기본 개념에 대한 이해
 > **소요 시간**: 약 30분
 > **핵심 질문**: "시스템을 어떻게 나누고, 각 부분이 어떻게 협력해야 하는가?"
 
@@ -994,5 +994,5 @@ flowchart TB
 
 #### 다음 단계
 
-- [전술적 설계](tactical-design/) - Entity, Value Object, Aggregate 패턴
-- [아키텍처](architecture/) - Hexagonal, Clean Architecture
+- [전술적 설계]({{< relref "/docs/ddd/concepts/tactical-design" >}}) - Entity, Value Object, Aggregate 패턴
+- [아키텍처]({{< relref "/docs/ddd/concepts/architecture" >}}) - Hexagonal, Clean Architecture

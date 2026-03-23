@@ -1,38 +1,38 @@
 ---
-title: 계층형 아키텍처
-description: "계층형 아키텍처의 작동 원리와 각 계층의 역할을 설명합니다."
+title: Layered Architecture
+description: "Explains the workings of layered architecture and the role of each layer."
 weight: 1
 lastmod: "2026-01-15"
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
 
-> **대상 독자**: 아키텍처 패턴을 처음 배우는 개발자
-> **선수 지식**: 기본적인 Spring Boot MVC 패턴 이해
-> **소요 시간**: 약 15분
+> **Target Audience**: Developers learning architecture patterns for the first time
+> **Prerequisites**: Basic understanding of Spring Boot MVC patterns
+> **Estimated Time**: About 15 minutes
 
 가장 기본적이고 널리 사용되는 아키텍처 패턴입니다. **처음 아키텍처를 배운다면 여기서 시작하세요.** 계층형 아키텍처는 소프트웨어를 수평으로 나누어 각 계층이 명확한 역할을 가지도록 구성합니다. 각 계층은 위에서 아래로만 호출할 수 있다는 단순하지만 강력한 규칙을 따릅니다.
 
-#### 한 줄 요약
+#### One-Line Summary
 
 코드를 4개 층으로 나누고, 위에서 아래로만 호출한다는 원칙을 기본으로 합니다. 이렇게 하면 각 층이 자신의 책임에 집중할 수 있고, 코드의 구조를 이해하기 쉬워집니다.
 
 ```mermaid
 flowchart TB
-    subgraph Layers["4계층 구조"]
-        P["Presentation Layer<br>(사용자와 만나는 층)"]
-        A["Application Layer<br>(흐름을 조율하는 층)"]
-        D["Domain Layer<br>(비즈니스 규칙이 있는 층)"]
-        I["Infrastructure Layer<br>(기술적 세부사항)"]
+    subgraph Layers["4-Layer Structure"]
+        P["Presentation Layer<br>(User-facing layer)"]
+        A["Application Layer<br>(Flow orchestration layer)"]
+        D["Domain Layer<br>(Business rules layer)"]
+        I["Infrastructure Layer<br>(Technical details)"]
     end
 
     P --> A --> D
-    I -.->|"구현 제공"| D
+    I -.->|"Provides implementation"| D
 ```
 
 ---
 
-#### 왜 계층으로 나누나요?
+#### Why Divide Into Layers?
 
 계층으로 나누는 이유는 복잡한 시스템을 관리 가능한 단위로 분리하기 위함입니다. 각 계층이 자신만의 책임을 가지면, 코드 변경 시 영향 범위를 예측하기 쉽고, 팀원들 간의 협업도 원활해집니다.
 
@@ -51,23 +51,23 @@ flowchart TB
 
 ```mermaid
 flowchart TB
-    subgraph Company["회사 조직"]
-        CS["고객 응대팀<br>(고객과 대화)"]
-        PM["기획팀<br>(업무 조율)"]
-        DEV["개발팀<br>(핵심 기술)"]
-        INFRA["인프라팀<br>(서버, DB 관리)"]
+    subgraph Company["Company Organization"]
+        CS["Customer Service Team<br>(Talks to customers)"]
+        PM["Planning Team<br>(Coordinates work)"]
+        DEV["Development Team<br>(Core technology)"]
+        INFRA["Infrastructure Team<br>(Server, DB management)"]
     end
 
-    CS -->|"요청 전달"| PM
-    PM -->|"작업 지시"| DEV
-    DEV -->|"인프라 사용"| INFRA
+    CS -->|"Forward request"| PM
+    PM -->|"Assign work"| DEV
+    DEV -->|"Use infrastructure"| INFRA
 ```
 
 각 팀이 명확한 역할을 가지고 있어서 문제가 생겼을 때 어디를 고쳐야 할지 바로 알 수 있습니다. 소프트웨어 계층도 이와 같은 원리로 동작합니다.
 
 ---
 
-#### 4가지 계층 상세 설명
+#### 4 Layers in Detail
 
 계층형 아키텍처는 크게 4개의 계층으로 구성됩니다. 각 계층은 명확히 구분되며, 상위 계층은 하위 계층만 호출할 수 있습니다.
 
@@ -453,7 +453,7 @@ public class PaymentGatewayClient implements PaymentService {
 
 ---
 
-#### 패키지 구조
+#### Package Structure
 
 계층형 아키텍처를 Java 프로젝트에 적용할 때는 패키지 구조가 중요합니다. 각 계층을 별도의 패키지로 분리하여 물리적으로도 계층이 명확히 구분되도록 합니다.
 
@@ -511,7 +511,7 @@ flowchart TB
 
 ---
 
-#### 의존성 역전 (DIP)
+#### Dependency Inversion (DIP)
 
 "Domain이 Infrastructure에 의존하지 않는다"는 말이 이상하게 들릴 수 있습니다. Repository를 사용하는데 어떻게 의존하지 않을 수 있을까요? 비밀은 인터페이스에 있습니다.
 
@@ -527,11 +527,11 @@ flowchart LR
     end
 
     subgraph Infrastructure["Infrastructure Layer"]
-        JR["JpaOrderRepository<br>(구현체)"]
+        JR["JpaOrderRepository<br>(Implementation)"]
     end
 
-    O -->|"사용"| RI
-    JR -->|"구현"| RI
+    O -->|"uses"| RI
+    JR -->|"implements"| RI
 ```
 
 위 다이어그램에서 Order는 OrderRepository 인터페이스를 사용하고, JpaOrderRepository는 그 인터페이스를 구현합니다. 의존성 방향이 역전되어 있습니다.
@@ -564,7 +564,7 @@ public class JpaOrderRepository implements OrderRepository {
 
 ---
 
-#### 계층형의 장단점
+#### Pros and Cons of Layered
 
 계층형 아키텍처는 간단하고 직관적이지만, 몇 가지 장단점이 있습니다. 프로젝트의 특성에 따라 장점이 단점보다 클 수도 있고, 그 반대일 수도 있습니다.
 
@@ -595,7 +595,7 @@ public class JpaOrderRepository implements OrderRepository {
 
 ---
 
-#### 흔한 실수들
+#### Common Mistakes
 
 계층형 아키텍처를 적용할 때 자주 발생하는 실수들을 알아보겠습니다. 이런 실수를 피하면 더 깔끔한 코드를 작성할 수 있습니다.
 
@@ -703,7 +703,7 @@ public class PaymentEventHandler {
 
 ---
 
-#### 테스트 전략
+#### Testing Strategy
 
 계층형 아키텍처에서는 각 계층을 독립적으로 테스트할 수 있습니다. 계층별로 적합한 테스트 방법이 다릅니다.
 
@@ -825,7 +825,7 @@ class JpaOrderRepositoryTest {
 
 ---
 
-#### 언제 계층형을 사용하나요?
+#### When Should You Use Layered?
 
 계층형 아키텍처는 모든 상황에 적합한 것은 아닙니다. 프로젝트의 특성과 팀의 상황에 따라 적합성이 다릅니다.
 
@@ -855,7 +855,7 @@ class JpaOrderRepositoryTest {
 
 ---
 
-#### 핵심 요약
+#### Key Summary
 
 {{< callout type="info" title="계층형 아키텍처 핵심 정리" >}}
 | 계층 | 역할 | 예시 |
@@ -873,18 +873,18 @@ class JpaOrderRepositoryTest {
 
 ---
 
-#### 다음 단계로 발전하기
+#### Evolving to the Next Level
 
 계층형이 익숙해지면, 필요에 따라 더 발전된 패턴으로 이동할 수 있습니다. 점진적으로 개선해 나가는 것이 좋습니다.
 
 ```mermaid
 flowchart LR
-    A["계층형<br>(현재)"]
-    B["도메인 분리"]
-    C["헥사고날"]
+    A["Layered<br>(Current)"]
+    B["Domain Separation"]
+    C["Hexagonal"]
 
-    A -->|"1. Repository Interface 추출"| B
-    B -->|"2. Port/Adapter 도입"| C
+    A -->|"1. Extract Repository Interface"| B
+    B -->|"2. Introduce Port/Adapter"| C
 ```
 
 **1단계: Repository Interface를 Domain으로 이동**
@@ -908,7 +908,7 @@ public interface OrderRepository {
 
 ---
 
-#### 다음 단계
+#### Next Steps
 
 - [헥사고날 아키텍처]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}}) - Port와 Adapter로 외부 격리
 - [클린 아키텍처]({{< relref "/docs/ddd/concepts/architecture/clean-architecture" >}}) - 엄격한 의존성 규칙

@@ -1,16 +1,16 @@
 ---
-title: 이벤트 기반 아키텍처
-description: "이벤트 기반 아키텍처의 작동 원리와 설계 의도를 설명합니다."
+title: Event-Driven Architecture
+description: "Explains the workings and design intent of event-driven architecture."
 weight: 6
 lastmod: "2026-01-15"
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
 
-> **대상 독자**: 도메인 모델링과 트랜잭션 개념을 이해한 개발자
-> **선수 지식**: [어니언 아키텍처]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}}) 또는 Aggregate 경계 개념에 대한 이해
-> **소요 시간**: 약 30분
-> **핵심 질문**: "도메인 이벤트를 언제, 왜 사용해야 하는가?"
+> **Target Audience**: Developers who understand domain modeling and transaction concepts
+> **Prerequisites**: Understanding of [Onion Architecture]({{< relref "/docs/ddd/concepts/architecture/onion-architecture" >}}) or Aggregate boundary concepts
+> **Estimated Time**: About 30 minutes
+> **Key Question**: "When and why should you use domain events?"
 
 ---
 
@@ -33,21 +33,21 @@ author_url: "http://github.com/kimbenji"
 
 도메인에서 발생한 중요한 사건을 이벤트로 표현하고 활용하는 방법을 살펴봅니다. 도메인 이벤트는 비즈니스 프로세스에서 일어나는 의미 있는 변화를 포착하여 시스템 내에서 전파하고, 이를 통해 느슨하게 결합된 컴포넌트 간 통신을 가능하게 합니다. 이는 마이크로서비스 아키텍처나 이벤트 기반 시스템을 구축할 때 핵심적인 개념입니다.
 
-#### 도메인 이벤트란?
+#### What Are Domain Events?
 
 도메인 이벤트는 도메인 전문가가 관심을 가지는 비즈니스적으로 의미 있는 사건입니다. 예를 들어 "주문이 확정되었다", "결제가 완료되었다", "상품이 배송되었다"와 같은 실제 비즈니스에서 중요하게 여기는 순간들을 코드로 표현한 것입니다. 이런 이벤트들은 단순히 기술적인 상태 변경이 아니라, 비즈니스 관점에서 의미 있는 일이 발생했음을 나타냅니다.
 
 ```mermaid
 flowchart LR
-    subgraph Domain["도메인"]
-        ACT[행위 발생]
-        EVT["이벤트 발행<br>'주문이 확정되었다'"]
+    subgraph Domain["Domain"]
+        ACT[Action Occurs]
+        EVT["Event Published<br>'Order was confirmed'"]
     end
 
-    subgraph Handlers["이벤트 처리"]
-        H1[재고 차감]
-        H2[알림 발송]
-        H3[포인트 적립]
+    subgraph Handlers["Event Processing"]
+        H1[Deduct Inventory]
+        H2[Send Notification]
+        H3[Accumulate Points]
     end
 
     ACT --> EVT
@@ -70,7 +70,7 @@ flowchart LR
 
 
 
-#### 이벤트 설계
+#### Event Design
 
 도메인 이벤트를 설계할 때는 일관된 구조를 유지하는 것이 중요합니다. 모든 이벤트가 공통으로 가져야 하는 속성들을 베이스 클래스로 정의하면 관리와 추적이 쉬워집니다.
 
@@ -182,7 +182,7 @@ public class Order extends AggregateRoot {
 
 위 코드에서 주문 엔티티는 상태를 변경한 직후 적절한 이벤트를 등록합니다. 이벤트는 즉시 발행되지 않고 Aggregate에 일단 저장되며, 트랜잭션이 성공적으로 완료된 후에 실제로 발행됩니다.
 
-#### 이벤트 발행 구현
+#### Event Publishing Implementation
 
 도메인 이벤트를 실제로 발행하는 방법은 여러 가지가 있습니다. 각 방법은 장단점이 있으며, 프로젝트의 요구사항에 맞게 선택해야 합니다.
 
@@ -254,15 +254,15 @@ public class OrderEntity extends AbstractAggregateRoot<OrderEntity> {
 
 ```mermaid
 flowchart TB
-    subgraph Transaction["하나의 트랜잭션"]
-        AGG[Aggregate 저장]
-        OUT[Outbox 테이블 저장]
+    subgraph Transaction["Single Transaction"]
+        AGG[Save Aggregate]
+        OUT[Save to Outbox Table]
     end
 
-    subgraph Async["비동기 처리"]
-        POLL[Outbox 폴링]
-        PUB[메시지 발행]
-        DEL[Outbox 삭제]
+    subgraph Async["Async Processing"]
+        POLL[Poll Outbox]
+        PUB[Publish Message]
+        DEL[Delete Outbox]
     end
 
     AGG --> OUT
@@ -318,7 +318,7 @@ public void publishOutboxEvents() {
 }
 ```
 
-#### 이벤트 처리
+#### Event Processing
 
 이벤트를 발행했다면 이제 이를 처리할 핸들러가 필요합니다. 이벤트 처리는 동기 방식과 비동기 방식으로 나뉘며, 각각 다른 사용 사례에 적합합니다.
 
@@ -408,7 +408,7 @@ public class InventoryEventConsumer {
 }
 ```
 
-#### 이벤트 설계 가이드
+#### Event Design 가이드
 
 좋은 이벤트를 설계하려면 적절한 정보량을 유지하는 것이 중요합니다. 너무 적으면 이벤트 소비자가 추가 조회를 해야 하고, 너무 많으면 이벤트가 무거워지고 불필요한 결합이 생깁니다.
 
@@ -458,7 +458,7 @@ public class OrderConfirmedEventV2 extends DomainEvent {
 }
 ```
 
-#### 이벤트 패턴 비교
+#### Event Pattern Comparison
 
 도메인 이벤트를 사용하는 세 가지 주요 패턴이 있으며, 각각 다른 목적을 가집니다. 이 패턴들을 이해하면 상황에 맞는 적절한 방식을 선택할 수 있습니다.
 
@@ -503,22 +503,22 @@ public class OrderConfirmedEvent {
 
 어떤 패턴을 선택할지는 다음과 같이 결정할 수 있습니다. 단순히 알림만 필요하다면 Event Notification을 사용합니다. 소비자가 추가 조회 없이 바로 처리해야 한다면 Event-Carried State Transfer를 사용합니다. 완전한 감사 추적이 필요하고 복잡도를 감당할 수 있다면 Event Sourcing을 고려합니다. 대부분의 경우 Event-Carried State Transfer가 적절한 선택입니다.
 
-#### 이벤트 소싱 (Event Sourcing)
+#### Event Sourcing
 
 이벤트 소싱은 이벤트를 상태의 원본으로 사용하는 패턴입니다. 기존 방식은 현재 상태만 저장하지만, 이벤트 소싱은 모든 변경 이력을 이벤트로 저장하고 현재 상태는 이벤트를 재생하여 도출합니다.
 
 ```mermaid
 flowchart TB
-    subgraph Traditional["기존 방식"]
-        T1[현재 상태만 저장]
+    subgraph Traditional["Traditional Approach"]
+        T1[Store current state only]
         T2[(orders 테이블)]
         T1 --> T2
     end
 
-    subgraph EventSourcing["이벤트 소싱"]
-        E1[모든 이벤트 저장]
+    subgraph EventSourcing["Event Sourcing"]
+        E1[Store all events]
         E2[(events 테이블)]
-        E3[이벤트 재생으로<br>현재 상태 도출]
+        E3[Derive current state<br>by replaying events]
         E1 --> E2
         E2 --> E3
     end
@@ -608,19 +608,19 @@ public class EventSourcedOrderRepository implements OrderRepository {
 | **Axon Framework** | Java 생태계, CQRS 통합 | Spring 기반 프로젝트 |
 | **Kafka** | 고성능, 이미 사용 중이면 | 이벤트 스트리밍 중심 |
 
-#### CQRS와 도메인 이벤트
+#### CQRS and Domain Events
 
 이벤트 소싱을 사용하면 CQRS(Command Query Responsibility Segregation)가 자연스럽게 필요해집니다. 왜냐하면 이벤트 재생은 읽기 성능에 문제를 일으킬 수 있기 때문입니다.
 
 ```mermaid
 flowchart LR
-    subgraph Write["쓰기 측 (Command)"]
+    subgraph Write["Write Side (Command)"]
         CMD[Command] --> AGG[Aggregate]
         AGG --> EVT[Domain Event]
         EVT --> ES[(Event Store)]
     end
 
-    subgraph Read["읽기 측 (Query)"]
+    subgraph Read["Read Side (Query)"]
         ES --> PROJ[Projection]
         PROJ --> RD[(Read DB)]
         RD --> API[Query API]
@@ -657,7 +657,7 @@ public void on(OrderConfirmedEvent event) {
 
 CQRS는 복잡도를 증가시키므로 모든 프로젝트에 필요한 것은 아닙니다. 다음 조건 중 2개 이상에 해당하면 CQRS를 고려해볼 만합니다. 읽기와 쓰기 패턴이 크게 다른 경우, 읽기 성능이 중요한 경우, 이벤트 소싱을 사용하는 경우, 복잡한 조회 요구사항이 있어 다양한 뷰가 필요한 경우, 읽기와 쓰기 확장이 독립적으로 필요한 경우입니다.
 
-#### 실전 팁
+#### Practical Tips
 
 도메인 이벤트를 실전에서 사용할 때 알아두면 유용한 몇 가지 팁을 소개합니다.
 
@@ -717,7 +717,7 @@ public class StockEventHandler {
 }
 ```
 
-#### 이벤트 기반 아키텍처의 함정
+#### Pitfalls of Event-Driven Architecture
 
 도메인 이벤트는 강력하지만, 잘못 사용하면 디버깅이 어려운 시스템이 됩니다. 흔히 빠지는 함정들을 알아두면 미리 예방할 수 있습니다.
 
@@ -839,7 +839,7 @@ public class OrderConfirmedEvent {
 // OrderConfirmedEventV2
 ```
 
-#### 이벤트 디버깅 팁
+#### Event Debugging Tips
 
 이벤트 기반 시스템은 흐름 추적이 어렵습니다. 디버깅을 쉽게 하려면 모든 이벤트에 추적 정보를 포함해야 합니다. eventId는 각 이벤트를 고유하게 식별하고, correlationId는 같은 요청에서 발생한 모든 이벤트를 연결하며, occurredAt는 발생 시각을 기록하고, aggregateId와 aggregateType은 어떤 Aggregate에서 발생했는지 알려줍니다.
 
@@ -862,7 +862,7 @@ log.info("이벤트 처리 시작: eventId={}, correlationId={}, type={}",
     event.getClass().getSimpleName());
 ```
 
-#### 실제 스키마 진화 사례
+#### Real Schema Evolution Cases
 
 이벤트 스키마 변경은 신중해야 합니다. 실제 사례를 통해 안전한 변경과 위험한 변경을 구분하는 법을 배워봅시다.
 
@@ -959,7 +959,7 @@ public void handle(ConsumerRecord<String, JsonNode> record) {
 
 ---
 
-#### 언제 이벤트 기반 아키텍처를 사용하나요?
+#### When Should You Use Event-Driven Architecture?
 
 **적합한 경우**
 
@@ -992,7 +992,7 @@ public void handle(ConsumerRecord<String, JsonNode> record) {
 
 ---
 
-#### 요약
+#### Summary
 
 도메인 이벤트는 비즈니스적으로 의미 있는 사건을 코드로 표현한 것입니다. 이벤트 패턴으로는 Notification, State Transfer, Sourcing이 있으며 각각 다른 목적을 가집니다. Outbox 패턴을 사용하면 이벤트 유실을 방지할 수 있고, CQRS는 이벤트 소싱의 쿼리 성능 문제를 해결합니다. 스키마 진화 시에는 하위 호환성 유지가 필수입니다.
 
@@ -1004,7 +1004,7 @@ public void handle(ConsumerRecord<String, JsonNode> record) {
 | **CQRS** | 이벤트 소싱의 쿼리 성능 해결 |
 | **스키마 진화** | 하위 호환성 유지 필수 |
 
-#### 다음 단계
+#### Next Steps
 
 - [CQRS]({{< relref "/docs/ddd/concepts/architecture/cqrs" >}}) - 이벤트 기반 시스템과 잘 어울리는 패턴
 - [실습 예제]({{< relref "/docs/ddd/examples" >}}) - Spring Boot로 구현하는 주문 도메인

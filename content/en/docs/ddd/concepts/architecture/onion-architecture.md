@@ -1,15 +1,15 @@
 ---
-title: 어니언 아키텍처
-description: "어니언 아키텍처의 작동 원리와 의존성 방향을 설명합니다."
+title: Onion Architecture
+description: "Explains the workings of onion architecture and dependency direction."
 weight: 4
 lastmod: "2026-01-15"
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
 
-> **대상 독자**: DDD와 잘 어울리는 아키텍처를 찾는 개발자
-> **선수 지식**: [헥사고날 아키텍처]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}})와 의존성 역전 원칙
-> **소요 시간**: 약 20분
+> **Target Audience**: Developers looking for an architecture that works well with DDD
+> **Prerequisites**: [Hexagonal Architecture]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}}) and Dependency Inversion Principle
+> **Estimated Time**: About 20 minutes
 
 # 어니언 아키텍처 (Onion Architecture)
 
@@ -17,7 +17,7 @@ Jeffrey Palermo가 2008년에 제안한 아키텍처입니다. <strong>도메인
 
 어니언 아키텍처는 전통적인 계층형 아키텍처의 한계에서 출발합니다. 계층형 아키텍처에서는 상위 계층이 하위 계층에 의존하므로, 데이터베이스 계층의 변경이 서비스 계층에 연쇄적인 영향을 미칩니다. 반면 어니언 아키텍처에서는 <strong>도메인 모델이 어떤 것에도 의존하지 않고</strong>, 인프라스트럭처가 도메인에 의존하는 방향으로 설계합니다. 이를 통해 도메인 로직은 데이터베이스, 프레임워크, 외부 서비스의 변화와 무관하게 순수한 비즈니스 규칙만을 표현할 수 있습니다. DDD(Domain-Driven Design)와 특히 잘 어울리는 이유도 여기에 있습니다.
 
-## 한 줄 요약
+## One-Line Summary
 
 > **도메인 모델이 왕이다. 나머지는 모두 도메인을 섬긴다.**
 
@@ -43,7 +43,7 @@ flowchart TB
 
 ---
 
-## "양파"로 이해하기
+## Understanding Through the "Onion"
 
 {{< callout type="tip" title="비유: 진짜 양파 🧅" >}}
 양파를 잘라보면 겹겹이 층이 있습니다:
@@ -62,11 +62,11 @@ flowchart TB
 
 ```mermaid
 flowchart TB
-    subgraph Onion["🧅 양파 구조"]
-        L1["바깥 껍질<br>(버리는 부분)"]
-        L2["바깥쪽 층"]
-        L3["안쪽 층"]
-        L4["💎 핵심<br>(가장 단단하고 중요)"]
+    subgraph Onion["🧅 Onion Structure"]
+        L1["Outer skin<br>(disposable)"]
+        L2["Outer layer"]
+        L3["Inner layer"]
+        L4["💎 Core<br>(hardest and most important)"]
     end
 
     L1 --> L2 --> L3 --> L4
@@ -74,7 +74,7 @@ flowchart TB
 
 ---
 
-## 클린 아키텍처와의 차이
+## Difference from Clean Architecture
 
 둘 다 "동심원" 구조지만, 강조점이 다릅니다:
 
@@ -88,20 +88,20 @@ flowchart TB
 
 ```mermaid
 flowchart LR
-    subgraph Clean["클린 아키텍처"]
+    subgraph Clean["Clean Architecture"]
         C1["Entity"]
         C2["Use Case"]
         C3["Adapter"]
     end
 
-    subgraph Onion["어니언 아키텍처"]
+    subgraph Onion["Onion Architecture"]
         O1["Domain Model"]
         O2["Domain Service"]
         O3["Application Service"]
         O4["Infrastructure"]
     end
 
-    Clean -.->|"DDD 강화"| Onion
+    Clean -.->|"DDD Enhancement"| Onion
 ```
 
 **어니언이 DDD에 더 적합한 이유:**
@@ -111,7 +111,7 @@ flowchart LR
 
 ---
 
-## 4개의 레이어 상세 설명
+## 4 Layers in Detail
 
 ### 1. Domain Model (도메인 모델) - 💎 가장 안쪽
 
@@ -454,8 +454,8 @@ flowchart TB
     subgraph Infra["Infrastructure Layer"]
         UI["🖥️ UI / Web"]
         CTRL["Controller"]
-        REPO["Repository 구현"]
-        EXT["외부 서비스 연동"]
+        REPO["Repository Impl"]
+        EXT["External Service Integration"]
     end
 ```
 
@@ -563,7 +563,7 @@ public class ExternalPaymentService implements PaymentService {
 
 ---
 
-## 패키지 구조
+## Package Structure
 
 ```
 com.example.order/
@@ -622,13 +622,13 @@ com.example.order/
 
 ---
 
-## 의존성 방향
+## Dependency Direction
 
 ```mermaid
 flowchart TB
     subgraph Infra["Infrastructure"]
         CTRL["Controller"]
-        REPO_IMPL["Repository 구현"]
+        REPO_IMPL["Repository Impl"]
     end
 
     subgraph App["Application Services"]
@@ -644,7 +644,7 @@ flowchart TB
     CTRL --> AS
     AS --> DS --> DM
     AS --> RI
-    REPO_IMPL -->|"구현"| RI
+    REPO_IMPL -->|"implements"| RI
 ```
 
 **핵심 규칙:**
@@ -654,27 +654,27 @@ flowchart TB
 
 ---
 
-## 다른 아키텍처와 비교
+## Comparison with Other Architectures
 
 ### 클린 vs 헥사고날 vs 어니언
 
 ```mermaid
 flowchart TB
-    subgraph Clean["클린"]
+    subgraph Clean["Clean"]
         C1["Entity"]
         C2["Use Case"]
         C3["Adapter"]
         C4["Framework"]
     end
 
-    subgraph Hex["헥사고날"]
+    subgraph Hex["Hexagonal"]
         H1["Domain"]
         H2["Application"]
         H3["Port"]
         H4["Adapter"]
     end
 
-    subgraph Onion["어니언"]
+    subgraph Onion["Onion"]
         O1["Domain Model"]
         O2["Domain Service"]
         O3["Application Service"]
@@ -693,7 +693,7 @@ flowchart TB
 
 ---
 
-## 흔한 실수들
+## Common Mistakes
 
 ### 1. Domain에 Infrastructure 코드
 
@@ -809,16 +809,16 @@ public class OrderApplicationService {
 
 ---
 
-## 테스트 전략
+## Testing Strategy
 
 ### 레이어별 테스트
 
 ```mermaid
 flowchart TB
-    subgraph Tests["테스트 피라미드"]
-        E2E["E2E Test<br>(적음)"]
-        INT["Integration Test<br>(중간)"]
-        UNIT["Unit Test<br>(많음)"]
+    subgraph Tests["Test Pyramid"]
+        E2E["E2E Test<br>(Few)"]
+        INT["Integration Test<br>(Medium)"]
+        UNIT["Unit Test<br>(Many)"]
     end
 
     E2E --> INT --> UNIT
@@ -964,7 +964,7 @@ class JpaOrderRepositoryTest {
 
 ---
 
-## 트레이드오프
+## Trade-offs
 
 어니언 아키텍처는 도메인을 보호하는 대신, 복잡성과 개발 비용이라는 대가를 지불합니다. 프로젝트에 도입하기 전에 장단점을 명확히 이해해야 합니다.
 
@@ -992,25 +992,25 @@ class JpaOrderRepositoryTest {
 
 ```mermaid
 flowchart LR
-    subgraph Decision["도입 결정 기준"]
-        Q1{"비즈니스 로직이<br>복잡한가?"}
-        Q2{"장기 유지보수<br>프로젝트인가?"}
-        Q3{"팀이 DDD를<br>이해하는가?"}
+    subgraph Decision["Adoption Decision Criteria"]
+        Q1{"Is business logic<br>complex?"}
+        Q2{"Is it a long-term<br>maintenance project?"}
+        Q3{"Does the team<br>understand DDD?"}
     end
 
     Q1 -->|Yes| Q2
     Q2 -->|Yes| Q3
-    Q3 -->|Yes| O["어니언 적합"]
-    Q1 -->|No| L["계층형 권장"]
+    Q3 -->|Yes| O["Onion suitable"]
+    Q1 -->|No| L["Layered recommended"]
     Q2 -->|No| L
-    Q3 -->|No| H["헥사고날 또는<br>계층형 권장"]
+    Q3 -->|No| H["Hexagonal or<br>Layered recommended"]
 ```
 
 > <strong>핵심:</strong> 아키텍처의 복잡성은 <strong>해결하려는 문제의 복잡성에 비례</strong>해야 합니다. 단순한 문제에 복잡한 해결책을 적용하면, 그 복잡성 자체가 새로운 문제가 됩니다.
 
 ---
 
-## 언제 어니언 아키텍처를 사용하나요?
+## When Should You Use Onion Architecture?
 
 ### 적합한 경우
 
@@ -1042,14 +1042,14 @@ flowchart LR
 
 ---
 
-## 점진적 도입
+## Gradual Adoption
 
 ```mermaid
 flowchart LR
-    A["1단계<br>Entity 풍부화"]
-    B["2단계<br>Domain Service 추출"]
-    C["3단계<br>Repository Interface 분리"]
-    D["4단계<br>완전한 분리"]
+    A["Step 1<br>Enrich Entity"]
+    B["Step 2<br>Extract Domain Service"]
+    C["Step 3<br>Separate Repository Interface"]
+    D["Step 4<br>Complete Separation"]
 
     A --> B --> C --> D
 ```
@@ -1103,7 +1103,7 @@ public class JpaOrderRepository implements OrderRepository {
 
 ---
 
-## 다음 단계
+## Next Steps
 
 - [계층형 아키텍처]({{< relref "/docs/ddd/concepts/architecture/layered-architecture" >}}) - 기본부터 시작
 - [헥사고날 아키텍처]({{< relref "/docs/ddd/concepts/architecture/hexagonal-architecture" >}}) - 외부 연동 중심
