@@ -93,6 +93,11 @@ flowchart TB
 | [리소스 관리](resources/) | CPU/메모리 요청과 제한 설정 | "얼마나 많은 리소스를 할당할까?" |
 | [스케일링](scaling/) | HPA/VPA를 통한 자동 확장/축소 | "트래픽 증가에 어떻게 대응하나?" |
 | [헬스 체크](health-checks/) | Probe를 통한 상태 모니터링과 자동 복구 | "앱이 정상인지 어떻게 확인하나?" |
+| [Namespace](namespace/) | 클러스터 내 리소스를 논리적으로 격리하는 메커니즘 | "팀별로 리소스를 어떻게 분리하나?" |
+| [StatefulSet](statefulset/) | 상태를 유지하는 애플리케이션의 배포와 관리 | "DB를 Kubernetes에 어떻게 배포하나?" |
+| [RBAC](rbac/) | 역할 기반 접근 제어로 API 권한 관리 | "누가 어떤 리소스에 접근할 수 있나?" |
+| [Job과 CronJob](jobs/) | 일회성/반복 배치 작업 실행 관리 | "배치 작업을 어떻게 실행하나?" |
+| [NetworkPolicy](network-policy/) | Pod 간 네트워크 트래픽 제어 | "Pod 간 통신을 어떻게 제한하나?" |
 
 #### 학습 순서
 
@@ -117,3 +122,13 @@ flowchart TB
 8. [리소스 관리](resources/) - CPU와 메모리의 요청(requests)과 제한(limits) 설정 방법을 학습합니다. 리소스 부족 상황에서의 동작을 이해합니다.
 9. [스케일링](scaling/) - HPA(Horizontal Pod Autoscaler)를 통한 자동 스케일링과 VPA의 개념을 학습합니다.
 10. [헬스 체크](health-checks/) - Liveness, Readiness, Startup Probe를 통해 애플리케이션 상태를 모니터링하고 자동 복구하는 방법을 학습합니다.
+
+**고급 주제**
+
+고급 주제에서는 멀티 테넌트 환경 구성, 상태 유지 워크로드, 보안, 배치 처리 등 실전에서 필요한 심화 내용을 다룹니다.
+
+11. [Namespace](namespace/) - 클러스터 내 리소스를 논리적으로 격리하고 ResourceQuota로 사용량을 제한하는 방법을 학습합니다.
+12. [StatefulSet](statefulset/) - 데이터베이스와 같이 상태를 유지해야 하는 애플리케이션의 배포와 관리 방법을 학습합니다.
+13. [RBAC](rbac/) - Role-Based Access Control을 통해 사용자와 서비스의 API 접근 권한을 관리하는 방법을 학습합니다.
+14. [Job과 CronJob](jobs/) - 일회성 배치 작업과 스케줄 기반 반복 작업을 실행하고 관리하는 방법을 학습합니다.
+15. [NetworkPolicy](network-policy/) - Pod 간 네트워크 트래픽을 제어하여 클러스터 보안을 강화하는 방법을 학습합니다.
