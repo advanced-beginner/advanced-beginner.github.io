@@ -1,5 +1,5 @@
 ---
-title: 문제 해결
+title: How-To Guide
 description: 실무에서 자주 마주치는 문제 상황과 해결 방법
 weight: 4
 bookCollapseSection: true

@@ -1,7 +1,7 @@
 ---
 bookCollapseSection: true
 title: 부록
-weight: 4
+weight: 5
 lastmod: 2026-01-08
 ---
 

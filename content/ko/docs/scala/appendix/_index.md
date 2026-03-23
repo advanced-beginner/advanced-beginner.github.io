@@ -2,7 +2,7 @@
 bookCollapseSection: true
 lastmod: "2026-01-09"
 title: 부록
-weight: 4
+weight: 5
 ---
 
 Scala 학습에 도움이 되는 참고 자료입니다. 용어 사전, 버전 비교, FAQ, 참고 링크 등 학습 과정에서 필요한 보조 자료들을 모았습니다.

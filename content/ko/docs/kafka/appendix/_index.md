@@ -2,7 +2,7 @@
 bookCollapseSection: true
 lastmod: "2026-01-06"
 title: 부록
-weight: 4
+weight: 5
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
