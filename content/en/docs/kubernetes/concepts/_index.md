@@ -69,6 +69,11 @@ flowchart TB
 | [Resource Management](resources/) | CPU/memory requests and limits configuration | "How much resources to allocate?" |
 | [Scaling](scaling/) | Automatic scaling with HPA/VPA | "How to respond to traffic increases?" |
 | [Health Checks](health-checks/) | Status monitoring and auto-recovery through Probes | "How to verify app is healthy?" |
+| [Namespace](namespace/) | Mechanism to logically isolate resources within a cluster | "How to separate resources by team?" |
+| [StatefulSet](statefulset/) | Deployment and management of stateful applications | "How to deploy a DB on Kubernetes?" |
+| [RBAC](rbac/) | Role-based access control for API permission management | "Who can access which resources?" |
+| [Jobs and CronJobs](jobs/) | One-time and recurring batch job execution | "How to run batch jobs?" |
+| [NetworkPolicy](network-policy/) | Control network traffic between Pods | "How to restrict Pod-to-Pod communication?" |
 
 #### Learning Path
 
@@ -93,3 +98,13 @@ Advanced topics cover subjects necessary for stable Kubernetes operations in pro
 8. [Resource Management](resources/) - Learn how to configure CPU and memory requests and limits. Understand behavior under resource shortage situations.
 9. [Scaling](scaling/) - Learn auto-scaling through HPA (Horizontal Pod Autoscaler) and the concept of VPA.
 10. [Health Checks](health-checks/) - Learn how to monitor application status and auto-recover through Liveness, Readiness, and Startup Probes.
+
+**Advanced Topics**
+
+Advanced topics cover multi-tenant environment setup, stateful workloads, security, batch processing, and other practical in-depth content.
+
+11. [Namespace](namespace/) - Learn how to logically isolate resources within a cluster and limit usage with ResourceQuota.
+12. [StatefulSet](statefulset/) - Learn how to deploy and manage stateful applications like databases.
+13. [RBAC](rbac/) - Learn how to manage API access permissions for users and services through Role-Based Access Control.
+14. [Jobs and CronJobs](jobs/) - Learn how to run and manage one-time batch tasks and schedule-based recurring tasks.
+15. [NetworkPolicy](network-policy/) - Learn how to control Pod-to-Pod network traffic to strengthen cluster security.

@@ -25,14 +25,22 @@ flowchart TD
     Q2 -->|Some experience| Q3{Want to deploy<br>real app?}
 
     Q3 -->|Yes| C[Spring Boot Deployment]
-    Q3 -->|No| B
+    Q3 -->|No| Q4{Need state management /<br>operations?}
+
+    Q4 -->|State management| D[StatefulSet Lab]
+    Q4 -->|Access control| E[RBAC Configuration]
+    Q4 -->|Scheduling| F[CronJob Lab]
 
     A -->|After completion| B
     B -->|After completion| C
+    C -->|After completion| D
 
     style A fill:#90EE90
     style B fill:#87CEEB
     style C fill:#DDA0DD
+    style D fill:#FFD700
+    style E fill:#FFA07A
+    style F fill:#98FB98
 ```
 
 | Your Situation | Recommended Example | What You'll Learn |
@@ -40,6 +48,9 @@ flowchart TD
 | New to Kubernetes | [Environment Setup](setup/) → [Basic Example](basic/) | Cluster setup, Pod/Service basics |
 | Know concepts but lack hands-on | [Basic Example](basic/) | Run Pod, Deployment, Service directly |
 | Want to deploy real apps | [Spring Boot Deployment](spring-boot/) | Apply ConfigMap, Secret, Probe |
+| Need stateful apps | [StatefulSet Lab](statefulset/) | PVC templates, Headless Service |
+| Want to manage access permissions | [RBAC Configuration Lab](rbac/) | Role, ServiceAccount, RoleBinding |
+| Want to automate periodic tasks | [CronJob Lab](cronjob/) | Scheduling, concurrency policies |
 
 #### Example List
 
@@ -48,6 +59,9 @@ flowchart TD
 | [Environment Setup](setup/) | ⭐ Beginner | 30 min | Local environment with Minikube, Kind |
 | [Basic Example](basic/) | ⭐⭐ Basic | 60 min | Pod, Deployment, Service hands-on |
 | [Spring Boot Deployment](spring-boot/) | ⭐⭐⭐ Intermediate | 90 min | Real application deployment |
+| [StatefulSet Lab](statefulset/) | ⭐⭐⭐ Intermediate | 60 min | MySQL StatefulSet, PVC, Headless Service |
+| [RBAC Configuration Lab](rbac/) | ⭐⭐⭐ Intermediate | 45 min | Role, ServiceAccount, per-namespace access control |
+| [CronJob Lab](cronjob/) | ⭐⭐⭐ Intermediate | 45 min | Periodic backup, concurrency policies, alert setup |
 
 #### Prerequisites
 
