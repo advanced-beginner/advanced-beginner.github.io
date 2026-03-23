@@ -6,13 +6,13 @@ weight: 3
 
 Frequently asked questions and answers about Scala. Questions are categorized for quick access to the information you need.
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **Version Choice**: Scala 3 for new projects, Scala 2.12/2.13 when using Spark
 - **val vs var**: Always prefer `val` (immutable)
 - **Instead of null**: Use `Option`, `Some`, `None` for safe null handling
 - **IDE**: IntelliJ IDEA + Scala plugin (most mature)
 - **Performance**: Equivalent to Java, watch out for collection chaining and lambda usage
-{{% /notice %}}
+{{< /callout >}}
 
 #### General
 
@@ -48,10 +48,10 @@ The basics are not difficult. If you have Java experience, you can pick up the b
 
 Learn gradually. You don't need to know all advanced features from the start.
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - Scala 3 recommended for new projects, maintain Scala 2 when using Spark
 - Basics are approachable, but advanced type system requires gradual learning
-{{% /notice %}}
+{{< /callout >}}
 
 #### Syntax
 
@@ -112,11 +112,11 @@ def printMessage(): Unit = println("Hello")
 val unit: Unit = ()
 ```
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - Use `val` (immutable) by default, `var` (mutable) only when necessary
 - `lazy val` initializes on first access, `def` recomputes on every call
 - Semicolons only needed when writing multiple statements on one line
-{{% /notice %}}
+{{< /callout >}}
 
 #### Functional Programming
 
@@ -177,11 +177,11 @@ Some(1).flatMap(x =>
 // Result: Some(3)
 ```
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - Use `Option` to safely replace null, `getOrElse` for default values
 - `map` transforms values, `flatMap` flattens nested containers
 - For comprehension is a more readable expression of `flatMap`/`map` chains
-{{% /notice %}}
+{{< /callout >}}
 
 #### Troubleshooting
 
@@ -228,11 +228,11 @@ import zio.prelude._      // ZIO extension methods
 2. **Reload** in sbt tab
 3. **Build** → **Rebuild Project**
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - "implicit not found" resolved by defining/importing required type class instances
 - Extension method errors: check correct import statements
 - Compilation speed improvement: use incremental compilation (`sbt ~compile`)
-{{% /notice %}}
+{{< /callout >}}
 
 #### Performance
 
@@ -258,11 +258,11 @@ val list2 = 0 :: list1  // Reuses list1's data
 
 If performance is critical, use `Array` or mutable collections.
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - Scala runtime performance equals Java (JVM bytecode)
 - Immutable collections are efficient via structural sharing, use `Array` for extreme performance
 - Verify tail recursion optimization with `@tailrec`
-{{% /notice %}}
+{{< /callout >}}
 
 #### Tools
 
@@ -285,11 +285,11 @@ Questions about development tool choices.
 - **MUnit**: Simple and lightweight (recommended for Scala 3)
 - **Specs2**: BDD style
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - IDE: IntelliJ IDEA (mature) or VS Code + Metals (lightweight)
 - Build: sbt (standard), Mill (fast), Gradle (Java integration)
 - Testing: ScalaTest (general purpose), MUnit (Scala 3 lightweight)
-{{% /notice %}}
+{{< /callout >}}
 
 #### Additional Questions
 

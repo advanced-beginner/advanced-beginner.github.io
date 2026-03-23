@@ -6,7 +6,7 @@ weight: 5
 lastmod: 2026-01-08
 ---
 
-{{% notice style="info" title="Version Information" %}}
+{{< callout type="info" title="Version Information" >}}
 This guide is written based on the following versions:
 - **Elasticsearch**: 8.11.x
 - **Kibana**: 8.11.x
@@ -15,7 +15,7 @@ This guide is written based on the following versions:
 - **Java**: 17+
 
 Some APIs or configurations may differ in other versions. In particular, Elasticsearch 7.x and 8.x have significant differences in security settings and client APIs.
-{{% /notice %}}
+{{< /callout >}}
 
 ## What is Elasticsearch?
 

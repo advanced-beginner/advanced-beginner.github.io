@@ -8,12 +8,12 @@ author_url: "http://github.com/kimbenji"
 
 이 문서에서는 Spring Kafka를 사용하여 메시지를 송수신하는 방법을 단계별로 실습합니다.
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **Producer**: `KafkaTemplate`으로 동기/비동기 메시지 전송, Key 사용으로 Partition 지정
 - **Consumer**: `@KafkaListener`로 메시지 수신, 배치 처리 및 패턴 구독 지원
 - **수동 커밋**: `Acknowledgment`로 처리 완료 후 명시적 커밋
 - **에러 처리**: `@RetryableTopic`으로 재시도 및 Dead Letter Topic 설정
-{{% /notice %}}
+{{< /callout >}}
 
 ## 시작하기 전에
 
@@ -24,11 +24,11 @@ author_url: "http://github.com/kimbenji"
 | **사전 완료** | [Quick Start](../quick-start/) 예제 완료, [환경 구성](setup/) 설정 완료 |
 | **예상 소요 시간** | 약 30분 |
 
-{{% notice style="warning" title="환경별 주의사항" %}}
+{{< callout type="warning" title="환경별 주의사항" >}}
 **Windows 사용자**: 명령어에서 `./gradlew` 대신 `gradlew.bat`을 사용하세요.
 
 **macOS/Linux 사용자**: Gradle Wrapper에 실행 권한이 없다면 `chmod +x gradlew` 명령을 먼저 실행하세요.
-{{% /notice %}}
+{{< /callout >}}
 
 Quick Start를 먼저 완료하면 이 문서를 더 쉽게 이해할 수 있습니다. 이 문서에서는 Quick Start의 단순한 예제를 확장하여 실무에서 사용하는 패턴들을 학습합니다.
 
@@ -155,12 +155,12 @@ public void sendToPartition(String topic, int partition, String key, String mess
 }
 ```
 
-{{% notice style="info" title="Producer 구현 핵심 포인트" %}}
+{{< callout type="info" title="Producer 구현 핵심 포인트" >}}
 - **동기 전송**: `get()` 메서드로 전송 완료까지 블로킹하여 결과 확인
 - **비동기 전송**: `whenComplete()` 콜백으로 결과 처리, 높은 처리량 확보
 - **Key 사용**: 동일한 Key는 동일한 Partition으로 전송되어 순서 보장
 - **Partition 지정**: 필요시 특정 Partition에 직접 전송 가능
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -255,12 +255,12 @@ public void consumeBatch(List<String> messages) {
 INFO  c.e.consumer.MessageConsumer : 배치 수신: 10건
 ```
 
-{{% notice style="info" title="Consumer 구현 핵심 포인트" %}}
+{{< callout type="info" title="Consumer 구현 핵심 포인트" >}}
 - **기본 Listener**: `@KafkaListener`로 Topic 지정, 메시지 자동 수신
 - **ConsumerRecord**: 메타데이터(Partition, Offset, Key, Timestamp) 함께 수신
 - **다중 Topic 구독**: 배열로 여러 Topic 지정 또는 정규식 패턴 사용
 - **배치 처리**: `batch = "true"` 설정으로 여러 메시지 한번에 처리
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -322,11 +322,11 @@ flowchart TB
 
 *[다이어그램 설명: 메시지 수신 후 처리가 성공하면 acknowledge를 호출하여 Offset을 커밋하고 다음 메시지를 처리합니다. 처리가 실패하면 커밋하지 않아 Consumer 재시작 시 해당 메시지를 다시 처리합니다.]*
 
-{{% notice style="info" title="수동 Offset 커밋 핵심 포인트" %}}
+{{< callout type="info" title="수동 Offset 커밋 핵심 포인트" >}}
 - **설정**: `enable-auto-commit: false`, `ack-mode: manual`로 수동 커밋 활성화
 - **커밋 시점**: 비즈니스 로직 성공 후 `ack.acknowledge()` 호출
 - **재처리 보장**: 커밋 전 실패 시 다음 Consumer 시작 때 재처리됨
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -389,11 +389,11 @@ flowchart LR
 
 *[다이어그램 설명: 메시지 처리 실패 시 retry Topic으로 이동하여 재시도합니다. 재시도가 모두 실패하면 Dead Letter Topic(DLT)으로 이동하고, 관리자가 수동으로 처리합니다.]*
 
-{{% notice style="info" title="에러 처리 핵심 포인트" %}}
+{{< callout type="info" title="에러 처리 핵심 포인트" >}}
 - **DefaultErrorHandler**: Bean 등록으로 자동 재시도, `FixedBackOff`로 재시도 간격/횟수 설정
 - **@RetryableTopic**: 선언적 재시도 정책, 실패 시 자동으로 DLT로 이동
 - **Dead Letter Topic**: 처리 불가능한 메시지 별도 보관, 모니터링 및 수동 처리 필요
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -536,9 +536,9 @@ class KafkaIntegrationTest {
 ./gradlew test
 ```
 
-{{% notice style="warning" title="Windows 사용자" %}}
+{{< callout type="warning" title="Windows 사용자" >}}
 `./gradlew test` 대신 `gradlew.bat test`를 사용하세요.
-{{% /notice %}}
+{{< /callout >}}
 
 **예상 출력:**
 ```

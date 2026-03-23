@@ -13,11 +13,11 @@ description: "Step-by-step guide to diagnose and resolve OOM errors in Spark"
 **Estimated Time**: About 15 minutes
 {{< /callout >}}
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **Driver OOM**: Reduce `collect()` result size, increase `spark.driver.memory`
 - **Executor OOM**: Increase partition count (`repartition`), increase `spark.executor.memory`
 - **Diagnose First**: Check Spark UI to identify where OOM occurs
-{{% /notice %}}
+{{< /callout >}}
 
 ## Problem Definition
 

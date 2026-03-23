@@ -13,12 +13,12 @@ description: "Spark 셔플을 최소화하여 작업 성능을 대폭 개선하�
 **예상 소요 시간**: 약 20분
 {{< /callout >}}
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **셔플 확인**: `df.explain()`에서 `Exchange` 노드 = 셔플 발생
 - **불필요한 셔플 제거**: 같은 그룹에서 여러 집계 한 번에 수행
 - **브로드캐스트 조인**: 작은 테이블(수십 MB)은 `broadcast()` 사용
 - **셔플 파티션 수**: `spark.sql.shuffle.partitions` 조정 (기본 200)
-{{% /notice %}}
+{{< /callout >}}
 
 ## 문제 정의
 

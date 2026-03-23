@@ -4,12 +4,12 @@ weight: 2
 lastmod: 2026-01-10
 ---
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - Implement Document CRUD and basic search using **Spring Data Elasticsearch**
 - Handle simple queries with **Repository pattern**, complex queries with **ElasticsearchOperations**
 - Choose field types based on purpose: `Text` (for search), `Keyword` (for filtering), `Integer` (for range queries)
 - Total time required: approximately 20 minutes
-{{% /notice %}}
+{{< /callout >}}
 
 Implement Document CRUD and basic search using Spring Data Elasticsearch.
 
@@ -125,11 +125,11 @@ public class Product {
 | Explicit `@Field` | Auto mapping | Explicit types ensure predictable behavior |
 | `standard` analyzer | `nori` | Basic example kept simple, see [Product Search](product-search/) for Korean search |
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - Specify index name with `@Document`, document ID field with `@Id`
 - `Text` type is for search (morphological analysis), `Keyword` type is for filtering/sorting
 - Explicitly specifying field types ensures predictable behavior
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -182,11 +182,11 @@ public interface ProductRepository extends ElasticsearchRepository<Product, Stri
 - Use `ElasticsearchOperations` for complex queries → see Service below
 - Use `@Query` annotation for native queries
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - Extending `ElasticsearchRepository` provides basic CRUD methods automatically
 - Queries are auto-generated from method name conventions (`findByXxx`, `findByXxxContaining`)
 - Use Repository for simple queries, `ElasticsearchOperations` for complex queries
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -323,11 +323,11 @@ public class ProductService {
 }
 ```
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - Combine multiple conditions with `BoolQuery`: `must` (affects scoring), `filter` (no scoring, cacheable)
 - Set pagination and sorting with `NativeQuery`
 - Extract actual Document objects with `getContent()` from `SearchHits`
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -501,11 +501,11 @@ curl -X PUT http://localhost:8080/api/products/1 \
 curl -X DELETE http://localhost:8080/api/products/1
 ```
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - REST API endpoints follow standard CRUD patterns (POST/GET/PUT/DELETE)
 - The `/init` endpoint quickly generates test sample data
 - Search API accepts filter conditions via query parameters
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -568,11 +568,11 @@ curl -X DELETE http://localhost:9200/products
 The default `standard` analyzer doesn't perform Korean morphological analysis.
 Check Nori settings in [Product Search System](product-search/) example.
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - If auto index creation fails, verify `@Document(createIndex = true)`
 - For mapping conflicts, delete existing index and restart
 - Nori analyzer configuration is essential for Korean search
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 

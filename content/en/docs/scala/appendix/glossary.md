@@ -6,13 +6,13 @@ weight: 1
 
 Key Scala terms organized alphabetically. For detailed explanations, refer to the [Concepts](../concepts/) section. Each term includes a definition and links to related documentation.
 
-{{% notice style="tip" title="TL;DR - Top 5 Terms" %}}
+{{< callout type="tip" title="TL;DR - Top 5 Terms" >}}
 - **Case Class**: Immutable data class, auto-generates `equals`/`copy`
 - **Option[A]**: Replacement for null, either `Some(value)` or `None`
 - **Pattern Matching**: Structure analysis and data extraction (`match` expressions)
 - **Trait**: Interface that can include implementations, supports mixin inheritance
 - **given/using** (Scala 3): New syntax for implicit values/parameters
-{{% /notice %}}
+{{< /callout >}}
 
 #### A
 
@@ -39,11 +39,11 @@ Key Scala terms organized alphabetically. For detailed explanations, refer to th
 **Currying**
 : A technique for transforming a function with multiple arguments into a chain of single-argument functions. Used with [Higher-Order Function](#higher-order-function). → [Functions and Methods](../concepts/functions-methods/)
 
-{{% notice style="note" title="A-C Key Points" %}}
+{{< callout type="info" title="A-C Key Points" >}}
 - **ADT**: Type-safe data modeling with `sealed trait` + `case class`
 - **Case Class**: Optimized for immutable data, used with pattern matching
 - **Companion Object**: Place for factory methods (`apply`) and utility functions
-{{% /notice %}}
+{{< /callout >}}
 
 #### E
 
@@ -94,11 +94,11 @@ Key Scala terms organized alphabetically. For detailed explanations, refer to th
 **Intersection Type (&)**
 : A type satisfying multiple types. `A & B`. Opposite of [Union Type](#union-type-). → [Advanced Type System](../concepts/type-system-advanced/)
 
-{{% notice style="note" title="E-I Key Points" %}}
+{{< callout type="info" title="E-I Key Points" >}}
 - **Either/Option**: Used instead of null, functional approach to error handling
 - **flatMap**: Core of Monad, elegantly expressed with for comprehension
 - **given/using** (Scala 3): Clear syntax replacing `implicit`
-{{% /notice %}}
+{{< /callout >}}
 
 #### L
 
@@ -124,11 +124,11 @@ Key Scala terms organized alphabetically. For detailed explanations, refer to th
 **Option[A]**
 : A type representing the presence (`Some`) or absence (`None`) of a value. Replacement for `null`. Safely handled with [flatMap](#flatmap) and [For Comprehension](#for-comprehension). → [Basics](../concepts/basics/)
 
-{{% notice style="note" title="L-O Key Points" %}}
+{{< callout type="info" title="L-O Key Points" >}}
 - **lazy val**: Defers expensive initialization until first use
 - **Monad**: `flatMap` + `pure`, core abstraction for sequential effect composition
 - **Option**: Type-safe handling with `Some`/`None` instead of null
-{{% /notice %}}
+{{< /callout >}}
 
 #### P
 
@@ -174,11 +174,11 @@ Key Scala terms organized alphabetically. For detailed explanations, refer to th
 **Type Inference**
 : The compiler's ability to automatically infer types. Scala's powerful type inference reduces boilerplate. → [Basics](../concepts/basics/)
 
-{{% notice style="note" title="P-T Key Points" %}}
+{{< callout type="info" title="P-T Key Points" >}}
 - **Pattern Matching**: Destructure data structures and branch with `match` expressions
 - **Sealed**: Restricts inheritance to same file, enables pattern matching exhaustiveness checking
 - **Type Class**: Add functionality to existing types, implement ad-hoc polymorphism
-{{% /notice %}}
+{{< /callout >}}
 
 #### U
 
@@ -204,11 +204,11 @@ Key Scala terms organized alphabetically. For detailed explanations, refer to th
 **yield**
 : Keyword for generating values in [For Comprehension](#for-comprehension). Transformed to `map` calls. → [For Comprehension Details](../concepts/for-comprehensions/)
 
-{{% notice style="note" title="U-Y Key Points" %}}
+{{< callout type="info" title="U-Y Key Points" >}}
 - **Union Type** (`|`): Scala 3 only, concise type expression instead of `Either`
 - **val/var**: Prefer `val` (immutable), minimize `var` (mutable)
 - **Variance**: Define type relationships with covariant (`+A`), contravariant (`-A`)
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 

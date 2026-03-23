@@ -8,12 +8,12 @@ author_url: "http://github.com/kimbenji"
 
 Spring Boot에서 Kafka를 사용하기 위한 환경 설정 레퍼런스입니다.
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **Kafka 실행**: Docker Compose로 KRaft 모드 Kafka 3.6.1 실행
 - **의존성**: `spring-kafka`, `spring-boot-starter-web` 추가
 - **기본 설정**: `bootstrap-servers`, Serializer/Deserializer, `group-id` 설정
 - **프로덕션**: `acks: all`, `enable.idempotence: true`로 안정성 확보
-{{% /notice %}}
+{{< /callout >}}
 
 #### 대상 독자 및 선수 지식
 
@@ -83,12 +83,12 @@ docker-compose down
 docker-compose down -v
 ```
 
-{{% notice style="info" title="Docker Kafka 핵심 포인트" %}}
+{{< callout type="info" title="Docker Kafka 핵심 포인트" >}}
 - **KRaft 모드**: Zookeeper 없이 Kafka 자체 메타데이터 관리 (3.3 이상 권장)
 - **포트**: 9092 (클라이언트), 9093 (컨트롤러)
 - **볼륨**: `kafka-data`로 데이터 영속성 확보
 - **완전 초기화**: `docker-compose down -v`로 볼륨까지 삭제
-{{% /notice %}}
+{{< /callout >}}
 
 #### Spring Boot 의존성
 
@@ -133,11 +133,11 @@ Maven을 사용하는 경우 다음과 같이 의존성을 추가합니다.
 </dependencies>
 ```
 
-{{% notice style="info" title="의존성 핵심 포인트" %}}
+{{< callout type="info" title="의존성 핵심 포인트" >}}
 - **spring-kafka**: Kafka Producer/Consumer 추상화, KafkaTemplate 제공
 - **spring-boot-starter-web**: REST API 엔드포인트 구현용 (선택)
 - **spring-kafka-test**: 테스트용 EmbeddedKafka 제공
-{{% /notice %}}
+{{< /callout >}}
 
 #### application.yml 설정
 
@@ -193,12 +193,12 @@ spring:
         max.poll.interval.ms: 300000
 ```
 
-{{% notice style="info" title="application.yml 핵심 포인트" %}}
+{{< callout type="info" title="application.yml 핵심 포인트" >}}
 - **bootstrap-servers**: Kafka 브로커 연결 주소 (필수)
 - **Serializer/Deserializer**: 문자열은 StringSerializer, 객체는 JsonSerializer 사용
 - **group-id**: Consumer Group 식별자, 서비스명 기반 권장
 - **프로덕션 설정**: `acks: all`로 데이터 안정성, `enable.idempotence: true`로 중복 방지
-{{% /notice %}}
+{{< /callout >}}
 
 #### 설정 항목 상세
 
@@ -259,11 +259,11 @@ public void consume(OrderEvent event) {
 }
 ```
 
-{{% notice style="info" title="JSON 메시지 처리 핵심 포인트" %}}
+{{< callout type="info" title="JSON 메시지 처리 핵심 포인트" >}}
 - **JsonSerializer/JsonDeserializer**: 객체를 JSON으로 자동 직렬화/역직렬화
 - **trusted.packages**: 역직렬화 허용 패키지 지정 (보안)
 - **Java Record**: 불변 데이터 클래스로 이벤트 정의 권장
-{{% /notice %}}
+{{< /callout >}}
 
 #### 프로필별 설정
 
@@ -305,11 +305,11 @@ spring:
       auto-offset-reset: latest
 ```
 
-{{% notice style="info" title="프로필별 설정 핵심 포인트" %}}
+{{< callout type="info" title="프로필별 설정 핵심 포인트" >}}
 - **환경 변수**: `${KAFKA_SERVERS:localhost:9092}` 형식으로 기본값 지정
 - **로컬 개발**: `earliest`로 모든 메시지 처음부터 읽기
 - **프로덕션**: 다중 브로커 지정, `latest`로 최신 메시지부터 읽기
-{{% /notice %}}
+{{< /callout >}}
 
 #### 일반적인 오류와 해결
 

@@ -6,7 +6,7 @@ weight: 5
 lastmod: 2026-01-08
 ---
 
-{{% notice style="info" title="버전 정보" %}}
+{{< callout type="info" title="버전 정보" >}}
 이 가이드는 다음 버전을 기준으로 작성되었습니다:
 - **Elasticsearch**: 8.11.x
 - **Kibana**: 8.11.x
@@ -15,7 +15,7 @@ lastmod: 2026-01-08
 - **Java**: 17+
 
 다른 버전에서는 일부 API나 설정이 다를 수 있습니다. 특히 Elasticsearch 7.x와 8.x는 보안 설정, 클라이언트 API 등에서 큰 차이가 있습니다.
-{{% /notice %}}
+{{< /callout >}}
 
 ## Elasticsearch란?
 

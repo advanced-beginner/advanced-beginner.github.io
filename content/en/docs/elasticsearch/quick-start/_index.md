@@ -51,9 +51,9 @@ docker-compose --version
 # Expected output: Docker Compose version v2.x.x or higher
 ```
 
-{{% notice style="warning" title="Don't have Docker?" %}}
+{{< callout type="warning" title="Don't have Docker?" >}}
 Install from the [Docker Desktop official site](https://www.docker.com/products/docker-desktop/).
-{{% /notice %}}
+{{< /callout >}}
 
 ## Step 1/4: Start Elasticsearch
 

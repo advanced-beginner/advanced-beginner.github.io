@@ -8,13 +8,13 @@ author_url: "http://github.com/kimbenji"
 
 This section compiles additional resources for learning Kafka. From official documentation to books, online courses, communities, and tools, we've gathered resources for systematic learning.
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **Official Documentation**: Apache Kafka, Spring Kafka, Confluent docs are essential
 - **Beginner Books**: "Kafka: The Definitive Guide", "Kafka in Action" recommended
 - **Online Courses**: Confluent Developer (free), Udemy, Inflearn
 - **Communities**: Stack Overflow, Confluent Forum, OKKY
 - **Tools**: Kafka UI (management), Prometheus+Grafana (monitoring)
-{{% /notice %}}
+{{< /callout >}}
 
 #### Official Documentation
 

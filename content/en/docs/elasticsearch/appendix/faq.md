@@ -4,13 +4,13 @@ weight: 2
 lastmod: 2026-01-10
 ---
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **ES vs RDB**: Use ES for full-text search/log analysis, RDB for transactions/JOINs
 - **text vs keyword**: text is for search (analyzed), keyword is for filter/sort (not analyzed)
 - **Performance issues**: Use Filter Context, return only needed fields, `search_after` pagination
 - **Korean search**: Nori analyzer installation required
 - **Common errors**: Most caused by disk shortage, memory shortage, or type mismatch
-{{% /notice %}}
+{{< /callout >}}
 
 Frequently asked questions and answers.
 

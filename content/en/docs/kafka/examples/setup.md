@@ -8,12 +8,12 @@ author_url: "http://github.com/kimbenji"
 
 Reference guide for setting up Kafka with Spring Boot.
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **Kafka Execution**: Run Kafka 3.6.1 in KRaft mode via Docker Compose
 - **Dependencies**: Add `spring-kafka`, `spring-boot-starter-web`
 - **Basic Settings**: Configure `bootstrap-servers`, Serializer/Deserializer, `group-id`
 - **Production**: Ensure stability with `acks: all`, `enable.idempotence: true`
-{{% /notice %}}
+{{< /callout >}}
 
 #### Target Audience and Prerequisites
 
@@ -83,12 +83,12 @@ docker-compose down
 docker-compose down -v
 ```
 
-{{% notice style="info" title="Docker Kafka Key Points" %}}
+{{< callout type="info" title="Docker Kafka Key Points" >}}
 - **KRaft Mode**: Kafka manages its own metadata without Zookeeper (recommended for 3.3+)
 - **Ports**: 9092 (client), 9093 (controller)
 - **Volume**: Ensure data persistence with `kafka-data`
 - **Full Reset**: Delete volumes with `docker-compose down -v`
-{{% /notice %}}
+{{< /callout >}}
 
 #### Spring Boot Dependencies
 
@@ -133,11 +133,11 @@ When using Maven, add dependencies as follows.
 </dependencies>
 ```
 
-{{% notice style="info" title="Dependencies Key Points" %}}
+{{< callout type="info" title="Dependencies Key Points" >}}
 - **spring-kafka**: Kafka Producer/Consumer abstraction, provides KafkaTemplate
 - **spring-boot-starter-web**: For REST API endpoint implementation (optional)
 - **spring-kafka-test**: Provides EmbeddedKafka for testing
-{{% /notice %}}
+{{< /callout >}}
 
 #### application.yml Configuration
 
@@ -193,12 +193,12 @@ spring:
         max.poll.interval.ms: 300000
 ```
 
-{{% notice style="info" title="application.yml Key Points" %}}
+{{< callout type="info" title="application.yml Key Points" >}}
 - **bootstrap-servers**: Kafka broker connection address (required)
 - **Serializer/Deserializer**: Use StringSerializer for strings, JsonSerializer for objects
 - **group-id**: Consumer Group identifier, service name-based recommended
 - **Production Settings**: `acks: all` for data stability, `enable.idempotence: true` to prevent duplicates
-{{% /notice %}}
+{{< /callout >}}
 
 #### Configuration Details
 
@@ -259,11 +259,11 @@ public void consume(OrderEvent event) {
 }
 ```
 
-{{% notice style="info" title="JSON Message Processing Key Points" %}}
+{{< callout type="info" title="JSON Message Processing Key Points" >}}
 - **JsonSerializer/JsonDeserializer**: Auto serialize/deserialize objects to JSON
 - **trusted.packages**: Specify allowed packages for deserialization (security)
 - **Java Record**: Recommended for defining events as immutable data classes
-{{% /notice %}}
+{{< /callout >}}
 
 #### Profile-based Configuration
 
@@ -305,11 +305,11 @@ spring:
       auto-offset-reset: latest
 ```
 
-{{% notice style="info" title="Profile-based Configuration Key Points" %}}
+{{< callout type="info" title="Profile-based Configuration Key Points" >}}
 - **Environment Variables**: Specify default with `${KAFKA_SERVERS:localhost:9092}` format
 - **Local Development**: Read all messages from beginning with `earliest`
 - **Production**: Specify multiple brokers, read from latest messages with `latest`
-{{% /notice %}}
+{{< /callout >}}
 
 #### Common Errors and Solutions
 

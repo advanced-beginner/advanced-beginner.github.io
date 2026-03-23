@@ -8,14 +8,14 @@ author_url: "http://github.com/kimbenji"
 
 This section compiles frequently asked questions and answers about Kafka. Organized by topic from basic concepts to configuration, error handling, performance tuning, operations, and Spring Kafka.
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **Basic Concepts**: Kafka is a distributed event streaming platform, not a message queue; order is guaranteed per Partition
 - **Configuration**: Use `acks=all` for safety, `auto.offset.reset=earliest` recommended, manual commit to prevent message loss
 - **Error Handling**: Use `@RetryableTopic` for retries then move to Dead Letter Topic
 - **Performance**: Producer - batch/compression; Consumer - increase instances and adjust fetch settings
 - **Operations**: Recommend `replication.factor=3`, `min.insync.replicas=2`
 - **Spring Kafka**: Simple implementation with `KafkaTemplate` and `@KafkaListener`
-{{% /notice %}}
+{{< /callout >}}
 
 #### Basic Concepts
 

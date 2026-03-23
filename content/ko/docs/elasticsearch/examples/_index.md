@@ -7,9 +7,9 @@ lastmod: 2026-01-08
 
 Spring Boot 기반의 실행 가능한 예제 코드입니다.
 
-{{% notice style="info" title="버전 정보" %}}
+{{< callout type="info" title="버전 정보" >}}
 모든 예제는 **Elasticsearch 8.11.x**, **Spring Boot 3.2.x**, **Java 17+** 기준입니다.
-{{% /notice %}}
+{{< /callout >}}
 
 ## 예제 목록
 

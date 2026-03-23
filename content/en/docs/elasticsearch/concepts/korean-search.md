@@ -14,11 +14,11 @@ related_concepts:
     path: /docs/elasticsearch/examples/product-search/
 ---
 
-{{% notice style="info" title="Prerequisites" %}}
+{{< callout type="info" title="Prerequisites" >}}
 Before reading this document, understand these concepts first:
 - [Data Modeling](data-modeling/) - Analyzer, text vs keyword types
 - [Query DSL](query-dsl/) - match, multi_match queries
-{{% /notice %}}
+{{< /callout >}}
 
 This document covers how to optimize Korean language search in Elasticsearch. We'll implement the Nori analyzer, autocomplete, and initial consonant (chosung) search.
 

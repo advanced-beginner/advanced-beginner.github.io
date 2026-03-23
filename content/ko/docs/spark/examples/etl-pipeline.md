@@ -7,12 +7,12 @@ author:
   github: advanced-beginner
 ---
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **템플릿 메서드 패턴**: Extract → Transform → Validate → Load 표준화
 - **데이터 정제 유틸리티**: 중복 제거, NULL 처리, 이상치 필터링
 - **증분 ETL**: 워터마크 기반 변경 데이터만 처리
 - **재시도 로직**: 실패 시 자동 재시도 및 날짜 범위 처리
-{{% /notice %}}
+{{< /callout >}}
 
 ## 대상 독자 및 선수 지식
 
@@ -198,12 +198,12 @@ public record EtlResult(
 }
 ```
 
-{{% notice style="info" title="핵심 포인트: 기본 ETL 구조" %}}
+{{< callout type="info" title="핵심 포인트: 기본 ETL 구조" >}}
 - **템플릿 메서드 패턴**: `execute()`가 전체 흐름 제어, 하위 클래스는 각 단계 구현
 - **4단계 프로세스**: Extract → Transform → Validate → Load
 - **검증 필수**: 적재 전 데이터 품질 검사로 오류 데이터 방지
 - **결과 추적**: `EtlResult` record로 성공/실패, 레코드 수, 소요 시간 기록
-{{% /notice %}}
+{{< /callout >}}
 
 ## 매출 데이터 ETL 예제
 
@@ -414,12 +414,12 @@ public record ValidationResult(
 }
 ```
 
-{{% notice style="info" title="핵심 포인트: 매출 데이터 ETL" %}}
+{{< callout type="info" title="핵심 포인트: 매출 데이터 ETL" >}}
 - **스키마 명시**: `StructType`으로 입력 스키마 정의 (inferSchema보다 안정적)
 - **PERMISSIVE 모드**: 오류 레코드를 별도 컬럼으로 분리하여 보존
 - **파생 컬럼**: 비즈니스 로직 적용 (금액 계산, 지역 분류 등)
 - **메타데이터**: 처리 시점, 배치 ID 추가로 추적 가능성 확보
-{{% /notice %}}
+{{< /callout >}}
 
 ## 데이터 정제 유틸리티
 
@@ -534,12 +534,12 @@ public class DataCleaner {
 }
 ```
 
-{{% notice style="info" title="핵심 포인트: 데이터 정제 유틸리티" %}}
+{{< callout type="info" title="핵심 포인트: 데이터 정제 유틸리티" >}}
 - **중복 제거**: `dropDuplicates(keyColumns)`로 키 기준 중복 제거
 - **이상치 필터링**: IQR(사분위 범위) 방식으로 통계적 이상치 제거
 - **문자열 정규화**: `lower()`, `trim()`으로 일관성 확보
 - **재사용성**: 범용 클래스로 다양한 ETL 작업에서 활용
-{{% /notice %}}
+{{< /callout >}}
 
 ## 증분 ETL (Incremental)
 
@@ -654,12 +654,12 @@ public class IncrementalEtlJob {
 }
 ```
 
-{{% notice style="info" title="핵심 포인트: 증분 ETL" %}}
+{{< callout type="info" title="핵심 포인트: 증분 ETL" >}}
 - **워터마크**: 마지막 처리 시점 기록으로 증분 데이터만 추출
 - **Upsert**: 기존 데이터 업데이트 + 신규 데이터 삽입 동시 처리
 - **left_anti 조인**: 기존 키 제외 후 신규 데이터와 병합
 - **멱등성**: 동일 데이터 재처리해도 결과 동일하게 보장
-{{% /notice %}}
+{{< /callout >}}
 
 ## 에러 처리 및 재시도
 
@@ -752,12 +752,12 @@ public class EtlRunner {
 }
 ```
 
-{{% notice style="info" title="핵심 포인트: 에러 처리 및 재시도" %}}
+{{< callout type="info" title="핵심 포인트: 에러 처리 및 재시도" >}}
 - **재시도 로직**: 일시적 오류(네트워크, 타임아웃) 시 자동 재시도
 - **지수 백오프**: 재시도 간격을 점점 늘려 시스템 부하 방지
 - **날짜 범위 처리**: 누락된 날짜 일괄 재처리 지원
 - **실패 시 중단**: 특정 날짜 실패 시 후속 처리 중단으로 데이터 정합성 유지
-{{% /notice %}}
+{{< /callout >}}
 
 ## 스케줄링 (Spring)
 

@@ -6,13 +6,13 @@ weight: 2
 
 An overview of the main differences between Scala 2 and Scala 3. Scala 3, released in 2020, provides more concise syntax, a more powerful type system, and improved implicit features.
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **New Projects**: Scala 3 recommended (more concise syntax, improved type system)
 - **Using Spark**: Maintain Scala 2.12/2.13 (Spark doesn't support Scala 3 yet)
 - **Key Changes**: `implicit` → `given`/`using`, indentation-based syntax, `enum` added
 - **Compatibility**: Scala 3 can use Scala 2.13 libraries
 - **Migration**: Gradual transition with `-source:3.0-migration` option
-{{% /notice %}}
+{{< /callout >}}
 
 #### New Features (Scala 3)
 
@@ -85,12 +85,12 @@ Scala 3's macro system was completely redesigned. The `inline` keyword guarantee
 | Macro API | scala.reflect | scala.quoted |
 | Compile-time operations | Limited | compiletime package |
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - **Syntax**: Indentation-based option, `if cond then`, `for x <- list do`
 - **enum**: Concise replacement for `sealed trait` + `case object` combination
 - **Types**: Union (`|`), Intersection (`&`), Opaque Types added
 - **Implicits**: `implicit` → `given`/`using` for clearer intent
-{{% /notice %}}
+{{< /callout >}}
 
 #### Changed Features
 
@@ -139,11 +139,11 @@ val p = Person("Alice")  // without new!
 val p = new Person("Alice")
 ```
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - **Trait Parameters**: Traits can have constructor parameters in Scala 3
 - **@main**: Entry point definition simplified with automatic argument parsing
 - **Creator Applications**: Regular classes can create instances without `new`
-{{% /notice %}}
+{{< /callout >}}
 
 #### Removed Features
 
@@ -160,11 +160,11 @@ The following features were removed in Scala 3. Most have better alternatives, a
 | `private[this]` | `private` |
 | `protected[this]` | `protected` |
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - **Procedure syntax** (`def f() { }`): Explicitly use `: Unit =`
 - **XML literals**: Replaced with separate library
 - **Symbol literals** (`'symbol`): Use strings
-{{% /notice %}}
+{{< /callout >}}
 
 #### Compatibility
 
@@ -202,11 +202,11 @@ scalacOptions ++= Seq(
 )
 ```
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - **Binary Compatibility**: Scala 2.13 libraries can be used directly in Scala 3
 - **Cross-building**: Support multiple versions simultaneously with `crossScalaVersions`
 - **Migration Mode**: Automatic conversion with `-source:3.0-migration -rewrite`
-{{% /notice %}}
+{{< /callout >}}
 
 #### Recommendations
 
@@ -230,11 +230,11 @@ Projects using Apache Spark must maintain Scala 2.
 
 - **Maintain Scala 2.12/2.13**: Spark doesn't support Scala 3 yet (as of 2024)
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - **New Projects**: Choose Scala 3 (better syntax, error messages, type inference)
 - **Existing Projects**: Gradual migration, verify dependency Scala 3 support
 - **Spark**: Must maintain Scala 2, waiting for Scala 3 support
-{{% /notice %}}
+{{< /callout >}}
 
 #### References
 

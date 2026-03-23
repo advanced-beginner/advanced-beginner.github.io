@@ -17,10 +17,10 @@ lastmod: 2026-01-10
 
 Learn how to implement semantic search and similar image search using Elasticsearch's vector search (kNN).
 
-{{% notice style="info" title="Version Requirements" %}}
+{{< callout type="info" title="Version Requirements" >}}
 - **Elasticsearch 8.0+** required (native kNN support)
 - Versions before 8.x require script_score or plugins
-{{% /notice %}}
+{{< /callout >}}
 
 ## What is Vector Search?
 

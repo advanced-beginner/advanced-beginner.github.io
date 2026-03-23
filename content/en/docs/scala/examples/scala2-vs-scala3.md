@@ -4,13 +4,13 @@ title: Scala 2 vs Scala 3 Comparison
 weight: 3
 ---
 
-{{% notice style="primary" title="TL;DR" %}}
+{{< callout type="info" title="TL;DR" >}}
 - **Syntax**: Scala 3 supports simpler syntax (indentation-based, no braces required)
 - **Enums**: Simple definition with `enum` keyword (replaces `sealed trait` + `case object`)
 - **Implicits**: Clearer with `given`/`using` keywords (replacing `implicit`)
 - **New features**: Union Types, Opaque Types, Intersection Types
 - **Compatibility**: Most Scala 2 code works in Scala 3
-{{% /notice %}}
+{{< /callout >}}
 
 **Target Audience**: Developers familiar with Scala 2, developers choosing Scala 3
 
@@ -64,11 +64,11 @@ def process(x: Int): Int = {
 
 Scala 3 can omit braces by defining blocks with indentation. Scala 2 style braces also work in Scala 3.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **Scala 3**: Can omit braces, use indentation
 - **Scala 2**: Braces always required
 - Both styles work in Scala 3 (backward compatible)
-{{% /notice %}}
+{{< /callout >}}
 
 **if Expressions**
 
@@ -97,10 +97,10 @@ val grade = if (score >= 90) "A"
 
 Scala 3 uses `then` keyword, omitting parentheses. Improves readability.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **Scala 3**: `if condition then result` (without parentheses)
 - **Scala 2**: `if (condition) result` (with parentheses)
-{{% /notice %}}
+{{< /callout >}}
 
 **for Expressions**
 
@@ -151,11 +151,11 @@ val result = for {
 
 Scala 3 separates loop body with `do` keyword. Clearly distinguishes loop definition from loop body.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **Scala 3**: Separate loop body with `do` keyword
 - **Scala 2**: Define loop and body together with braces
 - Scala 2 style also works in Scala 3
-{{% /notice %}}
+{{< /callout >}}
 
 #### Enumerations (Enum)
 
@@ -218,11 +218,11 @@ val circle: Shape = Circle(5.0)
 
 Scala 3 enum definition is much more concise. Also suitable for ADT (Algebraic Data Type) definition.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **Scala 3 enum**: Simple definition, ideal for simple enumerations and ADTs
 - **Scala 2**: Requires `sealed trait` + `case object/class` boilerplate
 - Scala 3 enums are internally implemented as sealed traits
-{{% /notice %}}
+{{< /callout >}}
 
 #### Implicit Features
 
@@ -263,11 +263,11 @@ connect("localhost")(10000) // Explicit
 
 Scala 3 uses `given` keyword to define implicit instances and `using` keyword for implicit parameters. This makes code intent clearer than `implicit` overloading.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **Scala 3**: `given` for instances, `using` for parameters
 - **Scala 2**: `implicit` for both, ambiguous distinction
 - Scala 3 separates naming instances from using them
-{{% /notice %}}
+{{< /callout >}}
 
 **Extension Methods**
 
@@ -299,11 +299,11 @@ implicit class StringOps(s: String) {
 
 Scala 3 uses `extension` keyword to explicitly declare adding new methods to existing types.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **Scala 3**: Use `extension` keyword directly (clearer intent)
 - **Scala 2**: Use `implicit class` (create wrapper class)
 - Scala 3 extensions compile to more efficient bytecode
-{{% /notice %}}
+{{< /callout >}}
 
 **Type Classes**
 
@@ -354,11 +354,11 @@ val intShow = implicitly[Show[Int]]
 
 Scala 3 uses `given ... with` for cleaner type class instance definition. `summon` replaces `implicitly`.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **Scala 3**: `given ... with` syntax, cleaner definition
 - **Scala 2**: Create anonymous classes with `new`, verbose
 - **Scala 3 summon**: Clearer naming than `implicitly`
-{{% /notice %}}
+{{< /callout >}}
 
 #### Entry Point
 
@@ -394,11 +394,11 @@ object Hello extends App {
 
 Scala 3's `@main` annotation automatically parses command-line arguments to match method parameter types.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **Scala 3**: `@main` annotation, automatic argument parsing
 - **Scala 2**: Define `main` method in object or extend `App` trait
 - Scala 3 `@main` provides better type safety
-{{% /notice %}}
+{{< /callout >}}
 
 #### New Type Features (Scala 3 Only)
 
@@ -459,11 +459,11 @@ def process(file: Readable with Writable): Unit = {
 }
 ```
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **Union Types**: `A | B` - value can be A or B
 - **Intersection Types**: `A & B` - value has both A and B properties
 - **Opaque Types**: Type aliases transparent at compile time, opaque at runtime
-{{% /notice %}}
+{{< /callout >}}
 
 #### Migration Summary
 
@@ -494,11 +494,11 @@ for (i <- 1 to 5) { println(i) }
 
 However, Scala 3 style is recommended for new projects to fully leverage new features.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - Most Scala 2 syntax works in Scala 3 (backward compatibility)
 - New features like Union Types, Opaque Types only in Scala 3
 - Migration possible gradually (mix Scala 2/3 style)
-{{% /notice %}}
+{{< /callout >}}
 
 #### Next Steps
 

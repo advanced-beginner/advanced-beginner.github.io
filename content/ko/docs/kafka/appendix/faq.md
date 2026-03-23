@@ -8,14 +8,14 @@ author_url: "http://github.com/kimbenji"
 
 Kafka를 사용하면서 자주 받는 질문과 답변을 정리했습니다. 기본 개념부터 설정, 에러 처리, 성능 튜닝, 운영, Spring Kafka까지 주제별로 구성했습니다.
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **기본 개념**: Kafka는 메시지 큐가 아닌 분산 이벤트 스트리밍 플랫폼, Partition 단위 순서 보장
 - **설정**: `acks=all`로 안정성 확보, `auto.offset.reset=earliest` 권장, 수동 커밋으로 메시지 유실 방지
 - **에러 처리**: `@RetryableTopic`으로 재시도 후 Dead Letter Topic으로 이동
 - **성능**: Producer는 배치/압축, Consumer는 인스턴스 수 증가 및 fetch 설정 조정
 - **운영**: `replication.factor=3`, `min.insync.replicas=2` 권장
 - **Spring Kafka**: `KafkaTemplate`과 `@KafkaListener`로 간편하게 구현
-{{% /notice %}}
+{{< /callout >}}
 
 #### 기본 개념
 

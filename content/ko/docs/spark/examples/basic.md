@@ -7,12 +7,12 @@ author:
   github: advanced-beginner
 ---
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **CSV, JSON, Parquet, JDBC** 등 다양한 데이터 소스 읽기/쓰기
 - **DataFrame API**로 필터, 변환, 집계, 조인 수행
 - **SQL 쿼리**와 DataFrame API 혼용 가능
 - **실무 예제**: NYC 택시 데이터, Kaggle 데이터셋 분석
-{{% /notice %}}
+{{< /callout >}}
 
 ## 대상 독자 및 선수 지식
 
@@ -98,11 +98,11 @@ Dataset<Row> selected = spark.read()
         .select("id", "name");
 ```
 
-{{% notice style="info" title="핵심 포인트: 데이터 포맷 선택" %}}
+{{< callout type="info" title="핵심 포인트: 데이터 포맷 선택" >}}
 - **Parquet**: 컬럼 지향, 압축 효율, 스키마 내장 - **프로덕션 권장**
 - **CSV/JSON**: 사람이 읽기 쉬움 - 소규모 데이터나 디버깅용
 - **JDBC**: 데이터베이스 직접 연동 - 증분 추출이나 lookup 테이블용
-{{% /notice %}}
+{{< /callout >}}
 
 **JDBC로 데이터베이스 읽기**
 
@@ -196,12 +196,12 @@ Dataset<Row> depts = employees.filter(
 filtered.show();
 ```
 
-{{% notice style="info" title="핵심 포인트: 데이터 변환" %}}
+{{< callout type="info" title="핵심 포인트: 데이터 변환" >}}
 - **withColumn()**: 새 컬럼 추가 또는 기존 컬럼 변환
 - **filter()**: 조건에 맞는 행만 선택 (SQL WHERE와 동일)
 - **NULL 처리**: `isNull()`, `isNotNull()`로 명시적 처리 필수
 - **체이닝**: 여러 변환을 연결하여 파이프라인 구성
-{{% /notice %}}
+{{< /callout >}}
 
 **정렬**
 
@@ -284,12 +284,12 @@ pivoted.show();
 // +----------+-------+-------+------+
 ```
 
-{{% notice style="info" title="핵심 포인트: 집계" %}}
+{{< callout type="info" title="핵심 포인트: 집계" >}}
 - **groupBy() + agg()**: SQL GROUP BY와 동일한 그룹별 집계
 - **pivot()**: 행을 열로 변환하는 피벗 테이블 생성
 - **alias()**: 집계 결과 컬럼에 명확한 이름 부여
 - **orderBy()**: 집계 후 정렬로 가독성 향상
-{{% /notice %}}
+{{< /callout >}}
 
 ## 조인
 
@@ -340,12 +340,12 @@ Dataset<Row> optimized = employees.join(
 );
 ```
 
-{{% notice style="info" title="핵심 포인트: 조인" %}}
+{{< callout type="info" title="핵심 포인트: 조인" >}}
 - **조인 유형**: inner, left, right, full, left_semi, left_anti, cross
 - **broadcast()**: 작은 테이블(수 MB 이하)을 모든 노드에 복제하여 성능 향상
 - **동일 컬럼명**: `.join(other, "key")` 간단 문법 사용 가능
 - **다중 조건**: `.and()` 연산자로 복합 조인 조건 구성
-{{% /notice %}}
+{{< /callout >}}
 
 ## SQL 사용
 
@@ -392,12 +392,12 @@ Dataset<Row> cteResult = spark.sql("""
 cteResult.show();
 ```
 
-{{% notice style="info" title="핵심 포인트: SQL 사용" %}}
+{{< callout type="info" title="핵심 포인트: SQL 사용" >}}
 - **createOrReplaceTempView()**: DataFrame을 SQL 테이블처럼 사용
 - **spark.sql()**: 표준 SQL 쿼리 실행 (Window 함수, CTE 포함)
 - **혼용 가능**: DataFrame API와 SQL을 필요에 따라 조합
 - **복잡한 분석**: Window 함수, CTE 등은 SQL이 더 직관적
-{{% /notice %}}
+{{< /callout >}}
 
 ## 데이터 저장
 
@@ -438,12 +438,12 @@ result.coalesce(1)
 | `ignore` | 이미 존재하면 무시 |
 | `error` (기본) | 이미 존재하면 오류 |
 
-{{% notice style="info" title="핵심 포인트: 데이터 저장" %}}
+{{< callout type="info" title="핵심 포인트: 데이터 저장" >}}
 - **Parquet + 파티셔닝**: 대용량 데이터의 표준 저장 방식
 - **partitionBy()**: 자주 필터링하는 컬럼 기준 디렉토리 분할
 - **coalesce(1)**: 단일 파일 출력 (소규모 결과 공유 시 유용)
 - **저장 모드**: 프로덕션에서는 `append` 또는 명시적 `overwrite` 사용
-{{% /notice %}}
+{{< /callout >}}
 
 ## 종합 예제: 매출 분석
 

@@ -14,11 +14,11 @@ related_concepts:
     path: /docs/elasticsearch/concepts/high-availability/
 ---
 
-{{% notice style="info" title="선수 개념" %}}
+{{< callout type="info" title="선수 개념" >}}
 이 문서를 읽기 전에 다음 개념을 먼저 이해하세요:
 - [핵심 구성요소](core-components/) - Shard, Segment 개념
 - [데이터 모델링](data-modeling/) - Mapping, Analyzer 기본
-{{% /notice %}}
+{{< /callout >}}
 
 ## 전체 비유: 도서관의 신간 입고 프로세스
 

@@ -4,13 +4,13 @@ title: Spark Integration
 weight: 4
 ---
 
-{{% notice style="primary" title="TL;DR" %}}
+{{< callout type="info" title="TL;DR" >}}
 - **Scala is Spark's native language**: Latest features supported first, most concise API
 - **DataFrame**: SQL-style data processing, `$"column"` syntax for column references
 - **Dataset[T]**: Type-safe data processing with Case Classes, compile-time error detection
 - **Performance optimization**: Utilize broadcast joins, caching, Predicate Pushdown
 - **Note**: Spark 3.5 only supports Scala 2.12/2.13 (Scala 3 not supported)
-{{% /notice %}}
+{{< /callout >}}
 
 **Target Audience**: Scala developers learning large-scale data processing, Spark beginners
 
@@ -61,11 +61,11 @@ Key benefits of using Scala and Spark together. You can access the latest featur
 | **Functional Style** | Natural use of map, filter, reduce, etc. |
 | **REPL Support** | Interactive development with spark-shell |
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - Scala is Spark's native language with latest features supported first
 - Much more concise code than Java (`$"column"` syntax, etc.)
 - Leverage type-safe Dataset API with Case Classes
-{{% /notice %}}
+{{< /callout >}}
 
 #### Environment Setup
 
@@ -94,11 +94,11 @@ lazy val root = (project in file("."))
 sbt.version=1.10.6
 ```
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - Spark 3.5 **only supports Scala 2.12/2.13** (Scala 3 not supported)
 - Must add `spark-core` and `spark-sql` dependencies
 - Specify sbt version in `project/build.properties`
-{{% /notice %}}
+{{< /callout >}}
 
 #### Basic Example: DataFrame Processing
 
@@ -171,12 +171,12 @@ object SparkBasics extends App {
 
 In this example, importing `spark.implicits._` enables referencing columns with `$"column_name"` syntax. This leverages Scala's string interpolation and implicit conversions.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **SparkSession**: Spark's entry point, created with `builder()` pattern
 - **spark.implicits._**: Enables `$"column"` syntax and `toDF()`
 - **local[\*]**: Use all CPU cores in local mode
 - Process data with `filter`, `select`, `groupBy`, `agg`, `orderBy`
-{{% /notice %}}
+{{< /callout >}}
 
 #### Case Class and Dataset
 
@@ -269,12 +269,12 @@ ds.filter(_.salry > 70000)   // Compile error! Immediately caught
 //            ^^^^^ value salry is not a member of Employee
 ```
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **Dataset[T]**: Type-safe data processing with Case Classes
 - **DataFrame**: Runtime errors possible, **Dataset**: Compile-time error detection
 - **toDS()**: Convert Seq to Dataset
 - **groupByKey + mapGroups**: Type-safe grouping and aggregation
-{{% /notice %}}
+{{< /callout >}}
 
 #### Leveraging Functional Style
 
@@ -361,11 +361,11 @@ object FunctionalSparkExample extends App {
 
 UDF (User Defined Function) allows using Scala functions in Spark SQL. Leveraging pattern matching enables clear expression of data classification logic.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **Functional chaining**: Connect `filter` → `map` → `groupByKey` → `reduceGroups`
 - **UDF**: Convert Scala functions to be usable in Spark SQL
 - **Pattern matching**: Clearly express data classification logic
-{{% /notice %}}
+{{< /callout >}}
 
 #### Practical Example: ETL Pipeline
 
@@ -475,12 +475,12 @@ object ETLPipeline extends App {
 
 In this ETL pipeline, use Option type to safely handle nullable fields and classify session types with pattern matching. Final results are saved in Parquet format for use in subsequent analysis.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **Option[T]**: Type-safe handling of nullable fields
 - **getOrElse**: Apply default value to missing values
 - **partitionBy**: Date-based partitioning improves query performance
 - **Parquet**: Column-based format optimized for analysis
-{{% /notice %}}
+{{< /callout >}}
 
 #### Spark SQL and Scala
 
@@ -550,11 +550,11 @@ object SparkSQLExample extends App {
 }
 ```
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **createOrReplaceTempView**: Reference DataFrame as table in SQL
 - **spark.sql()**: Execute SQL query and return DataFrame
 - **Mix SQL + Scala API**: Complex joins in SQL, additional processing in Scala
-{{% /notice %}}
+{{< /callout >}}
 
 #### Performance Optimization Tips
 
@@ -615,12 +615,12 @@ val filtered = spark.read
   .filter($"status" === "ERROR")     // Filter pushdown
 ```
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **Partitioning**: Optimize shuffles with `repartition(n, $"key")`
 - **Broadcast join**: Replicate small tables to all nodes to prevent shuffles
 - **Caching**: Keep repeatedly used data in memory with `cache()` or `persist()`
 - **Predicate Pushdown**: Push filter conditions down to data source level
-{{% /notice %}}
+{{< /callout >}}
 
 #### Troubleshooting
 
@@ -669,11 +669,11 @@ class MyProcessor extends Serializable {
 }
 ```
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **Task not serializable**: Capture only primitives in closure or use `@transient`
 - **OutOfMemoryError**: Increase `spark.driver.memory`, `spark.executor.memory`
 - **Memory issues**: Allow disk spill with `StorageLevel.MEMORY_AND_DISK`
-{{% /notice %}}
+{{< /callout >}}
 
 #### How to Run
 
@@ -696,11 +696,11 @@ spark-shell --master local[*]
 
 For local development, use sbt run or spark-shell. For cluster deployment, use spark-submit.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **sbt run**: Quick execution for local development
 - **spark-shell**: Interactive development and exploratory analysis
 - **spark-submit**: Use for cluster deployment, requires JAR packaging
-{{% /notice %}}
+{{< /callout >}}
 
 #### Next Steps
 

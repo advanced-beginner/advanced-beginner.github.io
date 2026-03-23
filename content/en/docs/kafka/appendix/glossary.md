@@ -8,13 +8,13 @@ author_url: "http://github.com/kimbenji"
 
 This glossary covers key Kafka terminology. For detailed explanations of each term, refer to the Concepts section. Terms are sorted alphabetically, with cross-references to related terms.
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **Core Components**: Topic (logical channel), Partition (parallel processing unit), Broker (server), Producer (publisher), Consumer (receiver)
 - **Reliability**: ACK (delivery confirmation), ISR (synchronized replicas), Replication Factor (number of copies)
 - **Consumer Management**: Consumer Group (parallel processing), Offset (position), Commit (save), Rebalancing (redistribution)
 - **Spring Kafka**: KafkaTemplate (Producer), @KafkaListener (Consumer)
 - **Metadata Management**: KRaft (recommended for new clusters), Zookeeper (legacy)
-{{% /notice %}}
+{{< /callout >}}
 
 #### A
 

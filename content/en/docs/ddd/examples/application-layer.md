@@ -8,13 +8,13 @@ author_url: "http://github.com/kimbenji"
 
 # Application Layer Implementation
 
-{{% notice style="primary" title="TL;DR" %}}
+{{< callout type="info" title="TL;DR" >}}
 - **OrderService**: Use Case orchestration. Calls domain logic, manages transactions, publishes events
 - **Command objects**: Encapsulate requests as immutable objects like CreateOrderCommand
 - **DTO**: Separate response representation from domain with OrderResponse, etc.
 - **JPA Repository**: Implementation of Domain Repository interface. Uses Mapper for Entity conversion
 - **Event handler**: Publishes to Kafka after commit using @TransactionalEventListener
-{{% /notice %}}
+{{< /callout >}}
 
 ## Target Audience and Prerequisites
 
@@ -142,12 +142,12 @@ public class OrderService {
 }
 ```
 
-{{% notice style="tip" title="Key Points: Application Service" %}}
+{{< callout type="tip" title="Key Points: Application Service" >}}
 - **@Transactional(readOnly = true)**: Class-level default. Only write methods override with @Transactional
 - **Command/Query separation**: Write operations use Command objects, read operations use direct parameters
 - **Domain logic delegation**: Service only orchestrates, business logic executes in Aggregate
 - **Event publishing**: Publishes collected events via ApplicationEventPublisher after save
-{{% /notice %}}
+{{< /callout >}}
 
 ## Command Objects
 
@@ -211,12 +211,12 @@ public record CancelOrderCommand(
 }
 ```
 
-{{% notice style="tip" title="Key Points: Command Objects" %}}
+{{< callout type="tip" title="Key Points: Command Objects" >}}
 - **Java Record**: Guarantees immutability, concise code
 - **Compact Constructor**: Validation performed at creation time
 - **Domain types**: Use domain types like OrderId, CustomerId instead of String
 - **Self-documenting**: Intent clear from Command name alone (CreateOrderCommand, CancelOrderCommand)
-{{% /notice %}}
+{{< /callout >}}
 
 ## DTO
 
@@ -429,12 +429,12 @@ record CreateOrderResponse(String orderId, String message) {}
 record CancelOrderRequest(String reason) {}
 ```
 
-{{% notice style="tip" title="Key Points: REST Controller and DTO" %}}
+{{< callout type="tip" title="Key Points: REST Controller and DTO" >}}
 - **DTO conversion**: Convert Request DTO to Command, Domain to Response DTO
 - **HTTP status codes**: 201 Created + Location header for creation, 200 OK for queries
 - **Domain protection**: Controller never returns domain objects directly
 - **Inner Record**: Define Request/Response DTOs together with Controller for better cohesion
-{{% /notice %}}
+{{< /callout >}}
 
 ## Infrastructure Layer: JPA Repository
 
@@ -710,13 +710,13 @@ public class OrderMapper {
 }
 ```
 
-{{% notice style="tip" title="Key Points: JPA Repository" %}}
+{{< callout type="tip" title="Key Points: JPA Repository" >}}
 - **Domain Repository implementation**: Interface in Domain, implementation in Infrastructure
 - **Entity separation**: Keep JPA Entity and Domain Model separate to prevent domain pollution
 - **Mapper pattern**: Bidirectional conversion with toEntity/toDomain methods
 - **@Version**: Optimistic locking for concurrency control
 - **reconstitute usage**: Use domain model's reconstitute method for DB restoration
-{{% /notice %}}
+{{< /callout >}}
 
 ## Event Handler
 
@@ -809,12 +809,12 @@ record OrderEventPayload(
 ) {}
 ```
 
-{{% notice style="tip" title="Key Points: Event Handler" %}}
+{{< callout type="tip" title="Key Points: Event Handler" >}}
 - **@TransactionalEventListener**: Executes after transaction commit for data consistency
 - **TransactionPhase.AFTER_COMMIT**: Only publishes to external systems after successful save
 - **Kafka publishing**: Converts Domain Event to Kafka message for publishing
 - **Payload conversion**: Transforms to appropriate format (OrderEventPayload) for external systems
-{{% /notice %}}
+{{< /callout >}}
 
 ## API Testing
 
@@ -901,12 +901,12 @@ flowchart TB
 | **Domain** | Business logic | Order, OrderLine, Money |
 | **Infrastructure** | Technical implementation | JpaOrderRepository, Mapper |
 
-{{% notice style="tip" title="Key Points: Summary" %}}
+{{< callout type="tip" title="Key Points: Summary" >}}
 - **Layer separation**: Each layer only handles its responsibilities. Domain logic in Domain, orchestration in Application
 - **Dependency direction**: Always points inward (toward Domain). Infrastructure implements Domain Interface
 - **Conversion responsibility**: DTO conversion in Controller, Entity conversion in Mapper
 - **Event flow**: Generated in Domain -> Collected in Application -> Published in Infrastructure
-{{% /notice %}}
+{{< /callout >}}
 
 ## Next Steps
 

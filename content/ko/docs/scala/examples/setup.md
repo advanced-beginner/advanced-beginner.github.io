@@ -4,12 +4,12 @@ title: 환경 설정
 weight: 1
 ---
 
-{{% notice style="primary" title="TL;DR" %}}
+{{< callout type="info" title="TL;DR" >}}
 - <strong>Coursier</strong>로 JDK, sbt, Scala CLI를 한 번에 설치
 - <strong>sbt</strong>는 Scala의 표준 빌드 도구로 컴파일, 테스트, 의존성 관리 담당
 - <strong>IntelliJ IDEA</strong> 또는 <strong>VS Code + Metals</strong>로 IDE 설정
 - 프로젝트 구조: `build.sbt` (설정) + `src/main/scala/` (소스) + `src/test/scala/` (테스트)
-{{% /notice %}}
+{{< /callout >}}
 
 **대상 독자**: Scala 프로그래밍을 처음 시작하는 개발자
 
@@ -56,10 +56,10 @@ brew install sbt
 sdk install sbt
 ```
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - Coursier(`cs setup`)는 모든 필수 도구를 자동 설치하는 가장 편리한 방법
 - 직접 설치 시 JDK는 별도로 설치 필요
-{{% /notice %}}
+{{< /callout >}}
 
 #### 프로젝트 구조
 
@@ -83,12 +83,12 @@ my-project/
 
 `build.sbt`는 프로젝트의 핵심 설정 파일로, 프로젝트 이름, Scala 버전, 의존성 등을 정의합니다. `project/` 디렉토리에는 빌드 자체에 대한 메타 설정이 들어갑니다. `src/main/scala/`에는 애플리케이션 소스 코드가, `src/test/scala/`에는 테스트 코드가 위치합니다. `target/` 디렉토리는 컴파일 결과물이 생성되는 곳으로, 버전 관리에서 제외해야 합니다.
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - `build.sbt`: 프로젝트 메타데이터 및 의존성 정의
 - `src/main/scala/`: 메인 소스 코드 위치
 - `src/test/scala/`: 테스트 코드 위치
 - `target/`: 빌드 결과물 (`.gitignore`에 추가)
-{{% /notice %}}
+{{< /callout >}}
 
 #### build.sbt 설정
 
@@ -144,11 +144,11 @@ sbt.version=1.10.6
 
 > 💡 **팁:** 최신 sbt 버전은 [sbt 릴리스 페이지](https://github.com/sbt/sbt/releases)에서 확인하세요.
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - Scala 3: `scalaVersion := "3.3.1"`, MUnit 테스트 프레임워크 권장
 - Scala 2.13: `scalaVersion := "2.13.12"`, ScalaTest 프레임워크 권장
 - `project/build.properties`에 sbt 버전 명시로 팀 간 일관성 유지
-{{% /notice %}}
+{{< /callout >}}
 
 #### 자주 사용하는 sbt 명령어
 
@@ -180,11 +180,11 @@ sbt
 > ~compile
 ```
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - `compile`, `run`, `test`: 가장 자주 사용하는 기본 명령어
 - `~` 접두사: 파일 변경 감지 후 자동 재실행 (개발 중 필수)
 - sbt 셸 내에서 명령어 실행이 더 빠름
-{{% /notice %}}
+{{< /callout >}}
 
 #### IDE 설정
 
@@ -222,11 +222,11 @@ VS Code는 가볍고 빠른 편집기로, Metals 확장을 통해 Scala를 지�
 
 Metals가 제공하는 유용한 기능들입니다. Hover로 타입 정보를 확인하고, F12로 정의로 이동하며, ⇧ + F12로 참조를 찾고, F2로 심볼 이름을 변경할 수 있습니다.
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - **IntelliJ IDEA**: 가장 완성도 높은 Scala IDE, Scala 플러그인 설치 필요
 - **VS Code + Metals**: 가볍고 빠름, 무료, "Import build" 클릭으로 프로젝트 설정
 - 둘 다 훌륭한 지원 제공 - 익숙한 도구 선택
-{{% /notice %}}
+{{< /callout >}}
 
 #### 의존성 추가
 
@@ -260,11 +260,11 @@ libraryDependencies ++= Seq(
 
 `%%`와 `%`의 차이를 이해하는 것이 중요합니다. `%%`를 사용하면 Scala 버전이 자동으로 아티팩트 이름에 추가됩니다. 예를 들어 Scala 3을 사용한다면 `cats-core_3`으로, Scala 2.13을 사용한다면 `cats-core_2.13`으로 변환됩니다. Java 라이브러리는 Scala 버전과 무관하므로 단일 `%`를 사용합니다.
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - `%%`: Scala 라이브러리 (Scala 버전 자동 추가)
 - `%`: Java 라이브러리 (버전 무관)
 - `% Test`: 테스트 전용, `% Provided`: 컴파일 전용
-{{% /notice %}}
+{{< /callout >}}
 
 #### 멀티 프로젝트
 
@@ -291,11 +291,11 @@ lazy val api = project
 
 위 예제에서 `root` 프로젝트는 `core`와 `api`를 집계(aggregate)합니다. `api` 프로젝트는 `core`에 의존(dependsOn)하므로 `core`의 클래스들을 사용할 수 있습니다.
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - `aggregate`: 여러 서브프로젝트를 한 번에 빌드
 - `dependsOn`: 다른 프로젝트의 클래스 사용 가능
 - 대규모 프로젝트에서 코드 분리에 유용
-{{% /notice %}}
+{{< /callout >}}
 
 #### 유용한 플러그인
 
@@ -317,12 +317,12 @@ addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.1.4")
 
 sbt-updates는 의존성의 새 버전이 있는지 확인해줍니다. sbt-scalafmt은 코드를 일관된 스타일로 포맷팅합니다. sbt-native-packager는 Docker 이미지나 네이티브 패키지를 생성하고, sbt-assembly는 모든 의존성을 포함한 단일 JAR 파일을 만듭니다.
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - **sbt-updates**: 의존성 업데이트 확인
 - **sbt-scalafmt**: 코드 자동 포맷팅
 - **sbt-assembly**: 배포용 단일 JAR 생성
 - 플러그인은 `project/plugins.sbt`에 추가
-{{% /notice %}}
+{{< /callout >}}
 
 #### 트러블슈팅
 
@@ -413,12 +413,12 @@ rm -rf .metals .bloop .bsp
 # VS Code 재시작 후 "Import build" 클릭
 ```
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - **JDK 문제**: `java -version` 확인, `JAVA_HOME` 설정
 - **의존성 문제**: 캐시 삭제 (`rm -rf ~/.cache/coursier`)
 - **IDE 문제**: 캐시 무효화 및 프로젝트 재빌드
 - **메모리 부족**: `.sbtopts`에 `-J-Xmx4G` 추가
-{{% /notice %}}
+{{< /callout >}}
 
 #### 다음 단계
 

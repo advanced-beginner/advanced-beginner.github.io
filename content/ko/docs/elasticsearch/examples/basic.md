@@ -4,12 +4,12 @@ weight: 2
 lastmod: 2026-01-10
 ---
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **Spring Data Elasticsearch**로 Document CRUD 및 기본 검색을 구현합니다
 - **Repository 패턴**으로 간단한 쿼리, **ElasticsearchOperations**로 복합 쿼리를 처리합니다
 - 필드 타입은 용도에 맞게 선택: `Text`(검색용), `Keyword`(필터용), `Integer`(범위 검색)
 - 전체 소요 시간: 약 20분
-{{% /notice %}}
+{{< /callout >}}
 
 Spring Data Elasticsearch를 사용하여 Document CRUD와 기본 검색을 구현합니다.
 
@@ -125,11 +125,11 @@ public class Product {
 | `@Field` 명시 | 자동 매핑 | 타입 명시로 예측 가능한 동작 보장 |
 | `standard` analyzer | `nori` | 기본 예제는 단순하게, 한글 검색은 [상품 검색 예제](product-search/) 참조 |
 
-{{% notice style="note" title="핵심 포인트" %}}
+{{< callout type="info" title="핵심 포인트" >}}
 - `@Document`로 인덱스명 지정, `@Id`로 문서 ID 필드 지정
 - `Text` 타입은 검색용(형태소 분석), `Keyword` 타입은 필터/정렬용
 - 필드 타입을 명시적으로 지정하면 예측 가능한 동작을 보장합니다
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -182,11 +182,11 @@ public interface ProductRepository extends ElasticsearchRepository<Product, Stri
 - 복잡한 쿼리는 `ElasticsearchOperations` 사용 → 아래 Service 참조
 - 네이티브 쿼리가 필요하면 `@Query` 어노테이션 사용
 
-{{% notice style="note" title="핵심 포인트" %}}
+{{< callout type="info" title="핵심 포인트" >}}
 - `ElasticsearchRepository`를 상속하면 기본 CRUD 메서드가 자동 제공됩니다
 - 메서드 이름 규칙(`findByXxx`, `findByXxxContaining`)으로 쿼리가 자동 생성됩니다
 - 단순 조회/검색에는 Repository, 복잡한 쿼리에는 `ElasticsearchOperations` 사용
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -323,11 +323,11 @@ public class ProductService {
 }
 ```
 
-{{% notice style="note" title="핵심 포인트" %}}
+{{< callout type="info" title="핵심 포인트" >}}
 - `BoolQuery`로 여러 조건을 조합: `must`(필수 매칭), `filter`(필터링, 점수 영향 없음)
 - `NativeQuery`로 페이지네이션과 정렬을 설정합니다
 - `SearchHits`에서 `getContent()`로 실제 Document 객체를 추출합니다
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -501,11 +501,11 @@ curl -X PUT http://localhost:8080/api/products/1 \
 curl -X DELETE http://localhost:8080/api/products/1
 ```
 
-{{% notice style="note" title="핵심 포인트" %}}
+{{< callout type="info" title="핵심 포인트" >}}
 - REST API 엔드포인트는 표준 CRUD 패턴을 따릅니다 (POST/GET/PUT/DELETE)
 - `/init` 엔드포인트로 테스트용 샘플 데이터를 빠르게 생성할 수 있습니다
 - 검색 API는 쿼리 파라미터로 필터 조건을 받습니다
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -568,11 +568,11 @@ curl -X DELETE http://localhost:9200/products
 기본 `standard` analyzer는 한글 형태소 분석을 하지 않습니다.
 [상품 검색 시스템](product-search/) 예제에서 Nori 설정을 확인하세요.
 
-{{% notice style="note" title="핵심 포인트" %}}
+{{< callout type="info" title="핵심 포인트" >}}
 - 인덱스 자동 생성이 안 되면 `@Document(createIndex = true)` 확인
 - Mapping 충돌 시 기존 인덱스를 삭제하고 재시작하세요
 - 한글 검색을 위해서는 Nori 분석기 설정이 필수입니다
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 

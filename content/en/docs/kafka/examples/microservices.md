@@ -8,12 +8,12 @@ author_url: "http://github.com/kimbenji"
 
 Implement event-driven communication using Kafka in a microservices environment.
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **Event Chaining**: Event propagation in order: Order -> Payment -> Shipment -> Notification
 - **Correlation ID**: Propagate correlation ID for distributed tracing
 - **Saga Pattern**: Handle distributed transactions with compensation transactions
 - **Idempotency**: Safely handle duplicate messages
-{{% /notice %}}
+{{< /callout >}}
 
 #### Target Audience and Prerequisites
 
@@ -105,11 +105,11 @@ public class ShipmentCreatedEvent extends BaseEvent {
 }
 ```
 
-{{% notice style="info" title="Common Event Definition Key Points" %}}
+{{< callout type="info" title="Common Event Definition Key Points" >}}
 - **BaseEvent Inheritance**: Common fields eventId, eventType, occurredAt, correlationId
 - **correlationId**: Propagated to all events for distributed tracing
 - **Domain Events**: OrderCreatedEvent, PaymentCompletedEvent, ShipmentCreatedEvent, etc.
-{{% /notice %}}
+{{< /callout >}}
 
 #### Order Service
 
@@ -207,11 +207,11 @@ public class OrderController {
 }
 ```
 
-{{% notice style="info" title="Order Service Key Points" %}}
+{{< callout type="info" title="Order Service Key Points" >}}
 - **Reliability Settings**: Ensure message stability with `acks: all`, `enable.idempotence: true`
 - **Async Publishing**: Save to local DB first, then publish event and return response immediately
 - **orderId Key**: Guarantees order of events for the same order
-{{% /notice %}}
+{{< /callout >}}
 
 #### Payment Service
 
@@ -320,11 +320,11 @@ public class PaymentProducer {
 }
 ```
 
-{{% notice style="info" title="Payment Service Key Points" %}}
+{{< callout type="info" title="Payment Service Key Points" >}}
 - **Idempotency Check**: Prevent duplicate processing with `isAlreadyProcessed()`
 - **Success/Failure Branching**: Publish PaymentCompleted or PaymentFailed event based on result
 - **correlationId Propagation**: Include original event's correlationId in new event
-{{% /notice %}}
+{{< /callout >}}
 
 #### Shipment Service
 
@@ -377,11 +377,11 @@ public class ShipmentConsumer {
 }
 ```
 
-{{% notice style="info" title="Shipment Service Key Points" %}}
+{{< callout type="info" title="Shipment Service Key Points" >}}
 - **Event Filtering**: Process only when PaymentStatus.COMPLETED
 - **Chaining**: Receive payment completed event -> Create shipment -> Publish shipment event
 - **Error Propagation**: Throw exceptions to trigger retry
-{{% /notice %}}
+{{< /callout >}}
 
 #### Notification Service
 
@@ -434,11 +434,11 @@ public class NotificationConsumer {
 }
 ```
 
-{{% notice style="info" title="Notification Service Key Points" %}}
+{{< callout type="info" title="Notification Service Key Points" >}}
 - **Multiple Topic Subscription**: Subscribe to orders, payments, shipments Topics simultaneously
 - **eventType Header**: Branch notification content by event type
 - **Failure Tolerance**: Acknowledge after notification failure without retry (non-critical feature)
-{{% /notice %}}
+{{< /callout >}}
 
 #### Saga Pattern: Distributed Transactions
 
@@ -496,11 +496,11 @@ public class OrderSagaOrchestrator {
 }
 ```
 
-{{% notice style="info" title="Saga Pattern Key Points" %}}
+{{< callout type="info" title="Saga Pattern Key Points" >}}
 - **Compensation Transaction**: Cancel previous work on failure event (order cancellation, refund request)
 - **Event Listening**: Subscribe to payment failed, shipment failed events for compensation processing
 - **Data Consistency**: Maintain eventual consistency in distributed environment
-{{% /notice %}}
+{{< /callout >}}
 
 #### Monitoring: Distributed Tracing
 
@@ -569,11 +569,11 @@ public class ConsumerLagMonitor {
 }
 ```
 
-{{% notice style="info" title="Monitoring Key Points" %}}
+{{< callout type="info" title="Monitoring Key Points" >}}
 - **Correlation ID**: Auto-add tracing ID to all messages with ProducerInterceptor
 - **Consumer Lag**: Processing delay metric, warning when over 1000
 - **Micrometer Integration**: Expose metrics to Prometheus etc. with `meterRegistry.gauge()`
-{{% /notice %}}
+{{< /callout >}}
 
 #### Testing
 
@@ -623,11 +623,11 @@ class OrderServiceIntegrationTest {
 }
 ```
 
-{{% notice style="info" title="Testing Key Points" %}}
+{{< callout type="info" title="Testing Key Points" >}}
 - **Testcontainers**: Integration testing with real Kafka container
 - **DynamicPropertySource**: Dynamically set test bootstrap-servers
 - **Message Verification**: Consume from Topic to verify Key, Value
-{{% /notice %}}
+{{< /callout >}}
 
 #### Checklist
 

@@ -13,11 +13,11 @@ description: "특정 파티션에 데이터가 집중되는 스큐 문제를 진
 **예상 소요 시간**: 약 20분
 {{< /callout >}}
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **진단**: Spark UI Stages 탭에서 Task Duration Min/Max 비교 (10배 이상 차이 = 스큐)
 - **AQE 활성화**: `spark.sql.adaptive.skewJoin.enabled=true` (Spark 3.0+)
 - **수동 해결**: Salting 기법으로 핫 키 분산
-{{% /notice %}}
+{{< /callout >}}
 
 ## 문제 정의
 

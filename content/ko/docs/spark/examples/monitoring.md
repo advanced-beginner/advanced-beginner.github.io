@@ -7,12 +7,12 @@ author:
   github: advanced-beginner
 ---
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **Spark UI**: 실시간 작업 상태, 실행 계획, 메모리 사용량 확인 (:4040)
 - **History Server**: 종료된 애플리케이션 로그 분석 (:18080)
 - **Prometheus + Grafana**: 메트릭 수집 및 시각화, 알림 설정
 - **커스텀 메트릭**: 비즈니스 KPI (처리량, 실패율, 처리 시간) 추적
-{{% /notice %}}
+{{< /callout >}}
 
 ## 대상 독자 및 선수 지식
 
@@ -103,12 +103,12 @@ SparkSession spark = SparkSession.builder()
         .getOrCreate();
 ```
 
-{{% notice style="info" title="핵심 포인트: Spark UI 설정" %}}
+{{< callout type="info" title="핵심 포인트: Spark UI 설정" >}}
 - **실시간 UI**: :4040 포트로 현재 실행 중인 작업 모니터링
 - **History Server**: 종료된 작업도 분석 가능 (:18080)
 - **이벤트 로그**: `eventLog.enabled=true`로 작업 기록 보존
 - **보존 설정**: `retainedJobs`, `retainedStages`로 UI에 표시할 기록 수 조정
-{{% /notice %}}
+{{< /callout >}}
 
 ## Prometheus + Grafana 연동
 
@@ -181,12 +181,12 @@ rate(spark_executor_failedTasks_total{app_name="$app"}[5m]) /
 rate(spark_executor_completedTasks_total{app_name="$app"}[5m]) * 100
 ```
 
-{{% notice style="info" title="핵심 포인트: Prometheus + Grafana 연동" %}}
+{{< callout type="info" title="핵심 포인트: Prometheus + Grafana 연동" >}}
 - **PrometheusServlet**: 내장 Sink로 /metrics/prometheus 엔드포인트 제공
 - **scrape_interval**: 15초 권장 (너무 짧으면 오버헤드 증가)
 - **주요 메트릭**: 메모리 사용률, GC 시간, Shuffle 바이트, Task 실패율
 - **PromQL**: rate(), increase() 함수로 시계열 분석
-{{% /notice %}}
+{{< /callout >}}
 
 ## 커스텀 메트릭 구현
 
@@ -318,12 +318,12 @@ public class MonitoredETLJob {
 }
 ```
 
-{{% notice style="info" title="핵심 포인트: 커스텀 메트릭 구현" %}}
+{{< callout type="info" title="핵심 포인트: 커스텀 메트릭 구현" >}}
 - **Dropwizard Metrics**: Counter, Histogram, Meter 등 다양한 메트릭 타입
 - **metricsSystem 등록**: Spark 내장 메트릭 시스템에 커스텀 Source 추가
 - **비즈니스 KPI**: 처리된 레코드 수, 실패율, 처리 시간 분포 추적
 - **실시간 로깅**: `logStats()` 메서드로 현재 상태 출력
-{{% /notice %}}
+{{< /callout >}}
 
 ## 로깅 설정
 
@@ -428,12 +428,12 @@ public class StructuredLoggingExample {
 }
 ```
 
-{{% notice style="info" title="핵심 포인트: 로깅 설정" %}}
+{{< callout type="info" title="핵심 포인트: 로깅 설정" >}}
 - **Log4j2 권장**: Spark 3.x 기본 로깅 프레임워크
 - **로그 레벨 조정**: org.apache.spark는 WARN, 애플리케이션은 INFO
 - **JSON 포맷**: ELK 스택 연동 시 JsonLayout 사용
 - **MDC 활용**: 파티션 ID, 작업 ID 등 컨텍스트 정보 추가
-{{% /notice %}}
+{{< /callout >}}
 
 ## 알림 설정
 
@@ -483,12 +483,12 @@ groups:
           summary: "디스크 Spill 1GB 초과 - 메모리 증설 필요"
 ```
 
-{{% notice style="info" title="핵심 포인트: 알림 설정" %}}
+{{< callout type="info" title="핵심 포인트: 알림 설정" >}}
 - **Task 실패 알림**: 5분간 10건 이상 실패 시 즉시 알림
 - **메모리 압박 알림**: 90% 초과 10분 지속 시 알림
 - **Shuffle Spill 알림**: 디스크 스필 1GB 초과 시 메모리 증설 권고
 - **for 조건**: 일시적 스파이크가 아닌 지속적 문제만 알림
-{{% /notice %}}
+{{< /callout >}}
 
 ## 모니터링 체크리스트
 

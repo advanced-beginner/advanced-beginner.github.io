@@ -8,13 +8,13 @@ author_url: "http://github.com/kimbenji"
 
 Kafka 관련 주요 용어를 정리합니다. 각 용어의 상세한 설명은 개념 이해 섹션을 참고하세요. 용어들은 알파벳 순서로 정렬되어 있으며, 관련 용어들은 상호 참조로 연결되어 있습니다.
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **핵심 구성요소**: Topic(논리적 채널), Partition(병렬 처리 단위), Broker(서버), Producer(발행자), Consumer(수신자)
 - **신뢰성**: ACK(전송 확인), ISR(동기화 복제본), Replication Factor(복제 수)
 - **Consumer 관리**: Consumer Group(병렬 처리), Offset(위치), Commit(저장), Rebalancing(재분배)
 - **Spring Kafka**: KafkaTemplate(Producer), @KafkaListener(Consumer)
 - **메타데이터 관리**: KRaft(신규 권장), Zookeeper(레거시)
-{{% /notice %}}
+{{< /callout >}}
 
 #### A
 

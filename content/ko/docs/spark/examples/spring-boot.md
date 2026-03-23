@@ -7,12 +7,12 @@ author:
   github: advanced-beginner
 ---
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **SparkSession Bean**: `@Configuration`으로 싱글톤 관리, `@PreDestroy`로 정리
 - **프로파일 분리**: local, production, test 환경별 Spark 설정
 - **비동기 배치**: `@Async` + `CompletableFuture`로 대용량 처리
 - **REST API**: DataFrame 결과를 JSON 응답으로 변환
-{{% /notice %}}
+{{< /callout >}}
 
 ## 대상 독자 및 선수 지식
 
@@ -272,12 +272,12 @@ spark:
       partitions: 2
 ```
 
-{{% notice style="info" title="핵심 포인트: SparkSession 빈 구성" %}}
+{{< callout type="info" title="핵심 포인트: SparkSession 빈 구성" >}}
 - **싱글톤 관리**: SparkSession은 JVM당 하나만 존재해야 함
 - **프로파일 분리**: `@Profile("!test")`로 테스트 환경 별도 설정
 - **@PreDestroy**: 애플리케이션 종료 시 SparkSession 안전하게 정리
 - **AQE 활성화**: `spark.sql.adaptive.enabled`로 쿼리 최적화 자동화
-{{% /notice %}}
+{{< /callout >}}
 
 ## 서비스 레이어 패턴
 
@@ -497,12 +497,12 @@ public class BatchProcessingService {
 }
 ```
 
-{{% notice style="info" title="핵심 포인트: 서비스 레이어 패턴" %}}
+{{< callout type="info" title="핵심 포인트: 서비스 레이어 패턴" >}}
 - **생성자 주입**: SparkSession을 생성자로 주입받아 테스트 용이성 확보
 - **@Async 배치**: 대용량 처리는 비동기로 실행하여 API 응답 지연 방지
 - **@Scheduled**: cron 표현식으로 일일/주간 배치 작업 스케줄링
 - **CompletableFuture**: 비동기 작업 결과와 상태 추적
-{{% /notice %}}
+{{< /callout >}}
 
 ## REST API 통합
 
@@ -586,12 +586,12 @@ public class AnalyticsController {
 }
 ```
 
-{{% notice style="info" title="핵심 포인트: REST API 통합" %}}
+{{< callout type="info" title="핵심 포인트: REST API 통합" >}}
 - **동기 조회**: 소규모 집계는 즉시 응답 (GET 엔드포인트)
 - **비동기 처리**: 대용량 배치는 작업 ID 반환 후 백그라운드 실행 (POST + 202 Accepted)
 - **JSON 변환**: `collectAsList()` + Stream API로 DataFrame → List 변환
 - **작업 추적**: 실제 운영에서는 작업 ID로 상태 조회 API 추가 필요
-{{% /notice %}}
+{{< /callout >}}
 
 ## 테스트 작성
 
@@ -692,12 +692,12 @@ class DataAnalysisServiceTest {
 }
 ```
 
-{{% notice style="info" title="핵심 포인트: 테스트 작성" %}}
+{{< callout type="info" title="핵심 포인트: 테스트 작성" >}}
 - **@ActiveProfiles("test")**: 테스트용 SparkSession 설정 사용
 - **@BeforeAll**: 테스트 데이터 생성 및 Parquet 저장
 - **createDataFrame()**: 인메모리 테스트 데이터 생성
 - **@AfterAll**: 테스트 완료 후 임시 파일 정리
-{{% /notice %}}
+{{< /callout >}}
 
 ## Java vs Scala 비교
 

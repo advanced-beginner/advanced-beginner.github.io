@@ -9,13 +9,13 @@ author:
 
 Spark에서 사용되는 주요 용어와 개념을 정리합니다. 각 용어에서 관련 문서로 이동할 수 있습니다.
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **핵심 추상화**: SparkSession(진입점) → Application → Job → Stage → Task
 - **데이터 구조**: RDD(저수준) < DataFrame(스키마, Row) < Dataset(타입 안전)
 - **실행 모델**: Transformation(지연 평가) + Action(실제 실행) = DAG 기반 실행
 - **성능 핵심**: Partition(분할 단위), Shuffle(데이터 재분배), Cache/Persist(재사용)
 - **최적화 도구**: Catalyst Optimizer(쿼리 최적화), Tungsten(실행 엔진), AQE(런타임 최적화)
-{{% /notice %}}
+{{< /callout >}}
 
 ## 핵심 개념
 
@@ -284,7 +284,7 @@ Spark 1.6+에서 도입된 메모리 모델. Execution(연산)과 Storage(캐시
 Hadoop 생태계의 [Cluster Manager](#cluster-manager). 기존 Hadoop 클러스터가 있는 환경에서 사용.
 → [배포와 클러스터 관리](../concepts/deployment/)
 
-{{% notice style="info" title="핵심 개념 요약" %}}
+{{< callout type="info" title="핵심 개념 요약" >}}
 | 계층 | 용어 | 설명 |
 |------|------|------|
 | 진입점 | SparkSession | 모든 Spark 작업의 시작점 |
@@ -292,7 +292,7 @@ Hadoop 생태계의 [Cluster Manager](#cluster-manager). 기존 Hadoop 클러스
 | 데이터 추상화 | RDD → DataFrame → Dataset | 저수준에서 고수준으로, 타입 안전성 증가 |
 | 실행 방식 | Transformation (지연) + Action (실행) | DAG로 최적화 후 실행 |
 | 성능 핵심 | Narrow(셔플X) vs Wide(셔플O) Transformation | Wide일수록 비용 증가 |
-{{% /notice %}}
+{{< /callout >}}
 
 ## 스트리밍 용어
 
@@ -351,12 +351,12 @@ Structured Streaming에서 집계 상태를 저장하는 저장소. RocksDB 또�
 시간 기반 그룹화를 위한 연산. Tumbling, Sliding, Session Window가 있다.
 → [Structured Streaming](../concepts/structured-streaming/)
 
-{{% notice style="info" title="스트리밍 용어 요약" %}}
+{{< callout type="info" title="스트리밍 용어 요약" >}}
 - **Micro-Batch**: 스트림을 작은 배치로 나눠 처리 (기본 모드)
 - **Trigger**: 처리 주기 설정 (예: 10초마다, 한 번만)
 - **Watermark**: 늦은 데이터 허용 시간 (예: 10분까지 기다림)
 - **Window**: 시간 기반 그룹화 (Tumbling: 고정, Sliding: 겹침, Session: 활동 기반)
-{{% /notice %}}
+{{< /callout >}}
 
 ## 머신러닝 용어
 
@@ -415,12 +415,12 @@ transform() 메서드로 데이터를 변환하는 컴포넌트.
 여러 컬럼을 하나의 특성 벡터로 결합하는 MLlib [Transformer](#transformer).
 → [MLlib](../concepts/mllib/)
 
-{{% notice style="info" title="머신러닝 용어 요약" %}}
+{{< callout type="info" title="머신러닝 용어 요약" >}}
 - **Estimator**: 데이터를 학습하여 모델(Transformer) 생성 → `fit()`
 - **Transformer**: 데이터를 변환 → `transform()`
 - **Pipeline**: 여러 단계를 연결한 ML 워크플로우
 - 흐름: `Estimator.fit(data) → Transformer.transform(data)`
-{{% /notice %}}
+{{< /callout >}}
 
 ## 설정 관련
 
@@ -444,9 +444,9 @@ transform() 메서드로 데이터를 변환하는 컴포넌트.
 워크로드에 따라 [Executor](#executor) 수를 자동으로 조절하는 기능.
 → [성능 튜닝](../concepts/tuning/), [배포와 클러스터 관리](../concepts/deployment/)
 
-{{% notice style="info" title="설정 관련 용어 요약" %}}
+{{< callout type="info" title="설정 관련 용어 요약" >}}
 - **AQE**: 런타임 쿼리 최적화 (Spark 3.0+, 파티션 자동 조정, 스큐 조인 해결)
 - **Broadcast Join**: 작은 테이블을 모든 노드에 복제하여 셔플 없이 조인
 - **CBO**: 테이블 통계 기반 최적 실행 계획 선택
 - **Dynamic Allocation**: 워크로드에 따라 Executor 수 자동 조절
-{{% /notice %}}
+{{< /callout >}}

@@ -6,13 +6,13 @@ weight: 2
 
 Scala 2와 Scala 3의 주요 차이점을 한눈에 정리합니다. Scala 3는 2020년에 출시되어 더 간결한 문법, 강력한 타입 시스템, 개선된 암시적 기능을 제공합니다.
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **새 프로젝트**: Scala 3 권장 (더 간결한 문법, 개선된 타입 시스템)
 - **Spark 사용**: Scala 2.12/2.13 유지 (Spark가 아직 Scala 3 미지원)
 - **핵심 변경**: `implicit` → `given`/`using`, 들여쓰기 기반 문법, `enum` 추가
 - **호환성**: Scala 3에서 Scala 2.13 라이브러리 사용 가능
 - **마이그레이션**: `-source:3.0-migration` 옵션으로 점진적 전환
-{{% /notice %}}
+{{< /callout >}}
 
 #### 새로운 기능 (Scala 3)
 
@@ -85,12 +85,12 @@ Scala 3의 매크로 시스템은 완전히 재설계되었습니다. `inline` �
 | 매크로 API | scala.reflect | scala.quoted |
 | 컴파일 타임 연산 | 제한적 | compiletime 패키지 |
 
-{{% notice style="note" title="핵심 포인트" %}}
+{{< callout type="info" title="핵심 포인트" >}}
 - **문법**: 들여쓰기 기반 옵션, `if cond then`, `for x <- list do`
 - **enum**: `sealed trait` + `case object` 조합을 간결하게 대체
 - **타입**: Union(`|`), Intersection(`&`), Opaque Types 추가
 - **암시적**: `implicit` → `given`/`using`으로 의도 명확화
-{{% /notice %}}
+{{< /callout >}}
 
 #### 변경된 기능
 
@@ -139,11 +139,11 @@ val p = Person("Alice")  // new 없이!
 val p = new Person("Alice")
 ```
 
-{{% notice style="note" title="핵심 포인트" %}}
+{{< callout type="info" title="핵심 포인트" >}}
 - **트레이트 매개변수**: Scala 3에서 트레이트도 생성자 매개변수 가능
 - **@main**: 진입점 정의가 간단해지고 인자 파싱 자동화
 - **Creator Applications**: 일반 클래스도 `new` 없이 인스턴스 생성
-{{% /notice %}}
+{{< /callout >}}
 
 #### 제거된 기능
 
@@ -160,11 +160,11 @@ val p = new Person("Alice")
 | `private[this]` | `private` |
 | `protected[this]` | `protected` |
 
-{{% notice style="note" title="핵심 포인트" %}}
+{{< callout type="info" title="핵심 포인트" >}}
 - **절차적 문법** (`def f() { }`): 명시적으로 `: Unit =` 사용
 - **XML 리터럴**: 별도 라이브러리로 대체
 - **기호 리터럴** (`'symbol`): 문자열 사용
-{{% /notice %}}
+{{< /callout >}}
 
 #### 호환성
 
@@ -202,11 +202,11 @@ scalacOptions ++= Seq(
 )
 ```
 
-{{% notice style="note" title="핵심 포인트" %}}
+{{< callout type="info" title="핵심 포인트" >}}
 - **바이너리 호환**: Scala 3에서 Scala 2.13 라이브러리 직접 사용 가능
 - **Cross-building**: `crossScalaVersions`로 여러 버전 동시 지원
 - **마이그레이션 모드**: `-source:3.0-migration -rewrite`로 자동 변환
-{{% /notice %}}
+{{< /callout >}}
 
 #### 권장 사항
 
@@ -230,11 +230,11 @@ Apache Spark를 사용하는 프로젝트는 Scala 2를 유지해야 합니다.
 
 - **Scala 2.12/2.13 유지**: Spark는 아직 Scala 3 미지원 (2024년 기준)
 
-{{% notice style="note" title="핵심 포인트" %}}
+{{< callout type="info" title="핵심 포인트" >}}
 - **새 프로젝트**: Scala 3 선택 (더 나은 문법, 에러 메시지, 타입 추론)
 - **기존 프로젝트**: 점진적 마이그레이션, 의존성 Scala 3 지원 확인
 - **Spark**: Scala 2 유지 필수, Scala 3 지원 대기 중
-{{% /notice %}}
+{{< /callout >}}
 
 #### 참고 자료
 

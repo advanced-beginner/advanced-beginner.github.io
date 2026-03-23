@@ -8,13 +8,13 @@ author_url: "http://github.com/kimbenji"
 
 # 주문 도메인 구현
 
-{{% notice style="primary" title="TL;DR" %}}
+{{< callout type="info" title="TL;DR" >}}
 - **Order**: Aggregate Root. 주문의 일관성 경계를 관리
 - **OrderLine**: 내부 Entity. Order를 통해서만 생성/변경 가능
 - **Money, ShippingAddress, OrderId**: Value Object. 불변이며 값으로 비교
 - **불변식**: 주문 항목 1개 이상, 최대 금액 1억원, 수량 1~999
 - **도메인 이벤트**: OrderCreatedEvent, OrderConfirmedEvent 등 상태 변경 시 발행
-{{% /notice %}}
+{{< /callout >}}
 
 ## 대상 독자 및 선수 지식
 
@@ -128,12 +128,12 @@ OrderLine(ProductId productId, ...) { }
 
 **이유:** OrderLine은 Order 없이 존재할 수 없습니다. 패키지 프라이빗으로 만들면 <strong>컴파일 타임에 잘못된 사용을 방지</strong>합니다.
 
-{{% notice style="tip" title="핵심 포인트: 설계 결정" %}}
+{{< callout type="tip" title="핵심 포인트: 설계 결정" >}}
 - **Aggregate 경계**: 일관성이 보장되어야 하는 범위. Order + OrderLine이 하나의 경계
 - **ID 참조**: 다른 Aggregate(Customer, Product)는 객체가 아닌 ID로만 참조
 - **Value Object**: 불변, 값으로 비교, 교체만 가능 (Money, Address)
 - **내부 Entity**: Aggregate 내에서만 존재, Root를 통해서만 접근 (OrderLine)
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -330,12 +330,12 @@ public record ShippingAddress(
 }
 ```
 
-{{% notice style="tip" title="핵심 포인트: Value Object" %}}
+{{< callout type="tip" title="핵심 포인트: Value Object" >}}
 - **Java Record 활용**: 불변성, equals/hashCode 자동 생성
 - **Compact Constructor**: 유효성 검증을 생성자에서 수행
 - **팩토리 메서드**: `Money.won(10000)`, `OrderId.generate()` 등 명확한 생성 방법 제공
 - **도메인 연산**: `Money.add()`, `Money.multiply()` 등 도메인 로직을 VO 내부에 캡슐화
-{{% /notice %}}
+{{< /callout >}}
 
 ## Entity 구현
 
@@ -444,12 +444,12 @@ public record OrderLineId(String value) {
 }
 ```
 
-{{% notice style="tip" title="핵심 포인트: Entity" %}}
+{{< callout type="tip" title="핵심 포인트: Entity" >}}
 - **패키지 프라이빗 생성자**: Aggregate Root를 통해서만 생성 가능하도록 제한
 - **불변식 검증**: `validateQuantity()`로 수량 제약(1~999) 강제
 - **reconstitute 메서드**: DB 복원용 별도 메서드로 유효성 검증 우회
 - **상태 변경 메서드**: `changeQuantity()`도 패키지 프라이빗으로 Root만 호출 가능
-{{% /notice %}}
+{{< /callout >}}
 
 ## Aggregate Root 구현
 
@@ -734,13 +734,13 @@ public enum OrderStatus {
 }
 ```
 
-{{% notice style="tip" title="핵심 포인트: Aggregate Root" %}}
+{{< callout type="tip" title="핵심 포인트: Aggregate Root" >}}
 - **팩토리 메서드**: `Order.create()`로 생성, `Order.reconstitute()`로 복원
 - **불변식 보장**: 모든 비즈니스 규칙(최대 금액, 최소 항목 수)을 내부에서 검증
 - **상태 전이 제어**: `confirm()`, `cancel()` 등 상태별 허용 동작 제한
 - **이벤트 발행**: 상태 변경 시 `registerEvent()`로 도메인 이벤트 수집
 - **캡슐화**: `getOrderLines()`는 불변 리스트 반환으로 외부 변경 방지
-{{% /notice %}}
+{{< /callout >}}
 
 ## 도메인 이벤트 구현
 
@@ -843,12 +843,12 @@ public class OrderConfirmedEvent extends DomainEvent {
 }
 ```
 
-{{% notice style="tip" title="핵심 포인트: 도메인 이벤트" %}}
+{{< callout type="tip" title="핵심 포인트: 도메인 이벤트" >}}
 - **불변 스냅샷**: 이벤트 발행 시점의 상태를 스냅샷으로 저장
 - **자동 메타데이터**: eventId, occurredAt은 부모 클래스에서 자동 생성
 - **Aggregate ID**: `getAggregateId()`로 어떤 Aggregate에서 발생했는지 식별
 - **Inner Record**: `OrderLineSnapshot` 등으로 이벤트 전용 데이터 구조 정의
-{{% /notice %}}
+{{< /callout >}}
 
 ## Repository 인터페이스
 
@@ -1025,13 +1025,13 @@ class OrderTest {
 }
 ```
 
-{{% notice style="tip" title="핵심 포인트: 단위 테스트" %}}
+{{< callout type="tip" title="핵심 포인트: 단위 테스트" >}}
 - **@Nested**: 테스트를 기능별로 그룹화 (주문 생성, 주문 확정, 주문 취소)
 - **@DisplayName**: 한글로 테스트 의도 명시
 - **Given-When-Then**: 테스트 구조를 명확하게 분리
 - **이벤트 검증**: `getDomainEvents()`로 발행된 이벤트 확인
 - **예외 검증**: `assertThatThrownBy()`로 비즈니스 규칙 위반 테스트
-{{% /notice %}}
+{{< /callout >}}
 
 ## 트러블슈팅
 

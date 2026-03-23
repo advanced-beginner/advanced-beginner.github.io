@@ -9,13 +9,13 @@ author:
 
 Apache Spark 학습을 위한 공식 문서와 추가 자료를 안내합니다.
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **공식 문서**: [spark.apache.org/docs/latest](https://spark.apache.org/docs/latest/) - 가장 정확한 최신 정보
 - **Java API**: [Javadoc](https://spark.apache.org/docs/latest/api/java/) - Dataset, SparkSession, functions 클래스 참조
 - **학습 추천**: Databricks Academy(공식), Baeldung(Java 개발자용)
 - **입문서 추천**: "Learning Spark, 2nd Edition", "Spark: The Definitive Guide"
 - **커뮤니티**: Stack Overflow `apache-spark` 태그, GitHub Issues
-{{% /notice %}}
+{{< /callout >}}
 
 ## 공식 문서
 
@@ -47,12 +47,12 @@ Apache Spark 학습을 위한 공식 문서와 추가 자료를 안내합니다.
 - **[YARN](https://spark.apache.org/docs/latest/running-on-yarn.html)**
 - **[Kubernetes](https://spark.apache.org/docs/latest/running-on-kubernetes.html)**
 
-{{% notice style="info" title="공식 문서 핵심 포인트" %}}
+{{< callout type="info" title="공식 문서 핵심 포인트" >}}
 - **시작점**: Spark 3.5 문서 또는 latest 문서
 - **프로그래밍**: SQL/DataFrame 가이드가 가장 많이 사용됨
 - **운영**: Tuning Guide와 Monitoring Guide 필수 숙지
 - **클러스터**: 환경에 따라 YARN, Kubernetes, Standalone 중 선택
-{{% /notice %}}
+{{< /callout >}}
 
 ## API 문서
 
@@ -67,11 +67,11 @@ Apache Spark 학습을 위한 공식 문서와 추가 자료를 안내합니다.
 
 - **[Spark Scala API (Scaladoc)](https://spark.apache.org/docs/latest/api/scala/org/apache/spark/index.html)**
 
-{{% notice style="info" title="API 문서 핵심 포인트" %}}
+{{< callout type="info" title="API 문서 핵심 포인트" >}}
 - **Java 개발자 필수**: Dataset, SparkSession, functions 클래스
 - **functions 클래스**: 모든 내장 함수 (col, lit, when, sum, avg 등) 포함
 - Scala API도 참조하면 더 많은 예제와 설명 확인 가능
-{{% /notice %}}
+{{< /callout >}}
 
 ## 추가 학습 자료
 
@@ -93,12 +93,12 @@ Apache Spark 학습을 위한 공식 문서와 추가 자료를 안내합니다.
 - **[Spark Mailing Lists](https://spark.apache.org/community.html)** — 개발자 메일링 리스트
 - **[GitHub - apache/spark](https://github.com/apache/spark)** — 소스 코드와 이슈 트래커
 
-{{% notice style="info" title="추가 학습 자료 핵심 포인트" %}}
+{{< callout type="info" title="추가 학습 자료 핵심 포인트" >}}
 - **공식 교육**: Databricks Academy - 체계적인 커리큘럼 제공
 - **Java 개발자**: Baeldung Spark Tutorials 추천
 - **실무 예제**: Spark By Examples - 다양한 언어별 코드 예제
 - **문제 해결**: Stack Overflow `apache-spark` 태그 검색
-{{% /notice %}}
+{{< /callout >}}
 
 ## 관련 기술 문서
 
@@ -121,11 +121,11 @@ Apache Spark 학습을 위한 공식 문서와 추가 자료를 안내합니다.
 - **[Azure HDInsight](https://learn.microsoft.com/en-us/azure/hdinsight/)** — Azure 관리형 Hadoop/Spark
 - **[Databricks](https://docs.databricks.com/)** — Unified Data Analytics Platform
 
-{{% notice style="info" title="관련 기술 문서 핵심 포인트" %}}
+{{< callout type="info" title="관련 기술 문서 핵심 포인트" >}}
 - **데이터 소스**: Kafka(스트리밍), HDFS(분산 저장), Parquet(컬럼 포맷), Delta Lake(ACID)
 - **클러스터**: YARN(Hadoop 환경), Kubernetes(컨테이너)
 - **클라우드**: AWS EMR, GCP Dataproc, Azure HDInsight, Databricks
-{{% /notice %}}
+{{< /callout >}}
 
 ## 버전별 릴리즈 노트
 
@@ -150,8 +150,8 @@ Apache Spark 학습을 위한 공식 문서와 추가 자료를 안내합니다.
 - **High Performance Spark** (O'Reilly) — Holden Karau, Rachel Warren
 - **Spark in Action, 2nd Edition** (Manning) — Jean-Georges Perrin
 
-{{% notice style="info" title="참고 도서 핵심 포인트" %}}
+{{< callout type="info" title="참고 도서 핵심 포인트" >}}
 - **입문 추천**: "Learning Spark, 2nd Edition" - 최신 Spark 3.x 기준 종합 입문서
 - **심화 추천**: "High Performance Spark" - 성능 최적화와 내부 구조 이해
 - **실무 지향**: "Spark in Action, 2nd Edition" - 실무 예제 중심
-{{% /notice %}}
+{{< /callout >}}

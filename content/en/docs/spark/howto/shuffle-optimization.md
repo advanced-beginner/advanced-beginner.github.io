@@ -13,12 +13,12 @@ description: "Guide to minimize Spark shuffle and significantly improve job perf
 **Estimated Time**: About 20 minutes
 {{< /callout >}}
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **Check Shuffle**: `Exchange` node in `df.explain()` = shuffle occurs
 - **Eliminate Unnecessary Shuffles**: Perform multiple aggregations at once in the same group
 - **Broadcast Join**: Use `broadcast()` for small tables (tens of MB)
 - **Shuffle Partition Count**: Adjust `spark.sql.shuffle.partitions` (default 200)
-{{% /notice %}}
+{{< /callout >}}
 
 ## Problem Definition
 

@@ -14,11 +14,11 @@ related_concepts:
     path: /docs/elasticsearch/concepts/high-availability/
 ---
 
-{{% notice style="info" title="Prerequisites" %}}
+{{< callout type="info" title="Prerequisites" >}}
 Before reading this document, understand these concepts first:
 - [Core Components](core-components/) - Shard, Segment concepts
 - [Data Modeling](data-modeling/) - Mapping, Analyzer basics
-{{% /notice %}}
+{{< /callout >}}
 
 Learn Bulk indexing, Refresh, and Index Lifecycle Management for efficiently storing large volumes of data.
 

@@ -14,11 +14,11 @@ related_concepts:
     path: /docs/elasticsearch/concepts/performance-tuning/
 ---
 
-{{% notice style="info" title="선수 개념" %}}
+{{< callout type="info" title="선수 개념" >}}
 이 문서를 읽기 전에 다음 개념을 먼저 이해하세요:
 - [Query DSL](query-dsl/) - 기본 쿼리 구조
 - [데이터 모델링](data-modeling/) - keyword vs text 타입
-{{% /notice %}}
+{{< /callout >}}
 
 ## 전체 비유: 도서관 통계 분석
 

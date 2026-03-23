@@ -14,11 +14,11 @@ related_concepts:
     path: /docs/elasticsearch/examples/product-search/
 ---
 
-{{% notice style="info" title="선수 개념" %}}
+{{< callout type="info" title="선수 개념" >}}
 이 문서를 읽기 전에 다음 개념을 먼저 이해하세요:
 - [데이터 모델링](data-modeling/) - Analyzer, text vs keyword 타입
 - [Query DSL](query-dsl/) - match, multi_match 쿼리
-{{% /notice %}}
+{{< /callout >}}
 
 ## 전체 비유: 외국인을 위한 한글 도서 검색
 

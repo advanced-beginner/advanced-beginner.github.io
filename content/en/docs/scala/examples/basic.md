@@ -4,13 +4,13 @@ title: Basic Examples
 weight: 2
 ---
 
-{{% notice style="primary" title="TL;DR" %}}
+{{< callout type="info" title="TL;DR" >}}
 - Model immutable data with **case classes**, utilize auto-generated `equals` and `copy`
 - **Option** for null safety, **Either** for detailed error handling
 - **Pattern matching** for type-based branching
 - **Collection API** (`map`, `filter`, `groupBy`) for declarative data processing
 - **Type classes** for extensible functionality implementation
-{{% /notice %}}
+{{< /callout >}}
 
 **Target Audience**: Developers who have completed Scala environment setup and want to learn Scala through practical code
 
@@ -58,11 +58,11 @@ val order = Order.create(
 
 In the code above, the Order.create factory method returns None if the order lines are empty, and Some(Order(...)) otherwise. This prevents empty orders from being created at compile time.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **Case classes**: Ideal for immutable data representation, auto-generate `equals`, `hashCode`, `toString`, `copy`
 - **Factory method**: Forces validation during object creation to prevent invalid states
 - **Option return**: Express "value may be absent" through type instead of null
-{{% /notice %}}
+{{< /callout >}}
 
 #### Example 2: Order Processing
 
@@ -104,11 +104,11 @@ order.foreach { o =>
 
 The totalPrice method calculates the sum of each order line's price multiplied by quantity. The applyDiscount method uses nested copy methods to apply discounts while maintaining immutability.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **extension**: Add new methods without modifying existing classes (Scala 3)
 - **copy**: Create new object with some fields changed from immutable object
 - **Higher-order functions**: Process collections declaratively with `map`, `sum`, `exists`
-{{% /notice %}}
+{{< /callout >}}
 
 #### Example 3: Error Handling
 
@@ -157,12 +157,12 @@ createOrderLine("Laptop", 1500000, 1) match
 
 Using for comprehension, you can chain Either values sequentially. If the first validation fails, it immediately returns Left. If all validations pass, the final result is wrapped in Right.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **Either[L, R]**: `Left` for failure, `Right` for success (convention)
 - **enum**: Define error types as enumeration for type safety
 - **for comprehension**: Chain multiple Eithers sequentially, stop at first failure
 - **Pattern matching**: Explicitly handle all error cases
-{{% /notice %}}
+{{< /callout >}}
 
 #### Example 4: Collection Processing
 
@@ -211,12 +211,12 @@ val sortedByName = products.sortBy(_.name)
 
 filter extracts only elements meeting the condition, map transforms each element. groupBy groups elements by key function and returns a Map. sortBy sorts by the given function's result.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **filter**: Extract only elements meeting condition
 - **map**: Transform each element to create new collection
 - **groupBy**: Group by key function → returns `Map[K, List[V]]`
 - **sortBy**: Specify sort criteria, **maxBy/minBy**: Extract max/min element
-{{% /notice %}}
+{{< /callout >}}
 
 #### Example 5: Using Option
 
@@ -257,12 +257,12 @@ println(s"Order total: ${orderTotal.getOrElse(0.0)}")
 
 Applying map to Option performs transformation only when value exists. Using for comprehension, you can combine multiple Option values; if any is None, the entire result becomes None.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **Option[T]**: Express value presence with `Some(value)` or `None`
 - **getOrElse**: Return default value when None
 - **map/flatMap**: Perform transformation only when value exists
 - **for comprehension**: Combine multiple Options, entire becomes None if any is None
-{{% /notice %}}
+{{< /callout >}}
 
 #### Example 6: Type Classes
 
@@ -310,12 +310,12 @@ println(products.toJson)
 
 Define type class instances with given keyword. The List encoder is automatically generated if the element type has an encoder. Through extension, add toJson method to all encodable types.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **Type classes**: Pattern for adding functionality without modifying existing types
 - **trait**: Define type class interface
 - **given**: Define type class instance (Scala 3)
 - **extension + using**: Conditional extension methods (add `toJson` only to types with encoder)
-{{% /notice %}}
+{{< /callout >}}
 
 #### Run Example Project
 
@@ -386,11 +386,11 @@ println(s"Successfully fetched users: ${results.length}")
 
 We defined extension methods to convert ApiResponse to Either or Option. The collect method uses a partial function to extract only Right cases.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **API response wrapper**: Represent status code, data, error message in single type
 - **Extension methods**: Convert response to `Either` or `Option` for consistent error handling
 - **collect**: Extract only elements matching specific pattern to create new collection
-{{% /notice %}}
+{{< /callout >}}
 
 #### Example 8: Real-world Scenario - Configuration Management
 
@@ -458,11 +458,11 @@ config match
 
 Enumerate possible environments with Environment enum and return appropriate configuration for each through pattern matching. The fromString method accepts string input and returns Either, safely handling invalid environment strings.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **enum**: Enumerate possible values as types for compile-time safety
 - **Pattern matching**: Clearly branch configuration for each environment
 - **Either return**: Safely handle invalid input, can pass error messages
-{{% /notice %}}
+{{< /callout >}}
 
 #### Exercises
 

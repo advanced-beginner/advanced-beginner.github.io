@@ -33,10 +33,10 @@ Vector Search를 **도서관의 비슷한 책 추천 시스템**에 비유하면
 
 Elasticsearch의 벡터 검색(kNN)을 사용하여 시맨틱 검색과 유사 이미지 검색을 구현하는 방법을 배웁니다.
 
-{{% notice style="info" title="버전 요구사항" %}}
+{{< callout type="info" title="버전 요구사항" >}}
 - **Elasticsearch 8.0+** 필수 (네이티브 kNN 지원)
 - 8.x 이전 버전은 script_score나 플러그인 필요
-{{% /notice %}}
+{{< /callout >}}
 
 ## Vector Search란?
 

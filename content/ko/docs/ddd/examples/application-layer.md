@@ -8,13 +8,13 @@ author_url: "http://github.com/kimbenji"
 
 # 애플리케이션 계층 구현
 
-{{% notice style="primary" title="TL;DR" %}}
+{{< callout type="info" title="TL;DR" >}}
 - **OrderService**: Use Case 조율. 도메인 로직 호출, 트랜잭션 관리, 이벤트 발행
 - **Command 객체**: CreateOrderCommand 등 요청을 불변 객체로 캡슐화
 - **DTO**: OrderResponse 등 응답을 도메인과 분리하여 표현
 - **JPA Repository**: Domain Repository 인터페이스의 구현체. Mapper로 Entity 변환
 - **이벤트 핸들러**: @TransactionalEventListener로 커밋 후 Kafka 발행
-{{% /notice %}}
+{{< /callout >}}
 
 ## 대상 독자 및 선수 지식
 
@@ -142,12 +142,12 @@ public class OrderService {
 }
 ```
 
-{{% notice style="tip" title="핵심 포인트: Application Service" %}}
+{{< callout type="tip" title="핵심 포인트: Application Service" >}}
 - **@Transactional(readOnly = true)**: 클래스 레벨 기본값. 쓰기 메서드만 @Transactional 재정의
 - **Command/Query 분리**: 쓰기는 Command 객체, 읽기는 직접 파라미터
 - **도메인 로직 위임**: Service는 조율만 담당, 비즈니스 로직은 Aggregate에서 실행
 - **이벤트 발행**: 저장 후 수집된 이벤트를 ApplicationEventPublisher로 발행
-{{% /notice %}}
+{{< /callout >}}
 
 ## Command 객체
 
@@ -211,12 +211,12 @@ public record CancelOrderCommand(
 }
 ```
 
-{{% notice style="tip" title="핵심 포인트: Command 객체" %}}
+{{< callout type="tip" title="핵심 포인트: Command 객체" >}}
 - **Java Record**: 불변성 보장, 간결한 코드
 - **Compact Constructor**: 유효성 검증을 생성 시점에 수행
 - **도메인 타입 사용**: String 대신 OrderId, CustomerId 등 도메인 타입 활용
 - **자기 문서화**: Command 이름만으로 의도 파악 가능 (CreateOrderCommand, CancelOrderCommand)
-{{% /notice %}}
+{{< /callout >}}
 
 ## DTO
 
@@ -429,12 +429,12 @@ record CreateOrderResponse(String orderId, String message) {}
 record CancelOrderRequest(String reason) {}
 ```
 
-{{% notice style="tip" title="핵심 포인트: REST Controller와 DTO" %}}
+{{< callout type="tip" title="핵심 포인트: REST Controller와 DTO" >}}
 - **DTO 변환**: Request DTO를 Command로, Domain을 Response DTO로 변환
 - **HTTP 상태 코드**: 생성은 201 Created + Location 헤더, 조회는 200 OK
 - **도메인 보호**: Controller에서 도메인 객체를 직접 반환하지 않음
 - **Inner Record**: Request/Response DTO를 Controller 파일에 함께 정의하여 응집도 향상
-{{% /notice %}}
+{{< /callout >}}
 
 ## 인프라 계층: JPA Repository
 
@@ -711,13 +711,13 @@ public class OrderMapper {
 }
 ```
 
-{{% notice style="tip" title="핵심 포인트: JPA Repository" %}}
+{{< callout type="tip" title="핵심 포인트: JPA Repository" >}}
 - **Domain Repository 구현**: Interface는 Domain에, 구현체는 Infrastructure에 위치
 - **Entity 분리**: JPA Entity와 Domain Model을 별도로 유지하여 도메인 오염 방지
 - **Mapper 패턴**: toEntity/toDomain 메서드로 양방향 변환
 - **@Version**: 낙관적 잠금으로 동시성 제어
 - **reconstitute 활용**: DB 복원 시 도메인 모델의 reconstitute 메서드 사용
-{{% /notice %}}
+{{< /callout >}}
 
 ## 이벤트 핸들러
 
@@ -810,12 +810,12 @@ record OrderEventPayload(
 ) {}
 ```
 
-{{% notice style="tip" title="핵심 포인트: 이벤트 핸들러" %}}
+{{< callout type="tip" title="핵심 포인트: 이벤트 핸들러" >}}
 - **@TransactionalEventListener**: 트랜잭션 커밋 후 실행으로 데이터 일관성 보장
 - **TransactionPhase.AFTER_COMMIT**: 저장 성공 후에만 외부 시스템에 발행
 - **Kafka 발행**: Domain Event를 Kafka 메시지로 변환하여 발행
 - **Payload 변환**: 외부 시스템에 적합한 형태(OrderEventPayload)로 변환
-{{% /notice %}}
+{{< /callout >}}
 
 ## API 테스트
 
@@ -902,12 +902,12 @@ flowchart TB
 | **Domain** | 비즈니스 로직 | Order, OrderLine, Money |
 | **Infrastructure** | 기술 구현 | JpaOrderRepository, Mapper |
 
-{{% notice style="tip" title="핵심 포인트: 정리" %}}
+{{< callout type="tip" title="핵심 포인트: 정리" >}}
 - **계층 분리**: 각 계층은 자신의 책임만 수행. 도메인 로직은 Domain에, 조율은 Application에
 - **의존성 방향**: 항상 안쪽(Domain)을 향함. Infrastructure는 Domain Interface 구현
 - **변환 책임**: Controller에서 DTO 변환, Mapper에서 Entity 변환
 - **이벤트 흐름**: Domain에서 발생 -> Application에서 수집 -> Infrastructure에서 발행
-{{% /notice %}}
+{{< /callout >}}
 
 ## 다음 단계
 

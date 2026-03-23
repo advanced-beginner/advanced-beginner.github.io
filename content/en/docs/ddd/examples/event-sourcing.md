@@ -6,13 +6,13 @@ author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
 ---
 
-{{% notice style="primary" title="TL;DR" %}}
+{{< callout type="info" title="TL;DR" >}}
 - **Event Sourcing**: Store events instead of state. Restore state by replaying events
 - **Event Store**: Persistent storage for events. Version-based optimistic concurrency control
 - **Event-Sourced Aggregate**: Apply/when pattern for event application and state changes
 - **Snapshot**: Periodically save state snapshots for performance optimization
 - **Point-in-time Recovery**: Replay events up to a specific version to query past state
-{{% /notice %}}
+{{< /callout >}}
 
 ## Target Audience and Prerequisites
 
@@ -52,12 +52,12 @@ flowchart LR
 | **Debugging** | Difficult | Easy event tracing |
 | **Complexity** | Low | High |
 
-{{% notice style="tip" title="Key Points: Event Sourcing Concept" %}}
+{{< callout type="tip" title="Key Points: Event Sourcing Concept" >}}
 - **Don't store state, store events**: Current state is calculated by replaying events
 - **Complete history**: All change history is automatically preserved
 - **Time travel**: Can restore state at any point in time
 - **Trade-off**: Increased implementation complexity, query performance considerations needed
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -165,12 +165,12 @@ public class OrderCancelledEvent extends DomainEvent {
 }
 ```
 
-{{% notice style="tip" title="Key Points: Domain Events" %}}
+{{< callout type="tip" title="Key Points: Domain Events" >}}
 - **Version included**: Each event contains the Aggregate's version number
 - **Immutable**: Events cannot be changed once created
 - **Self-describing**: getEventType() identifies the event type
 - **Minimal data**: Contains only the data needed to restore state
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -316,13 +316,13 @@ public abstract class EventSourcedAggregate {
 }
 ```
 
-{{% notice style="tip" title="Key Points: Event-Sourced Aggregate" %}}
+{{< callout type="tip" title="Key Points: Event-Sourced Aggregate" >}}
 - **apply/when pattern**: apply() records the event, when() changes state
 - **Command methods**: Validate then generate events (addItem, confirm, cancel)
 - **reconstitute**: Restore state from event list
 - **uncommittedEvents**: Track events not yet saved
 - **Version management**: nextVersion() assigns sequential version numbers
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -465,12 +465,12 @@ public class JpaEventStore implements EventStore {
 }
 ```
 
-{{% notice style="tip" title="Key Points: Event Store" %}}
+{{< callout type="tip" title="Key Points: Event Store" >}}
 - **Append-Only**: Events can only be added, never modified or deleted
 - **Optimistic concurrency**: expectedVersion validation detects concurrent modification conflicts
 - **JSON serialization**: Store events as JSON for flexibility
 - **Version-based query**: loadFromVersion() loads only events after a specific version
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -513,12 +513,12 @@ public class EventSourcedOrderRepository implements OrderRepository {
 }
 ```
 
-{{% notice style="tip" title="Key Points: Repository" %}}
+{{< callout type="tip" title="Key Points: Repository" >}}
 - **Event Store delegation**: Delegates event storage/retrieval to Event Store
 - **Version calculation**: expectedVersion = current version - uncommitted event count on save
 - **reconstitute usage**: Restore Aggregate from events
 - **Domain Repository interface**: Interface defined in domain layer
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -605,12 +605,12 @@ public class SnapshotStore {
 }
 ```
 
-{{% notice style="tip" title="Key Points: Snapshot" %}}
+{{< callout type="tip" title="Key Points: Snapshot" >}}
 - **Performance optimization**: Reduces full replay cost when there are many events
 - **Periodic creation**: Create snapshot every SNAPSHOT_THRESHOLD (e.g., 100) events
 - **Partial replay**: Restore state by replaying snapshot + only subsequent events
 - **State serialization**: Store Aggregate state as JSON
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -698,12 +698,12 @@ public class OrderApplicationService {
 }
 ```
 
-{{% notice style="tip" title="Key Points: Application Service" %}}
+{{< callout type="tip" title="Key Points: Application Service" >}}
 - **Point-in-time query**: getOrderAtVersion() queries state at specific version
 - **Event filtering**: Filter events with version <= targetVersion to restore past state
 - **External event publishing**: Notify external systems via ApplicationEventPublisher after save
 - **Standard CRUD pattern**: Maintains same service interface as traditional approach
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -764,12 +764,12 @@ class OrderTest {
 }
 ```
 
-{{% notice style="tip" title="Key Points: Tests" %}}
+{{< callout type="tip" title="Key Points: Tests" >}}
 - **Event verification**: Check generated events with getUncommittedEvents()
 - **State restoration test**: Verify state after reconstitute from event list
 - **Invariant test**: Verify exception thrown when attempting invalid state transitions
 - **Independent tests**: Can unit test domain logic without DB
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 

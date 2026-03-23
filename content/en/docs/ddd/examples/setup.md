@@ -8,12 +8,12 @@ author_url: "http://github.com/kimbenji"
 
 # Project Setup
 
-{{% notice style="primary" title="TL;DR" %}}
+{{< callout type="info" title="TL;DR" >}}
 - DDD layered architecture (Domain, Application, Infrastructure, Interfaces) package structure
 - Spring Boot 3.2.x + Spring Kafka + JPA based dependencies
 - AggregateRoot, DomainEvent, Entity base class implementations
 - Docker Compose for Kafka + PostgreSQL development environment
-{{% /notice %}}
+{{< /callout >}}
 
 ## Target Audience and Prerequisites
 
@@ -174,12 +174,12 @@ flowchart LR
 | **Dependencies flow inward** | Interfaces -> Application -> Domain |
 | **Infrastructure implements Domain** | Provides Repository Interface implementations |
 
-{{% notice style="tip" title="Key Points: Layer Responsibilities" %}}
+{{< callout type="tip" title="Key Points: Layer Responsibilities" >}}
 - **Domain Layer**: Core of business logic. Implemented in pure Java without external dependencies
 - **Application Layer**: Use Case orchestration. Handles transaction boundaries and event publishing
 - **Infrastructure Layer**: Technical implementation. Depends on external technologies like JPA, Kafka
 - **Interfaces Layer**: External integration. REST API, message handlers, etc.
-{{% /notice %}}
+{{< /callout >}}
 
 ## application.yml
 
@@ -301,11 +301,11 @@ public abstract class Entity<ID> {
 }
 ```
 
-{{% notice style="tip" title="Key Points: Base Classes" %}}
+{{< callout type="tip" title="Key Points: Base Classes" >}}
 - **AggregateRoot**: Collects and manages domain events. Parent class for all Aggregates
 - **DomainEvent**: Auto-generates event ID and occurrence time. Designed as immutable object
 - **Entity**: ID-based equality comparison. equals/hashCode only use ID
-{{% /notice %}}
+{{< /callout >}}
 
 ## Docker Compose (Development Environment)
 
@@ -381,11 +381,11 @@ com.example
     └── ...
 ```
 
-{{% notice style="tip" title="Key Points: Package Structure" %}}
+{{< callout type="tip" title="Key Points: Package Structure" >}}
 - **Domain-centric, not technology-centric**: Use domain/application/infrastructure structure instead of controller/service/repository
 - **Subdomain separation**: Separate by domain (order/, inventory/, shipping/) as the system grows
 - **Bounded Context reflection**: Each subdomain has its own independent layer structure
-{{% /notice %}}
+{{< /callout >}}
 
 ## Next Steps
 

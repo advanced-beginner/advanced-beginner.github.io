@@ -4,13 +4,13 @@ weight: 1
 lastmod: 2026-01-15
 ---
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **Index/Document/Field**: RDB의 Table/Row/Column에 대응
 - **Shard/Replica**: 데이터 분산과 복제의 기본 단위
 - **Analyzer/Tokenizer**: 텍스트를 검색 가능한 토큰으로 분해
 - **Query/Filter Context**: 점수 계산 여부에 따른 검색 방식 구분
 - 알파벳순으로 정렬, 각 용어에서 관련 개념 문서로 링크
-{{% /notice %}}
+{{< /callout >}}
 
 > **빠른 이동**: [A](#a-e) | [B](#a-e) | [C](#a-e) | [D](#a-e) | [E](#a-e) | [F](#f-m) | [G](#f-m) | [H](#f-m) | [I](#f-m) | [J](#f-m) | [K](#f-m) | [L](#f-m) | [M](#f-m) | [N](#n-r) | [O](#n-r) | [P](#n-r) | [Q](#n-r) | [R](#n-r) | [S](#s-z) | [T](#s-z) | [U](#s-z) | [V](#s-z) | [W](#s-z) | [Z](#s-z)
 

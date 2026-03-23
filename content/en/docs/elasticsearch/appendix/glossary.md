@@ -4,13 +4,13 @@ weight: 1
 lastmod: 2026-01-10
 ---
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **Index/Document/Field**: Corresponds to Table/Row/Column in RDB
 - **Shard/Replica**: Basic units of data distribution and replication
 - **Analyzer/Tokenizer**: Breaks text into searchable tokens
 - **Query/Filter Context**: Search methods distinguished by scoring calculation
 - Sorted alphabetically, each term links to related concept documents
-{{% /notice %}}
+{{< /callout >}}
 
 Quick reference for Elasticsearch core terms. For detailed explanations, see the [Concepts](../concepts/) section.
 

@@ -14,11 +14,11 @@ related_concepts:
     path: /docs/elasticsearch/concepts/korean-search/
 ---
 
-{{% notice style="info" title="Prerequisites" %}}
+{{< callout type="info" title="Prerequisites" >}}
 Before reading this document, understand these concepts first:
 - [Query DSL](query-dsl/) - match, bool query basics
 - [Data Modeling](data-modeling/) - Analyzer operation principles
-{{% /notice %}}
+{{< /callout >}}
 
 Learn relevance tuning methods including Score, BM25, and Boosting to improve search result quality.
 

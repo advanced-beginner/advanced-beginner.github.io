@@ -4,13 +4,13 @@ title: Spark 연동
 weight: 4
 ---
 
-{{% notice style="primary" title="TL;DR" %}}
+{{< callout type="info" title="TL;DR" >}}
 - **Scala는 Spark의 네이티브 언어**: 최신 기능 가장 먼저 지원, 가장 간결한 API
 - **DataFrame**: SQL 스타일 데이터 처리, `$"column"` 문법으로 컬럼 참조
 - **Dataset[T]**: Case Class로 타입 안전한 데이터 처리, 컴파일 타임 오류 검출
 - **성능 최적화**: 브로드캐스트 조인, 캐싱, Predicate Pushdown 활용
 - **주의**: Spark 3.5는 Scala 2.12/2.13만 지원 (Scala 3 미지원)
-{{% /notice %}}
+{{< /callout >}}
 
 **대상 독자**: 대규모 데이터 처리를 배우려는 Scala 개발자, Spark 입문자
 
@@ -61,11 +61,11 @@ Scala와 Spark를 함께 사용할 때 얻을 수 있는 주요 이점을 정리
 | **함수형 스타일** | map, filter, reduce 등 자연스럽게 활용 |
 | **REPL 지원** | spark-shell로 대화형 개발 가능 |
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - Scala는 Spark의 네이티브 언어로 최신 기능이 가장 먼저 지원됨
 - Java 대비 훨씬 간결한 코드 작성 가능 (`$"column"` 문법 등)
 - Case Class로 타입 안전한 Dataset API 활용 가능
-{{% /notice %}}
+{{< /callout >}}
 
 #### 환경 설정
 
@@ -94,11 +94,11 @@ lazy val root = (project in file("."))
 sbt.version=1.10.6
 ```
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - Spark 3.5는 **Scala 2.12/2.13만 지원** (Scala 3 미지원)
 - `spark-core`와 `spark-sql` 의존성 추가 필수
 - sbt 버전은 `project/build.properties`에 명시
-{{% /notice %}}
+{{< /callout >}}
 
 #### 기본 예제: DataFrame 처리
 
@@ -171,12 +171,12 @@ object SparkBasics extends App {
 
 이 예제에서 `spark.implicits._`를 import하면 `$"column_name"` 문법으로 컬럼을 참조할 수 있습니다. 이는 Scala의 문자열 보간법과 암시적 변환을 활용한 것입니다.
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - **SparkSession**: Spark의 진입점, `builder()` 패턴으로 생성
 - **spark.implicits._**: `$"column"` 문법 및 `toDF()` 활성화
 - **local[\*]**: 로컬 모드에서 모든 CPU 코어 사용
 - `filter`, `select`, `groupBy`, `agg`, `orderBy`로 데이터 처리
-{{% /notice %}}
+{{< /callout >}}
 
 #### Case Class와 Dataset
 
@@ -269,12 +269,12 @@ ds.filter(_.salry > 70000)   // 컴파일 에러! 즉시 발견
 //            ^^^^^ value salry is not a member of Employee
 ```
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - **Dataset[T]**: Case Class로 타입 안전한 데이터 처리
 - **DataFrame**: 런타임 오류 가능, **Dataset**: 컴파일 타임 오류 검출
 - **toDS()**: Seq를 Dataset으로 변환
 - **groupByKey + mapGroups**: 타입 안전한 그룹화 및 집계
-{{% /notice %}}
+{{< /callout >}}
 
 #### 함수형 스타일 활용
 
@@ -361,11 +361,11 @@ object FunctionalSparkExample extends App {
 
 UDF(User Defined Function)를 사용하면 Scala 함수를 Spark SQL에서 사용할 수 있습니다. 패턴 매칭을 활용하면 데이터 분류 로직을 명확하게 표현할 수 있습니다.
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - **함수형 체이닝**: `filter` → `map` → `groupByKey` → `reduceGroups` 연결
 - **UDF**: Scala 함수를 Spark SQL에서 사용 가능하게 변환
 - **패턴 매칭**: 데이터 분류 로직을 명확하게 표현
-{{% /notice %}}
+{{< /callout >}}
 
 #### 실전 예제: ETL 파이프라인
 
@@ -475,12 +475,12 @@ object ETLPipeline extends App {
 
 이 ETL 파이프라인에서 Option 타입을 사용하여 nullable 필드를 안전하게 처리하고, 패턴 매칭으로 세션 유형을 분류합니다. 최종 결과는 Parquet 포맷으로 저장하여 후속 분석에 활용할 수 있습니다.
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - **Option[T]**: nullable 필드를 타입 안전하게 처리
 - **getOrElse**: 결측값에 기본값 적용
 - **partitionBy**: 날짜별 파티셔닝으로 쿼리 성능 향상
 - **Parquet**: 컬럼 기반 포맷으로 분석에 최적화
-{{% /notice %}}
+{{< /callout >}}
 
 #### Spark SQL과 Scala
 
@@ -550,11 +550,11 @@ object SparkSQLExample extends App {
 }
 ```
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - **createOrReplaceTempView**: DataFrame을 SQL에서 테이블로 참조
 - **spark.sql()**: SQL 쿼리 실행 후 DataFrame 반환
 - **SQL + Scala API 혼합**: 복잡한 조인은 SQL로, 추가 처리는 Scala로
-{{% /notice %}}
+{{< /callout >}}
 
 #### 성능 최적화 팁
 
@@ -615,12 +615,12 @@ val filtered = spark.read
   .filter($"status" === "ERROR")     // 필터 푸시다운
 ```
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - **파티셔닝**: `repartition(n, $"key")`로 셔플 최적화
 - **브로드캐스트 조인**: 작은 테이블을 모든 노드에 복제하여 셔플 방지
 - **캐싱**: `cache()` 또는 `persist()`로 반복 사용 데이터 메모리에 유지
 - **Predicate Pushdown**: 필터 조건을 데이터 소스 수준까지 내려보냄
-{{% /notice %}}
+{{< /callout >}}
 
 #### 트러블슈팅
 
@@ -669,11 +669,11 @@ class MyProcessor extends Serializable {
 }
 ```
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - **Task not serializable**: 클로저에서 기본 타입만 캡처하거나 `@transient` 사용
 - **OutOfMemoryError**: `spark.driver.memory`, `spark.executor.memory` 증가
 - **메모리 문제**: `StorageLevel.MEMORY_AND_DISK`로 디스크 스필 허용
-{{% /notice %}}
+{{< /callout >}}
 
 #### 실행 방법
 
@@ -696,11 +696,11 @@ spark-shell --master local[*]
 
 로컬 개발 시에는 sbt run이나 spark-shell을 사용하고, 클러스터 배포 시에는 spark-submit을 사용합니다.
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - **sbt run**: 로컬 개발 시 빠른 실행
 - **spark-shell**: 대화형 개발 및 탐색적 분석
 - **spark-submit**: 클러스터 배포 시 사용, JAR 패키징 필요
-{{% /notice %}}
+{{< /callout >}}
 
 #### 다음 단계
 

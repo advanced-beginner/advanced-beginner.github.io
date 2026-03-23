@@ -8,13 +8,13 @@ author_url: "http://github.com/kimbenji"
 
 # Order Domain Implementation
 
-{{% notice style="primary" title="TL;DR" %}}
+{{< callout type="info" title="TL;DR" >}}
 - **Order**: Aggregate Root. Manages the order's consistency boundary
 - **OrderLine**: Internal Entity. Can only be created/modified through Order
 - **Money, ShippingAddress, OrderId**: Value Objects. Immutable and compared by value
 - **Invariants**: At least 1 order line, max amount 100M won, quantity 1~999
 - **Domain Events**: OrderCreatedEvent, OrderConfirmedEvent, etc. published on state changes
-{{% /notice %}}
+{{< /callout >}}
 
 ## Target Audience and Prerequisites
 
@@ -128,12 +128,12 @@ OrderLine(ProductId productId, ...) { }
 
 **Reason:** OrderLine cannot exist without Order. Making it package-private **prevents incorrect usage at compile time**.
 
-{{% notice style="tip" title="Key Points: Design Decisions" %}}
+{{< callout type="tip" title="Key Points: Design Decisions" >}}
 - **Aggregate Boundary**: Range where consistency must be guaranteed. Order + OrderLine form one boundary
 - **ID Reference**: Other Aggregates (Customer, Product) referenced only by ID, not objects
 - **Value Object**: Immutable, compared by value, only replaceable (Money, Address)
 - **Internal Entity**: Exists only within Aggregate, accessed only through Root (OrderLine)
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -330,12 +330,12 @@ public record ShippingAddress(
 }
 ```
 
-{{% notice style="tip" title="Key Points: Value Object" %}}
+{{< callout type="tip" title="Key Points: Value Object" >}}
 - **Java Record usage**: Immutability, auto-generated equals/hashCode
 - **Compact Constructor**: Validation performed in constructor
 - **Factory methods**: Clear creation methods like `Money.won(10000)`, `OrderId.generate()`
 - **Domain operations**: Domain logic encapsulated within VO like `Money.add()`, `Money.multiply()`
-{{% /notice %}}
+{{< /callout >}}
 
 ## Entity Implementation
 
@@ -444,12 +444,12 @@ public record OrderLineId(String value) {
 }
 ```
 
-{{% notice style="tip" title="Key Points: Entity" %}}
+{{< callout type="tip" title="Key Points: Entity" >}}
 - **Package-private constructor**: Restricts creation only through Aggregate Root
 - **Invariant validation**: `validateQuantity()` enforces quantity constraints (1~999)
 - **reconstitute method**: Separate method for DB restoration that bypasses validation
 - **State change methods**: `changeQuantity()` is also package-private, callable only by Root
-{{% /notice %}}
+{{< /callout >}}
 
 ## Aggregate Root Implementation
 
@@ -734,13 +734,13 @@ public enum OrderStatus {
 }
 ```
 
-{{% notice style="tip" title="Key Points: Aggregate Root" %}}
+{{< callout type="tip" title="Key Points: Aggregate Root" >}}
 - **Factory methods**: `Order.create()` for creation, `Order.reconstitute()` for restoration
 - **Invariant enforcement**: All business rules (max amount, min line count) validated internally
 - **State transition control**: `confirm()`, `cancel()` restrict allowed actions per status
 - **Event publishing**: `registerEvent()` collects domain events on state changes
 - **Encapsulation**: `getOrderLines()` returns immutable list to prevent external modification
-{{% /notice %}}
+{{< /callout >}}
 
 ## Domain Event Implementation
 
@@ -843,12 +843,12 @@ public class OrderConfirmedEvent extends DomainEvent {
 }
 ```
 
-{{% notice style="tip" title="Key Points: Domain Events" %}}
+{{< callout type="tip" title="Key Points: Domain Events" >}}
 - **Immutable snapshots**: Store state snapshot at time of event publication
 - **Auto metadata**: eventId, occurredAt auto-generated in parent class
 - **Aggregate ID**: `getAggregateId()` identifies which Aggregate the event originated from
 - **Inner Record**: Define event-specific data structures like `OrderLineSnapshot`
-{{% /notice %}}
+{{< /callout >}}
 
 ## Repository Interface
 
@@ -1025,13 +1025,13 @@ class OrderTest {
 }
 ```
 
-{{% notice style="tip" title="Key Points: Unit Tests" %}}
+{{< callout type="tip" title="Key Points: Unit Tests" >}}
 - **@Nested**: Group tests by functionality (Order Creation, Order Confirmation, Order Cancellation)
 - **@DisplayName**: Clearly express test intent
 - **Given-When-Then**: Clear separation of test structure
 - **Event verification**: Verify published events with `getDomainEvents()`
 - **Exception verification**: Test business rule violations with `assertThatThrownBy()`
-{{% /notice %}}
+{{< /callout >}}
 
 ## Troubleshooting
 

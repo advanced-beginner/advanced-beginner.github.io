@@ -13,11 +13,11 @@ description: "Spark에서 발생하는 OOM 오류를 진단하고 해결하는 �
 **예상 소요 시간**: 약 15분
 {{< /callout >}}
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **Driver OOM**: `collect()` 결과 크기 줄이기, `spark.driver.memory` 증가
 - **Executor OOM**: 파티션 수 증가 (`repartition`), `spark.executor.memory` 증가
 - **진단 우선**: Spark UI에서 어디서 OOM이 발생하는지 먼저 확인
-{{% /notice %}}
+{{< /callout >}}
 
 ## 문제 정의
 

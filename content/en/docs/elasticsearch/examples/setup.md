@@ -4,19 +4,19 @@ weight: 1
 lastmod: 2026-01-10
 ---
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - Quickly set up Elasticsearch 8.11 + Kibana environment with **Docker Compose**
 - Complete integration setup with **Spring Boot 3.2** + Spring Data Elasticsearch
 - Install **Nori analyzer** for Korean search
 - Total time required: approximately 15 minutes
-{{% /notice %}}
+{{< /callout >}}
 
-{{% notice style="info" title="Version Information" %}}
+{{< callout type="info" title="Version Information" >}}
 - **Elasticsearch / Kibana**: 8.11.0
 - **Spring Boot**: 3.2.0
 - **Spring Data Elasticsearch**: 5.2.x (included in Spring Boot 3.2)
 - **Java**: 17+
-{{% /notice %}}
+{{< /callout >}}
 
 Configure Elasticsearch + Kibana with Docker and set up a Spring Boot project.
 
@@ -118,11 +118,11 @@ docker-compose down
 docker-compose down -v
 ```
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - `single-node` mode is for development environments only
 - `xpack.security.enabled=false` is for development; always enable it in production
 - Ensure ports 9200 (REST API) and 5601 (Kibana) are open
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -197,11 +197,11 @@ public class ElasticsearchConfig extends ElasticsearchConfiguration {
 }
 ```
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - Complete integration setup with a single `spring-boot-starter-data-elasticsearch` dependency
 - The `uris` setting in `application.yml` must match the Docker environment
 - Setting the log level to DEBUG allows you to see ES queries
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -254,11 +254,11 @@ Response:
 }
 ```
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - Nori installation uses the `elasticsearch-plugin install analysis-nori` command in the Dockerfile
 - Verify analyzer operation by checking tokenization results with the `_analyze` API
 - Use `decompound_mode: mixed` to decompose compound words (e.g., `삼성전자` → `삼성`, `전자`)
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -327,11 +327,11 @@ Elasticsearch cluster not available: connect timed out
 2. Wait for Elasticsearch to fully start (check healthcheck passes)
 3. Verify Docker network settings (check if on same network)
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - Most connection issues occur when attempting to connect before Elasticsearch is fully started
 - Check status with `docker-compose ps`, verify response with `curl localhost:9200`
 - On Linux, the `vm.max_map_count` setting is mandatory
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 

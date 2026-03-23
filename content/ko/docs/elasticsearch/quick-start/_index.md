@@ -51,9 +51,9 @@ docker-compose --version
 # 예상 출력: Docker Compose version v2.x.x 이상
 ```
 
-{{% notice style="warning" title="Docker가 없다면?" %}}
+{{< callout type="warning" title="Docker가 없다면?" >}}
 [Docker Desktop 공식 사이트](https://www.docker.com/products/docker-desktop/)에서 설치하세요.
-{{% /notice %}}
+{{< /callout >}}
 
 ## Step 1/4: Elasticsearch 시작
 

@@ -6,13 +6,13 @@ weight: 4
 
 A collection of reference materials helpful for learning Scala. Resources are categorized from official documentation to books, online courses, and communities.
 
-{{% notice style="tip" title="TL;DR - Top Recommendations" %}}
+{{< callout type="tip" title="TL;DR - Top Recommendations" >}}
 - **Official Docs**: [Scala 3 Book](https://docs.scala-lang.org/scala3/book/introduction.html) - Step-by-step tutorial
 - **Beginner Book**: "Scala for the Impatient" - Optimal for quick learning
 - **Functional Deep Dive**: "Scala with Cats" (free online) - Master type classes
 - **Online Practice**: [Scastie](https://scastie.scala-lang.org/) - Run code instantly in browser
 - **Community**: [Scala Discord](https://discord.gg/scala) - Real-time Q&A
-{{% /notice %}}
+{{< /callout >}}
 
 #### Official Documentation
 
@@ -40,11 +40,11 @@ Official documentation for build tools used in Scala projects.
 - [sbt Documentation](https://www.scala-sbt.org/1.x/docs/) — Official sbt documentation
 - [Mill Build Tool](https://mill-build.com/mill/Intro_to_Mill.html) — Mill documentation
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - **Starting Point**: Tour of Scala for quick overview of core features
 - **Scala 3**: Learn from Scala 3 Book for new projects
 - **Build**: sbt is standard, Mill is fast alternative
-{{% /notice %}}
+{{< /callout >}}
 
 #### Books
 
@@ -86,11 +86,11 @@ Books covering advanced topics like type classes and effect systems.
   - Author: Gabriel Volpe
   - Practical functional programming
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - **Beginner**: "Scala for the Impatient" (quick learning) or "Programming in Scala" (deep learning)
 - **Free**: "Essential Scala", "Scala with Cats" available online
 - **Functional Deep Dive**: "Functional Programming in Scala" (Red Book)
-{{% /notice %}}
+{{< /callout >}}
 
 #### Real-World Library Preview
 
@@ -208,11 +208,11 @@ Recommended libraries and learning resources based on areas of interest.
 | Web Development | http4s + Circe | [http4s Tutorial](https://http4s.org/v0.23/docs/) |
 | Data Processing | Spark | [Spark Scala API](https://spark.apache.org/docs/latest/api/scala/) |
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - **Cats/ZIO**: Functional programming libraries, type classes and effect systems
 - **http4s + Circe**: Functional web development stack
 - **Spark**: Big data processing, requires Scala 2
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -235,11 +235,11 @@ Paid courses for more structured learning.
 - [Rock the JVM](https://rockthejvm.com/) — Comprehensive Scala courses
 - [Zionomicon](https://www.zionomicon.com/) — ZIO deep dive
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - **Free Recommendation**: Coursera's Martin Odersky course (Scala creator)
 - **Paid**: Rock the JVM (comprehensive), Zionomicon (ZIO deep dive)
 - **Scala 3**: Must-read New Features page in official documentation
-{{% /notice %}}
+{{< /callout >}}
 
 #### Library Documentation
 
@@ -275,11 +275,11 @@ Links to official documentation of major Scala libraries.
 - [MUnit](https://scalameta.org/munit/) — Lightweight testing
 - [ScalaCheck](https://scalacheck.org/) — Property-based testing
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - **Functional**: Cats (type classes), ZIO (effect system), Cats Effect (async)
 - **Web**: http4s (functional), Play (full-stack), Akka HTTP (actor-based)
 - **Data**: Doobie (DB), Circe (JSON), Spark (distributed processing)
-{{% /notice %}}
+{{< /callout >}}
 
 #### Community
 
@@ -302,11 +302,11 @@ Channels for communicating with Scala developers.
 - [Typelevel Blog](https://typelevel.org/blog/) — Functional Scala
 - [Li Haoyi's Blog](https://www.lihaoyi.com/) — Scala tips
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - **Real-time Questions**: Scala Discord, Typelevel Discord
 - **Q&A**: Stack Overflow (search), Reddit r/scala (discussions)
 - **Latest Info**: Subscribe to Scala Times weekly newsletter
-{{% /notice %}}
+{{< /callout >}}
 
 #### Tools
 
@@ -324,11 +324,11 @@ Tools to boost development productivity.
 - [Scalafmt](https://scalameta.org/scalafmt/) — Code formatter
 - [Scalafix](https://scalacenter.github.io/scalafix/) — Refactoring tool
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - **IDE**: IntelliJ (mature), VS Code + Metals (lightweight)
 - **Essential Tools**: Scastie (online execution), Scaladex (library search)
 - **Code Quality**: Scalafmt (formatting), Scalafix (refactoring)
-{{% /notice %}}
+{{< /callout >}}
 
 #### Conferences
 

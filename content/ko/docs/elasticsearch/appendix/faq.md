@@ -4,13 +4,13 @@ weight: 2
 lastmod: 2026-01-10
 ---
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **ES vs RDB**: 풀텍스트 검색/로그 분석은 ES, 트랜잭션/JOIN은 RDB
 - **text vs keyword**: text는 검색용(분석됨), keyword는 필터/정렬용(분석 안 됨)
 - **성능 문제**: Filter Context 사용, 필요한 필드만 반환, `search_after` 페이지네이션
 - **한글 검색**: Nori 분석기 설치 필수
 - **흔한 에러**: 대부분 디스크 부족, 메모리 부족, 타입 불일치가 원인
-{{% /notice %}}
+{{< /callout >}}
 
 자주 묻는 질문과 답변을 정리했습니다.
 

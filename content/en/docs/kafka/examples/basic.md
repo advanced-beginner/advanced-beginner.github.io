@@ -8,12 +8,12 @@ author_url: "http://github.com/kimbenji"
 
 This document provides a step-by-step guide to sending and receiving messages using Spring Kafka.
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **Producer**: Synchronous/asynchronous message sending with `KafkaTemplate`, Partition assignment using Key
 - **Consumer**: Message reception with `@KafkaListener`, batch processing and pattern subscription support
 - **Manual Commit**: Explicit commit after processing completion with `Acknowledgment`
 - **Error Handling**: Retry and Dead Letter Topic configuration with `@RetryableTopic`
-{{% /notice %}}
+{{< /callout >}}
 
 ## Before You Begin
 
@@ -24,11 +24,11 @@ This document provides a step-by-step guide to sending and receiving messages us
 | **Prior Completion** | [Quick Start](../quick-start/) example completed, [Environment Setup](setup/) configuration done |
 | **Estimated Time** | About 30 minutes |
 
-{{% notice style="warning" title="Platform-specific Notes" %}}
+{{< callout type="warning" title="Platform-specific Notes" >}}
 **Windows Users**: Use `gradlew.bat` instead of `./gradlew` in commands.
 
 **macOS/Linux Users**: If Gradle Wrapper doesn't have execute permission, run `chmod +x gradlew` first.
-{{% /notice %}}
+{{< /callout >}}
 
 Completing the Quick Start first will make this document easier to understand. This document extends the simple Quick Start example to learn patterns used in production.
 
@@ -155,12 +155,12 @@ public void sendToPartition(String topic, int partition, String key, String mess
 }
 ```
 
-{{% notice style="info" title="Producer Implementation Key Points" %}}
+{{< callout type="info" title="Producer Implementation Key Points" >}}
 - **Synchronous Send**: Block until send completes with `get()` method to verify result
 - **Asynchronous Send**: Process result with `whenComplete()` callback, achieve high throughput
 - **Using Key**: Same Key sends to same Partition, guaranteeing order
 - **Partition Specification**: Directly send to specific Partition when needed
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -255,12 +255,12 @@ public void consumeBatch(List<String> messages) {
 INFO  c.e.consumer.MessageConsumer : Batch received: 10 messages
 ```
 
-{{% notice style="info" title="Consumer Implementation Key Points" %}}
+{{< callout type="info" title="Consumer Implementation Key Points" >}}
 - **Basic Listener**: Specify Topic with `@KafkaListener`, automatic message reception
 - **ConsumerRecord**: Receive with metadata (Partition, Offset, Key, Timestamp)
 - **Multiple Topic Subscription**: Specify multiple Topics with array or use regex pattern
 - **Batch Processing**: Set `batch = "true"` to process multiple messages at once
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -322,11 +322,11 @@ flowchart TB
 
 *[Diagram Description: After receiving a message, if processing succeeds, acknowledge is called to commit the Offset and proceed to the next message. If processing fails, no commit occurs, so the message is reprocessed when the Consumer restarts.]*
 
-{{% notice style="info" title="Manual Offset Commit Key Points" %}}
+{{< callout type="info" title="Manual Offset Commit Key Points" >}}
 - **Configuration**: Enable manual commit with `enable-auto-commit: false`, `ack-mode: manual`
 - **Commit Timing**: Call `ack.acknowledge()` after successful business logic
 - **Reprocessing Guarantee**: On failure before commit, reprocessed on next Consumer start
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -389,11 +389,11 @@ flowchart LR
 
 *[Diagram Description: When message processing fails, it moves to a retry Topic for retry. If all retries fail, it moves to the Dead Letter Topic (DLT), where an administrator processes it manually.]*
 
-{{% notice style="info" title="Error Handling Key Points" %}}
+{{< callout type="info" title="Error Handling Key Points" >}}
 - **DefaultErrorHandler**: Auto retry with Bean registration, set retry interval/count with `FixedBackOff`
 - **@RetryableTopic**: Declarative retry policy, automatic DLT movement on failure
 - **Dead Letter Topic**: Separate storage for unprocessable messages, requires monitoring and manual handling
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -536,9 +536,9 @@ Run the tests:
 ./gradlew test
 ```
 
-{{% notice style="warning" title="Windows Users" %}}
+{{< callout type="warning" title="Windows Users" >}}
 Use `gradlew.bat test` instead of `./gradlew test`.
-{{% /notice %}}
+{{< /callout >}}
 
 **Expected Output:**
 ```

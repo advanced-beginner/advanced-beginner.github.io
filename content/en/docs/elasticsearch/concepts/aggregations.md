@@ -14,11 +14,11 @@ related_concepts:
     path: /docs/elasticsearch/concepts/performance-tuning/
 ---
 
-{{% notice style="info" title="Prerequisites" %}}
+{{< callout type="info" title="Prerequisites" >}}
 Before reading this document, understand these concepts first:
 - [Query DSL](query-dsl/) - Basic query structure
 - [Data Modeling](data-modeling/) - keyword vs text types
-{{% /notice %}}
+{{< /callout >}}
 
 Learn how to analyze data and extract statistics using Elasticsearch Aggregations.
 

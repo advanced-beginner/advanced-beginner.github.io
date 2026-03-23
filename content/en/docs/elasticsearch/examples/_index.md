@@ -7,9 +7,9 @@ lastmod: 2026-01-08
 
 Executable example code based on Spring Boot.
 
-{{% notice style="info" title="Version Information" %}}
+{{< callout type="info" title="Version Information" >}}
 All examples are based on **Elasticsearch 8.11.x**, **Spring Boot 3.2.x**, and **Java 17+**.
-{{% /notice %}}
+{{< /callout >}}
 
 ## Example List
 

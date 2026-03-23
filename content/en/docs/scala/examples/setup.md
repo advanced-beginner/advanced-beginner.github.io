@@ -4,12 +4,12 @@ title: Environment Setup
 weight: 1
 ---
 
-{{% notice style="primary" title="TL;DR" %}}
+{{< callout type="info" title="TL;DR" >}}
 - Install JDK, sbt, and Scala CLI all at once with **Coursier**
 - **sbt** is Scala's standard build tool for compilation, testing, and dependency management
 - Configure IDE with **IntelliJ IDEA** or **VS Code + Metals**
 - Project structure: `build.sbt` (configuration) + `src/main/scala/` (source) + `src/test/scala/` (tests)
-{{% /notice %}}
+{{< /callout >}}
 
 **Target Audience**: Developers new to Scala programming
 
@@ -56,10 +56,10 @@ brew install sbt
 sdk install sbt
 ```
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - Coursier (`cs setup`) is the most convenient method for automatically installing all required tools
 - Direct installation requires separate JDK installation
-{{% /notice %}}
+{{< /callout >}}
 
 #### Project Structure
 
@@ -83,12 +83,12 @@ my-project/
 
 `build.sbt` is the core configuration file that defines project name, Scala version, and dependencies. The `project/` directory contains meta-configuration for the build itself. `src/main/scala/` contains application source code, while `src/test/scala/` contains test code. The `target/` directory is where compiled artifacts are generated and should be excluded from version control.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - `build.sbt`: Project metadata and dependency definitions
 - `src/main/scala/`: Main source code location
 - `src/test/scala/`: Test code location
 - `target/`: Build artifacts (add to `.gitignore`)
-{{% /notice %}}
+{{< /callout >}}
 
 #### build.sbt Configuration
 
@@ -144,11 +144,11 @@ sbt.version=1.10.6
 
 > 💡 **Tip:** Check the latest sbt version at the [sbt releases page](https://github.com/sbt/sbt/releases).
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - Scala 3: `scalaVersion := "3.3.1"`, MUnit test framework recommended
 - Scala 2.13: `scalaVersion := "2.13.12"`, ScalaTest framework recommended
 - Specify sbt version in `project/build.properties` for team consistency
-{{% /notice %}}
+{{< /callout >}}
 
 #### Commonly Used sbt Commands
 
@@ -180,11 +180,11 @@ sbt
 > ~compile
 ```
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - `compile`, `run`, `test`: Most frequently used basic commands
 - `~` prefix: Auto-rerun on file change detection (essential during development)
 - Command execution faster within sbt shell
-{{% /notice %}}
+{{< /callout >}}
 
 #### IDE Setup
 
@@ -222,11 +222,11 @@ VS Code is a lightweight and fast editor that supports Scala through the Metals 
 
 Useful features provided by Metals: Hover for type information, F12 to go to definition, ⇧ + F12 to find references, F2 to rename symbols.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **IntelliJ IDEA**: Most complete Scala IDE, requires Scala plugin installation
 - **VS Code + Metals**: Lightweight and fast, free, configure project by clicking "Import build"
 - Both provide excellent support - choose the familiar tool
-{{% /notice %}}
+{{< /callout >}}
 
 #### Adding Dependencies
 
@@ -260,11 +260,11 @@ libraryDependencies ++= Seq(
 
 Understanding the difference between `%%` and `%` is important. Using `%%` automatically appends the Scala version to the artifact name. For example, with Scala 3 it becomes `cats-core_3`, and with Scala 2.13 it becomes `cats-core_2.13`. Java libraries are version-independent, so use single `%`.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - `%%`: Scala libraries (Scala version automatically appended)
 - `%`: Java libraries (version-independent)
 - `% Test`: Test-only, `% Provided`: Compile-only
-{{% /notice %}}
+{{< /callout >}}
 
 #### Multi-Project
 
@@ -291,11 +291,11 @@ lazy val api = project
 
 In this example, the `root` project aggregates `core` and `api`. The `api` project depends on (`dependsOn`) `core`, allowing it to use `core`'s classes.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - `aggregate`: Build multiple sub-projects at once
 - `dependsOn`: Enable usage of other project's classes
 - Useful for code separation in large projects
-{{% /notice %}}
+{{< /callout >}}
 
 #### Useful Plugins
 
@@ -317,12 +317,12 @@ addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.1.4")
 
 sbt-updates checks for new versions of dependencies. sbt-scalafmt formats code to a consistent style. sbt-native-packager generates Docker images or native packages, and sbt-assembly creates a single JAR file with all dependencies.
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **sbt-updates**: Check dependency updates
 - **sbt-scalafmt**: Auto-format code
 - **sbt-assembly**: Generate single JAR for deployment
 - Add plugins to `project/plugins.sbt`
-{{% /notice %}}
+{{< /callout >}}
 
 #### Troubleshooting
 
@@ -413,12 +413,12 @@ rm -rf .metals .bloop .bsp
 # Restart VS Code and click "Import build"
 ```
 
-{{% notice style="tip" title="Key Points" %}}
+{{< callout type="tip" title="Key Points" >}}
 - **JDK issues**: Check `java -version`, set `JAVA_HOME`
 - **Dependency issues**: Clear cache (`rm -rf ~/.cache/coursier`)
 - **IDE issues**: Invalidate caches and rebuild project
 - **Out of memory**: Add `-J-Xmx4G` to `.sbtopts`
-{{% /notice %}}
+{{< /callout >}}
 
 #### Next Steps
 

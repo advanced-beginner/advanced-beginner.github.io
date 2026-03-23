@@ -4,12 +4,12 @@ weight: 3
 lastmod: 2026-01-10
 ---
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **Official Documentation**: Elastic official guide, Spring Data Elasticsearch documentation
 - **Korean Resources**: Real-world cases from Woowahan Brothers, Kakao, Naver D2 tech blogs
 - **Cloud Services**: Elastic Cloud (official), Amazon OpenSearch (AWS integration), Self-Managed (full control)
 - **Learning Path**: Official free training → Korean blogs → Elastic certification
-{{% /notice %}}
+{{< /callout >}}
 
 Official documentation, recommended books, and community resource links.
 

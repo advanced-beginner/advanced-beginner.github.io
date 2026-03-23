@@ -4,13 +4,13 @@ title: 실무 프로젝트
 weight: 5
 ---
 
-{{% notice style="primary" title="TL;DR" %}}
+{{< callout type="info" title="TL;DR" >}}
 - **REST API 서버**: http4s + Circe + Cats Effect로 함수형 웹 서버 구축
 - **데이터 파이프라인**: FS2로 메모리 효율적인 스트림 처리
 - **CLI 도구**: scopt로 타입 안전한 명령줄 파서 구현
 - **에러 처리**: Cats Validated로 여러 검증 오류 동시 수집
 - 모든 예제는 불변성, 참조 투명성, 타입 안전성을 강조하는 함수형 스타일
-{{% /notice %}}
+{{< /callout >}}
 
 **대상 독자**: Scala로 실제 서비스를 구축하려는 개발자
 
@@ -102,12 +102,12 @@ object JsonCodecs:
 
 UserId를 AnyVal로 래핑하면 런타임 오버헤드 없이 타입 안전성을 얻을 수 있습니다. JSON 코덱은 Circe의 semiauto를 사용하여 컴파일 타임에 자동 생성됩니다.
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - **Case Class**: 불변 데이터 모델링의 기본
 - **AnyVal 래핑**: `UserId(value: Long)`처럼 타입 안전성 확보, 런타임 오버헤드 없음
 - **Circe deriveEncoder/Decoder**: 컴파일 타임 JSON 코덱 자동 생성
 - **extension**: 모델에 변환 메서드 추가 (`user.toResponse`)
-{{% /notice %}}
+{{< /callout >}}
 
 **리포지토리 (인메모리)**
 
@@ -176,12 +176,12 @@ object InMemoryUserRepository:
 
 Ref.modify는 원자적 업데이트를 보장합니다. 트레이트로 인터페이스를 정의하면 나중에 실제 데이터베이스 구현으로 쉽게 교체할 수 있습니다.
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - **trait**: 인터페이스 정의로 구현체 교체 용이 (테스트, DB 전환)
 - **Ref[IO, A]**: 스레드 안전한 가변 상태 관리
 - **Ref.modify**: 원자적 읽기-수정-쓰기 연산
 - **for comprehension**: IO 연산 순차 조합
-{{% /notice %}}
+{{< /callout >}}
 
 **HTTP 라우트**
 
@@ -249,12 +249,12 @@ object UserRoutes:
   given EntityDecoder[IO, UpdateUserRequest] = jsonOf[IO, UpdateUserRequest]
 ```
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - **http4s DSL**: `GET -> Root / "users" / LongVar(id)`처럼 패턴 매칭으로 라우트 정의
 - **HttpRoutes[IO]**: 순수 함수형 라우트, 부수 효과는 IO로 관리
 - **req.as[T]**: 요청 본문을 타입 T로 디코딩
 - **Ok, Created, NotFound**: HTTP 응답 생성 헬퍼
-{{% /notice %}}
+{{< /callout >}}
 
 **메인 애플리케이션**
 
@@ -319,12 +319,12 @@ curl -X PUT http://localhost:8080/users/1 \
 curl -X DELETE http://localhost:8080/users/1
 ```
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - **IOApp.Simple**: IO 기반 앱의 간편한 진입점
 - **EmberServerBuilder**: http4s의 경량 서버 구현체
 - **Router**: 여러 라우트를 하나로 조합
 - **use + IO.never**: 리소스를 안전하게 관리하며 서버 유지
-{{% /notice %}}
+{{< /callout >}}
 
 #### 프로젝트 2: 데이터 파이프라인
 
@@ -434,12 +434,12 @@ object StreamPipeline extends IOApp.Simple:
 
 groupWithin은 시간 또는 개수 기반의 윈도우 집계를 수행합니다. compile.drain은 스트림을 끝까지 실행하고 결과를 버립니다.
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - **FS2 Stream**: 지연 평가, 메모리 효율적, 대용량 데이터 처리에 적합
 - **groupWithin**: 시간/개수 기반 윈도우 집계 (실시간 분석에 유용)
 - **evalMap**: 스트림 요소에 IO 연산 적용
 - **compile.drain**: 스트림을 끝까지 실행하고 결과 버림
-{{% /notice %}}
+{{< /callout >}}
 
 #### 프로젝트 3: CLI 도구
 
@@ -536,13 +536,13 @@ sbt "run analyze -i data.json -v"
 sbt "run --help"
 ```
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - **scopt OParser**: 타입 안전한 명령줄 파서
 - **cmd**: 서브커맨드 정의 (convert, analyze 등)
 - **opt**: 옵션 정의 (`-i`, `--input` 등)
 - **required/optional**: 필수/선택 인자 지정
 - 잘못된 인자 시 자동 에러 메시지 출력
-{{% /notice %}}
+{{< /callout >}}
 
 #### 공통 패턴: 에러 처리
 
@@ -591,13 +591,13 @@ validateUser("", "invalid-email", 200)          // Invalid(Chain(EmptyField(name
 
 ValidatedNec는 NonEmptyChain에 오류를 수집합니다. mapN은 모든 검증이 성공했을 때만 결과를 조합합니다. 하나라도 실패하면 모든 실패 사유가 수집됩니다.
 
-{{% notice style="tip" title="핵심 포인트" %}}
+{{< callout type="tip" title="핵심 포인트" >}}
 - **Either**: 첫 번째 오류에서 중단 (fail-fast)
 - **Validated**: 모든 오류 수집 (accumulating errors)
 - **ValidatedNec**: NonEmptyChain으로 오류 수집 (효율적 추가)
 - **mapN**: 여러 Validated를 조합, 모두 성공 시에만 결과 생성
 - 사용자 입력 검증처럼 여러 오류를 한 번에 보여줄 때 유용
-{{% /notice %}}
+{{< /callout >}}
 
 #### 다음 단계
 

@@ -11,20 +11,20 @@ prerequisites:
     path: /docs/elasticsearch/concepts/aggregations/
 ---
 
-{{% notice style="warning" title="Complete Example Project" %}}
+{{< callout type="warning" title="Complete Example Project" >}}
 If you want to run this code immediately, use the **complete Spring Boot project**:
 - 📁 [examples/elasticsearch/product-search/](https://github.com/advanced-beginner/advanced-beginner.github.io/tree/main/examples/elasticsearch/product-search)
 - Instant Elasticsearch execution with docker-compose (including Nori)
 - Automatic sample data initialization
-{{% /notice %}}
+{{< /callout >}}
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - Apply Korean morphological analysis with **Nori analyzer** to enable search for "삼성" and "전자" from "삼성전자"
 - Implement autocomplete functionality with **Edge N-gram**
 - Provide filtering and facets with **Bool Query + Aggregation**
 - Highlight search terms with **highlighting**
 - Total time required: approximately 30 minutes
-{{% /notice %}}
+{{< /callout >}}
 
 Implement a production-level product search system with Korean morphological analysis, autocomplete, and filtering.
 
@@ -173,11 +173,11 @@ GET /products/_analyze
 // Result: ["맥", "맥북"]
 ```
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - `nori_tokenizer`'s `decompound_mode: mixed` decomposes compound words
 - `edge_ngram` is for prefix matching; use `standard` analyzer for search
 - Use `Multi-field` to utilize the same field for multiple purposes (search, sorting, autocomplete)
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -339,11 +339,11 @@ GET /products/_search
 }
 ```
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - Search multiple fields simultaneously with `multi_match`, adjust importance with field weights (`^3`)
 - `must` affects scoring, `filter` is cached for better performance
 - Provide filter facets with `aggs` to allow users to narrow results
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -613,11 +613,11 @@ public class ProductController {
 }
 ```
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - Index the same field with multiple analyzers using `@MultiField`
 - Construct complex Bool Query and Aggregation with `ElasticsearchOperations`
 - Get highlighted text from `SearchHit`'s `getHighlightFields()`
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 
@@ -689,11 +689,11 @@ curl "http://localhost:8080/api/products/autocomplete?q=맥북"
 }
 ```
 
-{{% notice style="note" title="Key Points" %}}
+{{< callout type="info" title="Key Points" >}}
 - **Synonyms** enable searches for similar terms like "노트북" and "랩탑"
 - **function_score** applies weights based on bestseller tags or review counts
 - Improving search quality requires continuous testing and user feedback
-{{% /notice %}}
+{{< /callout >}}
 
 ---
 

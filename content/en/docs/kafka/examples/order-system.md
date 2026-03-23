@@ -8,12 +8,12 @@ author_url: "http://github.com/kimbenji"
 
 Implement an event-driven order system closer to real-world applications. In this example, we process the entire flow from order creation to delivery completion using Kafka events, and learn about order guarantee using Message Keys and extension patterns utilizing multiple Consumer Groups.
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **Event-driven Architecture**: Convert REST API requests to Kafka events for asynchronous processing
 - **Message Key**: Use orderId as Key to guarantee ordering of events for the same order
 - **State Machine**: State transitions in order: CREATED -> PAID -> SHIPPED -> DELIVERED
 - **Extension Pattern**: Multiple Consumer Groups independently subscribe to the same Topic
-{{% /notice %}}
+{{< /callout >}}
 
 #### Target Audience and Prerequisites
 
@@ -137,11 +137,11 @@ stateDiagram-v2
 
 This state machine forms the foundation of the event sourcing pattern. Since each state transition is recorded as a separate event, you can track the complete history of an order.
 
-{{% notice style="info" title="Event Types Key Points" %}}
+{{< callout type="info" title="Event Types Key Points" >}}
 - **OrderEvent**: Contains order information including orderId, customerId, status, timestamp
 - **State Transitions**: CREATED -> PAID -> SHIPPED -> DELIVERED (or CANCELLED)
 - **Event Sourcing**: Each state transition recorded as event for history tracking
-{{% /notice %}}
+{{< /callout >}}
 
 #### Message Key Usage
 
@@ -160,11 +160,11 @@ When using a Key, CREATED, PAID, and SHIPPED events for order "abc123" are all s
 
 When using the same orderId as Key, all events for that order are stored sequentially in a single Partition. The Consumer reads events from this Partition and processes them in order. For example, for order "abc123", CREATED, PAID, SHIPPED, DELIVERED are stored in order on Partition 2, and the Consumer processes them sequentially as Process 1, Process 2, Process 3, Process 4 with guaranteed ordering.
 
-{{% notice style="info" title="Message Key Key Points" %}}
+{{< callout type="info" title="Message Key Key Points" >}}
 - **With Key**: Same Key always goes to same Partition -> Order guaranteed
 - **Without Key**: Distributed round-robin -> Order not guaranteed
 - **Order System**: Use orderId as Key to guarantee order of events for the same order
-{{% /notice %}}
+{{< /callout >}}
 
 #### Producer Implementation
 
@@ -195,11 +195,11 @@ public class OrderProducer {
 
 In production, you should implement retry logic or compensation transactions on publish failure. This example simply logs, but in a production environment, you should record failed events to a separate store or send notifications.
 
-{{% notice style="info" title="Producer Implementation Key Points" %}}
+{{< callout type="info" title="Producer Implementation Key Points" >}}
 - **Key Setting**: Use orderId as Key with `kafkaTemplate.send(TOPIC, event.orderId(), event)`
 - **Async Processing**: Handle publish results with `whenComplete()` callback
 - **Failure Handling**: In production, implement retry or record to separate store
-{{% /notice %}}
+{{< /callout >}}
 
 #### Consumer Implementation
 
@@ -230,11 +230,11 @@ public class OrderConsumer {
 
 Each handler method performs business logic appropriate for that status. handleOrderCreated handles inventory check and payment waiting, handleOrderPaid starts shipping preparation, handleOrderShipped initiates delivery tracking, handleOrderDelivered completes the order, and handleOrderCancelled handles inventory restoration and refund processing.
 
-{{% notice style="info" title="Consumer Implementation Key Points" %}}
+{{< callout type="info" title="Consumer Implementation Key Points" >}}
 - **Topic/Group Specification**: Configure subscription with `@KafkaListener(topics, groupId)`
 - **ConsumerRecord**: Receive Key and Value together to verify orderId
 - **Status-based Processing**: Branch to handlers by status using switch expression
-{{% /notice %}}
+{{< /callout >}}
 
 #### Running the Example
 
@@ -354,11 +354,11 @@ public void consume(OrderEvent event) {
 }
 ```
 
-{{% notice style="info" title="Extension Points Key Points" %}}
+{{< callout type="info" title="Extension Points Key Points" >}}
 - **Multiple Consumer Groups**: Multiple services independently subscribe to the same Topic
 - **Loose Coupling**: No need to modify existing systems when adding new features
 - **@RetryableTopic**: Automatic DLT movement on retry failure
-{{% /notice %}}
+{{< /callout >}}
 
 #### Summary
 

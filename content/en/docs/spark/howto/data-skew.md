@@ -13,11 +13,11 @@ description: "Guide to diagnose and resolve data skew issues where data concentr
 **Estimated Time**: About 20 minutes
 {{< /callout >}}
 
-{{% notice style="tip" title="TL;DR" %}}
+{{< callout type="tip" title="TL;DR" >}}
 - **Diagnosis**: Compare Task Duration Min/Max in Spark UI Stages tab (10x+ difference = skew)
 - **Enable AQE**: `spark.sql.adaptive.skewJoin.enabled=true` (Spark 3.0+)
 - **Manual Fix**: Distribute hot keys using Salting technique
-{{% /notice %}}
+{{< /callout >}}
 
 ## Problem Definition
 

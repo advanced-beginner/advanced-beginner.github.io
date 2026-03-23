@@ -14,11 +14,11 @@ related_concepts:
     path: /docs/elasticsearch/concepts/korean-search/
 ---
 
-{{% notice style="info" title="선수 개념" %}}
+{{< callout type="info" title="선수 개념" >}}
 이 문서를 읽기 전에 다음 개념을 먼저 이해하세요:
 - [Query DSL](query-dsl/) - match, bool 쿼리 기본
 - [데이터 모델링](data-modeling/) - Analyzer 동작 원리
-{{% /notice %}}
+{{< /callout >}}
 
 ## 전체 비유: 도서관 사서의 책 추천
 
