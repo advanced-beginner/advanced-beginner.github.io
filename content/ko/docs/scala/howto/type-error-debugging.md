@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-03-23"
 title: 타입 에러 디버깅
+description: "복잡한 타입 에러 메시지를 해석하고 근본 원인을 찾는 방법을 안내합니다."
 weight: 3
 ---
 
@@ -38,7 +39,7 @@ covariant type A occurs in contravariant position in type A => Unit
 
 ### 이 가이드가 다루지 않는 것
 
-- **타입 시스템의 기초 개념**: [타입 시스템 개념 문서]({{< relref "/docs/scala/concepts/type-system" >}})를 참조하세요
+- **타입 시스템의 기초 개념**: [타입 시스템 개념 문서]({{< relref "/docs/scala/concepts/type-system-advanced" >}})를 참조하세요
 - **암시적 값 관련 에러**: [Implicit/Given 디버깅]({{< relref "/docs/scala/howto/implicit-debugging" >}})을 참조하세요
 - **매크로/리플렉션 관련 에러**: 해당 라이브러리 문서를 참조하세요
 
@@ -60,7 +61,7 @@ covariant type A occurs in contravariant position in type A => Unit
 
 다음 플로우차트에 따라 에러 유형을 먼저 파악하세요:
 
-{{< mermaid >}}
+```mermaid
 flowchart TD
     A["컴파일 에러 발생"] --> B{"에러 메시지에<br>type mismatch?"}
     B -->|예| C["1.1 Type Mismatch<br>해결"]
@@ -71,7 +72,7 @@ flowchart TD
     F -->|아니오| H{"Higher-Kinded<br>또는 kind 포함?"}
     H -->|예| I["2단계: HKT 에러<br>진단"]
     H -->|아니오| J["3단계: splain으로<br>상세 분석"]
-{{< /mermaid >}}
+```
 
 ---
 
@@ -394,6 +395,6 @@ def process[A: ClassTag](list: List[A]): Unit = {
 
 ## 관련 문서
 
-- [타입 시스템]({{< relref "/docs/scala/concepts/type-system" >}}) - Scala 타입 시스템의 기초
+- [타입 시스템]({{< relref "/docs/scala/concepts/type-system-advanced" >}}) - Scala 타입 시스템의 기초
 - [Implicit/Given 디버깅]({{< relref "/docs/scala/howto/implicit-debugging" >}}) - 암시적 값 관련 에러 해결
 - [Future 에러 처리]({{< relref "/docs/scala/howto/future-error-handling" >}}) - 비동기 코드의 에러 처리

@@ -72,7 +72,7 @@ curl -X PUT "localhost:9200/products/_mapping" -H 'Content-Type: application/jso
 
 ## 마이그레이션 흐름
 
-{{< mermaid >}}
+```mermaid
 flowchart TD
     A["현재 상태<br>products-v1 인덱스<br>+ products Alias"] --> B["1. 새 매핑으로<br>products-v2 생성"]
     B --> C["2. Reindex API로<br>데이터 복사"]
@@ -82,7 +82,7 @@ flowchart TD
     E -->|No| G["원인 분석 후<br>재시도"]
     F --> H["5. 기존 인덱스<br>products-v1 정리"]
     G --> B
-{{< /mermaid >}}
+```
 
 ---
 

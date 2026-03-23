@@ -2,6 +2,7 @@
 bookCollapseSection: true
 lastmod: "2026-01-15"
 title: 개념 이해
+description: "Kafka 핵심 구성요소부터 심화 개념까지 체계적으로 학습하는 가이드입니다."
 weight: 2
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
@@ -99,11 +100,11 @@ flowchart TD
 | 4 | [Replication](replication/) | "서버가 죽어도 데이터가 안전한 이유는?" |
 | 5 | [심화 개념](advanced-concepts/) | "acks, Message Key, 보존 정책 등 자주 쓰는 설정은?" |
 
-{{< hint info >}}
+{{< callout type="info" >}}
 **💡 여기까지만 읽어도 충분합니다**
 
 기초 개념 5개를 이해하면 Kafka를 활용한 애플리케이션 개발과 기본적인 운영이 가능합니다. 심화 학습은 성능 문제가 발생하거나 고급 기능이 필요할 때 돌아오세요.
-{{< /hint >}}
+{{< /callout >}}
 
 ---
 

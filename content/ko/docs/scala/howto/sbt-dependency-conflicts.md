@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-03-23"
 title: sbt 의존성 충돌 해결
+description: "sbt 의존성 충돌을 진단하고 eviction 규칙으로 해결하는 방법을 안내합니다."
 weight: 4
 ---
 
@@ -82,7 +83,7 @@ addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.10.0-RC1")
 
 직접 선언하지 않았지만 라이브러리가 내부적으로 사용하는 의존성입니다:
 
-{{< mermaid >}}
+```mermaid
 flowchart TD
     A["내 프로젝트"] --> B["library-a 1.0"]
     A --> C["library-b 2.0"]
@@ -91,7 +92,7 @@ flowchart TD
     D -.- F["충돌!<br>어떤 버전을 사용할까?"]
     E -.- F
     style F fill:#fff3cd,stroke:#ffc107
-{{< /mermaid >}}
+```
 
 ### 1.2 sbt의 기본 해결 전략
 
@@ -211,7 +212,7 @@ libraryDependencies += "com.google.guava" % "guava" % "31.0-jre" force()
 
 ### 3.4 해결 방법 선택 가이드
 
-{{< mermaid >}}
+```mermaid
 flowchart TD
     A["의존성 충돌 발견"] --> B{"특정 라이브러리 하나만<br>문제인가?"}
     B -->|예| C{"해당 라이브러리의<br>트랜지티브 의존성인가?"}
@@ -220,7 +221,7 @@ flowchart TD
     B -->|아니오| F{"여러 곳에서<br>같은 라이브러리 충돌?"}
     F -->|예| G["dependencyOverrides로<br>버전 통일"]
     F -->|아니오| H["각 충돌을<br>개별적으로 해결"]
-{{< /mermaid >}}
+```
 
 ---
 

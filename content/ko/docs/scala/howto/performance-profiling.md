@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-03-23"
 title: 성능 프로파일링
+description: "JMH 벤치마크와 프로파일링으로 Scala 코드 성능을 측정하고 개선하는 방법을 안내합니다."
 weight: 5
 ---
 
@@ -59,7 +60,7 @@ brew install --cask visualvm
 
 어떤 문제를 해결하려는지에 따라 적절한 도구를 선택하세요:
 
-{{< mermaid >}}
+```mermaid
 flowchart TD
     A["성능 문제 발생"] --> B{"어떤 종류의<br>문제인가?"}
     B -->|"CPU 사용량 높음"| C["JFR로 CPU<br>프로파일링"]
@@ -70,7 +71,7 @@ flowchart TD
     D --> H["큰 객체/누수 식별"]
     E --> I["GC 튜닝 또는<br>할당 최적화"]
     F --> J["스레드 경합<br>I/O 대기 분석"]
-{{< /mermaid >}}
+```
 
 ---
 

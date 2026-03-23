@@ -215,7 +215,7 @@ Master 노드는 반드시 **홀수 개**로 운영하세요. Split-brain을 방
 
 ### 아키텍처 구조
 
-{{< mermaid >}}
+```mermaid
 flowchart TB
     subgraph Hot["Hot 노드<br>&#40;SSD, 고성능&#41;"]
         H1["node-hot-1"]
@@ -238,7 +238,7 @@ flowchart TB
 
     Hot -->|"7일 경과"| Warm
     Warm -->|"30일 경과"| Cold
-{{< /mermaid >}}
+```
 
 ### 4.1 노드 역할 설정
 

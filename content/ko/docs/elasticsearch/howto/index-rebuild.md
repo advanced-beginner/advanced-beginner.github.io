@@ -69,7 +69,7 @@ curl -X GET "localhost:9200/products/_settings?pretty&filter_path=**.number_of_s
 
 ## 방법 선택 가이드
 
-{{< mermaid >}}
+```mermaid
 flowchart TD
     A["인덱스 재구축 필요"] --> B{같은 클러스터 내?}
     B -->|Yes| C{데이터 변환<br>필요?}
@@ -85,7 +85,7 @@ flowchart TD
     style G fill:#e8f5e9,stroke:#4caf50
     style H fill:#e8f5e9,stroke:#4caf50
     style I fill:#e3f2fd,stroke:#2196f3
-{{< /mermaid >}}
+```
 
 ### 방법별 비교
 
