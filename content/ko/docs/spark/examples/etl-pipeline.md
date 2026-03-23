@@ -1,5 +1,6 @@
 ---
 title: ETL 파이프라인
+description: "Spark 기반 ETL 파이프라인을 단계별로 구현합니다."
 weight: 6
 lastmod: "2026-01-10"
 author:

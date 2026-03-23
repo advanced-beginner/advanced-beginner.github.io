@@ -1,5 +1,6 @@
 ---
 title: 도메인 모델 패턴
+description: "Entity, Value Object, Service 등 도메인 모델 패턴을 설명합니다."
 weight: 6
 lastmod: "2026-02-17"
 author: "@kimbenji"

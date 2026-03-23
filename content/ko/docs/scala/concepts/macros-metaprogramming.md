@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 매크로와 메타프로그래밍
+description: "Scala 매크로와 메타프로그래밍의 작동 원리를 설명합니다."
 weight: 15
 ---
 

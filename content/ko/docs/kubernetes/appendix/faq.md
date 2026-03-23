@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-11"
 title: FAQ
+description: "Kubernetes 자주 묻는 질문과 답변입니다."
 weight: 2
 author:
   name: Advanced Beginner

@@ -1,5 +1,6 @@
 ---
 title: Aggregate 경계 정하기
+description: "Aggregate 경계를 식별하고 정하는 방법을 안내합니다."
 weight: 1
 lastmod: "2026-01-10"
 author: "@kimbenji"

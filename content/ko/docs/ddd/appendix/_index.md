@@ -1,6 +1,7 @@
 ---
 bookCollapseSection: true
 title: 부록
+description: "DDD 부록 자료와 참고 문서 목록입니다."
 weight: 5
 lastmod: "2026-01-13"
 author: "@kimbenji"

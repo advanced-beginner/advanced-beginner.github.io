@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: FAQ
+description: "Scala 자주 묻는 질문과 답변입니다."
 weight: 3
 ---
 

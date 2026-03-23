@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 고차 함수
+description: "고차 함수의 작동 원리와 함수 합성 패턴을 설명합니다."
 weight: 8
 ---
 

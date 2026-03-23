@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 스케일링
+description: "HPA, VPA 등 스케일링의 작동 원리와 전략을 설명합니다."
 weight: 9
 author:
   name: Advanced Beginner

@@ -1,5 +1,6 @@
 ---
 title: 데이터 모델링
+description: "Elasticsearch 데이터 모델링의 설계 원칙과 매핑 전략을 설명합니다."
 weight: 2
 lastmod: 2026-01-15
 ---

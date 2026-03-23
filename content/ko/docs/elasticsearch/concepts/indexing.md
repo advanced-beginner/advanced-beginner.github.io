@@ -1,5 +1,6 @@
 ---
 title: 인덱싱 전략
+description: "Elasticsearch 인덱싱 전략의 작동 원리와 최적화 방법을 설명합니다."
 weight: 6
 lastmod: 2026-01-15
 prerequisites:

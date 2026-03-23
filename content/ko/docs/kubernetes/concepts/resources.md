@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 리소스 관리
+description: "CPU, 메모리 등 리소스 관리의 작동 원리와 설정 방법을 설명합니다."
 weight: 8
 author:
   name: Advanced Beginner

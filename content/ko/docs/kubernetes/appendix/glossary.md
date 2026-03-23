@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 용어 사전
+description: "Kubernetes 핵심 용어를 정리합니다."
 weight: 1
 author:
   name: Advanced Beginner

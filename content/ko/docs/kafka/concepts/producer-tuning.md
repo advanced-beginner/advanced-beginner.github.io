@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: Producer 튜닝
+description: "Producer 성능 튜닝의 핵심 파라미터와 최적화 전략을 설명합니다."
 weight: 7
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

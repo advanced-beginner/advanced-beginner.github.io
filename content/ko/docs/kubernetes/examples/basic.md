@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-11"
 title: 기본 예제
+description: "Kubernetes 기본 리소스 배포를 단계별로 학습합니다."
 weight: 2
 author:
   name: Advanced Beginner

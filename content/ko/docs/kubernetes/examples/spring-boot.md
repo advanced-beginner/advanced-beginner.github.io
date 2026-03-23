@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-11"
 title: Spring Boot 배포
+description: "Spring Boot 애플리케이션을 Kubernetes에 단계별로 배포합니다."
 weight: 3
 author:
   name: Advanced Beginner

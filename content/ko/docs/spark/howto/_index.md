@@ -1,6 +1,7 @@
 ---
 bookCollapseSection: true
 title: How-To Guide
+description: "Spark 운영 문제 해결 가이드 목록입니다."
 weight: 4
 lastmod: "2026-01-10"
 author:

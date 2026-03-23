@@ -1,5 +1,6 @@
 ---
 title: 도메인 이벤트 설계하기
+description: "도메인 이벤트를 설계하고 구현하는 방법을 안내합니다."
 weight: 4
 lastmod: "2026-01-16"
 author: "@kimbenji"

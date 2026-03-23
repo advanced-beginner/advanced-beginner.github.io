@@ -1,5 +1,6 @@
 ---
 title: 애플리케이션 계층
+description: "DDD 애플리케이션 계층 구현을 단계별로 학습합니다."
 weight: 3
 lastmod: 2026-01-10
 author: "@kimbenji"

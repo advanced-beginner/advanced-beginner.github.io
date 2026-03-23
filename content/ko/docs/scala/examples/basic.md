@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: 기본 예제
+description: "Scala 기본 문법과 컬렉션 활용을 단계별로 학습합니다."
 weight: 2
 ---
 

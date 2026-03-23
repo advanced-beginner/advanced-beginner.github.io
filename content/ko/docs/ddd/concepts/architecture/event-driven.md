@@ -1,5 +1,6 @@
 ---
 title: 이벤트 기반 아키텍처
+description: "이벤트 기반 아키텍처의 작동 원리와 설계 의도를 설명합니다."
 weight: 6
 lastmod: "2026-01-15"
 author: "@kimbenji"

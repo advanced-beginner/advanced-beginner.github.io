@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Spark 연동
+description: "Scala로 Spark 애플리케이션을 단계별로 구현합니다."
 weight: 4
 ---
 

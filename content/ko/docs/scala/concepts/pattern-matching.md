@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 패턴 매칭
+description: "패턴 매칭의 작동 원리와 다양한 매칭 전략을 설명합니다."
 weight: 6
 ---
 

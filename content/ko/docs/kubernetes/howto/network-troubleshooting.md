@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-16"
 title: 네트워크 트러블슈팅
+description: "Kubernetes 네트워크 문제를 진단하고 해결하는 방법을 안내합니다."
 weight: 3
 author:
   name: Advanced Beginner

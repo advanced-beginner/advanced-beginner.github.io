@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-03-23"
 title: CronJob 실습
+description: "CronJob을 활용한 배치 작업을 단계별로 구현합니다."
 weight: 6
 author:
   name: Advanced Beginner

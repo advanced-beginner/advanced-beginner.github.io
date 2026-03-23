@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-03-23"
 title: StatefulSet 실습
+description: "StatefulSet을 활용한 상태 저장 워크로드를 단계별로 구현합니다."
 weight: 4
 author:
   name: Advanced Beginner

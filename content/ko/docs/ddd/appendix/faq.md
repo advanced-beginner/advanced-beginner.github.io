@@ -1,5 +1,6 @@
 ---
 title: 자주 묻는 질문
+description: "DDD 자주 묻는 질문과 답변입니다."
 weight: 3
 lastmod: 2026-01-10
 author: "@kimbenji"

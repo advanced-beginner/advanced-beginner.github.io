@@ -1,5 +1,6 @@
 ---
 title: MLlib
+description: "MLlib의 작동 원리와 머신러닝 파이프라인 구성을 설명합니다."
 weight: 9
 lastmod: "2026-01-15"
 author:

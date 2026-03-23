@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Producer 성능 최적화
+description: "Producer 성능 병목을 진단하고 최적화하는 방법을 안내합니다."
 weight: 2
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

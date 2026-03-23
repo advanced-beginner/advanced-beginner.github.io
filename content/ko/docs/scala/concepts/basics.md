@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 기본 문법
+description: "Scala 기본 문법과 타입 시스템의 작동 원리를 설명합니다."
 weight: 1
 author: "@advanced-beginner"
 author_url: "https://github.com/advanced-beginner"

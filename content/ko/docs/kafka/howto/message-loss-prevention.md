@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-16"
 title: 메시지 손실 방지 가이드
+description: "메시지 손실 원인을 진단하고 방지하는 방법을 안내합니다."
 weight: 3
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

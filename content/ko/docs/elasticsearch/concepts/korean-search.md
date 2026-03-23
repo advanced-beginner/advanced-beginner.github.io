@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 한글 검색 최적화
+description: "한글 형태소 분석과 검색 최적화의 원리와 설정 방법을 설명합니다."
 weight: 11
 prerequisites:
   - title: 데이터 모델링

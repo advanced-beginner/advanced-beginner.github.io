@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 클래스와 객체
+description: "Scala 클래스와 객체의 작동 원리와 설계 패턴을 설명합니다."
 weight: 4
 ---
 

@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-03-23"
 title: RBAC
+description: "RBAC 기반 접근 제어의 작동 원리와 설정 방법을 설명합니다."
 weight: 13
 author:
   name: Advanced Beginner

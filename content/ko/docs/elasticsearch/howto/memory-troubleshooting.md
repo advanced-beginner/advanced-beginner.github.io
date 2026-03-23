@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-16"
 title: 메모리 문제 해결
+description: "Elasticsearch 메모리 문제를 진단하고 해결하는 방법을 안내합니다."
 weight: 2
 ---
 

@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: 마이크로서비스 연동
+description: "Kafka 기반 마이크로서비스 연동을 단계별로 구현합니다."
 weight: 4
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

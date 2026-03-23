@@ -2,6 +2,7 @@
 bookCollapseSection: true
 lastmod: "2026-01-15"
 title: 개념 이해
+description: "Kubernetes 핵심 개념의 학습 가이드와 문서 목록입니다."
 weight: 2
 author:
   name: Advanced Beginner

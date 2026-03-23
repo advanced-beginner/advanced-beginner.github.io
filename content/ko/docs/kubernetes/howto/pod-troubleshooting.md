@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-16"
 title: Pod 트러블슈팅
+description: "Pod 장애를 진단하고 해결하는 방법을 안내합니다."
 weight: 1
 author:
   name: Advanced Beginner

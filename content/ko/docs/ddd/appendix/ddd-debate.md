@@ -1,5 +1,6 @@
 ---
 title: "DDD 토론: 긍정파 vs 부정파"
+description: "DDD 도입에 대한 긍정적/부정적 관점의 논쟁을 정리합니다."
 weight: 4
 lastmod: "2026-01-16"
 author: "@kimbenji"

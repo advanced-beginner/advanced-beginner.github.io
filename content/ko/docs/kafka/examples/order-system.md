@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: 주문 시스템
+description: "Kafka를 활용한 주문 시스템을 단계별로 구현합니다."
 weight: 3
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

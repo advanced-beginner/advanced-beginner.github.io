@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: Volume과 스토리지
+description: "Volume과 PersistentVolume의 작동 원리와 스토리지 관리를 설명합니다."
 weight: 6
 author:
   name: Advanced Beginner

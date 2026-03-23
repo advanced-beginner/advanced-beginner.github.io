@@ -1,5 +1,6 @@
 ---
 title: 고가용성
+description: "Elasticsearch 고가용성의 작동 원리와 장애 대응 전략을 설명합니다."
 weight: 9
 lastmod: 2026-01-15
 ---

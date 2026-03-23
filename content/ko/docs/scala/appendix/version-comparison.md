@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Scala 2 vs Scala 3 버전 비교
+description: "Scala 2와 Scala 3의 주요 변경사항을 비교 설명합니다."
 weight: 2
 ---
 

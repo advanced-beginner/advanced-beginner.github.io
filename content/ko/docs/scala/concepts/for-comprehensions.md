@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: For Comprehension
+description: "For Comprehension의 작동 원리와 모나드 활용을 설명합니다."
 weight: 10
 ---
 

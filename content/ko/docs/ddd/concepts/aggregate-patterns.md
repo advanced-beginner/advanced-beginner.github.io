@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: Aggregate 실전 패턴
+description: "Aggregate 실전 패턴의 작동 원리와 적용 전략을 설명합니다."
 weight: 4
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

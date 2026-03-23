@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 모니터링 기초
+description: "Kafka 모니터링 지표와 클러스터 상태 확인 방법을 설명합니다."
 weight: 10
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-16"
 title: 로그 수집 및 분석
+description: "Kubernetes 로그를 수집하고 분석하는 방법을 안내합니다."
 weight: 4
 author:
   name: Advanced Beginner

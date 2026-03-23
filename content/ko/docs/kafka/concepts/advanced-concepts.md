@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 심화 개념
+description: "Kafka 심화 개념의 작동 원리와 설계 의도를 설명합니다."
 weight: 5
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-03-23"
 title: StatefulSet
+description: "StatefulSet의 작동 원리와 상태 유지 전략을 설명합니다."
 weight: 12
 author:
   name: Advanced Beginner

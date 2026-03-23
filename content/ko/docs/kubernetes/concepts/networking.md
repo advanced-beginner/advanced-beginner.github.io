@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 네트워킹
+description: "Kubernetes 네트워킹 모델의 작동 원리를 설명합니다."
 weight: 7
 author:
   name: Advanced Beginner

@@ -2,6 +2,7 @@
 bookCollapseSection: true
 lastmod: "2026-01-09"
 title: 부록
+description: "Scala 부록 자료와 참고 문서 목록입니다."
 weight: 5
 ---
 

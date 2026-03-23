@@ -1,5 +1,6 @@
 ---
 title: 어니언 아키텍처
+description: "어니언 아키텍처의 작동 원리와 의존성 방향을 설명합니다."
 weight: 4
 lastmod: "2026-01-15"
 author: "@kimbenji"

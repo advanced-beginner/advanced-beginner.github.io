@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-03-23"
 title: NetworkPolicy
+description: "NetworkPolicy의 작동 원리와 네트워크 접근 제어를 설명합니다."
 weight: 15
 author:
   name: Advanced Beginner

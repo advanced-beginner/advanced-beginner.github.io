@@ -1,5 +1,6 @@
 ---
 title: Spring Boot 통합
+description: "Spring Boot와 Spark 통합을 단계별로 구현합니다."
 weight: 5
 lastmod: "2026-01-10"
 author:

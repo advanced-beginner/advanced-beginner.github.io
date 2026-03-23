@@ -1,5 +1,6 @@
 ---
 title: Spark Connect
+description: "Spark Connect의 작동 원리와 원격 실행 아키텍처를 설명합니다."
 weight: 12
 lastmod: "2026-01-15"
 author:

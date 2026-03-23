@@ -1,6 +1,7 @@
 ---
 bookCollapseSection: true
 title: 실습 예제
+description: "Elasticsearch 실습 예제의 학습 가이드와 문서 목록입니다."
 weight: 3
 lastmod: 2026-01-08
 ---

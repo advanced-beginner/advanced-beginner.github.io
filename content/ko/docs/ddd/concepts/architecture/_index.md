@@ -1,6 +1,7 @@
 ---
 bookCollapseSection: true
 title: 아키텍처 패턴
+description: "DDD 아키텍처 패턴의 학습 가이드와 문서 목록입니다."
 weight: 5
 lastmod: "2026-01-15"
 author: "@kimbenji"

@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 동시성
+description: "Future, Actor 등 Scala 동시성 모델의 작동 원리를 설명합니다."
 weight: 16
 ---
 

@@ -1,5 +1,6 @@
 ---
 title: 검색 관련성
+description: "검색 관련성 스코어링의 작동 원리와 튜닝 방법을 설명합니다."
 weight: 4
 lastmod: 2026-01-15
 prerequisites:

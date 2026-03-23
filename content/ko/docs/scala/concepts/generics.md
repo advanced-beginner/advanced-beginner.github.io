@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 제네릭
+description: "Scala 제네릭의 작동 원리와 타입 파라미터 활용을 설명합니다."
 weight: 9
 ---
 

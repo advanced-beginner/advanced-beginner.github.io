@@ -1,5 +1,6 @@
 ---
 title: RDD 기초
+description: "RDD의 작동 원리와 지연 평가 모델을 설명합니다."
 weight: 2
 lastmod: "2026-01-15"
 author:

@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Scala 2 vs Scala 3 비교
+description: "Scala 2와 Scala 3 문법 차이를 코드로 비교 학습합니다."
 weight: 3
 ---
 

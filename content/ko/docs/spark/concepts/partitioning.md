@@ -1,5 +1,6 @@
 ---
 title: 파티셔닝과 셔플
+description: "파티셔닝과 셔플의 작동 원리와 성능 영향을 설명합니다."
 weight: 6
 lastmod: "2026-01-15"
 author:

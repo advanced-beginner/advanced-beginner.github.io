@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: Pod
+description: "Pod의 작동 원리와 라이프사이클을 설명합니다."
 weight: 2
 author:
   name: Advanced Beginner

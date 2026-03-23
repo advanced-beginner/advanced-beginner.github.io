@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-16"
 title: 리소스 최적화
+description: "Kubernetes 리소스를 분석하고 최적화하는 방법을 안내합니다."
 weight: 2
 author:
   name: Advanced Beginner

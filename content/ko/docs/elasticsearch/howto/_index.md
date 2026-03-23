@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-16"
 title: How-To Guide
+description: "Elasticsearch 운영 문제 해결 가이드 목록입니다."
 weight: 4
 bookCollapseSection: true
 ---

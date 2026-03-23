@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 함수형 프로그래밍 패턴
+description: "Monad, Functor 등 함수형 프로그래밍 패턴을 설명합니다."
 weight: 17
 ---
 

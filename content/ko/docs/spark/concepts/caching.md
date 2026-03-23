@@ -1,5 +1,6 @@
 ---
 title: 캐싱과 영속성
+description: "Spark 캐싱과 영속성의 작동 원리와 최적화 전략을 설명합니다."
 weight: 7
 lastmod: "2026-01-15"
 author:

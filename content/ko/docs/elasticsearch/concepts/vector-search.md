@@ -1,5 +1,6 @@
 ---
 title: Vector Search (kNN)
+description: "Vector Search와 kNN의 작동 원리와 활용 방법을 설명합니다."
 weight: 10
 lastmod: 2026-01-15
 ---

@@ -1,5 +1,6 @@
 ---
 title: 참고 자료
+description: "Spark 공식 문서와 참고 자료 목록입니다."
 weight: 3
 lastmod: "2026-01-10"
 author:

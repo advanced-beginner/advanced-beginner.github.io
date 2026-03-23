@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-03-23"
 title: Namespace
+description: "Namespace의 작동 원리와 리소스 격리 전략을 설명합니다."
 weight: 11
 author:
   name: Advanced Beginner

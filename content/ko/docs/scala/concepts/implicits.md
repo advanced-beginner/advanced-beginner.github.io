@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: Implicit / Given
+description: "Implicit과 Given의 작동 원리와 활용 패턴을 설명합니다."
 weight: 11
 ---
 

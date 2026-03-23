@@ -1,5 +1,6 @@
 ---
 title: FAQ
+description: "Elasticsearch 자주 묻는 질문과 답변입니다."
 weight: 2
 lastmod: 2026-01-10
 ---

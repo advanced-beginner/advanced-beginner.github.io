@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 에러 처리 심화
+description: "Kafka 에러 처리 패턴과 재시도 전략을 설명합니다."
 weight: 9
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

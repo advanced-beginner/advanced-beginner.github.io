@@ -2,6 +2,7 @@
 bookCollapseSection: true
 lastmod: "2026-01-10"
 title: Quick Start
+description: "Scala 핵심 개념과 실습을 단계별로 학습합니다."
 weight: 1
 ---
 

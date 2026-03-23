@@ -2,6 +2,7 @@
 bookCollapseSection: true
 lastmod: "2026-01-09"
 title: 개념 이해
+description: "Scala 핵심 개념의 학습 가이드와 문서 목록입니다."
 weight: 2
 ---
 

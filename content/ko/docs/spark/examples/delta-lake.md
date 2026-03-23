@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Delta Lake 통합
+description: "Delta Lake 통합을 단계별로 구현합니다."
 weight: 6
 author:
   name: Advanced Beginner

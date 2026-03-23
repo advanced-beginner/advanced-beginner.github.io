@@ -1,5 +1,6 @@
 ---
 title: Spark SQL
+description: "Spark SQL의 작동 원리와 Catalyst 옵티마이저를 설명합니다."
 weight: 4
 lastmod: "2026-01-15"
 author:

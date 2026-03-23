@@ -1,5 +1,6 @@
 ---
 title: Value Object 설계하기
+description: "Value Object를 설계하고 구현하는 방법을 안내합니다."
 weight: 3
 lastmod: "2026-01-16"
 author: "@kimbenji"

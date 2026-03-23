@@ -1,5 +1,6 @@
 ---
 title: 성능 튜닝
+description: "Elasticsearch 성능 튜닝의 핵심 전략과 최적화 방법을 설명합니다."
 weight: 8
 lastmod: 2026-01-15
 ---

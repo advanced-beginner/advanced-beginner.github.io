@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: Aggregate 심화
+description: "Aggregate의 작동 원리와 일관성 경계 설계를 설명합니다."
 weight: 3
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

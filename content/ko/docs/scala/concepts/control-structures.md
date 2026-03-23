@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 제어 구조
+description: "Scala 제어 구조의 작동 원리와 함수형 대안을 설명합니다."
 weight: 2
 ---
 

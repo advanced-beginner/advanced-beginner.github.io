@@ -1,5 +1,6 @@
 ---
 title: CQRS
+description: "CQRS 패턴의 작동 원리와 설계 의도를 설명합니다."
 weight: 5
 lastmod: "2026-01-15"
 author: "@kimbenji"

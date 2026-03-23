@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: 실무 프로젝트
+description: "Scala 실무 프로젝트를 단계별로 구현합니다."
 weight: 5
 ---
 

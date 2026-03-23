@@ -1,5 +1,6 @@
 ---
 title: 전략적 설계
+description: "Bounded Context와 Context Map 등 전략적 설계를 설명합니다."
 weight: 1
 lastmod: "2026-02-16"
 author: "@kimbenji"

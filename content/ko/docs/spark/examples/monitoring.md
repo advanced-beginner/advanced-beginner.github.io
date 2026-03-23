@@ -1,5 +1,6 @@
 ---
 title: 모니터링 설정
+description: "Spark 모니터링 환경을 단계별로 구성합니다."
 weight: 4
 lastmod: "2026-01-10"
 author:

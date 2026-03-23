@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: Consumer 심화 운영
+description: "Consumer 고급 운영 전략과 장애 대응 방법을 설명합니다."
 weight: 4
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

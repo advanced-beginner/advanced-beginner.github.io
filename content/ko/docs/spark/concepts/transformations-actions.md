@@ -1,5 +1,6 @@
 ---
 title: Transformation과 Action
+description: "Transformation과 Action의 작동 원리와 실행 계획을 설명합니다."
 weight: 5
 lastmod: "2026-01-15"
 author:

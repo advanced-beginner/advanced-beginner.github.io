@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 메시지 흐름
+description: "Producer에서 Consumer까지 메시지 흐름의 작동 원리를 설명합니다."
 weight: 2
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

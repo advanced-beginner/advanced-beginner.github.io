@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 핵심 구성요소
+description: "Broker, Topic, Partition 등 Kafka 핵심 구성요소를 설명합니다."
 weight: 1
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

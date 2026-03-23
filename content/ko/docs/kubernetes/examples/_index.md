@@ -2,6 +2,7 @@
 bookCollapseSection: true
 lastmod: "2026-01-11"
 title: 실습 예제
+description: "Kubernetes 실습 예제의 학습 가이드와 문서 목록입니다."
 weight: 3
 author:
   name: Advanced Beginner

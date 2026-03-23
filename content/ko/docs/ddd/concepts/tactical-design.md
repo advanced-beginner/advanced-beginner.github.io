@@ -1,5 +1,6 @@
 ---
 title: 전술적 설계
+description: "Entity, Aggregate, Repository 등 전술적 설계 빌딩 블록을 설명합니다."
 weight: 2
 lastmod: "2026-02-17"
 author: "@kimbenji"

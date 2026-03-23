@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: ConfigMap과 Secret
+description: "ConfigMap과 Secret의 작동 원리와 설정 관리 방법을 설명합니다."
 weight: 5
 author:
   name: Advanced Beginner

@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: Replication
+description: "Kafka Replication의 작동 원리와 데이터 안정성 보장 방식을 설명합니다."
 weight: 4
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

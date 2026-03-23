@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 생태계
+description: "Kafka Connect, Streams 등 Kafka 생태계의 구성과 역할을 설명합니다."
 weight: 12
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

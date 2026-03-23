@@ -1,5 +1,6 @@
 ---
 title: 아키텍처
+description: "Spark 클러스터 아키텍처의 작동 원리와 실행 모델을 설명합니다."
 weight: 1
 lastmod: "2026-01-15"
 author:

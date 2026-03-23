@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: Service
+description: "Service의 작동 원리와 서비스 디스커버리를 설명합니다."
 weight: 4
 author:
   name: Advanced Beginner

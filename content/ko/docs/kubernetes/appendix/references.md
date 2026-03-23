@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-11"
 title: 참고 자료
+description: "Kubernetes 공식 문서와 참고 자료 목록입니다."
 weight: 3
 author:
   name: Advanced Beginner

@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-03-23"
 title: RBAC 설정 실습
+description: "RBAC 기반 접근 제어를 단계별로 설정합니다."
 weight: 5
 author:
   name: Advanced Beginner

@@ -1,5 +1,6 @@
 ---
 title: 로그 분석 시스템
+description: "Elasticsearch 기반 로그 분석 시스템을 단계별로 구현합니다."
 weight: 4
 lastmod: 2026-01-10
 prerequisites:

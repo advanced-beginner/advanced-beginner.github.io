@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: 자주 묻는 질문
+description: "Kafka 자주 묻는 질문과 답변입니다."
 weight: 4
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

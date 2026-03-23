@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-16"
 title: Future 에러 처리
+description: "Future 에러를 진단하고 안전하게 처리하는 방법을 안내합니다."
 weight: 2
 ---
 

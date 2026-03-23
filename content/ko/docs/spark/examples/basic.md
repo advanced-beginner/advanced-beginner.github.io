@@ -1,5 +1,6 @@
 ---
 title: 기본 예제
+description: "Spark 기본 연산과 데이터 처리를 단계별로 학습합니다."
 weight: 2
 lastmod: "2026-01-10"
 author:

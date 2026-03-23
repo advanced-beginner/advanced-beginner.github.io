@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 헬스 체크
+description: "Liveness, Readiness, Startup Probe의 작동 원리를 설명합니다."
 weight: 10
 author:
   name: Advanced Beginner

@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 트랜잭션과 Exactly-Once
+description: "Kafka 트랜잭션과 Exactly-Once 전달 보장의 원리를 설명합니다."
 weight: 6
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Event Sourcing 실습
+description: "Event Sourcing 패턴 구현을 단계별로 학습합니다."
 weight: 4
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

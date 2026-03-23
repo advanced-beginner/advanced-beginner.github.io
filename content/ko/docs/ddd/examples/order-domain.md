@@ -1,5 +1,6 @@
 ---
 title: 주문 도메인
+description: "DDD 기반 주문 도메인 모델 구현을 단계별로 학습합니다."
 weight: 2
 lastmod: "2026-01-10"
 author: "@kimbenji"

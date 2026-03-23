@@ -1,5 +1,6 @@
 ---
 title: 헥사고날 아키텍처
+description: "헥사고날 아키텍처의 작동 원리와 포트/어댑터 구조를 설명합니다."
 weight: 2
 lastmod: "2026-01-15"
 author: "@kimbenji"

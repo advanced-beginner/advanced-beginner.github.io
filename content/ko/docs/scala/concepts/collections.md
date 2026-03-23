@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 컬렉션
+description: "Scala 컬렉션 라이브러리의 작동 원리와 활용 방법을 설명합니다."
 weight: 7
 ---
 

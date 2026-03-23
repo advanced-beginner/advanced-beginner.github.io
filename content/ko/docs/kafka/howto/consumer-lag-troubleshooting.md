@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Consumer Lag 진단 및 해결
+description: "Consumer Lag을 진단하고 해결하는 방법을 안내합니다."
 weight: 1
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

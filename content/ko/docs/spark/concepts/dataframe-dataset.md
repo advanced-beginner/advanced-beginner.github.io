@@ -1,5 +1,6 @@
 ---
 title: DataFrame과 Dataset
+description: "DataFrame과 Dataset의 작동 원리와 활용 방법을 설명합니다."
 weight: 3
 lastmod: "2026-01-15"
 author:

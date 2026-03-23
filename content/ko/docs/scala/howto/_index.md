@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-03-23"
 title: How-To Guide
+description: "Scala 개발 문제 해결 가이드 목록입니다."
 weight: 4
 bookCollapseSection: true
 ---

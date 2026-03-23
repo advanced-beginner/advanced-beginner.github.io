@@ -1,5 +1,6 @@
 ---
 title: 클러스터 관리
+description: "Elasticsearch 클러스터 관리의 작동 원리와 운영 전략을 설명합니다."
 weight: 7
 lastmod: 2026-01-15
 ---

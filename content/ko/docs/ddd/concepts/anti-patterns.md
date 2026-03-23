@@ -1,5 +1,6 @@
 ---
 title: 안티패턴과 함정
+description: "DDD 적용 시 흔히 발생하는 안티패턴과 대응 방법을 설명합니다."
 weight: 8
 lastmod: "2026-01-15"
 author: "@kimbenji"

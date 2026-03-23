@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-03-23"
 title: Job과 CronJob
+description: "Job과 CronJob의 작동 원리와 배치 처리 전략을 설명합니다."
 weight: 14
 author:
   name: Advanced Beginner

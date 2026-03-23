@@ -1,5 +1,6 @@
 ---
 title: Structured Streaming
+description: "Structured Streaming의 작동 원리와 스트림 처리 모델을 설명합니다."
 weight: 8
 lastmod: "2026-01-15"
 author:

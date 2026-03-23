@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-16"
 title: Implicit/Given 디버깅
+description: "Implicit/Given 관련 오류를 진단하고 해결하는 방법을 안내합니다."
 weight: 1
 ---
 

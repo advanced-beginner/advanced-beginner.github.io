@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: Deployment
+description: "Deployment의 작동 원리와 롤링 업데이트 전략을 설명합니다."
 weight: 3
 author:
   name: Advanced Beginner

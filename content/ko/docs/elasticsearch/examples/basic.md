@@ -1,5 +1,6 @@
 ---
 title: 기본 예제
+description: "Elasticsearch 기본 CRUD와 검색을 단계별로 학습합니다."
 weight: 2
 lastmod: 2026-01-10
 ---

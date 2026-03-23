@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 보안
+description: "Kafka 인증, 인가, 암호화 등 보안 설정 방법을 설명합니다."
 weight: 11
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

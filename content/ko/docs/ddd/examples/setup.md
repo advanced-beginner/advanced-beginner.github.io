@@ -1,5 +1,6 @@
 ---
 title: 프로젝트 설정
+description: "DDD 예제 프로젝트 환경을 단계별로 구성합니다."
 weight: 1
 lastmod: 2026-01-10
 author: "@kimbenji"

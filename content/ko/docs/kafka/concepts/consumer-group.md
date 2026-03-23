@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: Consumer Group & Offset
+description: "Consumer Group과 Offset 관리의 작동 원리를 설명합니다."
 weight: 3
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

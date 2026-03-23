@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: 환경 구성
+description: "Kafka 개발 환경을 단계별로 구성합니다."
 weight: 1
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

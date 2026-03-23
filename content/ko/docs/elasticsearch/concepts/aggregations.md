@@ -1,5 +1,6 @@
 ---
 title: 집계
+description: "Elasticsearch 집계의 작동 원리와 분석 활용법을 설명합니다."
 weight: 5
 lastmod: 2026-01-15
 prerequisites:

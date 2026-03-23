@@ -1,6 +1,7 @@
 ---
 bookCollapseSection: true
 title: Quick Start
+description: "Elasticsearch 핵심 개념과 실습을 단계별로 학습합니다."
 weight: 1
 lastmod: 2026-01-10
 ---

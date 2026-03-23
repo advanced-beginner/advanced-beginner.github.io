@@ -1,5 +1,6 @@
 ---
 title: 클린 아키텍처
+description: "클린 아키텍처의 작동 원리와 계층 구조를 설명합니다."
 weight: 3
 lastmod: "2026-01-15"
 author: "@kimbenji"

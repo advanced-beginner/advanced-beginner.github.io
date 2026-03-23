@@ -1,5 +1,6 @@
 ---
 title: 배포와 클러스터 관리
+description: "Spark 배포 모드와 클러스터 관리 전략을 설명합니다."
 weight: 11
 lastmod: "2026-01-15"
 author:

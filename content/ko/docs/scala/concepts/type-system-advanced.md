@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 고급 타입 시스템
+description: "Scala 고급 타입 시스템의 작동 원리와 활용 패턴을 설명합니다."
 weight: 14
 ---
 

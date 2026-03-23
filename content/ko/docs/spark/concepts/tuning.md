@@ -1,5 +1,6 @@
 ---
 title: 성능 튜닝
+description: "Spark 성능 튜닝의 핵심 파라미터와 최적화 전략을 설명합니다."
 weight: 10
 lastmod: "2026-01-15"
 author:

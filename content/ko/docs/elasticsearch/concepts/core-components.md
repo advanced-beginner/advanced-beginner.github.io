@@ -1,5 +1,6 @@
 ---
 title: 핵심 구성요소
+description: "Index, Shard, Node 등 Elasticsearch 핵심 구성요소를 설명합니다."
 weight: 1
 lastmod: 2026-01-15
 ---

@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 아키텍처
+description: "Kubernetes 클러스터 아키텍처의 작동 원리를 설명합니다."
 weight: 1
 author:
   name: Advanced Beginner

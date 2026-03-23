@@ -1,5 +1,6 @@
 ---
 title: 계층형 아키텍처
+description: "계층형 아키텍처의 작동 원리와 각 계층의 역할을 설명합니다."
 weight: 1
 lastmod: "2026-01-15"
 author: "@kimbenji"

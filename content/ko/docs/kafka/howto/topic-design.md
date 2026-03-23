@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-16"
 title: 토픽 설계 및 파티션 결정 가이드
+description: "토픽 설계와 파티션 수를 결정하는 방법을 안내합니다."
 weight: 4
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"

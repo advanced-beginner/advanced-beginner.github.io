@@ -1,5 +1,6 @@
 ---
 title: Bounded Context 식별하기
+description: "Bounded Context를 식별하고 정의하는 방법을 안내합니다."
 weight: 2
 lastmod: "2026-01-16"
 author: "@kimbenji"

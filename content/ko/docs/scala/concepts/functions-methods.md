@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-15"
 title: 함수와 메서드
+description: "Scala 함수와 메서드의 차이점과 작동 원리를 설명합니다."
 weight: 3
 ---
 

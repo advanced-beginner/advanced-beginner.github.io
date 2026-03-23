@@ -1,5 +1,6 @@
 ---
 title: 테스트 전략
+description: "DDD 기반 도메인 모델의 테스트 전략과 패턴을 설명합니다."
 weight: 7
 lastmod: "2026-01-15"
 author: "@kimbenji"

@@ -1,6 +1,7 @@
 ---
 lastmod: "2026-01-10"
 title: Spring Kafka로 Producer/Consumer 구현하기
+description: "Spring Kafka로 Producer/Consumer를 단계별로 구현합니다."
 weight: 2
 author: "@kimbenji"
 author_url: "http://github.com/kimbenji"
