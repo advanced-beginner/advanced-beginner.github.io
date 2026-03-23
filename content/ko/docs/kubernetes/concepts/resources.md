@@ -30,6 +30,7 @@ author:
 
 > **대상 독자**: Kubernetes에서 리소스를 효율적으로 관리하고 싶은 백엔드 개발자
 > **선수 지식**: Pod, Deployment 개념
+> **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: requests와 limits의 차이, 적절한 리소스 설정 방법을 이해할 수 있습니다
 
 {{< callout type="tip" title="TL;DR" >}}

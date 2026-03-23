@@ -30,6 +30,7 @@ Volume과 스토리지를 **아파트 수납공간**에 비유하면 이해하�
 
 > **대상 독자**: Kubernetes에서 데이터를 영구 저장하고 싶은 백엔드 개발자
 > **선수 지식**: Pod 개념
+> **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: Volume, PersistentVolume, PersistentVolumeClaim의 개념과 사용 방법을 이해할 수 있습니다
 
 {{< callout type="tip" title="TL;DR" >}}

@@ -29,6 +29,8 @@ Scala 동시성을 <strong>레스토랑 주방</strong>에 비유하면 이해�
 - 고급 라이브러리: Cats Effect, ZIO, Akka
 {{< /callout >}}
 
+**소요 시간**: 약 25-30분
+
 **대상 독자:** 비동기 프로그래밍 기초를 이해한 개발자
 **선수 지식:** 고차 함수, for comprehension, 암시적 매개변수
 

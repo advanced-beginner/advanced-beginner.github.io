@@ -25,6 +25,7 @@ lastmod: "2026-01-15"
 
 > **대상 독자**: 다양한 서비스 유형을 운영하는 SRE
 > **선수 지식**: [SRE 황금 신호]({{< relref "/docs/observability/concepts/golden-signals" >}})
+> **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: 서비스 특성에 맞게 4대 신호를 적용할 수 있습니다
 
 ## TL;DR

@@ -19,6 +19,8 @@ author_url: "http://github.com/kimbenji"
 
 **선수 지식**: 기본적인 네트워크 통신 개념, REST API 사용 경험, Spring Boot 기초
 
+**소요 시간**: 약 25-30분
+
 ---
 
 Kafka는 다섯 가지 핵심 구성요소로 이루어져 있습니다. Producer는 메시지를 발행하고, Consumer는 메시지를 소비하며, Broker는 메시지를 저장하고 전달합니다. Topic은 메시지를 논리적으로 분류하는 채널이고, Partition은 Topic을 물리적으로 분할하여 병렬 처리를 가능하게 합니다. 이 다섯 가지 구성요소가 어떻게 상호작용하는지 이해하면 Kafka 기반 시스템을 설계하고 운영하는 데 필요한 기초를 갖추게 됩니다.

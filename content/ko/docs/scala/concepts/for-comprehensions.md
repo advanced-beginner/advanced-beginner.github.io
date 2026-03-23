@@ -27,6 +27,8 @@ For comprehension을 <strong>공장 조립 라인</strong>에 비유하면 이�
 - yield 없이 사용하면 부수 효과만 실행합니다 (foreach로 변환)
 {{< /callout >}}
 
+**소요 시간**: 약 25-30분
+
 **대상 독자:** 고차 함수를 이해한 개발자
 **선수 지식:** map, flatMap, filter 고차 함수
 

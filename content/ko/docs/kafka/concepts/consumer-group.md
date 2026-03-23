@@ -19,6 +19,8 @@ author_url: "http://github.com/kimbenji"
 
 **선수 지식**: [메시지 흐름](message-flow/)의 Topic과 Partition 개념, [Replication](replication/)의 Leader/Follower 개념
 
+**소요 시간**: 약 25-30분
+
 ---
 
 병렬 처리와 진행 상태 관리의 핵심 개념을 이해합니다. 이 문서는 Kafka 3.6.x 기준으로 작성되었으며, Spring Boot 3.2.x와 Spring Kafka 3.1.x, Java 17 환경에서 코드 예제가 검증되었습니다.

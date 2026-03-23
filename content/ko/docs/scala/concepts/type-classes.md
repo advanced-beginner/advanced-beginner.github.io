@@ -27,6 +27,8 @@ weight: 12
 - Show, Eq, Ordering, Monoid 등이 대표적인 타입 클래스입니다
 {{< /callout >}}
 
+**소요 시간**: 약 25-30분
+
 **대상 독자:** Implicit/Given을 이해한 개발자
 **선수 지식:** 암시적 기능, 제네릭
 

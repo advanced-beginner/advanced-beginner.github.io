@@ -90,7 +90,4 @@ graph LR
     C --> D["histogram_quantile"]
     D --> E["Recording Rules"]
     E --> F["Alerting Rules"]
-
-    style A fill:#e3f2fd
-    style F fill:#c8e6c9
 ```

@@ -26,6 +26,7 @@ StatefulSet을 **지정석이 있는 식당**에 비유하면 이해하기 쉽�
 
 > **대상 독자**: 데이터베이스나 클러스터링 애플리케이션을 Kubernetes에 배포하려는 개발자
 > **선수 지식**: Deployment, Service, Volume/PVC 개념
+> **소요 시간**: 약 20분
 > **이 문서를 읽으면**: StatefulSet의 동작 원리와 Deployment와의 차이를 이해할 수 있습니다
 
 {{< callout type="tip" title="TL;DR" >}}

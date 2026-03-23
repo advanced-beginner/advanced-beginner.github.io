@@ -27,6 +27,7 @@ lastmod: "2026-01-15"
 
 > **대상 독자**: 마이크로서비스를 운영하는 개발자, SRE
 > **선수 지식**: [관측성 3요소]({{< relref "/docs/observability/concepts/three-pillars" >}})
+> **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: 분산 추적을 이해하고 서비스 간 요청 흐름을 분석할 수 있습니다
 
 ## TL;DR
@@ -51,8 +52,6 @@ graph LR
     ORDER --> INVENTORY["재고 서비스"]
     PAYMENT --> DB1["결제 DB"]
     INVENTORY --> DB2["재고 DB"]
-
-    style PAYMENT fill:#ffcdd2
 ```
 
 **문제**: 응답이 느린데 어디가 문제인지 모름

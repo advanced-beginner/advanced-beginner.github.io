@@ -22,6 +22,8 @@ author:
 - Kafka 기본 개념 (선택 사항)
 - 이벤트 시간 vs 처리 시간 개념
 
+**소요 시간**: 약 25-30분
+
 ---
 
 Structured Streaming은 Spark의 스트림 처리 엔진입니다. 배치 처리와 동일한 DataFrame/Dataset API를 사용하여 실시간 데이터를 처리합니다.

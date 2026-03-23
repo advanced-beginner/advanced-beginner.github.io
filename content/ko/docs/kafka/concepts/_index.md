@@ -72,12 +72,6 @@ flowchart TD
         J --> K[보안]
         K --> L[생태계]
     end
-
-    style A fill:#e1f5fe
-    style B fill:#e1f5fe
-    style C fill:#e1f5fe
-    style D fill:#e1f5fe
-    style E fill:#fff3e0
 ```
 
 #### 학습 순서

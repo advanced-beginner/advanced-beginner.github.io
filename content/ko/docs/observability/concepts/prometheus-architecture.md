@@ -27,6 +27,7 @@ Prometheus 아키텍처를 **병원의 정기 건강검진 시스템**에 비유
 
 > **대상 독자**: Prometheus를 운영하거나 깊이 이해하고 싶은 개발자
 > **선수 지식**: [메트릭 기초]({{< relref "/docs/observability/concepts/metrics-fundamentals" >}})
+> **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: Prometheus의 설계 철학과 구성 요소를 이해하고 운영 전략을 수립할 수 있습니다
 
 ## TL;DR

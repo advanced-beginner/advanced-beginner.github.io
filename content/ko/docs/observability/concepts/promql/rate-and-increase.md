@@ -26,6 +26,7 @@ rate와 increase를 **누적 진료 기록 분석**에 비유하면 이해하기
 
 > **대상 독자**: Counter 메트릭을 활용하려는 개발자
 > **선수 지식**: [메트릭 기초]({{< relref "/docs/observability/concepts/metrics-fundamentals" >}}), [집계 연산자]({{< relref "/docs/observability/concepts/promql/aggregation-operators" >}})
+> **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: Counter 메트릭에서 초당 변화율, 총 증가량을 정확히 계산할 수 있습니다
 
 ## TL;DR

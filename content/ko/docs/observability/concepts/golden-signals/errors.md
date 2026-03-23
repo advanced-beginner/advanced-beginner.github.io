@@ -27,6 +27,7 @@ Errors를 **응급실 환자 분류(Triage) 시스템**에 비유하면 이해�
 
 > **대상 독자**: 서비스 신뢰성을 개선하려는 개발자, SRE
 > **선수 지식**: [집계 연산자]({{< relref "/docs/observability/concepts/promql/aggregation-operators" >}})
+> **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: 에러를 체계적으로 분류하고 SLO 기반 모니터링을 설정할 수 있습니다
 
 ## TL;DR

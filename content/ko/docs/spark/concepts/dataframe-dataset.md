@@ -22,6 +22,8 @@ author:
 - SQL 기본 문법 (SELECT, WHERE, GROUP BY)
 - [RDD 기초](rdd/) 문서 이해 권장
 
+**소요 시간**: 약 25-30분
+
 ---
 
 DataFrame과 Dataset은 Spark의 현대적인 고수준 API입니다. RDD보다 사용하기 쉽고, Catalyst Optimizer를 통한 자동 최적화를 제공합니다.

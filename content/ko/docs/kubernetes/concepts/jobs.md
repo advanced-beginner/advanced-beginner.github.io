@@ -27,6 +27,7 @@ Job과 CronJob을 **아르바이트와 정기 청소**에 비유하면 이해하
 
 > **대상 독자**: 배치 작업이나 정기 작업을 Kubernetes에서 실행하려는 개발자
 > **선수 지식**: Pod, Deployment 개념
+> **소요 시간**: 약 20분
 > **이 문서를 읽으면**: Job과 CronJob의 동작 원리와 설정 방법을 이해할 수 있습니다
 
 {{< callout type="tip" title="TL;DR" >}}

@@ -27,6 +27,7 @@ Saturation을 **병원의 수용 능력(병상/장비/인력)**에 비유하면 
 
 > **대상 독자**: 시스템 용량을 관리하는 SRE, 인프라 엔지니어
 > **선수 지식**: [Prometheus 아키텍처]({{< relref "/docs/observability/concepts/prometheus-architecture" >}})
+> **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: 리소스 병목을 조기에 감지하고 용량 계획을 수립할 수 있습니다
 
 ## TL;DR

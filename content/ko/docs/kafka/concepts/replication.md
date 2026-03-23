@@ -19,6 +19,8 @@ author_url: "http://github.com/kimbenji"
 
 **선수 지식**: [핵심 구성요소](core-components/)의 Broker, Partition 개념
 
+**소요 시간**: 약 15분
+
 ---
 
 데이터 복제는 Kafka의 고가용성과 내결함성의 핵심입니다. 이를 <strong>은행 금고 시스템</strong>에 비유하면 이해하기 쉽습니다:

@@ -21,6 +21,8 @@ author:
 - [아키텍처](architecture/) 문서의 Job, Stage, Task 개념
 - Java Stream API의 지연 평가 개념
 
+**소요 시간**: 약 25-30분
+
 ---
 
 Spark의 모든 연산은 **Transformation**과 **Action** 두 가지로 분류됩니다. 이 구분을 이해하는 것이 Spark 프로그래밍의 핵심입니다.

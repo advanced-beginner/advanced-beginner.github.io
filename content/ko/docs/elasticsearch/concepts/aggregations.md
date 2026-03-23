@@ -21,6 +21,8 @@ related_concepts:
 - [데이터 모델링](data-modeling/) - keyword vs text 타입
 {{< /callout >}}
 
+**소요 시간**: 약 25-30분
+
 ## 전체 비유: 도서관 통계 분석
 
 Aggregation을 **도서관의 장서 통계 분석**에 비유하면 이해하기 쉽습니다:

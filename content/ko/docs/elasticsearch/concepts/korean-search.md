@@ -21,6 +21,8 @@ related_concepts:
 - [Query DSL](query-dsl/) - match, multi_match 쿼리
 {{< /callout >}}
 
+**소요 시간**: 약 25-30분
+
 ## 전체 비유: 외국인을 위한 한글 도서 검색
 
 한글 검색 최적화를 **외국인 사서가 한글 도서를 색인하는 상황**에 비유하면 이해하기 쉽습니다:

@@ -30,6 +30,7 @@ Kubernetes 네트워킹을 **아파트 단지 출입 시스템**에 비유하면
 
 > **대상 독자**: Kubernetes 네트워크 구조를 이해하고 싶은 백엔드 개발자
 > **선수 지식**: Service 개념, 기본 네트워크 지식 (IP, 포트, DNS)
+> **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: Kubernetes의 네트워크 모델과 Ingress를 이해할 수 있습니다
 
 {{< callout type="tip" title="TL;DR" >}}

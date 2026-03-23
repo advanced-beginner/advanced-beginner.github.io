@@ -1008,3 +1008,4 @@ public void handle(ConsumerRecord<String, JsonNode> record) {
 
 - [CQRS](cqrs/) - 이벤트 기반 시스템과 잘 어울리는 패턴
 - [실습 예제](../../examples/) - Spring Boot로 구현하는 주문 도메인
+- [Kafka 핵심 구성요소]({{< relref "/docs/kafka/concepts/core-components" >}}) - 이벤트 기반 아키텍처의 메시지 브로커로 사용되는 Kafka의 구성요소

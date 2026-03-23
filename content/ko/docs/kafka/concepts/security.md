@@ -19,6 +19,8 @@ author_url: "http://github.com/kimbenji"
 
 **선수 지식**: [핵심 구성요소](core-components/)의 Broker, Producer, Consumer 개념, 기본적인 보안 개념(암호화, 인증, 인가)
 
+**소요 시간**: 약 25-30분
+
 ---
 
 프로덕션 환경에서 Kafka를 안전하게 운영하기 위한 암호화, 인증, 권한 관리를 이해합니다.

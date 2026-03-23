@@ -27,6 +27,7 @@ NetworkPolicy를 **아파트 단지의 출입 통제 시스템**에 비유하면
 
 > **대상 독자**: Kubernetes 클러스터의 네트워크 보안을 강화하려는 운영자
 > **선수 지식**: Pod, Service, Namespace, Label 개념
+> **소요 시간**: 약 20분
 > **이 문서를 읽으면**: NetworkPolicy로 Pod 간 트래픽을 제어하는 방법을 이해할 수 있습니다
 
 {{< callout type="tip" title="TL;DR" >}}

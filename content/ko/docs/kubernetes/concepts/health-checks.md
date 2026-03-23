@@ -31,6 +31,7 @@ author:
 
 > **대상 독자**: Kubernetes에서 애플리케이션 상태를 모니터링하고 싶은 백엔드 개발자
 > **선수 지식**: Pod, Deployment 개념
+> **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: Liveness, Readiness, Startup Probe의 차이와 설정 방법을 이해할 수 있습니다
 
 {{< callout type="tip" title="TL;DR" >}}

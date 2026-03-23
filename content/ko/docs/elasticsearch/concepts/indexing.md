@@ -21,6 +21,8 @@ related_concepts:
 - [데이터 모델링](data-modeling/) - Mapping, Analyzer 기본
 {{< /callout >}}
 
+**소요 시간**: 약 25-30분
+
 ## 전체 비유: 도서관의 신간 입고 프로세스
 
 인덱싱 전략을 **도서관의 신간 입고 프로세스**에 비유하면 이해하기 쉽습니다:

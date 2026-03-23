@@ -27,6 +27,7 @@ RBAC을 **건물 출입 카드 시스템**에 비유하면 이해하기 쉽습�
 
 > **대상 독자**: Kubernetes 클러스터의 보안과 접근 제어를 설정하려는 운영자
 > **선수 지식**: Namespace, Pod, ServiceAccount 기본 개념
+> **소요 시간**: 약 20분
 > **이 문서를 읽으면**: RBAC을 활용한 접근 권한 관리 방법을 이해할 수 있습니다
 
 {{< callout type="tip" title="TL;DR" >}}

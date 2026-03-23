@@ -19,6 +19,8 @@ author_url: "http://github.com/kimbenji"
 
 **선수 지식**: [Consumer Group & Offset](consumer-group/)의 기본 개념, [Replication](replication/)의 ISR과 Leader 개념
 
+**소요 시간**: 약 25-30분
+
 ---
 
 리밸런싱 최적화, Consumer Lag 모니터링, 트러블슈팅을 다룹니다. 이 문서는 Kafka 3.6.x 기준으로 작성되었으며, Spring Boot 3.2.x와 Spring Kafka 3.1.x, Micrometer 1.12.x, Java 17 환경에서 코드 예제가 검증되었습니다.

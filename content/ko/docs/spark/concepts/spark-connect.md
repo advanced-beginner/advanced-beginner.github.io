@@ -22,6 +22,8 @@ author:
 - gRPC 기본 개념 (선택 사항)
 - [DataFrame과 Dataset](dataframe-dataset/) API
 
+**소요 시간**: 약 25-30분
+
 ---
 
 Spark Connect는 Spark 3.4에서 도입된 새로운 클라이언트-서버 아키텍처입니다. 씬 클라이언트(Thin Client)로 원격 Spark 클러스터에 연결할 수 있습니다.

@@ -21,6 +21,8 @@ author:
 - 표준 SQL 문법 (SELECT, JOIN, GROUP BY, Window 함수)
 - [DataFrame과 Dataset](dataframe-dataset/) 기본 이해
 
+**소요 시간**: 약 25-30분
+
 ---
 
 Spark SQL은 구조화된 데이터 처리를 위한 Spark 모듈입니다. SQL 쿼리와 DataFrame API를 모두 지원하며, 동일한 실행 엔진(Catalyst Optimizer)을 사용합니다.

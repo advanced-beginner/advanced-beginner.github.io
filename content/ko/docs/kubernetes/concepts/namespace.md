@@ -27,6 +27,7 @@ Namespace를 **아파트 단지의 동 구분**에 비유하면 이해하기 쉽
 
 > **대상 독자**: Kubernetes 클러스터에서 리소스를 체계적으로 관리하고 싶은 운영자
 > **선수 지식**: Pod, Deployment, Service 개념
+> **소요 시간**: 약 20분
 > **이 문서를 읽으면**: Namespace를 활용한 멀티 테넌트 환경 구성 방법을 이해할 수 있습니다
 
 {{< callout type="tip" title="TL;DR" >}}

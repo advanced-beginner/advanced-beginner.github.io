@@ -19,6 +19,8 @@ author_url: "http://github.com/kimbenji"
 
 **선수 지식**: [Consumer Group & Offset](consumer-group/)의 Consumer 동작 원리, Spring Kafka 기초
 
+**소요 시간**: 약 25-30분
+
 ---
 
 Kafka Consumer의 에러 처리 전략과 Dead Letter Topic 패턴을 이해합니다.

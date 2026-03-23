@@ -22,6 +22,8 @@ author:
 - 람다 표현식 및 함수형 프로그래밍 기초
 - [아키텍처](architecture/) 문서 이해
 
+**소요 시간**: 약 25-30분
+
 ---
 
 RDD는 Spark의 가장 기본적인 데이터 추상화입니다. DataFrame과 Dataset의 기반이 되는 저수준 API로, Spark의 동작 원리를 이해하는 데 필수적입니다.

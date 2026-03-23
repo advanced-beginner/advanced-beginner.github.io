@@ -9,6 +9,7 @@ author_url: "http://github.com/kimbenji"
 
 > **대상 독자**: [전술적 설계]({{< relref "/docs/ddd/concepts/tactical-design" >}}) 빌딩 블록을 이해한 백엔드 개발자
 > **선수 지식**: Entity, Value Object, Repository, Domain Service 개념 이해
+> **소요 시간**: 약 25-30분
 > **핵심 질문**: "핵심 빌딩 블록만으로 표현하기 어려운 도메인 로직을 어떻게 구조화하는가?"
 
 {{< callout type="tip" title="요약" >}}

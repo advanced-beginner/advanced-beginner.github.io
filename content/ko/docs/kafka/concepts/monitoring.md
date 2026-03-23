@@ -19,6 +19,8 @@ author_url: "http://github.com/kimbenji"
 
 **선수 지식**: [Consumer Group & Offset](consumer-group/)의 Offset과 Lag 개념
 
+**소요 시간**: 약 25-30분
+
 ---
 
 Kafka 클러스터와 애플리케이션의 핵심 메트릭을 이해합니다.

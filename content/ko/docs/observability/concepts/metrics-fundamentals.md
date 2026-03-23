@@ -27,6 +27,7 @@ lastmod: "2026-01-15"
 
 > **대상 독자**: Prometheus 메트릭을 처음 설계하는 개발자
 > **선수 지식**: [관측성 3요소]({{< relref "/docs/observability/concepts/three-pillars" >}})
+> **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: 상황에 맞는 메트릭 타입을 선택하고 올바르게 구현할 수 있습니다
 
 ## TL;DR

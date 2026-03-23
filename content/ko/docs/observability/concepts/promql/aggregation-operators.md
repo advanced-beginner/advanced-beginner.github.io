@@ -27,6 +27,7 @@ PromQL 집계 연산자를 **병원 통계 분석**에 비유하면 이해하기
 
 > **대상 독자**: PromQL 기본 문법을 아는 개발자
 > **선수 지식**: [기본 문법]({{< relref "/docs/observability/concepts/promql/syntax-basics" >}})
+> **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: 여러 시계열을 집계하여 의미 있는 지표를 계산할 수 있습니다
 
 ## TL;DR

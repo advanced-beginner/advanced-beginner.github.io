@@ -22,6 +22,8 @@ author:
 - Docker/Kubernetes 기초 (K8s 배포 시)
 - Hadoop YARN 기초 (YARN 배포 시)
 
+**소요 시간**: 약 25-30분
+
 ---
 
 Spark 애플리케이션을 다양한 클러스터 환경에 배포하고 관리하는 방법을 알아봅니다.

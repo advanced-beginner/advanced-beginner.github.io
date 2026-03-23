@@ -26,6 +26,7 @@ Latency를 **응급실 대기 시간**에 비유하면 이해하기 쉽습니다
 
 > **대상 독자**: 서비스 응답시간을 개선하려는 개발자, SRE
 > **선수 지식**: [histogram_quantile]({{< relref "/docs/observability/concepts/promql/histogram-quantile" >}})
+> **소요 시간**: 약 20분
 > **이 문서를 읽으면**: 지연시간을 정확히 측정하고 SLA 기반 알림을 설정할 수 있습니다
 
 ## TL;DR

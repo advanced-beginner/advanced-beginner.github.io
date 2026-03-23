@@ -27,6 +27,7 @@ Alerting Rules를 **중환자실 환자 모니터 경보 시스템**에 비유�
 
 > **대상 독자**: 모니터링 알림을 설정하려는 개발자, SRE
 > **선수 지식**: [Recording Rules]({{< relref "/docs/observability/concepts/promql/recording-rules" >}})
+> **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: 오탐을 줄이고 실제 문제만 알림받는 규칙을 작성할 수 있습니다
 
 ## TL;DR

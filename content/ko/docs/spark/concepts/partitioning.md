@@ -21,6 +21,8 @@ author:
 - [아키텍처](architecture/) 문서의 Stage, Task 개념
 - [Transformation과 Action](transformations-actions/)의 Wide/Narrow 구분
 
+**소요 시간**: 약 25-30분
+
 ---
 
 파티셔닝은 Spark 성능의 핵심입니다. 데이터가 어떻게 분산되는지 이해하고 최적화하는 것이 대규모 데이터 처리의 관건입니다.

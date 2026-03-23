@@ -26,6 +26,7 @@ histogram_quantile을 **진료 대기시간 분포 분석**에 비유하면 이�
 
 > **대상 독자**: 응답시간 분석이 필요한 개발자, SRE
 > **선수 지식**: [메트릭 기초]({{< relref "/docs/observability/concepts/metrics-fundamentals" >}}), [rate와 increase]({{< relref "/docs/observability/concepts/promql/rate-and-increase" >}})
+> **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: Histogram에서 정확한 백분위를 계산하고 SLA를 모니터링할 수 있습니다
 
 ## TL;DR

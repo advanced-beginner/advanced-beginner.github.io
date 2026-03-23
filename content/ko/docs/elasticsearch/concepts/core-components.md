@@ -16,6 +16,8 @@ lastmod: 2026-01-15
 **대상 독자**: Elasticsearch를 처음 접하는 개발자
 **선수 지식**: JSON 기본 문법, REST API 개념
 
+**소요 시간**: 약 25-30분
+
 Elasticsearch의 핵심 구성요소인 Cluster, Node, Index, Document, Shard의 역할과 관계를 이해합니다.
 
 ## 전체 비유: 대형 도서관 체인

@@ -19,6 +19,8 @@ author_url: "http://github.com/kimbenji"
 
 **선수 지식**: [Consumer Group & Offset](consumer-group/)의 Consumer 동작 원리
 
+**소요 시간**: 약 20분
+
 ---
 
 Consumer 성능 최적화와 안정적인 운영을 위한 설정을 이해합니다.

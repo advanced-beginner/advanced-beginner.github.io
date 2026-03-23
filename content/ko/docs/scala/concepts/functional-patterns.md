@@ -30,6 +30,8 @@ weight: 17
 - Cats, ZIO 등 함수형 라이브러리로 더 강력한 추상화 가능
 {{< /callout >}}
 
+**소요 시간**: 약 25-30분
+
 **대상 독자:** 고차 함수와 For Comprehension을 이해한 개발자
 **선수 지식:** map, flatMap, filter, 제네릭
 

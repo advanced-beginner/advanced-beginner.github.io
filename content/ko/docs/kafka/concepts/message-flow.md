@@ -19,6 +19,8 @@ author_url: "http://github.com/kimbenji"
 
 **선수 지식**: [핵심 구성요소](core-components/)의 Producer, Consumer, Broker, Topic, Partition 개념
 
+**소요 시간**: 약 20분
+
 ---
 
 Kafka에서 메시지가 발행되고 소비되는 전체 과정을 이해하는 것은 안정적인 시스템 운영의 기초입니다. 메시지가 Producer에서 출발하여 Broker에 저장되고, Consumer가 읽어가는 각 단계에서 어떤 일이 일어나는지 알아야 문제 상황에서 원인을 빠르게 파악하고 해결할 수 있습니다.
