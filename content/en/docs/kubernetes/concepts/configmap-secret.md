@@ -24,8 +24,8 @@ Let's first examine the flow of ConfigMap and Secret injection into Pods.
 ```mermaid
 flowchart LR
     subgraph Sources[Config Sources]
-        CM[ConfigMap<br/>General config]
-        SEC[Secret<br/>Sensitive info]
+        CM[ConfigMap<br>General config]
+        SEC[Secret<br>Sensitive info]
     end
 
     subgraph Injection[Injection Methods]

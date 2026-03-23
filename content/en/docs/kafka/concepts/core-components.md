@@ -289,9 +289,9 @@ Topic is a logical channel, and Partition is the physical storage unit within th
 flowchart TB
     subgraph Topic["orders Topic (Logical Unit)"]
         direction TB
-        P0["Partition 0<br/>Offset: 0->1->2->3"]
-        P1["Partition 1<br/>Offset: 0->1->2"]
-        P2["Partition 2<br/>Offset: 0->1->2->3->4"]
+        P0["Partition 0<br>Offset: 0->1->2->3"]
+        P1["Partition 1<br>Offset: 0->1->2"]
+        P2["Partition 2<br>Offset: 0->1->2->3->4"]
     end
 
     subgraph Brokers["Kafka Cluster (Physical Storage)"]

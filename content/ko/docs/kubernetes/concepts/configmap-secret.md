@@ -44,8 +44,8 @@ ConfigMap과 Secret이 Pod에 주입되는 흐름을 먼저 살펴봅니다.
 ```mermaid
 flowchart LR
     subgraph Sources[설정 소스]
-        CM[ConfigMap<br/>일반 설정]
-        SEC[Secret<br/>민감 정보]
+        CM[ConfigMap<br>일반 설정]
+        SEC[Secret<br>민감 정보]
     end
 
     subgraph Injection[주입 방식]

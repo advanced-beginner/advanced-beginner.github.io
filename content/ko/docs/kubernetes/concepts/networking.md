@@ -50,11 +50,11 @@ Kubernetes 네트워크는 세 가지 기본 원칙을 따릅니다.
 ```mermaid
 flowchart TB
     subgraph Node1[Node 1]
-        P1[Pod A<br/>10.244.1.5]
-        P2[Pod B<br/>10.244.1.6]
+        P1[Pod A<br>10.244.1.5]
+        P2[Pod B<br>10.244.1.6]
     end
     subgraph Node2[Node 2]
-        P3[Pod C<br/>10.244.2.3]
+        P3[Pod C<br>10.244.2.3]
     end
     P1 <-->|직접 통신| P2
     P1 <-->|노드 간 통신| P3
@@ -113,18 +113,18 @@ Ingress는 클러스터 외부에서 내부 Service로의 HTTP/HTTPS 트래픽�
 ```mermaid
 flowchart TB
     subgraph External[외부]
-        User[사용자<br/>api.example.com/users]
+        User[사용자<br>api.example.com/users]
     end
 
     subgraph Cluster[Kubernetes 클러스터]
         subgraph Ingress[Ingress Layer]
-            LB[LoadBalancer<br/>External IP]
-            IC[Ingress Controller<br/>NGINX]
+            LB[LoadBalancer<br>External IP]
+            IC[Ingress Controller<br>NGINX]
             ING[Ingress 규칙]
         end
 
         subgraph Services[Service Layer]
-            SVC[user-service<br/>ClusterIP]
+            SVC[user-service<br>ClusterIP]
         end
 
         subgraph Pods[Pod Layer]

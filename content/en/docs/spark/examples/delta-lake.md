@@ -31,7 +31,7 @@ flowchart LR
         D1[part-001.parquet]
         D2[part-002.parquet]
         D3[_delta_log/]
-        D3 --> D4[00000.json<br/>Transaction Log]
+        D3 --> D4[00000.json<br>Transaction Log]
     end
 ```
 

@@ -53,7 +53,7 @@ flowchart LR
         H2 --> H3[Pod]
     end
     subgraph Vertical[수직 스케일링]
-        V1[Pod<br/>256Mi] --> V2[Pod<br/>512Mi]
+        V1[Pod<br>256Mi] --> V2[Pod<br>512Mi]
     end
 ```
 
@@ -273,19 +273,19 @@ updateMode 옵션을 비교하면 다음과 같습니다.
 
 ```mermaid
 flowchart TD
-    START[스케일링 필요] --> Q1{애플리케이션<br/>유형은?}
+    START[스케일링 필요] --> Q1{애플리케이션<br>유형은?}
 
-    Q1 -->|Stateless<br/>웹서버, API| Q2{트래픽 변동이<br/>큰가?}
-    Q1 -->|Stateful<br/>DB, 캐시| VPA_REC[VPA 권장]
+    Q1 -->|Stateless<br>웹서버, API| Q2{트래픽 변동이<br>큰가?}
+    Q1 -->|Stateful<br>DB, 캐시| VPA_REC[VPA 권장]
 
     Q2 -->|Yes| HPA_REC[HPA 권장]
-    Q2 -->|No| Q3{리소스 설정이<br/>적절한가?}
+    Q2 -->|No| Q3{리소스 설정이<br>적절한가?}
 
-    Q3 -->|모르겠다| VPA_OFF[VPA로 권장값 확인<br/>updateMode: Off]
+    Q3 -->|모르겠다| VPA_OFF[VPA로 권장값 확인<br>updateMode: Off]
     Q3 -->|최적화 필요| VPA_REC
 
-    HPA_REC --> Q4{리소스 설정도<br/>최적화 필요?}
-    Q4 -->|Yes| BOTH[HPA + VPA 병행<br/>CPU는 HPA, 메모리는 VPA]
+    HPA_REC --> Q4{리소스 설정도<br>최적화 필요?}
+    Q4 -->|Yes| BOTH[HPA + VPA 병행<br>CPU는 HPA, 메모리는 VPA]
     Q4 -->|No| HPA_ONLY[HPA만 사용]
 
     VPA_REC --> VPA_ONLY[VPA 사용]

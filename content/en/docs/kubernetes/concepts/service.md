@@ -24,10 +24,10 @@ Pod IPs change whenever Pods are recreated. How can we communicate reliably in t
 ```mermaid
 flowchart LR
     subgraph Before[Before restart]
-        P1[Pod<br/>10.244.1.5]
+        P1[Pod<br>10.244.1.5]
     end
     subgraph After[After restart]
-        P2[Pod<br/>10.244.1.9]
+        P2[Pod<br>10.244.1.9]
     end
     Before -->|IP changed!| After
 ```
@@ -47,10 +47,10 @@ Service finds Pods using label selectors and distributes traffic to those Pods.
 
 ```mermaid
 flowchart LR
-    Client[Client] -->|my-service:80| SVC[Service<br/>10.96.100.5]
-    SVC -->|load balancing| P1[Pod 1<br/>10.244.1.5]
-    SVC --> P2[Pod 2<br/>10.244.1.6]
-    SVC --> P3[Pod 3<br/>10.244.2.3]
+    Client[Client] -->|my-service:80| SVC[Service<br>10.96.100.5]
+    SVC -->|load balancing| P1[Pod 1<br>10.244.1.5]
+    SVC --> P2[Pod 2<br>10.244.1.6]
+    SVC --> P3[Pod 3<br>10.244.2.3]
 ```
 
 Service and Pod connection process:
@@ -87,7 +87,7 @@ spec:
 ```mermaid
 flowchart LR
     subgraph Cluster
-        Pod1[Other Pod] -->|my-service:80| SVC[Service<br/>ClusterIP]
+        Pod1[Other Pod] -->|my-service:80| SVC[Service<br>ClusterIP]
         SVC --> Target[Target Pod]
     end
     External[External] -.-x|No access| SVC

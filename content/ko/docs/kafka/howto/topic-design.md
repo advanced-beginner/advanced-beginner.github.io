@@ -156,10 +156,10 @@ kafka-topics.sh --create --topic order-events  # 이벤트 타입 불명확
 ```mermaid
 flowchart TB
     subgraph Problem["문제: 핫 파티션"]
-        K1["Key: user-A"] --> P0["Partition 0<br/>부하 80%"]
+        K1["Key: user-A"] --> P0["Partition 0<br>부하 80%"]
         K2["Key: user-B"] --> P0
-        K3["Key: user-C"] --> P1["Partition 1<br/>부하 10%"]
-        K4["Key: user-D"] --> P2["Partition 2<br/>부하 10%"]
+        K3["Key: user-C"] --> P1["Partition 1<br>부하 10%"]
+        K4["Key: user-D"] --> P2["Partition 2<br>부하 10%"]
     end
 ```
 
@@ -331,14 +331,14 @@ flowchart TB
     Start[토픽 설계 시작] --> N[1. 네이밍 결정]
     N --> Q1{순서 보장 필요?}
 
-    Q1 -->|Yes| P1[키 기반 파티셔닝<br/>파티션 수 = Consumer 수]
-    Q1 -->|No| P2[라운드로빈<br/>파티션 수 = 처리량 기반]
+    Q1 -->|Yes| P1[키 기반 파티셔닝<br>파티션 수 = Consumer 수]
+    Q1 -->|No| P2[라운드로빈<br>파티션 수 = 처리량 기반]
 
     P1 --> R[2. 복제 팩터 결정]
     P2 --> R
 
     R --> Q2{프로덕션 환경?}
-    Q2 -->|Yes| R1[replication-factor=3<br/>min.insync.replicas=2]
+    Q2 -->|Yes| R1[replication-factor=3<br>min.insync.replicas=2]
     Q2 -->|No| R2[replication-factor=1]
 
     R1 --> RT[3. 보관 정책 결정]
@@ -346,7 +346,7 @@ flowchart TB
 
     RT --> Q3{상태 저장 필요?}
     Q3 -->|Yes| RT1[cleanup.policy=compact]
-    Q3 -->|No| RT2[cleanup.policy=delete<br/>retention.ms 설정]
+    Q3 -->|No| RT2[cleanup.policy=delete<br>retention.ms 설정]
 
     RT1 --> End[토픽 생성]
     RT2 --> End

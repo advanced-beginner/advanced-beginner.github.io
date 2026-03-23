@@ -35,9 +35,9 @@ Health checks allow us to detect these situations and respond automatically.
 ```mermaid
 flowchart TB
     subgraph Probes
-        LP[Liveness Probe<br/>Are you dead?]
-        RP[Readiness Probe<br/>Are you ready?]
-        SP[Startup Probe<br/>Have you started?]
+        LP[Liveness Probe<br>Are you dead?]
+        RP[Readiness Probe<br>Are you ready?]
+        SP[Startup Probe<br>Have you started?]
     end
 
     LP -->|failure| RESTART[Restart container]

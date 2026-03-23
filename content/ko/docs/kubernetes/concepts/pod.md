@@ -50,7 +50,7 @@ flowchart TB
         C1 --- V
         C2 --- V
     end
-    NET[공유 네트워크<br/>localhost 통신]
+    NET[공유 네트워크<br>localhost 통신]
     Pod --- NET
 ```
 
@@ -88,7 +88,7 @@ Pod를 사용하는 이유는 **밀접하게 연관된 컨테이너들을 하나
 ```mermaid
 flowchart LR
     subgraph Pod
-        App[Web App<br/>:8080]
+        App[Web App<br>:8080]
         Log[Log Collector]
         V[(로그 볼륨)]
         App -->|로그 기록| V
@@ -268,11 +268,11 @@ Pod 네트워킹의 핵심 개념을 이해합니다.
 ```mermaid
 flowchart LR
     subgraph Node1
-        P1[Pod A<br/>10.244.1.5]
-        P2[Pod B<br/>10.244.1.6]
+        P1[Pod A<br>10.244.1.5]
+        P2[Pod B<br>10.244.1.6]
     end
     subgraph Node2
-        P3[Pod C<br/>10.244.2.3]
+        P3[Pod C<br>10.244.2.3]
     end
     P1 <-->|직접 통신| P3
     P1 <-->|localhost 불가| P2

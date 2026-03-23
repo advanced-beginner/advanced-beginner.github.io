@@ -289,9 +289,9 @@ Topic은 논리적인 채널이고, Partition은 그 채널 안의 물리적인 
 flowchart TB
     subgraph Topic["orders Topic (논리적 단위)"]
         direction TB
-        P0["Partition 0<br/>Offset: 0→1→2→3"]
-        P1["Partition 1<br/>Offset: 0→1→2"]
-        P2["Partition 2<br/>Offset: 0→1→2→3→4"]
+        P0["Partition 0<br>Offset: 0→1→2→3"]
+        P1["Partition 1<br>Offset: 0→1→2"]
+        P2["Partition 2<br>Offset: 0→1→2→3→4"]
     end
 
     subgraph Brokers["Kafka Cluster (물리적 저장)"]

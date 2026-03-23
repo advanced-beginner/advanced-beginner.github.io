@@ -21,8 +21,8 @@ Producer 성능 최적화는 세 가지 요소의 균형을 맞추는 작업입�
 
 ```mermaid
 flowchart TB
-    T[처리량<br/>Throughput] <--> L[지연 시간<br/>Latency]
-    L <--> D[안정성<br/>Durability]
+    T[처리량<br>Throughput] <--> L[지연 시간<br>Latency]
+    L <--> D[안정성<br>Durability]
     D <--> T
 
     style T fill:#e1f5fe
@@ -251,7 +251,7 @@ sequenceDiagram
     Note over P: ACK 못 받음, 재시도
 
     P->>B: 메시지 재전송 (seq=1)
-    Note over B: seq=1 이미 있음<br/>중복 무시
+    Note over B: seq=1 이미 있음<br>중복 무시
     B-->>P: ACK
 ```
 

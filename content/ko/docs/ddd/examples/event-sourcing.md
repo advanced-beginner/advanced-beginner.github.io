@@ -33,12 +33,12 @@ Event Sourcing 패턴을 실제 주문 도메인에 구현합니다. 상태 대�
 flowchart LR
     subgraph Traditional["기존 방식: 상태 저장"]
         T1[Order] --> T2[(DB)]
-        T2 --> T3["status: CONFIRMED<br/>amount: 50000"]
+        T2 --> T3["status: CONFIRMED<br>amount: 50000"]
     end
 
     subgraph ES["Event Sourcing: 이벤트 저장"]
         E1[Order] --> E2[(Event Store)]
-        E2 --> E3["1. OrderCreated<br/>2. ItemAdded<br/>3. OrderConfirmed"]
+        E2 --> E3["1. OrderCreated<br>2. ItemAdded<br>3. OrderConfirmed"]
     end
 ```
 

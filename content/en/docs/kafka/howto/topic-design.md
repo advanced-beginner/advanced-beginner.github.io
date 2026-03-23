@@ -156,10 +156,10 @@ When messages concentrate on specific keys, only that partition becomes overload
 ```mermaid
 flowchart TB
     subgraph Problem["Problem: Hot Partition"]
-        K1["Key: user-A"] --> P0["Partition 0<br/>80% load"]
+        K1["Key: user-A"] --> P0["Partition 0<br>80% load"]
         K2["Key: user-B"] --> P0
-        K3["Key: user-C"] --> P1["Partition 1<br/>10% load"]
-        K4["Key: user-D"] --> P2["Partition 2<br/>10% load"]
+        K3["Key: user-C"] --> P1["Partition 1<br>10% load"]
+        K4["Key: user-D"] --> P2["Partition 2<br>10% load"]
     end
 ```
 
@@ -331,14 +331,14 @@ flowchart TB
     Start[Start Topic Design] --> N[1. Decide Naming]
     N --> Q1{Need Ordering?}
 
-    Q1 -->|Yes| P1[Key-based Partitioning<br/>Partitions = Consumer count]
-    Q1 -->|No| P2[Round Robin<br/>Partitions = Throughput-based]
+    Q1 -->|Yes| P1[Key-based Partitioning<br>Partitions = Consumer count]
+    Q1 -->|No| P2[Round Robin<br>Partitions = Throughput-based]
 
     P1 --> R[2. Decide Replication Factor]
     P2 --> R
 
     R --> Q2{Production Environment?}
-    Q2 -->|Yes| R1[replication-factor=3<br/>min.insync.replicas=2]
+    Q2 -->|Yes| R1[replication-factor=3<br>min.insync.replicas=2]
     Q2 -->|No| R2[replication-factor=1]
 
     R1 --> RT[3. Decide Retention Policy]
@@ -346,7 +346,7 @@ flowchart TB
 
     RT --> Q3{Need State Storage?}
     Q3 -->|Yes| RT1[cleanup.policy=compact]
-    Q3 -->|No| RT2[cleanup.policy=delete<br/>Set retention.ms]
+    Q3 -->|No| RT2[cleanup.policy=delete<br>Set retention.ms]
 
     RT1 --> End[Create Topic]
     RT2 --> End

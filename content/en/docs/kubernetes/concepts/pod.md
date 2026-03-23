@@ -31,7 +31,7 @@ flowchart TB
         C1 --- V
         C2 --- V
     end
-    NET[Shared Network<br/>localhost communication]
+    NET[Shared Network<br>localhost communication]
     Pod --- NET
 ```
 
@@ -69,7 +69,7 @@ Pods are used to **manage tightly coupled containers as a single unit**.
 ```mermaid
 flowchart LR
     subgraph Pod
-        App[Web App<br/>:8080]
+        App[Web App<br>:8080]
         Log[Log Collector]
         V[(Log Volume)]
         App -->|write logs| V
@@ -249,11 +249,11 @@ Each Pod is assigned a unique IP within the cluster.
 ```mermaid
 flowchart LR
     subgraph Node1
-        P1[Pod A<br/>10.244.1.5]
-        P2[Pod B<br/>10.244.1.6]
+        P1[Pod A<br>10.244.1.5]
+        P2[Pod B<br>10.244.1.6]
     end
     subgraph Node2
-        P3[Pod C<br/>10.244.2.3]
+        P3[Pod C<br>10.244.2.3]
     end
     P1 <-->|direct communication| P3
     P1 <-->|localhost unavailable| P2

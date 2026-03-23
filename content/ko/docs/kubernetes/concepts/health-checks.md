@@ -56,9 +56,9 @@ author:
 ```mermaid
 flowchart TB
     subgraph Probes
-        LP[Liveness Probe<br/>죽었니?]
-        RP[Readiness Probe<br/>준비됐니?]
-        SP[Startup Probe<br/>시작됐니?]
+        LP[Liveness Probe<br>죽었니?]
+        RP[Readiness Probe<br>준비됐니?]
+        SP[Startup Probe<br>시작됐니?]
     end
 
     LP -->|실패| RESTART[컨테이너 재시작]

@@ -33,7 +33,7 @@ flowchart LR
         H2 --> H3[Pod]
     end
     subgraph Vertical[Vertical Scaling]
-        V1[Pod<br/>256Mi] --> V2[Pod<br/>512Mi]
+        V1[Pod<br>256Mi] --> V2[Pod<br>512Mi]
     end
 ```
 

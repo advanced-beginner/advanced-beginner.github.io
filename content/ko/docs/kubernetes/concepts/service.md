@@ -44,10 +44,10 @@ Pod IP는 Pod가 재생성될 때마다 변경됩니다. 이런 상황에서 어
 ```mermaid
 flowchart LR
     subgraph Before[재시작 전]
-        P1[Pod<br/>10.244.1.5]
+        P1[Pod<br>10.244.1.5]
     end
     subgraph After[재시작 후]
-        P2[Pod<br/>10.244.1.9]
+        P2[Pod<br>10.244.1.9]
     end
     Before -->|IP 변경!| After
 ```
@@ -67,10 +67,10 @@ Service는 label selector로 Pod를 찾고, 해당 Pod들로 트래픽을 분산
 
 ```mermaid
 flowchart LR
-    Client[클라이언트] -->|my-service:80| SVC[Service<br/>10.96.100.5]
-    SVC -->|로드밸런싱| P1[Pod 1<br/>10.244.1.5]
-    SVC --> P2[Pod 2<br/>10.244.1.6]
-    SVC --> P3[Pod 3<br/>10.244.2.3]
+    Client[클라이언트] -->|my-service:80| SVC[Service<br>10.96.100.5]
+    SVC -->|로드밸런싱| P1[Pod 1<br>10.244.1.5]
+    SVC --> P2[Pod 2<br>10.244.1.6]
+    SVC --> P3[Pod 3<br>10.244.2.3]
 ```
 
 Service와 Pod의 연결 과정은 다음과 같습니다.
@@ -107,7 +107,7 @@ spec:
 ```mermaid
 flowchart LR
     subgraph Cluster
-        Pod1[다른 Pod] -->|my-service:80| SVC[Service<br/>ClusterIP]
+        Pod1[다른 Pod] -->|my-service:80| SVC[Service<br>ClusterIP]
         SVC --> Target[대상 Pod]
     end
     External[외부] -.-x|접근 불가| SVC

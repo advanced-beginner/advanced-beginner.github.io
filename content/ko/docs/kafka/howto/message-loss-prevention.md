@@ -252,11 +252,11 @@ flowchart TB
         F2[Follower 2]
     end
 
-    P[Producer<br/>acks=all] -->|"min.insync.replicas=2"| L
+    P[Producer<br>acks=all] -->|"min.insync.replicas=2"| L
     L --> F1
     L --> F2
 
-    Note["Leader + 1개 이상의 Follower가<br/>동기화되어야 쓰기 허용"]
+    Note["Leader + 1개 이상의 Follower가<br>동기화되어야 쓰기 허용"]
 ```
 
 *다이어그램: min.insync.replicas=2는 최소 2개의 복제본이 동기화되어야 메시지를 수락합니다.*

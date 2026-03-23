@@ -252,11 +252,11 @@ flowchart TB
         F2[Follower 2]
     end
 
-    P[Producer<br/>acks=all] -->|"min.insync.replicas=2"| L
+    P[Producer<br>acks=all] -->|"min.insync.replicas=2"| L
     L --> F1
     L --> F2
 
-    Note["Leader + at least 1 Follower<br/>must be synchronized for writes"]
+    Note["Leader + at least 1 Follower<br>must be synchronized for writes"]
 ```
 
 *Diagram: min.insync.replicas=2 requires at least 2 replicas to be synchronized before accepting messages.*

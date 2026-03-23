@@ -30,11 +30,11 @@ Kubernetes networking follows three basic principles.
 ```mermaid
 flowchart TB
     subgraph Node1[Node 1]
-        P1[Pod A<br/>10.244.1.5]
-        P2[Pod B<br/>10.244.1.6]
+        P1[Pod A<br>10.244.1.5]
+        P2[Pod B<br>10.244.1.6]
     end
     subgraph Node2[Node 2]
-        P3[Pod C<br/>10.244.2.3]
+        P3[Pod C<br>10.244.2.3]
     end
     P1 <-->|direct communication| P2
     P1 <-->|cross-node communication| P3
@@ -93,18 +93,18 @@ Let's examine step by step how HTTP requests from outside reach Pods.
 ```mermaid
 flowchart TB
     subgraph External[External]
-        User[User<br/>api.example.com/users]
+        User[User<br>api.example.com/users]
     end
 
     subgraph Cluster[Kubernetes Cluster]
         subgraph Ingress[Ingress Layer]
-            LB[LoadBalancer<br/>External IP]
-            IC[Ingress Controller<br/>NGINX]
+            LB[LoadBalancer<br>External IP]
+            IC[Ingress Controller<br>NGINX]
             ING[Ingress Rules]
         end
 
         subgraph Services[Service Layer]
-            SVC[user-service<br/>ClusterIP]
+            SVC[user-service<br>ClusterIP]
         end
 
         subgraph Pods[Pod Layer]
