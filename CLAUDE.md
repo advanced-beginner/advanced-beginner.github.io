@@ -44,8 +44,13 @@ curl -X POST "http://localhost:8080/send?message=Hello"
 ```
 content/ko/           # 한글 문서 (메인 콘텐츠)
 └── docs/             # hugo-book 테마용 문서 섹션
-    ├── kafka/        # Kafka 가이드 (20개 문서)
-    └── ddd/          # DDD 가이드 (19개 문서)
+    ├── kafka/        # Kafka 가이드
+    ├── ddd/          # DDD 가이드
+    ├── kubernetes/   # Kubernetes 가이드
+    ├── elasticsearch/ # Elasticsearch 가이드
+    ├── scala/        # Scala 가이드
+    ├── spark/        # Spark 가이드
+    └── observability/ # Observability 가이드
 examples/             # Spring Boot Kafka 예제
 ├── quick-start/      # 최소 설정 예제
 └── order-system/     # 도메인 주도 설계 예제
@@ -53,6 +58,7 @@ docker/               # Kafka Docker Compose (KRaft, Zookeeper 없음)
 docs/                 # 프로젝트 문서 (PRD, 아키텍처)
 themes/               # Hugo 테마 (git submodule)
 layouts/partials/     # SEO, GTM, Mermaid 커스텀 설정 (docs/inject/)
+EVALUATION.md         # 문서 품질 평가 프레임워크 (Diátaxis 기반, v2.2)
 ```
 
 ### 콘텐츠 구성
@@ -130,9 +136,10 @@ BMad 에이전트 호출: `/BMad:agents:<agent-name>`
 열고 닫는 태그 쌍 확인:
 
 ```markdown
-{{< callout type="info" >}}...{{< /callout >}}   ✅
-{{% notice style="tip" %}}...{{% /notice %}}     ✅
-{{< tabs >}}...{{< /tabs >}}                      ✅
+{{< callout type="info" >}}...{{< /callout >}}                 ✅
+{{< callout type="warning" title="제목" >}}...{{< /callout >}} ✅ (title 속성 지원)
+{{< tabs >}}...{{< /tabs >}}                                    ✅
+{{% notice style="tip" %}}...{{% /notice %}}                   ❌ (callout으로 통일)
 ```
 
 ### Hugo 링크
@@ -195,5 +202,6 @@ A["Line1<br>Line2"]
 
 ### 스타일
 
-- 색상 스타일 (`style`, `fill`, `stroke`) 사용 자제 (테마 호환성)
+- 색상 스타일 (`style`, `fill`, `stroke`) 사용 금지 (테마 호환성)
+- `classDef`로 정의된 색상 클래스도 동일하게 금지
 - 단순 나열형 다이어그램은 텍스트로 대체 권장
