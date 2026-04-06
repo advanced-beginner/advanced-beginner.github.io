@@ -8,6 +8,8 @@ author:
   github: advanced-beginner
 ---
 
+**예상 소요 시간**: 전체 읽기 약 10분, 필요한 용어만 검색하면 1~2분
+
 Spark에서 사용되는 주요 용어와 개념을 정리합니다. 각 용어에서 관련 문서로 이동할 수 있습니다.
 
 {{< callout type="tip" title="TL;DR" >}}

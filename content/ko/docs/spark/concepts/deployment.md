@@ -213,7 +213,7 @@ spark.dynamicAllocation.schedulerBacklogTimeout=1s
 spark.dynamicAllocation.sustainedSchedulerBacklogTimeout=5s
 spark.dynamicAllocation.executorIdleTimeout=60s
 
-# 외부 셔플 서비스 필요
+# 외부 셔플 서비스 필요 — 동적 할당으로 Executor가 제거될 때 셔플 데이터가 유실되지 않도록 별도의 셔플 서비스가 데이터를 보존합니다
 spark.shuffle.service.enabled=true
 ```
 
@@ -333,6 +333,8 @@ spark-submit \
 
 ## Fat JAR 생성
 
+Fat JAR은 애플리케이션 코드와 모든 의존성 라이브러리를 하나의 JAR 파일로 패키징한 것입니다. 클러스터의 각 노드에는 사용자 라이브러리가 설치되어 있지 않으므로, 모든 의존성을 포함한 단일 JAR로 배포해야 합니다.
+
 **Gradle (Shadow Plugin)**
 
 ```groovy
@@ -343,7 +345,7 @@ plugins {
 }
 
 dependencies {
-    implementation 'org.apache.spark:spark-sql_2.13:3.5.1'
+    implementation 'org.apache.spark:spark-sql_2.13:3.5.1'  // 2.13은 Scala 버전으로, Spark가 Scala로 빌드되어 필요합니다
     // provided로 지정하면 Fat JAR에서 제외
     compileOnly 'org.apache.spark:spark-core_2.13:3.5.1'
 }

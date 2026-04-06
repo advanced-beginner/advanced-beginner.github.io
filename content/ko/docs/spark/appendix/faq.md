@@ -8,6 +8,8 @@ author:
   github: advanced-beginner
 ---
 
+**예상 소요 시간**: 전체 읽기 약 15분, 특정 질문만 검색하면 2~3분
+
 자주 묻는 질문과 흔히 발생하는 문제의 해결 방법을 제공합니다.
 
 {{< callout type="tip" title="TL;DR" >}}
@@ -361,6 +363,10 @@ List<Employee> employees = df.as(encoder).collectAsList();
 {{< /callout >}}
 
 ## Spark UI 활용 디버깅 가이드
+
+{{< callout type="tip" >}}
+Spark UI를 탭별로 체계적으로 분석하는 방법은 [Spark UI 읽는 법](../howto/spark-ui-guide/)에서 Step-by-Step으로 설명합니다. 아래는 빠른 참조용 요약입니다.
+{{< /callout >}}
 
 Spark 성능 문제 해결의 핵심은 Spark UI를 체계적으로 분석하는 것입니다.
 

@@ -331,6 +331,10 @@ root
 
 ## 프로덕션 수준 코드
 
+{{< callout type="info" title="심화 내용" >}}
+이 섹션은 프로덕션 환경을 위한 고급 패턴입니다. Quick Start 학습 목적이라면 건너뛰어도 됩니다.
+{{< /callout >}}
+
 실제 운영 환경에서는 예외 처리와 리소스 정리가 필수입니다:
 
 ```java
@@ -471,7 +475,7 @@ employees.filter(col("salary").geq(5000))
 ```
 
 - Java의 Stream API와 유사하지만, 분산 처리됨
-- `filter`, `select`, `groupBy` 등은 **Transformation** — 지연 평가됨
+- `filter`, `select`, `groupBy` 등은 **Transformation** — 지연 평가됨 (즉시 실행하지 않고, Action이 호출될 때 모아서 한번에 처리합니다)
 - `show`, `collect`, `count` 등은 **Action** — 실제 연산 수행
 
 **4. SQL 사용**

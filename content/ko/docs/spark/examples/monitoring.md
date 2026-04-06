@@ -113,6 +113,10 @@ SparkSession spark = SparkSession.builder()
 
 ## Prometheus + Grafana 연동
 
+{{< callout type="info" >}}
+Prometheus와 Grafana가 설치되어 있지 않다면 이 섹션을 건너뛰어도 됩니다. Spark UI만으로도 기본 모니터링이 충분합니다.
+{{< /callout >}}
+
 **1. Prometheus 메트릭 설정**
 
 `metrics.properties` 파일을 생성합니다:
@@ -186,7 +190,7 @@ rate(spark_executor_completedTasks_total{app_name="$app"}[5m]) * 100
 - **PrometheusServlet**: 내장 Sink로 /metrics/prometheus 엔드포인트 제공
 - **scrape_interval**: 15초 권장 (너무 짧으면 오버헤드 증가)
 - **주요 메트릭**: 메모리 사용률, GC 시간, Shuffle 바이트, Task 실패율
-- **PromQL**: rate(), increase() 함수로 시계열 분석
+- **PromQL**: rate()(초당 변화율), increase()(기간 내 증가량) 함수로 시계열 분석
 {{< /callout >}}
 
 ## 커스텀 메트릭 구현
@@ -195,7 +199,7 @@ rate(spark_executor_completedTasks_total{app_name="$app"}[5m]) * 100
 
 ```java
 import org.apache.spark.sql.SparkSession;
-import com.codahale.metrics.*;
+import com.codahale.metrics.*;  // Dropwizard Metrics (Spark 내부에서 사용하는 메트릭 수집 라이브러리)
 import org.apache.spark.metrics.source.Source;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -439,6 +443,8 @@ public class StructuredLoggingExample {
 ## 알림 설정
 
 **Grafana Alert Rules (YAML)**
+
+> **참고:** 기본 알림은 Grafana UI에서도 설정할 수 있습니다. 아래 YAML은 코드로 알림 규칙을 관리할 때 사용합니다.
 
 ```yaml
 # grafana-alerts.yml

@@ -24,6 +24,20 @@ author:
 
 **소요 시간**: 약 25-30분
 
+{{< callout type="info" title="ML 기초 5분 요약 — Java 개발자를 위한 최소 배경지식" >}}
+머신러닝(ML)이 처음이라면 아래 핵심 개념을 먼저 이해하세요:
+
+- **머신러닝이란?** 데이터(입력)를 모델에 넣으면 예측(출력)을 반환하는 구조입니다. 규칙을 사람이 작성하는 대신, 데이터에서 규칙을 자동으로 발견합니다.
+- **특성(Feature)이란?** 모델에 입력되는 개별 데이터 항목입니다. 예: 고객의 나이, 월 결제액, 가입 기간 등. Java 객체의 필드와 유사합니다.
+- **학습(Training)이란?** 과거 데이터로 모델의 규칙(파라미터)을 자동으로 찾아가는 과정입니다. `estimator.fit(data)`가 이에 해당합니다.
+- **분류 vs 회귀**: 결과가 범주(예/아니오)이면 분류, 숫자(가격, 점수)이면 회귀입니다.
+
+더 깊이 학습하려면:
+- [Google ML Crash Course](https://developers.google.com/machine-learning/crash-course) (무료, 한글 자막)
+- [scikit-learn 튜토리얼](https://scikit-learn.org/stable/tutorial/) (Python이지만 ML 개념 이해에 유용)
+- [StatQuest YouTube 채널](https://www.youtube.com/c/joshstarmer) (시각적 설명)
+{{< /callout >}}
+
 ---
 
 MLlib은 Spark의 분산 머신러닝 라이브러리입니다. 대규모 데이터셋에서 머신러닝 모델을 학습하고 예측할 수 있습니다.
@@ -139,7 +153,7 @@ LogisticRegressionModel loadedModel = LogisticRegressionModel.load("models/logis
 
 **VectorAssembler**
 
-여러 컬럼을 하나의 특성 벡터로 결합:
+ML 모델은 숫자 배열(벡터)만 입력받을 수 있습니다. VectorAssembler는 여러 컬럼(나이, 소득, 점수 등)을 하나의 숫자 배열로 합쳐서 모델이 이해할 수 있는 형태로 만듭니다:
 
 ```java
 VectorAssembler assembler = new VectorAssembler()
@@ -266,9 +280,9 @@ PipelineModel loadedModel = PipelineModel.load("models/pipeline");
 ```java
 LogisticRegression lr = new LogisticRegression()
         .setMaxIter(100)
-        .setRegParam(0.1)
-        .setElasticNetParam(0.8)  // L1/L2 비율
-        .setFamily("multinomial");  // 다중 클래스
+        .setRegParam(0.1)            // 규제 강도: 과적합 방지 (값이 클수록 규제 강함)
+        .setElasticNetParam(0.8)     // L1/L2 비율: 0=L2(Ridge), 1=L1(Lasso), 중간=혼합
+        .setFamily("multinomial");   // 다중 클래스
 
 LogisticRegressionModel model = lr.fit(training);
 
@@ -326,8 +340,8 @@ GBTClassificationModel model = gbt.fit(training);
 ```java
 LinearRegression lr = new LinearRegression()
         .setMaxIter(100)
-        .setRegParam(0.1)
-        .setElasticNetParam(0.5);
+        .setRegParam(0.1)            // 규제 강도: 과적합 방지 (0이면 규제 없음)
+        .setElasticNetParam(0.5);    // L1/L2 비율: 0=Ridge, 1=Lasso, 0.5=절반씩 혼합
 
 LinearRegressionModel model = lr.fit(training);
 
@@ -379,9 +393,23 @@ double cost = model.summary().trainingCost();
 ```java
 // Spark MLlib에는 Isolation Forest가 없음
 // 대안: K-Means 기반 거리 계산
-Dataset<Row> withDistance = predictions
-    .withColumn("distanceToCenter", calculateDistance(col("features"), col("prediction")));
 
+// calculateDistance는 직접 구현이 필요합니다.
+// 아래는 UDF(사용자 정의 함수)로 유클리드 거리를 계산하는 예시입니다:
+UserDefinedFunction distanceUdf = udf((Vector features, int clusterId) -> {
+    Vector center = model.clusterCenters()[clusterId];
+    double sum = 0.0;
+    for (int i = 0; i < features.size(); i++) {
+        double diff = features.apply(i) - center.apply(i);
+        sum += diff * diff;
+    }
+    return Math.sqrt(sum);
+}, DataTypes.DoubleType);
+
+Dataset<Row> withDistance = predictions
+    .withColumn("distanceToCenter", distanceUdf.apply(col("features"), col("prediction")));
+
+double threshold = 10.0;  // 비즈니스 요구에 맞게 조정
 Dataset<Row> anomalies = withDistance
     .filter(col("distanceToCenter").gt(threshold));
 ```
@@ -479,6 +507,17 @@ TrainValidationSplitModel tvsModel = tvs.fit(training);
 
 ## 실전 예제: 고객 이탈 예측
 
+{{< callout type="info" title="전체 파이프라인 한눈에 보기" >}}
+1. **데이터 로드**: CSV에서 고객 데이터 읽기
+2. **레이블 인덱싱**: "churned" 문자열을 숫자(0/1)로 변환
+3. **범주형 인코딩**: gender, region, plan_type → 숫자 인덱스 → 원-핫 벡터
+4. **특성 결합**: 수치형 컬럼 + 인코딩된 컬럼 → 하나의 벡터
+5. **정규화**: 특성 값 범위를 통일 (StandardScaler)
+6. **학습**: RandomForest로 이탈 패턴 학습
+7. **튜닝**: CrossValidator로 최적 하이퍼파라미터 탐색
+8. **평가**: AUC로 모델 성능 측정
+{{< /callout >}}
+
 ```java
 public class ChurnPrediction {
     public static void main(String[] args) {
@@ -487,18 +526,18 @@ public class ChurnPrediction {
                 .master("local[*]")
                 .getOrCreate();
 
-        // 데이터 로드
+        // Step 1: 데이터 로드
         Dataset<Row> data = spark.read()
                 .option("header", "true")
                 .option("inferSchema", "true")
                 .csv("customer_data.csv");
 
-        // 레이블 인덱싱
+        // Step 2: 레이블 인덱싱 — "Yes"/"No"를 1/0 숫자로 변환
         StringIndexer labelIndexer = new StringIndexer()
                 .setInputCol("churned")
                 .setOutputCol("label");
 
-        // 범주형 컬럼 인코딩
+        // Step 3: 범주형 컬럼 인코딩 — 문자열을 ML 모델이 이해할 수 있는 숫자로 변환
         String[] categoricalCols = {"gender", "region", "plan_type"};
         StringIndexer[] indexers = new StringIndexer[categoricalCols.length];
         OneHotEncoder[] encoders = new OneHotEncoder[categoricalCols.length];
@@ -512,7 +551,7 @@ public class ChurnPrediction {
                     .setOutputCols(new String[]{categoricalCols[i] + "_vec"});
         }
 
-        // 수치형 + 인코딩된 컬럼 결합
+        // Step 4: 수치형 + 인코딩된 컬럼을 하나의 벡터로 결합
         String[] numericCols = {"age", "tenure", "monthly_charges", "total_charges"};
         String[] encodedCols = {"gender_vec", "region_vec", "plan_type_vec"};
         String[] allFeatureCols = Stream.concat(
@@ -525,14 +564,14 @@ public class ChurnPrediction {
                 .setOutputCol("rawFeatures")
                 .setHandleInvalid("skip");
 
-        // 정규화
+        // Step 5: 정규화 — 나이(20~80)와 요금(10~300) 등 범위가 다른 값을 동일 스케일로 변환
         StandardScaler scaler = new StandardScaler()
                 .setInputCol("rawFeatures")
                 .setOutputCol("features")
                 .setWithStd(true)
                 .setWithMean(true);
 
-        // 분류기
+        // Step 6: 분류기 — 100개 결정 트리의 다수결로 이탈 여부 예측
         RandomForestClassifier rf = new RandomForestClassifier()
                 .setLabelCol("label")
                 .setFeaturesCol("features")
@@ -555,7 +594,7 @@ public class ChurnPrediction {
         Dataset<Row> training = splits[0];
         Dataset<Row> test = splits[1];
 
-        // 하이퍼파라미터 튜닝
+        // Step 7: 하이퍼파라미터 튜닝 — 트리 개수, 깊이 조합을 3-fold 교차검증으로 실험
         ParamMap[] paramGrid = new ParamGridBuilder()
                 .addGrid(rf.numTrees(), new int[]{50, 100, 150})
                 .addGrid(rf.maxDepth(), new int[]{5, 10, 15})
@@ -571,7 +610,7 @@ public class ChurnPrediction {
         // 학습
         CrossValidatorModel cvModel = cv.fit(training);
 
-        // 평가
+        // Step 8: 평가 — AUC(Area Under ROC Curve)로 모델 성능 측정 (1.0에 가까울수록 우수)
         Dataset<Row> predictions = cvModel.transform(test);
 
         BinaryClassificationEvaluator evaluator = new BinaryClassificationEvaluator();

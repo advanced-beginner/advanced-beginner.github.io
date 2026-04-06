@@ -70,7 +70,7 @@ Spark 애플리케이션이 어떻게 분산 환경에서 실행되는지 이해
 수천 대 서버 클러스터에서는 일부 노드 장애가 일상입니다:
 - DAG(실행 계획)가 있으므로 장애 시 해당 부분만 재계산
 - Driver가 Executor 상태를 추적하여 실패 Task 재시도
-- 데이터(RDD)가 아닌 **계산 방법(Lineage)**을 저장하여 복구
+- 데이터(RDD)가 아닌 **계산 방법(Lineage — 데이터의 변환 이력을 추적하는 계보 정보)**을 저장하여 복구
 
 **왜 Unified Memory인가?**
 
@@ -477,6 +477,10 @@ Executor 메모리: 8GB
 └── User Memory: (8GB - 300MB) × 0.4 = 3.1GB
 ```
 
+{{< callout type="info" title="심화 내용" >}}
+이 섹션은 고급 주제입니다. 처음 읽을 때는 건너뛰고, 성능 튜닝이 필요할 때 돌아오세요.
+{{< /callout >}}
+
 **Off-Heap 메모리**
 
 GC 영향을 줄이기 위해 JVM 힙 외부 메모리 사용:
@@ -491,7 +495,7 @@ SparkSession spark = SparkSession.builder()
 **Off-Heap 장점:**
 - GC 대상에서 제외되어 Stop-the-World 감소
 - 대용량 캐시에 효과적
-- Tungsten 메모리 관리와 통합
+- Tungsten(Spark 내부의 메모리/CPU 최적화 엔진) 메모리 관리와 통합
 
 **메모리 관련 트러블슈팅**
 

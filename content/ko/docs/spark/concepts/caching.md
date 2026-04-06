@@ -164,7 +164,7 @@ df.persist(StorageLevel.MEMORY_AND_DISK_2());
 | MEMORY_ONLY_SER | O | X | O | 1 | 메모리 절약, CPU 사용 |
 | MEMORY_AND_DISK_SER | O | O | O | 1 | 메모리 절약 + 디스크 백업 |
 | DISK_ONLY | X | O | O | 1 | 메모리 사용 안 함 |
-| OFF_HEAP | X (off-heap) | X | O | 1 | GC 영향 없음 |
+| OFF_HEAP | X (off-heap) | X | O | 1 | JVM 힙 외부 메모리 사용, GC 부담 경감 |
 | *_2 | - | - | - | 2 | 복제본 2개 |
 
 **어떤 레벨을 선택할까?**

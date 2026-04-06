@@ -251,7 +251,7 @@ JavaRDD<String> uniqueWords = words.distinct();
 
 ```java
 import org.apache.spark.api.java.JavaPairRDD;
-import scala.Tuple2;
+import scala.Tuple2;  // Spark가 Scala로 작성되어 Pair 데이터에 Scala의 Tuple2 타입을 사용합니다
 
 // 단어 빈도 계산 예제
 JavaRDD<String> words = lines.flatMap(
@@ -367,11 +367,12 @@ Integer sum = numbers.reduce(Integer::sum);  // 15
 Integer sumWithInit = numbers.fold(10, Integer::sum);  // 25
 
 // aggregate: 타입이 다른 집계 (복잡한 집계에 사용)
+// 2단계 흐름: (1) seqOp — 각 파티션 내에서 합산, (2) combOp — 파티션 간 결과 합산
 // 평균 계산 예제: (합계, 개수) 쌍으로 집계
 Tuple2<Integer, Integer> sumAndCount = numbers.aggregate(
     new Tuple2<>(0, 0),  // 초기값
-    (acc, n) -> new Tuple2<>(acc._1 + n, acc._2 + 1),  // seqOp
-    (acc1, acc2) -> new Tuple2<>(acc1._1 + acc2._1, acc1._2 + acc2._2)  // combOp
+    (acc, n) -> new Tuple2<>(acc._1 + n, acc._2 + 1),  // seqOp: 파티션 내 합산
+    (acc1, acc2) -> new Tuple2<>(acc1._1 + acc2._1, acc1._2 + acc2._2)  // combOp: 파티션 간 합산
 );
 double average = (double) sumAndCount._1 / sumAndCount._2;
 

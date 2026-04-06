@@ -656,7 +656,7 @@ public class NYCTaxiAnalysis {
                 .agg(
                     count("*").alias("trip_count"),
                     avg("total_amount").alias("avg_fare"),
-                    percentile_approx(col("trip_distance"), lit(0.5)).alias("median_distance")
+                    percentile_approx(col("trip_distance"), lit(0.5)).alias("median_distance")  // 근사 백분위수 계산 함수 (0.5 = 중앙값)
                 )
                 .orderBy(col("trip_count").desc())
                 .limit(20);
@@ -672,7 +672,7 @@ public class NYCTaxiAnalysis {
 
             double mean = fareStats.getDouble(0);
             double stddev = fareStats.getDouble(1);
-            double threshold = mean + (3 * stddev);  // 3-시그마 규칙
+            double threshold = mean + (3 * stddev);  // 3-시그마 규칙 (평균에서 표준편차의 3배 이상 벗어난 값을 이상치로 판별)
 
             Dataset<Row> outliers = taxiData
                 .filter(col("total_amount").gt(threshold)

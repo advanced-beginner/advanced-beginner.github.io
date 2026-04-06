@@ -66,7 +66,7 @@ df.filter(col("age").gt(30))
 | RDD | DataFrame |
 |-----|-----------|
 | 타입 정보만 있음 (Row) | 컬럼 이름 + 타입 정보 |
-| 최적화 정보 없음 | Predicate Pushdown, Column Pruning 가능 |
+| 최적화 정보 없음 | Predicate Pushdown(필터 조건을 데이터 소스 레벨로 내려보내 불필요한 데이터 읽기를 줄이는 최적화), Column Pruning(필요한 컬럼만 읽어 I/O를 줄이는 최적화) 가능 |
 | 바이트 단위 직렬화 | 컬럼 기반 효율적 저장 |
 
 스키마를 알면 **필요한 컬럼만 읽고(Column Pruning)**, **필터를 데이터 소스에 밀어넣어(Predicate Pushdown)** I/O를 줄일 수 있습니다.
@@ -76,7 +76,7 @@ df.filter(col("age").gt(30))
 | 특성 | DataFrame | Dataset |
 |------|-----------|---------|
 | 타입 안전성 | 런타임 에러 | 컴파일 타임 에러 |
-| 성능 | 최고 (Tungsten 최적화) | 직렬화 오버헤드 있음 |
+| 성능 | 최고 (Tungsten — Spark 내부의 메모리/CPU 최적화 엔진) | 직렬화 오버헤드 있음 |
 | 사용 편의성 | SQL 스타일, 간결 | 타입 명시 필요 |
 | 적합한 경우 | ETL, 동적 스키마 | 도메인 로직, 타입 검증 |
 
@@ -440,6 +440,10 @@ df.agg(
 ).show();
 ```
 
+{{< callout type="info" title="심화 내용" >}}
+Window 함수는 고급 주제입니다. 처음 읽을 때는 건너뛰고, 복잡한 집계나 순위 계산이 필요할 때 돌아오세요.
+{{< /callout >}}
+
 **Window 함수**
 
 ```java
@@ -761,7 +765,7 @@ Dataset<String> names = ds.map(
 
 **Scala:**
 ```scala
-case class Employee(name: String, age: Int, department: String)
+case class Employee(name: String, age: Int, department: String)  // Scala의 데이터 클래스로, Java의 Record와 유사합니다
 
 val ds = df.as[Employee]
 

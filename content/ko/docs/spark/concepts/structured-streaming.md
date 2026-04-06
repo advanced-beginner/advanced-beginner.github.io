@@ -20,7 +20,7 @@ author:
 **선수 지식**:
 - [DataFrame과 Dataset](dataframe-dataset/) API
 - Kafka 기본 개념 (선택 사항)
-- 이벤트 시간 vs 처리 시간 개념
+- 이벤트 시간 vs 처리 시간 개념 (이벤트 시간=사건이 실제 발생한 시각, 처리 시간=서버가 데이터를 수신한 시각)
 
 **소요 시간**: 약 25-30분
 
@@ -51,7 +51,7 @@ Spark가 스트림을 **무한 테이블**로 모델링한 이유가 있습니�
 ├── 레코드 단위 처리 (한 건씩)
 ├── 배치와 완전히 다른 API
 ├── 동일 로직을 두 번 구현 (배치용 + 스트림용)
-└── "Lambda 아키텍처" 복잡성
+└── "Lambda 아키텍처" 복잡성 (배치와 스트리밍을 별도로 구축하는 전통 패턴)
 ```
 
 **테이블 모델의 해결책**
@@ -347,14 +347,14 @@ Dataset<Row> slidingCounts = stream
 
 **Session Window (세션 윈도우)**
 
-활동 기반 동적 윈도우:
+활동 기반 동적 윈도우입니다. 사용자가 이벤트를 발생시키는 동안 세션이 유지되며, 지정한 시간(아래 예시에서는 5분) 동안 활동이 없으면 세션이 종료됩니다. 웹사이트 방문 세션 분석, 앱 사용 패턴 추적 등에 적합합니다:
 
 ```java
 // Spark 3.2+
 Dataset<Row> sessionCounts = stream
     .withWatermark("timestamp", "10 minutes")
     .groupBy(
-        session_window(col("timestamp"), "5 minutes"),  // 5분 비활성 시 세션 종료
+        session_window(col("timestamp"), "5 minutes"),  // 5분 동안 활동 없으면 세션 종료
         col("user_id")
     )
     .count();
@@ -405,15 +405,25 @@ spark.conf().set(
 spark.conf().set("spark.sql.streaming.stateStore.rocksdb.memory.mb", "256");
 ```
 
+### 커스텀 상태 관리
+
+`groupBy().agg()`는 합계, 평균 등 표준 집계만 가능합니다. 하지만 "사용자의 연속 로그인 일수 추적"이나 "세션 내 행동 패턴 분석"처럼 **복잡한 상태 로직**이 필요한 경우에는 `mapGroupsWithState` 또는 `flatMapGroupsWithState`를 사용합니다.
+
+이 API는 각 키(그룹)마다 직접 정의한 상태 객체를 유지하며, 새 데이터가 도착할 때마다 상태를 업데이트하는 함수를 작성할 수 있습니다. `mapGroupsWithState`는 그룹당 하나의 결과를, `flatMapGroupsWithState`는 여러 결과를 반환할 수 있습니다.
+
+{{< callout type="warning" title="심화 내용" >}}
+`mapGroupsWithState`와 `flatMapGroupsWithState`는 Structured Streaming의 가장 유연한 API이지만, 상태 크기 관리와 타임아웃 설정에 주의가 필요합니다. 표준 집계로 해결 가능하다면 `groupBy().agg()`를 먼저 고려하세요.
+{{< /callout >}}
+
 **상태 타임아웃**
 
 ```java
 // 그룹 상태에 타임아웃 설정 (mapGroupsWithState/flatMapGroupsWithState)
 .groupByKey(row -> row.getString(0), Encoders.STRING())
 .mapGroupsWithState(
-    mappingFunc,
-    Encoders.bean(State.class),
-    Encoders.bean(Output.class),
+    mappingFunc,                              // 상태 업데이트 함수
+    Encoders.bean(State.class),               // 상태 객체 인코더
+    Encoders.bean(Output.class),              // 출력 객체 인코더
     GroupStateTimeout.ProcessingTimeTimeout()  // 또는 EventTimeTimeout
 );
 ```
@@ -436,7 +446,7 @@ Dataset<Row> enriched = stream.join(
 
 **Stream-Stream 조인**
 
-두 스트림 조인 (워터마크 필수):
+두 스트림 조인 (워터마크 필수). 예를 들어, 광고 노출(impressions) 스트림과 클릭(clicks) 스트림을 매칭하여 "노출 후 1시간 내 클릭만" 유효 전환으로 집계할 수 있습니다:
 
 ```java
 Dataset<Row> impressions = spark.readStream()

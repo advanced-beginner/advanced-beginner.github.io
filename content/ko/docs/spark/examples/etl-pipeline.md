@@ -118,7 +118,7 @@ public abstract class AbstractEtlJob {
     }
 
     /**
-     * ETL 작업 실행 (템플릿 메서드 패턴)
+     * ETL 작업 실행 (템플릿 메서드 패턴: 전체 흐름은 부모 클래스가 정의하고, 세부 구현은 자식 클래스가 담당)
      */
     public final EtlResult execute() {
         String jobName = getJobName();
@@ -629,6 +629,8 @@ public class IncrementalEtlJob {
 
         // 중복 키 제거 (새 데이터 우선)
         Dataset<Row> merged = existing
+            // JavaConverters: Java 컬렉션을 Spark 내부의 Scala 컬렉션으로 변환
+            // (Spark API가 Scala Seq를 요구하기 때문에 필요)
             .join(updates.select(keyColumns), scala.collection.JavaConverters
                 .asScalaBuffer(java.util.Arrays.asList(keyColumns)).toSeq(), "left_anti")
             .union(updates);
@@ -658,7 +660,7 @@ public class IncrementalEtlJob {
 {{< callout type="info" title="핵심 포인트: 증분 ETL" >}}
 - **워터마크**: 마지막 처리 시점 기록으로 증분 데이터만 추출
 - **Upsert**: 기존 데이터 업데이트 + 신규 데이터 삽입 동시 처리
-- **left_anti 조인**: 기존 키 제외 후 신규 데이터와 병합
+- **left_anti 조인**: 왼쪽 테이블에만 있고 오른쪽에 없는 행만 선택하여 신규 데이터를 식별한 뒤 병합
 - **멱등성**: 동일 데이터 재처리해도 결과 동일하게 보장
 {{< /callout >}}
 

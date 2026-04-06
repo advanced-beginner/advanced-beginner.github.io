@@ -417,10 +417,12 @@ result.count();  // 이제 실행됨
 
 **2. foreach에서 Driver 변수 수정 불가**
 
+`foreach`는 Executor(별도 JVM)에서 실행되므로, Driver에서 정의한 변수에 직접 접근하거나 수정할 수 없습니다. 람다 내부의 변수는 직렬화되어 Executor로 복사되기 때문에, Driver의 원본 변수는 변경되지 않습니다.
+
 ```java
 // 잘못된 코드 - 동작 안 함!
 int[] counter = {0};
-df.foreach(row -> counter[0]++);  // Executor에서 실행됨
+df.foreach(row -> counter[0]++);  // Executor에서 실행됨 (별도 JVM의 복사본)
 System.out.println(counter[0]);   // 항상 0 출력
 
 // 올바른 방법

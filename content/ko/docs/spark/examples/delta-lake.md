@@ -59,6 +59,10 @@ flowchart LR
 
 *다이어그램 설명: 기존 Parquet은 파일들만 존재하지만, Delta Lake는 동일한 Parquet 파일들과 함께 _delta_log/ 디렉토리에 트랜잭션 로그(JSON)를 저장하여 ACID와 버전 관리를 지원*
 
+{{< callout type="info" title="트랜잭션 로그가 필요한 이유" >}}
+Parquet 파일만으로는 "누가 언제 어떤 파일을 추가/삭제했는지" 알 수 없습니다. Delta Lake의 `_delta_log/`는 모든 변경 사항을 JSON으로 기록하여, 동시에 여러 작업이 쓰기를 해도 데이터 일관성을 보장하고, 문제가 생기면 과거 시점으로 되돌릴 수 있게 합니다. 관계형 DB의 WAL(Write-Ahead Log)과 같은 역할입니다.
+{{< /callout >}}
+
 | 기능 | 설명 |
 |------|------|
 | **ACID 트랜잭션** | 원자적 쓰기, 동시성 제어 |
@@ -70,6 +74,27 @@ flowchart LR
 ---
 
 ## 환경 설정
+
+{{< tabs "build-config" >}}
+{{< tab "Gradle (Java)" >}}
+
+**build.gradle.kts**
+
+```kotlin
+plugins {
+    java
+    application
+}
+
+dependencies {
+    implementation("org.apache.spark:spark-core_2.13:3.5.1")
+    implementation("org.apache.spark:spark-sql_2.13:3.5.1")
+    implementation("io.delta:delta-spark_2.13:3.1.0")
+}
+```
+
+{{< /tab >}}
+{{< tab "sbt (Scala)" >}}
 
 **build.sbt**
 
@@ -87,7 +112,28 @@ lazy val root = (project in file("."))
   )
 ```
 
+{{< /tab >}}
+{{< /tabs >}}
+
 **SparkSession 설정**
+
+{{< tabs "spark-session" >}}
+{{< tab "Java" >}}
+
+```java
+import org.apache.spark.sql.SparkSession;
+
+SparkSession spark = SparkSession.builder()
+        .appName("Delta Lake Example")
+        .master("local[*]")
+        .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension")
+        .config("spark.sql.catalog.spark_catalog",
+                "org.apache.spark.sql.delta.catalog.DeltaCatalog")
+        .getOrCreate();
+```
+
+{{< /tab >}}
+{{< tab "Scala" >}}
 
 ```scala
 import org.apache.spark.sql.SparkSession
@@ -101,11 +147,15 @@ val spark = SparkSession.builder()
   .getOrCreate()
 ```
 
+{{< /tab >}}
+{{< /tabs >}}
+
 {{< callout type="info" title="핵심 포인트: 환경 설정" >}}
 - **spark-sql-extensions**: Delta Lake SQL 명령어 활성화
 - **spark_catalog**: Delta 테이블을 기본 카탈로그로 등록
 - **버전 호환성**: Spark 3.5.x와 Delta 3.1.x 조합 권장
 - **Scala 버전**: Spark와 동일한 Scala 버전(2.13) 사용 필수
+- **Java에서도 동일**: Delta Lake API는 Java/Scala 모두 `DeltaTable.forPath(spark, path)` 형태로 사용
 {{< /callout >}}
 
 ---
@@ -113,6 +163,49 @@ val spark = SparkSession.builder()
 ## 기본 CRUD 연산
 
 **Create: Delta 테이블 생성**
+
+{{< tabs "crud-create" >}}
+{{< tab "Java" >}}
+
+```java
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.RowFactory;
+import org.apache.spark.sql.types.*;
+import static org.apache.spark.sql.functions.*;
+
+// 스키마 정의
+StructType schema = new StructType()
+    .add("orderId", DataTypes.StringType)
+    .add("customerId", DataTypes.StringType)
+    .add("product", DataTypes.StringType)
+    .add("quantity", DataTypes.IntegerType)
+    .add("price", DataTypes.DoubleType)
+    .add("orderDate", DataTypes.StringType);
+
+// 데이터 생성
+List<Row> rows = Arrays.asList(
+    RowFactory.create("O001", "C1", "Laptop", 1, 1200.0, "2024-01-15"),
+    RowFactory.create("O002", "C2", "Phone", 2, 800.0, "2024-01-15"),
+    RowFactory.create("O003", "C1", "Tablet", 1, 500.0, "2024-01-16")
+);
+Dataset<Row> orders = spark.createDataFrame(rows, schema);
+
+// Delta 테이블로 저장
+orders.write()
+    .format("delta")
+    .mode("overwrite")
+    .save("/data/orders");
+
+// SQL로 테이블 생성
+spark.sql("CREATE TABLE IF NOT EXISTS orders ("
+    + "orderId STRING, customerId STRING, product STRING, "
+    + "quantity INT, price DOUBLE, orderDate DATE) "
+    + "USING DELTA LOCATION '/data/orders' PARTITIONED BY (orderDate)");
+```
+
+{{< /tab >}}
+{{< tab "Scala" >}}
 
 ```scala
 import io.delta.tables._
@@ -127,6 +220,8 @@ case class Order(
   orderDate: String
 )
 
+// Scala의 case class를 사용하면 스키마가 자동 추론됩니다
+// .toDF()는 import spark.implicits._ 가 필요합니다 (암시적 변환)
 val orders = Seq(
   Order("O001", "C1", "Laptop", 1, 1200.0, "2024-01-15"),
   Order("O002", "C2", "Phone", 2, 800.0, "2024-01-15"),
@@ -155,7 +250,33 @@ spark.sql("""
 """)
 ```
 
+{{< /tab >}}
+{{< /tabs >}}
+
+{{< callout type="info" >}}
+Scala 코드에서 `.toDF()`, `$"컬럼명"` 등의 문법은 `import spark.implicits._`가 필요한 Scala 전용 암시적 변환(implicit conversion)입니다. Java에서는 `col("컬럼명")` 또는 `functions.col()`을 사용합니다.
+{{< /callout >}}
+```
+
 **Read: 데이터 조회**
+
+{{< tabs "crud-read" >}}
+{{< tab "Java" >}}
+
+```java
+// DataFrame API
+Dataset<Row> df = spark.read().format("delta").load("/data/orders");
+df.show();
+
+// SQL
+spark.sql("SELECT * FROM delta.`/data/orders`").show();
+
+// 테이블로 등록 후 조회
+spark.sql("SELECT * FROM orders WHERE quantity > 1").show();
+```
+
+{{< /tab >}}
+{{< tab "Scala" >}}
 
 ```scala
 // DataFrame API
@@ -169,7 +290,33 @@ spark.sql("SELECT * FROM delta.`/data/orders`").show()
 spark.sql("SELECT * FROM orders WHERE quantity > 1").show()
 ```
 
+{{< /tab >}}
+{{< /tabs >}}
+
 **Update: 데이터 수정**
+
+{{< tabs "crud-update" >}}
+{{< tab "Java" >}}
+
+```java
+import io.delta.tables.DeltaTable;
+import java.util.HashMap;
+import java.util.Map;
+
+DeltaTable deltaTable = DeltaTable.forPath(spark, "/data/orders");
+
+// 조건부 업데이트
+Map<String, Column> set = new HashMap<>();
+set.put("quantity", lit(3));
+set.put("price", lit(750.0));
+deltaTable.update(expr("orderId = 'O002'"), set);
+
+// SQL로 업데이트
+spark.sql("UPDATE orders SET quantity = 3, price = 750.0 WHERE orderId = 'O002'");
+```
+
+{{< /tab >}}
+{{< tab "Scala" >}}
 
 ```scala
 import io.delta.tables.DeltaTable
@@ -193,7 +340,24 @@ spark.sql("""
 """)
 ```
 
+{{< /tab >}}
+{{< /tabs >}}
+
 **Delete: 데이터 삭제**
+
+{{< tabs "crud-delete" >}}
+{{< tab "Java" >}}
+
+```java
+// 조건부 삭제
+deltaTable.delete(expr("customerId = 'C2'"));
+
+// SQL로 삭제
+spark.sql("DELETE FROM orders WHERE customerId = 'C2'");
+```
+
+{{< /tab >}}
+{{< tab "Scala" >}}
 
 ```scala
 // 조건부 삭제
@@ -203,7 +367,31 @@ deltaTable.delete(expr("customerId = 'C2'"))
 spark.sql("DELETE FROM orders WHERE customerId = 'C2'")
 ```
 
+{{< /tab >}}
+{{< /tabs >}}
+
 **Merge (Upsert): 병합**
+
+{{< tabs "crud-merge" >}}
+{{< tab "Java" >}}
+
+```java
+// 새로운 주문 데이터 준비
+List<Row> newRows = Arrays.asList(
+    RowFactory.create("O002", "C2", "Phone", 5, 700.0, "2024-01-17"),  // 기존 주문 업데이트
+    RowFactory.create("O004", "C3", "Monitor", 2, 300.0, "2024-01-17") // 새 주문 삽입
+);
+Dataset<Row> newOrders = spark.createDataFrame(newRows, schema);
+
+deltaTable.as("target")
+    .merge(newOrders.as("source"), "target.orderId = source.orderId")
+    .whenMatched().updateAll()
+    .whenNotMatched().insertAll()
+    .execute();
+```
+
+{{< /tab >}}
+{{< tab "Scala" >}}
 
 ```scala
 val newOrders = Seq(
@@ -223,6 +411,9 @@ deltaTable.as("target")
   .execute()
 ```
 
+{{< /tab >}}
+{{< /tabs >}}
+
 {{< callout type="info" title="핵심 포인트: 기본 CRUD 연산" >}}
 - **MERGE (Upsert)**: 단일 트랜잭션으로 Insert + Update 처리
 - **조건부 Update/Delete**: `expr()` 또는 SQL WHERE 조건 사용
@@ -235,6 +426,30 @@ deltaTable.as("target")
 ## 시간 여행 (Time Travel)
 
 **버전별 조회**
+
+{{< tabs "time-travel-read" >}}
+{{< tab "Java" >}}
+
+```java
+// 특정 버전 조회
+Dataset<Row> version0 = spark.read()
+    .format("delta")
+    .option("versionAsOf", 0)
+    .load("/data/orders");
+
+// 특정 시점 조회
+Dataset<Row> asOf = spark.read()
+    .format("delta")
+    .option("timestampAsOf", "2024-01-16 10:00:00")
+    .load("/data/orders");
+
+// SQL로 조회
+spark.sql("SELECT * FROM orders VERSION AS OF 0").show();
+spark.sql("SELECT * FROM orders TIMESTAMP AS OF '2024-01-16 10:00:00'").show();
+```
+
+{{< /tab >}}
+{{< tab "Scala" >}}
 
 ```scala
 // 특정 버전 조회
@@ -259,11 +474,16 @@ spark.sql("""
 """).show()
 ```
 
+{{< /tab >}}
+{{< /tabs >}}
+
 **버전 히스토리 조회**
 
-```scala
-val history = deltaTable.history()
-history.select("version", "timestamp", "operation", "operationParameters").show(false)
+```java
+// Java와 Scala 모두 동일한 API
+deltaTable.history()
+    .select("version", "timestamp", "operation", "operationParameters")
+    .show(false);
 
 // 결과:
 // +-------+--------------------+---------+---------------------------+
@@ -278,15 +498,16 @@ history.select("version", "timestamp", "operation", "operationParameters").show(
 
 **버전 복원**
 
-```scala
+```java
+// Java와 Scala 모두 동일한 API
 // 이전 버전으로 복원
-deltaTable.restoreToVersion(1)
+deltaTable.restoreToVersion(1);
 
 // 특정 시점으로 복원
-deltaTable.restoreToTimestamp("2024-01-16 10:00:00")
+deltaTable.restoreToTimestamp("2024-01-16 10:00:00");
 
 // SQL로 복원
-spark.sql("RESTORE orders TO VERSION AS OF 1")
+spark.sql("RESTORE orders TO VERSION AS OF 1");
 ```
 
 {{< callout type="info" title="핵심 포인트: 시간 여행" >}}
@@ -302,6 +523,36 @@ spark.sql("RESTORE orders TO VERSION AS OF 1")
 
 **컬럼 추가**
 
+{{< tabs "schema-merge" >}}
+{{< tab "Java" >}}
+
+```java
+// 새 컬럼(status)이 있는 데이터
+StructType schemaWithStatus = new StructType()
+    .add("orderId", DataTypes.StringType)
+    .add("customerId", DataTypes.StringType)
+    .add("product", DataTypes.StringType)
+    .add("quantity", DataTypes.IntegerType)
+    .add("price", DataTypes.DoubleType)
+    .add("orderDate", DataTypes.StringType)
+    .add("status", DataTypes.StringType);
+
+Dataset<Row> ordersWithStatus = spark.createDataFrame(
+    Arrays.asList(RowFactory.create("O005", "C4", "Keyboard", 1, 100.0, "2024-01-18", "CONFIRMED")),
+    schemaWithStatus
+);
+
+// 스키마 자동 병합
+ordersWithStatus.write()
+    .format("delta")
+    .mode("append")
+    .option("mergeSchema", "true")
+    .save("/data/orders");
+```
+
+{{< /tab >}}
+{{< tab "Scala" >}}
+
 ```scala
 // 새 컬럼이 있는 데이터
 val ordersWithStatus = Seq(
@@ -316,15 +567,19 @@ ordersWithStatus.write
   .save("/data/orders")
 ```
 
+{{< /tab >}}
+{{< /tabs >}}
+
 **스키마 덮어쓰기**
 
-```scala
+```java
+// Java와 Scala 모두 동일한 API
 // 스키마 완전히 변경
-newSchema.write
-  .format("delta")
-  .mode("overwrite")
-  .option("overwriteSchema", "true")
-  .save("/data/orders")
+newSchema.write()
+    .format("delta")
+    .mode("overwrite")
+    .option("overwriteSchema", "true")
+    .save("/data/orders");
 ```
 
 {{< callout type="info" title="핵심 포인트: 스키마 진화" >}}
@@ -340,39 +595,40 @@ newSchema.write
 
 **Compaction (파일 병합)**
 
-```scala
+```java
+// Java와 Scala 모두 동일한 API
 // 작은 파일 병합
-deltaTable.optimize().executeCompaction()
+deltaTable.optimize().executeCompaction();
 
 // 특정 파티션만 최적화
 deltaTable.optimize()
-  .where("orderDate = '2024-01-15'")
-  .executeCompaction()
+    .where("orderDate = '2024-01-15'")
+    .executeCompaction();
 
 // SQL
-spark.sql("OPTIMIZE orders")
-spark.sql("OPTIMIZE orders WHERE orderDate = '2024-01-15'")
+spark.sql("OPTIMIZE orders");
+spark.sql("OPTIMIZE orders WHERE orderDate = '2024-01-15'");
 ```
 
 **Z-Order (데이터 클러스터링)**
 
-```scala
+```java
 // 자주 필터링하는 컬럼 기준 클러스터링
 deltaTable.optimize()
-  .executeZOrderBy("customerId", "product")
+    .executeZOrderBy("customerId", "product");
 
 // SQL
-spark.sql("OPTIMIZE orders ZORDER BY (customerId, product)")
+spark.sql("OPTIMIZE orders ZORDER BY (customerId, product)");
 ```
 
 **Vacuum (오래된 파일 정리)**
 
-```scala
+```java
 // 7일 이상 지난 버전 삭제
-deltaTable.vacuum(168)  // 168시간 = 7일
+deltaTable.vacuum(168);  // 168시간 = 7일
 
 // SQL
-spark.sql("VACUUM orders RETAIN 168 HOURS")
+spark.sql("VACUUM orders RETAIN 168 HOURS");
 
 // 주의: retention 기간 이전 버전은 시간 여행 불가
 ```
@@ -413,6 +669,42 @@ spark.sql("""
 
 **변경 사항 조회**
 
+{{< tabs "cdc-read" >}}
+{{< tab "Java" >}}
+
+```java
+// 버전 범위로 변경 조회
+Dataset<Row> changes = spark.read()
+    .format("delta")
+    .option("readChangeFeed", "true")
+    .option("startingVersion", 2)
+    .option("endingVersion", 5)
+    .table("orders");
+
+changes.show();
+// +-------+----------+-------+--------+-----+------------------+---------------+
+// |orderId|customerId|product|quantity|price|_change_type      |_commit_version|
+// +-------+----------+-------+--------+-----+------------------+---------------+
+// |O002   |C2        |Phone  |5       |700.0|update_postimage  |3              |
+// |O002   |C2        |Phone  |3       |750.0|update_preimage   |3              |
+// |O004   |C3        |Monitor|2       |300.0|insert            |3              |
+// +-------+----------+-------+--------+-----+------------------+---------------+
+
+// Streaming으로 변경 사항 수신
+Dataset<Row> changesStream = spark.readStream()
+    .format("delta")
+    .option("readChangeFeed", "true")
+    .option("startingVersion", 0)
+    .table("orders");
+
+changesStream.writeStream()
+    .format("console")
+    .start();
+```
+
+{{< /tab >}}
+{{< tab "Scala" >}}
+
 ```scala
 // 버전 범위로 변경 조회
 val changes = spark.read
@@ -443,6 +735,9 @@ changesStream.writeStream
   .start()
 ```
 
+{{< /tab >}}
+{{< /tabs >}}
+
 {{< callout type="info" title="핵심 포인트: Change Data Feed (CDC)" >}}
 - **활성화 필요**: `delta.enableChangeDataFeed = true` 테이블 속성
 - **변경 타입**: insert, update_preimage, update_postimage, delete
@@ -455,6 +750,92 @@ changesStream.writeStream
 ## 실전 예제: ETL 파이프라인
 
 **Bronze → Silver → Gold 아키텍처**
+
+데이터 레이크하우스에서 데이터 품질을 단계적으로 높이는 표준 패턴입니다:
+
+- **Bronze (원본)**: 외부 소스에서 받은 데이터를 가공 없이 그대로 저장합니다. 나중에 재처리가 가능하도록 원본을 보존합니다.
+- **Silver (정제)**: 중복 제거, 타입 변환, NULL 필터링 등 품질 검증을 거친 깨끗한 데이터입니다.
+- **Gold (비즈니스 집계)**: 리포팅과 대시보드에 바로 사용할 수 있는 집계 테이블입니다 (예: 일별 매출, 고객별 LTV).
+
+{{< tabs "etl-pipeline" >}}
+{{< tab "Java" >}}
+
+```java
+public class DeltaLakePipeline {
+    private final SparkSession spark;
+
+    public DeltaLakePipeline(SparkSession spark) {
+        this.spark = spark;
+    }
+
+    // Bronze: 원본 데이터 그대로 저장
+    public void ingestToBronze() {
+        Dataset<Row> rawData = spark.read()
+            .option("header", "true")
+            .csv("/data/raw/orders/*.csv");
+
+        rawData.write()
+            .format("delta")
+            .mode("append")
+            .option("mergeSchema", "true")
+            .save("/data/bronze/orders");
+    }
+
+    // Silver: 정제 및 검증
+    public void transformToSilver() {
+        Dataset<Row> bronze = spark.read().format("delta").load("/data/bronze/orders");
+
+        Dataset<Row> silver = bronze
+            .filter(col("orderId").isNotNull().and(col("price").gt(0)))
+            .withColumn("price", col("price").cast("double"))
+            .withColumn("quantity", col("quantity").cast("int"))
+            .withColumn("orderDate", to_date(col("orderDate")))
+            .dropDuplicates("orderId")
+            .withColumn("totalAmount", col("price").multiply(col("quantity")))
+            .withColumn("processedAt", current_timestamp());
+
+        DeltaTable silverTable = DeltaTable.forPath(spark, "/data/silver/orders");
+        silverTable.as("target")
+            .merge(silver.as("source"), "target.orderId = source.orderId")
+            .whenMatched().updateAll()
+            .whenNotMatched().insertAll()
+            .execute();
+    }
+
+    // Gold: 비즈니스 집계
+    public void aggregateToGold() {
+        Dataset<Row> silver = spark.read().format("delta").load("/data/silver/orders");
+
+        Dataset<Row> dailySales = silver
+            .groupBy(col("orderDate"))
+            .agg(
+                count("*").alias("orderCount"),
+                sum("totalAmount").alias("totalRevenue"),
+                avg("totalAmount").alias("avgOrderValue"),
+                countDistinct("customerId").alias("uniqueCustomers")
+            )
+            .withColumn("updatedAt", current_timestamp());
+
+        dailySales.write()
+            .format("delta")
+            .mode("overwrite")
+            .save("/data/gold/daily_sales");
+    }
+
+    public void runPipeline() {
+        ingestToBronze();
+        transformToSilver();
+        aggregateToGold();
+
+        // 최적화
+        DeltaTable.forPath(spark, "/data/silver/orders").optimize().executeCompaction();
+        DeltaTable.forPath(spark, "/data/silver/orders").vacuum(168);
+    }
+}
+```
+
+{{< /tab >}}
+{{< tab "Scala" >}}
 
 ```scala
 object DeltaLakePipeline extends App {
@@ -567,6 +948,9 @@ object DeltaLakePipeline extends App {
 }
 ```
 
+{{< /tab >}}
+{{< /tabs >}}
+
 {{< callout type="info" title="핵심 포인트: Bronze-Silver-Gold 아키텍처" >}}
 - **Bronze**: 원본 그대로 저장 (스키마 유연, 품질 무관)
 - **Silver**: 정제/검증 완료 데이터 (중복 제거, 타입 변환)
@@ -579,6 +963,31 @@ object DeltaLakePipeline extends App {
 ## Spark Streaming과 연동
 
 **Streaming 쓰기**
+
+{{< tabs "streaming-write" >}}
+{{< tab "Java" >}}
+
+```java
+Dataset<Row> stream = spark.readStream()
+    .format("kafka")
+    .option("kafka.bootstrap.servers", "localhost:9092")
+    .option("subscribe", "orders")
+    .load();
+
+Dataset<Row> orders = stream
+    .selectExpr("CAST(value AS STRING) as json")
+    .select(from_json(col("json"), orderSchema).alias("data"))
+    .select("data.*");
+
+orders.writeStream()
+    .format("delta")
+    .outputMode("append")
+    .option("checkpointLocation", "/data/checkpoints/orders")
+    .start("/data/bronze/orders");
+```
+
+{{< /tab >}}
+{{< tab "Scala" >}}
 
 ```scala
 val stream = spark.readStream
@@ -599,7 +1008,30 @@ orders.writeStream
   .start("/data/bronze/orders")
 ```
 
+{{< /tab >}}
+{{< /tabs >}}
+
 **Streaming 읽기**
+
+{{< tabs "streaming-read" >}}
+{{< tab "Java" >}}
+
+```java
+Dataset<Row> deltaStream = spark.readStream()
+    .format("delta")
+    .load("/data/silver/orders");
+
+deltaStream
+    .groupBy(window(col("orderDate"), "1 day"), col("product"))
+    .agg(sum("totalAmount").alias("dailyRevenue"))
+    .writeStream()
+    .format("console")
+    .outputMode("complete")
+    .start();
+```
+
+{{< /tab >}}
+{{< tab "Scala" >}}
 
 ```scala
 val deltaStream = spark.readStream
@@ -614,6 +1046,9 @@ deltaStream
   .outputMode("complete")
   .start()
 ```
+
+{{< /tab >}}
+{{< /tabs >}}
 
 {{< callout type="info" title="핵심 포인트: Spark Streaming 연동" >}}
 - **checkpointLocation**: 장애 복구를 위한 체크포인트 필수 설정

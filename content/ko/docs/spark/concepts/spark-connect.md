@@ -19,7 +19,7 @@ author:
 
 **선수 지식**:
 - [아키텍처](architecture/) 문서의 Driver/Executor 개념
-- gRPC 기본 개념 (선택 사항)
+- gRPC(Google이 만든 고성능 원격 프로시저 호출 프레임워크) 기본 개념 (선택 사항)
 - [DataFrame과 Dataset](dataframe-dataset/) API
 
 **소요 시간**: 약 25-30분
@@ -114,6 +114,7 @@ flowchart TB
 
 ```xml
 <!-- 기존 방식: spark-core + spark-sql (~200MB) -->
+<!-- _2.13은 Scala 버전으로, Spark가 Scala로 빌드되어 필요합니다 -->
 <dependency>
     <groupId>org.apache.spark</groupId>
     <artifactId>spark-sql_2.13</artifactId>
@@ -395,11 +396,22 @@ try {
     Dataset<Row> result = spark.sql("SELECT * FROM table");
     result.show();
 } catch (StatusRuntimeException e) {
-    if (e.getStatus().getCode() == Status.Code.UNAVAILABLE) {
-        logger.error("Spark Connect 서버 연결 실패");
-        // 재연결 로직
-    } else {
-        throw e;
+    switch (e.getStatus().getCode()) {
+        case UNAVAILABLE:
+            // 서버에 연결할 수 없음 — 서버 다운 또는 네트워크 문제
+            logger.error("Spark Connect 서버 연결 실패");
+            // 재연결 로직
+            break;
+        case NOT_FOUND:
+            // 요청한 리소스(세션, 테이블 등)가 존재하지 않음
+            logger.error("요청한 리소스를 찾을 수 없음: {}", e.getMessage());
+            break;
+        case DEADLINE_EXCEEDED:
+            // 요청 처리 시간 초과 — 쿼리가 너무 오래 걸리거나 서버 과부하
+            logger.error("요청 시간 초과: {}", e.getMessage());
+            break;
+        default:
+            throw e;
     }
 } catch (AnalysisException e) {
     logger.error("SQL 분석 오류: {}", e.getMessage());

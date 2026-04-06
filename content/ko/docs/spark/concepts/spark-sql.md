@@ -115,6 +115,10 @@ flowchart LR
 
 *그림: Catalyst Optimizer 쿼리 처리 단계 - SQL/DataFrame이 Unresolved Plan → Analyzed Plan → Optimized Plan → Physical Plans → Selected Plan → RDD 코드 생성 순으로 변환됩니다.*
 
+{{< callout type="info" title="심화 내용" >}}
+아래 Catalyst 4단계 설명은 내부 동작에 대한 내용입니다. 당장 이해하지 않아도 Spark SQL 사용에 문제없습니다. 성능 튜닝이나 실행 계획 분석이 필요할 때 돌아오세요.
+{{< /callout >}}
+
 **각 단계 상세**
 
 ## 1단계: Analysis (분석)
@@ -206,7 +210,7 @@ result.explain(true);
 //
 // == Physical Plan ==
 // *(2) HashAggregate(keys=[department], functions=[avg(salary)])
-// +- Exchange hashpartitioning(department, 200)   ← 셔플
+// +- Exchange hashpartitioning(department, 200)   ← 셔플 (Exchange는 실행 계획에서 셔플을 나타내는 노드)
 //    +- *(1) HashAggregate(keys=[department], functions=[partial_avg(salary)])
 //       +- *(1) Project [department, salary]
 //          +- *(1) Filter (age > 30)
@@ -214,7 +218,7 @@ result.explain(true);
 //                +- FileScan parquet [age,department,salary]  ← 필요한 컬럼만
 ```
 
-**AQE (Adaptive Query Execution)**
+**AQE (Adaptive Query Execution — 실행 중 통계를 기반으로 쿼리 계획을 동적으로 조정하는 최적화)**
 
 Spark 3.0+에서 도입된 **런타임 최적화**입니다. 실행 중 통계를 수집하여 계획을 동적으로 조정합니다.
 
@@ -680,6 +684,10 @@ catalog.refreshTable("employees");
 
 ## Hive 통합
 
+{{< callout type="info" title="선택 사항" >}}
+Hive를 사용하지 않는 환경이라면 이 섹션을 건너뛰어도 됩니다.
+{{< /callout >}}
+
 Spark SQL은 Hive 메타스토어와 통합하여 영구 테이블을 관리할 수 있습니다.
 
 ```java
@@ -750,6 +758,10 @@ result.explain("codegen");     // 생성된 코드
 result.explain("cost");        // 비용 추정
 result.explain("formatted");   // 보기 좋게 정렬
 ```
+
+{{< callout type="info" title="심화 내용" >}}
+SQL 힌트는 Catalyst Optimizer의 자동 최적화를 수동으로 제어하는 고급 기능입니다. 처음 읽을 때는 건너뛰고, 실행 계획을 직접 조정해야 할 때 돌아오세요.
+{{< /callout >}}
 
 **힌트**
 
