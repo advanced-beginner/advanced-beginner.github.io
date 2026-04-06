@@ -2,7 +2,7 @@
 title: Partitioning and Shuffle
 description: "Partitioning and shuffle mechanics and performance impact"
 weight: 6
-lastmod: "2026-01-07"
+lastmod: "2026-04-06"
 ---
 
 # Partitioning and Shuffle
@@ -270,6 +270,11 @@ df.groupBy(spark_partition_id().alias("partition"))
 
 **1. Salting**
 
+Salting is a technique for distributing hot keys (keys where data concentrates), performed in 3 steps:
+1. **Add random suffix to key**: `"hot_key"` → `"hot_key_0"`, `"hot_key_1"`, ... `"hot_key_9"`
+2. **Distributed processing**: Aggregate with salted keys for parallel processing across multiple partitions
+3. **Remove suffix and re-aggregate**: Sum partial aggregation results by original key
+
 ```java
 import java.util.Random;
 
@@ -401,6 +406,14 @@ Dataset<Row> filtered = spark.read()
 ```
 
 ### Bucketing
+
+> **Partitioning vs Bucketing**: Partitioning **splits directories** based on column values, while bucketing uses a hash function to **hash-split within files**. Partitioning is advantageous for filtering, while bucketing is advantageous for joins and aggregations.
+
+| Aspect | Partitioning | Bucketing |
+|--------|-------------|-----------|
+| Split method | Directory split (by value) | Hash split within files |
+| Suitable operations | Filtering, partition pruning | Joins, aggregations |
+| Cardinality | Low cardinality (year/month/region) | High cardinality (user_id, etc.) |
 
 ```java
 // Save with bucketing (join optimization)

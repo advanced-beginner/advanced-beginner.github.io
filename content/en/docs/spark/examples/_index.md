@@ -2,10 +2,12 @@
 title: Hands-on Examples
 description: "Spark hands-on examples learning guide and document index"
 weight: 3
-lastmod: "2026-01-07"
+lastmod: "2026-04-06"
 ---
 
 Example code for hands-on experience with Spark.
+
+> **Estimated Time**: Completing all examples in order takes approximately 3 hours 30 minutes (Environment Setup 15 min + Basic Examples 30 min + Monitoring 35 min + Spring Boot Integration 40 min + ETL Pipeline 45 min + Delta Lake 50 min).
 
 ## Example List
 

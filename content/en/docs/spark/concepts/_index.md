@@ -3,7 +3,7 @@ bookCollapseSection: true
 title: Concepts
 description: "Spark core concepts learning guide and document index"
 weight: 2
-lastmod: "2026-01-09"
+lastmod: "2026-04-06"
 author:
   name: Advanced Beginner
   github: advanced-beginner
@@ -63,9 +63,7 @@ Knowledge for operating Spark in production environments:
 
 Brief introduction to essential concepts for understanding Spark. Detailed content for each concept is covered in individual documents.
 
-**Execution Model**
-
-Core components for understanding how Spark applications execute:
+**Fundamentals** — Core components and data processing model of Spark
 
 | Concept | Description |
 |---------|-------------|
@@ -78,6 +76,25 @@ Core components for understanding how Spark applications execute:
 
 The Driver coordinates overall work, while actual data processing runs in parallel across multiple Executors.
 
+**Advanced Concepts** — Execution model and mechanisms that affect performance
+
+| Concept | Description |
+|---------|-------------|
+| Transformation | Lazy evaluation, returns new RDD/DataFrame (map, filter, groupBy) |
+| Action | Immediate execution, returns value (collect, count, show) |
+| Lazy Evaluation | Batch all Transformations and optimize at Action time |
+| Narrow vs Wide | Narrow: 1:1 partition mapping (no shuffle); Wide: shuffle occurs |
+
+Transformations are not executed immediately when called, but processed with an optimized execution plan when an Action is called.
+
+**Operational Concepts** — Performance optimization and internal workings
+
+| Concept | Description |
+|---------|-------------|
+| Caching | Store frequently used data in memory for fast reuse |
+| Broadcast | Distribute small data copies to all nodes for efficient joins |
+| DAG | Directed acyclic graph of operation dependencies |
+
 **Data Abstractions**
 
 Comparison of characteristics of Spark's three data APIs:
@@ -86,28 +103,6 @@ Comparison of characteristics of Spark's three data APIs:
 |-----|-------------|--------------|-------------|
 | RDD | Yes (generics) | Limited | When low-level control needed |
 | DataFrame | No (Row) | Catalyst optimization | SQL-style processing |
-| Dataset | Yes (case class) | Catalyst optimization | Type safety + optimization |
+| Dataset | Yes (case class — Scala's data class, similar to Java's Record) | Catalyst optimization | Type safety + optimization |
 
 In most cases, use DataFrame, and choose Dataset when compile-time type checking is needed.
-
-**Operation Types**
-
-Spark operations are broadly divided into Transformations and Actions:
-
-| Type | Characteristics | Examples |
-|------|-----------------|----------|
-| Transformation | Lazy evaluation, returns new RDD/DataFrame | map, filter, groupBy |
-| Action | Immediate execution, returns value | collect, count, show |
-
-Transformations are not executed immediately when called, but processed with an optimized execution plan when an Action is called.
-
-**Narrow vs Wide Transformation**
-
-Transformations are divided into two types depending on whether shuffle occurs:
-
-| Type | Shuffle | Examples |
-|------|---------|----------|
-| Narrow | No (1:1 partition mapping) | map, filter, union |
-| Wide | Yes (shuffle occurs) | groupBy, join, reduceByKey |
-
-Wide Transformations cause network I/O and significantly impact performance. Each document covers how these concepts connect in detail.

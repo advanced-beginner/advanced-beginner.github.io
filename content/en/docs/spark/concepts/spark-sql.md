@@ -2,7 +2,7 @@
 title: Spark SQL
 description: "Spark SQL mechanics and Catalyst optimizer explained"
 weight: 4
-lastmod: "2026-01-07"
+lastmod: "2026-04-06"
 ---
 
 # Spark SQL
@@ -47,6 +47,10 @@ flowchart LR
         F --> G
     end
 ```
+
+{{< callout type="info" title="Advanced Topic" >}}
+The following 4-stage Catalyst explanation covers internal workings. You can use Spark SQL without understanding this right away. Come back when you need performance tuning or execution plan analysis.
+{{< /callout >}}
 
 ### Stage Details
 
@@ -139,7 +143,7 @@ result.explain(true);
 //
 // == Physical Plan ==
 // *(2) HashAggregate(keys=[department], functions=[avg(salary)])
-// +- Exchange hashpartitioning(department, 200)   ← Shuffle
+// +- Exchange hashpartitioning(department, 200)   ← Shuffle (Exchange represents a shuffle node in the execution plan)
 //    +- *(1) HashAggregate(keys=[department], functions=[partial_avg(salary)])
 //       +- *(1) Project [department, salary]
 //          +- *(1) Filter (age > 30)
@@ -147,7 +151,7 @@ result.explain(true);
 //                +- FileScan parquet [age,department,salary]  ← Only needed columns
 ```
 
-### AQE (Adaptive Query Execution)
+### AQE (Adaptive Query Execution — optimization that dynamically adjusts query plans based on runtime statistics)
 
 **Runtime optimization** introduced in Spark 3.0+. Collects statistics during execution to dynamically adjust plans.
 
@@ -613,6 +617,10 @@ catalog.refreshTable("employees");
 
 ## Hive Integration
 
+{{< callout type="info" title="Optional" >}}
+You can skip this section if you are not using Hive in your environment.
+{{< /callout >}}
+
 Spark SQL can integrate with Hive metastore for persistent table management.
 
 ```java
@@ -685,6 +693,10 @@ result.explain("formatted");   // Nicely formatted
 ```
 
 ### Hints
+
+{{< callout type="info" title="Advanced Topic" >}}
+SQL hints are an advanced feature for manually controlling the Catalyst Optimizer's automatic optimizations. You can skip this on first reading and come back when you need to directly adjust execution plans.
+{{< /callout >}}
 
 ```sql
 -- Broadcast hint

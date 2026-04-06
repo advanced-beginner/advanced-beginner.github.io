@@ -2,7 +2,7 @@
 title: Spark Connect
 description: "Spark Connect mechanics and remote execution architecture"
 weight: 12
-lastmod: "2026-01-07"
+lastmod: "2026-04-06"
 ---
 
 # Spark Connect (Spark 3.4+)
@@ -49,6 +49,7 @@ flowchart TB
 
 ```xml
 <!-- Traditional approach: spark-core + spark-sql (~200MB) -->
+<!-- _2.13 is the Scala version, required because Spark is built with Scala -->
 <dependency>
     <groupId>org.apache.spark</groupId>
     <artifactId>spark-sql_2.13</artifactId>
@@ -330,11 +331,22 @@ try {
     Dataset<Row> result = spark.sql("SELECT * FROM table");
     result.show();
 } catch (StatusRuntimeException e) {
-    if (e.getStatus().getCode() == Status.Code.UNAVAILABLE) {
-        logger.error("Spark Connect server connection failed");
-        // Reconnection logic
-    } else {
-        throw e;
+    switch (e.getStatus().getCode()) {
+        case UNAVAILABLE:
+            // Cannot connect to server — server down or network issue
+            logger.error("Spark Connect server connection failed");
+            // Reconnection logic
+            break;
+        case NOT_FOUND:
+            // Requested resource (session, table, etc.) does not exist
+            logger.error("Requested resource not found: {}", e.getMessage());
+            break;
+        case DEADLINE_EXCEEDED:
+            // Request processing timeout — query takes too long or server overloaded
+            logger.error("Request timeout: {}", e.getMessage());
+            break;
+        default:
+            throw e;
     }
 } catch (AnalysisException e) {
     logger.error("SQL analysis error: {}", e.getMessage());

@@ -2,7 +2,7 @@
 title: Monitoring Setup
 description: "Step-by-step Spark monitoring environment setup"
 weight: 4
-lastmod: "2026-01-07"
+lastmod: "2026-04-06"
 ---
 
 # Spark Monitoring Setup Guide
@@ -113,6 +113,10 @@ SparkSession spark = SparkSession.builder()
         .getOrCreate();
 ```
 
+{{< callout type="info" >}}
+You can skip this section if Prometheus and Grafana are not installed. Spark UI alone provides sufficient basic monitoring.
+{{< /callout >}}
+
 ### 3. Prometheus Configuration
 
 ```yaml
@@ -160,7 +164,7 @@ rate(spark_executor_completedTasks_total{app_name="$app"}[5m]) * 100
 
 ```java
 import org.apache.spark.sql.SparkSession;
-import com.codahale.metrics.*;
+import com.codahale.metrics.*;  // Dropwizard Metrics (the metrics collection library used internally by Spark)
 import org.apache.spark.metrics.source.Source;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -390,6 +394,8 @@ public class StructuredLoggingExample {
 ## Alert Configuration
 
 ### Grafana Alert Rules (YAML)
+
+> **Note:** Basic alerts can also be configured through the Grafana UI. The YAML below is used when managing alert rules as code.
 
 ```yaml
 # grafana-alerts.yml

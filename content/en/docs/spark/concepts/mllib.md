@@ -2,7 +2,7 @@
 title: MLlib
 description: "MLlib mechanics and machine learning pipeline design"
 weight: 9
-lastmod: "2026-01-07"
+lastmod: "2026-04-06"
 ---
 
 # MLlib (Machine Learning Library)
@@ -27,6 +27,20 @@ This guide covers the **spark.ml** (DataFrame-based) API.
 - **Pipeline**: Connect multiple stages
 - **Evaluator**: Evaluate model performance
 - **CrossValidator/TrainValidationSplit**: Hyperparameter tuning
+
+{{< callout type="info" title="ML Basics in 5 Minutes — Minimum Background for Java Developers" >}}
+If you're new to machine learning (ML), understand these core concepts first:
+
+- **What is ML?** A structure where you feed data (input) into a model and it returns predictions (output). Instead of writing rules manually, rules are discovered automatically from data.
+- **What is a Feature?** An individual data item input to a model. E.g., customer age, monthly payment, subscription period. Similar to fields in a Java object.
+- **What is Training?** The process of automatically finding model rules (parameters) from historical data. `estimator.fit(data)` corresponds to this.
+- **Classification vs Regression**: If the output is a category (yes/no), it's classification. If it's a number (price, score), it's regression.
+
+For deeper learning:
+- [Google ML Crash Course](https://developers.google.com/machine-learning/crash-course) (free)
+- [scikit-learn Tutorial](https://scikit-learn.org/stable/tutorial/) (Python but useful for ML concepts)
+- [StatQuest YouTube Channel](https://www.youtube.com/c/joshstarmer) (visual explanations)
+{{< /callout >}}
 
 ## Basic Workflow
 
@@ -82,7 +96,7 @@ LogisticRegressionModel loadedModel = LogisticRegressionModel.load("models/logis
 
 ### VectorAssembler
 
-Combine multiple columns into a single feature vector:
+ML models can only accept numeric arrays (vectors) as input. VectorAssembler combines multiple columns (age, income, score, etc.) into a single numeric array so the model can understand it:
 
 ```java
 VectorAssembler assembler = new VectorAssembler()
@@ -209,9 +223,9 @@ PipelineModel loadedModel = PipelineModel.load("models/pipeline");
 ```java
 LogisticRegression lr = new LogisticRegression()
         .setMaxIter(100)
-        .setRegParam(0.1)
-        .setElasticNetParam(0.8)  // L1/L2 ratio
-        .setFamily("multinomial");  // Multi-class
+        .setRegParam(0.1)            // Regularization strength: prevents overfitting (higher = stronger regularization)
+        .setElasticNetParam(0.8)     // L1/L2 ratio: 0=L2(Ridge), 1=L1(Lasso), in-between=mixed
+        .setFamily("multinomial");   // Multi-class
 
 LogisticRegressionModel model = lr.fit(training);
 
@@ -269,8 +283,8 @@ GBTClassificationModel model = gbt.fit(training);
 ```java
 LinearRegression lr = new LinearRegression()
         .setMaxIter(100)
-        .setRegParam(0.1)
-        .setElasticNetParam(0.5);
+        .setRegParam(0.1)            // Regularization strength: prevents overfitting (0 means no regularization)
+        .setElasticNetParam(0.5);    // L1/L2 ratio: 0=Ridge, 1=Lasso, 0.5=half and half
 
 LinearRegressionModel model = lr.fit(training);
 
@@ -322,9 +336,23 @@ double cost = model.summary().trainingCost();
 ```java
 // Spark MLlib doesn't have Isolation Forest
 // Alternative: K-Means based distance calculation
-Dataset<Row> withDistance = predictions
-    .withColumn("distanceToCenter", calculateDistance(col("features"), col("prediction")));
 
+// calculateDistance needs to be implemented manually.
+// Below is an example using a UDF (User Defined Function) to calculate Euclidean distance:
+UserDefinedFunction distanceUdf = udf((Vector features, int clusterId) -> {
+    Vector center = model.clusterCenters()[clusterId];
+    double sum = 0.0;
+    for (int i = 0; i < features.size(); i++) {
+        double diff = features.apply(i) - center.apply(i);
+        sum += diff * diff;
+    }
+    return Math.sqrt(sum);
+}, DataTypes.DoubleType);
+
+Dataset<Row> withDistance = predictions
+    .withColumn("distanceToCenter", distanceUdf.apply(col("features"), col("prediction")));
+
+double threshold = 10.0;  // Adjust according to business requirements
 Dataset<Row> anomalies = withDistance
     .filter(col("distanceToCenter").gt(threshold));
 ```
@@ -422,6 +450,17 @@ TrainValidationSplitModel tvsModel = tvs.fit(training);
 
 ## Practical Example: Customer Churn Prediction
 
+{{< callout type="info" title="Full Pipeline at a Glance" >}}
+1. **Load Data**: Read customer data from CSV
+2. **Label Indexing**: Convert "churned" string to numeric (0/1)
+3. **Categorical Encoding**: gender, region, plan_type → numeric index → one-hot vector
+4. **Feature Assembly**: Numeric columns + encoded columns → single vector
+5. **Normalization**: Unify feature value ranges (StandardScaler)
+6. **Training**: Learn churn patterns with RandomForest
+7. **Tuning**: Search for optimal hyperparameters with CrossValidator
+8. **Evaluation**: Measure model performance with AUC
+{{< /callout >}}
+
 ```java
 public class ChurnPrediction {
     public static void main(String[] args) {
@@ -430,18 +469,18 @@ public class ChurnPrediction {
                 .master("local[*]")
                 .getOrCreate();
 
-        // Load data
+        // Step 1: Load data
         Dataset<Row> data = spark.read()
                 .option("header", "true")
                 .option("inferSchema", "true")
                 .csv("customer_data.csv");
 
-        // Label indexing
+        // Step 2: Label indexing — convert "Yes"/"No" to numeric 1/0
         StringIndexer labelIndexer = new StringIndexer()
                 .setInputCol("churned")
                 .setOutputCol("label");
 
-        // Categorical column encoding
+        // Step 3: Categorical column encoding — convert strings to numbers that ML models can understand
         String[] categoricalCols = {"gender", "region", "plan_type"};
         StringIndexer[] indexers = new StringIndexer[categoricalCols.length];
         OneHotEncoder[] encoders = new OneHotEncoder[categoricalCols.length];
@@ -455,7 +494,7 @@ public class ChurnPrediction {
                     .setOutputCols(new String[]{categoricalCols[i] + "_vec"});
         }
 
-        // Combine numeric + encoded columns
+        // Step 4: Combine numeric + encoded columns into a single vector
         String[] numericCols = {"age", "tenure", "monthly_charges", "total_charges"};
         String[] encodedCols = {"gender_vec", "region_vec", "plan_type_vec"};
         String[] allFeatureCols = Stream.concat(
@@ -468,14 +507,14 @@ public class ChurnPrediction {
                 .setOutputCol("rawFeatures")
                 .setHandleInvalid("skip");
 
-        // Normalization
+        // Step 5: Normalization — transform features with different ranges (age 20~80, charges 10~300) to the same scale
         StandardScaler scaler = new StandardScaler()
                 .setInputCol("rawFeatures")
                 .setOutputCol("features")
                 .setWithStd(true)
                 .setWithMean(true);
 
-        // Classifier
+        // Step 6: Classifier — predict churn by majority vote of 100 decision trees
         RandomForestClassifier rf = new RandomForestClassifier()
                 .setLabelCol("label")
                 .setFeaturesCol("features")
@@ -498,7 +537,7 @@ public class ChurnPrediction {
         Dataset<Row> training = splits[0];
         Dataset<Row> test = splits[1];
 
-        // Hyperparameter tuning
+        // Step 7: Hyperparameter tuning — experiment with tree count and depth combinations using 3-fold cross-validation
         ParamMap[] paramGrid = new ParamGridBuilder()
                 .addGrid(rf.numTrees(), new int[]{50, 100, 150})
                 .addGrid(rf.maxDepth(), new int[]{5, 10, 15})
@@ -514,7 +553,7 @@ public class ChurnPrediction {
         // Train
         CrossValidatorModel cvModel = cv.fit(training);
 
-        // Evaluate
+        // Step 8: Evaluate — measure model performance with AUC (Area Under ROC Curve, closer to 1.0 is better)
         Dataset<Row> predictions = cvModel.transform(test);
 
         BinaryClassificationEvaluator evaluator = new BinaryClassificationEvaluator();

@@ -3,7 +3,7 @@ bookCollapseSection: true
 title: Quick Start
 description: "Step-by-step guide to Spark core concepts and practice"
 weight: 1
-lastmod: "2026-01-10"
+lastmod: "2026-04-06"
 author:
   name: Advanced Beginner
   github: advanced-beginner
@@ -331,6 +331,10 @@ root
 
 ## Production-Level Code
 
+{{< callout type="info" title="Advanced Topic" >}}
+This section covers advanced patterns for production environments. You can skip this section if you are just learning the Quick Start.
+{{< /callout >}}
+
 In real production environments, exception handling and resource cleanup are essential:
 
 ```java
@@ -471,7 +475,7 @@ employees.filter(col("salary").geq(5000))
 ```
 
 - Similar to Java's Stream API, but distributed
-- `filter`, `select`, `groupBy`, etc. are **Transformations** — lazily evaluated
+- `filter`, `select`, `groupBy`, etc. are **Transformations** — lazily evaluated (not executed immediately; instead, they are batched and processed together when an Action is called)
 - `show`, `collect`, `count`, etc. are **Actions** — execute actual computation
 
 **4. Using SQL**

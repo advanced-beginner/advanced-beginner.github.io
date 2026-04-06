@@ -2,7 +2,7 @@
 title: Architecture
 description: "Spark cluster architecture and execution model explained"
 weight: 1
-lastmod: "2026-01-10"
+lastmod: "2026-04-06"
 author:
   name: Advanced Beginner
   github: advanced-beginner
@@ -364,6 +364,10 @@ Executor Memory: 8GB
 └── User Memory: (8GB - 300MB) × 0.4 = 3.1GB
 ```
 
+{{< callout type="info" title="Advanced Topic" >}}
+This section covers an advanced topic. You can skip this on first reading and come back when you need performance tuning.
+{{< /callout >}}
+
 ### Off-Heap Memory
 
 Use memory outside JVM heap to reduce GC impact:
@@ -378,7 +382,7 @@ SparkSession spark = SparkSession.builder()
 **Off-Heap Benefits:**
 - Excluded from GC, reducing Stop-the-World
 - Effective for large caches
-- Integrated with Tungsten memory management
+- Integrated with Tungsten (Spark's internal memory/CPU optimization engine) memory management
 
 ### Memory Troubleshooting
 

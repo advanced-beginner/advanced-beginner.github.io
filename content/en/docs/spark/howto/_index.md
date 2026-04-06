@@ -3,7 +3,7 @@ bookCollapseSection: true
 title: How-To Guides
 description: "Spark operational troubleshooting guides"
 weight: 4
-lastmod: "2026-01-10"
+lastmod: "2026-04-06"
 author:
   name: Advanced Beginner
   github: advanced-beginner
@@ -36,6 +36,14 @@ Improve Spark job performance by reducing network I/O.
 - Eliminating unnecessary shuffles
 - Leveraging broadcast joins
 - Optimizing partition count
+
+**[Reading the Spark UI](spark-ui-guide/)**
+
+Identify performance bottlenecks and diagnose root causes from each tab of the Spark UI.
+
+- Trace bottlenecks in Jobs → Stages → Tasks order
+- Diagnose data skew, GC issues, excessive shuffle
+- UI access methods by environment (local/YARN/K8s)
 
 ## How to Use These Guides
 

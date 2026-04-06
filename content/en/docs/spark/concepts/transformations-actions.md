@@ -2,7 +2,7 @@
 title: Transformations and Actions
 description: "Transformation and Action mechanics and execution plans"
 weight: 5
-lastmod: "2026-01-07"
+lastmod: "2026-04-06"
 ---
 
 # Transformations and Actions
@@ -323,10 +323,12 @@ result.count();  // Now it executes
 
 ### 2. Cannot Modify Driver Variables in foreach
 
+`foreach` runs on Executors (separate JVMs), so it cannot directly access or modify variables defined on the Driver. Variables inside the lambda are serialized and copied to Executors, so the original variable on the Driver remains unchanged.
+
 ```java
 // Wrong code - doesn't work!
 int[] counter = {0};
-df.foreach(row -> counter[0]++);  // Runs on Executor
+df.foreach(row -> counter[0]++);  // Runs on Executor (copy in separate JVM)
 System.out.println(counter[0]);   // Always prints 0
 
 // Correct approach

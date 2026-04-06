@@ -2,10 +2,12 @@
 title: Glossary
 description: "Key Spark terminology and definitions"
 weight: 1
-lastmod: "2026-01-07"
+lastmod: "2026-04-06"
 ---
 
 # Glossary
+
+**Estimated Time**: About 10 minutes to read through all, 1-2 minutes if searching for a specific term
 
 Key terminology and concepts used in Spark. Each term links to related documentation.
 

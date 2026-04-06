@@ -2,10 +2,12 @@
 title: FAQ
 description: "Frequently asked questions about Apache Spark"
 weight: 2
-lastmod: "2026-01-07"
+lastmod: "2026-04-06"
 ---
 
 # FAQ
+
+**Estimated Time**: About 15 minutes to read through all, 2-3 minutes if searching for a specific question
 
 Frequently asked questions and solutions to common problems.
 
@@ -313,6 +315,10 @@ List<Employee> employees = df.as(encoder).collectAsList();
 Note: `collect()` brings all data to the Driver, so don't use it with large datasets.
 
 ## Spark UI Debugging Guide
+
+{{< callout type="tip" >}}
+For a systematic, tab-by-tab guide to analyzing the Spark UI, see [Reading the Spark UI](../howto/spark-ui-guide/). Below is a quick-reference summary.
+{{< /callout >}}
 
 The key to resolving Spark performance issues is systematically analyzing the Spark UI.
 

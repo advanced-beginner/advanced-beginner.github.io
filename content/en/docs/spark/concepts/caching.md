@@ -2,7 +2,7 @@
 title: Caching and Persistence
 description: "Spark caching and persistence optimization strategies"
 weight: 7
-lastmod: "2026-01-07"
+lastmod: "2026-04-06"
 ---
 
 # Caching and Persistence
@@ -91,7 +91,7 @@ df.persist(StorageLevel.MEMORY_AND_DISK_2());
 | MEMORY_ONLY_SER | O | X | O | 1 | Saves memory, uses CPU |
 | MEMORY_AND_DISK_SER | O | O | O | 1 | Memory savings + disk backup |
 | DISK_ONLY | X | O | O | 1 | No memory usage |
-| OFF_HEAP | X (off-heap) | X | O | 1 | No GC impact |
+| OFF_HEAP | X (off-heap) | X | O | 1 | Uses memory outside JVM heap, reducing GC overhead |
 | *_2 | - | - | - | 2 | 2 replicas |
 
 ### Which Level to Choose?

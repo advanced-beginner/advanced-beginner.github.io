@@ -3,13 +3,13 @@ title: Apache Spark
 bookCollapseSection: true
 description: Apache Spark Guide for Java/Spring Developers - DataFrame API, SQL, Streaming, Cluster Deployment
 weight: 4
-lastmod: "2026-01-09"
+lastmod: "2026-04-06"
 author:
   name: Advanced Beginner
   github: advanced-beginner
 ---
 
-Apache Spark is a **unified analytics engine for large-scale data processing**. It provides processing speeds up to 100x faster in memory and 10x faster on disk compared to Hadoop MapReduce, supporting multiple languages including Java, Scala, Python, and R.
+Apache Spark is a **unified analytics engine for large-scale data processing**. It provides processing speeds up to 100x faster in memory and 10x faster on disk compared to Hadoop MapReduce (the traditional big data distributed processing approach), supporting multiple languages including Java, Scala, Python, and R.
 
 Spark is called a "unified" engine because it handles batch processing, real-time streaming, machine learning, and graph analysis all on a single platform.
 
@@ -38,7 +38,7 @@ Intermediate results are stored in memory rather than disk, providing dramatic p
 Transformation operations are not executed immediately when called. Instead, when an Action is triggered, the execution plan is optimized before processing. This helps eliminate unnecessary computations and build efficient execution plans.
 
 **3. Fault Tolerance**
-Through RDD lineage information, data loss triggers automatic recomputation. Reliable processing is possible without checkpoints.
+Through RDD lineage information, data loss triggers automatic recomputation. Reliable processing is possible without checkpoints. For more details on RDD and lineage, see the [RDD Basics](concepts/rdd/) document.
 
 **4. Unified Stack**
 - **Spark SQL**: Structured data processing
@@ -52,7 +52,7 @@ When considering Spark adoption, evaluate based on data scale and processing com
 
 **Suitable cases:**
 - When processing large-scale data (tens of GBs or more)
-- Building complex ETL (Extract-Transform-Load) pipelines
+- Building complex ETL (Extract-Transform-Load: pipelines that extract, transform, and load data) pipelines
 - Training machine learning models on massive datasets
 - When real-time and batch processing need to be unified
 - Running analytical queries on data lakes

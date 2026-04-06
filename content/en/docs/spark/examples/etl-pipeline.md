@@ -2,7 +2,7 @@
 title: ETL Pipeline
 description: "Step-by-step ETL pipeline implementation with Spark"
 weight: 6
-lastmod: "2026-01-07"
+lastmod: "2026-04-06"
 ---
 
 # Production ETL Pipeline Examples
@@ -97,7 +97,7 @@ public abstract class AbstractEtlJob {
     }
 
     /**
-     * Execute ETL job (Template Method pattern)
+     * Execute ETL job (Template Method pattern: the parent class defines the overall flow, subclasses provide specific implementations)
      */
     public final EtlResult execute() {
         String jobName = getJobName();
@@ -587,6 +587,8 @@ public class IncrementalEtlJob {
 
         // Remove duplicate keys (new data takes priority)
         Dataset<Row> merged = existing
+            // JavaConverters: converts Java collections to Scala collections used internally by Spark
+            // (needed because Spark API requires Scala Seq)
             .join(updates.select(keyColumns), scala.collection.JavaConverters
                 .asScalaBuffer(java.util.Arrays.asList(keyColumns)).toSeq(), "left_anti")
             .union(updates);

@@ -2,7 +2,7 @@
 title: RDD Basics
 description: "RDD mechanics and lazy evaluation model explained"
 weight: 2
-lastmod: "2026-01-10"
+lastmod: "2026-04-06"
 author:
   name: Advanced Beginner
   github: advanced-beginner
@@ -180,7 +180,7 @@ RDDs with key-value pairs provide additional operations.
 
 ```java
 import org.apache.spark.api.java.JavaPairRDD;
-import scala.Tuple2;
+import scala.Tuple2;  // Spark is written in Scala, so it uses Scala's Tuple2 type for pairs
 
 // Word frequency example
 JavaRDD<String> words = lines.flatMap(
@@ -289,11 +289,12 @@ Integer sum = numbers.reduce(Integer::sum);  // 15
 Integer sumWithInit = numbers.fold(10, Integer::sum);  // 25
 
 // aggregate: Aggregation with different type (for complex aggregations)
+// 2-phase flow: (1) seqOp — accumulate within each partition, (2) combOp — combine results across partitions
 // Average calculation example: aggregate as (sum, count) pair
 Tuple2<Integer, Integer> sumAndCount = numbers.aggregate(
     new Tuple2<>(0, 0),  // initial value
-    (acc, n) -> new Tuple2<>(acc._1 + n, acc._2 + 1),  // seqOp
-    (acc1, acc2) -> new Tuple2<>(acc1._1 + acc2._1, acc1._2 + acc2._2)  // combOp
+    (acc, n) -> new Tuple2<>(acc._1 + n, acc._2 + 1),  // seqOp: accumulate within partition
+    (acc1, acc2) -> new Tuple2<>(acc1._1 + acc2._1, acc1._2 + acc2._2)  // combOp: combine across partitions
 );
 double average = (double) sumAndCount._1 / sumAndCount._2;
 

@@ -2,7 +2,7 @@
 title: Deployment and Cluster Management
 description: "Spark deployment modes and cluster management strategies"
 weight: 11
-lastmod: "2026-01-07"
+lastmod: "2026-04-06"
 ---
 
 # Deployment and Cluster Management
@@ -140,7 +140,7 @@ spark.dynamicAllocation.schedulerBacklogTimeout=1s
 spark.dynamicAllocation.sustainedSchedulerBacklogTimeout=5s
 spark.dynamicAllocation.executorIdleTimeout=60s
 
-# External shuffle service required
+# External shuffle service required — preserves shuffle data in a separate service so it is not lost when Executors are removed by dynamic allocation
 spark.shuffle.service.enabled=true
 ```
 
@@ -260,6 +260,8 @@ spark-submit \
 
 ## Fat JAR Creation
 
+A Fat JAR packages the application code and all dependency libraries into a single JAR file. Since cluster nodes do not have user libraries installed, you must deploy as a single JAR containing all dependencies.
+
 ### Gradle (Shadow Plugin)
 
 ```groovy
@@ -270,7 +272,7 @@ plugins {
 }
 
 dependencies {
-    implementation 'org.apache.spark:spark-sql_2.13:3.5.1'
+    implementation 'org.apache.spark:spark-sql_2.13:3.5.1'  // 2.13 is the Scala version, required because Spark is built with Scala
     // Marked as provided to exclude from Fat JAR
     compileOnly 'org.apache.spark:spark-core_2.13:3.5.1'
 }

@@ -2,7 +2,7 @@
 title: Structured Streaming
 description: "Structured Streaming mechanics and stream processing model"
 weight: 8
-lastmod: "2026-01-07"
+lastmod: "2026-04-06"
 ---
 
 # Structured Streaming
@@ -261,14 +261,14 @@ Dataset<Row> slidingCounts = stream
 
 ### Session Window
 
-Activity-based dynamic windows:
+Activity-based dynamic windows. The session is maintained while the user generates events, and it ends when there is no activity for the specified duration (5 minutes in the example below). Suitable for website visit session analysis, app usage pattern tracking, etc.:
 
 ```java
 // Spark 3.2+
 Dataset<Row> sessionCounts = stream
     .withWatermark("timestamp", "10 minutes")
     .groupBy(
-        session_window(col("timestamp"), "5 minutes"),  // Session ends after 5-min inactivity
+        session_window(col("timestamp"), "5 minutes"),  // Session ends after 5 minutes of inactivity
         col("user_id")
     )
     .count();
@@ -319,15 +319,25 @@ spark.conf().set(
 spark.conf().set("spark.sql.streaming.stateStore.rocksdb.memory.mb", "256");
 ```
 
+### Custom State Management
+
+`groupBy().agg()` only supports standard aggregations like sum and average. However, for **complex state logic** such as "tracking consecutive login days per user" or "analyzing behavior patterns within a session", use `mapGroupsWithState` or `flatMapGroupsWithState`.
+
+These APIs maintain a custom state object for each key (group), and you write a function that updates the state whenever new data arrives. `mapGroupsWithState` returns one result per group, while `flatMapGroupsWithState` can return multiple results.
+
+{{< callout type="warning" title="Advanced Topic" >}}
+`mapGroupsWithState` and `flatMapGroupsWithState` are the most flexible APIs in Structured Streaming, but require care with state size management and timeout settings. If standard aggregation can solve the problem, consider `groupBy().agg()` first.
+{{< /callout >}}
+
 ### State Timeout
 
 ```java
 // Set timeout for group state (mapGroupsWithState/flatMapGroupsWithState)
 .groupByKey(row -> row.getString(0), Encoders.STRING())
 .mapGroupsWithState(
-    mappingFunc,
-    Encoders.bean(State.class),
-    Encoders.bean(Output.class),
+    mappingFunc,                              // State update function
+    Encoders.bean(State.class),               // State object encoder
+    Encoders.bean(Output.class),              // Output object encoder
     GroupStateTimeout.ProcessingTimeTimeout()  // Or EventTimeTimeout
 );
 ```
@@ -350,7 +360,7 @@ Dataset<Row> enriched = stream.join(
 
 ### Stream-Stream Join
 
-Join two streams (watermark required):
+Join two streams (watermark required). For example, you can match an impressions stream with a clicks stream to count only "clicks within 1 hour of impression" as valid conversions:
 
 ```java
 Dataset<Row> impressions = spark.readStream()

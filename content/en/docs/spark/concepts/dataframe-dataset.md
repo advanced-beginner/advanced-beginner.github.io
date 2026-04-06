@@ -2,7 +2,7 @@
 title: DataFrame and Dataset
 description: "DataFrame and Dataset mechanics and usage patterns"
 weight: 3
-lastmod: "2026-01-07"
+lastmod: "2026-04-06"
 ---
 
 # DataFrame and Dataset
@@ -348,6 +348,10 @@ df.agg(
 
 ### Window Functions
 
+{{< callout type="info" title="Advanced Topic" >}}
+Window functions are an advanced topic. You can skip this on first reading and come back when you need complex aggregations or ranking calculations.
+{{< /callout >}}
+
 ```java
 import org.apache.spark.sql.expressions.Window;
 import org.apache.spark.sql.expressions.WindowSpec;
@@ -646,7 +650,7 @@ Dataset<String> names = ds.map(
 
 **Scala:**
 ```scala
-case class Employee(name: String, age: Int, department: String)
+case class Employee(name: String, age: Int, department: String)  // Scala's data class, similar to Java's Record
 
 val ds = df.as[Employee]
 

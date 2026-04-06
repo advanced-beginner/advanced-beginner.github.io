@@ -2,7 +2,7 @@
 title: Basic Examples
 description: "Step-by-step Spark basic operations and data processing"
 weight: 2
-lastmod: "2026-01-07"
+lastmod: "2026-04-06"
 ---
 
 # Basic Examples
@@ -596,7 +596,7 @@ public class NYCTaxiAnalysis {
                 .agg(
                     count("*").alias("trip_count"),
                     avg("total_amount").alias("avg_fare"),
-                    percentile_approx(col("trip_distance"), lit(0.5)).alias("median_distance")
+                    percentile_approx(col("trip_distance"), lit(0.5)).alias("median_distance")  // Approximate percentile function (0.5 = median)
                 )
                 .orderBy(col("trip_count").desc())
                 .limit(20);
@@ -612,7 +612,7 @@ public class NYCTaxiAnalysis {
 
             double mean = fareStats.getDouble(0);
             double stddev = fareStats.getDouble(1);
-            double threshold = mean + (3 * stddev);  // 3-sigma rule
+            double threshold = mean + (3 * stddev);  // 3-sigma rule (values more than 3 standard deviations from the mean are considered outliers)
 
             Dataset<Row> outliers = taxiData
                 .filter(col("total_amount").gt(threshold)
