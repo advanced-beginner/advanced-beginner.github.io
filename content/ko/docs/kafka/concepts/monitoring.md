@@ -69,6 +69,8 @@ flowchart LR
     O3 -->|Lag: 200| O5
 ```
 
+*위 다이어그램은 Consumer Lag의 개념으로, Partition 내에서 Consumer의 현재 위치(Offset 800)와 최신 메시지 위치(Offset 1000) 사이의 차이(Lag 200)를 보여줍니다.*
+
 **Lag의 의미 해석**
 
 Lag이 0이면 Consumer가 실시간으로 메시지를 처리하고 있음을 나타내며 정상 상태입니다. Lag이 일정 수치를 유지하면 Consumer가 안정적으로 메시지를 처리하고 있으며 이 또한 정상 상태입니다. 그러나 Lag이 지속적으로 증가하는 추세라면 처리 속도가 생산 속도보다 느리다는 것을 의미하며 조치가 필요합니다. Lag이 급증한다면 Consumer가 처리를 중단했거나 심각한 문제가 발생한 것이므로 긴급 조치가 필요합니다.
@@ -271,6 +273,8 @@ flowchart TB
     LAG -->|증가 추세| TREND[추세 알림]
 ```
 
+*위 다이어그램은 Lag 수치에 따른 단계별 알림 설정 기준으로, 100 미만은 정상, 100~1000은 경고, 1000 초과는 긴급으로 분류합니다.*
+
 각 메트릭별 권장 임계값입니다. Consumer Lag은 1,000이면 Warning, 10,000이면 Critical입니다. Producer Error Rate는 1%면 Warning, 5%면 Critical입니다. Broker UnderReplicated는 1이면 Warning, 1을 초과하면 Critical입니다. Request Latency는 100ms면 Warning, 500ms면 Critical입니다.
 
 #### 로깅 전략
@@ -330,6 +334,8 @@ flowchart TB
     Q3 -->|Yes| CHECK_CONFIG[설정 확인]
     Q3 -->|No| SCALE[Consumer 스케일 아웃]
 ```
+
+*위 다이어그램은 Lag 급증 시 문제 진단 흐름으로, Consumer 생존 여부 → 처리 속도 → 리밸런싱 발생 순서로 원인을 추적합니다.*
 
 **문제 진단 체크리스트**
 

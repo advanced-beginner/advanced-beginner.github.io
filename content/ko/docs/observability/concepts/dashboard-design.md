@@ -30,10 +30,7 @@ lastmod: "2026-01-15"
 > **소요 시간**: 약 20분
 > **이 문서를 읽으면**: 효과적인 대시보드를 설계하고 문제를 빠르게 파악할 수 있습니다
 
-## TL;DR
-
-{{< callout type="info" >}}
-**핵심 요약:**
+{{< callout type="info" title="TL;DR" >}}
 - **계층적 구성**: Overview → Service → Detail 순서
 - **5초 규칙**: 5초 안에 문제 유무 파악 가능해야 함
 - **황금 신호 우선**: Latency, Traffic, Errors, Saturation
@@ -60,6 +57,8 @@ graph TD
     L1 --> |"문제 감지"| L2
     L2 --> |"원인 분석"| L3
 ```
+
+*Overview에서 문제를 감지하고, Service 레벨에서 원인을 좁히고, Detail에서 심층 분석하는 계층적 드릴다운 구조입니다.*
 
 ### 3. 색상 규칙
 

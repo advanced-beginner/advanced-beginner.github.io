@@ -34,6 +34,8 @@ flowchart LR
     E --> F[브라우저 접근]
 ```
 
+*YAML 작성부터 브라우저 접근까지 Quick Start의 전체 배포 흐름을 보여줍니다.*
+
 ## 시작 전 확인
 
 시작하기 전에 다음 도구들이 설치되어 있는지 확인하세요.
@@ -375,6 +377,8 @@ sequenceDiagram
     Kubelet->>Pod: 컨테이너 시작
     Pod-->>User: Running 상태
 ```
+
+*kubectl apply 명령이 API Server, Scheduler, Kubelet을 거쳐 Pod가 실행되기까지의 내부 흐름을 보여줍니다.*
 
 | 순서 | 컴포넌트 | 동작 |
 |------|----------|------|

@@ -28,10 +28,7 @@ lastmod: "2026-01-15"
 > **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: 서비스 특성에 맞게 4대 신호를 적용할 수 있습니다
 
-## TL;DR
-
-{{< callout type="info" >}}
-**핵심 요약:**
+{{< callout type="info" title="TL;DR" >}}
 - 서비스 유형마다 **핵심 신호**가 다름
 - **웹 API**: Latency, Errors 중심
 - **Kafka**: Traffic (Lag), Saturation 중심
@@ -68,6 +65,8 @@ graph TD
     L --> |"SLA"| SLA["P99 < 500ms"]
     E --> |"SLO"| SLO["에러율 < 0.1%"]
 ```
+
+*웹 API에서 Latency와 Errors가 SLA/SLO 기준으로 가장 중요한 핵심 지표임을 보여줍니다.*
 
 ### PromQL 쿼리
 
@@ -122,6 +121,8 @@ graph TD
     L --> |"중요"| LAG["Lag < 10,000"]
     S --> |"중요"| DISK["디스크 < 80%"]
 ```
+
+*Kafka에서 Consumer Lag과 디스크 사용률이 가장 중요한 모니터링 지표임을 보여줍니다.*
 
 ### PromQL 쿼리
 
@@ -192,6 +193,8 @@ graph TD
     L --> |"중요"| SLOW["슬로우 쿼리"]
 ```
 
+*데이터베이스에서 연결 포화도와 쿼리 지연시간이 가장 중요한 모니터링 지표임을 보여줍니다.*
+
 ### PromQL 쿼리 (PostgreSQL)
 
 ```promql
@@ -249,6 +252,8 @@ graph TD
     L --> |"중요"| HIT["히트율 > 90%"]
 ```
 
+*Redis에서 메모리 사용률과 캐시 히트율이 가장 중요한 모니터링 지표임을 보여줍니다.*
+
 ### PromQL 쿼리
 
 ```promql
@@ -288,6 +293,8 @@ graph TD
     E --> |"중요"| FAIL["실패율 < 1%"]
     T --> |"중요"| DONE["완료율 100%"]
 ```
+
+*배치 작업에서 실패율과 처리 완료율이 가장 중요한 모니터링 지표임을 보여줍니다.*
 
 ### PromQL 쿼리
 

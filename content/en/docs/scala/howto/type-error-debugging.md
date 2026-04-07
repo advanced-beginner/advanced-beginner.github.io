@@ -74,6 +74,8 @@ flowchart TD
     H -->|No| J["Step 3: Detailed Analysis<br>with splain"]
 ```
 
+*This diagram shows the diagnostic flow that classifies error types based on keywords in compile error messages and guides you to the appropriate resolution steps.*
+
 ---
 
 ## Step 2: Common Type Error Patterns

@@ -51,6 +51,8 @@ flowchart TB
     OP --> EA --> API
 ```
 
+*This diagram shows the core structure of Hexagonal Architecture with the domain at the center, communicating with the external world (Web, CLI, DB, etc.) through Ports and Adapters.*
+
 ---
 
 #### Why "Hexagonal"?
@@ -94,6 +96,8 @@ flowchart TB
     SPEAKER <--> BT <--> Phone
 ```
 
+*This diagram uses a smartphone analogy where the Core (OS, apps) connects to various Adapters through Ports (charging, earphone, display).*
+
 The same applies to software. Core business logic does not need to know which database or UI framework is used. All these technical choices are isolated through Adapters.
 
 The hexagonal shape does not mean 6 sides are important, but visually represents "can be connected from multiple directions." The key is shifting thinking from the layered "top->bottom" to an "inside<->outside" perspective.
@@ -123,6 +127,8 @@ flowchart LR
     EXT1["External Request"] --> InboundPorts
     OutboundPorts --> EXT2["External System"]
 ```
+
+*This diagram shows the difference between Inbound Ports (incoming requests: CreateOrderUseCase, etc.) and Outbound Ports (outgoing requests: SaveOrderPort, etc.).*
 
 Understanding the <strong>two types of Ports</strong> is important. The table below summarizes each Port's characteristics.
 
@@ -165,6 +171,8 @@ flowchart LR
         EA["External API Adapter"]
     end
 ```
+
+*This diagram shows the difference between Driving Adapters (things that call me, e.g., Controller) and Driven Adapters (things I call, e.g., DB).*
 
 Distinguishing the <strong>two types of Adapters</strong> is important. The table below summarizes each Adapter's characteristics.
 
@@ -224,6 +232,8 @@ flowchart TB
     end
 ```
 
+*This diagram shows the relationship between the Application Layer and Domain Layer within the Application Core, and the external Adapters.*
+
 The Application Core knows nothing about the external world. It does not know what HTTP is, what JPA is, or what Kafka is. It only knows Port interfaces and focuses solely on pure business logic.
 
 ---
@@ -281,6 +291,8 @@ flowchart TB
     PA --> DB
     NA --> MAIL
 ```
+
+*This diagram shows the complete connection structure from the external world through Driving Adapter, Inbound Port, Application Core, Outbound Port, to Driven Adapter.*
 
 Pay attention to the direction of the arrows in the diagram above. Dependencies always point from outside to inside only. The Application Core knows nothing about the outside and only uses Port interfaces.
 
@@ -642,6 +654,8 @@ flowchart TB
     APP --> DOM
 ```
 
+*This diagram shows the dependency direction flowing from Adapter to Port to Core, where Core depends on nothing.*
+
 **Core Rules:**
 
 Strictly following the dependency rules is the core of hexagonal architecture. First, Adapters implement and depend on Ports. Second, the Application Core knows nothing about Adapters. Third, the Domain depends on nothing and contains only pure business logic.
@@ -712,6 +726,8 @@ flowchart LR
     Before -->|"Replace Adapter only"| After
 ```
 
+*This diagram shows the ease of technology stack replacement where only the Adapter needs to be swapped when switching from MySQL to MongoDB.*
+
 For example, even if you change the database from MySQL to MongoDB, the OrderService code does not need any changes. The SaveOrderPort interface remains the same, and you simply write a new MongoOrderAdapter.
 
 ```java
@@ -752,6 +768,8 @@ flowchart LR
 
     Before -->|"Add Adapter only"| After
 ```
+
+*This diagram shows an example of extending notification channels by adding SMS and Push Adapters alongside the Email Adapter.*
 
 To extend from email-only to SMS and push notifications, just add SmsAdapter and PushAdapter. The Application Service still only calls SendNotificationPort, so no code changes are needed.
 
@@ -803,6 +821,8 @@ flowchart TB
         H1 <--> H2 <--> H3
     end
 ```
+
+*This diagram compares the structural differences between Layered Architecture (top-down) and Hexagonal Architecture (inside-out).*
 
 **Detailed Comparison**
 
@@ -931,6 +951,8 @@ flowchart TB
 
     E2E --> INT --> UNIT
 ```
+
+*This diagram shows the test pyramid strategy from unit tests (Domain/Port) to integration tests (Adapter) to E2E tests.*
 
 **1. Domain Test (Pure Unit Test)**
 
@@ -1099,6 +1121,8 @@ flowchart LR
 
     A --> B --> C
 ```
+
+*This diagram shows the gradual transition stages from existing layered architecture through Repository Interface extraction, Port pattern application, to Adapter separation.*
 
 **Step 1: Move Repository Interface to Domain**
 

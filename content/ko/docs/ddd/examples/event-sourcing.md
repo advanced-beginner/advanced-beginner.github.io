@@ -43,6 +43,8 @@ flowchart LR
     end
 ```
 
+*기존 방식(현재 상태를 DB에 저장)과 Event Sourcing(이벤트 시퀀스를 Event Store에 저장)의 차이를 비교합니다.*
+
 > **다이어그램 설명**: 왼쪽(기존 방식)은 Order가 DB에 현재 상태(status: CONFIRMED, amount: 50000)를 저장합니다. 오른쪽(Event Sourcing)은 Order가 Event Store에 이벤트 시퀀스(OrderCreated, ItemAdded, OrderConfirmed)를 저장합니다.
 
 | 구분 | 기존 방식 | Event Sourcing |

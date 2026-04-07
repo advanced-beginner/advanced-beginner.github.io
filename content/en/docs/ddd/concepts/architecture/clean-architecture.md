@@ -39,6 +39,8 @@ flowchart TB
     F --> A --> UC --> E
 ```
 
+*This diagram shows the concentric circle structure of Clean Architecture where dependencies point inward only, from outermost Frameworks & Drivers to innermost Entity.*
+
 ---
 
 ## Understanding Through "Concentric Circles"
@@ -58,6 +60,8 @@ flowchart TB
         L1 --> L2 --> L3 --> L4
     end
 ```
+
+*This diagram illustrates the onion-like layered structure where the outer shell (frameworks) is replaceable while the inner core (business rules) is protected.*
 
 Software is the same:
 
@@ -88,6 +92,8 @@ flowchart TB
         IN -.->|"❌ Does not know"| OUT
     end
 ```
+
+*This diagram shows the dependency rule where outer layers know about inner layers, but inner layers have no knowledge of outer layers.*
 
 **Why is this important?**
 
@@ -297,6 +303,8 @@ flowchart LR
     DB <--> REPO <--> UseCase
 ```
 
+*This diagram shows how the Interface Adapter layer handles data conversion between external formats (HTTP, DB) and internal formats (Domain).*
+
 **Three types of Adapter:**
 
 | Adapter | Role | Example |
@@ -378,6 +386,8 @@ flowchart TB
         UI["📱 React/Vue"]
     end
 ```
+
+*This diagram shows the Frameworks & Drivers layer containing replaceable external tools such as Spring MVC and JPA/Hibernate.*
 
 ```java
 // Framework Layer: Spring configuration
@@ -488,6 +498,8 @@ flowchart TB
     AD -.->|"❌ Forbidden"| EN
 ```
 
+*This diagram shows the compile-time dependency structure flowing inward from framework to adapter, usecase, and domain.*
+
 ### Runtime Flow (Actual Call Sequence)
 
 ```mermaid
@@ -510,6 +522,8 @@ sequenceDiagram
     UC-->>CTRL: output
     CTRL-->>HTTP: 201 Created
 ```
+
+*This diagram shows the runtime call flow of an HTTP request passing through Controller, Use Case, Entity, and Gateway to reach the DB.*
 
 ---
 
@@ -545,6 +559,8 @@ flowchart LR
 
     Hex -.->|"Practically the same"| Clean
 ```
+
+*This diagram compares the structural differences between Hexagonal Architecture and Clean Architecture.*
 
 ---
 
@@ -655,6 +671,8 @@ flowchart TB
     UNIT --> UC
     UNIT --> EN
 ```
+
+*This diagram shows the test strategy by layer as a pyramid from unit tests (Entity, Use Case) to integration tests to E2E tests.*
 
 ### 1. Entity Test (Purest)
 
@@ -850,6 +868,8 @@ flowchart LR
 
     A --> B --> C --> D
 ```
+
+*This diagram shows the stages of progressively adopting Clean Architecture from Entity separation to Use Case extraction and Gateway interface application.*
 
 ### Step 1: Separate Entity
 

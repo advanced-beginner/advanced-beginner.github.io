@@ -12,7 +12,7 @@ author_url: "http://github.com/kimbenji"
 > **Estimated Time**: About 30 minutes
 > **Key Question**: "How should we divide the system, and how should each part collaborate?"
 
-{{< callout type="tip" title="Summary" >}}
+{{< callout type="info" title="TL;DR" >}}
 4 core concepts of Strategic Design: **Subdomain** (classify business areas) -> **Ubiquitous Language** (define common language) -> **Bounded Context** (set model boundaries) -> **Context Mapping** (define collaboration between boundaries)
 {{< /callout >}}
 
@@ -35,6 +35,8 @@ flowchart TB
     UL --> BC
     BC --> CM
 ```
+
+*This diagram shows the four components of strategic design (Subdomain, Ubiquitous Language, Bounded Context, Context Mapping) and their relationships.*
 
 Each component of strategic design answers the following questions. **Subdomain** classifies the domain into Core, Supporting, and Generic by asking "What is core to the business?". **Ubiquitous Language** defines "What language will we communicate in?" and produces a glossary. **Bounded Context** answers "How do we divide the system?" and clarifies context boundaries. Finally, **Context Mapping** determines "How do systems integrate?" and establishes integration strategies.
 
@@ -76,6 +78,8 @@ flowchart TB
     end
 ```
 
+*This diagram classifies the e-commerce domain into Core (orders, pricing, promotions), Supporting (inventory, customers, reviews), and Generic (payments, notifications, authentication).*
+
 **Subdomain Types**
 
 Subdomains are classified into three types. **Core Domain** is the area that creates the business's core competency, requiring top priority investment and the best developers. For example, a delivery app's dispatch algorithm is Core Domain. **Supporting Domain** supports the core but is not a differentiating factor, requiring adequate investment. Inventory management and customer management fall here. **Generic Domain** is common to all businesses, and using external solutions is efficient. Payment, authentication, and email sending belong here.
@@ -116,6 +120,8 @@ flowchart TB
     end
 ```
 
+*This diagram classifies Coupang's domain into Core (Rocket Delivery, dynamic pricing, personalized recommendations), Supporting (catalog, inventory, sellers, reviews), and Generic (payments, notifications, authentication).*
+
 This classification becomes the basis for investment decisions. Core receives continuous investment for innovation and differentiation, Supporting receives investment necessary for business operations, and Generic receives only minimal integration costs.
 
 **Subdomain Identification Guide**
@@ -137,6 +143,8 @@ flowchart TB
     Q3 -->|Yes| GENERIC["Generic Domain"]
     Q3 -->|No| SUPPORTING["Supporting Domain"]
 ```
+
+*This diagram shows a decision flowchart for determining Subdomain type based on business necessity, competitive differentiation, and market solution availability.*
 
 #### Ubiquitous Language
 
@@ -161,6 +169,8 @@ flowchart LR
 
     Problem -->|Apply DDD| Solution
 ```
+
+*This diagram shows how terminology mismatch problems (left) are solved by applying Ubiquitous Language (right) so all stakeholders use the same terms.*
 
 **How to Write a Glossary**
 
@@ -308,6 +318,8 @@ flowchart TB
     Sales -.->|Event| Billing
 ```
 
+*This diagram shows the e-commerce system where Sales, Inventory, Shipping, and Billing Contexts each have independent models and are integrated through events.*
+
 **Same Term, Different Meaning (Homonyms)**
 
 Let's look specifically at how the term "Customer" has different meanings in each Context. Sales Context's Customer answers "Who is ordering?". It has membership grade (VIP, Gold, Silver) and available points, with a `getDiscount` method to calculate discounts. Shipping Context's Customer is named Recipient and answers "Who is receiving?". It has phone number, address, and delivery preference (door, security desk), with a `canReceiveAt` method to check if they can receive at a specific time slot. Billing Context's Customer is named Payer and answers "Who is paying?". It has tax ID, billing address, and payment methods, with a `requiresTaxInvoice` method to determine whether to issue a tax invoice.
@@ -391,6 +403,8 @@ flowchart TB
     T3 --> C3
 ```
 
+*This diagram shows how team structure (Sales, Logistics, Billing teams) maps to Bounded Contexts (Sales, Logistics, Billing) following Conway's Law.*
+
 Third is business process clues. Breaking down the order process into stages yields Order Receipt, Payment Processing, Shipping Instruction, Delivery, Settlement. Each stage has different responsibilities, naturally mapping to Sales, Payment, Inventory, Shipping, Billing Contexts.
 
 **3. Business Process Clues**
@@ -410,6 +424,8 @@ flowchart LR
     P4 -.-> C4["Shipping"]
     P5 -.-> C5["Billing"]
 ```
+
+*This diagram shows how each stage of the order process (receipt, payment, shipping, delivery, settlement) naturally maps to separate Contexts.*
 
 **Context Boundary Decision Checklist**
 
@@ -452,6 +468,8 @@ flowchart LR
     U -->|Product info| D3
 ```
 
+*This diagram shows the upstream Product Catalog Service providing product information to multiple downstream consumers (Order, Inventory, Search).*
+
 **Integration Patterns in Detail**
 
 There are several patterns for integrating between Contexts, each with different characteristics and suitable situations. Choosing the right pattern for the situation is important.
@@ -473,6 +491,8 @@ flowchart LR
     A <-->|Close collaboration<br>Joint planning| B
 ```
 
+*This diagram shows the Order team and Payment team collaborating closely through the Partnership pattern with joint planning.*
+
 **2. Shared Kernel**
 
 A pattern where two Contexts share some models. Suitable for truly identical concepts like Money or Address that are stable with rare changes. The advantage is eliminating duplication and consistency, but the disadvantage is increased coupling since changes affect both sides. As in the example below, creating a separate `shared-kernel` module to share Money and Address allows both Order Context and Payment Context to use the same amount calculation logic.
@@ -491,6 +511,8 @@ flowchart TB
 
     SK1 <-.->|Same module| SK2
 ```
+
+*This diagram shows Order Context and Payment Context sharing stable models like Money and Address through a Shared Kernel.*
 
 ```java
 // shared-kernel module
@@ -523,6 +545,8 @@ sequenceDiagram
     Note over D,U: Upstream leads API design
     Note over D: Downstream implements to match API
 ```
+
+*This diagram shows the Customer-Supplier pattern where Order Service calls Product Service's API to retrieve product information.*
 
 ```java
 // Downstream: Product Service Client
@@ -575,6 +599,8 @@ flowchart LR
     EXT -->|"Accept as-is"| INT
 ```
 
+*This diagram shows the Conformist pattern where the model from an unchangeable external Legacy ERP system is accepted as-is.*
+
 **5. Anti-Corruption Layer (ACL)**
 
 A pattern that places a translation layer to prevent external models from corrupting internal ones. Essential when integrating with legacy systems or complex, inconsistent external APIs. Anti-Corruption Layer consists of Translator (data conversion), Adapter (interface adaptation), and Facade (simplification). In the example below, the legacy system uses abbreviations and magic numbers like `ord_no`, `sts_cd`, `cust_nm`, but ACL converts these to clean domain models (Order, OrderStatus, ShippingAddress). The advantage is protecting internal model and isolation from legacy changes, but disadvantages are additional complexity and performance overhead.
@@ -598,6 +624,8 @@ flowchart LR
     EXT -->|Legacy format| ACL
     ACL -->|Domain format| DOM
 ```
+
+*This diagram shows the Anti-Corruption Layer (Translator, Adapter, Facade) placed between legacy systems and the domain to protect the internal model.*
 
 ```java
 // Legacy system response (unchangeable)
@@ -691,6 +719,8 @@ flowchart TB
     API --> C4
 ```
 
+*This diagram shows Product Service providing standardized services to multiple consumers through Open Host Service and Published Language.*
+
 ```json
 // Published Language: Standardized event schema
 {
@@ -746,6 +776,8 @@ flowchart TB
     A1 -.-|No integration| B1
 ```
 
+*This diagram shows the Separate Ways pattern where two Contexts do not integrate and implement independently.*
+
 **Context Map Example: E-commerce**
 
 Let's look at a complete Context Map for a real e-commerce system. Core Domain has Orders and Pricing Policy, Supporting Domain has Product Catalog, Inventory, Shipping, and Members, Generic Domain has Payment (external PG), Notifications (external service), and Authentication (OAuth). Order and Catalog are in Customer-Supplier relationship, querying product info when creating orders. Order and Inventory are also Customer-Supplier, requesting inventory check/deduction when confirming orders. Order and Payment use ACL protection for external PG integration. Order with Shipping and Notification integrate loosely via Published Language (events). Price and Order share pricing calculation logic in a Shared Kernel relationship.
@@ -781,6 +813,8 @@ flowchart TB
     AUTH -->|Conformist| MEMBER
 ```
 
+*This diagram shows the complete Context Map of an e-commerce system with integration patterns between Core/Supporting/Generic domains.*
+
 Each relationship has the following meaning. ORDER -> CATALOG is the relationship of querying product info when creating orders. ORDER -> INV is the relationship of checking inventory and requesting deduction when confirming orders. ORDER -> PAY is protected by ACL for external PG integration. ORDER -> SHIP, NOTI are event-based loose integration. PRICE <-> ORDER is a Shared Kernel relationship sharing pricing calculation logic.
 
 | Relationship | Description |
@@ -809,6 +843,8 @@ flowchart LR
 
     E --> C --> A --> P --> BC
 ```
+
+*This diagram shows the key EventStorming components (Actor, Command, Aggregate, Domain Event, Policy) connected in sequence.*
 
 **EventStorming Results**
 

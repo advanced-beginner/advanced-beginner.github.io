@@ -32,6 +32,8 @@ flowchart TD
     CRB -->|권한 부여| CL[클러스터 전체 리소스]
 ```
 
+*ServiceAccount가 RoleBinding/ClusterRoleBinding을 통해 Role/ClusterRole의 권한으로 리소스에 접근하는 구조를 보여줍니다.*
+
 | 리소스 | 범위 | 설명 |
 |--------|------|------|
 | Role | Namespace | 특정 Namespace 내 리소스 권한 |

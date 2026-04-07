@@ -212,6 +212,8 @@ flowchart TB
     end
 ```
 
+*같은 "상품"이라는 용어가 판매, 재고, 배송 Context에서 각기 다른 속성에 초점을 맞추는 것을 보여줍니다.*
+
 **Aggregate (집합체)**
 
 Aggregate는 트랜잭션 일관성을 유지하는 객체들의 묶음입니다. 외부에서는 반드시 Aggregate Root를 통해서만 접근하며, 하나의 트랜잭션에서는 하나의 Aggregate만 수정합니다. Aggregate 내부의 일관성은 Root가 책임집니다. 아래 다이어그램에서 Order가 Aggregate Root이고, OrderLine과 ShippingAddress는 Order를 통해서만 접근 가능합니다.
@@ -232,6 +234,8 @@ flowchart TB
     External["외부 코드"]
     External -->|"order.addLine()"| Order
 ```
+
+*Order Aggregate 내부 구조로, Aggregate Root인 Order를 통해서만 OrderLine과 ShippingAddress에 접근할 수 있음을 보여줍니다.*
 
 **Ubiquitous Language (유비쿼터스 언어)**
 
@@ -265,6 +269,8 @@ sequenceDiagram
         E->>A: 통계 업데이트
     end
 ```
+
+*주문 확정 이벤트가 Event Bus를 통해 재고, 알림, 통계 시스템에 병렬로 전달되는 흐름을 보여줍니다.*
 
 ## 언제 DDD를 적용해야 할까?
 

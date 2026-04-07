@@ -29,10 +29,7 @@ Recording Rules를 **병원의 정기 통계 보고서**에 비유하면 이해�
 > **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: Recording Rules로 쿼리 성능을 개선하고 복잡한 메트릭을 관리할 수 있습니다
 
-## TL;DR
-
-{{< callout type="info" >}}
-**핵심 요약:**
+{{< callout type="info" title="TL;DR" >}}
 - Recording Rules는 **쿼리 결과를 새로운 메트릭으로 저장**
 - 복잡한 쿼리를 미리 계산하여 대시보드/알림 성능 향상
 - 네이밍: `level:metric:operations` 패턴 권장
@@ -298,6 +295,8 @@ graph TD
     L1 --> |"sum by (service)"| L2
     L2 --> |"sum()"| L3
 ```
+
+*원본 메트릭에서 인스턴스별 rate → 서비스별 합계 → 전체 합계로 단계적으로 집계하는 계층적 Recording Rules 구조입니다.*
 
 ---
 

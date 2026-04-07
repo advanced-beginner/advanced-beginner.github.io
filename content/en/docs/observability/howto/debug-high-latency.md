@@ -33,6 +33,7 @@ graph TD
     A --> B --> C --> D --> E
 ```
 
+*This diagram shows the five-step workflow for diagnosing high latency: from scoping to resolution.*
 ## Step 1: Scope Analysis
 
 ### Check Impact Scope

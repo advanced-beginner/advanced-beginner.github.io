@@ -41,6 +41,8 @@ flowchart TB
     INF --> AS --> DS --> Model
 ```
 
+*어니언 아키텍처의 양파 레이어 구조로, Domain Model이 가장 안쪽에 위치하고 Infrastructure가 가장 바깥에 있습니다.*
+
 ---
 
 ## "양파"로 이해하기
@@ -71,6 +73,8 @@ flowchart TB
 
     L1 --> L2 --> L3 --> L4
 ```
+
+*양파의 층 구조 비유로, 바깥 껍질(Infrastructure)은 교체 가능하고 안쪽 핵심(Domain Model)은 보호됩니다.*
 
 ---
 
@@ -104,6 +108,8 @@ flowchart LR
     Clean -.->|"DDD 강화"| Onion
 ```
 
+*클린 아키텍처와 어니언 아키텍처의 구조를 나란히 비교합니다.*
+
 **어니언이 DDD에 더 적합한 이유:**
 - Domain Model과 Domain Service를 명확히 분리
 - Aggregate, Entity, Value Object 개념이 자연스럽게 들어감
@@ -126,6 +132,8 @@ flowchart TB
         DE["Domain Event<br>(도메인 이벤트)"]
     end
 ```
+
+*Domain Model 레이어에 Entity, Value Object, Domain Event가 위치하며 핵심 비즈니스 규칙을 담습니다.*
 
 ```java
 // Entity: 고유 식별자로 구분
@@ -459,6 +467,8 @@ flowchart TB
     end
 ```
 
+*Infrastructure 레이어에 UI, Controller, Repository 구현체, 외부 API 연동 등 기술적 세부사항이 위치합니다.*
+
 ```java
 // Controller (Infrastructure)
 @RestController
@@ -647,6 +657,8 @@ flowchart TB
     REPO_IMPL -->|"구현"| RI
 ```
 
+*의존성 방향으로, Infrastructure에서 Application Service, Domain Service를 거쳐 Domain Model까지 안쪽으로만 향합니다.*
+
 **핵심 규칙:**
 1. **Infrastructure → Application → Domain** 방향으로만 의존
 2. **Domain은 아무것에도 의존하지 않음**
@@ -681,6 +693,8 @@ flowchart TB
         O4["Infrastructure"]
     end
 ```
+
+*클린, 헥사고날, 어니언 아키텍처의 레이어 구조를 나란히 비교합니다.*
 
 | 비교 항목 | 클린 | 헥사고날 | 어니언 |
 |---------|------|---------|--------|
@@ -823,6 +837,8 @@ flowchart TB
 
     E2E --> INT --> UNIT
 ```
+
+*테스트 피라미드로, 단위 테스트(Domain)에서 통합 테스트, E2E 테스트까지의 전략을 보여줍니다.*
 
 ### 1. Domain Model 테스트 (가장 쉬움)
 
@@ -1006,6 +1022,8 @@ flowchart LR
     Q3 -->|No| H["헥사고날 또는<br>계층형 권장"]
 ```
 
+*비즈니스 로직 복잡도와 장기 유지보수 여부를 기준으로 어니언 아키텍처 도입을 결정하는 흐름도입니다.*
+
 > <strong>핵심:</strong> 아키텍처의 복잡성은 <strong>해결하려는 문제의 복잡성에 비례</strong>해야 합니다. 단순한 문제에 복잡한 해결책을 적용하면, 그 복잡성 자체가 새로운 문제가 됩니다.
 
 ---
@@ -1053,6 +1071,8 @@ flowchart LR
 
     A --> B --> C --> D
 ```
+
+*Entity 풍부화에서 Domain Service 추출, Repository Interface 적용까지 점진적으로 어니언 아키텍처를 도입하는 단계입니다.*
 
 ### 1단계: Entity에 로직 넣기
 

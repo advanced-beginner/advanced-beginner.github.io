@@ -396,6 +396,8 @@ flowchart TD
     P -->|Yes| Q[GC, 네트워크, 디스크 확인]
 ```
 
+*위 다이어그램은 Spark UI의 Jobs, Stages, Storage, Executors 탭을 활용한 성능 문제 진단 흐름을 보여줍니다.*
+
 **1. Jobs 탭 분석**
 
 ```

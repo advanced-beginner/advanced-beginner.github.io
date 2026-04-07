@@ -12,7 +12,7 @@ author_url: "http://github.com/kimbenji"
 > **Time Required**: About 40 minutes
 > **Key Question**: "What patterns should be used to implement domain models?"
 
-{{< callout type="tip" title="Summary" >}}
+{{< callout type="info" title="TL;DR" >}}
 Tactical Design Building Blocks: **Entity**(distinguished by identity) + **Value Object**(distinguished by value) → **Aggregate**(consistency boundary) + **Repository**(persistence) + **Domain Service**(domain logic) + **Domain Event**(event communication)
 {{< /callout >}}
 
@@ -61,6 +61,8 @@ flowchart TB
     AGG --> DE
 ```
 
+*This diagram shows the relationships between tactical design building blocks (Entity, VO, Aggregate), services (Domain/Application), infrastructure (Repository, Factory), and events.*
+
 #### Entity
 
 **Definition**
@@ -75,6 +77,8 @@ flowchart LR
         LIFE["Lifecycle"]
     end
 ```
+
+*This diagram shows the three key characteristics of an Entity: unique identifier, mutable state, and lifecycle.*
 
 Let's look at Entity characteristics in detail. **Identity** is the characteristic of being distinguished by a unique identifier. Order numbers and member IDs are typical examples. **Mutability** means the state can change. For example, order status changes from PENDING to CONFIRMED. **Lifecycle** means it has a lifecycle of creation, modification, and deletion. The process of member signup, activity, and withdrawal falls under this.
 
@@ -174,6 +178,8 @@ flowchart LR
         SIDE["No Side Effects"]
     end
 ```
+
+*This diagram shows the three key characteristics of a Value Object: immutability, equality by value, and no side effects.*
 
 Value Object characteristics are summarized as follows. **Immutability** means it cannot be changed after creation. After creating Money(1000, KRW), you cannot change the amount or currency. **Value Equality** means objects with the same attributes are treated as the same object. 1000 won equals 1000 won. **Self-Contained** means it validates itself. Negative amounts are rejected at creation time.
 
@@ -279,6 +285,8 @@ flowchart TB
     E2 -->|contains| V2
 ```
 
+*This diagram shows the relationship between Entities (Order, Member, Product) and Value Objects (Money, Address, Period), where Entities contain Value Objects.*
+
 The differences between the two concepts are summarized as follows. Entity is compared by ID, is mutable, and has an independent lifecycle. Order and Member fall under this. Value Object is compared by all attributes, is immutable, and is dependent on Entity. Money and Address fall under this.
 
 | Aspect | Entity | Value Object |
@@ -330,6 +338,8 @@ flowchart LR
     REPO_IF -.->|implements| REPO_IMPL
     REPO_IMPL --> DB
 ```
+
+*This diagram shows that Repository interfaces reside in the domain layer while implementations reside in the infrastructure layer, achieving dependency inversion.*
 
 **Interface Design**
 
@@ -433,6 +443,8 @@ flowchart TB
         C3["Logic not belonging to specific Entity"]
     end
 ```
+
+*This diagram shows Domain Service use cases: operations spanning multiple Aggregates, logic requiring external services, and logic that does not belong to any Entity.*
 
 **Example 1: Discount Calculation**
 
@@ -631,6 +643,8 @@ flowchart TB
     AGG --> EVT
 ```
 
+*This diagram shows how tactical design building blocks are arranged within the layer structure (Application, Domain, Infrastructure).*
+
 #### Specification Pattern
 
 **Definition**
@@ -650,6 +664,8 @@ flowchart LR
     OR --> SPEC
     NOT --> SPEC
 ```
+
+*This diagram shows the Specification pattern for encapsulating business rules as composable, reusable condition objects.*
 
 **Basic Implementation**
 
@@ -858,6 +874,8 @@ flowchart TB
     P3 --> IF
 ```
 
+*This diagram shows the Policy pattern for encapsulating business decisions and calculations as interchangeable strategy objects.*
+
 **Discount Policy Example**
 
 Let's implement discount policies with the Policy pattern. The `DiscountPolicy` interface defines `calculateDiscount` and `isApplicable` methods. `VipDiscountPolicy` applies a 10% discount to VIP customers. `FirstOrderDiscountPolicy` applies a 5000 won discount to first-order customers. `BulkOrderDiscountPolicy` applies a 5% discount when purchasing 10 or more items. `DiscountCalculator` combines all these policies to calculate the total discount.
@@ -1055,6 +1073,8 @@ flowchart TB
     ORDER -.->|ID reference only| CUSTOMER
     ORDER -.->|ID reference only| PRODUCT
 ```
+
+*This diagram shows the Module structure where Order, Customer, and Product modules depend on a Shared module and reference each other only by ID.*
 
 **Inter-Module Communication**
 

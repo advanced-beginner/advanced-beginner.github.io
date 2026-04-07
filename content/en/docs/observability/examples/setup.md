@@ -25,6 +25,7 @@ graph TB
     PROM --> AM["Alertmanager"]
 ```
 
+*This diagram shows the overall architecture where a Spring Boot app sends data to Prometheus (metrics), Loki (logs), and Tempo (traces), with Grafana providing unified visualization.*
 ## Step 1: Create Directory Structure
 
 ```bash

@@ -56,6 +56,8 @@ flowchart TB
     Pod --- NET
 ```
 
+*Pod 내부에서 여러 컨테이너가 네트워크와 Volume을 공유하는 구조를 보여줍니다.*
+
 Pod 내의 컨테이너들이 공유하는 것은 다음과 같습니다.
 
 | 공유 리소스 | 설명 |
@@ -98,6 +100,8 @@ flowchart LR
     end
     Log -->|전송| ES[(Elasticsearch)]
 ```
+
+*웹 앱이 로그를 생성하고, 같은 Pod 내의 Log Collector가 이를 읽어 Elasticsearch로 전송하는 Sidecar 패턴을 보여줍니다.*
 
 이 경우 Web App과 Log Collector는 다음과 같은 이유로 같은 Pod에 있어야 합니다.
 
@@ -158,6 +162,8 @@ stateDiagram-v2
     Succeeded --> [*]
     Failed --> [*]
 ```
+
+*Pod의 생명주기 상태 전이(Pending → Running → Succeeded/Failed/Unknown)를 보여줍니다.*
 
 각 단계를 설명하면 다음과 같습니다.
 
@@ -279,6 +285,8 @@ flowchart LR
     P1 <-->|직접 통신| P3
     P1 <-->|localhost 불가| P2
 ```
+
+*각 Pod가 고유한 IP를 가지며, 노드 간에도 직접 통신할 수 있는 Pod 네트워킹 구조를 보여줍니다.*
 
 네트워킹 규칙은 다음과 같습니다.
 

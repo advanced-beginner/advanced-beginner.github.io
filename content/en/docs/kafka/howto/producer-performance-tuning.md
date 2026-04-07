@@ -31,6 +31,8 @@ flowchart TB
     style D fill:#e8f5e9
 ```
 
+*This diagram shows the three axes of Producer performance optimization — throughput, latency, and durability — and their trade-off relationships.*
+
 | Factor | Description | Optimization Direction |
 |--------|-------------|------------------------|
 | **Throughput** | Messages sent per second | Increase batch size, enable compression |
@@ -119,6 +121,8 @@ flowchart LR
         B --> S4[Send Once]
     end
 ```
+
+*This diagram shows the difference between default settings (sending each message individually) and batch settings (collecting multiple messages and sending them at once).*
 
 | Setting | Default | Recommended | Effect |
 |---------|---------|-------------|--------|

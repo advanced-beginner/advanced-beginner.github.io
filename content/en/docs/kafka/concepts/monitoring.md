@@ -53,6 +53,8 @@ flowchart LR
     O3 -->|Lag: 200| O5
 ```
 
+*This diagram shows the concept of Consumer Lag — the difference between the Consumer's current position (Offset 800) and the latest message position (Offset 1000) within a Partition, resulting in a Lag of 200.*
+
 **Interpreting Lag**
 
 Lag of 0 indicates Consumer is processing messages in real-time; this is normal status. Lag maintaining a constant value indicates Consumer is processing messages stably; this is also normal status. However, continuously increasing Lag means processing speed is slower than production speed and action is needed. Spiking Lag means Consumer has stopped processing or a serious problem has occurred, requiring urgent action.
@@ -255,6 +257,8 @@ flowchart TB
     LAG -->|Increasing Trend| TREND[Trend Alert]
 ```
 
+*This diagram shows the tiered alert thresholds based on Lag values: below 100 is normal, 100–1000 is a warning, and above 1000 is critical.*
+
 Recommended thresholds per metric. Consumer Lag is Warning at 1,000, Critical at 10,000. Producer Error Rate is Warning at 1%, Critical at 5%. Broker UnderReplicated is Warning at 1, Critical above 1. Request Latency is Warning at 100ms, Critical at 500ms.
 
 #### Logging Strategy
@@ -314,6 +318,8 @@ flowchart TB
     Q3 -->|Yes| CHECK_CONFIG[Check Settings]
     Q3 -->|No| SCALE[Consumer Scale Out]
 ```
+
+*This diagram shows the troubleshooting flow when Lag spikes, tracing the cause by checking Consumer health, processing speed, and rebalancing occurrence in order.*
 
 **Problem Diagnosis Checklist**
 

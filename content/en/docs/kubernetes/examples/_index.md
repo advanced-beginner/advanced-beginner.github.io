@@ -44,6 +44,8 @@ flowchart TD
     style F fill:#98FB98
 ```
 
+*This diagram shows how to choose between environment setup, basic examples, Spring Boot deployment, and advanced exercises based on Kubernetes experience level.*
+
 | Your Situation | Recommended Example | What You'll Learn |
 |------------|----------|----------|
 | New to Kubernetes | [Environment Setup](setup/) → [Basic Example](basic/) | Cluster setup, Pod/Service basics |

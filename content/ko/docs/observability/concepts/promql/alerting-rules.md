@@ -30,10 +30,7 @@ Alerting Rules를 **중환자실 환자 모니터 경보 시스템**에 비유�
 > **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: 오탐을 줄이고 실제 문제만 알림받는 규칙을 작성할 수 있습니다
 
-## TL;DR
-
-{{< callout type="info" >}}
-**핵심 요약:**
+{{< callout type="info" title="TL;DR" >}}
 - `for`: 지정 시간 동안 조건 만족 시 발동 (오탐 방지)
 - `labels`: 심각도, 팀 등 메타데이터 추가
 - `annotations`: 알림 메시지, 런북 URL 포함
@@ -124,6 +121,8 @@ graph LR
     P --> |"5분 지속"| F
     P --> |"조건 해제"| R["해제<br>(알림 취소)"]
 ```
+
+*for 설정에 따라 조건 만족 시 Pending 상태에서 5분 지속되면 Firing으로, 중간에 해제되면 취소되는 흐름입니다.*
 
 **권장 값:**
 
@@ -448,6 +447,8 @@ stateDiagram-v2
     Pending --> Firing: for 시간 경과
     Firing --> Inactive: 조건 해제 (Resolved)
 ```
+
+*알림의 Inactive → Pending → Firing 상태 전환과 각 상태 간 조건을 보여주는 상태 다이어그램입니다.*
 
 | 상태 | 설명 |
 |------|------|

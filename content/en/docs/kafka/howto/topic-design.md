@@ -74,6 +74,8 @@ flowchart TB
     RT --> RT1["Business requirements"]
 ```
 
+*This diagram shows the four key elements to decide when designing a topic: naming, partition count, replication factor, and retention policy.*
+
 ---
 
 ## Step 1: Establish Topic Naming Rules
@@ -163,6 +165,8 @@ flowchart TB
         K4["Key: user-D"] --> P2["Partition 2<br>10% load"]
     end
 ```
+
+*This diagram shows the hot partition problem where messages are concentrated on a specific Key, causing load to be skewed toward one Partition.*
 
 **Solutions:**
 
@@ -352,6 +356,8 @@ flowchart TB
     RT1 --> End[Create Topic]
     RT2 --> End
 ```
+
+*This diagram shows the decision flow for new topic design, proceeding in order: naming, partitioning strategy, replication factor, and retention policy.*
 
 ---
 

@@ -56,6 +56,8 @@ flowchart TB
     K2 --> P4
 ```
 
+*This diagram shows the overall architecture of the Control Plane (API Server, etcd, Scheduler, Controller Manager) and Worker Nodes (Kubelet, Pods).*
+
 Comparing the roles of Control Plane and Worker Nodes:
 
 | Component | Role | Analogy |
@@ -80,6 +82,8 @@ flowchart LR
     CI/CD --> API
     API --> Internal[Internal Components]
 ```
+
+*This diagram shows how all external requests from kubectl, Dashboard, and CI/CD pass through the API Server before reaching internal components.*
 
 Its main roles are:
 
@@ -126,6 +130,8 @@ flowchart LR
     B -->|selects| F
 ```
 
+*This diagram shows how the Scheduler places new Pods on the node with the most available resources.*
+
 Scheduling decision factors include:
 
 | Factor | Description |
@@ -162,6 +168,8 @@ flowchart LR
     C --> A
 ```
 
+*This diagram shows how the Controller Manager's reconciliation loop continuously compares the current state with the desired state and makes adjustments.*
+
 For example, if a Deployment is set to `replicas: 3` but only 2 Pods currently exist, the ReplicaSet Controller creates 1 additional Pod.
 
 ## Worker Node Components
@@ -187,6 +195,8 @@ flowchart TB
     Kubelet --> CRI[Container Runtime]
     CRI --> Container[Container]
 ```
+
+*This diagram shows how the Kubelet receives Pod specs from the API Server, runs containers via the Container Runtime, and reports status back.*
 
 Kubelet communicates with the container runtime (containerd, CRI-O, etc.) to actually manage containers.
 
@@ -254,6 +264,8 @@ sequenceDiagram
     Kubelet->>API: 16. Update Pod status
 ```
 
+*This diagram shows the end-to-end flow when running kubectl apply, where the API Server, etcd, Controller Manager, Scheduler, and Kubelet collaborate sequentially.*
+
 Summarizing each step:
 
 | Step | Component | Action |
@@ -294,6 +306,8 @@ flowchart TB
     ETCD2 <--> ETCD3
     ETCD1 <--> ETCD3
 ```
+
+*This diagram shows a production high-availability (HA) setup with three Control Planes and an etcd cluster behind a Load Balancer.*
 
 Key elements of HA configuration:
 

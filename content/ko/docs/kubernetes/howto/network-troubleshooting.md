@@ -84,6 +84,8 @@ flowchart LR
     end
 ```
 
+*네트워크 문제 진단 시 Client → Ingress → Service → Pod 순서로 확인하는 연결 흐름과 확인 순서를 보여줍니다.*
+
 ---
 
 ## 1단계: Pod 직접 연결 확인

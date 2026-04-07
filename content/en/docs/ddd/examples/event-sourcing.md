@@ -43,6 +43,8 @@ flowchart LR
     end
 ```
 
+*This diagram compares the traditional approach (storing current state in DB) with Event Sourcing (storing event sequences in Event Store).*
+
 > **Diagram Description**: On the left (traditional approach), Order stores current state (status: CONFIRMED, amount: 50000) in the DB. On the right (Event Sourcing), Order stores an event sequence (OrderCreated, ItemAdded, OrderConfirmed) in the Event Store.
 
 | Aspect | Traditional | Event Sourcing |

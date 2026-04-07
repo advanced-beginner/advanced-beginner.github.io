@@ -75,6 +75,8 @@ flowchart LR
     USE -->|제한| LIM
 ```
 
+*requests(최소 보장)와 limits(최대 제한) 사이에서 실제 리소스가 사용되는 범위를 보여줍니다.*
+
 requests와 limits를 비교하면 다음과 같습니다.
 
 | 항목 | requests | limits |
@@ -114,6 +116,8 @@ flowchart LR
     B -->|보장 500m| CPU
     CPU -->|남은 250m| C[경합]
 ```
+
+*두 Pod가 각각 requests만큼 CPU를 보장받고, 남은 용량에 대해 경합하는 구조를 보여줍니다.*
 
 | 상황 | 동작 |
 |------|------|
@@ -188,6 +192,8 @@ flowchart LR
     BE --> BU[Burstable 종료]
     BU --> GU[Guaranteed 마지막]
 ```
+
+*노드 메모리 부족 시 BestEffort, Burstable, Guaranteed 순서로 Pod가 종료되는 QoS 우선순위를 보여줍니다.*
 
 ## 권장 설정
 

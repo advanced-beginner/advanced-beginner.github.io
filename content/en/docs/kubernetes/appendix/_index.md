@@ -23,6 +23,8 @@ flowchart LR
     T -->|Advanced Learning| R[References]
 ```
 
+*This diagram shows how to choose between the Glossary, FAQ, and References based on question type (terminology, errors, or advanced learning).*
+
 | Situation | Recommended Resource | Usage Example |
 |-----------|---------------------|---------------|
 | When encountering unfamiliar terms | [Glossary](glossary/) | "What's PVC?" → Check PersistentVolumeClaim definition |

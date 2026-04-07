@@ -212,6 +212,8 @@ flowchart TB
     end
 ```
 
+*This diagram shows how the same term "Product" focuses on different attributes in Sales, Inventory, and Shipping Contexts.*
+
 **Aggregate**
 
 An Aggregate is a cluster of objects that maintain transactional consistency. External access must go through the Aggregate Root, only one Aggregate is modified per transaction, and the Root is responsible for internal consistency. In the diagram below, Order is the Aggregate Root, and OrderLine and ShippingAddress are only accessible through Order.
@@ -232,6 +234,8 @@ flowchart TB
     External["External Code"]
     External -->|"order.addLine()"| Order
 ```
+
+*This diagram shows the internal structure of an Order Aggregate where OrderLine and ShippingAddress are only accessible through the Aggregate Root (Order).*
 
 **Ubiquitous Language**
 
@@ -265,6 +269,8 @@ sequenceDiagram
         E->>A: Update statistics
     end
 ```
+
+*This diagram shows the flow where an order confirmation event is delivered in parallel to Inventory, Notification, and Statistics systems through the Event Bus.*
 
 ## When Should You Apply DDD?
 

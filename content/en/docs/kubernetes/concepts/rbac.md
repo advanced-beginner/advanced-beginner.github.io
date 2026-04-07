@@ -96,6 +96,8 @@ flowchart TB
     CR --> NODE
 ```
 
+*This diagram shows the RBAC structure where subjects (User, Group, ServiceAccount) access resources through Bindings that reference Roles/ClusterRoles.*
+
 ## Role vs ClusterRole
 
 ### Role (Namespace Scope)

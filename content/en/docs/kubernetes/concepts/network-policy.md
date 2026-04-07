@@ -73,6 +73,8 @@ flowchart TB
     NP -.->|"Applied"| API
 ```
 
+*This diagram shows a NetworkPolicy applied to the api-server Pod that allows only frontend and monitoring traffic while blocking external access.*
+
 ## Default Policies: Allow All vs Deny All
 
 ### Default State (Allow All)

@@ -56,6 +56,8 @@ flowchart TB
     ARCH -.->|composes| POD
 ```
 
+*This diagram shows the relationships and dependencies among core Kubernetes concepts (workloads, networking, configuration, storage, and operations).*
+
 ## Concept Summary
 
 | Concept | One-line Summary | Key Question |

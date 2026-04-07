@@ -76,3 +76,5 @@ graph LR
     style A fill:#e3f2fd
     style F fill:#c8e6c9
 ```
+
+*This diagram shows the PromQL learning path progressing from basic syntax to Alerting Rules.*

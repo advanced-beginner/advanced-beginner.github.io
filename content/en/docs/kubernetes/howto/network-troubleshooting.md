@@ -84,6 +84,8 @@ flowchart LR
     end
 ```
 
+*This diagram shows the connection flow and verification order for diagnosing network issues: Client → Ingress → Service → Pod.*
+
 ---
 
 ## Step 1: Verify Direct Pod Connectivity

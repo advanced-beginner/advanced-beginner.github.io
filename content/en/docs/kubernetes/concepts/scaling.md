@@ -38,6 +38,8 @@ flowchart LR
     end
 ```
 
+*This diagram shows the difference between horizontal scaling (increasing Pod count) and vertical scaling (increasing Pod resources).*
+
 ## HPA (Horizontal Pod Autoscaler)
 
 HPA automatically adjusts Pod count based on metrics (CPU, memory, custom).
@@ -53,6 +55,8 @@ flowchart LR
     D --> P2[Pod]
     D --> PN[Pod N]
 ```
+
+*This diagram shows how the HPA collects metrics from the Metrics Server, compares them against targets, and adjusts the Deployment's Pod count.*
 
 HPA operation sequence:
 
@@ -272,6 +276,8 @@ flowchart TD
     VPA_REC --> VPA_ONLY[Use VPA]
     VPA_OFF --> MANUAL[Adjust settings manually]
 ```
+
+*This diagram shows the decision flow for choosing HPA, VPA, or a combination based on application type and requirements.*
 
 | Criteria | HPA | VPA |
 |----------|-----|-----|

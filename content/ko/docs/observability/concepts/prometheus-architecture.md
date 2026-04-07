@@ -30,10 +30,7 @@ Prometheus 아키텍처를 **병원의 정기 건강검진 시스템**에 비유
 > **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: Prometheus의 설계 철학과 구성 요소를 이해하고 운영 전략을 수립할 수 있습니다
 
-## TL;DR
-
-{{< callout type="info" >}}
-**핵심 요약:**
+{{< callout type="info" title="TL;DR" >}}
 - **Pull 모델**: Prometheus가 타겟에서 메트릭을 가져옴 (Push가 아님)
 - **시계열 DB**: 라벨 기반 다차원 데이터 모델
 - **서비스 디스커버리**: Kubernetes, Consul 등과 연동하여 타겟 자동 발견
@@ -90,6 +87,8 @@ graph TB
 
     HTTP --> |"PromQL"| GF
 ```
+
+*Prometheus Server가 타겟에서 Pull 방식으로 메트릭을 수집하고, 서비스 디스커버리, Alertmanager, Grafana와 연동하는 전체 아키텍처입니다.*
 
 ---
 
@@ -152,6 +151,8 @@ sequenceDiagram
     end
 ```
 
+*Pull 모델에서 Prometheus가 매 15초마다 각 타겟의 /metrics 엔드포인트에 GET 요청을 보내 메트릭을 수집하는 흐름입니다.*
+
 **Prometheus가 타겟을 찾아가서 메트릭을 수집합니다.**
 
 ### Push 모델 (Datadog, StatsD 방식)
@@ -166,6 +167,8 @@ sequenceDiagram
     B->>C: 메트릭 전송
     A->>C: 메트릭 전송
 ```
+
+*Push 모델에서 각 애플리케이션이 수집 서버로 메트릭을 직접 전송하는 흐름입니다.*
 
 **애플리케이션이 수집 서버로 메트릭을 보냅니다.**
 
@@ -250,6 +253,8 @@ graph LR
     M --> S3
 ```
 
+*하나의 메트릭명에서 라벨 조합(method, status)에 따라 각각 독립된 시계열이 생성되는 다차원 데이터 모델입니다.*
+
 각 **라벨 조합**이 별도의 시계열을 생성합니다.
 
 ### 카디널리티 주의
@@ -323,6 +328,8 @@ graph LR
     B1 --> |"Compaction"| B3
     B2 --> |"Compaction"| B3
 ```
+
+*TSDB의 Head Block(메모리)에서 디스크 블록으로 전환되고, Compaction을 통해 블록이 병합되는 저장 구조입니다.*
 
 | 구성 요소 | 역할 |
 |----------|------|
@@ -455,6 +462,8 @@ graph LR
     MRL --> ST["Storage"]
 ```
 
+*서비스 디스커버리 → Relabel(타겟 필터링) → Scrape(수집) → Metric Relabel(변환) → Storage 순서로 처리되는 파이프라인입니다.*
+
 ### 주요 액션
 
 | 액션 | 설명 | 예시 |
@@ -518,6 +527,8 @@ graph LR
     R --> PD["PagerDuty"]
     R --> EMAIL["Email"]
 ```
+
+*Prometheus에서 발생한 알림이 Alertmanager를 거쳐 그룹화, 억제, 침묵, 라우팅 처리 후 적절한 채널로 전달되는 흐름입니다.*
 
 ### Prometheus 알림 규칙
 
@@ -627,6 +638,8 @@ graph TD
     PA --> |"Federation"| GF
     PB --> |"Federation"| GF
 ```
+
+*리전별 Prometheus가 로컬 타겟을 수집하고, Global Prometheus가 Federation으로 집계하는 계층적 확장 구조입니다.*
 
 ```yaml
 # Global Prometheus 설정

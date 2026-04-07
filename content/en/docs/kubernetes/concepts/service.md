@@ -33,6 +33,8 @@ flowchart LR
     Before -->|IP changed!| After
 ```
 
+*This diagram shows the problem where Pod IPs change on restart, making direct access unreliable.*
+
 Using Service maintains a consistent access point even when Pod IPs change.
 
 | Problem | Service Solution |
@@ -53,6 +55,8 @@ flowchart LR
     SVC --> P2[Pod 2<br>10.244.1.6]
     SVC --> P3[Pod 3<br>10.244.2.3]
 ```
+
+*This diagram shows how a Service load-balances client requests across multiple Pods through a stable IP.*
 
 Service and Pod connection process:
 
@@ -94,6 +98,8 @@ flowchart LR
     External[External] -.-x|No access| SVC
 ```
 
+*This diagram shows how a ClusterIP Service is accessible only to Pods within the cluster, not from outside.*
+
 ClusterIP characteristics:
 
 | Characteristic | Description |
@@ -127,6 +133,8 @@ flowchart LR
     Node --> SVC[Service]
     SVC --> Pod[Pod:8080]
 ```
+
+*This diagram shows the NodePort structure where external clients access the Service through a node IP and designated port (30080).*
 
 NodePort characteristics:
 
@@ -163,6 +171,8 @@ flowchart LR
     Node1 --> Pod1[Pod]
     Node2 --> Pod2[Pod]
 ```
+
+*This diagram shows the LoadBalancer Service structure where a cloud Load Balancer distributes external traffic to Pods across multiple nodes.*
 
 LoadBalancer characteristics:
 

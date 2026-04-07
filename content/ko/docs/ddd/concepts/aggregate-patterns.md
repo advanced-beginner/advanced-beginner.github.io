@@ -12,7 +12,7 @@ author_url: "http://github.com/kimbenji"
 > **소요 시간**: 약 30분
 > **핵심 질문**: "Aggregate 구현 시 어떤 패턴을 적용해야 하는가?"
 
-{{< callout type="tip" title="요약" >}}
+{{< callout type="info" title="TL;DR" >}}
 실전 패턴: <strong>Factory Method</strong>(생성) + <strong>Domain Event 발행</strong> + <strong>Optimistic Locking</strong>(동시성) + <strong>Soft Delete</strong>(삭제)
 {{< /callout >}}
 
@@ -297,6 +297,8 @@ flowchart TB
     Q3 -->|Yes| SAME[같은 Aggregate]
     Q3 -->|No| SEP
 ```
+
+*새 Entity를 Aggregate에 포함시킬지 결정하는 의사결정 트리로, 세 가지 질문에 모두 Yes일 때만 같은 Aggregate에 포함합니다.*
 
 ### 예시: 주문과 결제
 

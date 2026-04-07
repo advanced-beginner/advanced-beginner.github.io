@@ -362,6 +362,8 @@ graph LR
     B --> C[decay<br>감소율]
 ```
 
+*Decay Function의 세 가지 파라미터(origin, scale, decay)가 점수 감소에 어떻게 적용되는지 보여줍니다.*
+
 | 함수 | 감소 형태 |
 |------|----------|
 | `linear` | 선형 감소 |

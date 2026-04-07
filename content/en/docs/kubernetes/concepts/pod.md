@@ -36,6 +36,8 @@ flowchart TB
     Pod --- NET
 ```
 
+*This diagram shows how multiple containers within a Pod share the same network and volumes.*
+
 Containers within a Pod share:
 
 | Shared Resource | Description |
@@ -78,6 +80,8 @@ flowchart LR
     end
     Log -->|send| ES[(Elasticsearch)]
 ```
+
+*This diagram shows the Sidecar pattern where a web app generates logs and a Log Collector in the same Pod reads and forwards them to Elasticsearch.*
 
 In this case, Web App and Log Collector should be in the same Pod because:
 
@@ -138,6 +142,8 @@ stateDiagram-v2
     Succeeded --> [*]
     Failed --> [*]
 ```
+
+*This diagram shows the Pod lifecycle state transitions (Pending → Running → Succeeded/Failed/Unknown).*
 
 Description of each stage:
 
@@ -259,6 +265,8 @@ flowchart LR
     P1 <-->|direct communication| P3
     P1 <-->|localhost unavailable| P2
 ```
+
+*This diagram shows the Pod networking model where each Pod has a unique IP and can communicate directly across nodes.*
 
 Networking rules:
 

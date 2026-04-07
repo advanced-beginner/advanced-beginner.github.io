@@ -75,6 +75,8 @@ sequenceDiagram
     Note over P0: Terminated
 ```
 
+*This diagram shows how StatefulSet Pods are created sequentially starting from 0 and terminated in reverse order during deletion.*
+
 {{< callout type="info" title="Why Does Order Matter?" >}}
 In a database cluster, the Primary node (app-0) must start first so that Replica nodes (app-1, app-2) can connect to it. During deletion, Replicas should be removed first to prevent data loss.
 {{< /callout >}}
@@ -102,6 +104,8 @@ flowchart TB
     HS -.->|"mysql-1.mysql-svc"| P1
     HS -.->|"mysql-2.mysql-svc"| P2
 ```
+
+*This diagram shows the complete StatefulSet architecture with ordinal-based Pods, individual DNS via Headless Service, and dedicated PVCs per Pod.*
 
 The role of each component is as follows.
 

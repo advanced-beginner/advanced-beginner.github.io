@@ -32,6 +32,8 @@ flowchart LR
     D --> E[Log Output]
 ```
 
+*This diagram shows the entire Quick Start message flow from REST API call to Consumer log output.*
+
 ## Before You Begin
 
 Make sure the following tools are installed before starting.
@@ -293,6 +295,8 @@ sequenceDiagram
     Kafka->>Consumer: Deliver message
     Consumer->>Consumer: Log output
 ```
+
+*This diagram shows the detailed sequence of message delivery from HTTP Client to ProducerController to Kafka Broker to MessageConsumer.*
 
 | Order | Component | Action |
 |-------|-----------|--------|

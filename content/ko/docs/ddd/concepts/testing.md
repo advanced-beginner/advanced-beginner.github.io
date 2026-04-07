@@ -12,7 +12,7 @@ author_url: "http://github.com/kimbenji"
 > **소요 시간**: 약 25분
 > **핵심 질문**: "DDD 아키텍처에서 테스트를 어떻게 구성해야 하는가?"
 
-{{< callout type="tip" title="요약" >}}
+{{< callout type="info" title="TL;DR" >}}
 테스트 전략 핵심: <strong>단위 테스트</strong>(도메인 모델 중심, 가장 많이) → <strong>통합 테스트</strong>(Repository, 외부 연동) → <strong>E2E 테스트</strong>(핵심 시나리오만)
 {{< /callout >}}
 
@@ -44,6 +44,8 @@ flowchart TB
 
     E2E --> INT --> UNIT
 ```
+
+*테스트 피라미드 구조로, E2E 테스트(적음, 느림)에서 단위 테스트(많음, 빠름)로 갈수록 비중이 커집니다.*
 
 테스트 유형별로 살펴보면, 단위 테스트는 도메인 모델과 서비스를 대상으로 하며 빠른 속도와 낮은 비용이 특징입니다. 통합 테스트는 Repository나 외부 시스템 연동을 검증하며 중간 수준의 속도와 비용을 가집니다. E2E 테스트는 전체 시스템을 대상으로 하여 가장 느리고 비용이 높습니다.
 
@@ -726,6 +728,8 @@ flowchart TB
 
     Unit --> Integration --> E2E
 ```
+
+*테스트 전략을 계층별로 정리한 것으로, 단위 테스트(Entity, VO, Aggregate)에서 통합 테스트(Repository, API), E2E 테스트로 확장됩니다.*
 
 테스트 대상에 따라 적절한 테스트 유형을 선택해야 합니다. Entity와 Value Object는 외부 의존성 없이 단위 테스트로 빠르게 검증하고, Repository는 실제 데이터베이스와 함께 통합 테스트를 수행하며, 전체 시나리오는 E2E 테스트로 사용자 관점에서 검증합니다.
 

@@ -10,6 +10,35 @@ author_url: "http://github.com/kimbenji"
 
 To properly utilize Kafka, knowing just the API usage is not enough. You need to understand how messages are stored, what path they take for delivery, and how they are recovered in failure scenarios to quickly diagnose and resolve problems that occur during operations. This section covers Kafka's core components and operating principles step by step.
 
+## Learning Roadmap
+
+The diagram below shows the dependency relationships between concepts. Follow the arrow direction for learning.
+
+```mermaid
+flowchart TD
+    subgraph basics["🔰 Foundational Concepts"]
+        A[Core Components] --> B[Message Flow]
+        B --> C[Consumer Group & Offset]
+        B --> D[Replication]
+        C --> E[Advanced Concepts]
+        D --> E
+    end
+
+    subgraph advanced["🚀 Advanced Topics"]
+        E --> F[Transactions]
+        E --> G[Producer Tuning]
+        E --> H[Consumer Tuning]
+        F --> I[Error Handling]
+        G --> I
+        H --> I
+        I --> J[Monitoring]
+        J --> K[Security]
+        K --> L[Ecosystem]
+    end
+```
+
+*This diagram shows the dependency relationships between Kafka concepts. Follow the recommended learning order from foundational concepts to advanced topics.*
+
 #### Learning Path
 
 The learning path below is designed considering dependencies between concepts. It's recommended to thoroughly understand foundational concepts before moving to advanced learning. Core Components and Message Flow in particular form the foundation for all subsequent concepts, so make sure to understand them well before proceeding.

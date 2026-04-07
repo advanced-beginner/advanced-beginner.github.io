@@ -158,6 +158,8 @@ flowchart TD
     TL3 --> TL4[Scaling]
 ```
 
+*This diagram shows the recommended learning paths for each role (Backend Developer, DevOps/SRE, Team Lead).*
+
 **Documents by difficulty level**
 
 | Document | Difficulty | Estimated time | Prerequisites |

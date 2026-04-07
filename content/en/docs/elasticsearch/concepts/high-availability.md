@@ -27,6 +27,8 @@ flowchart TB
     A --> E[Cluster Design]
 ```
 
+*This diagram shows the four core components of high availability (Replica Shard, Snapshot & Restore, CCR, and Cluster Design) and their relationship.*
+
 ---
 
 ## Replica Shard
@@ -49,6 +51,8 @@ flowchart LR
     Client -->|Write| P0
     Client -->|Read| R0
 ```
+
+*This diagram shows how write requests are sent to the Primary Shard, replicated to the Replica Shard, and read requests are distributed across replicas.*
 
 1. **Data Redundancy**: Replica is promoted when Primary fails
 2. **Read Performance**: Search requests distributed
@@ -219,6 +223,8 @@ flowchart LR
     L -->|Real-time Replication| F
 ```
 
+*This diagram shows the CCR configuration where data is replicated in real-time from the Leader Cluster in Seoul to the Follower Cluster in Busan.*
+
 ### Use Cases
 
 - **Disaster Recovery (DR)**: Maintain replica in different region
@@ -347,6 +353,8 @@ flowchart LR
     Client --> Active
 ```
 
+*This diagram shows the Active-Passive pattern where only the Active cluster handles reads and writes, while CCR replicates data to the Passive cluster for failover.*
+
 - Read/write on Active
 - Passive is standby (activated on failure)
 
@@ -365,6 +373,8 @@ flowchart TB
     BusanClient --> Busan
     Seoul <-->|Bidirectional CCR| Busan
 ```
+
+*This diagram shows the Active-Active pattern where each region (Seoul and Busan) independently handles reads and writes, with bidirectional CCR synchronizing data between them.*
 
 - Read/write in each region
 - Bidirectional sync (conflict management required)

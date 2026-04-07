@@ -91,3 +91,5 @@ graph LR
     D --> E["Recording Rules"]
     E --> F["Alerting Rules"]
 ```
+
+*PromQL 학습 경로로, 기본 문법부터 Alerting Rules까지 순서대로 진행하는 흐름입니다.*

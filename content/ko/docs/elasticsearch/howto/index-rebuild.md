@@ -81,6 +81,8 @@ flowchart TD
     D -->|100GB 이상| I["Snapshot /<br>Restore"]
 ```
 
+*인덱스 재구축 시 상황에 따른 방법 선택 흐름을 보여줍니다. 클러스터 위치, 데이터 변환 필요 여부, 데이터 크기에 따라 적절한 방법을 안내합니다.*
+
 ### 방법별 비교
 
 | 항목 | _reindex API | Snapshot/Restore | Logstash |

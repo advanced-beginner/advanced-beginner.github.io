@@ -27,6 +27,8 @@ flowchart TD
     L4 -.->|Recommended| R4[CKA/CKAD Certification]
 ```
 
+*This diagram shows a four-stage learning roadmap from beginner to expert with recommended resources for each stage.*
+
 | Stage | Goal | Recommended Resources | Expected Duration |
 |-------|------|----------------------|-------------------|
 | **1. Introduction** | First successful deployment | Kubernetes Basics, Play with K8s | 1 week |

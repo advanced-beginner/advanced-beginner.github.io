@@ -894,6 +894,8 @@ flowchart TB
     EVT -.->|발행| KAFKA
 ```
 
+*전체 계층 구조로, Controller에서 Service, Aggregate, Repository, Mapper, Event Publisher까지의 데이터 흐름입니다.*
+
 > **다이어그램 설명**: 전체 계층 구조를 보여줍니다. Controller가 Service를 호출하고, Service는 Aggregate와 Repository Interface를 사용합니다. Infrastructure의 JpaOrderRepository가 Repository를 구현하며, Mapper로 변환합니다. Domain Event는 KafkaEventPublisher를 통해 외부로 발행됩니다.
 
 | 계층 | 역할 | 주요 클래스 |

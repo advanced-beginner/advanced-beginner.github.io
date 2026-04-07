@@ -156,6 +156,8 @@ flowchart TB
     EVT -.->|publish| KAFKA
 ```
 
+*This diagram shows the layer-by-layer roles and flow from Controller through Application Service, Aggregate, and Repository to Event Publisher.*
+
 > **Diagram Description**: The Controller in the Interfaces layer calls the Service in the Application layer. The Service uses Aggregate/Entity and Repository Interface from the Domain layer. The Infrastructure layer provides Repository implementation, JPA Entity, and Kafka Publisher. Domain Events are published through Infrastructure.
 
 ### Dependency Rules
@@ -166,6 +168,8 @@ flowchart LR
     A --> D[Domain]
     INF[Infrastructure] --> D
 ```
+
+*This diagram shows the dependency rules: Interfaces depends on Application, Application depends on Domain, and Infrastructure implements Domain.*
 
 > **Diagram Description**: Dependencies always point inward (toward Domain). Interfaces depends on Application, Application depends on Domain, and Infrastructure implements Domain interfaces.
 

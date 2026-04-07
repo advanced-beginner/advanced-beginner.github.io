@@ -39,6 +39,7 @@ graph LR
     T --> |"Performance Analysis"| M
 ```
 
+*This diagram shows how Metrics, Logs, and Traces are cyclically connected, complementing each other from anomaly detection to flow tracing.*
 | Pillar | Role | Representative Tools | Examples |
 |------|------|----------|------|
 | **Metrics** | Numeric-based state measurement | Prometheus, Micrometer | CPU 80%, Response time 200ms |
@@ -132,6 +133,7 @@ graph TD
     P3 --> NEXT
 ```
 
+*This diagram shows recommended learning paths branching by experience level: beginner, intermediate, and operator.*
 **If you're new:**
 ```
 Quick Start → Three Pillars → Metrics Fundamentals → Prometheus Architecture → Spring Boot Example

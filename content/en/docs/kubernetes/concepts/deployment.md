@@ -42,6 +42,8 @@ flowchart TB
     RS --> P3[Pod 3]
 ```
 
+*This diagram shows the hierarchy where a Deployment creates a ReplicaSet, and the ReplicaSet manages Pods.*
+
 Comparing each resource's role:
 
 | Resource | Role |
@@ -141,6 +143,8 @@ sequenceDiagram
 
     Note over RS2: Pod v2 x 3
 ```
+
+*This diagram shows how a rolling update gradually scales up Pods in the new ReplicaSet while scaling down Pods in the old ReplicaSet.*
 
 ### Rolling Update State by Stage
 

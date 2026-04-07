@@ -24,6 +24,8 @@ graph LR
     A --> B --> C --> D
 ```
 
+*메트릭에서 에러 감지 → 로그에서 trace_id 확인 → 트레이스에서 병목 발견 → 해결로 이어지는 풀스택 분석 흐름입니다.*
+
 ## 시나리오: 주문 서비스 장애 분석
 
 ### 시스템 구성
@@ -36,6 +38,8 @@ graph LR
     ORDER --> INVENTORY["Inventory Service"]
     PAYMENT --> DB["Payment DB"]
 ```
+
+*사용자 요청이 API Gateway → Order → Payment/Inventory 서비스로 분산되는 시스템 구성을 보여줍니다.*
 
 ## Step 1: 장애 감지 (Metrics)
 

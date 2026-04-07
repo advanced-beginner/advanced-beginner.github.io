@@ -95,3 +95,5 @@ graph TD
     C --> J
     I --> L
 ```
+
+*This diagram shows three learning paths by level: beginner (Three Pillars, Metrics, Prometheus), PromQL deep-dive, and SRE perspective.*

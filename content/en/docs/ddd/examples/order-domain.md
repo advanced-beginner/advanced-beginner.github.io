@@ -62,6 +62,8 @@ flowchart TD
     Q2 -->|No| ENT["Internal Entity"]
 ```
 
+*This diagram shows a flowchart for determining Entity vs Value Object based on whether tracking is needed and whether it can exist independently.*
+
 > **Diagram Description**: This is a flowchart for deciding Entity vs Value Object. If the answer to "Does it need to be tracked over time?" is No, it's a Value Object. If Yes, the next question "Can it exist without Order?" determines whether it's a Separate Aggregate (Yes) or Internal Entity (No).
 
 **Why Money is a Value Object:**
@@ -94,6 +96,8 @@ flowchart LR
         O2 -.->|ID reference| PID
     end
 ```
+
+*This diagram compares incorrect design (including full Customer and Product objects) with correct design (referencing only by ID).*
 
 > **Diagram Description**: On the left (wrong design), Order contains entire Customer and Product objects. On the right (correct design), Order only references CustomerId and ProductId. Other Aggregates should only be referenced by ID.
 
@@ -161,6 +165,8 @@ flowchart TB
     PID["ProductId"] -.->|ID reference| OL1
     PID2["ProductId"] -.->|ID reference| OL2
 ```
+
+*This diagram shows the internal structure of the Order Aggregate where Root Order contains OrderLine, ShippingAddress (VO), and Money (VO), and external references use only IDs.*
 
 > **Diagram Description**: This shows the internal structure of Order Aggregate. Order (Aggregate Root) contains OrderLines, ShippingAddress (VO), and Money (VO). CustomerId and ProductId are shown with dotted lines indicating external references (ID only).
 

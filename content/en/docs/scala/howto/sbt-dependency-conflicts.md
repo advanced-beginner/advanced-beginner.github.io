@@ -94,6 +94,8 @@ flowchart TD
     style F fill:#fff3cd,stroke:#ffc107
 ```
 
+*This diagram shows a situation where transitive dependencies cause a conflict between different versions of the same library.*
+
 ### 1.2 sbt's Default Resolution Strategy
 
 By default, sbt uses a **latest wins** strategy:
@@ -222,6 +224,8 @@ flowchart TD
     F -->|Yes| G["Use dependencyOverrides<br>to unify the version"]
     F -->|No| H["Resolve each conflict<br>individually"]
 ```
+
+*This diagram shows the flow for choosing the appropriate resolution method — exclude, dependencyOverrides, or version upgrade — depending on the conflict situation.*
 
 ---
 

@@ -12,10 +12,7 @@ lastmod: "2026-01-12"
 > **Time Required**: About 10 minutes
 > **After Reading**: You'll be able to collect metrics with Prometheus and visualize them in Grafana
 
-## TL;DR
-
-{{< callout type="info" >}}
-**Quick Summary:**
+{{< callout type="info" title="TL;DR" >}}
 1. Run Prometheus + Grafana with Docker Compose
 2. Expose metrics from sample application
 3. View real-time data in Grafana dashboard
@@ -34,6 +31,7 @@ graph LR
     style D fill:#c8e6c9
 ```
 
+*This diagram shows the four steps of the Quick Start: from environment preparation to dashboard configuration.*
 ---
 
 ## Step 1/4: Environment Setup (2 min)

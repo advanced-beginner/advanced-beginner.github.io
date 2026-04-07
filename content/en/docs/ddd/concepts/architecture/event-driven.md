@@ -56,6 +56,8 @@ flowchart LR
     EVT --> H3
 ```
 
+*This diagram shows the event-driven flow where an action in the domain publishes an event and interested subscribers each react independently.*
+
 The diagram above shows how a single domain event is processed by multiple handlers. When an order is confirmed, follow-up tasks such as inventory deduction, notification delivery, and point accumulation are automatically triggered.
 
 **Key characteristics of domain events**
@@ -270,6 +272,8 @@ flowchart TB
     POLL --> PUB
     PUB --> DEL
 ```
+
+*This diagram shows the Outbox pattern where Aggregate save and Outbox table save are processed in a single transaction to prevent event loss.*
 
 This diagram shows the full flow of the Transactional Outbox Pattern. The important point is that Aggregate saving and Outbox saving happen within a single transaction.
 
@@ -524,6 +528,8 @@ flowchart TB
     end
 ```
 
+*This diagram compares the traditional approach (storing only current state) with Event Sourcing (storing event sequences and deriving state through replay).*
+
 **Restoring Aggregates from Events**
 
 In Event Sourcing, to get the current state of an Aggregate, you replay all of its events in order. Each event changes the Aggregate's state through the `apply` method. For example, applying OrderCreatedEvent sets the order ID and status, and applying OrderConfirmedEvent changes the status to CONFIRMED.
@@ -626,6 +632,8 @@ flowchart LR
         RD --> API[Query API]
     end
 ```
+
+*This diagram shows Event Sourcing combined with CQRS where the write side stores events and the read side queries via Projections.*
 
 **Why CQRS Is Needed**
 

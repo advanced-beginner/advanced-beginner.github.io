@@ -62,6 +62,8 @@ flowchart TB
     P1 <-->|노드 간 통신| P3
 ```
 
+*모든 Pod가 고유 IP를 가지며 같은 노드 및 다른 노드의 Pod와 NAT 없이 직접 통신하는 구조를 보여줍니다.*
+
 ## 클러스터 내부 통신
 
 ### Pod 간 통신
@@ -84,6 +86,8 @@ flowchart LR
     SVC --> P2[Pod 2]
     SVC --> P3[Pod 3]
 ```
+
+*클라이언트 Pod가 Service를 통해 여러 백엔드 Pod에 트래픽을 분산하는 구조를 보여줍니다.*
 
 Service DNS를 사용하면 Pod IP 변경에 영향받지 않습니다.
 
@@ -143,6 +147,8 @@ flowchart TB
     SVC -->|5. 로드밸런싱| P2
 ```
 
+*외부 요청이 DNS, LoadBalancer, Ingress Controller, Service를 거쳐 Pod에 도달하는 전체 흐름을 보여줍니다.*
+
 | 단계 | 컴포넌트 | 동작 |
 |------|----------|------|
 | 1 | DNS/LB | 도메인을 LoadBalancer IP로 해석 |
@@ -176,6 +182,8 @@ flowchart LR
     ING -->|/web/*| S2
     ING -->|/| S3
 ```
+
+*하나의 Ingress Controller가 도메인과 경로 기반으로 여러 Service에 트래픽을 라우팅하는 구조를 보여줍니다.*
 
 ### Ingress Controller
 
@@ -325,6 +333,8 @@ flowchart LR
     F[Frontend Pod] -->|허용| B[Backend Pod:8080]
     O[Other Pod] -.-x|차단| B
 ```
+
+*NetworkPolicy로 Frontend Pod의 접근만 허용하고 다른 Pod의 접근은 차단하는 규칙을 보여줍니다.*
 
 ## 실습: Ingress 설정
 

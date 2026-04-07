@@ -41,6 +41,8 @@ flowchart TB
     P1 <-->|cross-node communication| P3
 ```
 
+*This diagram shows how every Pod has a unique IP and communicates directly with Pods on the same or different nodes without NAT.*
+
 ## Cluster Internal Communication
 
 ### Pod-to-Pod Communication
@@ -63,6 +65,8 @@ flowchart LR
     SVC --> P2[Pod 2]
     SVC --> P3[Pod 3]
 ```
+
+*This diagram shows how a client Pod distributes traffic to multiple backend Pods through a Service.*
 
 Using Service DNS prevents impact from Pod IP changes.
 
@@ -122,6 +126,8 @@ flowchart TB
     SVC -->|5. Load balance| P2
 ```
 
+*This diagram shows the complete flow of an external request reaching a Pod through DNS, LoadBalancer, Ingress Controller, and Service.*
+
 | Step | Component | Action |
 |------|-----------|--------|
 | 1 | DNS/LB | Resolve domain to LoadBalancer IP |
@@ -155,6 +161,8 @@ flowchart LR
     ING -->|/web/*| S2
     ING -->|/| S3
 ```
+
+*This diagram shows how a single Ingress Controller routes traffic to multiple Services based on domain and path rules.*
 
 ### Ingress Controller
 
@@ -304,6 +312,8 @@ flowchart LR
     F[Frontend Pod] -->|allowed| B[Backend Pod:8080]
     O[Other Pod] -.-x|blocked| B
 ```
+
+*This diagram shows a NetworkPolicy rule that allows access only from Frontend Pods while blocking access from other Pods.*
 
 ## Practice: Ingress Configuration
 

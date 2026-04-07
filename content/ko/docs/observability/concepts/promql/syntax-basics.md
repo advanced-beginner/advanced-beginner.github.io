@@ -30,10 +30,7 @@ PromQL 기본 문법을 **병원 EMR 검색 시스템**에 비유하면 이해�
 > **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: 기본적인 PromQL 쿼리를 작성하고 원하는 메트릭을 조회할 수 있습니다
 
-## TL;DR
-
-{{< callout type="info" >}}
-**핵심 요약:**
+{{< callout type="info" title="TL;DR" >}}
 - **Instant Vector**: 현재 시점의 값 `http_requests_total`
 - **Range Vector**: 시간 범위의 값들 `http_requests_total[5m]`
 - **레이블 매칭**: `=`, `!=`, `=~`, `!~`로 필터링

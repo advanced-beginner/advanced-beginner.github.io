@@ -37,6 +37,8 @@ flowchart TD
     style D fill:#fbf,stroke:#333
 ```
 
+*This diagram shows how to choose the appropriate troubleshooting guide based on problem type (Pod status, performance, connectivity, or logs).*
+
 | Symptom | Recommended Guide |
 |---------|-------------------|
 | Pod won't start, CrashLoopBackOff | [Pod Troubleshooting](pod-troubleshooting/) |

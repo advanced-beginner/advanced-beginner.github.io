@@ -64,6 +64,8 @@ flowchart TB
     RETRY -->|Yes| FAIL["Job Failed"]
 ```
 
+*This diagram shows the Job execution flow: creating Pods, checking completions on success, and retrying up to the backoffLimit on failure.*
+
 ## Job YAML
 
 ### Basic Job
@@ -154,6 +156,8 @@ flowchart LR
     P2 -->|Complete| D2["Done"]
     P3 -->|Complete| D3["Done"]
 ```
+
+*This diagram shows how a CronJob creates Jobs on a daily schedule, with each Job's Pod completing its task in a recurring cycle.*
 
 ## CronJob YAML
 

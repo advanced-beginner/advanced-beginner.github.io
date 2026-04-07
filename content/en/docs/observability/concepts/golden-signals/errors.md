@@ -10,10 +10,7 @@ lastmod: "2026-01-12"
 > **Prerequisites**: [Aggregation Operators](../promql/aggregation-operators/)
 > **After reading this**: You'll be able to systematically classify errors and set up SLO-based monitoring
 
-## TL;DR
-
-{{< callout type="info" >}}
-**Key Summary:**
+{{< callout type="info" title="TL;DR" >}}
 - **Error rate**: Failed requests / Total requests
 - Not just HTTP 5xx: Include business logic failures
 - **Error budget**: Allowed error amount (based on SLO)
@@ -47,6 +44,7 @@ graph LR
     E --> |"User churn"| T2["Traffic ↓<br>(natural decline)"]
 ```
 
+*This diagram shows the cascading relationship: increased Saturation and Latency cause errors, which in turn lead to decreased traffic.*
 | Cause | Error Type | Chain Effect |
 |-------|------------|--------------|
 | Traffic surge | 503, 429 | More retries → additional traffic increase |
@@ -96,6 +94,7 @@ graph TD
     S --> S3["Timeout<br>504"]
 ```
 
+*This diagram shows the systematic classification of errors into client errors (4xx) and server errors (5xx) with their subtypes.*
 ---
 
 ## Measurement Methods

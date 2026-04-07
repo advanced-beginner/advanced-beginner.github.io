@@ -12,7 +12,7 @@ author_url: "http://github.com/kimbenji"
 > **소요 시간**: 약 25-30분
 > **핵심 질문**: "핵심 빌딩 블록만으로 표현하기 어려운 도메인 로직을 어떻게 구조화하는가?"
 
-{{< callout type="tip" title="요약" >}}
+{{< callout type="info" title="TL;DR" >}}
 핵심 빌딩 블록(Entity, Value Object, Repository, Domain Service, Factory)은 도메인 모델의 뼈대입니다. 이 문서에서 다루는 패턴들은 그 뼈대 위에 <strong>비즈니스 규칙을 체계적으로 표현</strong>하는 도구입니다: <strong>Specification</strong>(조건 검사) + <strong>Policy</strong>(계산/결정) + <strong>Module</strong>(코드 조직) + <strong>Builder</strong>(복잡한 생성) + <strong>Null Object</strong>(null 안전성)
 {{< /callout >}}
 
@@ -38,6 +38,8 @@ flowchart TB
 
     Core --> Patterns
 ```
+
+*핵심 빌딩 블록(Entity, VO, Repository 등) 위에 Specification, Policy, Module, Builder, Null Object 패턴이 추가되는 관계입니다.*
 
 > **이 페이지 예제의 공통 import:**
 > ```java
@@ -65,6 +67,8 @@ flowchart LR
     OR --> SPEC
     NOT --> SPEC
 ```
+
+*Specification 패턴의 구성으로, 기본 Specification을 And, Or, Not으로 조합할 수 있음을 보여줍니다.*
 
 **언제 사용하나?**
 
@@ -286,6 +290,8 @@ flowchart TB
     P3 --> IF
 ```
 
+*Specification(조건 검사, boolean 반환)과 Policy(계산/결정, 값 반환)의 차이 및 Policy 구현체(VIP, 일반, 신규 회원)를 보여줍니다.*
+
 **할인 정책 예시**
 
 할인 정책을 Policy 패턴으로 구현해보겠습니다. `DiscountPolicy` 인터페이스는 `calculateDiscount`와 `isApplicable` 메서드를 정의합니다. `VipDiscountPolicy`는 VIP 고객에게 10% 할인을 적용합니다. `FirstOrderDiscountPolicy`는 첫 주문 고객에게 5000원 할인을 적용합니다. `BulkOrderDiscountPolicy`는 10개 이상 구매 시 5% 할인을 적용합니다. `DiscountCalculator`는 이 모든 정책을 조합하여 총 할인액을 계산합니다.
@@ -483,6 +489,8 @@ flowchart TB
     ORDER -.->|ID 참조만| CUSTOMER
     ORDER -.->|ID 참조만| PRODUCT
 ```
+
+*모듈 간 의존성 구조로, 주문/고객/상품 모듈이 공유 모듈을 의존하고 서로는 ID로만 참조합니다.*
 
 **모듈 간 통신**
 

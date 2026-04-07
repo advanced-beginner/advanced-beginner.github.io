@@ -118,6 +118,8 @@ flowchart TB
     DE -.-> CQRS
 ```
 
+*DDD의 전략적 설계, 전술적 설계, 아키텍처 개념들이 서로 어떻게 연결되는지를 보여줍니다.*
+
 ## 핵심 정리
 
 {{< callout type="info" title="이 섹션에서 기억할 것" >}}

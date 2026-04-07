@@ -30,10 +30,7 @@ OpenTelemetry를 **국제 의료 기록 표준(HL7/FHIR)**에 비유하면 이�
 > **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: OpenTelemetry를 이해하고 프로젝트에 적용할 수 있습니다
 
-## TL;DR
-
-{{< callout type="info" >}}
-**핵심 요약:**
+{{< callout type="info" title="TL;DR" >}}
 - **OpenTelemetry (OTel)**: Metrics, Logs, Traces를 위한 **벤더 중립 표준**
 - **구성 요소**: SDK (계측) + Collector (수집/변환/전송)
 - **장점**: 벤더 종속성 없음, 한 번 계측으로 여러 백엔드 지원
@@ -62,6 +59,8 @@ graph LR
     APP --> PR
 ```
 
+*OTel 이전에는 애플리케이션이 벤더별 SDK에 각각 연결해야 했던 구조를 보여줍니다.*
+
 **문제점:**
 - 벤더마다 다른 SDK
 - 벤더 변경 시 코드 수정 필요
@@ -78,6 +77,8 @@ graph LR
     COLLECTOR --> JA["Jaeger"]
     COLLECTOR --> PR["Prometheus"]
 ```
+
+*OTel 도입 후 하나의 SDK와 Collector를 통해 여러 백엔드로 데이터를 전송하는 구조를 보여줍니다.*
 
 **장점:**
 - 한 번 계측, 여러 백엔드
@@ -124,6 +125,8 @@ graph LR
     E --> B2["Prometheus"]
     E --> B3["Loki"]
 ```
+
+*OTel Collector의 Receivers → Processors → Exporters 파이프라인 구조를 보여줍니다.*
 
 ### 3. Instrumentation
 
@@ -381,6 +384,8 @@ graph LR
     S2 --> S3["3단계<br>수동 계측 보강"]
     S3 --> S4["4단계<br>대시보드/알림"]
 ```
+
+*Collector 배포부터 대시보드 구성까지 4단계 도입 전략을 순서대로 보여줍니다.*
 
 1. **Collector 배포**: 데이터 수집 인프라 구축
 2. **자동 계측**: Java Agent로 빠르게 시작

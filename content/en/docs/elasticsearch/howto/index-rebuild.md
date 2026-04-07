@@ -87,6 +87,8 @@ flowchart TD
     style I fill:#e3f2fd,stroke:#2196f3
 ```
 
+*This diagram shows the method selection flow for index rebuilds. It guides you to the appropriate method based on cluster location, data transformation needs, and data size.*
+
 ### Method Comparison
 
 | Item | _reindex API | Snapshot/Restore | Logstash |

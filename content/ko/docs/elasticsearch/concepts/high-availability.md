@@ -45,6 +45,8 @@ flowchart TB
     A --> E[클러스터 설계]
 ```
 
+*고가용성을 구성하는 네 가지 핵심 요소(Replica Shard, Snapshot & Restore, CCR, 클러스터 설계)의 관계를 보여줍니다.*
+
 ---
 
 ## Replica Shard
@@ -67,6 +69,8 @@ flowchart LR
     Client -->|쓰기| P0
     Client -->|읽기| R0
 ```
+
+*Primary Shard에 쓰기 요청이 전달되고, Replica Shard로 복제되어 읽기 요청을 분산 처리하는 구조입니다.*
 
 1. **데이터 이중화**: Primary 장애 시 Replica가 승격
 2. **읽기 성능 향상**: 검색 요청 분산
@@ -237,6 +241,8 @@ flowchart LR
     L -->|실시간 복제| F
 ```
 
+*서울의 Leader 클러스터에서 부산의 Follower 클러스터로 데이터를 실시간 복제하는 CCR 구성을 보여줍니다.*
+
 ### 사용 사례
 
 - **재해 복구(DR)**: 다른 리전에 복제본 유지
@@ -365,6 +371,8 @@ flowchart LR
     Client --> Active
 ```
 
+*Active 클러스터에서만 읽기/쓰기를 처리하고, CCR로 Passive 클러스터에 복제하여 장애 시 전환하는 Active-Passive 패턴입니다.*
+
 - Active에서 읽기/쓰기
 - Passive는 대기 (장애 시 활성화)
 
@@ -383,6 +391,8 @@ flowchart TB
     BusanClient --> Busan
     Seoul <-->|양방향 CCR| Busan
 ```
+
+*서울과 부산 각 리전에서 독립적으로 읽기/쓰기를 처리하며, 양방향 CCR로 데이터를 동기화하는 Active-Active 패턴입니다.*
 
 - 각 리전에서 읽기/쓰기
 - 양방향 동기화 (충돌 관리 필요)

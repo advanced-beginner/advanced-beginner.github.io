@@ -11,11 +11,11 @@ author_url: "http://github.com/kimbenji"
 
 Books, articles, and presentations for learning DDD.
 
-> **TL;DR**
->
-> - **Essential Reading**: Blue Book (original), Red Book (implementation), DDD Distilled (intro)
-> - **Learning Order**: Intro -> Fundamentals -> Advanced -> Practice (progressive learning)
-> - **Practice**: Start with refactoring existing projects or EventStorming
+{{< callout type="info" title="TL;DR" >}}
+- **Essential Reading**: Blue Book (original), Red Book (implementation), DDD Distilled (intro)
+- **Learning Order**: Intro -> Fundamentals -> Advanced -> Practice (progressive learning)
+- **Practice**: Start with refactoring existing projects or EventStorming
+{{< /callout >}}
 
 ## Essential Reading
 
@@ -213,6 +213,8 @@ flowchart TB
         D2[EventStorming workshops]
     end
 ```
+
+*This diagram shows the DDD learning roadmap from introductory (DDD Distilled) through fundamentals (Blue/Red Book), advanced topics, to practical project application.*
 
 ### Stage-by-Stage Recommendations
 

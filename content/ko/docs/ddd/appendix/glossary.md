@@ -11,11 +11,11 @@ author_url: "http://github.com/kimbenji"
 
 Domain-Driven Design의 핵심 용어를 정리합니다. 상세 설명은 [개념 이해](../concepts/) 섹션을 참고하세요.
 
-> **TL;DR**
->
-> - **전략적 설계**: Bounded Context, Context Mapping, Ubiquitous Language로 도메인 경계와 언어 정의
-> - **전술적 설계**: Entity, Value Object, Aggregate, Repository, Domain Event로 도메인 모델 구현
-> - **아키텍처 패턴**: Layered, Hexagonal, CQRS, Event Sourcing으로 시스템 구조화
+{{< callout type="info" title="TL;DR" >}}
+- **전략적 설계**: Bounded Context, Context Mapping, Ubiquitous Language로 도메인 경계와 언어 정의
+- **전술적 설계**: Entity, Value Object, Aggregate, Repository, Domain Event로 도메인 모델 구현
+- **아키텍처 패턴**: Layered, Hexagonal, CQRS, Event Sourcing으로 시스템 구조화
+{{< /callout >}}
 
 ## 전략적 설계 (Strategic Design)
 
@@ -583,6 +583,8 @@ flowchart LR
     WM --> DB[(Database)]
     DB --> RM
 ```
+
+*CQRS의 핵심 구조로, Command는 Write Model로, Query는 Read Model로 분리되어 Database와 통신합니다.*
 
 **장점:**
 - 각각 최적화 가능

@@ -34,6 +34,8 @@ flowchart TD
     FAIL --> HIST2[이력 관리<br>failedJobsHistoryLimit]
 ```
 
+*CronJob이 스케줄에 따라 Job을 생성하고, 성공/실패 시 이력을 관리하며 실패 시 재시도하는 전체 흐름을 보여줍니다.*
+
 ## 사전 준비
 
 다음이 필요합니다:
@@ -221,6 +223,8 @@ flowchart LR
         C1[Job-1 실행 중] --> C2[Job-1 중단<br>Job-2 시작]
     end
 ```
+
+*Allow(동시 실행), Forbid(건너뜀), Replace(기존 중단 후 새로 시작) 세 가지 동시 실행 정책의 차이를 보여줍니다.*
 
 | 정책 | 동작 | 사용 사례 |
 |------|------|----------|

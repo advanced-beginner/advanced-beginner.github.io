@@ -12,7 +12,7 @@ author_url: "http://github.com/kimbenji"
 > **소요 시간**: 약 30분
 > **핵심 질문**: "시스템을 어떻게 나누고, 각 부분이 어떻게 협력해야 하는가?"
 
-{{< callout type="tip" title="요약" >}}
+{{< callout type="info" title="TL;DR" >}}
 전략적 설계의 4가지 핵심 개념: <strong>Subdomain</strong>(비즈니스 영역 분류) → <strong>Ubiquitous Language</strong>(공통 언어 정의) → <strong>Bounded Context</strong>(모델 경계 설정) → <strong>Context Mapping</strong>(경계 간 협력 방식 정의)
 {{< /callout >}}
 
@@ -48,6 +48,8 @@ flowchart TB
     UL --> BC
     BC --> CM
 ```
+
+*전략적 설계의 4가지 구성요소(Subdomain, Ubiquitous Language, Bounded Context, Context Mapping)와 그 관계를 보여줍니다.*
 
 전략적 설계의 각 구성요소는 다음과 같은 질문에 답합니다. <strong>Subdomain</strong>은 "비즈니스의 핵심은 무엇인가?"라는 질문으로 도메인을 Core, Supporting, Generic으로 분류합니다. <strong>Ubiquitous Language</strong>는 "어떤 언어로 소통할 것인가?"를 정의하며 용어 사전을 산출물로 만듭니다. <strong>Bounded Context</strong>는 "시스템을 어떻게 나눌 것인가?"에 답하며 컨텍스트 경계를 명확히 합니다. 마지막으로 <strong>Context Mapping</strong>은 "시스템 간 어떻게 통합할 것인가?"를 결정하여 통합 전략을 수립합니다.
 
@@ -89,6 +91,8 @@ flowchart TB
     end
 ```
 
+*이커머스 도메인을 Core(주문, 가격, 프로모션), Supporting(재고, 고객, 리뷰), Generic(결제, 알림, 인증)으로 분류합니다.*
+
 **Subdomain 유형**
 
 Subdomain은 세 가지 유형으로 분류됩니다. <strong>Core Domain</strong>은 비즈니스의 핵심 경쟁력을 만드는 영역으로 최우선 투자가 필요하며 최고의 개발자를 배치해야 합니다. 예를 들어 배달앱의 배차 알고리즘은 Core Domain입니다. <strong>Supporting Domain</strong>은 핵심을 지원하지만 차별화 요소는 아닌 영역으로 적절한 수준의 투자가 필요합니다. 재고 관리나 고객 관리가 여기에 해당합니다. <strong>Generic Domain</strong>은 모든 비즈니스에 공통적으로 필요한 영역으로 외부 솔루션을 활용하는 것이 효율적입니다. 결제, 인증, 이메일 발송 등이 이에 속합니다.
@@ -129,6 +133,8 @@ flowchart TB
     end
 ```
 
+*쿠팡의 도메인을 Core(로켓배송, 동적 가격, 개인화 추천), Supporting(카탈로그, 재고, 판매자, 리뷰), Generic(결제, 알림, 인증)으로 분류합니다.*
+
 이러한 분류는 투자 결정의 기준이 됩니다. Core에는 혁신과 차별화를 위한 지속적인 투자가 이루어지고, Supporting에는 비즈니스 운영에 필요한 수준의 투자가, Generic에는 최소한의 통합 비용만 투입됩니다.
 
 **Subdomain 식별 가이드**
@@ -150,6 +156,8 @@ flowchart TB
     Q3 -->|Yes| GENERIC["Generic Domain"]
     Q3 -->|No| SUPPORTING["Supporting Domain"]
 ```
+
+*Subdomain 유형을 결정하는 의사결정 흐름도로, 사업 필수 여부와 차별화 여부, 솔루션 구매 가능 여부로 판단합니다.*
 
 #### Ubiquitous Language (유비쿼터스 언어)
 
@@ -174,6 +182,8 @@ flowchart LR
 
     Problem -->|DDD 적용| Solution
 ```
+
+*용어 불일치 문제(왼쪽)를 유비쿼터스 언어 적용(오른쪽)으로 해결하여 모든 이해관계자가 동일한 용어를 사용하도록 합니다.*
 
 **용어 사전 작성법**
 
@@ -321,6 +331,8 @@ flowchart TB
     Sales -.->|이벤트| Billing
 ```
 
+*이커머스 시스템의 판매, 재고, 배송, 정산 Context가 각각 독립적인 모델을 가지며 이벤트로 통합되는 구조입니다.*
+
 **같은 용어, 다른 의미 (동음이의어)**
 
 "Customer"라는 용어가 각 Context에서 어떻게 다른 의미를 가지는지 구체적으로 살펴보겠습니다. 판매 Context의 Customer는 "누가 주문하는가?"에 답합니다. 회원 등급(VIP, Gold, Silver)과 사용 가능한 포인트를 가지며 `getDiscount` 메서드로 할인을 계산합니다. 배송 Context의 Customer는 Recipient로 명명되며 "누가 받는가?"에 답합니다. 전화번호, 주소, 배송 선호도(문 앞, 경비실)를 가지며 `canReceiveAt` 메서드로 특정 시간대에 수령 가능한지 확인합니다. 정산 Context의 Customer는 Payer로 명명되며 "누가 돈을 내는가?"에 답합니다. 세금 ID, 청구 주소, 결제 수단을 가지며 `requiresTaxInvoice` 메서드로 세금계산서 발급 여부를 판단합니다.
@@ -404,6 +416,8 @@ flowchart TB
     T3 --> C3
 ```
 
+*팀 구조(판매팀, 물류팀, 정산팀)가 Conway's Law에 따라 Bounded Context(Sales, Logistics, Billing)로 매핑됩니다.*
+
 셋째는 비즈니스 프로세스 단서입니다. 주문 프로세스를 단계별로 나누면 주문 접수, 결제 처리, 출고 지시, 배송, 정산으로 구분됩니다. 각 단계는 서로 다른 책임을 가지며, 이는 Sales, Payment, Inventory, Shipping, Billing Context로 자연스럽게 매핑됩니다.
 
 **3. 비즈니스 프로세스 단서**
@@ -423,6 +437,8 @@ flowchart LR
     P4 -.-> C4["Shipping"]
     P5 -.-> C5["Billing"]
 ```
+
+*주문 프로세스의 각 단계(접수, 결제, 출고, 배송, 정산)가 자연스럽게 별도 Context로 매핑됩니다.*
 
 **Context 경계 결정 체크리스트**
 
@@ -465,6 +481,8 @@ flowchart LR
     U -->|상품 정보| D3
 ```
 
+*Upstream인 Product Catalog Service가 다수의 Downstream(Order, Inventory, Search)에 상품 정보를 제공하는 관계입니다.*
+
 **통합 패턴 상세**
 
 Context 간 통합에는 여러 패턴이 있으며, 각각의 특성과 적합한 상황이 다릅니다. 상황에 맞는 패턴을 선택하는 것이 중요합니다.
@@ -486,6 +504,8 @@ flowchart LR
     A <-->|긴밀한 협력<br>공동 계획| B
 ```
 
+*주문팀과 결제팀이 Partnership 패턴으로 긴밀하게 협력하며 공동으로 계획하는 관계를 보여줍니다.*
+
 **2. Shared Kernel (공유 커널)**
 
 두 Context가 일부 모델을 공유하는 패턴입니다. Money나 Address처럼 정말 동일한 개념이고 변경이 드문 안정적인 모델에 적합합니다. 장점은 중복 제거와 일관성이지만, 단점은 변경 시 양쪽에 영향을 주어 결합도가 증가한다는 것입니다. 아래 예시처럼 `shared-kernel` 모듈을 별도로 만들어 Money와 Address를 공유하면, Order Context와 Payment Context 모두 동일한 금액 계산 로직을 사용할 수 있습니다.
@@ -504,6 +524,8 @@ flowchart TB
 
     SK1 <-.->|동일한 모듈| SK2
 ```
+
+*Order Context와 Payment Context가 Money, Address 같은 안정적 모델을 Shared Kernel로 공유하는 구조입니다.*
 
 ```java
 // shared-kernel 모듈
@@ -536,6 +558,8 @@ sequenceDiagram
     Note over D,U: Upstream이 API 설계 주도권
     Note over D: Downstream은 API에 맞춰 구현
 ```
+
+*Customer-Supplier 패턴에서 Order Service가 Product Service의 API를 호출하여 상품 정보를 조회하는 흐름입니다.*
 
 ```java
 // Downstream: Product Service Client
@@ -588,6 +612,8 @@ flowchart LR
     EXT -->|"그대로 수용"| INT
 ```
 
+*변경 불가능한 외부 Legacy ERP 시스템의 모델을 그대로 수용하는 Conformist 패턴을 보여줍니다.*
+
 **5. Anti-Corruption Layer (부패 방지 계층)**
 
 외부 모델이 내부를 오염시키지 않도록 번역 계층을 두는 패턴입니다. 레거시 시스템이나 복잡하고 일관성 없는 외부 API와 통합할 때 필수적입니다. Anti-Corruption Layer는 Translator(데이터 변환), Adapter(인터페이스 적응), Facade(단순화)로 구성됩니다. 아래 예시에서 레거시 시스템은 `ord_no`, `sts_cd`, `cust_nm` 같은 약어와 매직 넘버를 사용하지만, ACL이 이를 깨끗한 도메인 모델(Order, OrderStatus, ShippingAddress)로 변환합니다. 장점은 내부 모델을 보호하고 레거시 변경에 격리되지만, 추가 복잡성과 성능 오버헤드가 단점입니다.
@@ -611,6 +637,8 @@ flowchart LR
     EXT -->|Legacy 형식| ACL
     ACL -->|도메인 형식| DOM
 ```
+
+*레거시 시스템과 도메인 사이에 Anti-Corruption Layer(Translator, Adapter, Facade)를 두어 내부 모델을 보호합니다.*
 
 ```java
 // 레거시 시스템의 응답 (변경 불가)
@@ -704,6 +732,8 @@ flowchart TB
     API --> C4
 ```
 
+*Product Service가 Open Host Service와 Published Language로 다수의 소비자에게 표준화된 서비스를 제공합니다.*
+
 ```json
 // Published Language: 표준화된 이벤트 스키마
 {
@@ -759,6 +789,8 @@ flowchart TB
     A1 -.-|통합 없음| B1
 ```
 
+*두 Context가 통합하지 않고 각자 독립적으로 구현하는 Separate Ways 패턴을 보여줍니다.*
+
 **Context Map 예시: 이커머스**
 
 실제 이커머스 시스템의 전체 Context Map을 보겠습니다. Core Domain에는 주문과 가격 정책이, Supporting Domain에는 상품 카탈로그, 재고, 배송, 회원이, Generic Domain에는 결제(외부 PG), 알림(외부 서비스), 인증(OAuth)이 있습니다. Order와 Catalog는 Customer-Supplier 관계로, Order 생성 시 상품 정보를 조회합니다. Order와 Inventory도 Customer-Supplier 관계로, Order 확정 시 재고 확인/차감을 요청합니다. Order와 Payment는 외부 PG 연동이므로 ACL로 보호합니다. Order와 Shipping, Order와 Notification은 Published Language(이벤트)로 느슨하게 통합합니다. Price와 Order는 가격 계산 로직을 공유하므로 Shared Kernel 관계입니다.
@@ -793,6 +825,8 @@ flowchart TB
     MEMBER -->|Customer-Supplier| ORDER
     AUTH -->|Conformist| MEMBER
 ```
+
+*이커머스 시스템의 전체 Context Map으로, Core/Supporting/Generic 도메인 간의 통합 패턴을 보여줍니다.*
 
 각 관계는 다음과 같은 의미를 가집니다. ORDER → CATALOG는 주문 생성 시 상품 정보를 조회하는 관계입니다. ORDER → INV는 주문 확정 시 재고를 확인하고 차감 요청하는 관계입니다. ORDER → PAY는 외부 PG 연동으로 ACL로 보호합니다. ORDER → SHIP, NOTI는 이벤트 기반 느슨한 통합입니다. PRICE ↔ ORDER는 가격 계산 로직을 공유하는 Shared Kernel 관계입니다.
 
@@ -829,6 +863,8 @@ flowchart LR
     A --> CMD --> AGG --> EVT --> POL
     POL -.->|"다음 Command 트리거"| CMD
 ```
+
+*EventStorming의 핵심 구성 요소(Actor, Command, Aggregate, Domain Event, Policy)가 순서대로 연결되는 흐름입니다.*
 
 **1. Domain Event (주황색 포스트잇) — "무슨 일이 일어났는가?"**
 
@@ -891,6 +927,8 @@ flowchart TD
 
     S1 --> S2 --> S3 --> S4 --> S5 --> S6
 ```
+
+*EventStorming 진행 순서로, Domain Event 나열에서 시작하여 타임라인 정리, Command/Actor 식별, Aggregate 도출, Policy 연결까지 진행합니다.*
 
 **Step 1. Domain Event 나열 — "무슨 일이 일어나나요?"**
 
@@ -965,6 +1003,8 @@ flowchart TB
 
     E2 -->|"Context 간<br>이벤트 전달"| C3
 ```
+
+*전자상거래 도메인의 EventStorming 결과로, Order Context 내부 흐름과 Inventory Context로의 이벤트 전파를 보여줍니다.*
 
 | 단계 | 요소 | 예시 | 설명 |
 |------|------|------|------|

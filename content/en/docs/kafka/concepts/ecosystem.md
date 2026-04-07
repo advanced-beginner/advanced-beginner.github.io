@@ -66,6 +66,8 @@ flowchart TB
     STREAMS -.->|Query schema| SCHEMA
 ```
 
+*This diagram shows the overall Kafka Platform ecosystem, where Source Connectors ingest data, Streams processes it, and Sink Connectors export it to external systems.*
+
 #### Kafka Connect
 
 Kafka Connect is a framework for reliably streaming data between Kafka and external systems. You can connect Kafka to various systems including databases, file systems, cloud storage, and search engines. The biggest advantage is that you can build data pipelines with JSON configuration alone, no coding required.
@@ -236,6 +238,8 @@ flowchart LR
     SR -->|6. Return schema| C
     C -->|7. Deserialize| APP[Application]
 ```
+
+*This diagram shows the message serialization/deserialization flow through Schema Registry, where the Producer registers a schema and the Consumer looks it up by schema ID to interpret the data.*
 
 **Docker Compose Configuration**
 

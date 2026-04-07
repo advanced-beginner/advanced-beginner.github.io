@@ -10,10 +10,7 @@ lastmod: "2026-01-12"
 > **Prerequisites**: [Prometheus Architecture](../prometheus-architecture/)
 > **After reading this**: You'll be able to detect resource bottlenecks early and establish capacity planning
 
-## TL;DR
-
-{{< callout type="info" >}}
-**Key Summary:**
+{{< callout type="info" title="TL;DR" >}}
 - **Saturation**: How "full" resources are (0-100%)
 - **Key resources**: CPU, memory, disk, network, connection pools
 - Approaching 100% causes **latency spikes, errors**
@@ -54,6 +51,7 @@ graph LR
     S4 --> E["Latency ↑<br>Errors ↑"]
 ```
 
+*This diagram shows how saturation levels progress from comfortable to caution to warning to critical as utilization increases from 0% to over 90%, with latency and errors spiking at critical levels.*
 ### Why Warning from 80%?
 
 Systems need **headroom** for peak traffic. If 80% normally, sudden traffic increases risk exceeding 100%. Generally **20% headroom** is recommended.

@@ -24,6 +24,7 @@ graph LR
     A --> B --> C --> D
 ```
 
+*This diagram shows the full-stack analysis flow: detecting errors in metrics, finding trace_id in logs, identifying bottlenecks in traces, and resolving the issue.*
 ## Scenario: Order Service Failure Analysis
 
 ### System Architecture
@@ -37,6 +38,7 @@ graph LR
     PAYMENT --> DB["Payment DB"]
 ```
 
+*This diagram shows the system architecture where user requests are distributed from API Gateway to Order, Payment, and Inventory services.*
 ## Step 1: Failure Detection (Metrics)
 
 ### Grafana Alert Triggered

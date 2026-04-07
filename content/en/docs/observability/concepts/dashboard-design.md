@@ -10,10 +10,7 @@ lastmod: "2026-01-12"
 > **Prerequisites**: [SRE Golden Signals](golden-signals/)
 > **After Reading**: You'll be able to design effective dashboards and quickly identify problems
 
-## TL;DR
-
-{{< callout type="info" >}}
-**Key Summary:**
+{{< callout type="info" title="TL;DR" >}}
 - **Hierarchical Structure**: Overview → Service → Detail order
 - **5-Second Rule**: Must be able to identify problem presence in 5 seconds
 - **Golden Signals First**: Latency, Traffic, Errors, Saturation
@@ -41,6 +38,7 @@ graph TD
     L2 --> |"Root Cause Analysis"| L3
 ```
 
+*This diagram shows the hierarchical drill-down structure: detecting problems at the Overview level, narrowing causes at the Service level, and deep analysis at the Detail level.*
 ### 3. Color Rules
 
 | Color | Meaning | Usage |

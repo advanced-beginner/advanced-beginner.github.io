@@ -10,10 +10,7 @@ lastmod: "2026-01-12"
 > **Prerequisites**: [SRE Golden Signals](./)
 > **After reading this**: You'll be able to apply the four signals tailored to service characteristics
 
-## TL;DR
-
-{{< callout type="info" >}}
-**Key Summary:**
+{{< callout type="info" title="TL;DR" >}}
 - Each service type has different **key signals**
 - **Web API**: Latency, Errors focused
 - **Kafka**: Traffic (Lag), Saturation focused
@@ -51,6 +48,7 @@ graph TD
     E --> |"SLO"| SLO["Error rate < 0.1%"]
 ```
 
+*This diagram shows that Latency and Errors are the most critical metrics for Web APIs based on SLA/SLO criteria.*
 ### PromQL Queries
 
 ```promql
@@ -105,6 +103,7 @@ graph TD
     S --> |"Important"| DISK["Disk < 80%"]
 ```
 
+*This diagram shows that Consumer Lag and disk utilization are the most important monitoring metrics for Kafka.*
 ### PromQL Queries
 
 ```promql
@@ -174,6 +173,7 @@ graph TD
     L --> |"Important"| SLOW["Slow queries"]
 ```
 
+*This diagram shows that connection saturation and query latency are the most important monitoring metrics for databases.*
 ### PromQL Queries (PostgreSQL)
 
 ```promql
@@ -231,6 +231,7 @@ graph TD
     L --> |"Important"| HIT["Hit rate > 90%"]
 ```
 
+*This diagram shows that memory utilization and cache hit rate are the most important monitoring metrics for Redis.*
 ### PromQL Queries
 
 ```promql
@@ -271,6 +272,7 @@ graph TD
     T --> |"Important"| DONE["Completion rate 100%"]
 ```
 
+*This diagram shows that failure rate and completion rate are the most important monitoring metrics for batch jobs.*
 ### PromQL Queries
 
 ```promql

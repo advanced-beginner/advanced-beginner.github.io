@@ -30,10 +30,7 @@ lastmod: "2026-01-15"
 > **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: 분산 추적을 이해하고 서비스 간 요청 흐름을 분석할 수 있습니다
 
-## TL;DR
-
-{{< callout type="info" >}}
-**핵심 요약:**
+{{< callout type="info" title="TL;DR" >}}
 - **Trace**: 하나의 요청 전체 경로 (여러 Span으로 구성)
 - **Span**: 단일 작업 단위 (시작/종료 시간, 메타데이터)
 - **Context Propagation**: 서비스 간 Trace ID 전달
@@ -53,6 +50,8 @@ graph LR
     PAYMENT --> DB1["결제 DB"]
     INVENTORY --> DB2["재고 DB"]
 ```
+
+*하나의 사용자 요청이 API Gateway를 거쳐 주문, 결제, 재고 서비스와 각 DB로 분산되는 마이크로서비스 구조입니다.*
 
 **문제**: 응답이 느린데 어디가 문제인지 모름
 
@@ -77,6 +76,8 @@ graph TB
     S2 --> S3
     S3 --> S4
 ```
+
+*하나의 Trace 안에서 API Gateway, Order, Payment, DB 순으로 Span이 중첩되며 각 구간의 시간 범위를 보여줍니다.*
 
 | 용어 | 설명 |
 |------|------|
@@ -126,6 +127,8 @@ sequenceDiagram
     Note over C: Extract context<br>Create child span
 ```
 
+*서비스 간 HTTP 요청 시 traceparent 헤더를 통해 Trace 컨텍스트가 전파되는 과정을 보여줍니다.*
+
 **W3C Trace Context 형식:**
 ```
 traceparent: 00-{trace-id}-{span-id}-{flags}
@@ -153,6 +156,8 @@ graph TB
     STORAGE --> QUERY["Jaeger Query"]
     QUERY --> UI["Jaeger UI"]
 ```
+
+*Jaeger의 Application → Agent → Collector → Storage → Query → UI 데이터 흐름을 보여줍니다.*
 
 ---
 
@@ -268,6 +273,8 @@ graph LR
     LOG --> |"trace_id 추출"| TRACE
 ```
 
+*메트릭 알림에서 로그로, 로그에서 trace_id를 추출하여 트레이스로 연결하는 분석 흐름입니다.*
+
 ### 로그에 Trace ID 포함
 
 ```java
@@ -328,6 +335,8 @@ graph LR
     PAYMENT --> PAYMENT_DB["Payment DB"]
     INVENTORY --> INVENTORY_DB["Inventory DB"]
 ```
+
+*서비스 간 의존성을 시각화한 맵으로, API Gateway에서 각 서비스와 데이터베이스로의 연결 관계를 보여줍니다.*
 
 ---
 

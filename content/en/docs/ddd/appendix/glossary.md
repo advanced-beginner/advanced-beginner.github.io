@@ -11,11 +11,11 @@ author_url: "http://github.com/kimbenji"
 
 A compilation of Domain-Driven Design core terminology. For detailed explanations, see the [Concepts](../concepts/) section.
 
-> **TL;DR**
->
-> - **Strategic Design**: Define domain boundaries and language with Bounded Context, Context Mapping, Ubiquitous Language
-> - **Tactical Design**: Implement domain models with Entity, Value Object, Aggregate, Repository, Domain Event
-> - **Architecture Patterns**: Structure systems with Layered, Hexagonal, CQRS, Event Sourcing
+{{< callout type="info" title="TL;DR" >}}
+- **Strategic Design**: Define domain boundaries and language with Bounded Context, Context Mapping, Ubiquitous Language
+- **Tactical Design**: Implement domain models with Entity, Value Object, Aggregate, Repository, Domain Event
+- **Architecture Patterns**: Structure systems with Layered, Hexagonal, CQRS, Event Sourcing
+{{< /callout >}}
 
 ## Strategic Design
 
@@ -407,6 +407,8 @@ flowchart LR
     WM --> DB[(Database)]
     DB --> RM
 ```
+
+*This diagram shows the core CQRS structure where Command flows to Write Model and Query flows to Read Model, each communicating with the Database.*
 
 **Benefits:**
 - Each can be optimized independently

@@ -54,6 +54,8 @@ flowchart LR
     Before -->|IP 변경!| After
 ```
 
+*Pod 재시작 시 IP가 변경되어 직접 접근이 어려운 문제를 보여줍니다.*
+
 Service를 사용하면 Pod IP가 변경되어도 일관된 접근점을 유지할 수 있습니다.
 
 | 문제 | Service의 해결책 |
@@ -74,6 +76,8 @@ flowchart LR
     SVC --> P2[Pod 2<br>10.244.1.6]
     SVC --> P3[Pod 3<br>10.244.2.3]
 ```
+
+*Service가 고정 IP를 통해 클라이언트 요청을 여러 Pod에 로드밸런싱하는 구조를 보여줍니다.*
 
 Service와 Pod의 연결 과정은 다음과 같습니다.
 
@@ -115,6 +119,8 @@ flowchart LR
     External[외부] -.-x|접근 불가| SVC
 ```
 
+*ClusterIP Service는 클러스터 내부 Pod만 접근 가능하고 외부에서는 접근할 수 없는 구조를 보여줍니다.*
+
 ClusterIP의 특징은 다음과 같습니다.
 
 | 특징 | 설명 |
@@ -148,6 +154,8 @@ flowchart LR
     Node --> SVC[Service]
     SVC --> Pod[Pod:8080]
 ```
+
+*외부에서 노드 IP와 지정된 포트(30080)를 통해 Service에 접근하는 NodePort 구조를 보여줍니다.*
 
 NodePort의 특징은 다음과 같습니다.
 
@@ -184,6 +192,8 @@ flowchart LR
     Node1 --> Pod1[Pod]
     Node2 --> Pod2[Pod]
 ```
+
+*클라우드 Load Balancer가 외부 트래픽을 여러 노드의 Pod로 분산하는 LoadBalancer Service 구조를 보여줍니다.*
 
 LoadBalancer의 특징은 다음과 같습니다.
 

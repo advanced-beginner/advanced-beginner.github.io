@@ -156,6 +156,8 @@ flowchart TB
     EVT -.->|발행| KAFKA
 ```
 
+*계층별 역할로, Controller에서 Application Service, Aggregate, Repository를 거쳐 Event Publisher까지의 흐름입니다.*
+
 > **다이어그램 설명**: Interfaces 계층의 Controller가 Application 계층의 Service를 호출하고, Service는 Domain 계층의 Aggregate/Entity와 Repository Interface를 사용합니다. Infrastructure 계층은 Repository 구현체와 JPA Entity, Kafka Publisher를 제공하며, Domain Event는 Infrastructure를 통해 발행됩니다.
 
 ### 의존성 규칙
@@ -166,6 +168,8 @@ flowchart LR
     A --> D[Domain]
     INF[Infrastructure] --> D
 ```
+
+*의존성 규칙으로, Interfaces에서 Application으로, Application에서 Domain으로 의존하며 Infrastructure는 Domain을 구현합니다.*
 
 > **다이어그램 설명**: 의존성은 항상 안쪽(Domain)을 향합니다. Interfaces에서 Application으로, Application에서 Domain으로 의존하며, Infrastructure는 Domain의 인터페이스를 구현합니다.
 

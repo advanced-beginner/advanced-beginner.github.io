@@ -75,6 +75,8 @@ flowchart LR
     end
 ```
 
+*This diagram shows how the Writer and Reader containers within the same Pod share data through an emptyDir volume.*
+
 emptyDir characteristics summary:
 
 | Characteristic | Description |
@@ -105,6 +107,8 @@ flowchart LR
     PVC -->|binds to| PV
     Pod -->|uses| PVC
 ```
+
+*This diagram shows the relationship where an admin creates a PV, a developer creates a PVC, and they are automatically bound for use by a Pod.*
 
 | Resource | Created By | Role |
 |----------|-----------|------|
@@ -199,6 +203,8 @@ flowchart LR
     SC -->|auto-creates| PV[PersistentVolume]
     PV -->|binds| PVC
 ```
+
+*This diagram shows the dynamic volume provisioning flow where a PV is automatically created when a PVC is submitted through a StorageClass.*
 
 ### StorageClass Example
 

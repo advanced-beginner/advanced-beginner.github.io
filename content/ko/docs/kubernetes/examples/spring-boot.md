@@ -30,6 +30,8 @@ flowchart LR
     F --> G[Ingress]
 ```
 
+*Spring Boot 앱을 Docker 이미지로 빌드하고 Kubernetes에 Deployment, Service, Ingress로 배포하는 전체 흐름을 보여줍니다.*
+
 ## 1. Spring Boot 애플리케이션 준비
 
 ### 예제 애플리케이션 구조

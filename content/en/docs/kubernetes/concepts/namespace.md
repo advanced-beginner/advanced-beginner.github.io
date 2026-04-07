@@ -70,6 +70,8 @@ flowchart TB
     end
 ```
 
+*This diagram shows how team-a, team-b, and kube-system are isolated as separate Namespaces within a single cluster.*
+
 Each Namespace is an independent space, so a `web-app` Deployment with the same name can exist in both `team-a` and `team-b`.
 
 ## Default Namespaces
@@ -239,6 +241,8 @@ flowchart LR
     end
     PA -->|"api-svc.team-b.svc.cluster.local"| SB
 ```
+
+*This diagram shows cross-namespace communication where Services in other Namespaces are accessed using FQDNs.*
 
 | Access Method | Example | Description |
 |---------------|---------|-------------|

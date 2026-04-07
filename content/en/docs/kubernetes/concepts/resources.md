@@ -54,6 +54,8 @@ flowchart LR
     USE -->|limited| LIM
 ```
 
+*This diagram shows the range of actual resource usage between requests (minimum guarantee) and limits (maximum cap).*
+
 Comparing requests and limits:
 
 | Item | requests | limits |
@@ -93,6 +95,8 @@ flowchart LR
     B -->|guaranteed 500m| CPU
     CPU -->|remaining 250m| C[Contention]
 ```
+
+*This diagram shows how two Pods each receive their guaranteed CPU from requests and compete for remaining capacity.*
 
 | Situation | Behavior |
 |-----------|----------|
@@ -167,6 +171,8 @@ flowchart LR
     BE --> BU[Burstable terminated]
     BU --> GU[Guaranteed last]
 ```
+
+*This diagram shows the QoS eviction priority where Pods are terminated in order of BestEffort, Burstable, and Guaranteed when node memory is exhausted.*
 
 ## Recommended Settings
 

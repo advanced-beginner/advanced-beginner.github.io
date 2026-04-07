@@ -10,10 +10,7 @@ lastmod: "2026-01-12"
 > **Prerequisites**: [Recording Rules](recording-rules/)
 > **What You'll Learn**: Write rules that reduce false positives and alert only on real issues
 
-## TL;DR
-
-{{< callout type="info" >}}
-**Key Summary:**
+{{< callout type="info" title="TL;DR" >}}
 - `for`: Fires when condition is met for specified duration (prevents false positives)
 - `labels`: Add metadata like severity, team
 - `annotations`: Include alert message, runbook URL
@@ -105,6 +102,7 @@ graph LR
     P --> |"condition cleared"| R["Resolved<br>(alert canceled)"]
 ```
 
+*This diagram shows the flow where a condition triggers Pending status, fires after 5 minutes of sustained condition, or cancels if the condition clears in between.*
 **Recommended Values:**
 
 | Situation | for Value | Reason |
@@ -429,6 +427,7 @@ stateDiagram-v2
     Firing --> Inactive: condition cleared (Resolved)
 ```
 
+*This diagram shows the alert state machine: transitions between Inactive, Pending, and Firing states with their conditions.*
 | State | Description |
 |-------|-------------|
 | **Inactive** | Condition not met |

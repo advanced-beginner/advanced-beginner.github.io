@@ -10,10 +10,7 @@ lastmod: "2026-01-12"
 > **Prerequisites**: [Three Pillars of Observability](three-pillars/)
 > **After Reading**: You'll be able to select a log collection system and design effective logs
 
-## TL;DR
-
-{{< callout type="info" >}}
-**Key Summary:**
+{{< callout type="info" title="TL;DR" >}}
 - **Loki**: Label-based, lightweight, excellent Grafana integration
 - **ELK**: Powerful full-text search, suitable for large-scale analysis
 - **Structured Logs**: JSON format for easy field-by-field search
@@ -52,6 +49,7 @@ graph LR
     end
 ```
 
+*This diagram shows the inefficient structure where administrators must individually access each server to check logs in a distributed environment.*
 ```mermaid
 graph LR
     subgraph "Centralized Logs (Efficient)"
@@ -67,6 +65,7 @@ graph LR
     end
 ```
 
+*This diagram shows a centralized log collection system that aggregates all server logs into a unified dashboard for searching.*
 {{< callout type="info" >}}
 **Core Principle**: Logs should be **searchable from one place**. Incident response time is proportional to "time spent finding logs."
 {{< /callout >}}
@@ -93,6 +92,7 @@ graph TB
     end
 ```
 
+*This diagram compares the architectures of the Loki stack (Promtail, Loki, Grafana) and the ELK stack (Filebeat, Logstash, Elasticsearch, Kibana).*
 ### Detailed Comparison
 
 | Item | Loki | ELK |
@@ -118,6 +118,7 @@ graph TD
     Q3 --> |"No"| LOKI
 ```
 
+*This diagram shows the decision flow for choosing between Loki and ELK based on full-text search needs, Grafana usage, and operational staffing.*
 | Situation | Recommendation |
 |------|------|
 | Already using Grafana | Loki |
@@ -363,6 +364,7 @@ graph LR
     HOT --> WARM --> COLD --> DELETE
 ```
 
+*This diagram shows the log retention lifecycle: data moving through Hot, Warm, Cold stages before deletion.*
 ### Loki Retention Settings
 
 ```yaml

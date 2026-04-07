@@ -97,6 +97,8 @@ flowchart TB
     CR --> NODE
 ```
 
+*주체(User, Group, ServiceAccount)가 Binding을 통해 Role/ClusterRole의 권한으로 리소스에 접근하는 RBAC 구조를 보여줍니다.*
+
 ## Role vs ClusterRole
 
 ### Role (Namespace 범위)

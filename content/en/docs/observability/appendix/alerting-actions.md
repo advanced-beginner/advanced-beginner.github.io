@@ -20,6 +20,7 @@ graph LR
     F --> G["Post-Incident Review"]
 ```
 
+*This diagram shows the six-step response workflow from alert receipt to post-incident review.*
 ---
 
 ## Response by Situation

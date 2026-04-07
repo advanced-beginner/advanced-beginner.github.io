@@ -893,6 +893,8 @@ flowchart TB
     EVT -.->|publish| KAFKA
 ```
 
+*This diagram shows the overall layer structure and data flow from Controller through Service, Aggregate, Repository, Mapper, to Event Publisher.*
+
 > **Diagram Description**: This shows the entire layer structure. Controller calls Service, Service uses Aggregate and Repository Interface. Infrastructure's JpaOrderRepository implements Repository, using Mapper for conversion. Domain Events are published externally through KafkaEventPublisher.
 
 | Layer | Role | Key Classes |

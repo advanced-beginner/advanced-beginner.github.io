@@ -10,10 +10,7 @@ lastmod: "2026-01-12"
 > **Prerequisites**: [histogram_quantile](../promql/histogram-quantile/)
 > **After reading this**: You'll be able to accurately measure latency and set up SLA-based alerts
 
-## TL;DR
-
-{{< callout type="info" >}}
-**Key Summary:**
+{{< callout type="info" title="TL;DR" >}}
 - **P50 (median)**: Typical user experience
 - **P95**: Most users' experience
 - **P99**: Worst-case user experience (SLA baseline)
@@ -48,6 +45,7 @@ graph LR
     P99["P99: 10,000ms<br>✅ Worst experience"]
 ```
 
+*This diagram shows that when 99 requests take 100ms but 1 takes 10s, the average of 199ms is misleading, while P99 accurately reflects the worst-case experience.*
 | Metric | Value | Meaning |
 |--------|-------|---------|
 | Average | 199ms | Distorted by 1% slow requests |
@@ -284,6 +282,7 @@ graph TD
     Q1 --> |"Network"| A4["DNS/connection pool<br>check"]
 ```
 
+*This diagram shows the decision flow for choosing different optimization strategies based on bottleneck location (application, DB, external API, network) when P99 increases.*
 ### Common Causes
 
 | Cause | Symptom | Solution |

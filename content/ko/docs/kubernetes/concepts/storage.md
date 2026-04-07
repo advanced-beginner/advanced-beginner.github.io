@@ -96,6 +96,8 @@ flowchart LR
     end
 ```
 
+*같은 Pod 내의 Writer 컨테이너와 Reader 컨테이너가 emptyDir Volume을 통해 데이터를 공유하는 구조를 보여줍니다.*
+
 emptyDir의 특징을 정리하면 다음과 같습니다.
 
 | 특징 | 설명 |
@@ -126,6 +128,8 @@ flowchart LR
     PVC -->|바인딩| PV
     Pod -->|사용| PVC
 ```
+
+*관리자가 PV를 생성하고, 개발자가 PVC를 생성하면 자동 바인딩되어 Pod에서 사용하는 관계를 보여줍니다.*
 
 | 리소스 | 생성 주체 | 역할 |
 |--------|----------|------|
@@ -220,6 +224,8 @@ flowchart LR
     SC -->|자동 생성| PV[PersistentVolume]
     PV -->|바인딩| PVC
 ```
+
+*StorageClass를 통해 PVC 생성 시 PV가 자동으로 프로비저닝되는 동적 볼륨 할당 흐름을 보여줍니다.*
 
 ### StorageClass 예시
 

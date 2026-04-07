@@ -61,6 +61,8 @@ flowchart TB
     ACL --> B3
 ```
 
+*This diagram shows Kafka's three-layer security architecture, where client requests pass through SSL/TLS encryption, SASL authentication, and ACL authorization checks in sequence before reaching the Broker.*
+
 #### Encryption: SSL/TLS
 
 SSL/TLS encrypts network communication to prevent data exposure during transmission. To configure SSL in Kafka, you need to generate certificates and configure both Broker and Client.

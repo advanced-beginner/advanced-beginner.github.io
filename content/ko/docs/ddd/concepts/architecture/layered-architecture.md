@@ -30,6 +30,8 @@ flowchart TB
     I -.->|"구현 제공"| D
 ```
 
+*계층형 아키텍처의 4계층(Presentation, Application, Domain, Infrastructure)과 위에서 아래로의 의존성 방향을 보여줍니다.*
+
 ---
 
 #### 왜 계층으로 나누나요?
@@ -62,6 +64,8 @@ flowchart TB
     PM -->|"작업 지시"| DEV
     DEV -->|"인프라 사용"| INFRA
 ```
+
+*회사 조직 비유로, 고객 응대팀(Presentation), 기획팀(Application), 전문가팀(Domain), 지원팀(Infrastructure)의 역할을 보여줍니다.*
 
 각 팀이 명확한 역할을 가지고 있어서 문제가 생겼을 때 어디를 고쳐야 할지 바로 알 수 있습니다. 소프트웨어 계층도 이와 같은 원리로 동작합니다.
 
@@ -507,6 +511,8 @@ flowchart TB
     I --> D
 ```
 
+*각 계층 간의 의존성 방향으로, Domain은 아무것도 의존하지 않고 Infrastructure가 Domain을 구현합니다.*
+
 이렇게 하면 domain 계층이 가장 안정적인 계층이 되며, 기술적 변경(예: JPA에서 MyBatis로 변경)이 domain에 영향을 주지 않습니다.
 
 ---
@@ -533,6 +539,8 @@ flowchart LR
     O -->|"사용"| RI
     JR -->|"구현"| RI
 ```
+
+*Domain Layer에서 Repository Interface를 정의하고 Infrastructure Layer에서 구현하는 의존성 역전을 보여줍니다.*
 
 위 다이어그램에서 Order는 OrderRepository 인터페이스를 사용하고, JpaOrderRepository는 그 인터페이스를 구현합니다. 의존성 방향이 역전되어 있습니다.
 
@@ -886,6 +894,8 @@ flowchart LR
     A -->|"1. Repository Interface 추출"| B
     B -->|"2. Port/Adapter 도입"| C
 ```
+
+*계층형에서 도메인 분리, 헥사고날까지 점진적으로 아키텍처를 발전시키는 로드맵입니다.*
 
 **1단계: Repository Interface를 Domain으로 이동**
 

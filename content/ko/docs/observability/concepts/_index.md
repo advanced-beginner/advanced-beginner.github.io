@@ -112,3 +112,5 @@ graph TD
     C --> J
     I --> L
 ```
+
+*입문(3요소 → 메트릭 → Prometheus), PromQL 심화, SRE 관점의 세 가지 학습 경로를 단계별로 보여줍니다.*

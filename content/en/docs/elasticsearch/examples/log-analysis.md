@@ -42,6 +42,8 @@ flowchart LR
     B --> D[Alerts/Monitoring]
 ```
 
+*This diagram shows the overall architecture where a Spring Boot application stores logs to Elasticsearch via Logback, which are then used for Kibana dashboards and alerts/monitoring.*
+
 - **Log Collection**: Store application logs directly in Elasticsearch
 - **Real-time Search**: Error log search, specific user request tracing
 - **Dashboards**: Visualize error rates, response time distribution

@@ -21,6 +21,8 @@ flowchart TB
     A --> E[System Settings]
 ```
 
+*This diagram shows the four core areas of performance tuning: Index Design, Query Optimization, Caching, and System Settings.*
+
 ---
 
 ## Index Design Optimization

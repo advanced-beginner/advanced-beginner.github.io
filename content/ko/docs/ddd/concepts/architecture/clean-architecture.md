@@ -39,6 +39,8 @@ flowchart TB
     F --> A --> UC --> E
 ```
 
+*Clean Architecture의 동심원 구조로, 가장 안쪽의 Entity에서 바깥쪽 Frameworks & Drivers까지 의존성이 안쪽으로만 향합니다.*
+
 ---
 
 ## "동심원"으로 이해하기
@@ -58,6 +60,8 @@ flowchart TB
         L1 --> L2 --> L3 --> L4
     end
 ```
+
+*양파처럼 여러 겹의 층이 있으며, 바깥 껍질(프레임워크)은 교체 가능하고 안쪽 핵심(비즈니스 규칙)은 보호됩니다.*
 
 소프트웨어도 마찬가지입니다:
 
@@ -88,6 +92,8 @@ flowchart TB
         IN -.->|"❌ 모름"| OUT
     end
 ```
+
+*의존성 규칙을 보여주며, 바깥 레이어는 안쪽 레이어를 알지만 안쪽은 바깥을 전혀 모릅니다.*
 
 **이것이 왜 중요할까요?**
 
@@ -297,6 +303,8 @@ flowchart LR
     DB <--> REPO <--> UseCase
 ```
 
+*Interface Adapter 레이어가 외부 형식(HTTP, DB)과 내부 형식(Domain) 사이의 데이터 변환을 담당합니다.*
+
 **세 가지 종류의 Adapter:**
 
 | Adapter | 역할 | 예시 |
@@ -378,6 +386,8 @@ flowchart TB
         UI["📱 React/Vue"]
     end
 ```
+
+*Frameworks & Drivers 레이어에 Spring MVC, JPA/Hibernate 등 교체 가능한 외부 도구들이 위치합니다.*
 
 ```java
 // Framework Layer: Spring 설정
@@ -488,6 +498,8 @@ flowchart TB
     AD -.->|"❌ 금지"| EN
 ```
 
+*컴파일 타임 의존성 구조로, framework에서 adapter, usecase, domain 순으로 안쪽을 향합니다.*
+
 ### 런타임 흐름 (실제 호출 순서)
 
 ```mermaid
@@ -510,6 +522,8 @@ sequenceDiagram
     UC-->>CTRL: output
     CTRL-->>HTTP: 201 Created
 ```
+
+*HTTP 요청이 Controller, Use Case, Entity, Gateway를 거쳐 DB까지 도달하는 런타임 호출 흐름입니다.*
 
 ---
 
@@ -545,6 +559,8 @@ flowchart LR
 
     Hex -.->|"실제로 거의 같음"| Clean
 ```
+
+*헥사고날 아키텍처와 Clean Architecture의 구조적 차이를 비교합니다.*
 
 ---
 
@@ -655,6 +671,8 @@ flowchart TB
     UNIT --> UC
     UNIT --> EN
 ```
+
+*레이어별 테스트 전략으로, 단위 테스트(Entity, Use Case)에서 통합 테스트, E2E 테스트까지의 피라미드입니다.*
 
 ### 1. Entity 테스트 (가장 순수)
 
@@ -850,6 +868,8 @@ flowchart LR
 
     A --> B --> C --> D
 ```
+
+*Entity 분리에서 Use Case 추출, Gateway 인터페이스 적용까지 점진적으로 Clean Architecture를 도입하는 단계입니다.*
 
 ### 1단계: Entity 분리
 

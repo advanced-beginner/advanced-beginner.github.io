@@ -62,6 +62,8 @@ flowchart TB
     RS --> P3[Pod 3]
 ```
 
+*Deployment가 ReplicaSet을 생성하고, ReplicaSet이 Pod를 관리하는 계층 구조를 보여줍니다.*
+
 각 리소스의 역할을 비교하면 다음과 같습니다.
 
 | 리소스 | 역할 |
@@ -161,6 +163,8 @@ sequenceDiagram
 
     Note over RS2: Pod v2 x 3
 ```
+
+*롤링 업데이트 시 새 ReplicaSet의 Pod를 점진적으로 늘리고 이전 ReplicaSet의 Pod를 줄여가는 과정을 보여줍니다.*
 
 ### 롤링 업데이트 단계별 상태
 

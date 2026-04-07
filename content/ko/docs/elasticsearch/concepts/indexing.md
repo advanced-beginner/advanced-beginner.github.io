@@ -60,6 +60,8 @@ flowchart LR
     G --> H[Disk]
 ```
 
+*문서가 수신되어 분석, 역색인 생성, 메모리 버퍼 저장, Refresh, Segment 생성, Flush를 거쳐 디스크에 영구 저장되는 인덱싱 과정입니다.*
+
 | 단계 | 설명 |
 |------|------|
 | 분석 | 텍스트를 토큰으로 분리 |
@@ -147,6 +149,8 @@ flowchart LR
     A[Memory Buffer] -->|Refresh| B[Segment<br>검색 가능]
 ```
 
+*메모리 버퍼의 데이터가 Refresh를 통해 검색 가능한 Segment로 변환되는 과정을 보여줍니다.*
+
 ### Refresh Interval
 
 ```json
@@ -199,6 +203,8 @@ flowchart LR
     B -->|장애 복구| D[데이터 복원]
     C -->|Flush| E[Disk Segment]
 ```
+
+*문서가 Translog와 메모리 버퍼에 동시에 기록되어, 장애 시 Translog로 복구하고 Flush로 디스크에 영구 저장하는 구조입니다.*
 
 ### Flush
 
@@ -271,6 +277,8 @@ flowchart LR
     C --> D[Frozen<br>거의 안 읽음]
     D --> E[Delete<br>삭제]
 ```
+
+*인덱스 수명주기의 다섯 단계를 보여줍니다. Hot에서 활발히 사용되다가 Warm, Cold, Frozen으로 점차 접근 빈도가 줄고, 최종적으로 Delete됩니다.*
 
 ### ILM 정책 생성
 

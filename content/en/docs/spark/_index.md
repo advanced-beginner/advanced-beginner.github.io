@@ -166,6 +166,8 @@ flowchart TD
     DA3 --> DA4[MLlib]
 ```
 
+*This diagram shows the recommended learning path for each role — backend developer, data engineer, and data analyst.*
+
 **Documents by Difficulty**
 
 Each document has different difficulty levels and estimated learning times. Use the table below to start with documents matching your current level:

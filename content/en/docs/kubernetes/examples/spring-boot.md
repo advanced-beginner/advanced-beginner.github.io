@@ -30,6 +30,8 @@ flowchart LR
     F --> G[Ingress]
 ```
 
+*This diagram shows the end-to-end flow of building a Spring Boot app as a Docker image and deploying it to Kubernetes with Deployment, Service, and Ingress.*
+
 ## 1. Prepare Spring Boot Application
 
 ### Example Application Structure

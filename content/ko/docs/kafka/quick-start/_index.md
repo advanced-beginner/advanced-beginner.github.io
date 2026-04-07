@@ -32,6 +32,8 @@ flowchart LR
     D --> E[로그 출력]
 ```
 
+*위 다이어그램은 REST API 호출부터 Consumer의 로그 출력까지 Quick Start의 전체 메시지 흐름을 보여줍니다.*
+
 ## 시작 전 확인
 
 시작하기 전에 다음 도구들이 설치되어 있는지 확인하세요.
@@ -293,6 +295,8 @@ sequenceDiagram
     Kafka->>Consumer: 메시지 전달
     Consumer->>Consumer: 로그 출력
 ```
+
+*위 다이어그램은 HTTP Client → ProducerController → Kafka Broker → MessageConsumer 순서로 메시지가 전달되는 상세 시퀀스를 보여줍니다.*
 
 | 순서 | 컴포넌트 | 동작 |
 |------|----------|------|

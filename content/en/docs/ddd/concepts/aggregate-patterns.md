@@ -12,7 +12,7 @@ author_url: "http://github.com/kimbenji"
 > **Reading Time**: About 30 minutes
 > **Key Question**: "What patterns should I apply when implementing Aggregates?"
 
-{{< callout type="tip" title="Summary" >}}
+{{< callout type="info" title="TL;DR" >}}
 Practical patterns: **Factory Method** (creation) + **Domain Event publishing** + **Optimistic Locking** (concurrency) + **Soft Delete** (deletion)
 {{< /callout >}}
 
@@ -234,6 +234,8 @@ flowchart TB
     Q3 -->|Yes| SAME[Same Aggregate]
     Q3 -->|No| SEP
 ```
+
+*This diagram shows a decision tree for determining whether to include a new Entity in an Aggregate — only include it when all three questions are answered Yes.*
 
 ### Example: Order and Payment
 

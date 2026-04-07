@@ -43,6 +43,8 @@ flowchart TB
     end
 ```
 
+*This diagram compares a Big Ball of Mud where all concepts are tangled (left) with properly separated Contexts each having clear responsibilities (right).*
+
 The main symptoms of this anti-pattern are as follows. All teams modify the same codebase, causing frequent merge conflicts. Even small changes require redeploying the entire application, lengthening deployment cycles. The same terms are used with different meanings, adding to confusion. For example, the term "product" can have different attributes and behaviors in catalog management, inventory management, and order processing.
 
 The solution is to find clear boundaries and separate Contexts. First, find linguistic boundaries. Points where domain expert terminology conflicts are good candidates for Context boundaries. Second, consider team boundaries. Areas owned by different teams naturally separate into different Contexts. Third, separate gradually. Don't try to separate everything at once; start from the clearest boundaries and proceed step by step.
@@ -61,6 +63,8 @@ flowchart LR
         O -->|API| A
     end
 ```
+
+*This diagram shows the anti-pattern of excessively splitting Order, OrderLine, and Address into separate services, causing API call overhead.*
 
 The symptoms of this anti-pattern are having to call multiple services to implement a simple feature, complex distributed transaction management, and performance degradation due to network overhead. If retrieving a single order requires calling the Order service, OrderLine service, and Address service separately, it's clearly a wrong design.
 

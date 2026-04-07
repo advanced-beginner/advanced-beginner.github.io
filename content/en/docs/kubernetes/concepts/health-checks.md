@@ -46,6 +46,8 @@ flowchart TB
     SP -->|failure| WAIT[Continue waiting]
 ```
 
+*This diagram shows the different failure behaviors of the three probe types: Liveness (restart), Readiness (remove from service), and Startup (wait).*
+
 Comparing characteristics of each Probe:
 
 | Probe | Question | Action on Failure | When to Use |
@@ -143,6 +145,8 @@ flowchart LR
     EP -.-x P3[Pod 3 ✗ Not Ready]
 ```
 
+*This diagram shows how a Pod is removed from Service Endpoints and stops receiving traffic when its Readiness Probe fails.*
+
 ## Startup Probe
 
 Used when application takes long to start. Liveness/Readiness Probes are disabled until Startup Probe succeeds.
@@ -183,6 +187,8 @@ sequenceDiagram
     K->>C: Readiness Probe
     C-->>K: Success
 ```
+
+*This diagram shows the startup-to-running phase transition where Liveness and Readiness Probes only activate after the Startup Probe succeeds.*
 
 ## Real Example: Spring Boot
 

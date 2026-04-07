@@ -32,6 +32,8 @@ flowchart TD
     CRB -->|Grant permissions| CL[Cluster-wide Resources]
 ```
 
+*This diagram shows how a ServiceAccount accesses resources through RoleBinding/ClusterRoleBinding referencing Role/ClusterRole permissions.*
+
 | Resource | Scope | Description |
 |----------|-------|-------------|
 | Role | Namespace | Permissions for resources within a specific Namespace |

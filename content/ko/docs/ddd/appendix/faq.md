@@ -11,13 +11,13 @@ author_url: "http://github.com/kimbenji"
 
 DDD를 적용할 때 자주 받는 질문과 답변입니다.
 
-> **TL;DR**
->
-> - DDD는 <strong>아키텍처가 아닌 방법론</strong>이며, 복잡한 비즈니스 로직이 있을 때 가치가 있습니다
-> - Entity는 ID로, Value Object는 속성 값으로 동등성을 판단합니다
-> - Aggregate는 "진정한 불변식을 보호하는 최소 단위"로 설계합니다
-> - <strong>유비쿼터스 언어</strong>가 DDD 적용 시 가장 중요한 요소입니다
-> - 레거시 시스템에도 ACL(Anti-Corruption Layer)을 통해 점진적으로 적용 가능합니다
+{{< callout type="info" title="TL;DR" >}}
+- DDD는 <strong>아키텍처가 아닌 방법론</strong>이며, 복잡한 비즈니스 로직이 있을 때 가치가 있습니다
+- Entity는 ID로, Value Object는 속성 값으로 동등성을 판단합니다
+- Aggregate는 "진정한 불변식을 보호하는 최소 단위"로 설계합니다
+- <strong>유비쿼터스 언어</strong>가 DDD 적용 시 가장 중요한 요소입니다
+- 레거시 시스템에도 ACL(Anti-Corruption Layer)을 통해 점진적으로 적용 가능합니다
+{{< /callout >}}
 
 ## 기본 개념
 
@@ -49,6 +49,8 @@ flowchart TB
     Q1 -->|Yes| DDD["DDD 권장"]
     Q1 -->|No| SIMPLE["단순 CRUD 충분"]
 ```
+
+*비즈니스 로직의 복잡도에 따라 DDD 적용 여부를 판단하는 의사결정 흐름도입니다.*
 
 **DDD가 적합한 경우:**
 - 복잡한 비즈니스 규칙 (금융, 보험, 물류)
@@ -225,6 +227,8 @@ sequenceDiagram
     Repo->>Bus: 이벤트 발행
     Note right of Bus: 트랜잭션 커밋 후
 ```
+
+*도메인 이벤트의 발행 시점으로, Aggregate에서 등록 후 Repository 저장, 트랜잭션 커밋 후 Event Bus로 발행됩니다.*
 
 ---
 
@@ -416,6 +420,8 @@ flowchart LR
     C --> D["점진적 마이그레이션"]
 ```
 
+*레거시 시스템에 ACL 추가 후 새 기능을 DDD로 개발하고 점진적으로 마이그레이션하는 단계를 보여줍니다.*
+
 **전략:**
 1. <strong>Anti-Corruption Layer</strong>로 레거시 격리
 2. 새 기능은 DDD로 개발
@@ -472,6 +478,8 @@ flowchart LR
     C --> D["4. 아키텍처<br>Hexagonal, CQRS"]
     D --> E["5. 실전 적용<br>프로젝트"]
 ```
+
+*DDD 학습 순서로, Quick Start에서 전술적/전략적 패턴, 아키텍처, 실전 적용까지의 경로입니다.*
 
 **추천 자료:**
 1. **입문:** DDD Distilled (책)

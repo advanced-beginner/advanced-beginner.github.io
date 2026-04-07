@@ -30,6 +30,8 @@ flowchart TB
     I -.->|"Provides implementation"| D
 ```
 
+*This diagram shows the four layers of Layered Architecture (Presentation, Application, Domain, Infrastructure) and the top-down dependency direction.*
+
 ---
 
 #### Why Divide Into Layers?
@@ -62,6 +64,8 @@ flowchart TB
     PM -->|"Assign work"| DEV
     DEV -->|"Use infrastructure"| INFRA
 ```
+
+*This diagram uses a company organization analogy showing the roles of Customer Service team (Presentation), Planning team (Application), Expert team (Domain), and Support team (Infrastructure).*
 
 Each team has a clear role, so when problems arise, you immediately know where to fix. Software layers operate on the same principle.
 
@@ -507,6 +511,8 @@ flowchart TB
     I --> D
 ```
 
+*This diagram shows the dependency direction between layers where Domain depends on nothing and Infrastructure implements Domain.*
+
 This makes the domain layer the most stable layer, and technical changes (e.g., switching from JPA to MyBatis) do not affect the domain.
 
 ---
@@ -533,6 +539,8 @@ flowchart LR
     O -->|"uses"| RI
     JR -->|"implements"| RI
 ```
+
+*This diagram shows dependency inversion where Repository Interface is defined in the Domain Layer and implemented in the Infrastructure Layer.*
 
 In the diagram above, Order uses the OrderRepository interface, and JpaOrderRepository implements that interface. The dependency direction is inverted.
 
@@ -886,6 +894,8 @@ flowchart LR
     A -->|"1. Extract Repository Interface"| B
     B -->|"2. Introduce Port/Adapter"| C
 ```
+
+*This diagram shows the roadmap for progressively evolving architecture from layered to domain separation to hexagonal.*
 
 **Step 1: Move Repository Interface to Domain**
 

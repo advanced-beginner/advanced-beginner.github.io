@@ -12,7 +12,7 @@ author_url: "http://github.com/kimbenji"
 > **Estimated Time**: About 35 minutes
 > **Key Question**: "When should you separate read and write models?"
 
-{{< callout type="tip" title="Summary" >}}
+{{< callout type="info" title="TL;DR" >}}
 CQRS core: Separate <strong>Command</strong> (state changes, uses domain model) and <strong>Query</strong> (reads, uses optimized read model) to optimize each according to its requirements
 {{< /callout >}}
 
@@ -50,6 +50,8 @@ flowchart TB
     end
 ```
 
+*This diagram shows the traditional CRUD approach where UI, Service, Model, and DB handle all operations through a single path.*
+
 Key problems include polluting the domain model to support complex queries. For example, adding read-only methods to domain entities to obtain reporting data degrades domain model purity. Also, the optimization requirements for queries and commands are fundamentally different. Queries need fast responses and benefit from denormalized data, while commands need consistency and transactions with normalized data. Finally, since reads and writes have different load patterns but share the same database, independent scaling is difficult.
 
 **Benefits of CQRS Structure**
@@ -81,6 +83,8 @@ flowchart TB
     end
 ```
 
+*This diagram shows the CQRS pattern where Command Side (write) and Query Side (read) are separated, each using its own model and DB.*
+
 This structure allows the domain model to focus purely on business logic while the read model can be freely designed in a UI-optimized format. Each can be independently scaled and optimized, improving both performance and maintainability.
 
 #### Implementation Levels
@@ -107,6 +111,8 @@ flowchart TB
     CMD --> DB
     QRY --> DB
 ```
+
+*This diagram shows Level 1 CQRS where commands and queries are separated at the code level while sharing a single DB.*
 
 The Command Service uses the domain model to execute business logic and change state. It manages transactions and validates domain rules. The Query Service directly retrieves DTOs for fast data return. It uses read-only transactions and writes queries optimized for reading.
 
@@ -231,6 +237,8 @@ flowchart TB
     QRY --> RT
 ```
 
+*This diagram shows Level 2 CQRS where writes go to normalized tables and reads come from denormalized tables.*
+
 In this structure, domain events are published when orders are created or statuses change. The event handler receives these and updates the read model. The read model is denormalized for fast queries without complex joins.
 
 ```java
@@ -353,6 +361,8 @@ flowchart TB
     QRY --> RDB
 ```
 
+*This diagram shows Level 3 CQRS where Write DB and Read DB are completely separated and synchronized via an event bus (Kafka).*
+
 In this structure, command processing and querying are completely independent. Each uses a different database, so problems in one do not affect the other. Even if the read DB goes down, writes continue working, and you can rebuild the read DB.
 
 ```java
@@ -457,6 +467,8 @@ flowchart TB
     PROJ -->|Update View| RDB
     QRY --> RDB
 ```
+
+*This diagram shows CQRS combined with Event Sourcing where Commands generate events and events are used to build the Read Model.*
 
 On the Command Side, only events are stored. The current state is derived by replaying events. On the Query Side, the event stream is subscribed to generate read-only views. This provides complete audit trails and fast query performance simultaneously.
 

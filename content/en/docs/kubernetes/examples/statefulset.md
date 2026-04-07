@@ -32,6 +32,8 @@ flowchart LR
     E --> H[PVC-2]
 ```
 
+*This diagram shows the complete setup of a Headless Service, StatefulSet, and individual PVCs attached to each Pod.*
+
 ## Prerequisites
 
 You will need the following:

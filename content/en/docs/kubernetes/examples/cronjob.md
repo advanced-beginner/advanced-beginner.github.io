@@ -34,6 +34,8 @@ flowchart TD
     FAIL --> HIST2[History Management<br>failedJobsHistoryLimit]
 ```
 
+*This diagram shows the complete CronJob flow: creating Jobs on schedule, managing history on success/failure, and retrying on failure.*
+
 ## Prerequisites
 
 You will need the following:
@@ -221,6 +223,8 @@ flowchart LR
         C1[Job-1 Running] --> C2[Job-1 Canceled<br>Job-2 Starts]
     end
 ```
+
+*This diagram shows the differences between the three concurrency policies: Allow (run concurrently), Forbid (skip), and Replace (stop existing and start new).*
 
 | Policy | Behavior | Use Case |
 |--------|----------|----------|

@@ -10,10 +10,7 @@ lastmod: "2026-01-12"
 > **Prerequisites**: [rate and increase](../promql/rate-and-increase/)
 > **After reading this**: You'll be able to analyze traffic patterns and use them for capacity planning
 
-## TL;DR
-
-{{< callout type="info" >}}
-**Key Summary:**
+{{< callout type="info" title="TL;DR" >}}
 - **RPS (Requests Per Second)**: Requests per second
 - **Throughput**: Throughput per second (bytes, messages, etc.)
 - **Concurrent Connections**: Active connections
@@ -43,6 +40,7 @@ graph LR
     S --> E["Errors ↑"]
 ```
 
+*This diagram shows the causal relationship: increased traffic raises saturation, which leads to higher latency and error rates.*
 Increased traffic saturates system resources (Saturation), leading to increased latency (Latency) and errors (Errors). Therefore, detecting traffic changes first allows **proactive response before other problems occur**.
 
 ### Meaning of Traffic Changes

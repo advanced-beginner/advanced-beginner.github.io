@@ -32,6 +32,8 @@ flowchart TD
     D --> D1["kubectl logs 활용<br>패턴 분석"]
 ```
 
+*문제 유형(Pod 상태, 성능, 연결, 로그)에 따라 적합한 트러블슈팅 가이드를 선택하는 흐름을 보여줍니다.*
+
 | 증상 | 추천 가이드 |
 |------|------------|
 | Pod가 시작 안 됨, CrashLoopBackOff | [Pod 트러블슈팅](pod-troubleshooting/) |

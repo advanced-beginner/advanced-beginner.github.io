@@ -70,6 +70,7 @@ graph TD
     A --> B --> C --> D --> E
 ```
 
+*This diagram shows the five-step workflow for resolving alert fatigue: from assessing the current state to validation.*
 ## Step 1: Assess Current State
 
 ### Analyze Alert Frequency

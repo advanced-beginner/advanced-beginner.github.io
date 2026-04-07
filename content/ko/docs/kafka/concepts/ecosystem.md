@@ -83,6 +83,8 @@ flowchart TB
     STREAMS -.->|스키마 조회| SCHEMA
 ```
 
+*위 다이어그램은 Kafka Platform의 전체 생태계 구조로, Source Connector가 데이터를 수집하고 Streams가 처리하며 Sink Connector가 외부 시스템으로 내보내는 흐름을 보여줍니다.*
+
 #### Kafka Connect
 
 Kafka Connect는 Kafka와 외부 시스템 간에 데이터를 안정적으로 스트리밍하기 위한 프레임워크입니다. 데이터베이스, 파일 시스템, 클라우드 스토리지, 검색 엔진 등 다양한 시스템과 Kafka를 연결할 수 있습니다. 가장 큰 장점은 코딩 없이 JSON 설정만으로 데이터 파이프라인을 구축할 수 있다는 것입니다.
@@ -253,6 +255,8 @@ flowchart LR
     SR -->|6. 스키마 반환| C
     C -->|7. 역직렬화| APP[Application]
 ```
+
+*위 다이어그램은 Schema Registry를 통한 메시지 직렬화/역직렬화 흐름으로, Producer가 스키마를 등록하고 Consumer가 스키마 ID로 조회하여 데이터를 해석하는 과정을 보여줍니다.*
 
 **Docker Compose 설정**
 

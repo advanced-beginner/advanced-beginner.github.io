@@ -12,7 +12,7 @@ author_url: "http://github.com/kimbenji"
 > **Estimated Time**: About 25-30 minutes
 > **Key Question**: "How do you structure domain logic that is difficult to express with core building blocks alone?"
 
-{{< callout type="tip" title="Summary" >}}
+{{< callout type="info" title="TL;DR" >}}
 Core building blocks (Entity, Value Object, Repository, Domain Service, Factory) are the skeleton of a domain model. The patterns covered in this document are tools for <strong>systematically expressing business rules</strong> on top of that skeleton: <strong>Specification</strong> (condition checking) + <strong>Policy</strong> (calculation/decision) + <strong>Module</strong> (code organization) + <strong>Builder</strong> (complex creation) + <strong>Null Object</strong> (null safety)
 {{< /callout >}}
 
@@ -38,6 +38,8 @@ flowchart TB
 
     Core --> Patterns
 ```
+
+*This diagram shows how Specification, Policy, Module, Builder, and Null Object patterns are layered on top of core building blocks (Entity, VO, Repository, etc.).*
 
 > **Common imports for examples on this page:**
 > ```java
@@ -65,6 +67,8 @@ flowchart LR
     OR --> SPEC
     NOT --> SPEC
 ```
+
+*This diagram shows the Specification pattern composition where base Specifications can be combined with And, Or, and Not operators.*
 
 **When to Use It?**
 
@@ -286,6 +290,8 @@ flowchart TB
     P3 --> IF
 ```
 
+*This diagram shows the difference between Specification (condition checking, returns boolean) and Policy (calculation/decision, returns value) along with Policy implementations (VIP, regular, new member).*
+
 **Discount Policy Example**
 
 Let us implement a discount policy with the Policy pattern. The `DiscountPolicy` interface defines `calculateDiscount` and `isApplicable` methods. `VipDiscountPolicy` applies a 10% discount for VIP customers. `FirstOrderDiscountPolicy` applies a 5,000 won discount for first-time customers. `BulkOrderDiscountPolicy` applies a 5% discount for purchases of 10 or more items. `DiscountCalculator` combines all these policies to calculate the total discount.
@@ -483,6 +489,8 @@ flowchart TB
     ORDER -.->|ID reference only| CUSTOMER
     ORDER -.->|ID reference only| PRODUCT
 ```
+
+*This diagram shows the inter-module dependency structure where Order, Customer, and Product modules depend on a Shared module and reference each other only by ID.*
 
 **Inter-Module Communication**
 

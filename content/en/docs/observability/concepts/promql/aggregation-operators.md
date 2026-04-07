@@ -10,10 +10,7 @@ lastmod: "2026-01-12"
 > **Prerequisites**: [Basic Syntax](syntax-basics/)
 > **What You'll Learn**: Aggregate multiple time series to calculate meaningful metrics
 
-## TL;DR
-
-{{< callout type="info" >}}
-**Key Summary:**
+{{< callout type="info" title="TL;DR" >}}
 - **sum**: Total - total request count
 - **avg**: Average - average response time
 - **count**: Count - number of active instances

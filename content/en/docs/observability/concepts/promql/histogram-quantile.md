@@ -10,10 +10,7 @@ lastmod: "2026-01-12"
 > **Prerequisites**: [Metrics Fundamentals](../metrics-fundamentals/), [rate and increase](rate-and-increase/)
 > **What You'll Learn**: Calculate accurate percentiles from Histograms and monitor SLAs
 
-## TL;DR
-
-{{< callout type="info" >}}
-**Key Summary:**
+{{< callout type="info" title="TL;DR" >}}
 - `histogram_quantile(φ, bucket)`: Calculate φ percentile (0 ≤ φ ≤ 1)
 - **P50**: `histogram_quantile(0.5, ...)` - Median
 - **P95**: `histogram_quantile(0.95, ...)` - 95% are at or below this value
@@ -37,6 +34,7 @@ graph LR
     P99["P99: 5000ms<br>✅ Reflects worst experience"]
 ```
 
+*This diagram shows that while most users experience fast responses, 1% of slow requests skew the average, and P99 accurately reflects the worst-case experience.*
 | Metric | Value | Meaning |
 |--------|-------|---------|
 | Average | 149ms | Distorted by extremes |
@@ -78,6 +76,7 @@ graph LR
     B3 --> |"includes"| B4
 ```
 
+*This diagram shows how Histogram buckets store data in a cumulative structure (le=0.1 is a subset of le=0.5 is a subset of le=1.0 is a subset of +Inf).*
 ---
 
 ## histogram_quantile() Usage
@@ -265,6 +264,7 @@ graph LR
     NR["P99 = 0.82s<br>(Actual: 0.8s, Small error)"]
 ```
 
+*This diagram compares how wider bucket intervals cause larger linear interpolation errors, while finer intervals calculate percentiles closer to actual values.*
 ### Bucket Design Recommendations
 
 ```java

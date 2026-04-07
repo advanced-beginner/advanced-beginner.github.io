@@ -71,6 +71,8 @@ flowchart TB
     end
 ```
 
+*하나의 클러스터 내에서 team-a, team-b, kube-system이 각각 독립된 Namespace로 격리된 구조를 보여줍니다.*
+
 각 Namespace는 독립적인 공간이므로, `team-a`와 `team-b`에 동일한 이름의 `web-app` Deployment가 존재할 수 있습니다.
 
 ## 기본 Namespace
@@ -240,6 +242,8 @@ flowchart LR
     end
     PA -->|"api-svc.team-b.svc.cluster.local"| SB
 ```
+
+*다른 Namespace의 Service에 FQDN을 사용하여 접근하는 네임스페이스 간 통신 구조를 보여줍니다.*
 
 | 접근 방식 | 예시 | 설명 |
 |-----------|------|------|

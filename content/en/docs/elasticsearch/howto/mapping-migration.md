@@ -84,6 +84,8 @@ flowchart TD
     G --> B
 ```
 
+*This diagram shows the overall mapping migration flow. It proceeds in order: create a new index, copy data via Reindex, validate, switch the Alias, and clean up the old index.*
+
 ---
 
 ## Step 1: Check Current Index State

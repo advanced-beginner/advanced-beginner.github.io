@@ -59,6 +59,8 @@ flowchart LR
     end
 ```
 
+*수평 스케일링(Pod 수 증가)과 수직 스케일링(Pod 리소스 증가)의 차이를 보여줍니다.*
+
 ## HPA (Horizontal Pod Autoscaler)
 
 HPA는 메트릭(CPU, 메모리, 커스텀)을 기반으로 Pod 수를 자동으로 조정합니다.
@@ -74,6 +76,8 @@ flowchart LR
     D --> P2[Pod]
     D --> PN[Pod N]
 ```
+
+*HPA가 Metrics Server에서 메트릭을 수집하고 목표치와 비교하여 Deployment의 Pod 수를 조정하는 흐름을 보여줍니다.*
 
 HPA 동작 순서는 다음과 같습니다.
 
@@ -293,6 +297,8 @@ flowchart TD
     VPA_REC --> VPA_ONLY[VPA 사용]
     VPA_OFF --> MANUAL[수동으로 설정 조정]
 ```
+
+*애플리케이션 유형과 상황에 따라 HPA, VPA, 또는 병행 사용을 선택하는 의사결정 흐름을 보여줍니다.*
 
 | 기준 | HPA | VPA |
 |------|-----|-----|

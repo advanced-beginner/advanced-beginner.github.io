@@ -173,6 +173,8 @@ flowchart LR
     B --> A
 ```
 
+*Order Context와 Payment Context 사이의 순환 의존 문제를 보여주며, 합치거나 이벤트 기반으로 분리해야 합니다.*
+
 **해결**: 둘 중 하나로 합치거나, 이벤트 기반으로 분리하세요.
 
 **증상 2: 과도한 동기 호출**
@@ -234,6 +236,8 @@ flowchart TB
     ORDER -->|처리| PAY
     ORDER -->|발송| NOTI
 ```
+
+*발견한 Context들의 Context Map으로, Core/Supporting/Generic 도메인과 통합 관계(조회, 확인, 요청 등)를 시각화합니다.*
 
 ### 4.2 Context별 용어 사전 작성하기
 

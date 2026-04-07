@@ -40,6 +40,8 @@ flowchart LR
     G --> H[Disk]
 ```
 
+*This diagram shows the indexing process where a document is received, analyzed, stored in an inverted index, held in a memory buffer, made searchable via Refresh, written to a Segment, and permanently stored to disk via Flush.*
+
 | Stage | Description |
 |-------|-------------|
 | Analyze | Split text into tokens |
@@ -127,6 +129,8 @@ flowchart LR
     A[Memory Buffer] -->|Refresh| B[Segment<br>Searchable]
 ```
 
+*This diagram shows how data in the memory buffer is converted into a searchable Segment through the Refresh operation.*
+
 ### Refresh Interval
 
 ```json
@@ -179,6 +183,8 @@ flowchart LR
     B -->|Crash Recovery| D[Data Restore]
     C -->|Flush| E[Disk Segment]
 ```
+
+*This diagram shows how a document is simultaneously written to both the Translog and memory buffer, enabling crash recovery from the Translog while Flush permanently stores data to disk.*
 
 ### Flush
 
@@ -251,6 +257,8 @@ flowchart LR
     C --> D[Frozen<br>Rarely read]
     D --> E[Delete<br>Remove]
 ```
+
+*This diagram shows the five phases of the index lifecycle. Data starts in the Hot phase with active usage, gradually moves through Warm, Cold, and Frozen as access frequency decreases, and is finally Deleted.*
 
 ### Creating ILM Policy
 

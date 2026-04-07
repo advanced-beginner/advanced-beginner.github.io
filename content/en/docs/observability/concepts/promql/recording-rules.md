@@ -10,10 +10,7 @@ lastmod: "2026-01-12"
 > **Prerequisites**: [histogram_quantile](histogram-quantile/)
 > **What You'll Learn**: Improve query performance with Recording Rules and manage complex metrics
 
-## TL;DR
-
-{{< callout type="info" >}}
-**Key Summary:**
+{{< callout type="info" title="TL;DR" >}}
 - Recording Rules **save query results as new metrics**
 - Pre-compute complex queries to improve dashboard/alert performance
 - Naming: `level:metric:operations` pattern recommended
@@ -280,6 +277,7 @@ graph TD
     L2 --> |"sum()"| L3
 ```
 
+*This diagram shows the hierarchical Recording Rules structure: per-instance rate, service-level sum, and global total aggregation from source metrics.*
 ---
 
 ## Configuration and Management

@@ -10,10 +10,7 @@ lastmod: "2026-01-12"
 > **Prerequisites**: [Three Pillars of Observability](three-pillars/)
 > **After Reading**: You'll be able to select the appropriate metric type and implement it correctly
 
-## TL;DR
-
-{{< callout type="info" >}}
-**Key Summary:**
+{{< callout type="info" title="TL;DR" >}}
 - **Counter**: Only cumulative increase (request count, error count) → Calculate rate of change with `rate()`
 - **Gauge**: Current value (temperature, memory) → Use as-is or `avg()` for average
 - **Histogram**: Distribution measurement (response time) → Calculate percentiles with `histogram_quantile()`
@@ -70,6 +67,7 @@ graph LR
     end
 ```
 
+*This diagram shows how a Counter cumulatively increases and resets to zero upon process restart.*
 | Property | Description |
 |------|------|
 | **Monotonically increasing** | Value never decreases |
@@ -159,6 +157,7 @@ graph LR
     end
 ```
 
+*This diagram shows how a Gauge fluctuates up and down, representing the current state.*
 | Property | Description |
 |------|------|
 | **Bidirectional** | Can increase/decrease |
@@ -257,6 +256,7 @@ graph TD
     B4 --> |"Total"| N4["500 requests"]
 ```
 
+*This diagram shows how Histogram buckets store response time distributions using a cumulative structure.*
 | Component | Description |
 |----------|------|
 | `_bucket` | Cumulative count per range |
@@ -376,6 +376,7 @@ graph TD
     H --> H1["Response time, Request size"]
 ```
 
+*This diagram shows the decision flow for choosing between Counter, Histogram, and Gauge based on whether values only increase and whether distribution matters.*
 ### Quick Reference Table
 
 | Measurement Target | Type | Reason |

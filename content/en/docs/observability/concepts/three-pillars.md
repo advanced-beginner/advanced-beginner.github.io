@@ -10,10 +10,7 @@ lastmod: "2026-01-12"
 > **Prerequisites**: Basic understanding of web application architecture
 > **After Reading**: You'll understand the role of each pillar and know when to use which
 
-## TL;DR
-
-{{< callout type="info" >}}
-**Key Summary:**
+{{< callout type="info" title="TL;DR" >}}
 - **Metrics**: "How much?" - Numerically measurable states (CPU 80%, response time 200ms)
 - **Logs**: "What happened?" - Detailed records of individual events
 - **Traces**: "From where to where?" - Tracking the entire path of a request
@@ -49,6 +46,7 @@ graph TD
     T --> |"After improvement"| M
 ```
 
+*This diagram shows the analysis flow during incidents: detecting anomalies with Metrics, identifying causes with Logs, and tracing paths with Traces.*
 | Step | Used Pillar | Information Gained |
 |------|------------|----------|
 | 1. Anomaly detection | Metrics | "P99 response time spiked to 3s" |
@@ -108,6 +106,7 @@ graph LR
     S --> |"Examples"| S1["P50, P95, P99"]
 ```
 
+*This diagram shows the four metric types (Counter, Gauge, Histogram, Summary) and their representative use cases.*
 ### Examples
 
 ```promql
@@ -228,6 +227,7 @@ graph LR
     S2 --> S4
 ```
 
+*This diagram shows how a single Trace is composed of four Spans (API Gateway, Order, Payment, Database) with their respective durations.*
 | Term | Description |
 |------|------|
 | **Trace** | Entire path of one request (composed of multiple Spans) |
@@ -274,6 +274,7 @@ graph TD
     T --> |"After improvement"| M
 ```
 
+*This diagram shows how Metrics, Logs, and Traces are interconnected in a unified analysis flow: error rate detection, log filtering, and trace visualization.*
 ### Practical Example: Order Failure Analysis
 
 **1. Detect Anomaly in Metrics**

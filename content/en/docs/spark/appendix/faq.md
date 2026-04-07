@@ -348,6 +348,8 @@ flowchart TD
     P -->|Yes| Q[Check GC, network, disk]
 ```
 
+*This diagram shows the performance troubleshooting flow using the Jobs, Stages, Storage, and Executors tabs in the Spark UI.*
+
 ### 1. Jobs Tab Analysis
 
 ```

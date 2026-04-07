@@ -12,7 +12,7 @@ author_url: "http://github.com/kimbenji"
 > **소요 시간**: 약 25분
 > **핵심 질문**: "Aggregate 경계를 어떻게 정하고, 크기는 어느 정도가 적당한가?"
 
-{{< callout type="tip" title="요약" >}}
+{{< callout type="info" title="TL;DR" >}}
 Aggregate 설계 핵심: <strong>불변식 기반 경계 설정</strong> → <strong>작게 유지</strong> → <strong>ID로 참조</strong> → <strong>결과적 일관성 활용</strong>
 {{< /callout >}}
 
@@ -91,6 +91,8 @@ flowchart TB
     External -.->|직접 접근 불가| OL1
 ```
 
+*Order Aggregate의 내부 구조로, Aggregate Root인 Order를 통해서만 내부 객체에 접근 가능하며 외부의 직접 접근은 불가합니다.*
+
 ### 핵심 구성요소
 
 | 요소 | 역할 | 예시 |
@@ -155,6 +157,8 @@ flowchart TB
         O2 -.->|ID 참조| P2
     end
 ```
+
+*너무 큰 Aggregate(왼쪽)와 ID 참조로 적절히 분리된 Aggregate(오른쪽)를 비교합니다.*
 
 **작게 유지해야 하는 이유:**
 - 트랜잭션 범위 축소 → 동시성 충돌 감소
@@ -348,6 +352,8 @@ sequenceDiagram
     Note right of Stock: 트랜잭션 2 완료
 ```
 
+*Order 확정 시 도메인 이벤트를 통해 Stock Aggregate가 별도 트랜잭션에서 재고를 차감하는 결과적 일관성 흐름입니다.*
+
 ```java
 // Order Aggregate
 public class Order {
@@ -427,6 +433,8 @@ flowchart TB
         T3 -.->|이벤트| T4
     end
 ```
+
+*여러 Aggregate를 한 트랜잭션에서 수정하면 락 경합이 발생하는 문제(왼쪽)와 이벤트로 분리하는 해결책(오른쪽)을 비교합니다.*
 
 ---
 

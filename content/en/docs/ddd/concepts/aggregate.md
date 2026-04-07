@@ -12,7 +12,7 @@ author_url: "http://github.com/kimbenji"
 > **Reading Time**: About 25 minutes
 > **Key Question**: "How do I determine Aggregate boundaries, and what is the appropriate size?"
 
-{{< callout type="tip" title="Summary" >}}
+{{< callout type="info" title="TL;DR" >}}
 Aggregate design core: **Invariant-based boundary setting** → **Keep it small** → **Reference by ID** → **Use eventual consistency**
 {{< /callout >}}
 
@@ -79,6 +79,8 @@ flowchart TB
     External -.->|No direct access| OL1
 ```
 
+*This diagram shows the internal structure of an Order Aggregate where internal objects are only accessible through the Aggregate Root (Order), and direct external access is not allowed.*
+
 ### Core Components
 
 | Element | Role | Example |
@@ -143,6 +145,8 @@ flowchart TB
         O2 -.->|ID reference| P2
     end
 ```
+
+*This diagram compares an overly large Aggregate (left) with properly separated Aggregates using ID references (right).*
 
 **Why keep them small:**
 - Reduce transaction scope → Less concurrency conflicts
@@ -307,6 +311,8 @@ sequenceDiagram
     Note right of Stock: Transaction 2 complete
 ```
 
+*This diagram shows the eventual consistency flow where a domain event triggers the Stock Aggregate to deduct inventory in a separate transaction upon order confirmation.*
+
 ```java
 // Order Aggregate
 public class Order {
@@ -386,6 +392,8 @@ flowchart TB
         T3 -.->|Event| T4
     end
 ```
+
+*This diagram compares the problem of lock contention when modifying multiple Aggregates in one transaction (left) with the solution of separating them via events (right).*
 
 ---
 

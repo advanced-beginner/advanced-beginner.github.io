@@ -32,6 +32,8 @@ flowchart LR
     E --> H[PVC-2]
 ```
 
+*Headless Service, StatefulSet, 각 Pod에 연결된 개별 PVC의 전체 구성을 보여줍니다.*
+
 ## 사전 준비
 
 다음이 필요합니다:

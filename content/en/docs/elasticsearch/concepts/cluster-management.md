@@ -34,6 +34,8 @@ flowchart TB
     M -.State Management.-> D3
 ```
 
+*This diagram shows the basic architecture of an Elasticsearch cluster. Client requests are distributed to Data nodes through the Coordinating node, while the Master node manages the overall cluster state.*
+
 ---
 
 ## Node Roles

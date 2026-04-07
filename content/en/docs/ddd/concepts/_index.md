@@ -73,3 +73,6 @@ flowchart TB
     REPO --> HEX
     DE --> CQRS
 ```
+
+*This diagram shows how strategic design, tactical design, and architecture concepts in DDD are interconnected.*
+

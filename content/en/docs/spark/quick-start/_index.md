@@ -33,6 +33,8 @@ flowchart LR
     D --> E[5. View Results]
 ```
 
+*This diagram shows the five-step Quick Start flow from project creation to viewing results.*
+
 ## Prerequisites
 
 Prepare the following environment before starting:

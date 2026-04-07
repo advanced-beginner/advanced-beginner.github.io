@@ -46,6 +46,8 @@ flowchart LR
     VOL --> APP
 ```
 
+*This diagram shows how ConfigMaps and Secrets are injected into Pods via environment variables or volume mounts.*
+
 | Injection Method | Advantages | Disadvantages | When to Use |
 |------------------|------------|---------------|-------------|
 | Environment variables | Access without code changes | Only reflected on Pod restart | Simple values, config needed at startup |

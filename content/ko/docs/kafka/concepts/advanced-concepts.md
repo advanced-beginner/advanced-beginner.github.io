@@ -87,6 +87,8 @@ flowchart TB
     end
 ```
 
+*위 다이어그램은 acks=all이지만 ISR이 Leader 하나뿐인 경우, Follower와 동기화 없이도 ACK가 반환되는 문제를 보여줍니다.*
+
 이 문제를 해결하려면 `min.insync.replicas` 설정을 함께 사용해야 합니다. 이 설정은 ACK를 반환하기 위해 동기화되어 있어야 하는 최소 복제본 수를 지정합니다. `acks=all`과 `min.insync.replicas=2`를 함께 사용하면 ISR에 최소 2개 이상의 복제본이 있어야만 쓰기가 성공합니다. ISR이 1개로 줄어들면 쓰기 요청이 실패하여 데이터 안전성이 보장됩니다.
 
 {{< callout type="info" title="핵심 포인트" >}}
@@ -138,6 +140,8 @@ flowchart TB
     end
 ```
 
+*위 다이어그램은 Key 유무에 따른 Partition 할당 방식의 차이를 보여줍니다. Key가 있으면 같은 Partition에, 없으면 라운드로빈으로 분산됩니다.*
+
 Key가 있으면 Kafka는 Key의 해시값을 계산하여 Partition을 결정합니다. 같은 Key는 항상 같은 해시값을 생성하므로 동일한 Partition에 저장됩니다. Key가 없으면 Sticky Partitioner(Kafka 2.4+)를 통해 배치 효율을 위해 일정 기간 같은 Partition에 전송하다가 다른 Partition으로 전환합니다.
 
 **순서 보장의 원리**
@@ -162,6 +166,8 @@ sequenceDiagram
 
     Note over C: 순서대로 처리됨
 ```
+
+*위 다이어그램은 동일한 Key를 가진 메시지가 같은 Partition에 저장되어 순서대로 Consumer에게 전달되는 과정을 보여줍니다.*
 
 사용자 ID를 Key로 사용하면 사용자별 이벤트 순서가 보장되고, 주문 ID를 Key로 사용하면 주문별 상태 변경 순서가 보장됩니다. IoT 환경에서는 기기 ID를 Key로 사용하여 디바이스별 데이터를 그룹화할 수 있습니다.
 
@@ -237,6 +243,8 @@ flowchart LR
 
     Before -->|Compaction| After
 ```
+
+*위 다이어그램은 Log Compaction의 동작 원리로, 같은 Key의 이전 값을 제거하고 최신 값만 유지하는 과정을 보여줍니다.*
 
 Log Compaction은 백그라운드 스레드에서 비동기로 실행됩니다. 닫힌(Closed) 세그먼트만 Compaction 대상이 되며, 현재 쓰기 중인 Active 세그먼트는 제외됩니다. `min.cleanable.dirty.ratio` 설정이 0.5(기본값)이면 정리되지 않은 데이터가 50%를 초과할 때 Compaction이 시작됩니다.
 
@@ -316,6 +324,8 @@ sequenceDiagram
     B->>B: seq=0 이미 처리됨 → 무시
     B->>P: ACK (중복 방지됨)
 ```
+
+*위 다이어그램은 Idempotent Producer의 중복 방지 메커니즘으로, PID와 시퀀스 번호를 사용하여 ACK 유실 후 재전송 시에도 메시지가 한 번만 저장되는 과정을 보여줍니다.*
 
 Kafka 3.0부터 `enable.idempotence=true`가 기본값입니다. 특별한 이유가 없다면 이 설정을 끄지 않는 것이 좋습니다. Idempotent Producer가 활성화되면 `acks=all`, `retries=Integer.MAX_VALUE`, `max.in.flight.requests.per.connection=5`가 자동으로 설정됩니다.
 

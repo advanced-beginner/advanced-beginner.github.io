@@ -10,10 +10,7 @@ lastmod: "2026-01-12"
 > **Prerequisites**: [Three Pillars of Observability](three-pillars/)
 > **After Reading**: You'll understand distributed tracing and be able to analyze request flows between services
 
-## TL;DR
-
-{{< callout type="info" >}}
-**Key Summary:**
+{{< callout type="info" title="TL;DR" >}}
 - **Trace**: Entire path of one request (composed of multiple Spans)
 - **Span**: Single unit of work (start/end time, metadata)
 - **Context Propagation**: Passing Trace ID between services
@@ -36,6 +33,7 @@ graph LR
     style PAYMENT fill:#ffcdd2
 ```
 
+*This diagram shows a microservices architecture where a single user request is distributed through API Gateway to Order, Payment, and Inventory services with their databases.*
 **Problem**: Response is slow but don't know where
 
 **Solution**: Distributed tracing to check time spent in each segment
@@ -60,6 +58,7 @@ graph TB
     S3 --> S4
 ```
 
+*This diagram shows how Spans are nested within a single Trace (API Gateway, Order, Payment, DB) with their respective time ranges.*
 | Term | Description |
 |------|------|
 | **Trace** | Entire request path (unique Trace ID) |
@@ -108,6 +107,7 @@ sequenceDiagram
     Note over C: Extract context<br>Create child span
 ```
 
+*This diagram shows how Trace context is propagated between services via the traceparent header during HTTP requests.*
 **W3C Trace Context format:**
 ```
 traceparent: 00-{trace-id}-{span-id}-{flags}
@@ -136,6 +136,7 @@ graph TB
     QUERY --> UI["Jaeger UI"]
 ```
 
+*This diagram shows the Jaeger data flow: Application, Agent, Collector, Storage, Query, and UI.*
 ---
 
 ## Spring Boot Configuration
@@ -250,6 +251,7 @@ graph LR
     LOG --> |"Extract trace_id"| TRACE
 ```
 
+*This diagram shows the analysis flow from metric alerts to logs, extracting trace_id from logs to connect to traces.*
 ### Include Trace ID in Logs
 
 ```java
@@ -311,6 +313,7 @@ graph LR
     INVENTORY --> INVENTORY_DB["Inventory DB"]
 ```
 
+*This diagram shows a service dependency map visualizing the connections from API Gateway to each service and database.*
 ---
 
 ## Alerting Rules

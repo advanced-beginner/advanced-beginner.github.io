@@ -240,6 +240,8 @@ flowchart TB
     Warm -->|"After 30 days"| Cold
 ```
 
+*This diagram shows the Hot-Warm-Cold architecture. The latest data resides on high-performance Hot nodes, moves to Warm after 7 days, and then to Cold nodes after 30 days to optimize costs.*
+
 ### 4.1 Node Role Settings
 
 ```yaml

@@ -10,10 +10,7 @@ lastmod: "2026-01-12"
 > **Prerequisites**: [Metrics Fundamentals](../metrics-fundamentals/)
 > **What You'll Learn**: Write basic PromQL queries and retrieve desired metrics
 
-## TL;DR
-
-{{< callout type="info" >}}
-**Key Summary:**
+{{< callout type="info" title="TL;DR" >}}
 - **Instant Vector**: Current point-in-time value `http_requests_total`
 - **Range Vector**: Values over time range `http_requests_total[5m]`
 - **Label Matching**: Filter using `=`, `!=`, `=~`, `!~`

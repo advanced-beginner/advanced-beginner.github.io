@@ -173,6 +173,8 @@ flowchart LR
     B --> A
 ```
 
+*This diagram shows the circular dependency problem between Order Context and Payment Context, which should be resolved by merging or separating via events.*
+
 **Solution**: Merge into one or separate using events.
 
 **Symptom 2: Excessive Synchronous Calls**
@@ -234,6 +236,8 @@ flowchart TB
     ORDER -->|Process| PAY
     ORDER -->|Send| NOTI
 ```
+
+*This diagram shows the Context Map of discovered Contexts, visualizing Core/Supporting/Generic domains and their integration relationships (query, confirm, request, etc.).*
 
 ### 4.2 Creating a Glossary for Each Context
 

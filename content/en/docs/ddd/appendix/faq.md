@@ -11,13 +11,13 @@ author_url: "http://github.com/kimbenji"
 
 Common questions and answers when applying DDD.
 
-> **TL;DR**
->
-> - DDD is a **methodology, not an architecture**, and provides value when there is complex business logic
-> - Entity is identified by ID, Value Object equality is determined by attribute values
-> - Design Aggregate as the **minimum unit that protects true invariants**
-> - **Ubiquitous Language** is the most important element when applying DDD
-> - Can be applied gradually to legacy systems through ACL (Anti-Corruption Layer)
+{{< callout type="info" title="TL;DR" >}}
+- DDD is a **methodology, not an architecture**, and provides value when there is complex business logic
+- Entity is identified by ID, Value Object equality is determined by attribute values
+- Design Aggregate as the **minimum unit that protects true invariants**
+- **Ubiquitous Language** is the most important element when applying DDD
+- Can be applied gradually to legacy systems through ACL (Anti-Corruption Layer)
+{{< /callout >}}
 
 ## Basic Concepts
 
@@ -49,6 +49,8 @@ flowchart TB
     Q1 -->|Yes| DDD["DDD Recommended"]
     Q1 -->|No| SIMPLE["Simple CRUD is sufficient"]
 ```
+
+*This diagram shows a decision flowchart for determining whether to apply DDD based on business logic complexity.*
 
 **When DDD is appropriate:**
 - Complex business rules (finance, insurance, logistics)
@@ -225,6 +227,8 @@ sequenceDiagram
     Repo->>Bus: Publish event
     Note right of Bus: After transaction commit
 ```
+
+*This diagram shows the domain event publishing timeline: registered in Aggregate, saved via Repository, then published to Event Bus after transaction commit.*
 
 ---
 
@@ -416,6 +420,8 @@ flowchart LR
     C --> D["Gradual migration"]
 ```
 
+*This diagram shows the stages of adding ACL to a legacy system, developing new features with DDD, and gradually migrating.*
+
 **Strategy:**
 1. Isolate legacy with **Anti-Corruption Layer**
 2. Develop new features with DDD
@@ -472,6 +478,8 @@ flowchart LR
     C --> D["4. Architecture<br>Hexagonal, CQRS"]
     D --> E["5. Practice<br>Projects"]
 ```
+
+*This diagram shows the DDD learning path from Quick Start through tactical/strategic patterns, architecture, to practical application.*
 
 **Recommended resources:**
 1. **Beginner:** DDD Distilled (book)

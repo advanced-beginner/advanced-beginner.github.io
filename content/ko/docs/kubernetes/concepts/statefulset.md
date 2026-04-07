@@ -76,6 +76,8 @@ sequenceDiagram
     Note over P0: Terminated
 ```
 
+*StatefulSet의 Pod가 0번부터 순차 생성되고, 삭제 시에는 역순으로 종료되는 과정을 보여줍니다.*
+
 {{< callout type="info" title="왜 순서가 중요한가?" >}}
 데이터베이스 클러스터에서 Primary 노드(app-0)가 먼저 시작되어야 Replica 노드(app-1, app-2)가 연결할 수 있습니다. 삭제 시에는 Replica를 먼저 제거해야 데이터 손실을 방지할 수 있습니다.
 {{< /callout >}}
@@ -103,6 +105,8 @@ flowchart TB
     HS -.->|"mysql-1.mysql-svc"| P1
     HS -.->|"mysql-2.mysql-svc"| P2
 ```
+
+*StatefulSet이 순번 기반 Pod, Headless Service를 통한 개별 DNS, Pod별 전용 PVC를 제공하는 전체 구조를 보여줍니다.*
 
 각 구성요소의 역할은 다음과 같습니다.
 

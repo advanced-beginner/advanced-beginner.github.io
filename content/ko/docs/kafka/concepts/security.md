@@ -77,6 +77,8 @@ flowchart TB
     ACL --> B3
 ```
 
+*위 다이어그램은 Kafka 보안의 3계층 구조로, 클라이언트 요청이 SSL/TLS 암호화 → SASL 인증 → ACL 권한 검사를 순차적으로 통과하여 Broker에 도달하는 흐름을 보여줍니다.*
+
 #### 암호화 (Encryption): SSL/TLS
 
 SSL/TLS는 네트워크 통신을 암호화하여 데이터가 전송 중에 노출되는 것을 방지합니다. Kafka에서 SSL을 구성하려면 인증서를 생성하고 Broker와 Client에 각각 설정해야 합니다.

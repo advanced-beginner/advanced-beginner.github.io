@@ -12,7 +12,7 @@ author_url: "http://github.com/kimbenji"
 > **소요 시간**: 약 40분
 > **핵심 질문**: "도메인 모델을 어떤 패턴으로 구현해야 하는가?"
 
-{{< callout type="tip" title="요약" >}}
+{{< callout type="info" title="TL;DR" >}}
 전술적 설계 빌딩 블록: <strong>Entity</strong>(식별자로 구분) + <strong>Value Object</strong>(값으로 구분) → <strong>Aggregate</strong>(일관성 경계) + <strong>Repository</strong>(영속화) + <strong>Domain Service</strong>(도메인 로직) + <strong>Domain Event</strong>(이벤트 통신)
 {{< /callout >}}
 
@@ -75,6 +75,8 @@ flowchart TB
     AGG --> DE
 ```
 
+*전술적 설계의 빌딩 블록(Entity, VO, Aggregate), 서비스(Domain/Application), 인프라(Repository, Factory), 이벤트 간의 관계입니다.*
+
 #### Entity (엔티티)
 
 **정의**
@@ -89,6 +91,8 @@ flowchart LR
         LIFE["생명주기"]
     end
 ```
+
+*Entity의 세 가지 핵심 특성인 고유 식별자, 상태 변경 가능, 생명주기를 보여줍니다.*
 
 Entity의 특징을 구체적으로 살펴보겠습니다. <strong>Identity</strong>는 고유 식별자로 구분되는 특성입니다. 주문번호나 회원ID가 대표적인 예입니다. <strong>Mutability</strong>는 상태가 변경될 수 있다는 특성입니다. 예를 들어 주문 상태가 PENDING에서 CONFIRMED로 변경됩니다. <strong>Lifecycle</strong>은 생성, 변경, 소멸의 생명주기를 가진다는 특성입니다. 회원 가입, 활동, 탈퇴의 과정이 여기에 해당합니다.
 
@@ -188,6 +192,8 @@ flowchart LR
         SIDE["부수효과 없음"]
     end
 ```
+
+*Value Object의 세 가지 핵심 특성인 불변성, 값으로 비교, 부수효과 없음을 보여줍니다.*
 
 Value Object의 특징을 정리하면 다음과 같습니다. <strong>Immutability</strong>는 생성 후 변경할 수 없다는 특성입니다. Money(1000, KRW)를 생성한 후에는 금액이나 통화를 바꿀 수 없습니다. <strong>Value Equality</strong>는 모든 속성이 같으면 같은 객체로 취급된다는 특성입니다. 1000원과 1000원은 동일합니다. <strong>Self-Contained</strong>는 자체적으로 유효성을 검증한다는 특성입니다. 음수 금액은 생성 시점에 거부됩니다.
 
@@ -293,6 +299,8 @@ flowchart TB
     E2 -->|포함| V2
 ```
 
+*Entity(주문, 회원, 상품)와 Value Object(금액, 주소, 기간)의 관계로, Entity가 Value Object를 포함합니다.*
+
 두 개념의 차이를 정리하면 다음과 같습니다. Entity는 ID로 비교하고 변경 가능하며 독립적인 생명주기를 가집니다. 주문이나 회원이 여기에 해당합니다. Value Object는 모든 속성으로 비교하고 불변이며 Entity에 종속됩니다. 금액이나 주소가 여기에 해당합니다.
 
 | 구분 | Entity | Value Object |
@@ -344,6 +352,8 @@ flowchart LR
     REPO_IF -.->|구현| REPO_IMPL
     REPO_IMPL --> DB
 ```
+
+*Repository 인터페이스는 도메인 계층에, 구현체는 인프라 계층에 위치하여 의존성 역전을 실현합니다.*
 
 **인터페이스 설계**
 
@@ -447,6 +457,8 @@ flowchart TB
         C3["특정 Entity에 속하지 않는 로직"]
     end
 ```
+
+*Domain Service의 사용 케이스로, 여러 Aggregate에 걸친 연산, 외부 서비스 필요 로직, Entity에 속하지 않는 로직을 처리합니다.*
 
 **예시 1: 할인 계산**
 
@@ -636,6 +648,8 @@ flowchart TB
     REPO_IF -.->|구현| REPO_IMPL
     FACT --> AGG
 ```
+
+*전술적 설계 빌딩 블록이 계층 구조(응용, 도메인, 인프라) 내에서 어떻게 배치되는지를 보여줍니다.*
 
 #### 전술적 설계 체크리스트
 

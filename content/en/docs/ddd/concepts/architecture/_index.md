@@ -67,6 +67,8 @@ flowchart TB
     end
 ```
 
+*This diagram compares incorrect dependency direction (business logic depends on DB) with correct dependency direction (DB depends on business logic).*
+
 ## Philosophy of Each Architecture Pattern
 
 Each architecture pattern has its own philosophy and design goals.
@@ -177,6 +179,8 @@ flowchart TB
     L4 --> L6
 ```
 
+*This diagram shows a flowchart for selecting the appropriate architecture pattern based on team experience, business logic complexity, and number of external integrations.*
+
 ## Gradual Evolution Path
 
 You do not need to apply a complex architecture from the start. As your project grows, you can naturally evolve the architecture.
@@ -194,6 +198,8 @@ flowchart LR
     C -->|"When testing/changing becomes difficult"| D
     D -->|"When query performance/scalability needed"| E
 ```
+
+*This diagram shows the roadmap for progressively evolving architecture from layered to domain separation, port extraction, and hexagonal/onion.*
 
 ### Evolution Signals by Stage
 

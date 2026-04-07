@@ -10,10 +10,7 @@ lastmod: "2026-01-12"
 > **Prerequisites**: [Metrics Fundamentals](../metrics-fundamentals/), [Aggregation Operators](aggregation-operators/)
 > **What You'll Learn**: Calculate per-second rate and total increase from Counter metrics accurately
 
-## TL;DR
-
-{{< callout type="info" >}}
-**Key Summary:**
+{{< callout type="info" title="TL;DR" >}}
 - **rate()**: Average per-second increase rate → Used in dashboards and alerts
 - **increase()**: Total increase within time range → Used for period totals
 - **irate()**: Instantaneous rate of last two samples → Used for volatile metrics
@@ -57,6 +54,7 @@ graph LR
     D --> R3
 ```
 
+*This diagram shows how applying rate() to raw Counter values (cumulative) converts them into per-second change rates for each interval.*
 ```promql
 # ❌ Meaningless: cumulative requests since server start
 http_requests_total
@@ -107,6 +105,7 @@ graph LR
     CALC["rate() = (1300 - 1000) / 300sec = 1/sec"]
 ```
 
+*This diagram shows the process of collecting 6 samples over 5 minutes and calculating the per-second increase rate by dividing the difference between first and last values by time.*
 ### Basic Usage
 
 ```promql
@@ -242,6 +241,7 @@ graph TB
     end
 ```
 
+*This diagram shows the difference between rate() (average over the entire range) and irate() (instantaneous rate using only the last two samples).*
 | Function | Characteristics | Purpose |
 |----------|----------------|----------|
 | `rate()` | Smooth graph | General monitoring, alerts |
@@ -291,6 +291,7 @@ graph LR
     end
 ```
 
+*This diagram shows how rate() automatically detects counter resets (process restarts) and calculates only the increment.*
 ```promql
 # Calculates correctly even with reset
 rate(http_requests_total[5m])

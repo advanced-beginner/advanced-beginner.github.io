@@ -40,6 +40,8 @@ flowchart LR
     E --> F[Highlighting]
 ```
 
+*This diagram shows the overall flow of the product search system. When a search term is entered, autocomplete and search execution happen simultaneously, followed by filter application and highlighted results.*
+
 - **Korean Search**: Searching "삼성전자" matches both "삼성" and "전자"
 - **Autocomplete**: Typing "맥북 프" suggests "맥북 프로"
 - **Filtering**: Category, price range, brand filters

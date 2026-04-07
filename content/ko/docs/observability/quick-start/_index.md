@@ -12,10 +12,7 @@ lastmod: "2026-01-12"
 > **소요 시간**: 약 10분
 > **이 문서를 읽으면**: Prometheus로 메트릭을 수집하고 Grafana에서 시각화할 수 있습니다
 
-## TL;DR
-
-{{< callout type="info" >}}
-**핵심만 빠르게:**
+{{< callout type="info" title="TL;DR" >}}
 1. Docker Compose로 Prometheus + Grafana 실행
 2. 샘플 애플리케이션에서 메트릭 노출
 3. Grafana 대시보드에서 실시간 확인
@@ -30,6 +27,8 @@ graph LR
     B --> C["Step 3<br>메트릭 확인"]
     C --> D["Step 4<br>대시보드 구성"]
 ```
+
+*Quick Start의 4단계 흐름을 보여줍니다. 환경 준비부터 대시보드 구성까지 순서대로 진행합니다.*
 
 ---
 

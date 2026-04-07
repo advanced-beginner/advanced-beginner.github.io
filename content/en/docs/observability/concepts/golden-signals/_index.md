@@ -40,6 +40,7 @@ graph TD
     S --> |"At limit?"| Q4["Resource Headroom"]
 ```
 
+*This diagram shows the four golden signals (Latency, Traffic, Errors, Saturation) and the key question each one answers.*
 | Signal | Measures | Key Question |
 |--------|----------|--------------|
 | **Latency** | Response time | "How fast is it?" |
@@ -81,6 +82,7 @@ graph LR
     L --> E
 ```
 
+*This diagram shows the causal chain: increased traffic raises saturation, which leads to higher latency and error rates.*
 Increased traffic leads to higher saturation, which leads to increased latency and error rates.
 
 ---
@@ -235,6 +237,7 @@ graph TD
     ROW5 --> |"Gauge + Time"| SAT["CPU/MEM/DISK<br>Usage"]
 ```
 
+*This diagram shows a Grafana dashboard layout organizing golden signals into Summary, Latency, Traffic, Errors, and Saturation rows.*
 ---
 
 ## Next Steps

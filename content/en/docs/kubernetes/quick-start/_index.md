@@ -34,6 +34,8 @@ flowchart LR
     E --> F[Browser access]
 ```
 
+*This diagram shows the complete Quick Start deployment flow from writing YAML to accessing the app in a browser.*
+
 ## Before You Start
 
 Make sure the following tools are installed before starting.
@@ -375,6 +377,8 @@ sequenceDiagram
     Kubelet->>Pod: Start container
     Pod-->>User: Running state
 ```
+
+*This diagram shows the internal flow of a kubectl apply command passing through the API Server, Scheduler, and Kubelet until the Pod is running.*
 
 | Order | Component | Action |
 |-------|-----------|--------|

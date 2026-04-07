@@ -10,10 +10,7 @@ lastmod: "2026-01-12"
 > **Prerequisites**: [Metrics Fundamentals](metrics-fundamentals/)
 > **After Reading**: You'll understand Prometheus design philosophy and components, and be able to plan operational strategies
 
-## TL;DR
-
-{{< callout type="info" >}}
-**Key Summary:**
+{{< callout type="info" title="TL;DR" >}}
 - **Pull Model**: Prometheus fetches metrics from targets (not Push)
 - **Time Series DB**: Label-based multidimensional data model
 - **Service Discovery**: Auto-discover targets with Kubernetes, Consul, etc.
@@ -71,6 +68,7 @@ graph TB
     HTTP --> |"PromQL"| GF
 ```
 
+*This diagram shows the overall Prometheus architecture: the server pulls metrics from targets and integrates with service discovery, Alertmanager, and Grafana.*
 ---
 
 ## Why Pull Model?
@@ -132,6 +130,7 @@ sequenceDiagram
     end
 ```
 
+*This diagram shows how Prometheus sends GET requests to each target's /metrics endpoint every 15 seconds in the pull model.*
 **Prometheus visits targets to collect metrics.**
 
 ### Push Model (Datadog, StatsD Way)
@@ -147,6 +146,7 @@ sequenceDiagram
     A->>C: Send metrics
 ```
 
+*This diagram shows the push model where each application directly sends metrics to the collection server.*
 **Applications send metrics to the collection server.**
 
 ### Detailed Comparison
@@ -230,6 +230,7 @@ graph LR
     M --> S3
 ```
 
+*This diagram shows the multidimensional data model where different label combinations (method, status) each create independent time series from a single metric name.*
 Each **label combination** creates a separate time series.
 
 ### Cardinality Warning
@@ -304,6 +305,7 @@ graph LR
     B2 --> |"Compaction"| B3
 ```
 
+*This diagram shows the TSDB storage structure: Head Block (memory) transitions to disk blocks, which are then merged through compaction.*
 | Component | Role |
 |----------|------|
 | **Head Block** | Recent 2 hours data, memory resident |
@@ -435,6 +437,7 @@ graph LR
     MRL --> ST["Storage"]
 ```
 
+*This diagram shows the processing pipeline: Service Discovery, Relabel (target filtering), Scrape (collection), Metric Relabel (transformation), and Storage.*
 ### Main Actions
 
 | Action | Description | Example |
@@ -499,6 +502,7 @@ graph LR
     R --> EMAIL["Email"]
 ```
 
+*This diagram shows how alerts from Prometheus flow through Alertmanager for grouping, inhibition, silencing, and routing before being delivered to appropriate channels.*
 ### Prometheus Alerting Rules
 
 ```yaml
@@ -608,6 +612,7 @@ graph TD
     PB --> |"Federation"| GF
 ```
 
+*This diagram shows the hierarchical scaling structure where regional Prometheus instances collect local targets, and a Global Prometheus aggregates via federation.*
 ```yaml
 # Global Prometheus configuration
 scrape_configs:

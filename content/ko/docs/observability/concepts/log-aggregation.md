@@ -31,10 +31,7 @@ lastmod: "2026-01-15"
 > **소요 시간**: 약 25-30분
 > **이 문서를 읽으면**: 로그 수집 시스템을 선택하고 효과적인 로그를 설계할 수 있습니다
 
-## TL;DR
-
-{{< callout type="info" >}}
-**핵심 요약:**
+{{< callout type="info" title="TL;DR" >}}
 - **Loki**: 라벨 기반, 경량, Grafana 통합 우수
 - **ELK**: 전문 검색 강력, 대규모 분석에 적합
 - **구조화 로그**: JSON 형식으로 필드별 검색 용이
@@ -73,6 +70,8 @@ graph LR
     end
 ```
 
+*분산 환경에서 관리자가 각 서버에 개별 접속하여 로그를 확인해야 하는 비효율적 구조를 보여줍니다.*
+
 ```mermaid
 graph LR
     subgraph "중앙 집중 로그 (효율)"
@@ -87,6 +86,8 @@ graph LR
         CENTRAL --> DASH
     end
 ```
+
+*중앙 집중식 로그 수집 시스템으로 모든 서버 로그를 통합 대시보드에서 검색하는 구조를 보여줍니다.*
 
 {{< callout type="info" >}}
 **핵심 원칙**: 로그는 **한 곳에서 검색**할 수 있어야 합니다. 장애 대응 시간은 "로그를 찾는 시간"에 비례합니다.
@@ -114,6 +115,8 @@ graph TB
     end
 ```
 
+*Loki 스택(Promtail → Loki → Grafana)과 ELK 스택(Filebeat → Logstash → Elasticsearch → Kibana)의 아키텍처를 비교합니다.*
+
 ### 상세 비교
 
 | 항목 | Loki | ELK |
@@ -138,6 +141,8 @@ graph TD
     Q3 --> |"예"| ELK
     Q3 --> |"아니오"| LOKI
 ```
+
+*전문 검색 필요 여부, Grafana 사용 여부, 운영 인력에 따라 Loki와 ELK 중 적합한 도구를 선택하는 의사결정 흐름입니다.*
 
 | 상황 | 권장 |
 |------|------|
@@ -383,6 +388,8 @@ graph LR
 
     HOT --> WARM --> COLD --> DELETE
 ```
+
+*로그 보관 정책의 Hot → Warm → Cold → 삭제 단계별 데이터 이동 흐름을 보여줍니다.*
 
 ### Loki 보관 설정
 

@@ -12,7 +12,7 @@ author_url: "http://github.com/kimbenji"
 > **Time Required**: About 25 minutes
 > **Key Question**: "How should tests be organized in DDD architecture?"
 
-{{< callout type="tip" title="Summary" >}}
+{{< callout type="info" title="TL;DR" >}}
 Testing Strategy Core: **Unit Tests**(domain model focused, most numerous) → **Integration Tests**(Repository, external integrations) → **E2E Tests**(critical scenarios only)
 {{< /callout >}}
 
@@ -32,6 +32,8 @@ flowchart TB
 
     E2E --> INT --> UNIT
 ```
+
+*This diagram shows the test pyramid structure where the proportion increases from E2E tests (few, slow) to unit tests (many, fast).*
 
 Looking at each test type, unit tests target domain models and services with fast speed and low cost. Integration tests verify Repository and external system integrations with medium speed and cost. E2E tests target the entire system and are the slowest and most expensive.
 
@@ -714,6 +716,8 @@ flowchart TB
 
     Unit --> Integration --> E2E
 ```
+
+*This diagram shows test strategy organized by layer, expanding from unit tests (Entity, VO, Aggregate) to integration tests (Repository, API) to E2E tests.*
 
 Choose appropriate test types according to test targets. Entities and Value Objects are quickly verified with unit tests without external dependencies, Repositories perform integration tests with actual databases, and full scenarios are verified from the user perspective with E2E tests.
 

@@ -56,6 +56,8 @@ flowchart LR
     EVT --> H3
 ```
 
+*도메인에서 행위가 발생하면 이벤트를 발행하고, 관심 있는 구독자가 각자 반응하는 이벤트 기반 흐름입니다.*
+
 위 다이어그램은 하나의 도메인 이벤트가 여러 핸들러에 의해 처리되는 과정을 보여줍니다. 주문이 확정되면 재고 차감, 알림 발송, 포인트 적립 등의 후속 작업이 자동으로 트리거됩니다.
 
 **도메인 이벤트의 주요 특징**
@@ -270,6 +272,8 @@ flowchart TB
     POLL --> PUB
     PUB --> DEL
 ```
+
+*Outbox 패턴으로, Aggregate 저장과 Outbox 테이블 저장을 하나의 트랜잭션으로 처리하여 이벤트 유실을 방지합니다.*
 
 이 다이어그램은 Transactional Outbox Pattern의 전체 흐름을 보여줍니다. 중요한 점은 Aggregate 저장과 Outbox 저장이 하나의 트랜잭션 안에서 일어난다는 것입니다.
 
@@ -524,6 +528,8 @@ flowchart TB
     end
 ```
 
+*기존 방식(현재 상태만 저장)과 Event Sourcing(이벤트 시퀀스 저장 후 재생으로 상태 도출)을 비교합니다.*
+
 **이벤트로부터 Aggregate 복원하기**
 
 이벤트 소싱에서는 Aggregate의 현재 상태를 얻기 위해 해당 Aggregate의 모든 이벤트를 순서대로 재생합니다. 각 이벤트는 `apply` 메서드를 통해 Aggregate의 상태를 변경합니다. 예를 들어 OrderCreatedEvent를 적용하면 주문 ID와 상태가 설정되고, OrderConfirmedEvent를 적용하면 상태가 CONFIRMED로 바뀝니다.
@@ -626,6 +632,8 @@ flowchart LR
         RD --> API[Query API]
     end
 ```
+
+*Event Sourcing과 CQRS를 결합하여 쓰기 측은 이벤트를 저장하고 읽기 측은 Projection으로 조회하는 구조입니다.*
 
 **CQRS가 필요한 이유**
 

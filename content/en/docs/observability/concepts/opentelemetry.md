@@ -10,10 +10,7 @@ lastmod: "2026-01-12"
 > **Prerequisites**: [Three Pillars of Observability](three-pillars/), [Distributed Tracing](distributed-tracing/)
 > **After Reading**: You'll understand OpenTelemetry and be able to apply it to your projects
 
-## TL;DR
-
-{{< callout type="info" >}}
-**Key Summary:**
+{{< callout type="info" title="TL;DR" >}}
 - **OpenTelemetry (OTel)**: **Vendor-neutral standard** for Metrics, Logs, and Traces
 - **Components**: SDK (instrumentation) + Collector (collect/transform/export)
 - **Advantages**: No vendor lock-in, instrument once to support multiple backends
@@ -42,6 +39,7 @@ graph LR
     APP --> PR
 ```
 
+*This diagram shows the pre-OTel architecture where applications had to connect to each vendor's SDK separately.*
 **Problems:**
 - Different SDKs per vendor
 - Code changes needed when switching vendors
@@ -59,6 +57,7 @@ graph LR
     COLLECTOR --> PR["Prometheus"]
 ```
 
+*This diagram shows the post-OTel architecture where a single SDK and Collector send data to multiple backends.*
 **Advantages:**
 - Instrument once, multiple backends
 - Only modify Collector config when switching vendors
@@ -105,6 +104,7 @@ graph LR
     E --> B3["Loki"]
 ```
 
+*This diagram shows the OTel Collector pipeline structure: Receivers, Processors, and Exporters.*
 ### 3. Instrumentation
 
 Auto/manual instrumentation libraries.
@@ -362,6 +362,7 @@ graph LR
     S3 --> S4["Phase 4<br>Dashboards/Alerts"]
 ```
 
+*This diagram shows the four-stage adoption strategy from Collector deployment to dashboard configuration.*
 1. **Deploy Collector**: Build data collection infrastructure
 2. **Auto Instrumentation**: Quick start with Java Agent
 3. **Enhance Manual Instrumentation**: Custom Spans for business logic

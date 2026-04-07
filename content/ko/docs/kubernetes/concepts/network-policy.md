@@ -74,6 +74,8 @@ flowchart TB
     NP -.->|"적용"| API
 ```
 
+*NetworkPolicy가 api-server Pod에 적용되어 frontend와 monitoring만 허용하고 외부 트래픽은 차단하는 구조를 보여줍니다.*
+
 ## 기본 정책: Allow All vs Deny All
 
 ### 기본 상태 (Allow All)

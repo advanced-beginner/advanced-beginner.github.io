@@ -25,6 +25,8 @@ graph TB
     PROM --> AM["Alertmanager"]
 ```
 
+*Spring Boot 앱에서 Prometheus(메트릭), Loki(로그), Tempo(트레이스)로 데이터를 보내고 Grafana에서 통합 시각화하는 전체 아키텍처입니다.*
+
 ## Step 1: 디렉토리 구조 생성
 
 ```bash

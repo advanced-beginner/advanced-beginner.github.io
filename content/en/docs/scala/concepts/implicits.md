@@ -179,6 +179,8 @@ flowchart TD
     F -->|AppConfig, DbContext, etc.| H[⚠️ Use with caution]
 ```
 
+*This diagram shows the decision flow for determining whether a parameter should be defined as implicit.*
+
 **Anti-Patterns to Avoid**
 
 ```scala

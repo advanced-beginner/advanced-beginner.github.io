@@ -51,6 +51,8 @@ flowchart TB
     OP --> EA --> API
 ```
 
+*헥사고날 아키텍처의 핵심 구조로, 도메인을 중심에 두고 Port와 Adapter로 외부 세계(Web, CLI, DB 등)와 통신합니다.*
+
 ---
 
 #### 왜 "헥사고날(육각형)"인가요?
@@ -94,6 +96,8 @@ flowchart TB
     SPEAKER <--> BT <--> Phone
 ```
 
+*스마트폰 비유로, Core(운영체제, 앱)가 Port(충전, 이어폰, 디스플레이)를 통해 다양한 Adapter와 연결됩니다.*
+
 소프트웨어도 마찬가지입니다. 핵심 비즈니스 로직은 어떤 데이터베이스를 쓰는지, 어떤 UI 프레임워크를 쓰는지 알 필요가 없습니다. 이 모든 기술적 선택은 Adapter를 통해 격리됩니다.
 
 육각형이라는 형태는 실제로 6개 면이 중요한 게 아니라, "여러 방향에서 연결할 수 있다"는 의미를 시각적으로 표현한 것입니다. 계층형의 "위→아래" 대신 "안↔밖" 관점으로 사고를 전환하는 것이 핵심입니다.
@@ -123,6 +127,8 @@ flowchart LR
     EXT1["외부 요청"] --> InboundPorts
     OutboundPorts --> EXT2["외부 시스템"]
 ```
+
+*Inbound Port(들어오는 요청: CreateOrderUseCase 등)와 Outbound Port(나가는 요청: SaveOrderPort 등)의 차이를 보여줍니다.*
 
 <strong>두 종류의 Port</strong>를 이해하는 것이 중요합니다. 아래 표는 각 Port의 특성을 정리한 것입니다.
 
@@ -165,6 +171,8 @@ flowchart LR
         EA["External API Adapter"]
     end
 ```
+
+*Driving Adapter(Controller 등 나를 호출하는 것)와 Driven Adapter(DB 등 내가 호출하는 것)의 차이를 보여줍니다.*
 
 <strong>두 종류의 Adapter</strong>를 구분하는 것이 중요합니다. 아래 표는 각 Adapter의 특성을 정리한 것입니다.
 
@@ -224,6 +232,8 @@ flowchart TB
     end
 ```
 
+*Application Core 내부의 Application Layer와 Domain Layer, 그리고 외부 Adapter들의 관계를 보여줍니다.*
+
 Application Core는 외부 세계에 대해 아무것도 알지 못합니다. HTTP가 무엇인지, JPA가 무엇인지, Kafka가 무엇인지 모릅니다. 오직 Port 인터페이스만 알고 있으며, 순수한 비즈니스 로직에만 집중합니다.
 
 ---
@@ -281,6 +291,8 @@ flowchart TB
     PA --> DB
     NA --> MAIL
 ```
+
+*외부 세계에서 Driving Adapter, Inbound Port, Application Core, Outbound Port, Driven Adapter까지의 전체 연결 구조입니다.*
 
 위 다이어그램에서 화살표의 방향에 주목하세요. 의존성은 항상 바깥에서 안으로만 향합니다. Application Core는 외부를 전혀 모르며, Port 인터페이스만 사용합니다.
 
@@ -642,6 +654,8 @@ flowchart TB
     APP --> DOM
 ```
 
+*의존성 방향이 Adapter에서 Port로, Port에서 Core로 향하며 Core는 아무것도 의존하지 않습니다.*
+
 **핵심 규칙:**
 
 의존성 규칙을 엄격히 지키는 것이 헥사고날 아키텍처의 핵심입니다. 첫째, Adapter는 Port를 구현하고 Port에 의존합니다. 둘째, Application Core는 Adapter를 전혀 모릅니다. 셋째, Domain은 아무것도 의존하지 않으며 순수한 비즈니스 로직만 담고 있습니다.
@@ -712,6 +726,8 @@ flowchart LR
     Before -->|"Adapter만 교체"| After
 ```
 
+*MySQL에서 MongoDB로 전환할 때 Adapter만 교체하면 되는 기술 스택 교체 용이성을 보여줍니다.*
+
 예를 들어, MySQL에서 MongoDB로 데이터베이스를 변경해도 OrderService 코드는 전혀 변경할 필요가 없습니다. SaveOrderPort 인터페이스도 그대로이고, 단지 MongoOrderAdapter라는 새로운 Adapter만 작성하면 됩니다.
 
 ```java
@@ -752,6 +768,8 @@ flowchart LR
 
     Before -->|"Adapter만 추가"| After
 ```
+
+*이메일 Adapter에 SMS, Push Adapter를 추가하여 알림 채널을 확장하는 예시를 보여줍니다.*
 
 이메일만 지원하던 것을 SMS와 푸시 알림으로 확장하려면 SmsAdapter와 PushAdapter를 추가하면 됩니다. Application Service는 여전히 SendNotificationPort만 호출하므로 코드 변경이 없습니다.
 
@@ -803,6 +821,8 @@ flowchart TB
         H1 <--> H2 <--> H3
     end
 ```
+
+*계층형 아키텍처(위에서 아래로)와 헥사고날 아키텍처(안쪽에서 바깥으로)의 구조적 차이를 비교합니다.*
 
 **상세 비교**
 
@@ -931,6 +951,8 @@ flowchart TB
 
     E2E --> INT --> UNIT
 ```
+
+*테스트 피라미드로, 단위 테스트(Domain/Port)에서 통합 테스트(Adapter), E2E 테스트까지의 전략을 보여줍니다.*
 
 **1. Domain 테스트 (순수 단위 테스트)**
 
@@ -1099,6 +1121,8 @@ flowchart LR
 
     A --> B --> C
 ```
+
+*기존 계층형에서 Repository Interface 추출, Port 패턴 적용, Adapter 분리까지 점진적 전환 단계를 보여줍니다.*
 
 **1단계: Repository Interface를 Domain으로**
 

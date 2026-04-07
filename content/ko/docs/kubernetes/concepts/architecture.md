@@ -77,6 +77,8 @@ flowchart TB
     K2 --> P4
 ```
 
+*Control Plane(API Server, etcd, Scheduler, Controller Manager)과 Worker Node(Kubelet, Pod)의 전체 구조를 보여줍니다.*
+
 Control Plane과 Worker Node의 역할을 비교하면 다음과 같습니다.
 
 | 구성요소 | 역할 | 비유 |
@@ -101,6 +103,8 @@ flowchart LR
     CI/CD --> API
     API --> Internal[내부 컴포넌트]
 ```
+
+*kubectl, Dashboard, CI/CD 등 모든 외부 요청이 API Server를 거쳐 내부로 전달되는 구조를 보여줍니다.*
 
 주요 역할은 다음과 같습니다.
 
@@ -147,6 +151,8 @@ flowchart LR
     B -->|선택| F
 ```
 
+*Scheduler가 새 Pod를 여유 리소스가 가장 많은 노드에 배치하는 과정을 보여줍니다.*
+
 스케줄링 결정 요소는 다음과 같습니다.
 
 | 요소 | 설명 |
@@ -183,6 +189,8 @@ flowchart LR
     C --> A
 ```
 
+*Controller Manager의 조정 루프(Reconciliation Loop)가 현재 상태와 원하는 상태를 비교하여 지속적으로 조정하는 과정을 보여줍니다.*
+
 예를 들어 Deployment에서 `replicas: 3`으로 설정했는데 현재 Pod가 2개라면, ReplicaSet Controller가 1개를 추가로 생성합니다.
 
 ## Worker Node 구성요소
@@ -208,6 +216,8 @@ flowchart TB
     Kubelet --> CRI[Container Runtime]
     CRI --> Container[컨테이너]
 ```
+
+*Kubelet이 API Server로부터 Pod 명세를 받아 Container Runtime을 통해 컨테이너를 실행하고 상태를 보고하는 흐름을 보여줍니다.*
 
 Kubelet은 컨테이너 런타임(containerd, CRI-O 등)과 통신하여 실제 컨테이너를 관리합니다.
 
@@ -275,6 +285,8 @@ sequenceDiagram
     Kubelet->>API: 16. Pod 상태 업데이트
 ```
 
+*kubectl apply 명령 실행 시 API Server, etcd, Controller Manager, Scheduler, Kubelet이 순차적으로 협력하는 전체 과정을 보여줍니다.*
+
 각 단계를 요약하면 다음과 같습니다.
 
 | 단계 | 컴포넌트 | 동작 |
@@ -315,6 +327,8 @@ flowchart TB
     ETCD2 <--> ETCD3
     ETCD1 <--> ETCD3
 ```
+
+*프로덕션 고가용성(HA) 구성에서 Load Balancer 뒤에 3개의 Control Plane과 etcd 클러스터가 배치된 구조를 보여줍니다.*
 
 HA 구성의 핵심 요소는 다음과 같습니다.
 

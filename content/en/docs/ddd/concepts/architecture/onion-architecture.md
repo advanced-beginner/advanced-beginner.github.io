@@ -41,6 +41,8 @@ flowchart TB
     INF --> AS --> DS --> Model
 ```
 
+*This diagram shows the onion layer structure of Onion Architecture with Domain Model at the innermost layer and Infrastructure at the outermost.*
+
 ---
 
 ## Understanding Through the "Onion"
@@ -71,6 +73,8 @@ flowchart TB
 
     L1 --> L2 --> L3 --> L4
 ```
+
+*This diagram uses an onion layer analogy where the outer shell (Infrastructure) is replaceable while the inner core (Domain Model) is protected.*
 
 ---
 
@@ -104,6 +108,8 @@ flowchart LR
     Clean -.->|"DDD Enhancement"| Onion
 ```
 
+*This diagram compares the structures of Clean Architecture and Onion Architecture side by side.*
+
 **Why Onion is more suitable for DDD:**
 - Clearly separates Domain Model and Domain Service
 - Aggregate, Entity, and Value Object concepts fit naturally
@@ -126,6 +132,8 @@ flowchart TB
         DE["Domain Event<br>(domain event)"]
     end
 ```
+
+*This diagram shows the Domain Model layer containing Entity, Value Object, and Domain Event, which hold the core business rules.*
 
 ```java
 // Entity: distinguished by unique identifier
@@ -459,6 +467,8 @@ flowchart TB
     end
 ```
 
+*This diagram shows the Infrastructure layer containing UI, Controller, Repository implementations, external API integrations, and other technical details.*
+
 ```java
 // Controller (Infrastructure)
 @RestController
@@ -647,6 +657,8 @@ flowchart TB
     REPO_IMPL -->|"implements"| RI
 ```
 
+*This diagram shows the dependency direction flowing inward only, from Infrastructure through Application Service and Domain Service to Domain Model.*
+
 **Core Rules:**
 1. Dependencies only flow in the direction **Infrastructure -> Application -> Domain**
 2. **Domain depends on nothing**
@@ -681,6 +693,8 @@ flowchart TB
         O4["Infrastructure"]
     end
 ```
+
+*This diagram compares the layer structures of Clean, Hexagonal, and Onion Architecture side by side.*
 
 | Comparison | Clean | Hexagonal | Onion |
 |---------|------|---------|--------|
@@ -823,6 +837,8 @@ flowchart TB
 
     E2E --> INT --> UNIT
 ```
+
+*This diagram shows the test pyramid strategy from unit tests (Domain) to integration tests to E2E tests.*
 
 ### 1. Domain Model Tests (Easiest)
 
@@ -1006,6 +1022,8 @@ flowchart LR
     Q3 -->|No| H["Hexagonal or<br>Layered recommended"]
 ```
 
+*This diagram shows a flowchart for deciding whether to adopt Onion Architecture based on business logic complexity and long-term maintenance needs.*
+
 > <strong>Key point:</strong> The complexity of the architecture should be <strong>proportional to the complexity of the problem you are solving</strong>. If you apply a complex solution to a simple problem, the complexity itself becomes a new problem.
 
 ---
@@ -1053,6 +1071,8 @@ flowchart LR
 
     A --> B --> C --> D
 ```
+
+*This diagram shows the stages of progressively adopting Onion Architecture from Entity enrichment to Domain Service extraction and Repository Interface application.*
 
 ### Step 1: Add Logic to Entities
 

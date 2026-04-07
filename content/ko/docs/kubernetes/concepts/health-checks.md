@@ -68,6 +68,8 @@ flowchart TB
     SP -->|실패| WAIT[대기 계속]
 ```
 
+*Liveness(재시작), Readiness(서비스 제외), Startup(대기) 세 Probe의 실패 시 동작 차이를 보여줍니다.*
+
 각 Probe의 특징을 비교하면 다음과 같습니다.
 
 | Probe | 질문 | 실패 시 동작 | 사용 시점 |
@@ -165,6 +167,8 @@ flowchart LR
     EP -.-x P3[Pod 3 ✗ Not Ready]
 ```
 
+*Readiness Probe 실패 시 해당 Pod가 Service Endpoints에서 제외되어 트래픽을 받지 않는 구조를 보여줍니다.*
+
 ## Startup Probe
 
 애플리케이션 시작에 오래 걸리는 경우 사용합니다. Startup Probe가 성공할 때까지 Liveness/Readiness Probe는 비활성화됩니다.
@@ -205,6 +209,8 @@ sequenceDiagram
     K->>C: Readiness Probe
     C-->>K: 성공
 ```
+
+*Startup Probe가 성공한 후에야 Liveness와 Readiness Probe가 활성화되는 시작-운영 단계 전환을 보여줍니다.*
 
 ## 실전 예시: Spring Boot
 

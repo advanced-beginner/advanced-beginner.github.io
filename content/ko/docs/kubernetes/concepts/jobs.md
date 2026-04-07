@@ -65,6 +65,8 @@ flowchart TB
     RETRY -->|Yes| FAIL["Job 실패"]
 ```
 
+*Job이 Pod를 생성하고, 성공 시 completions 확인, 실패 시 backoffLimit까지 재시도하는 실행 흐름을 보여줍니다.*
+
 ## Job YAML
 
 ### 기본 Job
@@ -155,6 +157,8 @@ flowchart LR
     P2 -->|완료| D2["Done"]
     P3 -->|완료| D3["Done"]
 ```
+
+*CronJob이 스케줄에 따라 매일 Job을 생성하고, 각 Job의 Pod가 작업을 완료하는 반복 흐름을 보여줍니다.*
 
 ## CronJob YAML
 

@@ -11,12 +11,12 @@ author_url: "http://github.com/kimbenji"
 
 DDD 학습을 위한 도서, 아티클, 발표 자료를 정리합니다.
 
-> **TL;DR**
->
-> - **필독서**: Blue Book(원전), Red Book(구현), DDD Distilled(입문)
-> - **학습 순서**: 입문 → 기본 → 심화 → 실전 순으로 점진적 학습
-> - **한국어 자료**: DDD START(최범균), 우아한객체지향(조영호) 추천
-> - **실습**: 기존 프로젝트 리팩터링 또는 EventStorming으로 시작
+{{< callout type="info" title="TL;DR" >}}
+- **필독서**: Blue Book(원전), Red Book(구현), DDD Distilled(입문)
+- **학습 순서**: 입문 → 기본 → 심화 → 실전 순으로 점진적 학습
+- **한국어 자료**: DDD START(최범균), 우아한객체지향(조영호) 추천
+- **실습**: 기존 프로젝트 리팩터링 또는 EventStorming으로 시작
+{{< /callout >}}
 
 ## 필독서
 
@@ -240,6 +240,8 @@ flowchart TB
         D2[EventStorming 워크숍]
     end
 ```
+
+*DDD 학습 로드맵으로, 입문(DDD Distilled)에서 기본(Blue/Red Book), 심화, 실전(프로젝트 적용)까지의 단계입니다.*
 
 ### 단계별 추천
 

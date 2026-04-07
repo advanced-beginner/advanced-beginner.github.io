@@ -58,6 +58,8 @@ graph TD
     S --> |"한계인가?"| Q4["리소스 여유"]
 ```
 
+*Latency, Traffic, Errors, Saturation 4대 황금 신호와 각각이 답하는 핵심 질문을 보여줍니다.*
+
 | 신호 | 측정 대상 | 핵심 질문 |
 |------|----------|----------|
 | **Latency** | 응답시간 | "얼마나 빠른가?" |
@@ -98,6 +100,8 @@ graph LR
     S --> E["Errors ↑"]
     L --> E
 ```
+
+*트래픽 증가가 포화도를 높이고, 이것이 지연시간과 에러율 증가로 이어지는 연쇄 관계를 보여줍니다.*
 
 트래픽이 증가하면 포화도가 높아지고, 이는 지연시간 증가와 에러율 증가로 이어집니다.
 
@@ -252,6 +256,8 @@ graph TD
     ROW4 --> |"Time Series"| E["에러율<br>에러 수"]
     ROW5 --> |"Gauge + Time"| SAT["CPU/MEM/DISK<br>사용률"]
 ```
+
+*Grafana 대시보드에서 황금 신호를 요약, Latency, Traffic, Errors, Saturation 행으로 구성하는 레이아웃입니다.*
 
 ---
 

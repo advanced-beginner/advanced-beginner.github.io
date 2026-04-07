@@ -53,6 +53,8 @@ flowchart TB
     M -.상태 관리.-> D3
 ```
 
+*Elasticsearch 클러스터의 기본 아키텍처를 보여줍니다. 클라이언트 요청이 Coordinating 노드를 통해 Data 노드로 분산되고, Master 노드가 전체 상태를 관리합니다.*
+
 ---
 
 ## 노드 역할

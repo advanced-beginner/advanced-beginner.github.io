@@ -73,6 +73,8 @@ flowchart TD
     F --> J["Thread contention<br>I/O wait analysis"]
 ```
 
+*This diagram shows the decision flow for selecting the appropriate profiling tool based on the type of performance issue.*
+
 ---
 
 ## Step 2: CPU/Memory Profiling with JFR

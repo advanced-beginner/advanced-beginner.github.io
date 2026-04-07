@@ -77,6 +77,8 @@ flowchart TB
     end
 ```
 
+*This diagram shows the problem where acks=all still returns an ACK without syncing with any Follower when the ISR contains only the Leader.*
+
 To solve this problem, use the `min.insync.replicas` setting together. This setting specifies the minimum number of replicas that must be synchronized for ACK to be returned. Using `acks=all` with `min.insync.replicas=2` means writes only succeed when at least 2 replicas are in ISR. If ISR shrinks to 1, write requests fail, ensuring data safety.
 
 {{< callout type="info" title="Key Points" >}}
@@ -123,6 +125,8 @@ flowchart TB
     end
 ```
 
+*This diagram shows the difference in Partition assignment depending on whether a Key is present. With a Key, messages go to the same Partition; without a Key, they are distributed via round-robin.*
+
 With a Key, Kafka calculates the Key's hash value to determine the Partition. The same Key always produces the same hash value, so it's stored in the same Partition. Without a Key, the Sticky Partitioner (Kafka 2.4+) sends to the same Partition for a period for batch efficiency, then switches to another Partition.
 
 **The Principle of Order Guarantee**
@@ -147,6 +151,8 @@ sequenceDiagram
 
     Note over C: Processed in order
 ```
+
+*This diagram shows how messages with the same Key are stored in the same Partition and delivered to the Consumer in order.*
 
 Using user ID as Key guarantees per-user event order, and using order ID as Key guarantees per-order state change order. In IoT environments, device ID as Key can group per-device data.
 
@@ -216,6 +222,8 @@ flowchart LR
 
     Before -->|Compaction| After
 ```
+
+*This diagram shows the principle of Log Compaction, which removes older values for the same Key and retains only the latest value.*
 
 Log Compaction runs asynchronously in background threads. Only closed segments are Compaction targets; the current active segment being written to is excluded. With `min.cleanable.dirty.ratio` setting at 0.5 (default), Compaction starts when uncleaned data exceeds 50%.
 
@@ -295,6 +303,8 @@ sequenceDiagram
     B->>B: seq=0 already processed → ignore
     B->>P: ACK (duplicate prevented)
 ```
+
+*This diagram shows the duplicate prevention mechanism of the Idempotent Producer, where even when an ACK is lost and the message is retransmitted, the PID and sequence number ensure the message is stored only once.*
 
 `enable.idempotence=true` is the default since Kafka 3.0. Unless there's a special reason, don't turn off this setting. When Idempotent Producer is enabled, `acks=all`, `retries=Integer.MAX_VALUE`, and `max.in.flight.requests.per.connection=5` are automatically set.
 

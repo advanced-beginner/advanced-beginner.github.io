@@ -343,6 +343,8 @@ graph LR
     B --> C[decay<br>Decay rate]
 ```
 
+*This diagram shows how the three Decay Function parameters (origin, scale, decay) are applied to score reduction.*
+
 | Function | Decay Shape |
 |----------|-------------|
 | `linear` | Linear decay |

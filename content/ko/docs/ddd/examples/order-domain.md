@@ -62,6 +62,8 @@ flowchart TD
     Q2 -->|No| ENT["내부 Entity"]
 ```
 
+*Entity와 Value Object를 판단하는 흐름도로, 추적 필요 여부와 독립 존재 가능 여부로 구분합니다.*
+
 > **다이어그램 설명**: Entity vs Value Object 판단 흐름도입니다. "시간이 지나도 추적해야 하나?" 질문에 No면 Value Object, Yes면 "Order 없이 존재 가능한가?" 추가 질문으로 Yes면 별도 Aggregate, No면 내부 Entity로 결정합니다.
 
 **Money가 Value Object인 이유:**
@@ -94,6 +96,8 @@ flowchart LR
         O2 -.->|ID 참조| PID
     end
 ```
+
+*잘못된 설계(Customer, Product 전체 포함)와 올바른 설계(ID만 참조)를 비교합니다.*
 
 > **다이어그램 설명**: 왼쪽은 잘못된 설계로 Order가 Customer와 Product 전체를 포함합니다. 오른쪽은 올바른 설계로 Order가 CustomerId, ProductId만 참조합니다. 다른 Aggregate는 ID로만 참조해야 합니다.
 
@@ -161,6 +165,8 @@ flowchart TB
     PID["ProductId"] -.->|ID 참조| OL1
     PID2["ProductId"] -.->|ID 참조| OL2
 ```
+
+*Order Aggregate 내부 구조로, Root인 Order가 OrderLine, ShippingAddress(VO), Money(VO)를 포함하고 외부는 ID로만 참조합니다.*
 
 > **다이어그램 설명**: Order Aggregate 내부 구조입니다. Order(Aggregate Root)가 OrderLine들, ShippingAddress(VO), Money(VO)를 포함합니다. CustomerId와 ProductId는 점선으로 표시된 것처럼 외부 참조(ID만)입니다.
 
