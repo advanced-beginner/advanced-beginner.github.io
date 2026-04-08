@@ -412,6 +412,10 @@ public class RemoteAreaShippingPolicy implements ShippingPolicy {
 
 #### Module (모듈) 조직
 
+**왜 모듈 조직이 필요한가?**
+
+클래스가 수십 개를 넘어가면 하나의 패키지에서 관련 코드를 찾는 것만으로도 시간이 걸립니다. "주문 관련 코드가 어디 있지?"라는 질문에 즉답할 수 없다면, 코드베이스의 응집도가 낮아진 것입니다. Module 패턴은 관련된 도메인 개념을 하나의 경계 안에 묶어, 코드 탐색 비용을 줄이고 팀 간 책임 경계를 명확히 합니다.
+
 **패키지 구조**
 
 도메인의 복잡도가 높아지면 모듈로 분리하여 관리합니다. DDD에서 Module은 관련된 도메인 개념을 응집력 있게 묶는 단위입니다. 주문 모듈, 고객 모듈, 상품 모듈을 각각 domain, application, infrastructure 계층으로 나눕니다. domain 패키지에는 Entity, Value Object, Repository Interface, Domain Event가 위치합니다. application 패키지에는 Application Service와 DTO가 위치합니다. infrastructure 패키지에는 Repository 구현체와 Event Publisher가 위치합니다. shared 모듈에는 Money, Address 같은 공통 Value Object가 위치합니다.
@@ -525,6 +529,10 @@ public class OrderApplicationService {
 
 #### Builder 패턴 (복잡한 생성)
 
+**왜 Builder가 필요한가?**
+
+Aggregate 생성자에 매개변수가 5개 이상이 되면, 어떤 값이 어디에 대응하는지 헷갈려 버그가 생기기 쉽습니다. Builder 패턴은 단계적으로 속성을 설정하게 하여 생성 의도를 명확히 하고, `build()` 시점에 최종 유효성 검증을 수행할 수 있게 합니다.
+
 **Aggregate Builder**
 
 복잡한 Aggregate 생성 시 Builder 패턴을 활용합니다. [전술적 설계](tactical-design/)에서 다룬 Factory가 "외부 의존성이 필요한 복잡한 생성"에 적합하다면, Builder는 "여러 속성을 조합하여 객체를 만드는" 상황에 적합합니다. 내부 Builder 클래스로 유창한 인터페이스를 제공하고, `build` 메서드에서 최종 검증을 수행합니다.
@@ -605,6 +613,10 @@ Order order = Order.builder()
 ```
 
 #### Null Object 패턴
+
+**왜 Null Object가 필요한가?**
+
+"할인 정책이 없는 주문"을 처리할 때마다 `if (discountPolicy != null)`을 반복하면, 한 곳이라도 빠뜨리는 순간 NullPointerException이 발생합니다. Null Object는 "아무것도 하지 않는" 구현체를 제공하여 null 체크 없이 안전하게 호출할 수 있게 합니다.
 
 **정의**
 

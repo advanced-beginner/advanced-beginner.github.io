@@ -20,6 +20,8 @@ This document covers Mapping, Field Type, and Analyzer design for effectively st
 
 ## What is Mapping?
 
+**Why define a Mapping upfront?** What happens if you index documents without a Mapping? Elasticsearch might infer "2024-01-15" as a string instead of a date, or assign a numeric ID as long type, wasting unnecessary memory. Changing the type later requires reindexing all data. Mapping is the schema definition that prevents these problems from the start.
+
 **Mapping** is a schema that defines how documents and fields are stored and indexed.
 
 ### RDB vs Elasticsearch
@@ -290,6 +292,8 @@ GET /products/_search
 
 ## Analyzer
 
+**Why do we need an Analyzer?** If you search for "galaxy" in a document containing "I purchased a Samsung Galaxy," will it return results? Without an Analyzer, the original text is compared as a whole, so "Galaxy" (with surrounding characters) and "galaxy" are treated as different strings, causing the search to fail. An Analyzer breaks text into meaningful token units to resolve such mismatch problems.
+
 An **Analyzer** converts text into searchable tokens.
 
 ### Analysis Process
@@ -431,6 +435,8 @@ PUT /products
 ---
 
 ## Dynamic Mapping
+
+**Why does Dynamic Mapping exist?** Manually defining every field's type is tedious. Especially during prototyping, schemas change frequently. Dynamic Mapping lets Elasticsearch automatically infer types just by inserting documents, enabling rapid development. However, be cautious in production, as incorrect inference can be critical.
 
 If Mapping is not defined, Elasticsearch automatically infers types.
 

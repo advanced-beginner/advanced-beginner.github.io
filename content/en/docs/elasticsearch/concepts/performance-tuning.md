@@ -212,6 +212,8 @@ PUT /products
 
 ## Caching
 
+**Why is caching important?** A "category=laptop" filter returns identical results every time -- should it be recalculated from disk on every request? When hundreds of identical filter requests per second come in, unnecessary computations accumulate and cluster load spikes. Caching stores frequently used filter results and aggregation results in memory to eliminate repeated computation.
+
 ### Cache Types
 
 | Cache | Target | Invalidation |

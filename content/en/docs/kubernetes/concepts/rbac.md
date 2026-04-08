@@ -37,6 +37,8 @@ In this way, RBAC is like systematically managing "who can do what and where."
 
 ## What Is RBAC?
 
+Without access control on a cluster, a junior developer could accidentally delete a production namespace's Deployment, or a CI/CD pipeline could unintentionally read all Secrets. RBAC prevents such incidents by controlling "who can do what, and where" based on roles.
+
 RBAC (Role-Based Access Control) is a mechanism that controls access to the Kubernetes API based on the roles of users or services.
 
 | Component | Description |

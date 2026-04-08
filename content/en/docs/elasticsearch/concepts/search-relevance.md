@@ -29,6 +29,8 @@ Elasticsearch uses the BM25 algorithm by default to assign a relevance score to 
 
 ## What is Score?
 
+**Why do we need scoring?** When you search for "MacBook" and thousands of documents match, which ones should be shown first? Sorting by insertion order or alphabetically could bury the most relevant result on page 10. Score quantifies "how relevant" each document is to the search query, surfacing the most appropriate results to the top.
+
 **Score** is a number indicating how relevant a document is to the search query.
 Higher scores appear higher in search results.
 
@@ -154,6 +156,8 @@ GET /products/_search
 
 ## Boosting
 
+**Why isn't the default BM25 score enough?** BM25's default scoring alone cannot reflect business requirements. Requirements like "surface promotional products higher" or "name matches should be more important than description matches" are beyond what the default algorithm can know. Boosting assigns weights to specific fields or conditions to incorporate business logic into search rankings.
+
 Adjust scores by adding weights to specific conditions.
 
 ### Field Boosting
@@ -232,6 +236,8 @@ GET /products/_search
 ---
 
 ## Function Score Query
+
+**Why do we need Function Score Query?** Simple Boosting cannot express complex scoring like "give bonus points to recent products but halve the score after 30 days, add extra boost for items with 100+ sales, and throw in some randomness." Function Score Query combines multiple functions to incorporate such sophisticated business logic into search rankings.
 
 Implement complex scoring logic.
 

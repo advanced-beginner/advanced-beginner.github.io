@@ -123,6 +123,8 @@ GET /_cluster/allocation/explain
 
 ## Shard Allocation
 
+**Why does shard placement matter?** What happens when shards are concentrated on a specific node? That node's CPU hits 100% while other nodes use only 10%, causing search response times to increase by more than 10x. Additionally, if a Primary and its Replica are placed on the same node, both are lost when that node fails. Shard allocation strategies prevent such imbalances and risks.
+
 ### Shard Placement Rules
 
 1. Primary and Replica are placed on **different nodes**

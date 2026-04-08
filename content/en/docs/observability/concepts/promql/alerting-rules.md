@@ -17,6 +17,10 @@ lastmod: "2026-01-12"
 - Use Recording Rules results for concise writing
 {{< /callout >}}
 
+## Why Are Alerting Rules Needed?
+
+**Why not just watch dashboards?** You can't stare at dashboards 24/7. If the error rate spikes at 3 AM and nobody is looking at the dashboard, the incident goes unnoticed. Alerting Rules let you declaratively define conditions like "notify automatically when a condition persists for a certain duration," ensuring the system detects problems and pages the responsible engineer even when no one is actively monitoring.
+
 ## Basic Syntax
 
 ### Alerting Rule Structure

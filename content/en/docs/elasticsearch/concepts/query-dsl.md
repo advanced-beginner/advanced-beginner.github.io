@@ -39,6 +39,8 @@ GET /products/_search
 
 ## Query Context vs Filter Context
 
+**Why distinguish between two contexts?** Suppose you search for "MacBook" on a shopping site while filtering the category to "Laptop." The "MacBook" search needs a relevance score, but the "Laptop" category filter only needs to check whether it matches or not. Computing scores for all conditions wastes computation and makes caching impossible. Elasticsearch separates these two situations into Query Context and Filter Context to achieve both performance and accuracy.
+
 Elasticsearch queries execute in two contexts.
 
 | Aspect | Query Context | Filter Context |
@@ -365,6 +367,8 @@ GET /products/_search
 ---
 
 ## Bool Query
+
+**Why do we need Bool queries?** Real search requirements are not simple. You need compound conditions like "name contains 'MacBook', category is Laptop, price is under $2,000,000, and exclude out-of-stock items." A single query cannot express such combinations. Bool queries combine must/should/must_not/filter to express complex conditions in a single query.
 
 Combine multiple queries.
 

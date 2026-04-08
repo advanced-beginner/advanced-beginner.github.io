@@ -20,6 +20,8 @@ author:
 
 ## What is Deployment?
 
+What happens if you create Pods directly? If a Pod dies, no one brings it back, and deploying a new version means manually deleting and recreating Pods. Zero-downtime updates are even harder. Deployment solves this problem. You just declare the desired state, and Kubernetes automatically handles Pod creation, updates, and recovery.
+
 Deployment is a resource that manages Pod deployment and updates. Using Deployment instead of directly managing Pods offers several benefits.
 
 | Feature | Description |

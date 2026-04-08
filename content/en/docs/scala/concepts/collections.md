@@ -17,6 +17,10 @@ weight: 7
 
 Scala's collection library provides rich data structures optimized for functional programming. Immutable collections are the default, and a consistent API allows working with various data structures. Unlike Java collections, Scala collections have built-in support for higher-order functions like map, filter, and fold.
 
+#### Why Learn Scala Collections?
+
+To filter even numbers from a Java `ArrayList` and create a list of their squares, you need loops, conditionals, and a mutable list. Scala collections let you express this declaratively as `list.filter(_ % 2 == 0).map(x => x * x)`, revealing intent immediately while immutability eliminates concurrency bugs at the source.
+
 #### Collection Hierarchy
 
 Scala collections have a well-designed hierarchy. At the top is Iterable, with ordered Seq, duplicate-free Set, and key-value Map underneath.

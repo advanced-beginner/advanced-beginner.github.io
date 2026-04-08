@@ -17,6 +17,10 @@ weight: 10
 
 For Comprehension is syntactic sugar that elegantly expresses `flatMap`, `map`, and `withFilter`. It allows you to write nested flatMap and map calls in a readable, declarative form, and works with various monadic types such as Option, Either, Future, and List.
 
+#### Why Do We Need For Comprehension?
+
+When you chain multiple Options or Futures with `flatMap`, indentation deepens like callback hell. For comprehension flattens this nesting into a flat, declarative syntax, making it easy to understand the meaning of each step at a glance.
+
 #### Basic Syntax
 
 Understanding the basic structure of for comprehension and how it converts to method calls is crucial.

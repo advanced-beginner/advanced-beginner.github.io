@@ -18,6 +18,10 @@ weight: 16
 
 Scala supports asynchronous programming through `Future`. This document covers `Future`, `Promise`, and `ExecutionContext`. Through asynchronous programming, you can perform other tasks during I/O wait time, greatly improving application throughput.
 
+#### Why Do We Need Asynchronous Programming?
+
+When you execute external API calls, DB queries, and file I/O sequentially, the thread blocks waiting for each operation to complete. With Future, you can perform other work during I/O wait time, and run independent tasks in parallel to reduce overall response time.
+
 #### Future Basics
 
 `Future` represents a value that has not yet been computed or is currently being computed. When you create a Future, computation starts immediately in the background, and you can process results through callbacks or composition methods once ready.

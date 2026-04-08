@@ -18,6 +18,10 @@ lastmod: "2026-01-12"
 - **by/without**: Specify grouping criteria
 {{< /callout >}}
 
+## Why Are Aggregation Operators Needed?
+
+**Why can't you just look at individual time series?** Prometheus creates a separate time series for each instance. If you have 5 API servers, there are 5 `http_requests_total` time series. When an alert fires at 3 AM, checking 5 graphs one by one is not practical. Aggregation operators summarize multiple time series into a single meaningful metric, enabling you to instantly answer operational questions like "What's the overall error rate?" or "What are the 5 slowest endpoints?"
+
 ## Aggregation Operators List
 
 | Operator | Description | Returns |

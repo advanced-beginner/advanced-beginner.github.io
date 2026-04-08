@@ -17,6 +17,10 @@ weight: 6
 
 Pattern matching is one of Scala's most powerful features. It elegantly handles value structure analysis, data extraction, and conditional branching. Unlike Java's switch statement, Scala's match is an expression that returns a value and provides much richer functionality including type matching, destructuring, guard conditions, and more.
 
+#### Why Do We Need Pattern Matching?
+
+When you branch on complex data structures using `if-else` and `isInstanceOf`, code quickly becomes hard to read. Pattern matching combines type checking, inner field extraction, and conditional branching into a single expression, enabling you to write declarative code with clear intent.
+
 #### Basic match Expression
 
 A match expression compares a value against multiple patterns in order and returns the result of the first matching case. The wildcard pattern (`_`) matches any value, so it's used as a default.

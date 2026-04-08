@@ -79,6 +79,10 @@ flowchart TB
 
 #### Entity (엔티티)
 
+**왜 Entity가 필요한가?**
+
+데이터베이스 중심으로 개발하면 모든 것이 "데이터 행(row)"이 됩니다. 주문 테이블의 한 행을 수정하면 그것이 같은 주문인지, 새로운 주문인지 구분하기 어렵습니다. Entity 패턴은 "식별자로 구분되는 도메인 객체"라는 명확한 개념을 부여하여, 상태가 변하더라도 동일한 비즈니스 대상임을 코드에서 보장합니다.
+
 **정의**
 
 Entity는 식별자(Identity)로 구분되는 도메인 객체입니다. 주문번호나 회원ID처럼 고유한 식별자를 가지며, 속성이 변경되더라도 식별자가 같으면 동일한 객체로 취급됩니다. Entity의 핵심은 Identity, Mutability, Lifecycle 세 가지 특성입니다.
@@ -179,6 +183,10 @@ Order order = new Order(OrderId.generate(), customerId, orderLines);
 ```
 
 #### Value Object (값 객체)
+
+**왜 Value Object가 필요한가?**
+
+`int price = 10000;`이라는 코드만 보면 이것이 원화인지 달러인지, 세전인지 세후인지 알 수 없습니다. 원시 타입(Primitive)으로 도메인 값을 표현하면 유효성 검증이 분산되고, 잘못된 값이 시스템 깊숙이 전파됩니다. Value Object는 도메인 값에 의미와 제약을 부여하여, 유효하지 않은 상태가 애초에 생성되지 못하도록 막습니다.
 
 **정의**
 
@@ -331,6 +339,10 @@ public class Order {
 ```
 
 #### Repository (리포지토리)
+
+**왜 Repository가 필요한가?**
+
+도메인 로직 안에서 `jdbcTemplate.query("SELECT * FROM orders WHERE ...")`를 직접 호출하면, 비즈니스 규칙이 SQL과 뒤섞여 읽기 어려워지고, 데이터베이스를 교체하거나 테스트할 때 큰 비용이 듭니다. Repository는 영속성의 기술적 세부사항을 도메인 바깥으로 밀어내어, 도메인 코드가 순수한 비즈니스 로직에만 집중할 수 있게 합니다.
 
 **정의**
 

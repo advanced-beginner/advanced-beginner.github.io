@@ -33,6 +33,8 @@ flowchart TB
 
 ## Replica Shard
 
+**Why do we need Replica Shards?** What happens when a node containing a Primary Shard goes down due to hardware failure? That shard's data becomes inaccessible, and the cluster status turns Red. Replica Shards maintain copies of the Primary on different nodes, so when a failure occurs, the Replica is immediately promoted to Primary, continuing operations without service interruption.
+
 ### Role
 
 ```mermaid
@@ -100,6 +102,8 @@ PUT /products/_settings
 ---
 
 ## Snapshot & Restore
+
+**Why aren't Replicas enough?** Replicas handle node failures, but they are powerless against operator mistakes like accidentally deleting an index or overwriting data with incorrect values. Replicas are deleted/modified in the same way. Snapshots store the data state at a specific point in time in a separate storage, enabling data recovery even from such logical failures.
 
 ### What is a Snapshot?
 
@@ -206,6 +210,8 @@ PUT /_slm/policy/daily_backup
 ---
 
 ## Cross-Cluster Replication (CCR)
+
+**Why do we need Cross-Cluster Replication?** Replicas and Snapshots address failures within the same datacenter. But what happens when the datacenter itself is paralyzed by a disaster (fire, power outage, network disconnection)? CCR replicates data in real-time to a cluster in a different region, enabling service continuity even in datacenter-level disasters.
 
 ### Concept
 

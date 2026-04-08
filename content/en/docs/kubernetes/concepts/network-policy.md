@@ -37,7 +37,9 @@ In this way, NetworkPolicy is like firewall rules that control "which Pods can c
 
 ## What Is NetworkPolicy?
 
-NetworkPolicy is a resource that defines Pod-level firewall rules. By default, Kubernetes Pods allow all traffic, but with NetworkPolicy, you can allow only permitted traffic.
+By default, all Pods in a cluster can freely communicate with each other. While convenient, this also means a frontend Pod can directly access the database, or a single compromised Pod can explore the entire internal network. NetworkPolicy adds firewall rules to this default-allow state, permitting only the traffic that is actually needed.
+
+NetworkPolicy is a resource that defines Pod-level firewall rules. With NetworkPolicy, you can allow only permitted traffic.
 
 | Property | Description |
 |----------|-------------|

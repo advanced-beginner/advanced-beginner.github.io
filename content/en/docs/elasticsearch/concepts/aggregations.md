@@ -327,6 +327,8 @@ GET /products/_search
 
 ## Nested Aggregations
 
+**Why aren't single aggregations enough?** Just knowing "product count by category" is insufficient. You need multi-dimensional analysis like "average price by category" or "sales by brand within each category," but a single aggregation cannot express such hierarchical analysis. Nested aggregations place additional aggregations inside buckets to perform multi-level analysis in a single request.
+
 Perform additional aggregations within buckets.
 
 ### Bucket + Metric
@@ -385,6 +387,8 @@ GET /products/_search
 ---
 
 ## Pipeline Aggregations
+
+**Why do we need pipeline aggregations?** You can get "monthly sales totals" with Bucket + Metric aggregations. But questions like "how much did this month's sales increase compared to last month?" or "what is the monthly average sales?" require post-processing of aggregation results. Pipeline Aggregations take the output of other aggregations as input to perform this kind of secondary analysis.
 
 Use results from other aggregations as input.
 

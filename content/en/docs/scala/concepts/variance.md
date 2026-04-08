@@ -17,6 +17,10 @@ weight: 13
 
 Variance defines the subtyping relationship of type parameters. It determines how generic types behave in the inheritance hierarchy and is a core concept for writing type-safe generic code.
 
+#### Why Should You Understand Variance?
+
+When `Dog` is a subtype of `Animal`, can you pass `List[Dog]` where `List[Animal]` is expected? Without knowing variance rules, you can't understand why the compiler rejects your code, and you end up using `+A` or `-A` by guesswork. Variance defines the safe assignment rules for generic types.
+
 #### Basic Concepts
 
 When `Dog <: Animal` (Dog is a subtype of Animal), what is the relationship between `List[Dog]` and `List[Animal]`?

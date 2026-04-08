@@ -59,6 +59,8 @@ GET /products/_search
 
 ## Query Context vs Filter Context
 
+쇼핑몰에서 "맥북"을 검색하면서 카테고리를 "노트북"으로 필터링한다고 합시다. "맥북" 검색에는 관련성 점수가 필요하지만, 카테고리 "노트북"은 일치 여부만 확인하면 됩니다. 모든 조건에 점수를 계산하면 불필요한 연산이 발생하고 캐싱도 불가능합니다. Elasticsearch는 이 두 가지 상황을 Query Context와 Filter Context로 구분하여 성능과 정확성을 모두 확보합니다.
+
 Elasticsearch 쿼리는 두 가지 맥락에서 실행됩니다.
 
 | 구분 | Query Context | Filter Context |
@@ -385,6 +387,8 @@ GET /products/_search
 ---
 
 ## Bool 쿼리
+
+실제 검색 요구사항은 단순하지 않습니다. "이름에 '맥북'이 포함되고, 카테고리는 노트북이며, 가격은 200만원 이하, 품절은 제외" 같은 복합 조건이 필요합니다. 단일 쿼리로는 이런 조합을 표현할 수 없으며, Bool 쿼리는 must/should/must_not/filter를 조합하여 복잡한 조건을 하나의 쿼리로 표현할 수 있게 합니다.
 
 여러 쿼리를 조합합니다.
 

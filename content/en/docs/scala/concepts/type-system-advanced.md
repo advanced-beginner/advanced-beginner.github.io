@@ -18,6 +18,10 @@ weight: 14
 
 Scala 3 provides an even more powerful and expressive type system. This document covers Scala 3's new type features.
 
+#### Why Do We Need the Advanced Type System?
+
+Expressing "this function accepts only `Int` or `String`" with `Any` loses type safety, while using `Either` adds wrapper boilerplate. Union Types, Opaque Types, Match Types, and other advanced features remove these limitations, letting you precisely express domain rules at the type level.
+
 > **Prerequisites**: To understand this document, you should be familiar with:
 > - [Generics](generics/) - Type parameters, type bounds
 > - [Variance](variance/) - Variance concepts

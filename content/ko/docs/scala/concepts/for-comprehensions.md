@@ -34,6 +34,10 @@ For comprehension을 <strong>공장 조립 라인</strong>에 비유하면 이�
 
 For Comprehension은 `flatMap`, `map`, `withFilter`를 우아하게 표현하는 문법적 설탕(syntactic sugar)입니다. 중첩된 flatMap과 map 호출을 읽기 쉬운 선언적 형태로 작성할 수 있게 해주며, Option, Either, Future, List 등 다양한 모나딕 타입과 함께 사용됩니다.
 
+#### 왜 For Comprehension이 필요한가?
+
+여러 Option이나 Future를 연쇄적으로 `flatMap`하면 콜백 지옥처럼 들여쓰기가 깊어집니다. For comprehension은 이 중첩을 평평한 선언적 문법으로 펼쳐 주어, 각 단계의 의미를 한눈에 파악할 수 있게 합니다.
+
 #### 기본 문법
 
 for comprehension의 기본 구조와 이것이 어떻게 메서드 호출로 변환되는지 이해하는 것이 중요합니다.

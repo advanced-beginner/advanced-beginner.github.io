@@ -17,6 +17,10 @@ lastmod: "2026-01-12"
 - **Remove Unnecessary Info**: Exclude metrics that don't lead to action
 {{< /callout >}}
 
+## Why Does Dashboard Design Matter?
+
+**Why should you invest time in dashboard layout, not just metrics?** Even with perfect metrics and alerts, a poorly designed dashboard slows down incident response. If an engineer paged at 3 AM has to sift through 20 panels, it can take 10 minutes just to understand the problem. A well-designed dashboard answers "Is there a problem? Where? How severe?" within 5 seconds, dramatically reducing the time from incident detection to response.
+
 ## Dashboard Design Principles
 
 ### 1. 5-Second Rule

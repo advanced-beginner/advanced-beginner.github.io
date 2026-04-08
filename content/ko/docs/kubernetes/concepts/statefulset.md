@@ -37,6 +37,8 @@ StatefulSet을 **지정석이 있는 식당**에 비유하면 이해하기 쉽�
 
 ## StatefulSet이란?
 
+MySQL 클러스터를 Deployment로 배포하면 어떻게 될까요? Pod 이름이 매번 바뀌어 Primary-Replica 관계를 유지할 수 없고, Pod가 재시작되면 다른 스토리지에 연결되어 기존 데이터를 잃을 수 있습니다. StatefulSet은 각 Pod에 안정적인 이름과 전용 스토리지를 보장하여 이 문제를 해결합니다.
+
 StatefulSet은 상태가 있는(stateful) 애플리케이션을 관리하기 위한 워크로드 리소스입니다. Deployment와 달리 각 Pod가 고유한 정체성을 유지합니다.
 
 | 특성 | Deployment | StatefulSet |

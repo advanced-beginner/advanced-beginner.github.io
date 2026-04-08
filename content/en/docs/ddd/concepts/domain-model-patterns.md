@@ -412,6 +412,10 @@ public class RemoteAreaShippingPolicy implements ShippingPolicy {
 
 #### Module Organization
 
+**Why do we need module organization?**
+
+Once you have more than a few dozen classes, simply finding the right code in a single package becomes time-consuming. If you cannot immediately answer the question "Where is the order-related code?", cohesion in your codebase has eroded. The Module pattern groups related domain concepts within a single boundary, reducing code navigation cost and clarifying responsibility boundaries between teams.
+
 **Package Structure**
 
 As domain complexity grows, you manage it by separating into modules. In DDD, a Module is a unit that cohesively groups related domain concepts. The order module, customer module, and product module are each divided into domain, application, and infrastructure layers. The domain package contains Entity, Value Object, Repository Interface, and Domain Events. The application package contains Application Services and DTOs. The infrastructure package contains Repository implementations and Event Publishers. The shared module contains common Value Objects like Money and Address.
@@ -525,6 +529,10 @@ public class OrderApplicationService {
 
 #### Builder Pattern (Complex Creation)
 
+**Why do we need a Builder?**
+
+When an Aggregate constructor grows to five or more parameters, it becomes easy to mix up which value goes where, inviting bugs. The Builder pattern lets you set attributes step by step, making the creation intent explicit and enabling final validation at the `build()` call.
+
 **Aggregate Builder**
 
 Use the Builder pattern for complex Aggregate creation. While the [Tactical Design](tactical-design/) Factory is suited for "complex creation requiring external dependencies," Builder is suited for "assembling objects from multiple attributes." An inner Builder class provides a fluent interface, and the `build` method performs final validation.
@@ -605,6 +613,10 @@ Order order = Order.builder()
 ```
 
 #### Null Object Pattern
+
+**Why do we need a Null Object?**
+
+Every time you handle an "order without a discount policy," repeating `if (discountPolicy != null)` means a single missed check produces a NullPointerException. The Null Object provides a "do nothing" implementation, allowing safe calls without any null checks.
 
 **Definition**
 

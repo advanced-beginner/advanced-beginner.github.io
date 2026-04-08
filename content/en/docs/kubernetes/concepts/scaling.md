@@ -20,6 +20,8 @@ author:
 
 ## Scaling Methods Comparison
 
+What if traffic suddenly spikes 10x and an operator has to wake up at 3 AM to manually add Pods? Conversely, if traffic drops but Pods keep running, you're just wasting money. Auto-scaling eliminates this manual intervention by automatically adjusting Pod count or resources based on load.
+
 Kubernetes provides two scaling methods.
 
 | Method | Description | Suitable For |

@@ -18,6 +18,10 @@ lastmod: "2026-01-12"
 - **Batch jobs**: Errors, Traffic (completion rate) focused
 {{< /callout >}}
 
+## Why Apply Differently by Service Type?
+
+**Why can't you use the same signals for every service?** For a Web API, the most critical signals are Latency and Errors, but for a Kafka Consumer, Consumer Lag and Saturation are what matter most. If you apply the four golden signals identically across all services, you'll miss the metrics that actually matter and accumulate alert fatigue from meaningless notifications. Prioritizing signals based on each service's characteristics is how you achieve practical operational visibility.
+
 ## Key Signals by Service Type
 
 | Service Type | Key Signals | Reason |

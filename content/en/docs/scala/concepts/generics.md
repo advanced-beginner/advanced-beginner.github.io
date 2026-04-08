@@ -17,6 +17,10 @@ weight: 9
 
 Generics allow you to write type-safe and reusable code. Through type parameters, you can define classes and methods that work with various types, while ensuring type safety at compile time.
 
+#### Why Do We Need Generics?
+
+What if you had to create a separate `Box` for `Int` and another for `String`? Or what if you used `Any` and ran into `ClassCastException` at runtime? Generics let you write a single definition that works with any type while catching type errors at compile time.
+
 #### Type Parameters
 
 Type parameters can be used in classes, traits, and methods. They are declared within brackets `[]`, and by convention use single capital letters like A, B, T.

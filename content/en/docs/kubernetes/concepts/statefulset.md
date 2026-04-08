@@ -36,6 +36,8 @@ In this way, a StatefulSet is like "having reserved seats and personal lockers s
 
 ## What Is a StatefulSet?
 
+What happens if you deploy a MySQL cluster with a Deployment? Pod names change every time, making it impossible to maintain Primary-Replica relationships, and when a Pod restarts it may connect to different storage and lose existing data. StatefulSet solves this by guaranteeing each Pod a stable name and dedicated storage.
+
 A StatefulSet is a workload resource for managing stateful applications. Unlike Deployments, each Pod maintains a unique identity.
 
 | Property | Deployment | StatefulSet |

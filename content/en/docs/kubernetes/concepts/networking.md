@@ -20,6 +20,8 @@ author:
 
 ## Kubernetes Network Model
 
+In Docker, communicating between containers requires port mapping or link configuration, and it gets even more complex with multiple nodes. Kubernetes eliminates this complexity with a simple principle: "every Pod must be able to communicate directly with every other Pod."
+
 Kubernetes networking follows three basic principles.
 
 | Principle | Description |

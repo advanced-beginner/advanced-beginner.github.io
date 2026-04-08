@@ -51,6 +51,8 @@ flowchart TB
 
 ## Replica Shard
 
+Primary Shard가 있는 노드가 하드웨어 장애로 다운되면 어떻게 될까요? 해당 샤드의 데이터는 접근할 수 없게 되고, 클러스터 상태가 Red로 전환됩니다. Replica Shard는 Primary의 복제본을 다른 노드에 유지하여, 장애 발생 시 즉시 Replica가 Primary로 승격되어 서비스 중단 없이 운영을 지속합니다.
+
 ### 역할
 
 ```mermaid
@@ -118,6 +120,8 @@ PUT /products/_settings
 ---
 
 ## Snapshot & Restore
+
+Replica는 노드 장애에는 대응하지만, 운영자의 실수로 인덱스를 삭제하거나 잘못된 데이터로 덮어쓰는 경우에는 무력합니다. Replica도 동일하게 삭제/변경되기 때문입니다. Snapshot은 특정 시점의 데이터 상태를 별도 저장소에 보관하여 이런 논리적 장애에도 데이터를 복원할 수 있게 합니다.
 
 ### 스냅샷이란?
 
@@ -224,6 +228,8 @@ PUT /_slm/policy/daily_backup
 ---
 
 ## Cross-Cluster Replication (CCR)
+
+Replica와 Snapshot은 동일 데이터센터 내에서의 장애에 대응합니다. 하지만 데이터센터 자체가 재해(화재, 정전, 네트워크 단절)로 마비되면 어떻게 될까요? CCR은 다른 지역의 클러스터에 데이터를 실시간으로 복제하여, 데이터센터 수준의 재해에도 서비스를 지속할 수 있게 합니다.
 
 ### 개념
 

@@ -18,6 +18,10 @@ weight: 17
 
 This document covers core functional programming patterns used in Scala. Functional programming is a paradigm that minimizes side effects and uses pure functions and immutable data to write predictable and easily testable code.
 
+#### Why Do We Need Functional Patterns?
+
+If you've noticed that `map` and `flatMap` work the same way across Option, Either, Future, and other types, that's exactly what Functors and Monads are. By explicitly recognizing these common patterns, you can immediately infer how to use new types and write generic utilities that work regardless of the specific type.
+
 > **Prerequisites**: To understand this document, you should be familiar with:
 > - [Higher-Order Functions](higher-order-functions/) - map, flatMap, filter
 > - [For Comprehension](for-comprehensions/) - Syntactic sugar for monadic operations

@@ -43,6 +43,8 @@ flowchart TB
 
 ## Cluster
 
+**Why not just run a single Elasticsearch server?** What happens if you only operate one server? When the disk fills up, you can no longer store data, and if the server goes down, the entire service stops. A cluster groups multiple servers together to solve this single point of failure problem.
+
 A **cluster** is a group of Elasticsearch servers consisting of one or more nodes.
 
 ### Key Characteristics
@@ -83,6 +85,8 @@ GET /_cluster/health
 ---
 
 ## Node
+
+**Why separate node roles?** What problems arise if all nodes do the same work? When every server simultaneously handles cluster state management, data storage, and request routing, resource contention intensifies and the blast radius of failures widens. Separating roles lets each node focus on its specialty, improving both stability and performance.
 
 A **node** is a single Elasticsearch server that is part of a cluster.
 
@@ -130,6 +134,8 @@ GET /_nodes
 ---
 
 ## Index
+
+**Why not store everything in one place?** What happens if you mix product data and log data together? Every search must scan irrelevant data, and field type conflicts cause mapping errors. An index logically separates data of similar characteristics to prevent such confusion.
 
 An **index** is a collection of documents with similar characteristics. It's analogous to a table in RDB.
 
@@ -251,6 +257,8 @@ DELETE /products/_doc/1
 
 ## Shard
 
+**Why split an index into shards?** What happens if you store a 100GB index on a single node? Disk I/O becomes a bottleneck, search speed drops dramatically, and if that node goes down, all data is lost. Shards split an index into multiple pieces for distributed storage, achieving both parallel processing and fault recovery.
+
 A **shard** is a horizontal partition of an index. It enables distributed storage and parallel processing.
 
 ### Primary Shard vs Replica Shard
@@ -331,6 +339,8 @@ products 1     r      STARTED 120  55mb  node-1
 ---
 
 ## Inverted Index
+
+**Why do we need an inverted index?** How would you find documents containing "MacBook" among 1 million documents? Scanning every document one by one (Full Scan) slows linearly as data grows. An inverted index pre-builds a "term -> list of documents containing that term" mapping, enabling instant results at search time.
 
 The core principle behind Elasticsearch's fast search.
 

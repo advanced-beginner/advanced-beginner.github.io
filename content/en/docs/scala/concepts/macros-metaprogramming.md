@@ -18,6 +18,10 @@ weight: 15
 
 Metaprogramming enables code generation and validation at compile time. Scala 3 provides `inline` and a new macro system. By leveraging these features, you can reduce boilerplate code, perform optimizations at compile time, and enable type-safe code generation.
 
+#### Why Do We Need Metaprogramming?
+
+What if you had to hand-write type class instances for dozens of case classes? Or wanted to completely eliminate debug logging from release builds? Metaprogramming lets the compiler generate repetitive code on your behalf and perform compile-time validation, producing safe code with zero runtime overhead.
+
 > 📚 **Prerequisites**: This is an advanced topic. You should be familiar with:
 > - [Generics](generics/) - Type parameters
 > - [Type Classes](type-classes/) - Type-level abstraction

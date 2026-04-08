@@ -37,6 +37,8 @@ In this way, a Job is "a task that finishes once the assigned work is done," and
 
 ## What Is a Job?
 
+What happens if you run a one-time task like data migration or bulk email sending with a Deployment? Even after the task finishes, the Pod keeps restarting and wasting resources. A Job is designed with "task completion" as its goal -- once it succeeds, it terminates cleanly.
+
 A Job is a resource that creates one or more Pods and terminates once the specified task is complete. Unlike Deployments, the goal is for Pods to terminate successfully.
 
 | Property | Deployment | Job |

@@ -17,6 +17,10 @@ weight: 5
 
 Case classes are special classes for **immutable data modeling**. You can define data classes without boilerplate code. The compiler automatically generates useful methods like equals, hashCode, toString, and copy, so you can define data-centric classes very concisely. They show their true value especially when used with pattern matching.
 
+#### Why Do We Need Case Classes?
+
+What if you had to manually write a constructor, getters, equals, hashCode, and toString every time you created a class just to hold data in Java? Case classes let the compiler auto-generate all that boilerplate so you can focus solely on data modeling.
+
 #### Basic Syntax
 
 Case classes are defined with the `case class` keyword. You can create instances without the new keyword, because the compiler automatically generates an apply factory method.

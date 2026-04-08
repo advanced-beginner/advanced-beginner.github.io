@@ -65,6 +65,10 @@ flowchart TB
 
 #### Entity
 
+**Why do we need Entities?**
+
+When you develop in a database-centric way, everything becomes a "data row." If you modify a row in the orders table, it is hard to tell whether it is the same order or a new one. The Entity pattern assigns the clear concept of "a domain object distinguished by its identifier," guaranteeing in code that the same business subject remains the same even as its state changes.
+
 **Definition**
 
 Entity is a domain object distinguished by its identity. Like order numbers or member IDs, it has a unique identifier, and even if attributes change, objects with the same identifier are treated as the same object. The core of Entity consists of three characteristics: Identity, Mutability, and Lifecycle.
@@ -165,6 +169,10 @@ Order order = new Order(OrderId.generate(), customerId, orderLines);
 ```
 
 #### Value Object
+
+**Why do we need Value Objects?**
+
+Looking at `int price = 10000;` alone, you cannot tell whether it is in Korean won or US dollars, before tax or after tax. When you represent domain values with primitives, validation logic scatters across the codebase and invalid values propagate deep into the system. Value Object attaches meaning and constraints to domain values, preventing invalid states from being created in the first place.
 
 **Definition**
 
@@ -317,6 +325,10 @@ public class Order {
 ```
 
 #### Repository
+
+**Why do we need a Repository?**
+
+When you call `jdbcTemplate.query("SELECT * FROM orders WHERE ...")` directly inside domain logic, business rules get tangled with SQL, making the code hard to read and costly to change when switching databases or writing tests. Repository pushes the technical details of persistence outside the domain, letting domain code focus purely on business logic.
 
 **Definition**
 

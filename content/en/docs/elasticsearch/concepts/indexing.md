@@ -54,6 +54,8 @@ flowchart LR
 
 ## Single vs Bulk Indexing
 
+**Why use Bulk indexing?** Indexing 10,000 documents one by one results in 10,000 network round trips, taking about 30 seconds. Sending the same data in batches of 1,000 completes in about 3 seconds with just 10 requests. Bulk indexing dramatically reduces network overhead, improving large-scale data processing speed by more than 10x.
+
 ### Single Document Indexing
 
 ```json
@@ -215,6 +217,8 @@ PUT /products/_settings
 
 ## Index Template
 
+**Why use Index Templates?** If you need to create indices like `logs-2024-01-01`, `logs-2024-01-02` every day, do you have to manually define shard count, replicas, and mapping each time? If you accidentally miss a setting, each index ends up with a different structure, causing search and operational problems. Index Templates automatically apply settings when indices matching a pattern are created.
+
 Settings automatically applied when creating new indices:
 
 ```json
@@ -244,6 +248,8 @@ Now automatically applied when creating `products-2024`, `products-2025`, etc.
 ---
 
 ## Index Lifecycle Management (ILM)
+
+**Why automate index lifecycle management?** If log data accumulates tens of GBs daily and you have to manually delete old indices and move infrequently accessed indices to lower-cost nodes, what happens? Operator mistakes can fill up disks or accidentally delete important data. ILM automatically executes Hot → Warm → Cold → Delete policies, eliminating this operational burden and risk.
 
 Automatically manage the lifecycle of time-series data. Especially useful for managing log data.
 → [ILM Practical Example](../examples/log-analysis/#ilm-policy)
@@ -379,6 +385,8 @@ GET /_tasks?actions=*reindex&detailed
 ---
 
 ## Alias
+
+**Why use Aliases?** If your application code hardcodes the index name `products-v1` and you need to switch to `products-v2` after a mapping change, you'd have to modify and redeploy all code, causing downtime during the transition. An Alias gives an index a nickname so the application only references the alias, allowing the actual index to be swapped with zero downtime.
 
 Give indices alternative names for flexible management:
 
