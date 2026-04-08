@@ -116,7 +116,7 @@ enable.idempotence = true  // Kafka 3.0+ 기본값
 // 자동으로 설정됨
 acks = all
 retries = Integer.MAX_VALUE
-max.in.flight.requests.per.connection = 5
+max.in.flight.requests.per.connection = 5  // 기본값, 5 이하에서 순서 보장
 ```
 
 범위는 단일 Producer에서 단일 Partition의 중복 방지입니다.

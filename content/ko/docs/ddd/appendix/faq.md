@@ -25,7 +25,7 @@ DDD를 적용할 때 자주 받는 질문과 답변입니다.
 
 **A:** 아닙니다. DDD는 <strong>복잡한 도메인을 다루는 방법론</strong>입니다.
 
-```
+```text
 DDD가 아닌 것:
 - 아키텍처 패턴 (Clean, Hexagonal 등과 같이 쓰일 뿐)
 - 기술 스택
@@ -93,7 +93,7 @@ money1.equals(money2);  // true (값으로 비교)
 
 **A:** <strong>"진정한 불변식(invariant)"을 보호하는 최소 단위</strong>로 만듭니다.
 
-```
+```text
 잘못된 접근:
 "주문 → 고객 → 고객의 모든 주문 → ..." (무한 확장)
 
@@ -324,7 +324,7 @@ public class Order {
 
 **A:** 둘은 <strong>같은 원칙을 다른 관점으로 설명</strong>한 것입니다.
 
-```
+```text
 공통점:
 - 도메인이 중심
 - 의존성은 안쪽으로
@@ -343,7 +343,7 @@ public class Order {
 
 **A:** 아닙니다. <strong>복잡한 조회가 있을 때만</strong> 고려하세요.
 
-```
+```text
 CQRS가 필요한 경우:
 - 조회와 명령의 모델이 크게 다름
 - 복잡한 검색/리포팅 필요
@@ -369,7 +369,7 @@ CQRS가 과한 경우:
 
 **A:** <strong>누군가는 도메인을 가장 잘 아는 사람</strong>이 있습니다.
 
-```
+```text
 도메인 전문가 후보:
 - 기획자 / PM
 - 현업 담당자
@@ -389,7 +389,7 @@ CQRS가 과한 경우:
 
 **A:** <strong>작게 시작</strong>하세요.
 
-```
+```text
 1주차: 기본 개념 공유
 - Quick Start 문서로 개념 소개
 - Entity vs Value Object 이해
@@ -455,7 +455,7 @@ public class LegacyOrderAdapter implements OrderReader {
 
 **A:** <strong>유비쿼터스 언어</strong>입니다.
 
-```
+```text
 코드에서 비즈니스 용어를 사용하면:
 ✓ 개발자-비개발자 소통 원활
 ✓ 코드가 문서 역할
@@ -492,7 +492,7 @@ flowchart LR
 
 **A:** 초기에는 <strong>정상</strong>입니다. 장기적으로 <strong>유지보수 비용이 줄어듭니다.</strong>
 
-```
+```text
 단기 비용:
 - Value Object 클래스 증가
 - Repository Interface/구현 분리

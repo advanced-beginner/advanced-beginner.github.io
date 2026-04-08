@@ -196,7 +196,7 @@ Auto commit automatically commits the current position at set intervals (default
 spring:
   kafka:
     consumer:
-      enable-auto-commit: true   # Auto commit (Spring Kafka 3.x default: false)
+      enable-auto-commit: true   # Spring Kafka 3.x default: false (manages commits via AckMode.BATCH)
       auto-commit-interval: 5000 # Commit every 5 seconds (Kafka default)
 ```
 
@@ -421,7 +421,7 @@ kafka-consumer-groups.sh --describe --group order-service \
 
 - [Kafka Official Documentation: Consumer Groups](https://kafka.apache.org/documentation/#consumerconfigs)
 - [Confluent: Kafka Consumer Design](https://docs.confluent.io/platform/current/clients/consumer.html)
-- [KIP-429: Consumer Group Protocol](https://cwiki.apache.org/confluence/display/KAFKA/KIP-429)
+- [KIP-429: Incremental Rebalance Protocol](https://cwiki.apache.org/confluence/display/KAFKA/KIP-429)
 
 #### Next Steps
 

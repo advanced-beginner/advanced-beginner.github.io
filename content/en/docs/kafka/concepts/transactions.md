@@ -102,7 +102,7 @@ enable.idempotence = true  // Kafka 3.0+ default
 // Automatically set
 acks = all
 retries = Integer.MAX_VALUE
-max.in.flight.requests.per.connection = 5
+max.in.flight.requests.per.connection = 5  // default value, order guaranteed when ≤ 5
 ```
 
 Scope: Prevents duplicates for single Producer to single Partition.

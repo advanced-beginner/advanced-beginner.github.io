@@ -68,7 +68,7 @@ For details: [Strategic Design](../concepts/strategic-design/#context-mapping)
 - Defined and managed through a glossary (like this one)
 
 **Practice:**
-```
+```text
 Business term: "Confirm an order"
 Code: order.confirm()
 Test: @Test void order_confirmation_changes_status_to_CONFIRMED()
@@ -348,7 +348,7 @@ For details: [Application Layer Example](../examples/application-layer/)
 
 ### Layered Architecture
 
-```
+```text
 +-------------------------+
 |   Interfaces (API)      |
 +-------------------------+
@@ -376,7 +376,7 @@ For details: [Layered Architecture](../concepts/)
 - Port: Interface (defined by domain, e.g., [Repository](#repository))
 - Adapter: Implementation (provided by infrastructure)
 
-```
+```text
            +-------------+
            |   Domain    |
            |  (Hexagon)  |
@@ -425,7 +425,7 @@ For details: [CQRS](../concepts/)
 
 **Definition:** Storing [Domain Events](#domain-event) instead of state and deriving state from events
 
-```
+```text
 Event Stream:
 [OrderCreated] -> [OrderLineAdded] -> [OrderConfirmed]
                            |

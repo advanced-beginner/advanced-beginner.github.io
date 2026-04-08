@@ -12,7 +12,7 @@ author_url: "http://github.com/kimbenji"
 - linger.ms=5만으로도 처리량이 약 2.7배 증가 가능
 - compression.type: snappy(일반), lz4(고성능), zstd(고압축) 권장
 - Idempotent Producer(Kafka 3.0+ 기본)로 중복 방지 및 순서 보장
-- buffer.memory 부족 시 BufferExhaustedException 발생
+- buffer.memory 부족 시 TimeoutException 발생 (max.block.ms 초과 시)
 {{< /callout >}}
 
 **대상 독자**: Producer 성능을 최적화하려는 개발자, 대용량 메시지 처리가 필요한 운영자
@@ -332,9 +332,9 @@ linger.ms=5만으로도 처리량이 약 2.7배 증가합니다. 대부분의 �
 
 #### 프로덕션 트러블슈팅
 
-**BufferExhaustedException**
+**TimeoutException (buffer.memory 부족)**
 
-buffer.memory가 가득 차서 max.block.ms 시간 내에 공간 확보에 실패한 경우입니다. buffer.memory를 증가시키거나 max.block.ms를 늘리거나 linger.ms를 조정하여 배치 전송을 촉진합니다.
+buffer.memory가 가득 차서 max.block.ms 시간 내에 공간 확보에 실패한 경우입니다. Kafka 3.x에서는 `BufferExhaustedException` 대신 `TimeoutException`이 발생합니다. buffer.memory를 증가시키거나 max.block.ms를 늘리거나 linger.ms를 조정하여 배치 전송을 촉진합니다.
 
 ```yaml
 spring:
@@ -391,7 +391,7 @@ linger.ms를 먼저 튜닝하세요. 기본값 0에서 5~20ms로만 바꿔도 �
 
 **Q: buffer.memory가 부족하면 어떻게 되나요?**
 
-max.block.ms 시간 동안 대기 후 BufferExhaustedException이 발생합니다. buffer.memory를 늘리거나 Broker 응답 속도를 확인하세요.
+max.block.ms 시간 동안 대기 후 TimeoutException이 발생합니다. buffer.memory를 늘리거나 Broker 응답 속도를 확인하세요.
 
 **Q: Idempotent Producer를 쓰면 성능이 떨어지나요?**
 

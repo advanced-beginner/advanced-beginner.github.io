@@ -68,7 +68,7 @@ Domain-Driven Design의 핵심 용어를 정리합니다. 상세 설명은 [개�
 - 이 용어 사전처럼 정의하고 관리
 
 **실천 방법:**
-```
+```text
 비즈니스 용어: "주문을 확정한다"
 코드: order.confirm()
 테스트: @Test void 주문_확정_시_상태가_CONFIRMED로_변경된다()
@@ -426,7 +426,7 @@ public class OrderService {
 
 ### Layered Architecture (계층형 아키텍처)
 
-```
+```text
 ┌─────────────────────────┐
 │   Interfaces (API)      │
 ├─────────────────────────┤
@@ -454,7 +454,7 @@ public class OrderService {
 - Port: 인터페이스 (도메인이 정의, 예: [Repository](#repository-리포지토리))
 - Adapter: 구현체 (인프라가 제공)
 
-```
+```text
            ┌─────────────┐
            │   Domain    │
            │  (Hexagon)  │
@@ -557,7 +557,7 @@ public class OrderController {
 **정의:** 고수준 모듈이 저수준 모듈에 의존하지 않고, 둘 다 추상화에 의존하는 원칙
 
 **DDD에서의 적용:**
-```
+```text
 Domain (고수준) → OrderRepository (Interface)
                          ↑
 Infrastructure (저수준) → JpaOrderRepository (구현)
@@ -601,7 +601,7 @@ flowchart LR
 
 **정의:** 상태 대신 [Domain Event](#domain-event-도메인-이벤트)를 저장하고, 이벤트로부터 상태를 도출
 
-```
+```text
 이벤트 스트림:
 [OrderCreated] → [OrderLineAdded] → [OrderConfirmed]
                            ↓

@@ -190,7 +190,7 @@ PUT /products
 
 | 설정 | 기본값 | 설명 |
 |------|--------|------|
-| `number_of_shards` | 1 | Primary 샤드 수 (생성 후 변경 불가) |
+| `number_of_shards` | 1 | Primary 샤드 수 (생성 후 직접 변경 불가, split/shrink API로 재생성 가능) |
 | `number_of_replicas` | 1 | Replica 샤드 수 (동적 변경 가능) |
 | `refresh_interval` | 1s | 검색 가능해지는 주기 |
 
@@ -209,7 +209,7 @@ DELETE /products
 
 {{< callout type="info" title="핵심 포인트" >}}
 - 인덱스는 RDB의 테이블과 유사하며, Mapping(스키마)을 가집니다
-- `number_of_shards`는 생성 후 변경 불가하므로 신중히 결정하세요
+- `number_of_shards`는 생성 후 직접 변경 불가하므로 신중히 결정하세요 (split/shrink API로 재생성은 가능)
 - `number_of_replicas`는 동적으로 변경 가능합니다
 {{< /callout >}}
 
@@ -349,7 +349,7 @@ products 1     r      STARTED 120  55mb  node-1
 ```
 
 {{< callout type="info" title="핵심 포인트" >}}
-- Primary Shard는 생성 후 변경 불가, Replica는 동적 변경 가능
+- Primary Shard는 생성 후 직접 변경 불가 (split/shrink로 재생성 가능), Replica는 동적 변경 가능
 - 문서 ID의 해시값으로 담당 샤드가 결정됩니다: `shard = hash(id) % number_of_shards`
 - 샤드 하나당 20-40GB가 적정 크기입니다
 {{< /callout >}}

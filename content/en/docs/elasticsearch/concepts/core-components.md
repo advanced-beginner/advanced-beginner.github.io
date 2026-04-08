@@ -172,7 +172,7 @@ PUT /products
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `number_of_shards` | 1 | Number of Primary shards (cannot change after creation) |
+| `number_of_shards` | 1 | Number of Primary shards (cannot change after creation; can be recreated via split/shrink API) |
 | `number_of_replicas` | 1 | Number of Replica shards (dynamically changeable) |
 | `refresh_interval` | 1s | Interval until searchable |
 
@@ -191,7 +191,7 @@ DELETE /products
 
 {{< callout type="info" title="Key Points" >}}
 - An index is similar to an RDB table and has a Mapping (schema)
-- `number_of_shards` cannot be changed after creation, so choose carefully
+- `number_of_shards` cannot be changed after creation (can be recreated via split/shrink API), so choose carefully
 - `number_of_replicas` can be changed dynamically
 {{< /callout >}}
 
@@ -290,7 +290,7 @@ flowchart LR
 
 | Type | Role | Characteristic |
 |------|------|----------------|
-| **Primary** | Stores original data | Fixed count at index creation |
+| **Primary** | Stores original data | Fixed count at index creation (can be recreated via split/shrink API) |
 | **Replica** | Copy of Primary | Improves read performance, failover backup |
 
 ### How Shards Work
@@ -331,7 +331,7 @@ products 1     r      STARTED 120  55mb  node-1
 ```
 
 {{< callout type="info" title="Key Points" >}}
-- Primary Shards cannot be changed after creation, Replicas can be changed dynamically
+- Primary Shards cannot be changed after creation (can be recreated via split/shrink API), Replicas can be changed dynamically
 - The responsible shard is determined by the hash value of the document ID: `shard = hash(id) % number_of_shards`
 - 20-40GB per shard is the optimal size
 {{< /callout >}}

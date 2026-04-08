@@ -325,7 +325,7 @@ Scala 생태계에서는 `Future`보다 더 강력한 비동기 라이브러리�
 
 **Cats Effect**
 
-Cats Effect는 순수 함수형 비동기 프로그래밍을 지원합니다 (의존성: `"org.typelevel" %% "cats-effect" % "3.5.2"`). IO 타입은 지연 평가되어 참조 투명성을 보장합니다.
+Cats Effect는 순수 함수형 비동기 프로그래밍을 지원합니다 (의존성: `"org.typelevel" %% "cats-effect" % "3.5.7"`). IO 타입은 지연 평가되어 참조 투명성을 보장합니다.
 
 ```scala
 import cats.effect.{IO, IOApp}
@@ -345,7 +345,7 @@ object MyApp extends IOApp.Simple:
 
 **ZIO**
 
-ZIO는 효과 시스템과 의존성 주입을 통합합니다 (의존성: `"dev.zio" %% "zio" % "2.0.19"`). 에러 타입이 명시되어 타입 안전한 에러 처리가 가능합니다.
+ZIO는 효과 시스템과 의존성 주입을 통합합니다 (의존성: `"dev.zio" %% "zio" % "2.1.14"`). 에러 타입이 명시되어 타입 안전한 에러 처리가 가능합니다.
 
 ```scala
 import zio.*

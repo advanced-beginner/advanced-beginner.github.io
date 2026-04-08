@@ -135,7 +135,7 @@ The **Cluster Manager** manages resources across the entire cluster. It allocate
 | **Standalone** | Built into Spark, simple setup | Small clusters, learning |
 | **YARN** | Hadoop ecosystem integration | When using existing Hadoop cluster |
 | **Kubernetes** | Container-based, flexible scaling | Cloud-native environments |
-| **Mesos** | General-purpose resource management | Mixed workloads |
+| **Mesos** | General-purpose resource management (deprecated in Spark 3.2, removed in 3.4) | Legacy environments |
 | **Local** | Single JVM | Development/testing |
 
 **Local Mode vs Cluster Mode:**

@@ -25,7 +25,7 @@ Common questions and answers when applying DDD.
 
 **A:** No. DDD is a **methodology for handling complex domains**.
 
-```
+```text
 What DDD is NOT:
 - An architecture pattern (just used alongside Clean, Hexagonal, etc.)
 - A technology stack
@@ -93,7 +93,7 @@ money1.equals(money2);  // true (compared by value)
 
 **A:** Make it the **minimum unit that protects true invariants**.
 
-```
+```text
 Wrong approach:
 "Order -> Customer -> All customer's orders -> ..." (infinite expansion)
 
@@ -324,7 +324,7 @@ public class Order {
 
 **A:** Both **explain the same principles from different perspectives**.
 
-```
+```text
 Commonalities:
 - Domain at the center
 - Dependencies flow inward
@@ -343,7 +343,7 @@ Differences:
 
 **A:** No. **Only consider it when there are complex queries**.
 
-```
+```text
 When CQRS is needed:
 - Query and command models are significantly different
 - Complex search/reporting needed
@@ -369,7 +369,7 @@ When CQRS is overkill:
 
 **A:** **Someone is always the person who knows the domain best**.
 
-```
+```text
 Domain expert candidates:
 - Planner / PM
 - Business operations staff
@@ -389,7 +389,7 @@ Domain expert candidates:
 
 **A:** **Start small**.
 
-```
+```text
 Week 1: Share basic concepts
 - Introduce concepts with Quick Start docs
 - Understand Entity vs Value Object
@@ -455,7 +455,7 @@ public class LegacyOrderAdapter implements OrderReader {
 
 **A:** **Ubiquitous Language**.
 
-```
+```text
 When using business terms in code:
 - Smooth communication between developers and non-developers
 - Code serves as documentation
@@ -492,7 +492,7 @@ flowchart LR
 
 **A:** This is **normal** initially. **Long-term maintenance costs decrease**.
 
-```
+```text
 Short-term costs:
 - Increased Value Object classes
 - Repository Interface/implementation separation

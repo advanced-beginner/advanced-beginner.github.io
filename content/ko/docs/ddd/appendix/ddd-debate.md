@@ -133,7 +133,7 @@ public void processOrder(Order order) {
 
 반면 잘 설계된 DDD는 300개 파일이 아닙니다. <strong>응집된 몇 개의 Aggregate</strong>로 나뉩니다:
 
-```
+```text
 Order (Aggregate Root)
 ├── OrderItem (Entity)
 ├── Discount (Value Object)

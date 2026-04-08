@@ -307,7 +307,7 @@ The Scala ecosystem has more powerful async libraries than `Future`. They provid
 
 **Cats Effect**
 
-Cats Effect supports pure functional asynchronous programming (dependency: `"org.typelevel" %% "cats-effect" % "3.5.2"`). IO type is lazily evaluated, ensuring referential transparency.
+Cats Effect supports pure functional asynchronous programming (dependency: `"org.typelevel" %% "cats-effect" % "3.5.7"`). IO type is lazily evaluated, ensuring referential transparency.
 
 ```scala
 import cats.effect.{IO, IOApp}
@@ -327,7 +327,7 @@ object MyApp extends IOApp.Simple:
 
 **ZIO**
 
-ZIO integrates effect systems with dependency injection (dependency: `"dev.zio" %% "zio" % "2.0.19"`). Error types are explicit, enabling type-safe error handling.
+ZIO integrates effect systems with dependency injection (dependency: `"dev.zio" %% "zio" % "2.1.14"`). Error types are explicit, enabling type-safe error handling.
 
 ```scala
 import zio.*

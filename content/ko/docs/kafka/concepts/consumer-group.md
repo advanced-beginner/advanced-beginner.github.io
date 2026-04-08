@@ -211,7 +211,7 @@ Offset 커밋은 Consumer가 메시지를 성공적으로 처리했음을 Kafka�
 spring:
   kafka:
     consumer:
-      enable-auto-commit: true   # 자동 커밋 (Spring Kafka 3.x 기본값: false)
+      enable-auto-commit: true   # Spring Kafka 3.x 기본값: false (AckMode.BATCH로 자체 커밋 관리)
       auto-commit-interval: 5000 # 5초마다 커밋 (Kafka 기본값)
 ```
 
@@ -436,7 +436,7 @@ kafka-consumer-groups.sh --describe --group order-service \
 
 - [Kafka 공식 문서: Consumer Groups](https://kafka.apache.org/documentation/#consumerconfigs)
 - [Confluent: Kafka Consumer Design](https://docs.confluent.io/platform/current/clients/consumer.html)
-- [KIP-429: Consumer Group Protocol](https://cwiki.apache.org/confluence/display/KAFKA/KIP-429)
+- [KIP-429: Incremental Rebalance Protocol](https://cwiki.apache.org/confluence/display/KAFKA/KIP-429)
 
 #### 다음 단계
 

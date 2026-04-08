@@ -12,7 +12,7 @@ author_url: "http://github.com/kimbenji"
 - Just linger.ms=5 can increase throughput by ~2.7x
 - compression.type: recommend snappy (general), lz4 (high performance), zstd (high compression)
 - Idempotent Producer (Kafka 3.0+ default) prevents duplicates and guarantees order
-- BufferExhaustedException occurs when buffer.memory is insufficient
+- TimeoutException (when max.block.ms exceeded) occurs when buffer.memory is insufficient
 {{< /callout >}}
 
 **Target Audience**: Developers optimizing Producer performance, operators needing high-volume message processing
@@ -314,9 +314,9 @@ Comparing compression methods, snappy and lz4 are generally recommended. gzip ha
 
 #### Production Troubleshooting
 
-**BufferExhaustedException**
+**TimeoutException (buffer.memory exhaustion)**
 
-Occurs when buffer.memory is full and fails to free space within max.block.ms time. Increase buffer.memory, extend max.block.ms, or adjust linger.ms to facilitate batch sending.
+In Kafka 3.x, `TimeoutException` is thrown instead of the legacy `BufferExhaustedException`. Occurs when buffer.memory is full and fails to free space within max.block.ms time. Increase buffer.memory, extend max.block.ms, or adjust linger.ms to facilitate batch sending.
 
 ```yaml
 spring:
@@ -373,7 +373,7 @@ Yes. gzip has high CPU usage. If CPU bottleneck is a concern, use lz4 or snappy.
 
 **Q: What happens when buffer.memory is insufficient?**
 
-After waiting max.block.ms, BufferExhaustedException occurs. Increase buffer.memory or check Broker response speed.
+After waiting max.block.ms, TimeoutException occurs. Increase buffer.memory or check Broker response speed.
 
 **Q: Does Idempotent Producer reduce performance?**
 

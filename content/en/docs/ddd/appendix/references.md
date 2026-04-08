@@ -241,7 +241,7 @@ flowchart TB
 
 ### 3. Code Review Perspective
 
-```
+```text
 Checklist:
 - [ ] Are domain terms reflected in code?
 - [ ] Is business logic in domain objects?

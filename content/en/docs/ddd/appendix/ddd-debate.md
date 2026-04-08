@@ -133,7 +133,7 @@ public void processOrder(Order order) {
 
 In contrast, well-designed DDD is not 300 files. It is <strong>a few cohesive Aggregates</strong>:
 
-```
+```text
 Order (Aggregate Root)
 ├── OrderItem (Entity)
 ├── Discount (Value Object)

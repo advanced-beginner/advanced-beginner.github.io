@@ -195,7 +195,7 @@ Driver는 Spring 애플리케이션의 메인 컨텍스트와 유사합니다. �
 | **Standalone** | Spark에 내장, 설정 간단 | 소규모 클러스터, 학습용 |
 | **YARN** | Hadoop 생태계 통합 | 기존 Hadoop 클러스터 활용 시 |
 | **Kubernetes** | 컨테이너 기반, 유연한 확장 | 클라우드 네이티브 환경 |
-| **Mesos** | 범용 리소스 관리 | 다양한 워크로드 혼합 시 |
+| **Mesos** | 범용 리소스 관리 (Spark 3.2 deprecated, 3.4에서 제거) | 레거시 환경 |
 | **Local** | 단일 JVM | 개발/테스트 환경 |
 
 각 Cluster Manager는 사용 환경과 요구사항에 따라 선택합니다. 개발 환경에서는 Local이나 Standalone을, 프로덕션 환경에서는 YARN이나 Kubernetes를 주로 사용합니다.
