@@ -101,6 +101,8 @@ flowchart TB
 | [RBAC](rbac/) | 역할 기반 접근 제어로 API 권한 관리 | "누가 어떤 리소스에 접근할 수 있나?" |
 | [Job과 CronJob](jobs/) | 일회성/반복 배치 작업 실행 관리 | "배치 작업을 어떻게 실행하나?" |
 | [NetworkPolicy](network-policy/) | Pod 간 네트워크 트래픽 제어 | "Pod 간 통신을 어떻게 제한하나?" |
+| [ArgoCD](argocd/) | GitOps 기반 지속적 배포 도구 | "Git으로 어떻게 배포를 자동화하나?" |
+| [ArgoCD 심화](argocd-advanced/) | App of Apps, ApplicationSet, Sync Waves | "대규모 배포를 어떻게 관리하나?" |
 
 #### 학습 순서
 
@@ -135,3 +137,10 @@ flowchart TB
 13. [RBAC](rbac/) - Role-Based Access Control을 통해 사용자와 서비스의 API 접근 권한을 관리하는 방법을 학습합니다.
 14. [Job과 CronJob](jobs/) - 일회성 배치 작업과 스케줄 기반 반복 작업을 실행하고 관리하는 방법을 학습합니다.
 15. [NetworkPolicy](network-policy/) - Pod 간 네트워크 트래픽을 제어하여 클러스터 보안을 강화하는 방법을 학습합니다.
+
+**GitOps & 배포 자동화**
+
+GitOps 패턴과 ArgoCD를 활용한 지속적 배포 자동화를 다룹니다.
+
+16. [ArgoCD](argocd/) - GitOps 원칙과 ArgoCD의 아키텍처, 핵심 리소스(Application, Project, Sync)를 학습합니다.
+17. [ArgoCD 심화](argocd-advanced/) - App of Apps, ApplicationSet, Sync Waves 등 대규모 배포 관리 패턴을 학습합니다.

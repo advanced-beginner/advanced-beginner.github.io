@@ -49,6 +49,7 @@ flowchart TD
 | [리소스 최적화](resource-optimization/) | 적절한 CPU/메모리 설정을 찾고 싶을 때 | 45분 |
 | [네트워크 트러블슈팅](network-troubleshooting/) | Service나 Ingress가 연결되지 않을 때 | 30분 |
 | [로그 수집 및 분석](logging-guide/) | 효과적으로 로그를 수집하고 분석할 때 | 25분 |
+| [ArgoCD 설치 및 설정](argocd-setup/) | ArgoCD를 설치하고 프로덕션 설정을 구성할 때 | 40분 |
 
 ## How-To Guide 사용법
 

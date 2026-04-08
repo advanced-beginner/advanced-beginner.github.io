@@ -77,6 +77,8 @@ flowchart TB
 | [RBAC](rbac/) | Role-based access control for API permission management | "Who can access which resources?" |
 | [Jobs and CronJobs](jobs/) | One-time and recurring batch job execution | "How to run batch jobs?" |
 | [NetworkPolicy](network-policy/) | Control network traffic between Pods | "How to restrict Pod-to-Pod communication?" |
+| [ArgoCD](argocd/) | GitOps-based continuous deployment tool for Kubernetes | "How to automate deployments with GitOps?" |
+| [ArgoCD Advanced](argocd-advanced/) | App of Apps, ApplicationSet, Sync Waves and other advanced patterns | "How to manage large-scale multi-cluster deployments?" |
 
 #### Learning Path
 

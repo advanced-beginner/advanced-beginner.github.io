@@ -65,6 +65,7 @@ flowchart TD
 | [StatefulSet Lab](statefulset/) | ⭐⭐⭐ Intermediate | 60 min | MySQL StatefulSet, PVC, Headless Service |
 | [RBAC Configuration Lab](rbac/) | ⭐⭐⭐ Intermediate | 45 min | Role, ServiceAccount, per-namespace access control |
 | [CronJob Lab](cronjob/) | ⭐⭐⭐ Intermediate | 45 min | Periodic backup, concurrency policies, alert setup |
+| [ArgoCD GitOps Deployment](argocd-deploy/) | ⭐⭐⭐ Intermediate | 60 min | GitOps workflow, Kustomize overlays, ArgoCD Application |
 
 #### Prerequisites
 

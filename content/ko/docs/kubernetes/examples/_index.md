@@ -58,6 +58,7 @@ flowchart TD
 | [StatefulSet 실습](statefulset/) | ⭐⭐⭐ 중급 | 60분 | MySQL StatefulSet, PVC, Headless Service |
 | [RBAC 설정 실습](rbac/) | ⭐⭐⭐ 중급 | 45분 | Role, ServiceAccount, 네임스페이스별 접근 제어 |
 | [CronJob 실습](cronjob/) | ⭐⭐⭐ 중급 | 45분 | 주기적 백업, 동시 실행 정책, 알림 설정 |
+| [ArgoCD GitOps 배포](argocd-deploy/) | ⭐⭐⭐ 중급 | 60분 | GitOps 배포, Kustomize 멀티 환경 |
 
 #### 예제 실행 전 준비사항
 
