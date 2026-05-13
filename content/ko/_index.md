@@ -29,6 +29,7 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 | [Kubernetes](docs/kubernetes/) | 18 | 4 | 컨테이너 오케스트레이션 |
 | [Elasticsearch](docs/elasticsearch/) | 20 | 2 | 분산 검색 엔진 |
 | [Observability](docs/observability/) | 28 | 3 | 시스템 관측성 (Metrics, Logs, Traces) |
+| [Kotlin](docs/kotlin/) | 27 | 5 | 안전하고 간결한 JVM 언어 (코루틴/Spring Boot/Multiplatform) |
 
 ---
 
@@ -102,6 +103,16 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 - SRE 황금 신호(Latency, Traffic, Errors, Saturation)
 - 분산 추적과 OpenTelemetry 통합
 
+### [Kotlin](docs/kotlin/)
+
+JetBrains가 만든 다중 패러다임 JVM 언어. 기본 문법부터 Null Safety, 코루틴, Spring Boot/Kafka 연동, Kotlin Multiplatform까지.
+
+**배우는 것:**
+- Kotlin 기본 문법과 Null Safety로 안전한 코드 작성
+- 확장 함수·스코프 함수로 표현력 있는 코드 만들기
+- 코루틴과 Flow를 활용한 구조화된 비동기 프로그래밍
+- Spring Boot/Kafka 환경에서의 Kotlin 활용 실무 패턴
+
 ## 이 가이드의 특징
 
 **First Principles** — 표면적인 사용법이 아닌, 그 기술이 해결하려는 근본 문제부터 시작합니다. "어떻게"보다 "왜"를 먼저 이해하면 응용력이 생깁니다.
@@ -126,3 +137,5 @@ description: 기초를 넘어 실무로 - 핵심 원리부터 이해하는 기�
 - **한글 검색을 최적화하고 싶다면** → [한글 검색 최적화](docs/elasticsearch/concepts/korean-search/)
 - **시스템 모니터링을 시작하고 싶다면** → [Observability Quick Start](docs/observability/quick-start/)
 - **PromQL을 깊이 배우고 싶다면** → [PromQL 심화](docs/observability/concepts/promql/)
+- **Kotlin을 처음 배운다면** → [Kotlin Quick Start](docs/kotlin/quick-start/)
+- **Kotlin 코루틴을 깊이 이해하고 싶다면** → [코루틴 기초](docs/kotlin/concepts/coroutines-basics/)
