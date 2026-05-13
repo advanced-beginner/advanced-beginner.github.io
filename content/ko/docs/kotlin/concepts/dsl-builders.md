@@ -34,7 +34,7 @@ lastmod: "2026-05-13"
 
 #### 왜 DSL이 필요한가?
 
-프로그래밍 언어로 **특정 도메인의 문법**을 표현할 때 DSL(Domain-Specific Language)이 유용합니다. XML이나 JSON으로 설정을 표현하는 대신, Kotlin 코드로 타입 안전하고 IDE 자동완성이 지원되는 설정을 작성할 수 있습니다.
+프로그래밍 언어로 **특정 도메인의 문법** 을 표현할 때 DSL(Domain-Specific Language)이 유용합니다. XML이나 JSON으로 설정을 표현하는 대신, Kotlin 코드로 타입 안전하고 IDE 자동완성이 지원되는 설정을 작성할 수 있습니다.
 
 ```kotlin
 // XML 방식 (타입 안전 없음, 오타 → 런타임 오류)
@@ -238,7 +238,7 @@ class ServerConfigBuilder { /* ... */ }
 class DatabaseBuilder { /* ... */ }
 ```
 
-이제 내부 람다에서 외부 스코프의 메서드를 호출하면 **컴파일 오류**가 발생합니다:
+이제 내부 람다에서 외부 스코프의 메서드를 호출하면 **컴파일 오류** 가 발생합니다:
 
 ```kotlin
 application {

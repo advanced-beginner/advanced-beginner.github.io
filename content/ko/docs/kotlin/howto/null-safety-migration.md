@@ -52,7 +52,7 @@ dependencies {
 
 ## 1단계: 플랫폼 타입 이해하기
 
-Kotlin은 Java 코드의 반환 타입을 **플랫폼 타입**으로 처리합니다. 플랫폼 타입은 `String!`처럼 표기되며, nullable인지 아닌지 Kotlin이 알 수 없습니다.
+Kotlin은 Java 코드의 반환 타입을 **플랫폼 타입** 으로 처리합니다. 플랫폼 타입은 `String!`처럼 표기되며, nullable인지 아닌지 Kotlin이 알 수 없습니다.
 
 ```kotlin
 // Java 코드 (UserService.java)

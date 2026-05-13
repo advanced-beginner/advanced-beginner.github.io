@@ -207,8 +207,8 @@ println(product)   // 120
 // 유용한 집계 함수들
 println(numbers.sum())          // 15
 println(numbers.average())      // 3.0
-println(numbers.min())          // 1
-println(numbers.max())          // 5
+println(numbers.minOrNull())    // 1  (Kotlin 1.7+: min/max는 minOrNull/maxOrNull로 대체)
+println(numbers.maxOrNull())    // 5
 println(numbers.count { it > 3 })   // 2
 ```
 

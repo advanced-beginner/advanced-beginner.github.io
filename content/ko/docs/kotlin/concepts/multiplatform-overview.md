@@ -24,11 +24,11 @@ lastmod: "2026-05-13"
 > **이 문서를 읽으면**: KMP 프로젝트 구조를 이해하고, expect/actual로 플랫폼별 코드를 분리하며, 어떤 상황에서 KMP가 적합한지 판단할 수 있습니다.
 
 {{< callout type="tip" title="TL;DR" >}}
-- KMP는 **비즈니스 로직**을 Kotlin으로 한 번 작성하고, UI는 각 플랫폼 네이티브로 유지합니다.
+- KMP는 **비즈니스 로직** 을 Kotlin으로 한 번 작성하고, UI는 각 플랫폼 네이티브로 유지합니다.
 - `expect`로 인터페이스를 선언하고, 각 플랫폼의 `actual`로 구현합니다.
 - `commonMain` → `jvmMain`/`iosMain`/`jsMain` 소스 셋 계층 구조를 사용합니다.
 - kotlinx-coroutines, kotlinx-serialization, kotlinx-datetime은 멀티플랫폼을 지원합니다.
-- KMP는 UI 공유보다 **비즈니스 로직 공유**에 적합합니다.
+- KMP는 UI 공유보다 **비즈니스 로직 공유** 에 적합합니다.
 {{< /callout >}}
 
 ---
@@ -41,7 +41,7 @@ lastmod: "2026-05-13"
 2. **버그 불일치**: 플랫폼마다 구현 세부사항이 달라 동작이 달라질 수 있습니다.
 3. **테스트 중복**: 같은 테스트를 각 언어로 작성해야 합니다.
 
-KMP는 **공통 비즈니스 로직을 Kotlin으로 한 번 작성**하고, UI와 플랫폼 API만 각 플랫폼 언어로 구현합니다. React Native나 Flutter처럼 UI까지 통합하는 방식이 아니라, 네이티브 UI를 유지하면서 로직만 공유합니다.
+KMP는 **공통 비즈니스 로직을 Kotlin으로 한 번 작성** 하고, UI와 플랫폼 API만 각 플랫폼 언어로 구현합니다. React Native나 Flutter처럼 UI까지 통합하는 방식이 아니라, 네이티브 UI를 유지하면서 로직만 공유합니다.
 
 ---
 
@@ -319,7 +319,7 @@ flowchart LR
 
 #### Compose Multiplatform
 
-UI도 공유하려면 **Compose Multiplatform**을 별도로 사용합니다. KMP의 상위 개념이 아니라 별개의 레이어입니다.
+UI도 공유하려면 **Compose Multiplatform** 을 별도로 사용합니다. KMP의 상위 개념이 아니라 별개의 레이어입니다.
 
 | 레이어 | 기술 | 지원 플랫폼 |
 |--------|------|-----------|
@@ -332,7 +332,7 @@ UI도 공유하려면 **Compose Multiplatform**을 별도로 사용합니다. KM
 #### 핵심 포인트
 
 {{< callout type="info" title="핵심 정리" >}}
-- KMP는 **UI는 네이티브, 비즈니스 로직은 Kotlin 공통**으로 설계합니다.
+- KMP는 **UI는 네이티브, 비즈니스 로직은 Kotlin 공통** 으로 설계합니다.
 - `expect`는 공통 코드의 "플랫폼 계약", `actual`은 플랫폼별 구현입니다.
 - 소스 셋은 `commonMain` → `jvmMain`/`iosMain`/`jsMain` 계층 구조입니다.
 - kotlinx-coroutines, serialization, datetime, Ktor Client는 모든 플랫폼을 지원합니다.

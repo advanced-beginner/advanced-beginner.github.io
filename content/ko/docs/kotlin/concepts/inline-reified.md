@@ -7,7 +7,7 @@ lastmod: "2026-05-13"
 
 ## 전체 비유: 요리법 복사 vs 식당에 주문
 
-`inline` 함수를 **요리법을 직접 복사하는 것**에 비유하면 이해하기 쉽습니다.
+`inline` 함수를 **요리법을 직접 복사하는 것** 에 비유하면 이해하기 쉽습니다.
 
 | 비유 | Kotlin 개념 | 효과 |
 |------|-----------|------|
@@ -73,13 +73,11 @@ println("소요 시간: ${System.currentTimeMillis() - start}ms")
 graph LR
     A["measureTime { 코드 }"] -->|"inline 없이"| B["람다 객체 생성<br>함수 호출<br>가상 디스패치"]
     A -->|"inline 적용"| C["코드 직접 삽입<br>객체 생성 없음<br>분기 없음"]
-    style B fill:#f0f0f0
-    style C fill:#f0f0f0
 ```
 
 #### inline 함수에서 non-local return
 
-`inline` 함수 안의 람다에서는 **바깥 함수까지 return**하는 non-local return이 가능합니다.
+`inline` 함수 안의 람다에서는 **바깥 함수까지 return** 하는 non-local return이 가능합니다.
 
 ```kotlin
 inline fun findFirst(list: List<Int>, predicate: (Int) -> Boolean): Int? {

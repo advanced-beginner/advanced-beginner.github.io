@@ -143,11 +143,12 @@ class UserService {
         event.begin()
         event.userId = id
 
+        val start = System.currentTimeMillis()
         try {
-            val user = findUser(id)
-            return user
+            return findUser(id)
         } finally {
-            event.durationMs = event.elapsedTime  // 자동 기록
+            event.end()
+            event.durationMs = System.currentTimeMillis() - start
             event.commit()
         }
     }

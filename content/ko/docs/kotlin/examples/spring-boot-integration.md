@@ -30,7 +30,7 @@ Kotlin과 Spring Boot 3.2.x를 연동하여 간단한 사용자 관리 REST API�
 | Java | 17 |
 | Dependencies | Spring Web, Spring Data JPA, H2 Database, Spring Boot DevTools |
 
-**ZIP을 다운로드하여 압축 해제**하거나, IntelliJ IDEA에서 **File** → **New** → **Project** → **Spring Initializr**로 직접 생성합니다.
+**ZIP을 다운로드하여 압축 해제** 하거나, IntelliJ IDEA에서 **File** → **New** → **Project** → **Spring Initializr** 로 직접 생성합니다.
 
 #### Step 2 — build.gradle.kts 설정
 

@@ -11,7 +11,7 @@ Kotlin 핵심 용어를 알파벳/한글 순으로 정리합니다. 각 용어�
 - **Coroutine (코루틴)**: 일시 중단 가능한 경량 비동기 실행 단위
 - **Data Class**: equals/hashCode/copy를 자동 생성하는 불변 데이터 클래스
 - **Null Safety**: nullable(`T?`)과 non-null(`T`)을 타입으로 구분하는 안전 장치
-- **Sealed Class**: 하위 타입을 같은 파일에 제한해 `when` 완전성 검사를 지원
+- **Sealed Class**: 하위 타입을 같은 모듈·패키지로 제한해 `when` 완전성 검사를 지원
 - **확장 함수**: 기존 타입을 수정하지 않고 새 함수를 추가하는 기법
 {{< /callout >}}
 
@@ -183,7 +183,7 @@ Kotlin 핵심 용어를 알파벳/한글 순으로 정리합니다. 각 용어�
 #### S
 
 **Sealed Class / Sealed Interface**
-: 하위 타입을 같은 파일 내로 제한하는 클래스/인터페이스. `when` 표현식과 함께 완전성 검사 지원. → [Data/Sealed Class]({{< relref "/docs/kotlin/concepts/data-sealed-classes/" >}})
+: 하위 타입을 같은 모듈·같은 패키지 안으로 제한하는 클래스/인터페이스 (Kotlin 1.5+). `when` 표현식과 함께 완전성 검사 지원. → [Data/Sealed Class]({{< relref "/docs/kotlin/concepts/data-sealed-classes/" >}})
 
 **Sequence**
 : 지연(lazy) 평가 컬렉션. 중간 컬렉션 생성 없이 요소를 하나씩 파이프라인으로 처리. 대용량 데이터에 효율적. → [컬렉션]({{< relref "/docs/kotlin/concepts/collections/" >}})

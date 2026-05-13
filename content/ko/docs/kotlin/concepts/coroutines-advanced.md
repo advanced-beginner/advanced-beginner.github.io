@@ -256,14 +256,14 @@ fun main() = runBlocking {
 ```
 
 {{< callout type="warning" title="CoroutineExceptionHandler 주의사항" >}}
-`CoroutineExceptionHandler`는 **루트 코루틴**에서만 동작합니다. 자식 코루틴에 달아도 예외가 이미 부모로 전파된 후에 처리됩니다. 또한 `async`에서는 `await()` 시 예외가 발생하므로 `try-catch`를 사용하세요.
+`CoroutineExceptionHandler`는 **루트 코루틴** 에서만 동작합니다. 자식 코루틴에 달아도 예외가 이미 부모로 전파된 후에 처리됩니다. 또한 `async`에서는 `await()` 시 예외가 발생하므로 `try-catch`를 사용하세요.
 {{< /callout >}}
 
 ---
 
 #### Channel — 코루틴 간 통신
 
-`Channel`은 코루틴 간에 데이터를 주고받는 **안전한 큐**입니다. 여러 생산자-소비자 패턴을 구현할 수 있습니다.
+`Channel`은 코루틴 간에 데이터를 주고받는 **안전한 큐** 입니다. 여러 생산자-소비자 패턴을 구현할 수 있습니다.
 
 **Channel 종류:**
 
@@ -390,7 +390,7 @@ fun main() = runBlocking {
 
 #### select 표현식
 
-`select`는 여러 채널 중 **먼저 준비된 것**을 선택해서 처리합니다.
+`select`는 여러 채널 중 **먼저 준비된 것** 을 선택해서 처리합니다.
 
 ```kotlin
 import kotlinx.coroutines.*

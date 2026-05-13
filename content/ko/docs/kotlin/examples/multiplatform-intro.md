@@ -39,10 +39,6 @@ graph TD
     A["commonMain<br>(공통 비즈니스 로직)"] --> B["jvmMain<br>(Android / 서버)"]
     A --> C["jsMain<br>(브라우저 / Node.js)"]
     A --> D["nativeMain<br>(iOS / 데스크탑)"]
-    style A fill:#f0f0f0
-    style B fill:#f0f0f0
-    style C fill:#f0f0f0
-    style D fill:#f0f0f0
 ```
 
 #### Step 2 — 프로젝트 생성

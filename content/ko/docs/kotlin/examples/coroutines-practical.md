@@ -212,7 +212,7 @@ class ResilientService {
 
 #### Step 5 — 구조화된 동시성으로 취소 전파
 
-코루틴의 구조화된 동시성은 **부모가 취소되면 모든 자식 코루틴이 자동으로 취소**됩니다.
+코루틴의 구조화된 동시성은 **부모가 취소되면 모든 자식 코루틴이 자동으로 취소** 됩니다.
 
 ```kotlin
 // src/main/kotlin/com/example/coroutine/service/BatchService.kt
@@ -283,8 +283,6 @@ graph TD
     F --> G["부모 취소 신호"]
     G --> D
     D --> H["자동 취소"]
-    style F fill:#f0f0f0
-    style H fill:#f0f0f0
 ```
 
 #### Step 6 — 예외 처리 패턴

@@ -379,7 +379,7 @@ fun main() = runBlocking {
 
 #### SharedFlow — 다수 구독자 Hot 스트림
 
-`SharedFlow`는 여러 구독자에게 값을 동시에 방출합니다. 이벤트 버스나 채팅 메시지처럼 **이벤트**를 전달할 때 적합합니다.
+`SharedFlow`는 여러 구독자에게 값을 동시에 방출합니다. 이벤트 버스나 채팅 메시지처럼 **이벤트** 를 전달할 때 적합합니다.
 
 ```kotlin
 import kotlinx.coroutines.*
