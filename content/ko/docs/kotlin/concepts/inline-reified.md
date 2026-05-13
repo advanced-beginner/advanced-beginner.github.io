@@ -175,11 +175,7 @@ val obj: Any = "hello"
 val str: String? = obj.castOrNull<String>()   // "hello"
 val num: Int? = obj.castOrNull<Int>()         // null
 
-// 2. 컬렉션 필터링
-inline fun <reified T> List<*>.filterIsInstance(): List<T> {
-    return filterIsInstance<T>()
-}
-
+// 2. 컬렉션 필터링 — 표준 라이브러리에 reified로 이미 제공됨
 val mixed: List<Any> = listOf(1, "hello", 2, "world", 3.14)
 val strings: List<String> = mixed.filterIsInstance<String>()
 // ["hello", "world"]

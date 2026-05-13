@@ -197,7 +197,7 @@ fun main() = runBlocking {
 }
 // 자식 2 실패!
 // 자식 1: 정상 완료
-// child2 상태: false  (cancel이 아니라 실패)
+// child2 상태: true  (예외로 종료된 launch 코루틴은 isCancelled가 true)
 // supervisorScope 종료
 ```
 

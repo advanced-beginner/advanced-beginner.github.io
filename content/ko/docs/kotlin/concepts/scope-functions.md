@@ -50,7 +50,7 @@ if (user != null) {
 findUser(id)?.apply {
     name = "홍길동"
     email = "hong@example.com"
-}.let { userRepository.save(it) }
+}?.let { userRepository.save(it) }
 ```
 
 #### 5개 스코프 함수 상세 비교

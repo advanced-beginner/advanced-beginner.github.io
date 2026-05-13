@@ -138,7 +138,7 @@ plugins {
 
 **디렉토리 구조:**
 
-```
+```text
 프로젝트 루트/
 ├── buildSrc/
 │   ├── build.gradle.kts        # buildSrc 자체 빌드 설정
@@ -184,7 +184,7 @@ kotlin {
     compilerOptions {
         freeCompilerArgs.addAll(
             "-Xjsr305=strict",
-            "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
+            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
         )
     }
 }

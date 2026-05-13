@@ -73,7 +73,7 @@ gradle init \
 
 `gradle init`이 묻는 질문에는 기본값(Enter)을 선택하면 됩니다. 생성된 프로젝트 구조는 다음과 같습니다.
 
-```
+```text
 my-kotlin-project/
 ├── build.gradle.kts          # 빌드 스크립트
 ├── settings.gradle.kts       # 프로젝트 설정

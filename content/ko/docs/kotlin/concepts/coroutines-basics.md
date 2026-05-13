@@ -416,7 +416,7 @@ fun main() = runBlocking {
 - `suspend` 함수는 코루틴 안에서만 호출 가능하며, 스레드를 블로킹하지 않습니다.
 - `launch` → `Job` (결과 없음), `async` → `Deferred<T>` (결과 있음).
 - `Dispatchers.IO`는 I/O 블로킹 작업, `Dispatchers.Default`는 CPU 작업에 사용합니다.
-- `withContext`로 디스패처를 전환해도 코루틴은 suspend되지 않고 재개됩니다.
+- `withContext`는 지정된 디스패처로 전환해 블록을 실행하고 결과를 반환하는 suspend 함수입니다.
 - 구조화된 동시성: 부모가 취소되면 자식도 취소됩니다.
 - `isActive` / `yield()`로 CPU 집약적 코드에서 협력적 취소를 구현합니다.
 {{< /callout >}}

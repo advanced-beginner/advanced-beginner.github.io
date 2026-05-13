@@ -118,7 +118,7 @@ class UserDashboardService(
 
 #### Step 3 — suspend 컨트롤러
 
-Spring MVC에서 `suspend fun`을 컨트롤러 메서드로 사용할 수 있습니다. WebFlux 없이도 동작합니다.
+Spring MVC에서 `suspend fun`을 컨트롤러 메서드로 사용할 수 있습니다. 코루틴-Reactor 어댑터(`kotlinx-coroutines-reactor`)가 클래스패스에 있으면 Spring이 자동으로 코루틴을 인식합니다.
 
 ```kotlin
 // src/main/kotlin/com/example/coroutine/controller/DashboardController.kt

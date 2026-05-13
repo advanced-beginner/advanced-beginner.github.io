@@ -62,7 +62,7 @@ JVM 실행 옵션에 다음을 추가하면 스레드 이름에 코루틴 정보
 
 **IntelliJ Run Configuration 설정:**
 
-```
+```text
 Run/Debug Configurations → VM options:
 -Dkotlinx.coroutines.debug
 ```
@@ -82,7 +82,7 @@ tasks.test {
 
 **활성화 전/후 스레드 이름 비교:**
 
-```
+```text
 // 활성화 전
 Thread[DefaultDispatcher-worker-1,5,main]
 
@@ -201,7 +201,7 @@ fun main() = runBlocking {
 ```
 
 출력 예시:
-```
+```text
 Coroutines dump 2026/05/13 10:00:00
 
 Coroutine "Worker1#2":StandaloneCoroutine{Active}@..., state: SUSPENDED

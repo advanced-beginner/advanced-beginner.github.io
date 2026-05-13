@@ -64,7 +64,7 @@ flowchart TD
 
 각 소스 셋은 독립적인 디렉토리를 가집니다:
 
-```
+```text
 src/
 ├── commonMain/kotlin/          # 공통 코드 (모든 플랫폼에서 실행)
 │   └── com/example/

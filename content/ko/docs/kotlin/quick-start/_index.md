@@ -137,7 +137,7 @@ gradle init \
 
 생성된 디렉토리는 다음과 같은 구조를 가집니다.
 
-```
+```text
 kotlin-quickstart/
 ├── build.gradle.kts            # 빌드 스크립트 (Kotlin DSL)
 ├── settings.gradle.kts

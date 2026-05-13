@@ -84,6 +84,8 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       enable-auto-commit: false  # 수동 커밋 권장
+    listener:
+      ack-mode: manual_immediate  # @KafkaListener의 Acknowledgment 파라미터 활성화
 
 server:
   port: 8080
@@ -378,7 +380,7 @@ curl -X POST http://localhost:8080/api/kafka/orders \
 
 서버 로그에서 Consumer가 메시지를 수신했는지 확인합니다.
 
-```
+```text
 INFO  MessageConsumer - 메시지 수신 — ID: 550e8400..., 발신자: 홍길동, 내용: 안녕하세요, Kafka!, 파티션: 0, 오프셋: 0
 INFO  MessageConsumer - 메시지 처리 완료: 550e8400...
 ```

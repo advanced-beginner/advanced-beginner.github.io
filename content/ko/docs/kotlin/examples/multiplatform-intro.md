@@ -22,7 +22,7 @@ Kotlin Multiplatform(KMP)으로 비즈니스 로직을 여러 플랫폼에서 �
 
 KMP 프로젝트에서 코드는 소스 세트(source set)로 구성됩니다.
 
-```
+```text
 shared/
 ├── build.gradle.kts
 └── src/

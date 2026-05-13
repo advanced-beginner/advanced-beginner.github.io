@@ -105,7 +105,7 @@ import jakarta.persistence.*
 class User(                       // JPA 엔티티는 open class 필요 — kotlin-jpa 플러그인이 자동 처리
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
+    var id: Long? = null,         // JPA가 ID를 채울 수 있도록 var + nullable 권장
 
     @Column(nullable = false, length = 100)
     var name: String,
@@ -157,7 +157,10 @@ data class UserResponse(
 )
 
 // 변환 확장 함수
-fun User.toResponse() = UserResponse(id, name, email, age, role)
+fun User.toResponse() = UserResponse(
+    id = requireNotNull(id) { "영속화되지 않은 User는 변환할 수 없습니다" },
+    name = name, email = email, age = age, role = role
+)
 fun CreateUserRequest.toEntity() = User(name = name, email = email, age = age, role = role)
 ```
 

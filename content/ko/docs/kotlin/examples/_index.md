@@ -25,7 +25,7 @@ weight: 3
 
 예제는 표준 Gradle Kotlin DSL 프로젝트 구조를 따릅니다. 아래는 일반적인 디렉토리 구조입니다.
 
-```
+```text
 kotlin-example/
 ├── build.gradle.kts           # 빌드 스크립트 (Kotlin DSL)
 ├── settings.gradle.kts

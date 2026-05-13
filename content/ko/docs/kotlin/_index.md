@@ -128,7 +128,7 @@ fun main() {
 
 목표에 따라 권장하는 학습 경로입니다.
 
-```
+```text
 처음이라면:        Quick Start → 기본 문법 → 변수와 타입 → 함수 → Null Safety
 백엔드 지향:       클래스 → Data Class → 확장 함수 → Spring Boot 연동 → Kafka 연동
 비동기/스트림:     코루틴 기초 → Flow → 코루틴 고급 → 코루틴 실무 사용

@@ -346,8 +346,8 @@ package com.example.types
 fun main() {
     // val / var
     val language = "Kotlin"
-    var year = 2016
-    year = 2017  // JetBrains가 1.0 릴리즈한 연도로 수정
+    var year = 2011  // 2011년 7월 JetBrains가 Project Kotlin을 처음 공개
+    year = 2016      // 2016년 2월 Kotlin 1.0 정식 릴리즈
 
     // 타입 추론
     val pi = 3.14159          // Double
