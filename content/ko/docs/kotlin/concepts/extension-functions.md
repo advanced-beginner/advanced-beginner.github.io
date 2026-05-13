@@ -66,9 +66,9 @@ val valid = "user@example.com".isValidEmail()
 확장 함수의 선언 형태는 `fun 수신타입.함수이름(파라미터): 반환타입 { ... }` 입니다.
 
 ```kotlin
-// 기본 형태
-fun String.repeat(n: Int): String {
-    return this.repeat(n)           // this = 수신 객체(String 인스턴스)
+// 기본 형태 — 'this'는 수신 객체(String 인스턴스)
+fun String.shout(): String {
+    return this.uppercase() + "!"
 }
 
 // this는 대부분 생략 가능합니다
@@ -81,6 +81,8 @@ fun <T> List<T>.secondOrNull(): T? {
     return if (size >= 2) this[1] else null
 }
 ```
+
+> **주의:** 멤버 함수와 시그니처가 같은 확장 함수를 정의해도 호출 시에는 **멤버 함수가 우선**합니다. 예를 들어 `fun String.repeat(n: Int)` 확장을 만들어도 `"abc".repeat(3)`은 표준 라이브러리의 `String.repeat` 멤버를 호출합니다. 확장 함수 이름은 멤버와 충돌하지 않게 짓는 것이 좋습니다.
 
 #### 수신 객체(this)
 

@@ -242,14 +242,16 @@ val value = map.getOrDefault("key", "기본값")
 **패턴 3: 늦은 초기화 변수**
 
 ```kotlin
-class UserController {
-    // 잘못된 예: lateinit은 초기화 전 접근 시 UninitializedPropertyAccessException
+// 잘못된 예: lateinit은 초기화 전 접근 시 UninitializedPropertyAccessException 발생
+class UserControllerLateinit {
     private lateinit var userService: UserService
 
-    // 초기화 확인
+    // 초기화 여부를 미리 확인할 수 있습니다
     fun isInitialized() = ::userService.isInitialized
+}
 
-    // 올바른 예: 선택적으로 nullable 사용
+// 올바른 예: nullable + 명시적 검증
+class UserControllerNullable {
     private var userService: UserService? = null
 
     fun getService() = userService ?: throw IllegalStateException("서비스 미초기화")

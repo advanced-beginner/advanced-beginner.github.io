@@ -139,7 +139,7 @@ value class Email(val address: String) {
     }
 }
 
-fun findUser(id: UserId): User = ...
+fun findUser(id: UserId): User = TODO("DB 조회 구현")
 
 val id = UserId(42L)
 // findUser(42L)  // 컴파일 오류 — 타입 안전
