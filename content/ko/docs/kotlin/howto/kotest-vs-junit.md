@@ -1,5 +1,6 @@
 ---
 title: "Kotest vs JUnit"
+weight: 4
 description: "Kotest와 JUnit 5의 철학 차이, 스택 비교, 공통 시나리오 코드 예제, 마이그레이션 절차, Spring Boot 통합 방법을 안내합니다."
 lastmod: "2026-05-13"
 ---

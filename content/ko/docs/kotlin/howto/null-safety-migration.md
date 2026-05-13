@@ -1,5 +1,6 @@
 ---
 title: "Null Safety 마이그레이션"
+weight: 2
 description: "Java 코드를 Kotlin으로 이전할 때 플랫폼 타입 처리, @Nullable/@NotNull 활용, 점진적 마이그레이션 절차와 자주 발생하는 NPE 패턴을 안내합니다."
 lastmod: "2026-05-13"
 ---
@@ -140,13 +141,15 @@ public class OrderService {
 **Gradle에서 JSR-305 처리 활성화:**
 
 ```kotlin
-// build.gradle.kts
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs += listOf("-Xjsr305=strict")
+// build.gradle.kts (Kotlin 2.0+ 권장 방식)
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll("-Xjsr305=strict")
     }
 }
 ```
+
+> Kotlin 1.x 시절의 `kotlinOptions { freeCompilerArgs += ... }` 블록은 deprecated되었습니다. Kotlin 2.0 이상에서는 위와 같이 `compilerOptions { freeCompilerArgs.addAll(...) }` 방식을 사용하세요.
 
 ---
 

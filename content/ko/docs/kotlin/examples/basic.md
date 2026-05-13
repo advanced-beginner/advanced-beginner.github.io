@@ -1,5 +1,6 @@
 ---
 title: "기본 예제"
+weight: 2
 description: "Hello Kotlin부터 데이터 클래스, 컬렉션 처리, 확장 함수, 작은 CLI 프로그램까지 Kotlin 핵심 기능을 실습합니다."
 lastmod: "2026-05-13"
 ---

@@ -1,5 +1,6 @@
 ---
 title: "Multiplatform 시작"
+weight: 6
 description: "Kotlin Multiplatform 프로젝트 구조, expect/actual 메커니즘, 공통 날짜 포매터를 JVM과 JS에서 공유하는 미니 예제를 다룹니다."
 lastmod: "2026-05-13"
 ---

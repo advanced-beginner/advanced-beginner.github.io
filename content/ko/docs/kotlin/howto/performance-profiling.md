@@ -1,5 +1,6 @@
 ---
 title: "성능 프로파일링"
+weight: 5
 description: "Async Profiler, JFR로 Kotlin/JVM 성능을 측정하고, 코루틴 디스패처 선택, 인라인 람다 비용, suspend 함수 재진입 비용을 최적화하는 방법을 안내합니다."
 lastmod: "2026-05-13"
 ---

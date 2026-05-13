@@ -1,5 +1,6 @@
 ---
 title: "코루틴 디버깅"
+weight: 1
 description: "kotlinx-coroutines-debug, IntelliJ 코루틴 도구창, JVM 옵션으로 코루틴 실행 흐름을 추적하고 데드락·누수를 진단하는 방법을 안내합니다."
 lastmod: "2026-05-13"
 ---

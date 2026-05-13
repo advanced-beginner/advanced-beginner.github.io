@@ -194,12 +194,12 @@ Kotlin 1.9.20부터 Kotlin Multiplatform(KMP)이 Stable 상태가 되었습니�
 
 ---
 
-#### Context Receivers (실험적)
+#### Context Receivers → Context Parameters
 
-Kotlin 1.6.20에 도입된 실험적 기능. 함수가 여러 수신 객체를 컨텍스트로 요구할 수 있습니다.
+Kotlin 1.6.20에서 **Context Receivers** 라는 실험적 기능이 도입되었습니다. 함수가 여러 수신 객체를 컨텍스트로 요구할 수 있도록 하는 기능이었습니다.
 
 ```kotlin
-// 실험적 기능 — 활성화 필요: -Xcontext-receivers
+// Context Receivers (1.6.20 ~ 2.0, 실험적) — 활성화: -Xcontext-receivers
 context(Logger, TransactionScope)
 fun processOrder(order: Order) {
     log("주문 처리 시작: ${order.id}")    // Logger의 log()
@@ -208,8 +208,19 @@ fun processOrder(order: Order) {
 }
 ```
 
-{{< callout type="warning" title="Context Receivers 사용 시 주의" >}}
-Context Receivers는 아직 실험적 기능입니다. 프로덕션 코드에서는 안정화될 때까지 사용을 자제하거나, `@OptIn(ExperimentalContextReceivers::class)` 어노테이션을 명시하는 것이 좋습니다.
+{{< callout type="warning" title="Context Receivers는 Context Parameters로 재설계됨" >}}
+Context Receivers는 안정화 단계에서 한계가 드러나 **재설계** 되었습니다. Kotlin 2.1부터는 **Context Parameters** (`-Xcontext-parameters`) 라는 새로운 설계로 대체됩니다. 매개변수 이름을 명시적으로 부여하고, 호출 시 `with(...)`로 컨텍스트를 전달하는 방식입니다.
+
+```kotlin
+// Context Parameters (2.1+, 실험적) — 활성화: -Xcontext-parameters
+context(logger: Logger, tx: TransactionScope)
+fun processOrder(order: Order) {
+    logger.log("주문 처리 시작: ${order.id}")
+    tx.beginTransaction()
+}
+```
+
+기존 Context Receivers 기반 코드는 Kotlin 2.x 이후 마이그레이션이 필요합니다. 자세한 내용은 [KEEP-367](https://github.com/Kotlin/KEEP/issues/367)을 참고하세요.
 {{< /callout >}}
 
 ---

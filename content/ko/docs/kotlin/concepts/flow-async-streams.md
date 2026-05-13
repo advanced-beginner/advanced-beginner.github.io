@@ -462,7 +462,10 @@ fun main() = runBlocking {
 ```
 
 {{< callout type="warning" title="catch의 범위" >}}
-`catch`는 **상류(upstream)** 예외만 잡습니다. `collect { }` 블록 내부에서 발생한 예외는 잡지 않습니다. collect 내부 예외는 `try-catch`로 직접 처리하거나, `catch`를 `map` 등으로 변환 후 catch하세요.
+`catch`는 **상류(upstream)** 예외만 잡습니다. `collect { }` 블록 내부에서 발생한 예외는 잡지 않습니다. 하류 예외를 처리하려면 다음 두 가지 방법 중 하나를 쓰세요.
+
+1. `collect { try { ... } catch (e: Exception) { ... } }` 처럼 collect 람다 안에서 직접 `try-catch`로 감싸기.
+2. 수신 로직을 `onEach { ... }` 같은 상류 연산자로 옮긴 뒤 마지막에 `.catch { ... }.collect()` 형태로 연결하기. 이 경우 `onEach` 안의 예외는 상류 예외가 되어 `catch`가 잡습니다.
 {{< /callout >}}
 
 **onCompletion — 완료/취소/예외 시 처리**

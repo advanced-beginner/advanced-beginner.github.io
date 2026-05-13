@@ -1,5 +1,6 @@
 ---
 title: "Gradle Kotlin DSL 팁"
+weight: 3
 description: "Version Catalog, buildSrc, 컨벤션 플러그인 등 Gradle Kotlin DSL 실전 노하우와 멀티모듈 구조의 자주 쓰는 패턴을 안내합니다."
 lastmod: "2026-05-13"
 ---

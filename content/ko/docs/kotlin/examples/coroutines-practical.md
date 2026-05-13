@@ -1,5 +1,6 @@
 ---
 title: "코루틴 실무 사용"
+weight: 5
 description: "외부 API 병렬 호출, Spring WebFlux 대신 코루틴 컨트롤러, withTimeout, 구조화된 동시성으로 취소 전파, 예외 처리를 실무 시나리오로 실습합니다."
 lastmod: "2026-05-13"
 ---

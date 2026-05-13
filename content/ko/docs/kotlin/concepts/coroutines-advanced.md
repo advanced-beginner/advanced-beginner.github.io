@@ -223,7 +223,7 @@ flowchart TD
 
 #### CoroutineExceptionHandler
 
-`launch` 코루틴에서 잡히지 않은 예외를 처리하는 마지막 수단입니다. `async`에서는 동작하지 않습니다(`await` 시점에 예외가 전파되므로).
+`launch` 코루틴에서 잡히지 않은 예외를 처리하는 마지막 수단입니다. `async`에서는 동작하지 않습니다. `CoroutineExceptionHandler`는 구조화된 동시성에서 **루트 코루틴의 미처리(uncaught) 예외**만 받는 핸들러인데, `async`의 예외는 `Deferred` 안에 캡슐화되어 `await()`를 통해서만 노출되기 때문에 `Deferred`를 직접 받는 호출자가 `try-catch`로 처리해야 합니다.
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -256,7 +256,9 @@ fun main() = runBlocking {
 ```
 
 {{< callout type="warning" title="CoroutineExceptionHandler 주의사항" >}}
-`CoroutineExceptionHandler`는 **루트 코루틴** 에서만 동작합니다. 자식 코루틴에 달아도 예외가 이미 부모로 전파된 후에 처리됩니다. 또한 `async`에서는 `await()` 시 예외가 발생하므로 `try-catch`를 사용하세요.
+`CoroutineExceptionHandler`는 **루트 코루틴** 에서만 동작합니다. 자식 코루틴에 핸들러를 달아도 예외가 부모로 먼저 전파되므로 핸들러는 호출되지 않습니다. 또한 `async`의 예외는 `Deferred`에 캡슐화되어 `await()`로만 노출되므로 호출자가 `try-catch`로 처리해야 합니다.
+
+추가로, `coroutineScope` 안에서 자식 `async`가 실패하면 다른 자식의 `await()`가 호출되기 전이라도 스코프 전체가 취소되어 부모로 예외가 올라갑니다. 자식 실패를 격리하려면 `supervisorScope` 또는 `SupervisorJob`을 사용해야 합니다.
 {{< /callout >}}
 
 ---

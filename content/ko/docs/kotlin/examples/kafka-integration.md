@@ -1,5 +1,6 @@
 ---
 title: "Kafka 연동"
+weight: 4
 description: "Kotlin + Spring Boot 3.2.x + Spring Kafka로 Producer/Consumer를 구현합니다. KafkaTemplate, @KafkaListener, application.yml 설정과 메시지 송수신 테스트를 다룹니다."
 lastmod: "2026-05-13"
 ---

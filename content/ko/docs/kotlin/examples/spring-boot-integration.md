@@ -1,5 +1,6 @@
 ---
 title: "Spring Boot 연동"
+weight: 3
 description: "Kotlin + Spring Boot 3.2.x로 REST API를 구성합니다. build.gradle.kts 설정, 컨트롤러/서비스/엔티티 작성, JPA + Kotlin 시 open 클래스 이슈와 해결을 다룹니다."
 lastmod: "2026-05-13"
 ---
@@ -32,7 +33,7 @@ Kotlin과 Spring Boot 3.2.x를 연동하여 간단한 사용자 관리 REST API�
 | Java | 17 |
 | Dependencies | Spring Web, Spring Data JPA, H2 Database, Spring Boot DevTools |
 
-**ZIP을 다운로드하여 압축 해제** 하거나, IntelliJ IDEA에서 **File** → **New** → **Project** → **Spring Initializr** 로 직접 생성합니다.
+**ZIP을 다운로드하여 압축을 해제** 하거나, IntelliJ IDEA에서 **File** → **New** → **Project** → **Spring Initializr** 로 직접 생성합니다.
 
 #### Step 2 — build.gradle.kts 설정
 
