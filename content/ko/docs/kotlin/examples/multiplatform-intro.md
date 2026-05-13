@@ -390,6 +390,147 @@ shared/build/js/packages/kmp-date-formatter-shared/
 - `kotlinx-datetime` 같은 공식 멀티플랫폼 라이브러리 활용으로 개발 범위 확장
 {{< /callout >}}
 
+---
+
+### 테스트 작성
+
+KMP의 공통 테스트는 `commonTest` 소스셋에 작성하며, `kotlin("test")` 의존성만으로 JVM과 JS 양쪽에서 동일한 테스트를 실행합니다. `build.gradle.kts`의 `commonTest` 소스셋에 이미 포함된 의존성을 확인합니다.
+
+```kotlin
+// shared/build.gradle.kts — commonTest 소스셋
+val commonTest by getting {
+    dependencies {
+        implementation(kotlin("test"))  // assertEquals, assertNotNull 등 포함
+    }
+}
+```
+
+**`commonTest` 소스셋 구조**
+
+```text
+shared/src/
+├── commonMain/kotlin/com/example/datetime/
+│   ├── DateFormatter.kt   (expect 선언)
+│   └── DateUtils.kt       (공통 유틸)
+└── commonTest/kotlin/com/example/datetime/
+    ├── DateRangeTest.kt   (공통 테스트 — JVM/JS 양쪽 실행)
+    └── DateServiceTest.kt
+```
+
+**`kotlin.test` 기본 단언 사용**
+
+`kotlin.test`는 `assertEquals`, `assertNotNull`, `assertTrue`, `assertFailsWith` 등을 제공합니다. 플랫폼별 임포트 없이 `commonTest`에서 바로 사용할 수 있습니다.
+
+```kotlin
+// shared/src/commonTest/kotlin/com/example/datetime/DateRangeTest.kt
+package com.example.datetime
+
+import kotlinx.datetime.LocalDate
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
+
+class DateRangeTest {
+
+    @Test
+    fun `DateRange durationDays는 두 날짜 사이 일수를 반환한다`() {
+        val range = DateRange(
+            start = LocalDate(2026, 5, 1),
+            end   = LocalDate(2026, 5, 31)
+        )
+        assertEquals(30L, range.durationDays)
+    }
+
+    @Test
+    fun `contains로 날짜 포함 여부를 확인한다`() {
+        val range = DateRange(
+            start = LocalDate(2026, 5, 1),
+            end   = LocalDate(2026, 5, 31)
+        )
+        assertTrue(LocalDate(2026, 5, 15) in range)
+        assertFalse(LocalDate(2026, 6, 1) in range)
+        assertFalse(LocalDate(2026, 4, 30) in range)
+    }
+
+    @Test
+    fun `nextWeekday는 주말을 건너뛰어 다음 평일을 반환한다`() {
+        val friday   = LocalDate(2026, 5, 15)   // 금요일
+        val expected = LocalDate(2026, 5, 18)   // 다음 월요일
+        val actual   = friday.nextWeekday()
+        assertEquals(expected, actual)
+        assertNotNull(actual)
+    }
+}
+```
+
+**`DateService` 공통 단위 테스트**
+
+`DateService`는 `PlatformDateFormatter`를 사용하므로 `expect/actual` 구현이 필요합니다. 공통 로직만 검증할 때는 `DateRange`와 같은 순수 공통 클래스를 대상으로 합니다.
+
+```kotlin
+// shared/src/commonTest/kotlin/com/example/datetime/DateUtilsExtTest.kt
+package com.example.datetime
+
+import kotlinx.datetime.LocalDate
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
+
+class DateUtilsExtTest {
+
+    @Test
+    fun `토요일과 일요일은 주말이다`() {
+        val saturday = LocalDate(2026, 5, 16)
+        val sunday   = LocalDate(2026, 5, 17)
+        assertTrue(saturday.isWeekend())
+        assertTrue(sunday.isWeekend())
+    }
+
+    @Test
+    fun `평일은 주말이 아니다`() {
+        val monday    = LocalDate(2026, 5, 11)
+        val wednesday = LocalDate(2026, 5, 13)
+        assertFalse(monday.isWeekend())
+        assertFalse(wednesday.isWeekend())
+    }
+
+    @Test
+    fun `daysUntil은 음수도 반환한다`() {
+        val from = LocalDate(2026, 5, 10)
+        val to   = LocalDate(2026, 5, 1)
+        assertEquals(-9L, from.daysUntil(to))
+    }
+}
+```
+
+JVM과 JS 양쪽에서 동시에 테스트를 실행합니다.
+
+```bash
+# 모든 플랫폼에서 공통 테스트 실행
+./gradlew :shared:allTests
+
+# JVM에서만 실행
+./gradlew :shared:jvmTest
+
+# JS에서만 실행
+./gradlew :shared:jsTest
+```
+
+{{< callout type="info" title="kotlin.test 주요 단언 함수" >}}
+| 함수 | 설명 |
+|------|------|
+| `assertEquals(expected, actual)` | 두 값이 같은지 검증 |
+| `assertNotNull(value)` | null이 아닌지 검증 |
+| `assertTrue(condition)` | 조건이 참인지 검증 |
+| `assertFalse(condition)` | 조건이 거짓인지 검증 |
+| `assertFailsWith<T> { }` | 특정 예외가 발생하는지 검증 |
+
+`kotlin.test`는 JVM에서 JUnit 5로, JS에서 Mocha로 매핑되므로 별도 플랫폼 설정이 필요하지 않습니다.
+{{< /callout >}}
+
 #### 다음 단계
 
 - [Multiplatform 개요](../concepts/multiplatform-overview/) — KMP 아키텍처와 플랫폼 지원 현황
