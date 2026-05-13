@@ -22,6 +22,7 @@
 | **[Kubernetes](https://advanced-beginner.github.io/ko/docs/kubernetes/)** | 컨테이너 오케스트레이션 플랫폼. Pod, Service, Deployment 실습 | ✅ 완료 |
 | **[Elasticsearch](https://advanced-beginner.github.io/ko/docs/elasticsearch/)** | 분산 검색 및 분석 엔진. 인덱싱, 쿼리, 클러스터 운영 가이드 | ✅ 완료 |
 | **[Observability](https://advanced-beginner.github.io/ko/docs/observability/)** | 시스템 관측성 실무 가이드. Prometheus, Grafana, PromQL, 분산 추적까지 | ✅ 완료 |
+| **[Kotlin](https://advanced-beginner.github.io/ko/docs/kotlin/)** | 간결하고 안전한 JVM 언어. Null Safety·코루틴·Spring Boot/Kafka 연동·Multiplatform | ✅ 완료 |
 
 ---
 
@@ -82,7 +83,8 @@ advanced-beginner/
 │   ├── spark/               # Spark 가이드 (30개 문서)
 │   ├── kubernetes/          # Kubernetes 가이드 (24개 문서)
 │   ├── elasticsearch/       # Elasticsearch 가이드 (23개 문서)
-│   └── observability/       # Observability 가이드 (36개 문서)
+│   ├── observability/       # Observability 가이드 (36개 문서)
+│   └── kotlin/              # Kotlin 가이드 (32개 문서)
 ├── examples/                # 실행 가능한 예제 프로젝트
 │   ├── quick-start/         # Kafka 최소 설정 예제
 │   ├── order-system/        # Kafka 도메인 이벤트 예제
