@@ -5,7 +5,9 @@ weight: 1
 lastmod: "2026-05-13"
 ---
 
-Kotlin 핵심 용어를 알파벳/한글 순으로 정리합니다. 각 용어는 간결한 정의와 함께 관련 개념 문서 링크를 제공합니다.
+> **소요 시간**: 약 10분
+
+Kotlin 핵심 용어를 알파벳 순으로 정리합니다. 각 용어는 간결한 정의와 함께 관련 개념 문서 링크를 제공합니다.
 
 {{< callout type="tip" title="핵심 용어 5선" >}}
 - **Coroutine (코루틴)**: 일시 중단 가능한 경량 비동기 실행 단위
@@ -85,6 +87,9 @@ Kotlin 핵심 용어를 알파벳/한글 순으로 정리합니다. 각 용어�
 
 **Expression (표현식)**
 : 값을 반환하는 코드 단위. Kotlin에서 `if`, `when`, `try`는 모두 표현식. → [기본 문법]({{< relref "/docs/kotlin/concepts/basics/" >}})
+
+**Extension Function (확장 함수)**
+: 기존 클래스를 수정하거나 상속하지 않고 새 함수를 추가하는 기법. `fun ClassName.newFunction() { ... }` 형식. 표준 라이브러리의 `String.uppercase()`, `List.filter()` 등이 확장 함수로 구현됨. → [확장 함수]({{< relref "/docs/kotlin/concepts/extension-functions/" >}})
 
 ---
 
@@ -226,12 +231,6 @@ Kotlin 핵심 용어를 알파벳/한글 순으로 정리합니다. 각 용어�
 
 **when**
 : Kotlin의 분기 표현식. `switch`보다 강력하며 타입 체크, 범위, 조건 등 다양한 패턴 지원. `sealed class`와 함께 완전성 검사. → [기본 문법]({{< relref "/docs/kotlin/concepts/basics/" >}})
-
----
-
-#### 확장 함수 (Extension Function)
-
-기존 클래스를 수정하거나 상속하지 않고 새 함수를 추가하는 기법. `fun ClassName.newFunction() { ... }` 형식. 표준 라이브러리의 `String.uppercase()`, `List.filter()` 등이 확장 함수로 구현됨.
 
 ---
 

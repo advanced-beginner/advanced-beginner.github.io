@@ -4,6 +4,8 @@ description: "Kotlin + Spring Boot 3.2.x + Spring Kafka로 Producer/Consumer를 
 lastmod: "2026-05-13"
 ---
 
+> **소요 시간**: 약 25분
+
 {{< callout type="tip" title="TL;DR" >}}
 - `spring-kafka` 의존성 추가 후 `application.yml` 설정
 - `KafkaTemplate<String, String>`으로 메시지 발행

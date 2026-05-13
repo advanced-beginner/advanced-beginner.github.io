@@ -4,6 +4,8 @@ description: "Hello Kotlin부터 데이터 클래스, 컬렉션 처리, 확장 �
 lastmod: "2026-05-13"
 ---
 
+> **소요 시간**: 약 15분
+
 {{< callout type="tip" title="TL;DR" >}}
 - `data class`로 간결한 데이터 모델 정의
 - `filter`, `map`, `sortedBy` 등 컬렉션 처리 함수 활용

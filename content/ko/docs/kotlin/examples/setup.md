@@ -5,6 +5,8 @@ weight: 1
 lastmod: "2026-05-13"
 ---
 
+> **소요 시간**: 약 10분
+
 {{< callout type="tip" title="TL;DR" >}}
 - JDK 17 설치 (SDKMAN 권장)
 - `gradle init`으로 Kotlin DSL 프로젝트 생성

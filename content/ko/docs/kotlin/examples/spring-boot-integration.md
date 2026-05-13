@@ -4,6 +4,8 @@ description: "Kotlin + Spring Boot 3.2.x로 REST API를 구성합니다. build.g
 lastmod: "2026-05-13"
 ---
 
+> **소요 시간**: 약 20분
+
 {{< callout type="tip" title="TL;DR" >}}
 - `start.spring.io`에서 Kotlin + Spring Web + Spring Data JPA 선택
 - `build.gradle.kts`에 `kotlin-spring`, `kotlin-jpa` 플러그인 필수
@@ -73,6 +75,19 @@ dependencies {
 
 {{< callout type="info" title="kotlin-spring 플러그인이 하는 일" >}}
 Spring의 CGLIB 프록시는 클래스를 상속하여 동작합니다. Kotlin의 클래스는 기본적으로 `final`이므로 상속이 불가능합니다. `kotlin-spring` 플러그인은 `@Component`, `@Service`, `@Repository`, `@Controller`, `@Configuration` 등이 붙은 클래스를 자동으로 `open`으로 만들어 줍니다.
+{{< /callout >}}
+
+{{< callout type="warning" title="플러그인을 빠뜨리면 만나는 실제 에러" >}}
+`kotlin-spring` 플러그인 없이 Kotlin으로 `@Service` 클래스를 작성하고 실행하면 다음과 같은 에러가 발생합니다.
+
+```text
+org.springframework.aop.framework.AopConfigException:
+  Could not generate CGLIB subclass of class com.example.MyService:
+  Common causes of this problem include using a final class
+  or a non-visible class
+```
+
+**해결**: `build.gradle.kts`에 `kotlin("plugin.spring") version "..."`을 추가하면 `@Component`/`@Service` 등이 붙은 클래스가 자동으로 `open` 처리됩니다.
 {{< /callout >}}
 
 #### Step 3 — 애플리케이션 진입점

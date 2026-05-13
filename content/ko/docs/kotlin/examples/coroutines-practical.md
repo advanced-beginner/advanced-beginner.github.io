@@ -4,6 +4,8 @@ description: "외부 API 병렬 호출, Spring WebFlux 대신 코루틴 컨트�
 lastmod: "2026-05-13"
 ---
 
+> **소요 시간**: 약 30분
+
 {{< callout type="tip" title="TL;DR" >}}
 - `async { }` + `await()` — 두 API를 병렬 호출, 직렬 대비 속도 향상
 - `suspend fun`을 `@GetMapping`에 사용하면 Spring MVC에서 코루틴 컨트롤러 동작

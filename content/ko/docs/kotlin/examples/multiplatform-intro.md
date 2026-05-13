@@ -4,6 +4,8 @@ description: "Kotlin Multiplatform 프로젝트 구조, expect/actual 메커니�
 lastmod: "2026-05-13"
 ---
 
+> **소요 시간**: 약 30분
+
 {{< callout type="tip" title="TL;DR" >}}
 - `commonMain` — 모든 플랫폼에서 공유하는 Kotlin 코드
 - `expect` — 공통 모듈에서 선언, `actual` — 각 플랫폼에서 구현
