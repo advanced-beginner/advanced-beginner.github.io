@@ -382,6 +382,104 @@ fun main() {
 - `?.`, `?:`, `?.let { }` — null 안전 처리의 기본 패턴
 {{< /callout >}}
 
+---
+
+### 테스트 작성
+
+JUnit 5와 AssertJ를 사용하여 앞서 작성한 `data class`와 확장 함수를 검증합니다. `spring-boot-starter-test`에 두 라이브러리가 모두 포함되어 있으므로 별도 의존성 추가 없이 사용할 수 있습니다.
+
+```kotlin
+// src/test/kotlin/model/UserTest.kt
+package model
+
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
+
+@DisplayName("User 데이터 클래스 테스트")
+class UserTest {
+
+    private val user = User(1L, "홍길동", "hong@example.com", 30, Role.USER)
+
+    @Test
+    fun `data class는 값 기반 동등성을 제공한다`() {
+        val copy = user.copy()
+        assertThat(copy).isEqualTo(user)
+        assertThat(copy).isNotSameAs(user)  // 참조는 다름
+    }
+
+    @Test
+    fun `copy로 일부 필드만 변경한 새 인스턴스를 만든다`() {
+        val promoted = user.copy(role = Role.ADMIN)
+        assertAll(
+            { assertThat(promoted.id).isEqualTo(user.id) },
+            { assertThat(promoted.name).isEqualTo(user.name) },
+            { assertThat(promoted.role).isEqualTo(Role.ADMIN) }
+        )
+    }
+
+    @Test
+    fun `toString은 모든 필드를 포함한다`() {
+        assertThat(user.toString()).contains("홍길동", "hong@example.com", "30")
+    }
+}
+```
+
+확장 함수도 단위 테스트로 검증합니다. 순수 함수는 테스트 작성이 간단합니다.
+
+```kotlin
+// src/test/kotlin/extension/ExtensionsTest.kt
+package extension
+
+import model.Role
+import model.User
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+
+class ExtensionsTest {
+
+    @Test
+    fun `isAdult는 18세 이상만 성인으로 판단한다`() {
+        val adult = User(1L, "성인", "a@test.com", 18)
+        val minor = User(2L, "미성년", "b@test.com", 17)
+
+        assertThat(adult.isAdult()).isTrue()
+        assertThat(minor.isAdult()).isFalse()
+    }
+
+    @Test
+    fun `hasAdminAccess는 ADMIN과 MODERATOR만 허용한다`() {
+        val admin = User(1L, "관리자", "a@test.com", 30, Role.ADMIN)
+        val mod   = User(2L, "중재자", "b@test.com", 30, Role.MODERATOR)
+        val user  = User(3L, "일반",   "c@test.com", 30, Role.USER)
+
+        assertThat(admin.hasAdminAccess()).isTrue()
+        assertThat(mod.hasAdminAccess()).isTrue()
+        assertThat(user.hasAdminAccess()).isFalse()
+    }
+
+    @Test
+    fun `maskEmail은 아이디 앞 세 글자만 남긴다`() {
+        val user = User(1L, "테스트", "hong@example.com", 25)
+        assertThat(user.maskEmail()).isEqualTo("hon***@example.com")
+    }
+
+    @Test
+    fun `toSlug는 소문자 하이픈 형식으로 변환한다`() {
+        assertThat("Hello Kotlin World".toSlug()).isEqualTo("hello-kotlin-world")
+    }
+}
+```
+
+{{< callout type="tip" title="테스트 실행" >}}
+```bash
+./gradlew test
+# 또는 특정 클래스만
+./gradlew test --tests "model.UserTest"
+```
+{{< /callout >}}
+
 #### 다음 단계
 
 - [Spring Boot 연동](spring-boot-integration/) — Kotlin으로 REST API 서버 구축

@@ -144,6 +144,99 @@ enum class Role { USER, ADMIN, MODERATOR }
 JPA 엔티티는 기본 생성자가 필요합니다. `kotlin-jpa` 플러그인이 `@Entity`, `@MappedSuperclass`, `@Embeddable`이 붙은 클래스에 인수 없는 생성자를 자동으로 추가합니다. 또한 클래스와 멤버를 자동으로 `open`으로 만들어 Hibernate의 Lazy Loading(프록시)이 동작하도록 합니다.
 {{< /callout >}}
 
+{{< callout type="warning" title="운영 함정 ① — JPA 엔티티에 data class 사용 금지" >}}
+TL;DR 에서는 "JPA 엔티티에는 일반 `class` 권장"이라고 언급하지만, **왜 `data class`를 쓰면 안 되는지** 명확히 이해해야 운영 장애를 예방할 수 있습니다.
+
+**문제 원인**: `data class`는 컴파일러가 `equals()`/`hashCode()`를 **모든 프로퍼티를 비교**하는 방식으로 자동 생성합니다. Hibernate는 Lazy Loading 시 실제 객체 대신 **프록시 객체**를 주입하는데, 이 프록시에 접근하면 미초기화 컬렉션까지 비교를 시도하여 다음 두 가지 오류가 발생합니다.
+
+- `LazyInitializationException`: 트랜잭션 종료 후 Lazy 컬렉션 접근 시
+- 무한 재귀: 양방향 관계에서 `equals()`가 서로를 참조하는 경우
+{{< /callout >}}
+
+**안티 패턴 vs 권장 패턴**
+
+```kotlin
+// ❌ 안티 패턴 — data class를 JPA 엔티티로 사용
+@Entity
+data class Order(
+    @Id @GeneratedValue val id: Long? = null,
+    val orderNo: String,
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+    val items: MutableList<OrderItem> = mutableListOf()
+    // equals/hashCode가 items를 포함하므로, 프록시 접근 시 LazyInitializationException 위험
+)
+
+// ✅ 권장 패턴 — 일반 class + id 기반 equals/hashCode 직접 오버라이드
+@Entity
+class Order(
+    @Id @GeneratedValue
+    val id: Long? = null,
+    val orderNo: String,
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+    val items: MutableList<OrderItem> = mutableListOf()
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Order) return false
+        return id != null && id == other.id   // id만 비교 — 프록시 안전
+    }
+
+    override fun hashCode(): Int = id?.hashCode() ?: 0
+
+    override fun toString(): String = "Order(id=$id, orderNo=$orderNo)"
+}
+```
+
+{{< callout type="warning" title="운영 함정 ② — Lazy Loading과 suspend 함수 충돌" >}}
+Kotlin 코루틴의 `suspend` 함수와 JPA Lazy Loading을 함께 사용하면 Hibernate Session 경계 문제로 `LazyInitializationException`이 발생할 수 있습니다.
+
+**원인**: `suspend` 함수는 스레드를 전환할 수 있으므로, `@Transactional`이 바인딩한 Hibernate Session이 코루틴 재개 시점에 이미 닫혀 있을 수 있습니다.
+{{< /callout >}}
+
+```kotlin
+// ❌ 잘못된 패턴 — 트랜잭션 밖에서 Lazy 컬렉션 접근
+@Service
+class OrderService(private val orderRepository: OrderRepository) {
+
+    // 트랜잭션 종료 후 suspend 재개 → Hibernate Session 없음
+    suspend fun getOrderWithItems(id: Long): OrderDetailResponse {
+        val order = orderRepository.findById(id).orElseThrow()
+        delay(10) // 코루틴 재개 후 Hibernate Session이 이미 닫힘
+        return OrderDetailResponse(
+            id = order.id!!,
+            items = order.items.map { it.toDto() }  // LazyInitializationException 발생!
+        )
+    }
+}
+
+// ✅ 올바른 패턴 ① — @Transactional 범위 안에서 명시적으로 fetch
+@Service
+class OrderService(private val orderRepository: OrderRepository) {
+
+    @Transactional(readOnly = true)
+    fun fetchOrderDetail(id: Long): OrderDetailResponse {
+        val order = orderRepository.findById(id).orElseThrow()
+        // 트랜잭션 안에서 Lazy 컬렉션 접근 → 안전
+        val items = order.items.map { it.toDto() }
+        return OrderDetailResponse(id = order.id!!, items = items)
+    }
+
+    // suspend 함수는 트랜잭션이 완료된 DTO만 받아서 처리
+    suspend fun processOrder(id: Long): ProcessedResponse {
+        val detail = fetchOrderDetail(id)   // 블로킹 호출로 먼저 DTO 변환 완료
+        delay(100)                          // 이 시점에는 Hibernate Session 불필요
+        return ProcessedResponse(detail)
+    }
+}
+
+// ✅ 올바른 패턴 ② — JPQL/fetch join으로 한 번에 조회
+@Repository
+interface OrderRepository : JpaRepository<Order, Long> {
+    @Query("SELECT o FROM Order o JOIN FETCH o.items WHERE o.id = :id")
+    fun findByIdWithItems(id: Long): Order?
+}
+```
+
 #### Step 5 — 요청/응답 DTO
 
 ```kotlin
@@ -350,6 +443,51 @@ H2 콘솔은 `http://localhost:8080/h2-console`에서 확인할 수 있습니다
 - `kotlin-jpa` 플러그인 — JPA 엔티티에 기본 생성자 자동 추가
 - `data class`는 DTO에 적합, JPA 엔티티에는 일반 `class` 권장
 - 확장 함수 `toResponse()`, `toEntity()`로 DTO 변환 로직을 깔끔하게 분리
+{{< /callout >}}
+
+{{< callout type="warning" title="운영 함정 ③ — Spring MVC + suspend는 진정한 non-blocking이 아닙니다" >}}
+Step 8의 컨트롤러는 `suspend` 없이 작성했지만, `suspend` 함수를 컨트롤러 핸들러로 사용해도 **Spring MVC에서는 스레드 점유가 줄어들지 않습니다**.
+
+Spring MVC는 Servlet 스레드(Tomcat 스레드 풀)를 기반으로 동작하므로, `suspend` 함수를 핸들러로 등록해도 내부적으로 `runBlocking`으로 래핑하여 스레드를 **블로킹 상태로 점유**합니다. 코루틴의 이점(스레드 해제 후 재개)을 얻으려면 **Spring WebFlux** 전환이 필요합니다.
+{{< /callout >}}
+
+**Spring MVC vs WebFlux + 코루틴 비교**
+
+| 항목 | Spring MVC + suspend | Spring WebFlux + 코루틴 |
+|------|---------------------|------------------------|
+| 스레드 모델 | Tomcat 스레드 풀 (블로킹) | Netty 이벤트 루프 (non-blocking) |
+| suspend 효과 | 없음 (runBlocking 래핑) | 스레드 반환 후 재개 |
+| 기존 코드 호환성 | Spring MVC 그대로 사용 가능 | 블로킹 코드 전면 검토 필요 |
+| JPA/JDBC 사용 | 자연스럽게 사용 가능 | R2DBC 또는 `Dispatchers.IO` 필요 |
+| 전환 비용 | 낮음 | 높음 (의존성, 설정 전면 변경) |
+| 적합 시나리오 | 일반적인 CRUD API | 고동시성·스트리밍·SSE |
+
+```kotlin
+// Spring MVC — suspend 컨트롤러 (진정한 non-blocking 아님)
+@RestController
+class UserController(private val userService: UserService) {
+    @GetMapping("/api/users/{id}")
+    suspend fun get(@PathVariable id: Long): UserResponse =
+        userService.findById(id)   // 내부적으로 runBlocking 래핑 → 스레드 점유 그대로
+}
+
+// Spring WebFlux — 진정한 non-blocking suspend 컨트롤러
+// build.gradle.kts: implementation("org.springframework.boot:spring-boot-starter-webflux")
+@RestController
+class UserController(private val userService: UserService) {
+    @GetMapping("/api/users/{id}")
+    suspend fun get(@PathVariable id: Long): UserResponse =
+        userService.findById(id)   // Netty 이벤트 루프에서 스레드 반환 후 재개
+}
+```
+
+{{< callout type="info" title="WebFlux 전환 시 고려사항" >}}
+WebFlux로 전환하면 JPA(블로킹 JDBC)를 그대로 사용할 수 없습니다. 대안은 두 가지입니다.
+
+- **R2DBC**: 리액티브 드라이버로 교체 (Spring Data R2DBC, 쿼리 방식 변경 필요)
+- **`Dispatchers.IO`**: 기존 JPA를 유지하되, 블로킹 DB 호출을 `withContext(Dispatchers.IO) { ... }`로 감싸서 전용 스레드 풀에서 실행
+
+대부분의 CRUD 서비스에서는 **Spring MVC + `Dispatchers.IO` 조합**으로 충분합니다. WebFlux는 SSE, WebSocket, 대규모 동시 스트리밍 처리가 필요한 경우에 도입을 검토하세요.
 {{< /callout >}}
 
 #### 다음 단계
