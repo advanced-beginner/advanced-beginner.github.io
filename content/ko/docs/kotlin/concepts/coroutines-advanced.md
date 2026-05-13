@@ -265,6 +265,49 @@ fun main() = runBlocking {
 
 ---
 
+#### 예외 처리 결정 트리
+
+지금까지 살펴본 `launch`/`async`, `Job`/`SupervisorJob`, `try-catch`/`CoroutineExceptionHandler`의 선택지를 한눈에 정리합니다. 새로운 코드를 작성할 때 다음 흐름에 따라 결정하세요.
+
+```mermaid
+flowchart TD
+    Q1{"코루틴의 결과가<br>필요한가?"}
+    Q1 -->|"필요 없음"| L["launch (Job 반환)"]
+    Q1 -->|"필요함"| A["async (Deferred 반환)"]
+
+    L --> Q2{"자식 실패가 형제·부모를<br>취소시켜야 하는가?"}
+    A --> Q3{"호출자에서 결과 또는<br>예외를 받을 위치는?"}
+
+    Q2 -->|"예 (작업 묶음)"| J["부모: 일반 Job 또는<br>coroutineScope"]
+    Q2 -->|"아니오 (독립 작업)"| S["부모: SupervisorJob 또는<br>supervisorScope"]
+
+    Q3 -->|"await() 시점"| TC1["try-catch로 await() 감싸기"]
+    Q3 -->|"즉시(루트 launch)"| H["CoroutineExceptionHandler<br>(루트 launch에만 동작)"]
+
+    J --> R1["예외는 즉시 부모로 전파<br>→ 다른 자식도 취소"]
+    S --> R2["예외는 해당 자식만 종료<br>→ 형제는 계속 실행"]
+    TC1 --> R3["Deferred의 예외는<br>await() 호출자가 처리"]
+    H --> R4["미처리 launch 예외만 수신<br>async에는 동작하지 않음"]
+```
+
+*그림: 코루틴 빌더·Job 유형·예외 처리 도구를 단계별로 선택하는 결정 트리. 결과 필요 여부 → 자식 격리 필요 여부 → 예외 수신 위치 순서로 묻습니다.*
+
+자주 만나는 시나리오 3가지를 매핑하면 다음과 같습니다.
+
+| 시나리오 | 빌더 | 부모 Job | 예외 처리 |
+|---------|------|---------|---------|
+| 백그라운드 작업 묶음(하나 실패 시 전체 취소) | `launch` | 일반 Job / `coroutineScope` | 루트에 `CoroutineExceptionHandler` |
+| 여러 API 병렬 호출 후 결과 합치기 | `async` + `awaitAll` | `coroutineScope` | `try-catch`로 `awaitAll()` 감싸기 |
+| 사용자별 알림 발송(한 사용자 실패가 다른 사용자에 영향 X) | `launch` | `SupervisorJob` / `supervisorScope` | 각 자식 내부 `try-catch` |
+
+{{< callout type="info" title="기억하면 좋은 한 줄" >}}
+- **묶음 vs 독립**: 함께 망해야 하면 Job, 격리해야 하면 SupervisorJob.
+- **결과 vs 통보**: 결과가 필요하면 `async + try-catch(await)`, 결과 없으면 `launch + CoroutineExceptionHandler`.
+- `CoroutineExceptionHandler`는 **루트 `launch`에만** 동작합니다. 자식이나 `async`에서는 동작하지 않습니다.
+{{< /callout >}}
+
+---
+
 #### Channel — 코루틴 간 통신
 
 `Channel`은 코루틴 간에 데이터를 주고받는 **안전한 큐** 입니다. 여러 생산자-소비자 패턴을 구현할 수 있습니다.

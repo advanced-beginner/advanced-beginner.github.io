@@ -1,6 +1,6 @@
 ---
-title: "환경 설정"
-description: "JDK 17, Gradle Wrapper, IntelliJ IDEA, build.gradle.kts 핵심 옵션을 단계별로 설정합니다."
+title: "환경 설정 심화"
+description: "build.gradle.kts 핵심 옵션, 의존성 패턴, IntelliJ 단축키, ktlint 통합 등 Quick Start 이후 알아두면 좋은 환경 설정 심화 내용을 다룹니다."
 weight: 1
 lastmod: "2026-05-13"
 ---
@@ -8,95 +8,22 @@ lastmod: "2026-05-13"
 > **소요 시간**: 약 10분
 
 {{< callout type="tip" title="TL;DR" >}}
-- JDK 17 설치 (SDKMAN 권장)
-- `gradle init`으로 Kotlin DSL 프로젝트 생성
-- IntelliJ IDEA Community에서 Gradle 프로젝트로 열기
-- `build.gradle.kts`에 `kotlin("jvm")` 플러그인과 `jvmToolchain(17)` 설정
+- `build.gradle.kts`의 핵심 블록(plugins, dependencies, kotlin, application) 의미 정리
+- `jvmToolchain(17)` vs `sourceCompatibility` 차이 이해
+- IntelliJ IDEA 단축키와 ktlint 통합으로 협업 환경 정비
+- 트러블슈팅 패턴(클래스 버전, 의존성 갱신, 캐시 무효화)
 {{< /callout >}}
 
-**대상 독자**: Kotlin 개발을 처음 시작하는 개발자
-**선수 지식**: 기본적인 터미널 사용법, IDE 경험
+**대상 독자**: Kotlin 환경 설정의 기본을 끝낸 개발자
+**선수 지식**: [Quick Start](../../quick-start/) 완료 (JDK 17 설치, `gradle init`, 첫 `./gradlew run` 실행까지)
+
+{{< callout type="info" title="기본 설치는 Quick Start에서" >}}
+JDK 17 설치, `gradle init`으로 Kotlin DSL 프로젝트 생성, IntelliJ IDEA 처음 열기 등 첫 환경 구축은 [Quick Start](../../quick-start/)에서 다룹니다. 이 페이지는 그 다음 단계 — 빌드 스크립트의 핵심 옵션과 협업에 필요한 추가 설정을 정리합니다.
+{{< /callout >}}
 
 ---
 
-Kotlin 개발 환경을 단계별로 구성합니다. JDK 설치부터 첫 빌드까지, 모든 과정을 따라하면 바로 코드를 작성할 수 있습니다.
-
-#### Step 1 — JDK 17 설치
-
-Kotlin은 JVM 위에서 실행되므로 JDK 17이 필요합니다. SDKMAN을 사용하면 여러 JDK 버전을 편리하게 관리할 수 있습니다.
-
-**SDKMAN 사용 (macOS/Linux 권장)**
-
-```bash
-# SDKMAN 설치
-curl -s "https://get.sdkman.io" | bash
-source "$HOME/.sdkman/bin/sdkman-init.sh"
-
-# JDK 17 설치 (Eclipse Temurin 권장)
-sdk install java 17.0.10-tem
-
-# 설치 확인
-java -version
-# openjdk version "17.0.10" 2024-01-16
-```
-
-**Homebrew 사용 (macOS)**
-
-```bash
-brew install openjdk@17
-echo 'export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"' >> ~/.zshrc
-source ~/.zshrc
-```
-
-**winget 사용 (Windows)**
-
-```powershell
-winget install Microsoft.OpenJDK.17
-```
-
-설치 후 `java -version`으로 JDK 17이 출력되는지 확인합니다.
-
-#### Step 2 — Gradle Wrapper 프로젝트 생성
-
-Gradle Wrapper를 사용하면 별도로 Gradle을 설치하지 않아도 되고, 팀 전체가 동일한 버전을 사용할 수 있습니다.
-
-```bash
-# 프로젝트 디렉토리 생성
-mkdir my-kotlin-project
-cd my-kotlin-project
-
-# Gradle 초기화 (Gradle이 미설치된 경우 sdk install gradle 8.7)
-gradle init \
-  --type kotlin-application \
-  --dsl kotlin \
-  --project-name my-kotlin-project \
-  --package com.example
-```
-
-`gradle init`이 묻는 질문에는 기본값(Enter)을 선택하면 됩니다. 생성된 프로젝트 구조는 다음과 같습니다.
-
-```text
-my-kotlin-project/
-├── build.gradle.kts          # 빌드 스크립트
-├── settings.gradle.kts       # 프로젝트 설정
-├── gradle/
-│   └── wrapper/
-│       ├── gradle-wrapper.jar
-│       └── gradle-wrapper.properties   # Gradle 버전 명시
-├── gradlew                   # Unix용 Wrapper
-├── gradlew.bat               # Windows용 Wrapper
-└── src/
-    ├── main/
-    │   └── kotlin/
-    │       └── com/example/
-    │           └── App.kt
-    └── test/
-        └── kotlin/
-            └── com/example/
-                └── AppTest.kt
-```
-
-#### Step 3 — build.gradle.kts 핵심 설정
+#### Step 1 — build.gradle.kts 핵심 설정
 
 Kotlin DSL로 작성된 빌드 스크립트입니다. 핵심 옵션을 이해합니다.
 
@@ -162,14 +89,16 @@ rootProject.name = "my-kotlin-project"
 `jvmToolchain(17)`은 컴파일러 JDK 버전, 바이트코드 버전, 컴파일 소스 버전을 한 번에 설정합니다. `sourceCompatibility = JavaVersion.VERSION_17`은 Java 소스에만 영향을 미칩니다. Kotlin 프로젝트에서는 `jvmToolchain` 사용을 권장합니다.
 {{< /callout >}}
 
-#### Step 4 — IntelliJ IDEA Community 설정
+#### Step 2 — IntelliJ IDEA 협업 설정
 
-IntelliJ IDEA는 Kotlin 개발에 가장 최적화된 IDE입니다. Community 버전은 무료입니다.
+IntelliJ IDEA 처음 열기는 [Quick Start](../../quick-start/)에서 다뤘으니, 여기서는 협업과 생산성에 필요한 추가 설정을 정리합니다.
 
-1. [IntelliJ IDEA Community](https://www.jetbrains.com/idea/download/) 다운로드 및 설치
-2. **File** → **Open** → 프로젝트 폴더 선택
-3. 우측 하단 "Gradle" 아이콘 클릭 → **Reload All Gradle Projects**
-4. **File** → **Project Structure** (⌘ + ;) → **SDK**: JDK 17 확인
+**SDK 일치 확인**
+
+팀 프로젝트에서 SDK가 어긋나면 빌드 결과가 달라집니다.
+
+- **File** → **Project Structure** (⌘ + ;) → **SDK**: JDK 17 확인
+- 우측 하단 "Gradle" 아이콘 → **Reload All Gradle Projects** 로 빌드 스크립트와 IDE 인덱스를 동기화
 
 **유용한 단축키 (macOS 기준)**
 
@@ -182,27 +111,28 @@ IntelliJ IDEA는 Kotlin 개발에 가장 최적화된 IDE입니다. Community �
 | ⌘ + Shift + F | 전체 검색 |
 | ⌃ + T | 리팩토링 메뉴 |
 
-#### Step 5 — 빌드 및 실행
+#### Step 3 — 자주 쓰는 Gradle 명령
 
-프로젝트가 정상적으로 설정되었는지 확인합니다.
+Quick Start의 `./gradlew run` 외에 실무에서 자주 쓰는 명령들을 정리했습니다.
 
 ```bash
-# 빌드
+# 빌드 + 테스트
 ./gradlew build
 
-# 테스트 실행
+# 테스트만 실행
 ./gradlew test
 
-# 애플리케이션 실행
-./gradlew run
-
-# 파일 변경 시 자동 재실행
+# 파일 변경 시 자동 재실행 (개발 중 유용)
 ./gradlew run --continuous
+
+# 의존성 트리 출력 (어떤 라이브러리가 들어오는지 확인)
+./gradlew dependencies
+
+# 캐시 갱신과 함께 다시 빌드 (의존성 해결 문제 시)
+./gradlew build --refresh-dependencies
 ```
 
-빌드 성공 시 `BUILD SUCCESSFUL` 메시지가 출력됩니다.
-
-#### Step 6 — 코드 스타일 설정 (선택)
+#### Step 4 — 코드 스타일 통합 (협업 권장)
 
 팀 프로젝트에서는 ktlint로 코드 스타일을 통일합니다.
 
