@@ -410,3 +410,8 @@ docker exec -it kafka \
 
 - [코루틴 실무 사용](coroutines-practical/) — suspend 함수로 비동기 메시지 처리
 - [Kafka 가이드]({{< relref "/docs/kafka" >}}) — Kafka 심화 학습
+
+> 💡 **함께 읽기**:
+> - [Kafka Producer/Consumer 구현]({{< relref "/docs/kafka/examples/basic" >}}) — 같은 패턴을 Java + Spring Kafka로 비교해 봅니다.
+> - [Consumer Group 개념]({{< relref "/docs/kafka/concepts/consumer-group" >}}) — `groupId` 설정이 파티션 분배에 미치는 영향을 이해합니다.
+> - [에러 처리 패턴]({{< relref "/docs/kafka/concepts/error-handling" >}}) — Dead Letter Queue 등 실무 재처리 전략을 다룹니다.

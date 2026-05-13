@@ -135,6 +135,8 @@ fun main() {
 멀티플랫폼:        Multiplatform 개요 → Multiplatform 시작
 ```
 
+> 💡 **함께 읽기**: 백엔드 지향 학습 경로를 마쳤다면 [Kafka 가이드]({{< relref "/docs/kafka" >}})와 [DDD 가이드]({{< relref "/docs/ddd" >}})로 확장해 메시징 기반 도메인 모델링을 익힐 수 있습니다.
+
 #### 흔한 오해
 
 Kotlin에 대한 몇 가지 흔한 오해를 바로잡습니다.

@@ -393,3 +393,5 @@ class UserDashboardServiceTest(
 
 - [Multiplatform 시작](multiplatform-intro/) — 코루틴이 KMP에서 동작하는 방식
 - [코루틴 기초](../concepts/coroutines-basics/) — 코루틴 빌더와 디스패처 원리
+
+> 💡 **함께 읽기**: 병렬 호출이 늘어나면 응답 시간 분포 분석이 중요해집니다. [Golden Signals: 지연시간]({{< relref "/docs/observability/concepts/golden-signals/latency" >}})에서 p95/p99 측정 기준과 운영 관점을 확인할 수 있습니다.

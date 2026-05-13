@@ -578,3 +578,5 @@ fun main() = runBlocking {
 - [코루틴 디버깅](../../howto/coroutine-debugging/) — 디버깅 도구, 누수 진단
 - [DSL 빌더](../dsl-builders/) — 코루틴 스코프를 활용한 DSL 설계
 - [Flow와 비동기 스트림](../flow-async-streams/) — Channel과 SharedFlow 비교
+
+> 💡 **함께 읽기**: 코루틴이 여러 서비스에 걸쳐 컨텍스트를 전파할 때는 [분산 추적]({{< relref "/docs/observability/concepts/distributed-tracing" >}}) 관점이 필요합니다. `CoroutineContext`를 트레이스 ID와 결합하면 비동기 호출 흐름을 끊김 없이 관찰할 수 있습니다.

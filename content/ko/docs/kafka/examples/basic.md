@@ -639,3 +639,5 @@ spring:
 - [주문 시스템](order-system/) - 도메인 주도 설계를 적용한 실전 예제
 - [Consumer 고급 설정](../concepts/consumer-tuning/) - 성능 최적화 방법
 - [에러 처리 패턴](../concepts/error-handling/) - 프로덕션 에러 처리 전략
+
+> 💡 **함께 읽기**: Kotlin으로 같은 패턴을 구현한 예제는 [Kotlin + Spring Kafka 연동]({{< relref "/docs/kotlin/examples/kafka-integration" >}})을 참고하세요.

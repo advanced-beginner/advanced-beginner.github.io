@@ -355,3 +355,5 @@ H2 콘솔은 `http://localhost:8080/h2-console`에서 확인할 수 있습니다
 
 - [Kafka 연동](kafka-integration/) — Kotlin + Spring Kafka로 메시지 Producer/Consumer 구현
 - [코루틴 실무 사용](coroutines-practical/) — suspend 컨트롤러로 비동기 API 구성
+
+> 💡 **함께 읽기**: REST API 위에 도메인 계층을 설계한다면 [DDD 애플리케이션 계층]({{< relref "/docs/ddd/examples/application-layer" >}})과 [주문 도메인 예제]({{< relref "/docs/ddd/examples/order-domain" >}})를 참고해 컨트롤러–서비스–도메인 책임 분리를 구체화할 수 있습니다.
