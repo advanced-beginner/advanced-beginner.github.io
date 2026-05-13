@@ -144,6 +144,8 @@ graph TD
     H["Consumer&lt;Int&gt;"] -.in.- I["Consumer&lt;Number&gt;"]
 ```
 
+*그림: 제네릭 변성(Variance) 비교 — 무공변 Box, 공변 Producer(out), 반공변 Consumer(in)의 타입 상속 관계 전파 방식을 Number·Int 계층으로 보여줍니다.*
+
 **기본: 무공변(Invariant)**
 
 아무것도 붙이지 않으면 무공변입니다. `Box<Int>`와 `Box<Number>`는 서로 대입 불가능합니다.

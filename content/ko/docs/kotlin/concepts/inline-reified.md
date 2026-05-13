@@ -75,6 +75,8 @@ graph LR
     A -->|"inline 적용"| C["코드 직접 삽입<br>객체 생성 없음<br>분기 없음"]
 ```
 
+*그림: inline 함수 적용 전후 비교 — inline 없이는 람다 객체 생성·가상 디스패치가 발생하고, inline 적용 시 코드 직접 삽입으로 오버헤드를 제거함을 보여줍니다.*
+
 #### inline 함수에서 non-local return
 
 `inline` 함수 안의 람다에서는 **바깥 함수까지 return** 하는 non-local return이 가능합니다.

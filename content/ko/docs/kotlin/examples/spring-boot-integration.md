@@ -490,6 +490,145 @@ WebFlux로 전환하면 JPA(블로킹 JDBC)를 그대로 사용할 수 없습니
 대부분의 CRUD 서비스에서는 **Spring MVC + `Dispatchers.IO` 조합**으로 충분합니다. WebFlux는 SSE, WebSocket, 대규모 동시 스트리밍 처리가 필요한 경우에 도입을 검토하세요.
 {{< /callout >}}
 
+---
+
+### 테스트 작성
+
+컨트롤러는 `@WebMvcTest`로 웹 계층만 격리하고, 서비스는 MockK로 의존성을 대체하여 단위 테스트합니다. MockK는 Kotlin 친화적인 모킹 라이브러리입니다. `build.gradle.kts`에 다음을 추가합니다.
+
+```kotlin
+// build.gradle.kts — dependencies 블록
+testImplementation("org.springframework.boot:spring-boot-starter-test")
+testImplementation("io.mockk:mockk:1.13.10")
+testImplementation("com.ninja-squad:springmockk:4.0.2")  // @MockkBean 지원
+```
+
+**컨트롤러 슬라이스 테스트 (`@WebMvcTest`)**
+
+`@WebMvcTest`는 웹 계층(컨트롤러, 필터, `@ControllerAdvice`)만 로드합니다. 서비스는 `@MockkBean`으로 대체하여 HTTP 응답 형식과 상태 코드를 검증합니다.
+
+```kotlin
+// src/test/kotlin/com/example/demo/user/UserControllerTest.kt
+package com.example.demo.user
+
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
+import io.mockk.verify
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.http.MediaType
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.post
+
+@WebMvcTest(UserController::class)
+class UserControllerTest @Autowired constructor(
+    private val mockMvc: MockMvc,
+    private val objectMapper: ObjectMapper
+) {
+    @MockkBean
+    private lateinit var userService: UserService
+
+    private val sampleResponse = UserResponse(1L, "홍길동", "hong@example.com", 30, Role.USER)
+
+    @Test
+    fun `GET api-users 전체 목록을 반환한다`() {
+        every { userService.findAll() } returns listOf(sampleResponse)
+
+        mockMvc.get("/api/users")
+            .andExpect {
+                status { isOk() }
+                jsonPath("$[0].name") { value("홍길동") }
+                jsonPath("$[0].email") { value("hong@example.com") }
+            }
+    }
+
+    @Test
+    fun `POST api-users 사용자를 생성하고 201을 반환한다`() {
+        val request = CreateUserRequest("홍길동", "hong@example.com", 30)
+        every { userService.create(request) } returns sampleResponse
+
+        mockMvc.post("/api/users") {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(request)
+        }.andExpect {
+            status { isCreated() }
+            jsonPath("$.id") { value(1) }
+            jsonPath("$.role") { value("USER") }
+        }
+
+        verify(exactly = 1) { userService.create(request) }
+    }
+
+    @Test
+    fun `GET api-users-존재하지않는ID 404를 반환한다`() {
+        every { userService.findById(999L) } throws NoSuchElementException("ID 999 사용자를 찾을 수 없습니다")
+
+        mockMvc.get("/api/users/999")
+            .andExpect {
+                status { isNotFound() }
+                jsonPath("$.code") { value("NOT_FOUND") }
+            }
+    }
+}
+```
+
+**서비스 단위 테스트**
+
+서비스는 Spring 컨텍스트 없이 순수 단위 테스트로 작성합니다. 리포지토리를 MockK로 대체하여 빠르게 실행됩니다.
+
+```kotlin
+// src/test/kotlin/com/example/demo/user/UserServiceTest.kt
+package com.example.demo.user
+
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import java.util.Optional
+
+class UserServiceTest {
+
+    private val userRepository: UserRepository = mockk()
+    private lateinit var userService: UserService
+
+    @BeforeEach
+    fun setUp() {
+        userService = UserService(userRepository)
+    }
+
+    @Test
+    fun `이미 사용 중인 이메일로 생성하면 예외가 발생한다`() {
+        val request = CreateUserRequest("홍길동", "hong@example.com", 30)
+        every { userRepository.existsByEmail("hong@example.com") } returns true
+
+        assertThatThrownBy { userService.create(request) }
+            .isInstanceOf(IllegalArgumentException::class.java)
+            .hasMessageContaining("이미 사용 중인 이메일")
+
+        verify(exactly = 0) { userRepository.save(any()) }
+    }
+
+    @Test
+    fun `존재하지 않는 ID 조회 시 NoSuchElementException이 발생한다`() {
+        every { userRepository.findById(99L) } returns Optional.empty()
+
+        assertThatThrownBy { userService.findById(99L) }
+            .isInstanceOf(NoSuchElementException::class.java)
+    }
+}
+```
+
+테스트를 실행하려면 다음 명령을 사용합니다.
+
+```bash
+./gradlew test
+```
+
 #### 다음 단계
 
 - [Kafka 연동](kafka-integration/) — Kotlin + Spring Kafka로 메시지 Producer/Consumer 구현

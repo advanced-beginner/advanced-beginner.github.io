@@ -62,6 +62,8 @@ flowchart TD
     CM --> CMT["commonTest"]
 ```
 
+*그림: KMP 소스 셋 계층 구조 — commonMain이 jvmMain·androidMain·iosMain·jsMain·nativeMain으로 분기되며 각 플랫폼별 테스트 소스 셋과 연결되는 구조를 보여줍니다.*
+
 각 소스 셋은 독립적인 디렉토리를 가집니다:
 
 ```text
@@ -308,6 +310,8 @@ flowchart LR
         N3["카메라 / 센서<br>(플랫폼 전용 API)"]
     end
 ```
+
+*그림: KMP 적합·부적합 사용 사례 비교 — 비즈니스 로직·네트워크 레이어는 공유 가능하고, UI·알림·카메라 등 플랫폼 전용 기능은 KMP 적용이 어려움을 보여줍니다.*
 
 **KMP가 빛나는 시나리오:**
 

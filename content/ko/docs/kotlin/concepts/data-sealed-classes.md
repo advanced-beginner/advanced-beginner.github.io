@@ -47,6 +47,8 @@ graph LR
     C --> D
 ```
 
+*그림: data class와 sealed class의 역할 비교 — data class는 불변 데이터 표현을, sealed class는 닫힌 타입 계층과 상태 모델링을 담당합니다.*
+
 ---
 
 #### data class — 자동 생성 메서드

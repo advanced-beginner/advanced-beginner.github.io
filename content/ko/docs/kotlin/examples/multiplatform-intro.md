@@ -44,6 +44,8 @@ graph TD
     A --> D["nativeMain<br>(iOS / 데스크탑)"]
 ```
 
+*그림: KMP 소스 셋 분기 구조 — commonMain에서 jvmMain·jsMain·nativeMain으로 플랫폼별 코드가 분리되는 Kotlin Multiplatform 프로젝트 구성을 보여줍니다.*
+
 #### Step 2 — 프로젝트 생성
 
 IntelliJ IDEA에서 **File** → **New** → **Project** → **Kotlin Multiplatform** → **Library** 선택.

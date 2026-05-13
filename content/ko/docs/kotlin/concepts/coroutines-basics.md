@@ -286,6 +286,8 @@ flowchart TD
     G --> H["부모 계속 실행"]
 ```
 
+*그림: 코루틴 구조화된 동시성 — runBlocking 아래 coroutineScope에서 두 자식 launch가 모두 완료된 뒤 부모가 재개되는 부모-자식 생명주기 관계를 보여줍니다.*
+
 ---
 
 #### 협력적 취소 — isActive / yield

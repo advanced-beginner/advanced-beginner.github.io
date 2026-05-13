@@ -288,6 +288,8 @@ graph TD
     D --> H["자동 취소"]
 ```
 
+*그림: 구조화된 동시성에서 예외 전파 — 세 개의 async 작업 중 하나가 실패하면 부모 coroutineScope가 취소 신호를 받아 나머지 자식 코루틴도 자동 취소되는 흐름을 보여줍니다.*
+
 #### Step 6 — 예외 처리 패턴
 
 ```kotlin
@@ -389,6 +391,179 @@ class UserDashboardServiceTest(
 - `CancellationException`은 반드시 다시 던져야 취소가 올바르게 전파됩니다
 - `supervisorScope` — 자식 실패가 형제 코루틴에 영향을 주지 않을 때 사용
 {{< /callout >}}
+
+---
+
+### 테스트 작성
+
+코루틴 테스트에는 `kotlinx-coroutines-test`, suspend 함수 모킹에는 MockK, Flow 검증에는 Turbine을 사용합니다. `build.gradle.kts`에 다음을 추가합니다.
+
+```kotlin
+// build.gradle.kts — dependencies 블록
+testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
+testImplementation("io.mockk:mockk:1.13.10")
+testImplementation("app.cash.turbine:turbine:1.1.0")
+```
+
+**`runTest` 기본 패턴 + `StandardTestDispatcher`**
+
+`runTest`는 `delay()`를 가상 시계로 대체하여 테스트를 즉시 완료합니다. `StandardTestDispatcher`를 사용하면 `advanceTimeBy()`로 가상 시간을 명시적으로 진행할 수 있습니다.
+
+```kotlin
+// src/test/kotlin/com/example/coroutine/service/ResilientServiceTest.kt
+package com.example.coroutine.service
+
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.runTest
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+
+@OptIn(ExperimentalCoroutinesApi::class)
+class ResilientServiceTest {
+
+    private val service = ResilientService()
+
+    @Test
+    fun `runTest에서 delay는 가상 시간으로 즉시 처리된다`() = runTest {
+        // 내부 delay(1_500L)가 실제로 기다리지 않음 — 테스트는 즉시 완료
+        val result = service.fetchWithFallback(1L)
+        assertThat(result).isEqualTo("결과-1")
+    }
+
+    @Test
+    fun `StandardTestDispatcher로 타임아웃 경계를 명시적으로 검증한다`() = runTest(StandardTestDispatcher()) {
+        var result: String? = null
+        val job = launch { result = service.fetchWithFallback(1L) }
+
+        // 1499ms 진행 — 내부 delay(1500L) 미완료, withTimeout(2000L) 내에 있음
+        advanceTimeBy(1_499L)
+        assertThat(result).isNull()
+
+        // 나머지 시간 진행 — delay 완료
+        advanceTimeBy(2L)
+        job.join()
+        assertThat(result).isEqualTo("결과-1")
+    }
+}
+```
+
+**MockK `coEvery`로 suspend 함수 모킹**
+
+MockK는 `coEvery { ... } returns ...` 문법으로 suspend 함수를 모킹합니다. `coVerify`로 호출 여부를 검증합니다.
+
+```kotlin
+// src/test/kotlin/com/example/coroutine/service/UserDashboardMockTest.kt
+package com.example.coroutine.service
+
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+
+class UserDashboardMockTest {
+
+    private val service: UserDashboardService = mockk()
+
+    @Test
+    fun `대시보드 조회 성공 시 user와 orders를 포함한다`() = runTest {
+        val expectedUser   = UserInfo(1L, "홍길동", "hong@example.com")
+        val expectedOrders = OrderHistory(1L, listOf("ORDER-001"), 50_000L)
+        val expected       = UserDashboard(expectedUser, expectedOrders, 100L)
+
+        // coEvery — suspend 함수 모킹
+        coEvery { service.getDashboard(1L) } returns expected
+
+        val result = service.getDashboard(1L)
+
+        assertThat(result.user.name).isEqualTo("홍길동")
+        assertThat(result.orders.totalAmount).isEqualTo(50_000L)
+
+        // coVerify — suspend 함수 호출 검증
+        coVerify(exactly = 1) { service.getDashboard(1L) }
+    }
+
+    @Test
+    fun `getDashboard가 예외를 던지면 호출자에게 전파된다`() = runTest {
+        coEvery { service.getDashboard(99L) } throws RuntimeException("서비스 오류")
+
+        val exception = runCatching { service.getDashboard(99L) }.exceptionOrNull()
+
+        assertThat(exception).isInstanceOf(RuntimeException::class.java)
+        assertThat(exception?.message).isEqualTo("서비스 오류")
+    }
+}
+```
+
+**Turbine으로 Flow 검증**
+
+Turbine은 `flow.test { }` 블록에서 `awaitItem()`, `awaitComplete()` 등으로 Flow 방출값을 순서대로 검증합니다.
+
+```kotlin
+// src/test/kotlin/com/example/coroutine/service/ProgressFlowTest.kt
+package com.example.coroutine.service
+
+import app.cash.turbine.test
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.test.runTest
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+
+class ProgressFlowTest {
+
+    // 진행 상황을 Flow로 방출하는 예시 함수
+    private fun progressFlow(ids: List<Long>) = flow {
+        for (id in ids) {
+            emit("처리 중: $id")
+        }
+        emit("완료")
+    }
+
+    @Test
+    fun `progressFlow는 각 ID를 순서대로 방출하고 완료된다`() = runTest {
+        progressFlow(listOf(1L, 2L, 3L)).test {
+            assertThat(awaitItem()).isEqualTo("처리 중: 1")
+            assertThat(awaitItem()).isEqualTo("처리 중: 2")
+            assertThat(awaitItem()).isEqualTo("처리 중: 3")
+            assertThat(awaitItem()).isEqualTo("완료")
+            awaitComplete()   // Flow가 정상 종료됨을 검증
+        }
+    }
+
+    @Test
+    fun `flow에서 예외 발생 시 awaitError로 검증한다`() = runTest {
+        val errorFlow = flow<String> {
+            emit("시작")
+            throw RuntimeException("처리 실패")
+        }
+
+        errorFlow.test {
+            assertThat(awaitItem()).isEqualTo("시작")
+            val error = awaitError()
+            assertThat(error).isInstanceOf(RuntimeException::class.java)
+            assertThat(error.message).isEqualTo("처리 실패")
+        }
+    }
+}
+```
+
+{{< callout type="tip" title="도구 선택 기준" >}}
+- `runTest` — 모든 코루틴 테스트의 기본 진입점. `delay()`를 가상 시간으로 처리합니다.
+- `StandardTestDispatcher` — 가상 시계를 수동으로 제어할 때 사용합니다.
+- `UnconfinedTestDispatcher` — 코루틴을 즉시 실행(열성적 실행)할 때 사용합니다.
+- `coEvery` / `coVerify` — suspend 함수를 모킹하고 호출을 검증합니다.
+- `Turbine` — `Flow`, `StateFlow`, `SharedFlow` 방출값을 순서대로 검증합니다.
+{{< /callout >}}
+
+테스트를 실행합니다.
+
+```bash
+./gradlew test
+```
 
 #### 다음 단계
 

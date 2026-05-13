@@ -337,6 +337,8 @@ graph LR
     D -->|"2개"| E
 ```
 
+*그림: Kotlin Sequence 지연 처리 흐름 — 원소 하나가 filter·map·take 연산을 차례로 통과하며 최종 결과가 누적되는 지연 평가 방식을 보여줍니다.*
+
 **언제 Sequence를 쓰는가?**
 
 | 상황 | 권장 |

@@ -438,6 +438,8 @@ flowchart TD
     F -->|"아니오"| H["현재 Dispatcher 유지<br>(withContext 생략)"]
 ```
 
+*그림: 코루틴 디스패처 선택 결정 트리 — 블로킹 I/O는 Dispatchers.IO, CPU 집약적 작업은 Dispatchers.Default, UI 업데이트는 Dispatchers.Main으로 분류하는 흐름을 보여줍니다.*
+
 ---
 
 ## 체크리스트

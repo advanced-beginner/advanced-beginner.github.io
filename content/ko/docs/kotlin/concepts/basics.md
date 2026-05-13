@@ -48,6 +48,8 @@ graph LR
     B --> B3["try 표현식<br>(결과를 반환)"]
 ```
 
+*그림: 구문(Statement)과 표현식(Expression)의 차이 — Kotlin에서 if·when·try는 값을 반환하는 표현식으로 사용됩니다.*
+
 Kotlin에서 `if`, `when`, `try` 모두 표현식입니다. 이 차이가 코드 스타일 전체에 영향을 줍니다.
 
 ---

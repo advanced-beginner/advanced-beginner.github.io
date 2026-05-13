@@ -219,6 +219,8 @@ flowchart TD
     end
 ```
 
+*그림: Job과 SupervisorJob 예외 전파 비교 — 기본 Job은 자식 실패가 부모와 형제 코루틴까지 취소시키는 반면, SupervisorJob은 실패한 자식만 독립적으로 종료됨을 보여줍니다.*
+
 ---
 
 #### CoroutineExceptionHandler

@@ -330,6 +330,8 @@ flowchart LR
     Cold -->|"변환"| Hot
 ```
 
+*그림: Cold Flow와 Hot Flow 특성 비교 — Cold Flow는 구독 시점에 독립 실행되고, Hot Flow(StateFlow/SharedFlow)는 항상 실행 중이며 구독자가 값을 공유함을 보여줍니다.*
+
 ---
 
 #### StateFlow — 상태 보유 Hot 스트림

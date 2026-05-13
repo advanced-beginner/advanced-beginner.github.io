@@ -46,6 +46,8 @@ flowchart TD
     Q2 -->|"아니오"| VAL2["listOf 등<br>불변 컬렉션 + val"]
 ```
 
+*그림: val/var 선택 흐름도 — 재할당 여부와 컬렉션 가변성 여부에 따라 적절한 선언 방식을 결정하는 과정을 보여줍니다.*
+
 ---
 
 #### val — 불변 변수
@@ -285,6 +287,8 @@ graph TB
     String --> Nothing
     Unit --> Nothing
 ```
+
+*그림: Kotlin 타입 계층도 — Any(최상위)부터 Nothing(최하위)까지 Int·String·Unit이 포함된 타입 상속 구조를 보여줍니다.*
 
 **Any — 모든 타입의 조상**
 

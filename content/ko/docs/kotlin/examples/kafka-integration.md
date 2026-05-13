@@ -407,6 +407,114 @@ docker exec -it kafka \
 - JSON 직렬화에 `jackson-module-kotlin` 필요
 {{< /callout >}}
 
+---
+
+### 테스트 작성
+
+`spring-kafka-test`의 `@EmbeddedKafka`를 사용하면 실제 Kafka 브로커 없이 인메모리 브로커로 Producer/Consumer를 검증할 수 있습니다. `build.gradle.kts`에 이미 포함된 `spring-kafka-test`를 확인합니다.
+
+```kotlin
+// build.gradle.kts — testImplementation 블록 확인
+testImplementation("org.springframework.boot:spring-boot-starter-test")
+testImplementation("org.springframework.kafka:spring-kafka-test")  // @EmbeddedKafka 포함
+```
+
+**Producer 단위 테스트 + Consumer 수신 검증**
+
+`@EmbeddedKafka`로 인메모리 브로커를 시작하고, `KafkaTemplate`으로 메시지를 발행한 뒤 `Consumer`가 수신했는지 `CountDownLatch`로 검증합니다.
+
+```kotlin
+// src/test/kotlin/com/example/kafka/producer/MessageProducerTest.kt
+package com.example.kafka.producer
+
+import com.example.kafka.config.KafkaTopicConfig
+import com.example.kafka.domain.Message
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.common.serialization.StringDeserializer
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.kafka.core.DefaultKafkaConsumerFactory
+import org.springframework.kafka.listener.ContainerProperties
+import org.springframework.kafka.listener.KafkaMessageListenerContainer
+import org.springframework.kafka.listener.MessageListener
+import org.springframework.kafka.test.EmbeddedKafkaBroker
+import org.springframework.kafka.test.context.EmbeddedKafka
+import org.springframework.kafka.test.utils.ContainerTestUtils
+import org.springframework.kafka.test.utils.KafkaTestUtils
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+
+@SpringBootTest(
+    properties = ["spring.kafka.bootstrap-servers=\${spring.embedded.kafka.brokers}"]
+)
+@EmbeddedKafka(
+    partitions = 1,
+    topics = [KafkaTopicConfig.TOPIC_MESSAGES]
+)
+class MessageProducerTest @Autowired constructor(
+    private val messageProducer: MessageProducer,
+    private val objectMapper: ObjectMapper,
+    private val embeddedKafkaBroker: EmbeddedKafkaBroker
+) {
+    @Test
+    fun `메시지를 발행하면 Consumer가 수신한다`() {
+        // Consumer 설정
+        val consumerProps = KafkaTestUtils.consumerProps(
+            "test-group", "true", embeddedKafkaBroker
+        ).apply {
+            put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer::class.java)
+            put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer::class.java)
+            put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
+        }
+
+        val consumerFactory = DefaultKafkaConsumerFactory<String, String>(consumerProps)
+        val containerProps = ContainerProperties(KafkaTopicConfig.TOPIC_MESSAGES)
+
+        val latch = CountDownLatch(1)
+        var receivedValue: String? = null
+
+        containerProps.messageListener = MessageListener<String, String> { record ->
+            receivedValue = record.value()
+            latch.countDown()
+        }
+
+        val container = KafkaMessageListenerContainer(consumerFactory, containerProps)
+        container.start()
+        ContainerTestUtils.waitForAssignment(container, embeddedKafkaBroker.partitionsPerTopic)
+
+        // Producer 실행
+        val messageId = messageProducer.sendMessage("테스트 메시지", "테스터")
+
+        // 최대 5초 대기
+        assertThat(latch.await(5, TimeUnit.SECONDS)).isTrue()
+        container.stop()
+
+        // 수신된 메시지 검증
+        val received = objectMapper.readValue(receivedValue, Message::class.java)
+        assertThat(received.id).isEqualTo(messageId)
+        assertThat(received.content).isEqualTo("테스트 메시지")
+        assertThat(received.sender).isEqualTo("테스터")
+    }
+}
+```
+
+{{< callout type="info" title="@EmbeddedKafka 속성" >}}
+- `partitions` — 토픽당 파티션 수 (기본값 1)
+- `topics` — 미리 생성할 토픽 목록
+- `spring.embedded.kafka.brokers` — 인메모리 브로커 주소 (자동 주입)
+
+`spring.kafka.bootstrap-servers=\${spring.embedded.kafka.brokers}`를 `@SpringBootTest` 속성으로 지정하면 애플리케이션 설정이 인메모리 브로커를 가리킵니다.
+{{< /callout >}}
+
+테스트를 실행합니다.
+
+```bash
+./gradlew test
+```
+
 #### 다음 단계
 
 - [코루틴 실무 사용](coroutines-practical/) — suspend 함수로 비동기 메시지 처리

@@ -54,6 +54,8 @@ graph LR
     E --> F
 ```
 
+*그림: Kotlin null 안전 타입 시스템 흐름 — Non-null 타입과 Nullable 타입(T?)이 분리되어 컴파일러가 안전 처리를 강제하는 구조를 보여줍니다.*
+
 ---
 
 #### Nullable 타입 선언
